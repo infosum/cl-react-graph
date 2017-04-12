@@ -66,7 +66,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.LineChart = exports.Histogram = undefined;
+	exports.ScatterPlot = exports.LineChart = exports.Histogram = undefined;
 
 	var _Histogram = __webpack_require__(2);
 
@@ -76,11 +76,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _LineChart2 = _interopRequireDefault(_LineChart);
 
+	var _ScatterPlot = __webpack_require__(10);
+
+	var _ScatterPlot2 = _interopRequireDefault(_ScatterPlot);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	exports.Histogram = _Histogram2.default;
 	exports.LineChart = _LineChart2.default;
-		// export ScatterPlot from './ScatterPlot';
+	exports.ScatterPlot = _ScatterPlot2.default;
 
 /***/ },
 /* 2 */
@@ -112,6 +116,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+	/**
+	 * Histogram component
+	 */
 	var Histogram = function (_Component) {
 	  _inherits(Histogram, _Component);
 
@@ -119,6 +126,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  //   width: '100%'
 	  // };
 
+	  /**
+	   * Constructor
+	   * @param {Object} props
+	   */
 	  function Histogram(props) {
 	    _classCallCheck(this, Histogram);
 
@@ -130,6 +141,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 	    return _this;
 	  }
+
+	  /**
+	   * Handle the page resize
+	   * @param {Event} e .
+	   */
+
 
 	  _createClass(Histogram, [{
 	    key: 'handleResize',
@@ -143,6 +160,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	      this.histogram.create(this.getDOMNode(), this.getChartState());
 	    }
+
+	    /**
+	     * Component mounted
+	     */
+
 	  }, {
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
@@ -156,11 +178,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.handleResize();
 	      }
 	    }
+
+	    /**
+	     * Component updated
+	     */
+
 	  }, {
 	    key: 'componentDidUpdate',
 	    value: function componentDidUpdate() {
 	      this.histogram.update(this.getDOMNode(), this.getChartState());
 	    }
+
+	    /**
+	     * Get the chart state
+	     * @return {Object} ChartState
+	     */
+
 	  }, {
 	    key: 'getChartState',
 	    value: function getChartState() {
@@ -174,7 +207,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return {
 	        data: data,
 	        height: 200,
-	        tipContainer: '.app-content',
 	        tipContentFn: function tipContentFn(info, i, d) {
 	          return info.bins[i] + '<br />' + d.toFixed(2) + '%';
 	        },
@@ -182,11 +214,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	        yTicks: 0
 	      };
 	    }
+
+	    /**
+	     * Props recieved, update the chart
+	     * @param {Object} props Props
+	     */
+
 	  }, {
 	    key: 'componentWillReceiveProps',
 	    value: function componentWillReceiveProps(props) {
 	      this.histogram.update(this.getDOMNode(), this.getChartState());
 	    }
+
+	    /**
+	     * Component will un mount, remove the chart and
+	     * any event listeners
+	     */
+
 	  }, {
 	    key: 'componentWillUnmount',
 	    value: function componentWillUnmount() {
@@ -195,11 +239,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 	      this.histogram.destroy(this.getDOMNode());
 	    }
+
+	    /**
+	     * Get the chart's dom node
+	     * @return {Element} dom noe
+	     */
+
 	  }, {
 	    key: 'getDOMNode',
 	    value: function getDOMNode() {
 	      return _reactDom2.default.findDOMNode(this);
 	    }
+
+	    /**
+	     * Render
+	     * @return {Dom} node
+	     */
+
 	  }, {
 	    key: 'render',
 	    value: function render() {
@@ -235,6 +291,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	});
 	exports.histogramD3 = undefined;
 
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 	var _d = __webpack_require__(6);
 
 	var d3 = _interopRequireWildcard(_d);
@@ -246,6 +304,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 	var histogramD3 = exports.histogramD3 = function histogramD3() {
 	  var svg = void 0,
@@ -299,7 +359,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    create: function create(el) {
 	      var props = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
-	      this.props = Object.assign({}, defaultProps, props);
+	      this.props = _extends({}, defaultProps, props);
 	      this.update(el, props);
 	    },
 
@@ -346,6 +406,18 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	    /**
+	     * Get a max count of values in each data set
+	     * @param {Object} data Histogram data
+	     * @return {Number} count
+	     */
+	    valuesCount: function valuesCount(data) {
+	      return data.counts.reduce(function (a, b) {
+	        return b.data.length > a ? b.data.length : a;
+	      }, 0);
+	    },
+
+
+	    /**
 	     * Draw scales
 	     * @param {Object} data Chart data
 	     */
@@ -356,7 +428,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	          width = _props2.width,
 	          height = _props2.height,
 	          yXaisWidth = _props2.yXaisWidth,
-	          yTicks = _props2.yTicks;
+	          yTicks = _props2.yTicks,
+	          valuesCount = this.valuesCount(data);
 
 
 	      svg.selectAll('.y-axis').remove();
@@ -366,13 +439,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	          yDomain = void 0,
 	          xAxis = void 0,
 	          yAxis = void 0,
-	          yRange = void 0;
+	          yRange = void 0,
+	          allCounts = data.counts.reduce(function (a, b) {
+	        return [].concat(_toConsumableArray(a), [b.data]);
+	      }, []);
 
 	      x.domain(data.bins).rangeRound([0, w]);
 
 	      xAxis = d3.axisBottom(x);
 
-	      if (w / data.counts.length < 10) {
+	      if (w / valuesCount < 10) {
 	        // Show one in 10 x axis labels
 	        xAxis.tickValues(x.domain().filter(function (d, i) {
 	          return !(i % 10);
@@ -380,7 +456,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 	      svg.append('g').attr('class', 'x-axis').attr('transform', 'translate(' + yXaisWidth + ',' + (height - xAxisHeight - margin.left * 2) + ')').call(xAxis);
 
-	      yDomain = d3.extent(data.counts, function (d) {
+	      // yDomain = d3.extent(data.counts, d => d);
+	      yDomain = d3.extent(allCounts, function (d) {
 	        return d;
 	      });
 	      yDomain[0] = 0;
@@ -414,15 +491,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	          tipContentFn = _props3.tipContentFn,
 	          bar = void 0,
 	          w = width - margin.left * 2,
+	          valuesCount = this.valuesCount(info),
 	          colors = d3.scaleOrdinal(colorScheme);
 
 	      // Ensure we don't have negative bar widths
-	      barWidth = Math.max(1, (w - (data.length + 1) * barMargin) / data.length);
+	      barWidth = Math.max(1, (w - (valuesCount + 1) * barMargin) / valuesCount);
 
 	      // Small bars - reduce margin and re-calcualate bar width
 	      if (barWidth < 5) {
 	        barMargin = 1;
-	        barWidth = Math.max(1, (w - (data.length + 1) * barMargin) / data.length);
+	        barWidth = Math.max(1, (w - (valuesCount + 1) * barMargin) / valuesCount);
 	      }
 
 	      svg.selectAll('.bar').remove();
@@ -462,11 +540,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    */
 	    update: function update(el, props) {
 	      if (!props.data) return;
-	      this.props = Object.assign({}, defaultProps, props);
+	      this.props = _extends({}, defaultProps, props);
 	      this._makeSvg(el);
 	      if (!this.props.data.bins) {
 	        return;
 	      }
+
 	      this._drawScales(this.props.data);
 	      this._drawBars(this.props.data);
 	    },
@@ -16914,12 +16993,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _lineChartD = __webpack_require__(9);
 
-	var _d = __webpack_require__(6);
-
-	var d3 = _interopRequireWildcard(_d);
-
-	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -16996,8 +17069,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        width: width,
 	        yTicks: 0,
 	        height: 200,
-	        curveType: d3.curveBasis,
-	        tipContainer: '.app-content',
+
 	        tipContentFn: function tipContentFn(info, i, d) {
 	          return info[i].x.toFixed(1);
 	        }
@@ -17058,7 +17130,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	      x = d3.scaleLinear();
 
 	  var lineProps = {
+	    curveType: d3.curveCatmullRom,
 	    show: true,
+	    fill: false,
 	    stroke: '#005870',
 	    strokeDashArray: '5 5',
 	    strokeDashOffset: 0
@@ -17070,7 +17144,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	  },
 	      defaultProps = {
 	    className: 'line-chart-d3',
-	    curveType: d3.curveCatmullRom,
 	    fx: d3.easeCubic,
 	    width: 200,
 	    height: 250,
@@ -17080,7 +17153,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    xTicks: 5,
 	    yTicks: 10,
 	    point: pointProps,
-	    tipContainer: 'body',
+	    tipContainer: null,
 	    tipContentFn: function tipContentFn(info, i, d) {
 	      return info[i].x.toFixed(3) + ',' + info[i].y;
 	    },
@@ -17144,19 +17217,20 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	      svg = d3.select(el).append('svg').attr('class', className).attr('width', width).attr('height', height).append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
-	      this._makeTip();
+	      this._makeTip(el);
 	    },
 
 
 	    /**
 	     * Create a bootstrap tip
+	     * @param {Node} el Container
 	     */
-	    _makeTip: function _makeTip() {
+	    _makeTip: function _makeTip(el) {
 	      if (tipContainer) {
 	        // Chart could be rebuilt - remove old tip
 	        tipContainer.remove();
 	      }
-	      tipContainer = d3.select(this.props.tipContainer).append('div').attr('class', 'tooltip top').style('opacity', 0);
+	      tipContainer = d3.select(this.props.tipContainer || el).append('div').attr('class', 'tooltip top').style('opacity', 0);
 
 	      tipContainer.append('div').attr('class', 'tooltip-arrow');
 	      tipContent = tipContainer.append('div').attr('class', 'tooltip-inner');
@@ -17166,6 +17240,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    /**
 	     * Iterate over the dataset drawing points for sets marked as
 	     * requiring points.
+	     * @param {Array} data LineChartDataSet
 	     */
 	    _drawDataPointSet: function _drawDataPointSet(data) {
 	      var _this = this;
@@ -17179,18 +17254,18 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    /**
 	     * Draw data points
-	     * @param {Object} data LineChartDataSet
+	     * @param {Object} datum LineChartDataSet
 	     * @param {String} selector Class name
 	     */
 	    _drawDataPoints: function _drawDataPoints(datum, selector) {
-	      debugger;
 	      var _props2 = this.props,
 	          yXaisWidth = _props2.yXaisWidth,
 	          tip = _props2.tip,
 	          tipContentFn = _props2.tipContentFn,
-	          radius = datum.point.radius || this.props.point.radius,
-	          stroke = datum.point.stroke || this.props.point.stroke,
-	          fill = datum.point.fill || this.props.point.fill;
+	          _datum$point = datum.point,
+	          radius = _datum$point.radius,
+	          stroke = _datum$point.stroke,
+	          fill = _datum$point.fill;
 
 	      svg.selectAll(selector).remove();
 	      var point = svg.selectAll(selector).data(datum.data).enter().append('circle').attr('class', 'point').attr('cx', function (d) {
@@ -17216,9 +17291,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	      point.exit().remove();
 	    },
+
 	    /**
 	     * Draw the chart scales
-	     * @param {Array} data Chart data
+	     * @param {Array} data LineChartDataSet
 	     */
 	    _drawScales: function _drawScales(data) {
 	      svg.selectAll('.y-axis').remove();
@@ -17280,15 +17356,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	      // @Todo fx transition not working.
 	      svg.selectAll(selector).remove();
 	      var _props4 = this.props,
-	          curveType = _props4.curveType,
 	          fx = _props4.fx,
 	          height = _props4.height,
 	          margin = _props4.margin,
 	          yXaisWidth = _props4.yXaisWidth,
 	          xAxisHeight = _props4.xAxisHeight,
-	          stroke = datum.line.stroke || this.props.line.stroke,
-	          strokeDashOffset = datum.line.strokeDashOffset || this.props.line.strokeDashOffset,
-	          strokeDashArray = datum.line.strokeDashArray || this.props.line.strokeDashArray,
+	          _datum$line = datum.line,
+	          curveType = _datum$line.curveType,
+	          stroke = _datum$line.stroke,
+	          strokeDashOffset = _datum$line.strokeDashOffset,
+	          strokeDashArray = _datum$line.strokeDashArray,
 	          path = svg.selectAll(selector).data([datum.data]),
 	          area = void 0,
 	          curve = d3.line().curve(curveType).x(function (d) {
@@ -17331,8 +17408,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	      if (!props.data) return;
 	      this._makeSvg(el);
 	      var data = props.data;
-	      data.map(function (datum) {
-	        return Object.assign({}, datum, datumProps);
+	      data = data.map(function (datum) {
+	        return Object.assign({}, datumProps, datum);
 	      });
 	      this._drawScales(data);
 	      this._drawLines(data);
@@ -17349,6 +17426,424 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 	  return LineChartD3;
 	};
+
+/***/ },
+/* 10 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(3);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactDom = __webpack_require__(4);
+
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+
+	var _ScatterPlotD = __webpack_require__(11);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var ScatterPlot = function (_Component) {
+	  _inherits(ScatterPlot, _Component);
+
+	  // static defaultProps = {
+	  //   chartSize: '100%',
+	  //   padding: 20,
+	  //   legendWidth: 100
+	  // };
+
+	  function ScatterPlot(props) {
+	    _classCallCheck(this, ScatterPlot);
+
+	    var _this = _possibleConstructorReturn(this, (ScatterPlot.__proto__ || Object.getPrototypeOf(ScatterPlot)).call(this, props));
+
+	    _this.chart = (0, _ScatterPlotD.scatterPlotD3)();
+	    _this.state = {
+	      parentWidth: 400
+	    };
+	    return _this;
+	  }
+
+	  _createClass(ScatterPlot, [{
+	    key: 'handleResize',
+	    value: function handleResize(e) {
+	      var _props = this.props,
+	          legendWidth = _props.legendWidth,
+	          padding = _props.padding;
+
+	      var elem = this.getDOMNode(),
+	          chartWidth = Math.max(200, elem.offsetWidth - padding - legendWidth),
+	          chartHeight = Math.max(200, window.innerHeight - padding - elem.getBoundingClientRect().top),
+	          chartSize = Math.min(chartHeight, chartWidth);
+
+	      this.setState({
+	        parentWidth: chartSize
+	      });
+
+	      this.chart.create(this.getDOMNode(), this.getChartState());
+	    }
+	  }, {
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      var _this2 = this;
+
+	      this.chart.create(this.getDOMNode(), this.getChartState());
+	      if (this.props.chartSize === '100%') {
+	        window.addEventListener('resize', function (e) {
+	          return _this2.handleResize();
+	        });
+	        this.handleResize();
+	      }
+	    }
+	  }, {
+	    key: 'componentDidUpdate',
+	    value: function componentDidUpdate() {
+	      this.chart.update(this.getDOMNode(), this.getChartState());
+	    }
+	  }, {
+	    key: 'getChartState',
+	    value: function getChartState() {
+	      var _props2 = this.props,
+	          chartSize = _props2.chartSize,
+	          data = _props2.data,
+	          choices = _props2.choices,
+	          split = _props2.split,
+	          distModels = _props2.distModels;
+
+	      if (chartSize === '100%') {
+	        chartSize = this.state.parentWidth || 300;
+	      }
+
+	      return {
+	        chartSize: chartSize,
+	        choices: choices,
+	        data: data,
+	        distModels: distModels,
+	        split: split
+	      };
+	    }
+	  }, {
+	    key: 'componentWillReceiveProps',
+	    value: function componentWillReceiveProps(props) {
+	      this.chart.update(this.getDOMNode(), this.getChartState());
+	    }
+	  }, {
+	    key: 'componentWillUnmount',
+	    value: function componentWillUnmount() {
+	      if (this.props.chartSize === '100%') {
+	        window.removeEventListener('resize', this.handleResize);
+	      }
+	      this.chart.destroy(this.getDOMNode());
+	    }
+	  }, {
+	    key: 'getDOMNode',
+	    value: function getDOMNode() {
+	      return _reactDom2.default.findDOMNode(this);
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement('div', { className: 'scatterplot-chart-container' });
+	    }
+	  }]);
+
+	  return ScatterPlot;
+	}(_react.Component);
+
+		exports.default = ScatterPlot;
+
+/***/ },
+/* 11 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.scatterPlotD3 = undefined;
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	var _d = __webpack_require__(6);
+
+	var d3 = _interopRequireWildcard(_d);
+
+	var _colors = __webpack_require__(7);
+
+	var _colors2 = _interopRequireDefault(_colors);
+
+	var _types = __webpack_require__(12);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+	var scatterPlotD3 = exports.scatterPlotD3 = function scatterPlotD3() {
+	  var svg = void 0,
+	      yScale = d3.scaleLinear(),
+	      xScale = d3.scaleLinear(),
+	      domainByTrait = {},
+	      xAxis = void 0,
+	      color = void 0,
+	      yAxis = void 0;
+
+	  var defaultProps = {
+	    choices: [],
+	    className: 'scatter-plot-d3',
+	    chartSize: 400,
+	    delay: 0,
+	    duration: 400,
+	    legendWidth: 100,
+	    colorScheme: _colors2.default,
+	    padding: 20,
+	    radius: 4
+	  },
+	      scatterPlotD3 = {
+	    /**
+	     * Initialization
+	     * @param {Node} el Target DOM node
+	     * @param {Object} props Chart properties
+	     */
+	    create: function create(el) {
+	      var props = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+	      this.props = Object.assign({}, defaultProps, props);
+	      this.update(el, props);
+	    },
+
+	    /**
+	     * Make the SVG container element
+	     * Recreate if it previously existed
+	     * @param {Dom} el Dom container node
+	     * @param {Array} data Chart data
+	     */
+	    _makeSvg: function _makeSvg(el, data) {
+	      if (svg) {
+	        svg.selectAll('svg > *').remove();
+	        svg.remove();
+	        var childNodes = el.getElementsByTagName('svg');
+	        if (childNodes.length > 0) {
+	          el.removeChild(childNodes[0]);
+	        }
+	      }
+	      var _props = this.props,
+	          chartSize = _props.chartSize,
+	          className = _props.className,
+	          colorScheme = _props.colorScheme,
+	          legendWidth = _props.legendWidth,
+	          padding = _props.padding;
+
+	      // Reference to svg element containing chart
+
+	      svg = d3.select(el).append('svg').attr('class', className).attr('width', chartSize + padding + legendWidth).attr('height', chartSize + padding).append('g').attr('transform', 'translate(' + padding + ',' + padding / 2 + ')');
+
+	      color = d3.scaleOrdinal(colorScheme);
+	    },
+
+
+	    /**
+	     * Draw the chart scales
+	     * @param {Object} data Chart data
+	     */
+	    _drawScales: function _drawScales(data) {
+	      var _props2 = this.props,
+	          chartSize = _props2.chartSize,
+	          padding = _props2.padding,
+	          size = chartSize / data.length;
+
+	      xScale.range([padding / 2, size - padding / 2]);
+	      yScale.range([size - padding / 2, padding / 2]);
+
+	      svg.selectAll('.x.axis').data(data).enter().append('g').attr('class', 'x axis').attr('transform', function (d, i) {
+	        return 'translate(' + (data.length - i - 1) * size + ',0)';
+	      }).each(function (d) {
+	        xScale.domain(domainByTrait[d]);
+	        d3.select(this).call(xAxis);
+	      });
+
+	      svg.selectAll('.y.axis').data(data).enter().append('g').attr('class', 'y axis').attr('transform', function (d, i) {
+	        return 'translate(0,' + i * size + ')';
+	      }).each(function (d) {
+	        yScale.domain(domainByTrait[d]);
+	        d3.select(this).call(yAxis);
+	      });
+	    },
+
+	    /**
+	     * Make a legend showing spit choice options
+	     */
+	    _drawLegend: function _drawLegend() {
+	      var _props3 = this.props,
+	          choices = _props3.choices,
+	          padding = _props3.padding,
+	          chartSize = _props3.chartSize,
+	          split = _props3.split,
+	          legend = svg.append('g').attr('transform', 'translate(' + (chartSize + padding / 2) + ', ' + (padding + 50) + ')');
+
+
+	      legend.append('g').append('text').attr('x', 0).attr('y', 0).attr('dy', '.71em').text(function (d) {
+	        return split;
+	      });
+	      legend.selectAll('.legendItem').data(choices).enter().append('g').each(function (c, i) {
+	        var cell = d3.select(this);
+	        cell.append('rect').attr('class', 'legendItem').attr('x', 0).attr('y', 20 + i * 15).attr('fill', color(i)).attr('height', 10).attr('width', 10);
+
+	        cell.append('text').attr('x', 15).attr('y', 20 + i * 15).attr('dy', '.71em').text(function (d) {
+	          return c;
+	        });
+	      });
+
+	      legend.exit().remove();
+	    },
+
+
+	    /**
+	     * Draw scatter points
+	     * @param {Object} traits Chart data
+	     * @param {Number} size Chart size
+	     */
+	    _drawPoints: function _drawPoints(traits, size) {
+	      var _props4 = this.props,
+	          data = _props4.data,
+	          delay = _props4.delay,
+	          duration = _props4.duration,
+	          choices = _props4.choices,
+	          split = _props4.split,
+	          padding = _props4.padding,
+	          radius = _props4.radius,
+	          n = traits.length;
+
+	      var cell = svg.selectAll('.cell').data(cross(traits, traits)).enter().append('g').attr('class', 'cell').attr('transform', function (d) {
+	        return 'translate(' + (n - d.i - 1) * size + ',' + d.j * size + ')';
+	      }).each(plot);
+
+	      // Titles for the diagonal.
+	      cell.filter(function (d) {
+	        return d.i === d.j;
+	      }).append('text').attr('x', padding).attr('y', padding).attr('dy', '.71em').text(function (d) {
+	        return d.x;
+	      });
+
+	      /**
+	       * Plot a point
+	       * @param {Object} p Point
+	       */
+	      function plot(p) {
+	        var cell = void 0,
+	            circle = void 0;
+	        cell = d3.select(this);
+	        xScale.domain(domainByTrait[p.x]);
+	        yScale.domain(domainByTrait[p.y]);
+
+	        cell.append('rect').attr('class', 'frame').attr('x', padding / 2).attr('y', padding / 2).attr('width', size - padding).attr('height', size - padding);
+
+	        circle = cell.selectAll('circle').data(data.values).enter().append('circle').attr('r', function (d) {
+	          return radius;
+	        }).attr('cx', function (d) {
+	          return xScale(d[p.x]);
+	        }).attr('cy', function (d) {
+	          return yScale(d[p.y]);
+	        }).style('fill', function (d) {
+	          if (d[split]) {
+	            var i = choices.findIndex(function (c) {
+	              return c === d[split];
+	            });
+	            return color(i);
+	          }
+	          return '#eeaabb';
+	        });
+
+	        circle.transition().duration(duration).delay(delay).attr('r', function (d) {
+	          return radius;
+	        });
+	      }
+
+	      /**
+	       * Create cross array
+	       * @param {Object} a point
+	       * @param {Object} b point
+	       * @return {Array} data
+	       */
+	      function cross(a, b) {
+	        var c = [],
+	            n = a.length,
+	            m = b.length,
+	            i = void 0,
+	            j = void 0;
+	        for (i = -1; ++i < n;) {
+	          for (j = -1; ++j < m;) {
+	            c.push({ x: a[i], i: i, y: b[j], j: j });
+	          }
+	        }
+	        return c;
+	      }
+	    },
+
+
+	    /**
+	     * Update chart
+	     * @param {Node} el Chart element
+	     * @param {Object} props Chart props
+	    */
+	    update: function update(el, props) {
+	      this.props = _extends({}, this.props, props);
+	      if (!props.data) return;
+	      var _props5 = this.props,
+	          chartSize = _props5.chartSize,
+	          data = _props5.data,
+	          distModels = _props5.distModels;
+
+	      this._makeSvg(el, props.data);
+	      this._drawLegend();
+	      var traits = data.keys.filter(function (k) {
+	        return distModels.indexOf(k) !== -1;
+	      }),
+	          size = chartSize / traits.length,
+	          n = traits.length;
+
+	      traits.forEach(function (trait) {
+	        domainByTrait[trait] = d3.extent(data.values, function (d) {
+	          return d[trait];
+	        });
+	      });
+	      xAxis = d3.axisBottom(xScale).ticks(6).tickSize(size * n);
+	      yAxis = d3.axisLeft(yScale).ticks(6).tickSize(-size * n);
+
+	      this._drawScales(traits);
+	      this._drawPoints(traits, size);
+	    },
+
+	    /**
+	     * Any necessary clean up
+	     * @param {Node} el To remove
+	    */
+	    destroy: function destroy(el) {
+	      svg.selectAll('svg > *').remove();
+	    }
+	  };
+	  return scatterPlotD3;
+	};
+
+/***/ },
+/* 12 */
+/***/ function(module, exports) {
+
+	"use strict";
 
 /***/ }
 /******/ ])

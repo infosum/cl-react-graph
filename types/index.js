@@ -1,6 +1,11 @@
 export type HistogramData = {
   bins: number[],
-  counts: number[]
+  counts: HistogramDataSet[]
+};
+
+export type HistogramDataSet = {
+  label: string,
+  data: number[]
 };
 
 export type ChartAdaptor = {
@@ -19,4 +24,16 @@ export type LineChartDataSet = {
    points: boolean,
    line: boolena,
    data: ChartPoint[]
+};
+
+export type ScatterPlotProps = {
+  choices: any[],
+  className: string,
+  chartSize: number,
+  delay: number,
+  duration: number,
+  legendWidth: number,
+  colorScheme: string[],
+  padding: number,
+  radius: number
 };

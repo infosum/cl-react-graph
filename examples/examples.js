@@ -4,17 +4,23 @@
 
  const data = {
      bins: [1, 2, 3, 4],
-     counts: [1, 2, 3, 4]
-   },
-   points = [{
-     label: 'test data',
-     data: [
-    {x: 1, y: 1},
-    {x: 2, y: 2},
-    {x: 3, y: 3},
-    {x: 4, y: 4}
+     counts: [
+       {
+         label: 'Data 1',
+         data: [1, 2, 3, 4]
+       }
      ]
    },
+   points = [
+     {
+       label: 'test data',
+       data: [
+        {x: 1, y: 1},
+        {x: 2, y: 2},
+        {x: 3, y: 3},
+        {x: 4, y: 4}
+       ]
+     },
      {
        label: 'test data',
        point: {
@@ -32,12 +38,16 @@
        },
 
        data: [
-    {x: 2, y: 1},
-    {x: 3, y: 2},
-    {x: 4, y: 3},
-    {x: 6, y: 4}
+        {x: 2, y: 1},
+        {x: 3, y: 2},
+        {x: 4, y: 3},
+        {x: 6, y: 4}
        ]
      }],
+
+   scatter = [
+
+   ],
    element = <div>
   <div>
   <Histogram data={data} width={'100%'} />

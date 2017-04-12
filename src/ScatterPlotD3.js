@@ -1,7 +1,7 @@
 // @flow
 import * as d3 from 'd3';
 import colorScheme from './colors';
-import {ChartPoint} from '../types';
+import {ChartPoint, ScatterPlotProps} from '../types';
 
 
 export const scatterPlotD3 = (() => {
@@ -114,7 +114,7 @@ export const scatterPlotD3 = (() => {
         legend.selectAll('.legendItem')
           .data(choices)
           .enter().append('g')
-          .each(function(c, i) {
+          .each(function(c, i: number) {
             var cell = d3.select(this);
             cell.append('rect')
             .attr('class', 'legendItem')
@@ -139,11 +139,11 @@ export const scatterPlotD3 = (() => {
        * @param {Object} traits Chart data
        * @param {Number} size Chart size
        */
-      _drawPoints(traits, size) {
+      _drawPoints(traits, size: number) {
         const {data, delay, duration,
           choices, split, padding, radius} = this.props,
           n = traits.length;
-        var cell = svg.selectAll('.cell')
+        let cell = svg.selectAll('.cell')
         .data(cross(traits, traits))
         .enter().append('g')
         .attr('class', 'cell')
@@ -181,7 +181,7 @@ export const scatterPlotD3 = (() => {
           .attr('r', d => radius)
           .attr('cx', d => xScale(d[p.x]))
           .attr('cy', d => yScale(d[p.y]))
-           .style('fill', (d, i) => {
+           .style('fill', (d) => {
              if (d[split]) {
                let i = choices.findIndex(c => c === d[split]);
                return color(i);
@@ -221,15 +221,13 @@ export const scatterPlotD3 = (() => {
        * @param {Node} el Chart element
        * @param {Object} props Chart props
       */
-      update: function(el: Node, props) {
-        this.props = Object.assign({}, this.props, props);
+      update: function(el: Node, props: ScatterPlotProps) {
+        this.props = {...this.props, ...props};
         if (!props.data) return;
         const {chartSize, data, distModels} = this.props;
         this._makeSvg(el, props.data);
         this._drawLegend();
-        let traits = data.keys.filter(k => {
-            return distModels.indexOf(k) !== -1;
-          }),
+        let traits = data.keys.filter(k => distModels.indexOf(k) !== -1),
           size = chartSize / traits.length,
           n = traits.length;
 

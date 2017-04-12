@@ -1,5 +1,5 @@
 // @flow
-import React, {Component} from 'react';
+import React, {Component, Element} from 'react';
 import ReactDOM from 'react-dom';
 import {histogramD3} from './HistogramD3';
 import type {DOMEvent, ChartAdaptor, HistogramData} from '../types';
@@ -18,6 +18,9 @@ type ChartState = {
   yTicks: number
 };
 
+/**
+ * Histogram component
+ */
 class Histogram extends Component {
 
   histogram: ChartAdaptor
@@ -32,6 +35,10 @@ class Histogram extends Component {
   //   width: '100%'
   // };
 
+  /**
+   * Constructor
+   * @param {Object} props
+   */
   constructor(props: Props) {
     super(props);
     this.histogram = histogramD3();
@@ -40,6 +47,10 @@ class Histogram extends Component {
     };
   }
 
+  /**
+   * Handle the page resize
+   * @param {Event} e .
+   */
   handleResize(e: DOMEvent) {
     let elem = this.getDOMNode(),
       width = elem.offsetWidth;
@@ -51,6 +62,9 @@ class Histogram extends Component {
     this.histogram.create(this.getDOMNode(), this.getChartState());
   }
 
+  /**
+   * Component mounted
+   */
   componentDidMount() {
     this.histogram.create(this.getDOMNode(), this.getChartState());
     if (this.props.width === '100%') {
@@ -59,10 +73,17 @@ class Histogram extends Component {
     }
   }
 
+  /**
+   * Component updated
+   */
   componentDidUpdate() {
     this.histogram.update(this.getDOMNode(), this.getChartState());
   }
 
+  /**
+   * Get the chart state
+   * @return {Object} ChartState
+   */
   getChartState(): ChartState {
     let {width, data} = this.props;
     if (width === '100%') {
@@ -78,10 +99,18 @@ class Histogram extends Component {
     };
   }
 
+  /**
+   * Props recieved, update the chart
+   * @param {Object} props Props
+   */
   componentWillReceiveProps(props: Props) {
     this.histogram.update(this.getDOMNode(), this.getChartState());
   }
 
+  /**
+   * Component will un mount, remove the chart and
+   * any event listeners
+   */
   componentWillUnmount() {
     if (this.props.width === '100%') {
       window.removeEventListener('resize', this.handleResize);
@@ -89,11 +118,19 @@ class Histogram extends Component {
     this.histogram.destroy(this.getDOMNode());
   }
 
+  /**
+   * Get the chart's dom node
+   * @return {Element} dom noe
+   */
   getDOMNode(): Node {
     return ReactDOM.findDOMNode(this);
   }
 
-  render(): React$Element<any> {
+  /**
+   * Render
+   * @return {Dom} node
+   */
+  render(): Element<any> {
     return (<div className="histogram-chart-container"></div>);
   }
 }

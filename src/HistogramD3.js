@@ -1,5 +1,5 @@
 import * as d3 from 'd3';
-import type {HistogramData, ChartAdaptor} from '../types';
+import type {HistogramData, ChartAdaptor, HistogramDataSet} from '../types';
 import colorScheme from './colors';
 
 export const histogramD3 = ((): ChartAdaptor => {
@@ -49,6 +49,7 @@ export const histogramD3 = ((): ChartAdaptor => {
         top: 5
       }
     },
+
     HistogramD3 = {
     /**
      * Initialization
@@ -56,7 +57,7 @@ export const histogramD3 = ((): ChartAdaptor => {
      * @param {Object} props Chart properties
      */
       create: function(el: Node, props: Object = {}) {
-        this.props = Object.assign({}, defaultProps, props);
+        this.props = {...defaultProps, ...props};
         this.update(el, props);
       },
 
@@ -105,27 +106,42 @@ export const histogramD3 = ((): ChartAdaptor => {
       .attr('class', 'tooltip-inner');
       },
 
+      /**
+       * Get a max count of values in each data set
+       * @param {Object} data Histogram data
+       * @return {Number} count
+       */
+      valuesCount(data: HistogramData): number {
+        return data.counts.reduce((a: number, b: HistogramDataSet): number => {
+          return b.data.length > a ? b.data.length : a;
+        }, 0);
+      },
+
     /**
      * Draw scales
      * @param {Object} data Chart data
      */
       _drawScales(data: HistogramData) {
         const {xAxisHeight, margin, width,
-          height, yXaisWidth, yTicks} = this.props;
+          height, yXaisWidth, yTicks} = this.props,
+          valuesCount = this.valuesCount(data);
 
         svg.selectAll('.y-axis').remove();
         svg.selectAll('.x-axis').remove();
 
         let w = width - (margin.left * 2),
           yDomain,
-          xAxis, yAxis, yRange;
+          xAxis, yAxis, yRange,
+          allCounts = data.counts.reduce((a: number[], b: HistogramDataSet): number[] => {
+            return [...a, b.data];
+          }, []);
 
         x.domain(data.bins)
         .rangeRound([0, w]);
 
         xAxis = d3.axisBottom(x);
 
-        if (w / data.counts.length < 10) {
+        if (w / valuesCount < 10) {
           // Show one in 10 x axis labels
           xAxis.tickValues(x.domain().filter((d, i) => !(i % 10)));
         }
@@ -134,7 +150,8 @@ export const histogramD3 = ((): ChartAdaptor => {
             (height - xAxisHeight - (margin.left * 2)) + ')')
           .call(xAxis);
 
-        yDomain = d3.extent(data.counts, d => d);
+        // yDomain = d3.extent(data.counts, d => d);
+        yDomain = d3.extent(allCounts, d => d);
         yDomain[0] = 0;
         yRange = [height - (margin.top * 2) - xAxisHeight, 0];
         y.range(yRange)
@@ -157,17 +174,18 @@ export const histogramD3 = ((): ChartAdaptor => {
           xAxisHeight, yXaisWidth, barMargin, tip, tipContentFn} = this.props,
           bar,
           w = width - (margin.left * 2),
+          valuesCount = this.valuesCount(info),
           colors = d3.scaleOrdinal(colorScheme);
 
         // Ensure we don't have negative bar widths
-        barWidth = Math.max(1, (w - (data.length + 1) * barMargin) /
-          data.length);
+        barWidth = Math.max(1, (w - (valuesCount + 1) * barMargin) /
+          valuesCount);
 
         // Small bars - reduce margin and re-calcualate bar width
         if (barWidth < 5) {
           barMargin = 1;
-          barWidth = Math.max(1, (w - (data.length + 1) * barMargin) /
-            data.length);
+          barWidth = Math.max(1, (w - (valuesCount + 1) * barMargin) /
+            valuesCount);
         }
 
         svg.selectAll('.bar').remove();
@@ -208,11 +226,12 @@ export const histogramD3 = ((): ChartAdaptor => {
     */
       update: function(el: Node, props: Object) {
         if (!props.data) return;
-        this.props = Object.assign({}, defaultProps, props);
+        this.props = {...defaultProps, ...props};
         this._makeSvg(el);
         if (!this.props.data.bins) {
           return;
         }
+
         this._drawScales(this.props.data);
         this._drawBars(this.props.data);
       },
