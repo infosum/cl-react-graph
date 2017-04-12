@@ -16,7 +16,9 @@ module.exports = {
     "mocha": true
   },
   "rules": {
+    "comma-dangle": ["error", "never"],
     "semi": 2,
+    "arrow-parens": 0,
     "indent": ["error", 2],
     "quotes": [2, "single"],
     "one-var": ["error", "always"],
