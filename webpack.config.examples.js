@@ -5,7 +5,7 @@ var webpack = require('webpack'),
     './examples/examples.js'
   ],
   plugins = [
-    new webpack.NoErrorsPlugin()
+    new webpack.NoEmitOnErrorsPlugin()
   ],
   loaders = [
     {test: /\.js$/, exclude: /(node_modules)/, loader: 'babel-loader'}
