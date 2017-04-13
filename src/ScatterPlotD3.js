@@ -198,6 +198,7 @@ export const scatterPlotD3 = (() => {
 
         /**
          * Create cross array
+         * // @TODO looks like d3 has its own cross function now...
          * @param {Object} a point
          * @param {Object} b point
          * @return {Array} data

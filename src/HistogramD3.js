@@ -18,7 +18,7 @@ export const histogramD3 = ((): ChartAdaptor => {
       barWidth: 50,
       barMargin: 5,
       yTicks: 10,
-      tipContentFn: (info, i, d) => info.bins[i] + '<br />' + d + '%',
+      tipContentFn: (bins: string[], i, d) => bins[i] + '<br />' + d + '%',
       tipContainer: 'body',
       tip: {
         fx: {
@@ -42,7 +42,12 @@ export const histogramD3 = ((): ChartAdaptor => {
       },
       xAxisHeight: 15,
       yXaisWidth: 18,
-      stroke: '#005870',
+      stroke: {
+        color: '#005870',
+        dasharray: '',
+        width: 1,
+        linecap: 'butt'
+      },
       colorScheme,
       margin: {
         left: 5,
@@ -108,11 +113,11 @@ export const histogramD3 = ((): ChartAdaptor => {
 
       /**
        * Get a max count of values in each data set
-       * @param {Object} data Histogram data
+       * @param {Object} counts Histogram data set values
        * @return {Number} count
        */
-      valuesCount(data: HistogramData): number {
-        return data.counts.reduce((a: number, b: HistogramDataSet): number => {
+      valuesCount(counts: HistogramDataSet): number {
+        return counts.reduce((a: number, b: HistogramDataSet): number => {
           return b.data.length > a ? b.data.length : a;
         }, 0);
       },
@@ -124,7 +129,7 @@ export const histogramD3 = ((): ChartAdaptor => {
       _drawScales(data: HistogramData) {
         const {xAxisHeight, margin, width,
           height, yXaisWidth, yTicks} = this.props,
-          valuesCount = this.valuesCount(data);
+          valuesCount = this.valuesCount(data.counts);
 
         svg.selectAll('.y-axis').remove();
         svg.selectAll('.x-axis').remove();
@@ -133,7 +138,7 @@ export const histogramD3 = ((): ChartAdaptor => {
           yDomain,
           xAxis, yAxis, yRange,
           allCounts = data.counts.reduce((a: number[], b: HistogramDataSet): number[] => {
-            return [...a, b.data];
+            return [...a, ...b.data];
           }, []);
 
         x.domain(data.bins)
@@ -150,7 +155,6 @@ export const histogramD3 = ((): ChartAdaptor => {
             (height - xAxisHeight - (margin.left * 2)) + ')')
           .call(xAxis);
 
-        // yDomain = d3.extent(data.counts, d => d);
         yDomain = d3.extent(allCounts, d => d);
         yDomain[0] = 0;
         yRange = [height - (margin.top * 2) - xAxisHeight, 0];
@@ -169,12 +173,19 @@ export const histogramD3 = ((): ChartAdaptor => {
        * @param {Object} info Bar data etc
        */
       _drawBars: function(info: HistogramData) {
-        let data = info.counts,
-          {colorScheme, height, width, margin, barWidth, delay, duration,
-          xAxisHeight, yXaisWidth, barMargin, tip, tipContentFn} = this.props,
+        const valuesCount = this.valuesCount(info.counts);
+        info.counts.forEach((set: HistogramDataSet, setIndex: number) => {
+          this.drawDataSet(info.bins, set, setIndex, info.counts.length, valuesCount);
+        });
+      },
+
+      drawDataSet(bins: string[], set: HistogramDataSet, setIndex: number, setCount: number, valuesCount: number) {
+        let {colorScheme, height, width, margin, barWidth, delay, duration,
+          xAxisHeight, yXaisWidth, barMargin, stroke,
+          tip, tipContentFn} = this.props,
           bar,
           w = width - (margin.left * 2),
-          valuesCount = this.valuesCount(info),
+
           colors = d3.scaleOrdinal(colorScheme);
 
         // Ensure we don't have negative bar widths
@@ -188,33 +199,54 @@ export const histogramD3 = ((): ChartAdaptor => {
             valuesCount);
         }
 
-        svg.selectAll('.bar').remove();
+        // show data sets next to each other...
+        barWidth = barWidth / setCount;
+        const selector = '.bar-' + setIndex;
 
-        bar = svg.selectAll('.bar')
-        .data(data)
-        .enter()
-        .append('rect')
-          .attr('class', 'bar')
-          .attr('x', (d, index, all) =>
-            ((barMargin + barWidth) * index) + barMargin + yXaisWidth)
-          .attr('width', d => barWidth)
-          .attr('fill', (d, i) => colors(i))
-          .on('mouseover', (d: number, i: number) => {
-            tipContent.html(() => tipContentFn(info, i, d));
-            tip.fx.in(tipContainer);
-          })
-          .on('mousemove', () => tip.fx.move(tipContainer))
-          .on('mouseout', () => tip.fx.out(tipContainer))
-          .attr('y', d => height - xAxisHeight - margin.top * 2)
-          .attr('height', 0);
+        svg.selectAll(selector).remove();
+        bar = svg.selectAll(selector)
+          .data(set.data)
+          .enter()
+          .append('rect')
+            .attr('class', 'bar ' + selector)
+            .attr('x', (d, index, all) =>
+              ((barMargin + barWidth) * index) + barMargin + yXaisWidth
+              + ((index + setIndex) * barWidth))
+            .attr('width', d => barWidth - barMargin / 2)
+            .attr('fill', (d, i) => colors(i))
+            .on('mouseover', (d: number, i: number) => {
+              tipContent.html(() => tipContentFn(bins, i, d));
+              tip.fx.in(tipContainer);
+            })
+            .on('mousemove', () => tip.fx.move(tipContainer))
+            .on('mouseout', () => tip.fx.out(tipContainer))
+            .attr('y', (d: number): number => {
+              return height - xAxisHeight - margin.top * 2;
+            })
+            .attr('height', 0);
+
+
+        bar.attr('stroke', (d, i) => typeof stroke.color === 'function'
+          ? stroke.color(d, i, colors)
+          : stroke.color)
+          .attr('stroke-width', stroke.width)
+          .attr('stroke-linecap', stroke.linecap);
+
+        if (stroke.dasharray !== '') {
+          bar.attr('stroke-dasharray', stroke.dasharray);
+        }
 
         bar
-          .transition()
-          .duration(duration)
-          .delay(delay)
-          .attr('y', (d: number) => y(d))
-          .attr('height',
-            d => (height - xAxisHeight - margin.top * 2) - (y(d)));
+            .transition()
+            .duration(duration)
+            .delay(delay)
+            .attr('y', (d: number): number => {
+              return y(d);
+            })
+            .attr('height',
+              (d: number): number => {
+                return (height - xAxisHeight - margin.top * 2) - (y(d));
+              });
 
         bar.exit().remove();
       },

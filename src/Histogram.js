@@ -1,4 +1,5 @@
 // @flow
+import * as d3 from 'd3';
 import React, {Component, Element} from 'react';
 import ReactDOM from 'react-dom';
 import {histogramD3} from './HistogramD3';
@@ -92,9 +93,13 @@ class Histogram extends Component {
     return {
       data,
       height: 200,
-      tipContentFn: (info, i, d) =>
-        info.bins[i] + '<br />' + d.toFixed(2) + '%',
+      tipContentFn: (bins: string[], i, d) =>
+        bins[i] + '<br />' + d.toFixed(2) + '%',
       width,
+      stroke: {
+        color: (d, i, colors) => d3.rgb(colors(i)).darker(1),
+        width: 2
+      },
       yTicks: 0
     };
   }
