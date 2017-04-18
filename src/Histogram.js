@@ -7,6 +7,7 @@ import type {DOMEvent, ChartAdaptor, HistogramData} from '../types';
 
 type Props = {
   data: HistogramData,
+  height: number,
   width: string | number
 };
 
@@ -32,9 +33,10 @@ class Histogram extends Component {
     parentWidth: number
   }
 
-  // static defaultProps = {
-  //   width: '100%'
-  // };
+  static defaultProps = {
+    width: '100%',
+    height: 200
+  };
 
   /**
    * Constructor
@@ -86,13 +88,13 @@ class Histogram extends Component {
    * @return {Object} ChartState
    */
   getChartState(): ChartState {
-    let {width, data} = this.props;
+    let {width, height, data} = this.props;
     if (width === '100%') {
       width = this.state.parentWidth || 300;
     }
     return {
       data,
-      height: 200,
+      height,
       tipContentFn: (bins: string[], i, d) =>
         bins[i] + '<br />' + d.toFixed(2) + '%',
       width,

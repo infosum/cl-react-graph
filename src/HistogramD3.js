@@ -1,6 +1,7 @@
 import * as d3 from 'd3';
 import type {HistogramData, ChartAdaptor, HistogramDataSet} from '../types';
 import colorScheme from './colors';
+import attrs from './d3/attrs';
 
 export const histogramD3 = ((): ChartAdaptor => {
   let svg,
@@ -9,16 +10,59 @@ export const histogramD3 = ((): ChartAdaptor => {
     y = d3.scaleLinear(),
     x = d3.scaleBand();
 
+// gridlines in x axis function
+  function make_x_gridlines(ticks: number = 5) {
+    return d3.axisBottom(x)
+        .ticks(ticks);
+  }
+
+  // gridlines in y axis function
+  function make_y_gridlines(ticks: number = 5) {
+    return d3.axisLeft(y)
+        .ticks(ticks);
+  }
+
   const defaultProps = {
+      barWidth: 50,
+      barMargin: 5,
       className: 'histogram-d3',
+      colorScheme,
       width: 200,
       height: 200,
       delay: 0,
       duration: 400,
-      barWidth: 50,
-      barMargin: 5,
-      yTicks: 10,
-      tipContentFn: (bins: string[], i, d) => bins[i] + '<br />' + d + '%',
+      grid: {
+        x: {
+          style: {
+            'stroke': '#bbb',
+            'fill': 'none',
+            'stroke-width': '1'
+          },
+          visible: true,
+          ticks: 10
+        },
+        y: {
+          style: {
+            'stroke': '#bbb',
+            'fill': 'none',
+            'stroke-width': '1'
+          },
+          visible: true,
+          ticks: 10
+        }
+      },
+      margin: {
+        left: 5,
+        top: 5
+      },
+      stroke: {
+        color: '#005870',
+        dasharray: '',
+        width: 1,
+        linecap: 'butt'
+      },
+      tipContentFn: (bins: string[], i: number, d: number): string =>
+        bins[i] + '<br />' + d + '%',
       tipContainer: 'body',
       tip: {
         fx: {
@@ -41,18 +85,8 @@ export const histogramD3 = ((): ChartAdaptor => {
         }
       },
       xAxisHeight: 15,
-      yXaisWidth: 18,
-      stroke: {
-        color: '#005870',
-        dasharray: '',
-        width: 1,
-        linecap: 'butt'
-      },
-      colorScheme,
-      margin: {
-        left: 5,
-        top: 5
-      }
+      yTicks: 10,
+      yXaisWidth: 18
     },
 
     HistogramD3 = {
@@ -179,7 +213,17 @@ export const histogramD3 = ((): ChartAdaptor => {
         });
       },
 
-      drawDataSet(bins: string[], set: HistogramDataSet, setIndex: number, setCount: number, valuesCount: number) {
+      /**
+       * Draw a single data set into the chart
+       * @param {Array} bins Data set labels
+       * @param {Object} set HistogramDataSet
+       * @param {number} setIndex Data set index
+       * @param {number} setCount Total number of data sets
+       * @param {number} valuesCount Max total number of
+       * values across all data sets
+       */
+      drawDataSet(bins: string[], set: HistogramDataSet,
+        setIndex: number, setCount: number, valuesCount: number) {
         let {colorScheme, height, width, margin, barWidth, delay, duration,
           xAxisHeight, yXaisWidth, barMargin, stroke,
           tip, tipContentFn} = this.props,
@@ -237,18 +281,52 @@ export const histogramD3 = ((): ChartAdaptor => {
         }
 
         bar
-            .transition()
-            .duration(duration)
-            .delay(delay)
-            .attr('y', (d: number): number => {
-              return y(d);
-            })
-            .attr('height',
-              (d: number): number => {
-                return (height - xAxisHeight - margin.top * 2) - (y(d));
-              });
+          .transition()
+          .duration(duration)
+          .delay(delay)
+          .attr('y', (d: number): number => {
+            return y(d);
+          })
+          .attr('height',
+            (d: number): number => {
+              return (height - xAxisHeight - margin.top * 2) - (y(d));
+            });
 
         bar.exit().remove();
+      },
+
+      /**
+       * Draw a grid onto the chart backgroud
+       * @param {Object} data HistogramData
+       */
+      _drawGrid(data: HistogramData) {
+        const {height, width, yXaisWidth, grid} = this.props,
+          ticks = this.valuesCount(data.counts);
+        let g, gy;
+
+        if (grid.x.visible) {
+           // Add the X gridlines
+          g = svg.append('g')
+            .attr('class', 'grid gridX')
+            .attr('transform', 'translate(' + yXaisWidth + ',' + height + ')');
+console.log('grid x ticks', grid.x.ticks);
+          g.call(make_x_gridlines(grid.x.ticks || ticks)
+                .tickSize(-height)
+                .tickFormat(''));
+          attrs(g.selectAll('.tick line'), grid.x.style);
+        }
+
+        if (grid.y.visible) {
+        // add the Y gridlines
+          gy = svg.append('g')
+          .attr('class', 'grid gridY')
+          .attr('transform', 'translate(' + yXaisWidth + ', 0)')
+          .call(make_y_gridlines(grid.y.ticks || ticks)
+              .tickSize(-width)
+              .tickFormat('')
+          );
+          attrs(gy.selectAll('.tick line'), grid.y.style);
+        }
       },
 
     /**
@@ -265,6 +343,7 @@ export const histogramD3 = ((): ChartAdaptor => {
         }
 
         this._drawScales(this.props.data);
+        this._drawGrid(this.props.data);
         this._drawBars(this.props.data);
       },
 

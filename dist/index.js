@@ -16,9 +16,9 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	function __webpack_require__(moduleId) {
 /******/
 /******/ 		// Check if module is in cache
-/******/ 		if(installedModules[moduleId])
+/******/ 		if(installedModules[moduleId]) {
 /******/ 			return installedModules[moduleId].exports;
-/******/
+/******/ 		}
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = installedModules[moduleId] = {
 /******/ 			i: moduleId,
@@ -73,21 +73,21 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "/";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 12);
+/******/ 	return __webpack_require__(__webpack_require__.s = 13);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
 /***/ (function(module, exports, __webpack_require__) {
 
-// https://d3js.org Version 4.7.4. Copyright 2017 Mike Bostock.
+// https://d3js.org Version 4.8.0. Copyright 2017 Mike Bostock.
 (function (global, factory) {
 	 true ? factory(exports) :
 	typeof define === 'function' && define.amd ? define(['exports'], factory) :
 	(factory((global.d3 = global.d3 || {})));
 }(this, (function (exports) { 'use strict';
 
-var version = "4.7.4";
+var version = "4.8.0";
 
 var ascending = function(a, b) {
   return a < b ? -1 : a > b ? 1 : a >= b ? 0 : NaN;
@@ -140,11 +140,24 @@ function pair(a, b) {
   return [a, b];
 }
 
-var cross = function(a, b, f) {
-  var na = a.length, nb = b.length, c = new Array(na * nb), ia, ib, ic, va;
-  if (f == null) f = pair;
-  for (ia = ic = 0; ia < na; ++ia) for (va = a[ia], ib = 0; ib < nb; ++ib, ++ic) c[ic] = f(va, b[ib]);
-  return c;
+var cross = function(values0, values1, reduce) {
+  var n0 = values0.length,
+      n1 = values1.length,
+      values = new Array(n0 * n1),
+      i0,
+      i1,
+      i,
+      value0;
+
+  if (reduce == null) reduce = pair;
+
+  for (i0 = i = 0; i0 < n0; ++i0) {
+    for (value0 = values0[i0], i1 = 0; i1 < n1; ++i1, ++i) {
+      values[i] = reduce(value0, values1[i1]);
+    }
+  }
+
+  return values;
 };
 
 var descending = function(a, b) {
@@ -155,36 +168,36 @@ var number = function(x) {
   return x === null ? NaN : +x;
 };
 
-var variance = function(array, f) {
-  var n = array.length,
+var variance = function(values, valueof) {
+  var n = values.length,
       m = 0,
-      a,
-      d,
-      s = 0,
       i = -1,
-      j = 0;
+      mean = 0,
+      value,
+      delta,
+      sum = 0;
 
-  if (f == null) {
+  if (valueof == null) {
     while (++i < n) {
-      if (!isNaN(a = number(array[i]))) {
-        d = a - m;
-        m += d / ++j;
-        s += d * (a - m);
+      if (!isNaN(value = number(values[i]))) {
+        delta = value - mean;
+        mean += delta / ++m;
+        sum += delta * (value - mean);
       }
     }
   }
 
   else {
     while (++i < n) {
-      if (!isNaN(a = number(f(array[i], i, array)))) {
-        d = a - m;
-        m += d / ++j;
-        s += d * (a - m);
+      if (!isNaN(value = number(valueof(values[i], i, values)))) {
+        delta = value - mean;
+        mean += delta / ++m;
+        sum += delta * (value - mean);
       }
     }
   }
 
-  if (j > 1) return s / (j - 1);
+  if (m > 1) return sum / (m - 1);
 };
 
 var deviation = function(array, f) {
@@ -192,30 +205,42 @@ var deviation = function(array, f) {
   return v ? Math.sqrt(v) : v;
 };
 
-var extent = function(array, f) {
-  var i = -1,
-      n = array.length,
-      a,
-      b,
-      c;
+var extent = function(values, valueof) {
+  var n = values.length,
+      i = -1,
+      value,
+      min,
+      max;
 
-  if (f == null) {
-    while (++i < n) if ((b = array[i]) != null && b >= b) { a = c = b; break; }
-    while (++i < n) if ((b = array[i]) != null) {
-      if (a > b) a = b;
-      if (c < b) c = b;
+  if (valueof == null) {
+    while (++i < n) { // Find the first comparable value.
+      if ((value = values[i]) != null && value >= value) {
+        min = max = value;
+        while (++i < n) { // Compare the remaining values.
+          if ((value = values[i]) != null) {
+            if (min > value) min = value;
+            if (max < value) max = value;
+          }
+        }
+      }
     }
   }
 
   else {
-    while (++i < n) if ((b = f(array[i], i, array)) != null && b >= b) { a = c = b; break; }
-    while (++i < n) if ((b = f(array[i], i, array)) != null) {
-      if (a > b) a = b;
-      if (c < b) c = b;
+    while (++i < n) { // Find the first comparable value.
+      if ((value = valueof(values[i], i, values)) != null && value >= value) {
+        min = max = value;
+        while (++i < n) { // Compare the remaining values.
+          if ((value = valueof(values[i], i, values)) != null) {
+            if (min > value) min = value;
+            if (max < value) max = value;
+          }
+        }
+      }
     }
   }
 
-  return [a, c];
+  return [min, max];
 };
 
 var array = Array.prototype;
@@ -252,13 +277,41 @@ var e5 = Math.sqrt(10);
 var e2 = Math.sqrt(2);
 
 var ticks = function(start, stop, count) {
-  var step = tickStep(start, stop, count);
-  return sequence(
-    Math.ceil(start / step) * step,
-    Math.floor(stop / step) * step + step / 2, // inclusive
-    step
-  );
+  var reverse = stop < start,
+      i = -1,
+      n,
+      ticks,
+      step;
+
+  if (reverse) n = start, start = stop, stop = n;
+
+  if ((step = tickIncrement(start, stop, count)) === 0 || !isFinite(step)) return [];
+
+  if (step > 0) {
+    start = Math.ceil(start / step);
+    stop = Math.floor(stop / step);
+    ticks = new Array(n = Math.ceil(stop - start + 1));
+    while (++i < n) ticks[i] = (start + i) * step;
+  } else {
+    start = Math.floor(start * step);
+    stop = Math.ceil(stop * step);
+    ticks = new Array(n = Math.ceil(start - stop + 1));
+    while (++i < n) ticks[i] = (start - i) / step;
+  }
+
+  if (reverse) ticks.reverse();
+
+  return ticks;
 };
+
+function tickIncrement(start, stop, count) {
+  var step = (stop - start) / Math.max(0, count),
+      power = Math.floor(Math.log(step) / Math.LN10),
+      error = step / Math.pow(10, power);
+  return power >= 0
+      ? (error >= e10 ? 10 : error >= e5 ? 5 : error >= e2 ? 2 : 1) * Math.pow(10, power)
+      : -Math.pow(10, -power) / (error >= e10 ? 10 : error >= e5 ? 5 : error >= e2 ? 2 : 1);
+}
 
 function tickStep(start, stop, count) {
   var step0 = Math.abs(stop - start) / Math.max(0, count),
@@ -295,12 +348,15 @@ var histogram = function() {
         tz = threshold(values, x0, x1);
 
     // Convert number of thresholds into uniform thresholds.
-    if (!Array.isArray(tz)) tz = ticks(x0, x1, tz);
+    if (!Array.isArray(tz)) {
+      tz = tickStep(x0, x1, tz);
+      tz = sequence(Math.ceil(x0 / tz) * tz, Math.floor(x1 / tz) * tz, tz); // exclusive
+    }
 
     // Remove any thresholds outside the domain.
     var m = tz.length;
     while (tz[0] <= x0) tz.shift(), --m;
-    while (tz[m - 1] >= x1) tz.pop(), --m;
+    while (tz[m - 1] > x1) tz.pop(), --m;
 
     var bins = new Array(m + 1),
         bin;
@@ -338,17 +394,17 @@ var histogram = function() {
   return histogram;
 };
 
-var threshold = function(array, p, f) {
-  if (f == null) f = number;
-  if (!(n = array.length)) return;
-  if ((p = +p) <= 0 || n < 2) return +f(array[0], 0, array);
-  if (p >= 1) return +f(array[n - 1], n - 1, array);
+var threshold = function(values, p, valueof) {
+  if (valueof == null) valueof = number;
+  if (!(n = values.length)) return;
+  if ((p = +p) <= 0 || n < 2) return +valueof(values[0], 0, values);
+  if (p >= 1) return +valueof(values[n - 1], n - 1, values);
   var n,
-      h = (n - 1) * p,
-      i = Math.floor(h),
-      a = +f(array[i], i, array),
-      b = +f(array[i + 1], i + 1, array);
-  return a + (b - a) * (h - i);
+      i = (n - 1) * p,
+      i0 = Math.floor(i),
+      value0 = +valueof(values[i0], i0, values),
+      value1 = +valueof(values[i0 + 1], i0 + 1, values);
+  return value0 + (value1 - value0) * (i - i0);
 };
 
 var freedmanDiaconis = function(values, min, max) {
@@ -360,55 +416,85 @@ var scott = function(values, min, max) {
   return Math.ceil((max - min) / (3.5 * deviation(values) * Math.pow(values.length, -1 / 3)));
 };
 
-var max = function(array, f) {
-  var i = -1,
-      n = array.length,
-      a,
-      b;
-
-  if (f == null) {
-    while (++i < n) if ((b = array[i]) != null && b >= b) { a = b; break; }
-    while (++i < n) if ((b = array[i]) != null && b > a) a = b;
-  }
-
-  else {
-    while (++i < n) if ((b = f(array[i], i, array)) != null && b >= b) { a = b; break; }
-    while (++i < n) if ((b = f(array[i], i, array)) != null && b > a) a = b;
-  }
-
-  return a;
-};
-
-var mean = function(array, f) {
-  var s = 0,
-      n = array.length,
-      a,
+var max = function(values, valueof) {
+  var n = values.length,
       i = -1,
-      j = n;
+      value,
+      max;
 
-  if (f == null) {
-    while (++i < n) if (!isNaN(a = number(array[i]))) s += a; else --j;
+  if (valueof == null) {
+    while (++i < n) { // Find the first comparable value.
+      if ((value = values[i]) != null && value >= value) {
+        max = value;
+        while (++i < n) { // Compare the remaining values.
+          if ((value = values[i]) != null && value > max) {
+            max = value;
+          }
+        }
+      }
+    }
   }
 
   else {
-    while (++i < n) if (!isNaN(a = number(f(array[i], i, array)))) s += a; else --j;
+    while (++i < n) { // Find the first comparable value.
+      if ((value = valueof(values[i], i, values)) != null && value >= value) {
+        max = value;
+        while (++i < n) { // Compare the remaining values.
+          if ((value = valueof(values[i], i, values)) != null && value > max) {
+            max = value;
+          }
+        }
+      }
+    }
   }
 
-  if (j) return s / j;
+  return max;
 };
 
-var median = function(array, f) {
-  var numbers = [],
-      n = array.length,
-      a,
-      i = -1;
+var mean = function(values, valueof) {
+  var n = values.length,
+      m = n,
+      i = -1,
+      value,
+      sum = 0;
 
-  if (f == null) {
-    while (++i < n) if (!isNaN(a = number(array[i]))) numbers.push(a);
+  if (valueof == null) {
+    while (++i < n) {
+      if (!isNaN(value = number(values[i]))) sum += value;
+      else --m;
+    }
   }
 
   else {
-    while (++i < n) if (!isNaN(a = number(f(array[i], i, array)))) numbers.push(a);
+    while (++i < n) {
+      if (!isNaN(value = number(valueof(values[i], i, values)))) sum += value;
+      else --m;
+    }
+  }
+
+  if (m) return sum / m;
+};
+
+var median = function(values, valueof) {
+  var n = values.length,
+      i = -1,
+      value,
+      numbers = [];
+
+  if (valueof == null) {
+    while (++i < n) {
+      if (!isNaN(value = number(values[i]))) {
+        numbers.push(value);
+      }
+    }
+  }
+
+  else {
+    while (++i < n) {
+      if (!isNaN(value = number(valueof(values[i], i, values)))) {
+        numbers.push(value);
+      }
+    }
   }
 
   return threshold(numbers.sort(ascending), 0.5);
@@ -436,23 +522,39 @@ var merge = function(arrays) {
   return merged;
 };
 
-var min = function(array, f) {
-  var i = -1,
-      n = array.length,
-      a,
-      b;
+var min = function(values, valueof) {
+  var n = values.length,
+      i = -1,
+      value,
+      min;
 
-  if (f == null) {
-    while (++i < n) if ((b = array[i]) != null && b >= b) { a = b; break; }
-    while (++i < n) if ((b = array[i]) != null && a > b) a = b;
+  if (valueof == null) {
+    while (++i < n) { // Find the first comparable value.
+      if ((value = values[i]) != null && value >= value) {
+        min = value;
+        while (++i < n) { // Compare the remaining values.
+          if ((value = values[i]) != null && min > value) {
+            min = value;
+          }
+        }
+      }
+    }
   }
 
   else {
-    while (++i < n) if ((b = f(array[i], i, array)) != null && b >= b) { a = b; break; }
-    while (++i < n) if ((b = f(array[i], i, array)) != null && a > b) a = b;
+    while (++i < n) { // Find the first comparable value.
+      if ((value = valueof(values[i], i, values)) != null && value >= value) {
+        min = value;
+        while (++i < n) { // Compare the remaining values.
+          if ((value = valueof(values[i], i, values)) != null && min > value) {
+            min = value;
+          }
+        }
+      }
+    }
   }
 
-  return a;
+  return min;
 };
 
 var permute = function(array, indexes) {
@@ -461,17 +563,21 @@ var permute = function(array, indexes) {
   return permutes;
 };
 
-var scan = function(array, compare) {
-  if (!(n = array.length)) return;
-  var i = 0,
-      n,
+var scan = function(values, compare) {
+  if (!(n = values.length)) return;
+  var n,
+      i = 0,
       j = 0,
       xi,
-      xj = array[j];
+      xj = values[j];
 
-  if (!compare) compare = ascending;
+  if (compare == null) compare = ascending;
 
-  while (++i < n) if (compare(xi = array[i], xj) < 0 || compare(xj, xj) !== 0) xj = xi, j = i;
+  while (++i < n) {
+    if (compare(xi = values[i], xj) < 0 || compare(xj, xj) !== 0) {
+      xj = xi, j = i;
+    }
+  }
 
   if (compare(xj, xj) === 0) return j;
 };
@@ -491,21 +597,25 @@ var shuffle = function(array, i0, i1) {
   return array;
 };
 
-var sum = function(array, f) {
-  var s = 0,
-      n = array.length,
-      a,
-      i = -1;
+var sum = function(values, valueof) {
+  var n = values.length,
+      i = -1,
+      value,
+      sum = 0;
 
-  if (f == null) {
-    while (++i < n) if (a = +array[i]) s += a; // Note: zero and null are equivalent.
+  if (valueof == null) {
+    while (++i < n) {
+      if (value = +values[i]) sum += value; // Note: zero and null are equivalent.
+    }
   }
 
   else {
-    while (++i < n) if (a = +f(array[i], i, array)) s += a;
+    while (++i < n) {
+      if (value = +valueof(values[i], i, values)) sum += value;
+    }
   }
 
-  return s;
+  return sum;
 };
 
 var transpose = function(matrix) {
@@ -6487,7 +6597,8 @@ var formatLocale = function(locale) {
   var group = locale.grouping && locale.thousands ? formatGroup(locale.grouping, locale.thousands) : identity$3,
       currency = locale.currency,
       decimal = locale.decimal,
-      numerals = locale.numerals ? formatNumerals(locale.numerals) : identity$3;
+      numerals = locale.numerals ? formatNumerals(locale.numerals) : identity$3,
+      percent = locale.percent || "%";
 
   function newFormat(specifier) {
     specifier = formatSpecifier(specifier);
@@ -6505,7 +6616,7 @@ var formatLocale = function(locale) {
     // Compute the prefix and suffix.
     // For SI-prefix, the suffix is lazily computed.
     var prefix = symbol === "$" ? currency[0] : symbol === "#" && /[boxX]/.test(type) ? "0" + type.toLowerCase() : "",
-        suffix = symbol === "$" ? currency[1] : /[%p]/.test(type) ? "%" : "";
+        suffix = symbol === "$" ? currency[1] : /[%p]/.test(type) ? percent : "";
 
     // What format function should we use?
     // Is this an integer type?
@@ -16285,6 +16396,7 @@ exports.scan = scan;
 exports.shuffle = shuffle;
 exports.sum = sum;
 exports.ticks = ticks;
+exports.tickIncrement = tickIncrement;
 exports.tickStep = tickStep;
 exports.transpose = transpose;
 exports.variance = variance;
@@ -16740,10 +16852,6 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var Histogram = function (_Component) {
   _inherits(Histogram, _Component);
 
-  // static defaultProps = {
-  //   width: '100%'
-  // };
-
   /**
    * Constructor
    * @param {Object} props
@@ -16817,6 +16925,7 @@ var Histogram = function (_Component) {
     value: function getChartState() {
       var _props = this.props,
           width = _props.width,
+          height = _props.height,
           data = _props.data;
 
       if (width === '100%') {
@@ -16824,7 +16933,7 @@ var Histogram = function (_Component) {
       }
       return {
         data: data,
-        height: 200,
+        height: height,
         tipContentFn: function tipContentFn(bins, i, d) {
           return bins[i] + '<br />' + d.toFixed(2) + '%';
         },
@@ -16890,6 +16999,10 @@ var Histogram = function (_Component) {
   return Histogram;
 }(_react.Component);
 
+Histogram.defaultProps = {
+  width: '100%',
+  height: 200
+};
 exports.default = Histogram;
 
 /***/ }),
@@ -16914,6 +17027,10 @@ var _colors = __webpack_require__(3);
 
 var _colors2 = _interopRequireDefault(_colors);
 
+var _attrs = __webpack_require__(10);
+
+var _attrs2 = _interopRequireDefault(_attrs);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
@@ -16927,15 +17044,59 @@ var histogramD3 = exports.histogramD3 = function histogramD3() {
       y = d3.scaleLinear(),
       x = d3.scaleBand();
 
+  // gridlines in x axis function
+  function make_x_gridlines() {
+    var ticks = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 5;
+
+    return d3.axisBottom(x).ticks(ticks);
+  }
+
+  // gridlines in y axis function
+  function make_y_gridlines() {
+    var ticks = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 5;
+
+    return d3.axisLeft(y).ticks(ticks);
+  }
+
   var defaultProps = {
+    barWidth: 50,
+    barMargin: 5,
     className: 'histogram-d3',
+    colorScheme: _colors2.default,
     width: 200,
     height: 200,
     delay: 0,
     duration: 400,
-    barWidth: 50,
-    barMargin: 5,
-    yTicks: 10,
+    grid: {
+      x: {
+        style: {
+          'stroke': '#bbb',
+          'fill': 'none',
+          'stroke-width': '1'
+        },
+        visible: true,
+        ticks: 10
+      },
+      y: {
+        style: {
+          'stroke': '#bbb',
+          'fill': 'none',
+          'stroke-width': '1'
+        },
+        visible: true,
+        ticks: 10
+      }
+    },
+    margin: {
+      left: 5,
+      top: 5
+    },
+    stroke: {
+      color: '#005870',
+      dasharray: '',
+      width: 1,
+      linecap: 'butt'
+    },
     tipContentFn: function tipContentFn(bins, i, d) {
       return bins[i] + '<br />' + d + '%';
     },
@@ -16955,18 +17116,8 @@ var histogramD3 = exports.histogramD3 = function histogramD3() {
       }
     },
     xAxisHeight: 15,
-    yXaisWidth: 18,
-    stroke: {
-      color: '#005870',
-      dasharray: '',
-      width: 1,
-      linecap: 'butt'
-    },
-    colorScheme: _colors2.default,
-    margin: {
-      left: 5,
-      top: 5
-    }
+    yTicks: 10,
+    yXaisWidth: 18
   },
       HistogramD3 = {
     /**
@@ -17100,6 +17251,15 @@ var histogramD3 = exports.histogramD3 = function histogramD3() {
       });
     },
 
+    /**
+     * Draw a single data set into the chart
+     * @param {Array} bins Data set labels
+     * @param {Object} set HistogramDataSet
+     * @param {number} setIndex Data set index
+     * @param {number} setCount Total number of data sets
+     * @param {number} valuesCount Max total number of
+     * values across all data sets
+     */
     drawDataSet: function drawDataSet(bins, set, setIndex, setCount, valuesCount) {
       var _props3 = this.props,
           colorScheme = _props3.colorScheme,
@@ -17172,6 +17332,37 @@ var histogramD3 = exports.histogramD3 = function histogramD3() {
 
 
     /**
+     * Draw a grid onto the chart backgroud
+     * @param {Object} data HistogramData
+     */
+    _drawGrid: function _drawGrid(data) {
+      var _props4 = this.props,
+          height = _props4.height,
+          width = _props4.width,
+          yXaisWidth = _props4.yXaisWidth,
+          grid = _props4.grid,
+          ticks = this.valuesCount(data.counts);
+
+      var g = void 0,
+          gy = void 0;
+
+      if (grid.x.visible) {
+        // Add the X gridlines
+        g = svg.append('g').attr('class', 'grid gridX').attr('transform', 'translate(' + yXaisWidth + ',' + height + ')');
+        console.log('grid x ticks', grid.x.ticks);
+        g.call(make_x_gridlines(grid.x.ticks || ticks).tickSize(-height).tickFormat(''));
+        (0, _attrs2.default)(g.selectAll('.tick line'), grid.x.style);
+      }
+
+      if (grid.y.visible) {
+        // add the Y gridlines
+        gy = svg.append('g').attr('class', 'grid gridY').attr('transform', 'translate(' + yXaisWidth + ', 0)').call(make_y_gridlines(grid.y.ticks || ticks).tickSize(-width).tickFormat(''));
+        (0, _attrs2.default)(gy.selectAll('.tick line'), grid.y.style);
+      }
+    },
+
+
+    /**
      * Update chart
      * @param {Node} el Chart element
      * @param {Object} props Chart props
@@ -17185,6 +17376,7 @@ var histogramD3 = exports.histogramD3 = function histogramD3() {
       }
 
       this._drawScales(this.props.data);
+      this._drawGrid(this.props.data);
       this._drawBars(this.props.data);
     },
 
@@ -17220,7 +17412,7 @@ var _reactDom = __webpack_require__(2);
 
 var _reactDom2 = _interopRequireDefault(_reactDom);
 
-var _lineChartD = __webpack_require__(10);
+var _lineChartD = __webpack_require__(11);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -17496,7 +17688,7 @@ var _colors = __webpack_require__(3);
 
 var _colors2 = _interopRequireDefault(_colors);
 
-var _types = __webpack_require__(11);
+var _types = __webpack_require__(12);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -17529,9 +17721,9 @@ var scatterPlotD3 = exports.scatterPlotD3 = function scatterPlotD3() {
      * @param {Object} props Chart properties
      */
     create: function create(el) {
-      var props = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+      var props = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : defaultProps;
 
-      this.props = Object.assign({}, defaultProps, props);
+      this.props = _extends({}, defaultProps, props);
       this.update(el, props);
     },
 
@@ -17684,12 +17876,12 @@ var scatterPlotD3 = exports.scatterPlotD3 = function scatterPlotD3() {
 
       /**
        * Create cross array
+       * // @TODO looks like d3 has its own cross function now...
        * @param {Object} a point
        * @param {Object} b point
        * @return {Array} data
        */
       function cross(a, b) {
-        console.log('cross', a, b);
         var c = [],
             n = a.length,
             m = b.length,
@@ -17751,6 +17943,30 @@ var scatterPlotD3 = exports.scatterPlotD3 = function scatterPlotD3() {
 
 /***/ }),
 /* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+/**
+ * Apply style object to a d3 selection
+ * @param {Object} selection D3 selection
+ * @param {Object} style Css styling
+ * @return {Object} selection
+ */
+exports.default = function (selection, style) {
+  Object.keys(style).forEach(function (k) {
+    selection.attr(k, style[k]);
+  });
+  return selection;
+};
+
+/***/ }),
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -18073,14 +18289,14 @@ var lineChartD3 = exports.lineChartD3 = function lineChartD3() {
 };
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__(4);

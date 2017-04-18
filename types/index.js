@@ -1,3 +1,8 @@
+export type D3Selection = {
+  _groups: NodeList[],
+  _parents: Node
+};
+
 export type HistogramData = {
   bins: number[],
   counts: HistogramDataSet[]
@@ -37,3 +42,5 @@ export type ScatterPlotProps = {
   padding: number,
   radius: number
 };
+
+export type ScatterPlotData = any[];

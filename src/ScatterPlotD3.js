@@ -1,8 +1,14 @@
 // @flow
 import * as d3 from 'd3';
 import colorScheme from './colors';
-import {ChartPoint, ScatterPlotProps} from '../types';
+import {ChartPoint, ScatterPlotData, ScatterPlotProps} from '../types';
 
+
+type Props = {
+  choices: any[],
+  colorScheme: string[],
+  padding: number
+};
 
 export const scatterPlotD3 = (() => {
   let svg,
@@ -31,8 +37,8 @@ export const scatterPlotD3 = (() => {
      * @param {Node} el Target DOM node
      * @param {Object} props Chart properties
      */
-      create: function(el: Node, props: Object = {}) {
-        this.props = Object.assign({}, defaultProps, props);
+      create: function(el: Node, props: Props = defaultProps) {
+        this.props = {...defaultProps, ...props};
         this.update(el, props);
       },
 
@@ -42,7 +48,7 @@ export const scatterPlotD3 = (() => {
      * @param {Dom} el Dom container node
      * @param {Array} data Chart data
      */
-      _makeSvg(el: Node, data) {
+      _makeSvg(el: Node, data: ScatterPlotData) {
         if (svg) {
           svg.selectAll('svg > *').remove();
           svg.remove();

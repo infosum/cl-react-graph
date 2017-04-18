@@ -33,8 +33,9 @@
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
     "chai": "^3.5.0",
+    "eslint": "^3.19.0",
     "eslint-plugin-flowtype": "^2.30.4",
-    "flow-bin": "^0.43.1",
+    "flow-bin": "^0.44.2",
     "istanbul": "^0.4.5",
     "mocha": "^3.2.0",
     "webpack": "^2.3.3"
@@ -51,6 +52,7 @@
   },
   "dependencies": {
     "d3": "^4.7.4",
+    "d3-selection-multi": "^1.0.1",
     "react": "^15.5.4",
     "react-dom": "^15.5.4"
   }

@@ -1,6 +1,12 @@
+/* @flow */
  import ReactDOM from 'react-dom';
  import * as d3 from 'd3';
  import {Histogram, LineChart, ScatterPlot} from '../src';
+
+function total(numbers: Array<number>) {
+}
+
+total([1]);
 
  const data = {
      bins: [1, 2, 3, 4],
@@ -54,7 +60,7 @@
    ],
    element = <div>
   <div>
-  <Histogram data={data} width={'100%'} />
+  <Histogram data={data} width={'100%'} height={150} />
   </div>
   <div>
    <LineChart data={points} width={300} />
