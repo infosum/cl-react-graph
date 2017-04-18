@@ -17291,11 +17291,14 @@ var histogramD3 = exports.histogramD3 = function histogramD3() {
 
       // show data sets next to each other...
       barWidth = barWidth / setCount;
-      var selector = '.bar-' + setIndex;
+      var selector = '.bar-' + setIndex,
+          multiLineOffset = function multiLineOffset(index) {
+        return setCount === 1 ? 0 : (index + setIndex) * barWidth;
+      };
 
       svg.selectAll(selector).remove();
       bar = svg.selectAll(selector).data(set.data).enter().append('rect').attr('class', 'bar ' + selector).attr('x', function (d, index, all) {
-        return (barMargin + barWidth) * index + barMargin + yXaisWidth + (index + setIndex) * barWidth;
+        return (barMargin + barWidth) * index + barMargin + yXaisWidth + multiLineOffset(index);
       }).attr('width', function (d) {
         return barWidth - barMargin / 2;
       }).attr('fill', function (d, i) {

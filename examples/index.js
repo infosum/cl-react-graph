@@ -16815,6 +16815,13 @@ var data = {
     data: [3, 2, 1, 5]
   }]
 },
+    data2 = {
+  bins: ['1', '10', '25', '50', '75', '90', '99'],
+  counts: [{
+    label: 'Data 1',
+    data: [999, 9000, 15000, 25000, 15000, 9000]
+  }]
+},
     points = [{
   label: 'test data',
   data: [{ x: 1, y: 1 }, { x: 2, y: 2 }, { x: 3, y: 3 }, { x: 4, y: 4 }]
@@ -16843,7 +16850,8 @@ var data = {
   React.createElement(
     'div',
     null,
-    React.createElement(_src.Histogram, { data: data, width: '100%', height: 150 })
+    React.createElement(_src.Histogram, { data: data, width: '100%', height: 150 }),
+    React.createElement(_src.Histogram, { data: data2, width: '100%', height: 150 })
   ),
   React.createElement(
     'div',
@@ -17341,11 +17349,14 @@ var histogramD3 = exports.histogramD3 = function histogramD3() {
 
       // show data sets next to each other...
       barWidth = barWidth / setCount;
-      var selector = '.bar-' + setIndex;
+      var selector = '.bar-' + setIndex,
+          multiLineOffset = function multiLineOffset(index) {
+        return setCount === 1 ? 0 : (index + setIndex) * barWidth;
+      };
 
       svg.selectAll(selector).remove();
       bar = svg.selectAll(selector).data(set.data).enter().append('rect').attr('class', 'bar ' + selector).attr('x', function (d, index, all) {
-        return (barMargin + barWidth) * index + barMargin + yXaisWidth + (index + setIndex) * barWidth;
+        return (barMargin + barWidth) * index + barMargin + yXaisWidth + multiLineOffset(index);
       }).attr('width', function (d) {
         return barWidth - barMargin / 2;
       }).attr('fill', function (d, i) {

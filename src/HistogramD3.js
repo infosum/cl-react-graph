@@ -245,7 +245,8 @@ export const histogramD3 = ((): ChartAdaptor => {
 
         // show data sets next to each other...
         barWidth = barWidth / setCount;
-        const selector = '.bar-' + setIndex;
+        const selector = '.bar-' + setIndex,
+          multiLineOffset = (index) => setCount === 1 ? 0 : ((index + setIndex) * barWidth);
 
         svg.selectAll(selector).remove();
         bar = svg.selectAll(selector)
@@ -255,7 +256,8 @@ export const histogramD3 = ((): ChartAdaptor => {
             .attr('class', 'bar ' + selector)
             .attr('x', (d, index, all) =>
               ((barMargin + barWidth) * index) + barMargin + yXaisWidth
-              + ((index + setIndex) * barWidth))
+              + multiLineOffset(index)
+              )
             .attr('width', d => barWidth - barMargin / 2)
             .attr('fill', (d, i) => colors(i))
             .on('mouseover', (d: number, i: number) => {

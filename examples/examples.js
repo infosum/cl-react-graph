@@ -21,6 +21,17 @@ total([1]);
        }
      ]
    },
+
+   data2 = {
+     bins: ['1', '10', '25', '50', '75', '90', '99'],
+     counts: [
+       {
+         label: 'Data 1',
+         data: [999, 9000, 15000, 25000, 15000, 9000]
+       }
+     ]
+   },
+
    points = [
      {
        label: 'test data',
@@ -61,6 +72,7 @@ total([1]);
    element = <div>
   <div>
   <Histogram data={data} width={'100%'} height={150} />
+  <Histogram data={data2} width={'100%'} height={150} />
   </div>
   <div>
    <LineChart data={points} width={300} />
