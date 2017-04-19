@@ -73,7 +73,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "/";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 14);
+/******/ 	return __webpack_require__(__webpack_require__.s = 15);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -16819,7 +16819,7 @@ var data = {
   bins: ['1', '10', '25', '50', '75', '90', '99'],
   counts: [{
     label: 'Data 1',
-    data: [999, 9000, 15000, 25000, 15000, 9000]
+    data: [999, 9000, 15000, 25000, 15000, 9000, 888]
   }]
 },
     points = [{
@@ -16850,8 +16850,7 @@ var data = {
   React.createElement(
     'div',
     null,
-    React.createElement(_src.Histogram, { data: data, width: '100%', height: 150 }),
-    React.createElement(_src.Histogram, { data: data2, width: '100%', height: 150 })
+    React.createElement(_src.Histogram, { data: data2, width: 700, height: 150 })
   ),
   React.createElement(
     'div',
@@ -16984,25 +16983,26 @@ var Histogram = function (_Component) {
       var _props = this.props,
           width = _props.width,
           height = _props.height,
-          data = _props.data;
+          data = _props.data,
+          stroke = _props.stroke;
 
       if (width === '100%') {
         width = this.state.parentWidth || 300;
       }
+
       return {
         data: data,
         height: height,
         tipContentFn: function tipContentFn(bins, i, d) {
-          return bins[i] + '<br />' + d.toFixed(2) + '%';
+          return bins[i] + '<br />' + d.toFixed(2);
         },
         width: width,
-        stroke: {
-          color: function color(d, i, colors) {
-            return d3.rgb(colors(i)).darker(1);
-          },
-          width: 2
-        },
-        yTicks: 0
+        stroke: stroke,
+        axis: {
+          y: {
+            ticks: 3
+          }
+        }
       };
     }
 
@@ -17059,7 +17059,13 @@ var Histogram = function (_Component) {
 
 Histogram.defaultProps = {
   width: '100%',
-  height: 200
+  height: 200,
+  stroke: {
+    color: function color(d, i, colors) {
+      return d3.rgb(colors(i)).darker(1);
+    },
+    width: 1
+  }
 };
 exports.default = Histogram;
 
@@ -17075,8 +17081,6 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.histogramD3 = undefined;
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
 var _d = __webpack_require__(0);
 
 var d3 = _interopRequireWildcard(_d);
@@ -17088,6 +17092,10 @@ var _colors2 = _interopRequireDefault(_colors);
 var _attrs = __webpack_require__(10);
 
 var _attrs2 = _interopRequireDefault(_attrs);
+
+var _deepmerge = __webpack_require__(14);
+
+var _deepmerge2 = _interopRequireDefault(_deepmerge);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -17117,8 +17125,21 @@ var histogramD3 = exports.histogramD3 = function histogramD3() {
   }
 
   var defaultProps = {
-    barWidth: 50,
-    barMargin: 5,
+    axis: {
+      x: {
+        height: 20,
+        'stroke-width': 1
+      },
+      y: {
+        width: 25,
+        ticks: 10,
+        'stroke-width': 1
+      }
+    },
+    bar: {
+      width: 50,
+      margin: 10
+    },
     className: 'histogram-d3',
     colorScheme: _colors2.default,
     width: 200,
@@ -17130,7 +17151,9 @@ var histogramD3 = exports.histogramD3 = function histogramD3() {
         style: {
           'stroke': '#bbb',
           'fill': 'none',
-          'stroke-width': '1'
+          'stroke-width': 1,
+          'stroke-opacity': 0.7,
+          'shape-rendering': 'crispEdges'
         },
         visible: true,
         ticks: 10
@@ -17139,7 +17162,9 @@ var histogramD3 = exports.histogramD3 = function histogramD3() {
         style: {
           'stroke': '#bbb',
           'fill': 'none',
-          'stroke-width': '1'
+          'stroke-width': 1,
+          'stroke-opacity': 0.7,
+          'shape-rendering': 'crispEdges'
         },
         visible: true,
         ticks: 10
@@ -17152,11 +17177,11 @@ var histogramD3 = exports.histogramD3 = function histogramD3() {
     stroke: {
       color: '#005870',
       dasharray: '',
-      width: 1,
+      width: 0,
       linecap: 'butt'
     },
     tipContentFn: function tipContentFn(bins, i, d) {
-      return bins[i] + '<br />' + d + '%';
+      return bins[i] + '<br />' + d;
     },
     tipContainer: 'body',
     tip: {
@@ -17172,10 +17197,7 @@ var histogramD3 = exports.histogramD3 = function histogramD3() {
           tipContainer.transition().duration(500).style('opacity', 0);
         }
       }
-    },
-    xAxisHeight: 15,
-    yTicks: 10,
-    yXaisWidth: 18
+    }
   },
       HistogramD3 = {
     /**
@@ -17186,7 +17208,7 @@ var histogramD3 = exports.histogramD3 = function histogramD3() {
     create: function create(el) {
       var props = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
-      this.props = _extends({}, defaultProps, props);
+      this.props = (0, _deepmerge2.default)(defaultProps, props);
       this.update(el, props);
     },
 
@@ -17250,19 +17272,17 @@ var histogramD3 = exports.histogramD3 = function histogramD3() {
      */
     _drawScales: function _drawScales(data) {
       var _props2 = this.props,
-          xAxisHeight = _props2.xAxisHeight,
           margin = _props2.margin,
           width = _props2.width,
           height = _props2.height,
-          yXaisWidth = _props2.yXaisWidth,
-          yTicks = _props2.yTicks,
+          axis = _props2.axis,
           valuesCount = this.valuesCount(data.counts);
 
 
       svg.selectAll('.y-axis').remove();
       svg.selectAll('.x-axis').remove();
 
-      var w = width - margin.left * 2,
+      var w = this.gridWidth(),
           yDomain = void 0,
           xAxis = void 0,
           yAxis = void 0,
@@ -17281,18 +17301,20 @@ var histogramD3 = exports.histogramD3 = function histogramD3() {
           return !(i % 10);
         }));
       }
-      svg.append('g').attr('class', 'x-axis').attr('transform', 'translate(' + yXaisWidth + ',' + (height - xAxisHeight - margin.left * 2) + ')').call(xAxis);
+      svg.append('g').attr('class', 'x-axis').attr('transform', 'translate(' + axis.y.width + ',' + (height - axis.x.height - margin.left * 2) + ')').call(xAxis);
 
       yDomain = d3.extent(allCounts, function (d) {
         return d;
       });
+      console.log('yDomain', yDomain);
       yDomain[0] = 0;
-      yRange = [height - margin.top * 2 - xAxisHeight, 0];
+      console.log('yDomain', yDomain);
+      yRange = [height - margin.top * 2 - axis.x.height, 0];
       y.range(yRange).domain(yDomain);
 
-      yAxis = d3.axisLeft(y).ticks(yTicks);
+      yAxis = d3.axisLeft(y).ticks(axis.y.ticks);
 
-      svg.append('g').attr('class', 'y-axis').attr('transform', 'translate(' + yXaisWidth + ', 0)').call(yAxis);
+      svg.append('g').attr('class', 'y-axis').attr('transform', 'translate(' + axis.y.width + ', 0)').call(yAxis);
     },
 
 
@@ -17305,9 +17327,72 @@ var histogramD3 = exports.histogramD3 = function histogramD3() {
 
       var valuesCount = this.valuesCount(info.counts);
       info.counts.forEach(function (set, setIndex) {
-        _this.drawDataSet(info.bins, set, setIndex, info.counts.length, valuesCount);
+        _this.drawDataSet(info.bins, set, setIndex, info.counts.length);
       });
     },
+
+    /**
+     * Calculate the width of the area used to display the
+     * chart bars. Removes chart margins and Y axis from
+     * chart total width.
+     * @return {number} width
+     */
+    gridWidth: function gridWidth() {
+      var _props3 = this.props,
+          axis = _props3.axis,
+          width = _props3.width,
+          margin = _props3.margin;
+
+      return width - margin.left * 2 - axis.y.width;
+    },
+
+
+    /**
+     * Calculate the height of the area used to display the
+     * chart bars. Removes chart margins and X axis from
+     * chart total height.
+     * @return {number} width
+     */
+    gridHeight: function gridHeight() {
+      var _props4 = this.props,
+          height = _props4.height,
+          margin = _props4.margin,
+          axis = _props4.axis;
+
+      return height - margin.top * 2 - axis.x.height;
+    },
+
+
+    /**
+     * Calculate the bar width
+     * @return {number} bar width
+     */
+    barWidth: function barWidth() {
+      var _props5 = this.props,
+          axis = _props5.axis,
+          width = _props5.width,
+          margin = _props5.margin,
+          data = _props5.data,
+          bar = _props5.bar,
+          stroke = _props5.stroke,
+          w = this.gridWidth(),
+          valuesCount = this.valuesCount(data.counts),
+          setCount = data.counts.length;
+      // let barWidth = Math.max(1, (w - (valuesCount + 1) * bar.margin) /
+      //   valuesCount);
+
+      var barWidth = w / valuesCount - bar.margin * 2;
+
+      // Small bars - reduce margin and re-calcualate bar width
+      if (barWidth < 5) {
+        bar.margin = 1;
+        barWidth = Math.max(1, (w - (valuesCount + 1) * bar.margin) / valuesCount);
+      }
+
+      // show data sets next to each other...
+      return barWidth / setCount;
+    },
+
 
     /**
      * Draw a single data set into the chart
@@ -17315,50 +17400,37 @@ var histogramD3 = exports.histogramD3 = function histogramD3() {
      * @param {Object} set HistogramDataSet
      * @param {number} setIndex Data set index
      * @param {number} setCount Total number of data sets
-     * @param {number} valuesCount Max total number of
-     * values across all data sets
      */
-    drawDataSet: function drawDataSet(bins, set, setIndex, setCount, valuesCount) {
-      var _props3 = this.props,
-          colorScheme = _props3.colorScheme,
-          height = _props3.height,
-          width = _props3.width,
-          margin = _props3.margin,
-          barWidth = _props3.barWidth,
-          delay = _props3.delay,
-          duration = _props3.duration,
-          xAxisHeight = _props3.xAxisHeight,
-          yXaisWidth = _props3.yXaisWidth,
-          barMargin = _props3.barMargin,
-          stroke = _props3.stroke,
-          tip = _props3.tip,
-          tipContentFn = _props3.tipContentFn,
-          bar = void 0,
-          w = width - margin.left * 2,
+    drawDataSet: function drawDataSet(bins, set, setIndex, setCount) {
+      var _this2 = this;
+
+      var _props6 = this.props,
+          colorScheme = _props6.colorScheme,
+          height = _props6.height,
+          width = _props6.width,
+          margin = _props6.margin,
+          bar = _props6.bar,
+          delay = _props6.delay,
+          duration = _props6.duration,
+          axis = _props6.axis,
+          stroke = _props6.stroke,
+          tip = _props6.tip,
+          tipContentFn = _props6.tipContentFn,
+          barItem = void 0,
+          barWidth = this.barWidth(),
           colors = d3.scaleOrdinal(colorScheme);
 
-      // Ensure we don't have negative bar widths
 
-      barWidth = Math.max(1, (w - (valuesCount + 1) * barMargin) / valuesCount);
-
-      // Small bars - reduce margin and re-calcualate bar width
-      if (barWidth < 5) {
-        barMargin = 1;
-        barWidth = Math.max(1, (w - (valuesCount + 1) * barMargin) / valuesCount);
-      }
-
-      // show data sets next to each other...
-      barWidth = barWidth / setCount;
       var selector = '.bar-' + setIndex,
           multiLineOffset = function multiLineOffset(index) {
         return setCount === 1 ? 0 : (index + setIndex) * barWidth;
       };
 
       svg.selectAll(selector).remove();
-      bar = svg.selectAll(selector).data(set.data).enter().append('rect').attr('class', 'bar ' + selector).attr('x', function (d, index, all) {
-        return (barMargin + barWidth) * index + barMargin + yXaisWidth + multiLineOffset(index);
+      barItem = svg.selectAll(selector).data(set.data).enter().append('rect').attr('class', 'bar ' + selector).attr('x', function (d, index, all) {
+        return axis.y.width + axis.y['stroke-width'] + bar.margin + (barWidth + bar.margin * 2) * index + multiLineOffset(index);
       }).attr('width', function (d) {
-        return barWidth - barMargin / 2;
+        return barWidth;
       }).attr('fill', function (d, i) {
         return colors(i);
       }).on('mouseover', function (d, i) {
@@ -17371,54 +17443,75 @@ var histogramD3 = exports.histogramD3 = function histogramD3() {
       }).on('mouseout', function () {
         return tip.fx.out(tipContainer);
       }).attr('y', function (d) {
-        return height - xAxisHeight - margin.top * 2;
+        return _this2.gridHeight();
       }).attr('height', 0);
 
-      bar.attr('stroke', function (d, i) {
+      barItem.attr('stroke', function (d, i) {
         return typeof stroke.color === 'function' ? stroke.color(d, i, colors) : stroke.color;
-      }).attr('stroke-width', stroke.width).attr('stroke-linecap', stroke.linecap);
+      }).attr('shape-rendering', 'crispEdges').attr('stroke-width', stroke.width).attr('stroke-linecap', stroke.linecap);
 
       if (stroke.dasharray !== '') {
-        bar.attr('stroke-dasharray', stroke.dasharray);
+        barItem.attr('stroke-dasharray', stroke.dasharray);
       }
 
-      bar.transition().duration(duration).delay(delay).attr('y', function (d) {
+      barItem.transition().duration(duration).delay(delay).attr('y', function (d) {
         return y(d);
+      })
+      // Hide bar's bottom border
+      .attr('stroke-dasharray', function (d) {
+        var currentHeight = _this2.gridHeight() - y(d);
+        return barWidth + ' 0 ' + currentHeight + ' ' + barWidth;
       }).attr('height', function (d) {
-        return height - xAxisHeight - margin.top * 2 - y(d);
+        return _this2.gridHeight() - y(d);
       });
 
-      bar.exit().remove();
+      barItem.exit().remove();
     },
 
 
     /**
-     * Draw a grid onto the chart backgroud
-     * @param {Object} data HistogramData
+     * Draw a grid onto the chart background
+     * @param {Object} props Props
      */
-    _drawGrid: function _drawGrid(data) {
-      var _props4 = this.props,
-          height = _props4.height,
-          width = _props4.width,
-          yXaisWidth = _props4.yXaisWidth,
-          grid = _props4.grid,
-          ticks = this.valuesCount(data.counts);
+    _drawGrid: function _drawGrid(props) {
+      var data = props.data,
+          height = props.height,
+          width = props.width,
+          axis = props.axis,
+          grid = props.grid,
+          margin = props.margin,
+          bar = props.bar,
+          ticks = this.valuesCount(data.counts),
+          axisWidth = 1,
+          offset = {
+        x: axis.y.width,
+        y: this.gridHeight()
+      };
 
       var g = void 0,
           gy = void 0;
 
       if (grid.x.visible) {
         // Add the X gridlines
-        g = svg.append('g').attr('class', 'grid gridX').attr('transform', 'translate(' + yXaisWidth + ',' + height + ')');
-        console.log('grid x ticks', grid.x.ticks);
-        g.call(make_x_gridlines(grid.x.ticks || ticks).tickSize(-height).tickFormat(''));
+        g = svg.append('g').attr('class', 'grid gridX').attr('transform', 'translate(' + offset.x + ', ' + offset.y + ')');
+
+        g.call(make_x_gridlines(grid.x.ticks || ticks).tickSize(-height + axis.x.height + margin.top * 2).tickFormat(''));
+
         (0, _attrs2.default)(g.selectAll('.tick line'), grid.x.style);
+        (0, _attrs2.default)(g.selectAll('.domain'), { stroke: 'transparent' });
       }
 
       if (grid.y.visible) {
         // add the Y gridlines
-        gy = svg.append('g').attr('class', 'grid gridY').attr('transform', 'translate(' + yXaisWidth + ', 0)').call(make_y_gridlines(grid.y.ticks || ticks).tickSize(-width).tickFormat(''));
+        gy = svg.append('g').attr('class', 'grid gridY').attr('transform', 'translate(' + (axis.y.width + axisWidth) + ', 0)').call(make_y_gridlines(grid.y.ticks || ticks).tickSize(-width + margin.left * 2 + axis.y.width).tickFormat(''));
         (0, _attrs2.default)(gy.selectAll('.tick line'), grid.y.style);
+
+        // Hide the first horizontal grid line to show axis
+        gy.selectAll('.gridY .tick line').filter(function (d, i) {
+          return i === 0;
+        }).attr('display', 'none');
+
+        (0, _attrs2.default)(gy.selectAll('.domain'), { stroke: 'transparent' });
       }
     },
 
@@ -17430,14 +17523,14 @@ var histogramD3 = exports.histogramD3 = function histogramD3() {
     */
     update: function update(el, props) {
       if (!props.data) return;
-      this.props = _extends({}, defaultProps, props);
+      this.props = (0, _deepmerge2.default)(defaultProps, props);
       this._makeSvg(el);
       if (!this.props.data.bins) {
         return;
       }
 
       this._drawScales(this.props.data);
-      this._drawGrid(this.props.data);
+      this._drawGrid(this.props);
       this._drawBars(this.props.data);
     },
 
@@ -18388,6 +18481,100 @@ var lineChartD3 = exports.lineChartD3 = function lineChartD3() {
 
 /***/ }),
 /* 14 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;(function (root, factory) {
+    if (true) {
+        !(__WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
+				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
+				(__WEBPACK_AMD_DEFINE_FACTORY__.call(exports, __webpack_require__, exports, module)) :
+				__WEBPACK_AMD_DEFINE_FACTORY__),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+    } else if (typeof exports === 'object') {
+        module.exports = factory();
+    } else {
+        root.deepmerge = factory();
+    }
+}(this, function () {
+
+function isMergeableObject(val) {
+    var nonNullObject = val && typeof val === 'object'
+
+    return nonNullObject
+        && Object.prototype.toString.call(val) !== '[object RegExp]'
+        && Object.prototype.toString.call(val) !== '[object Date]'
+}
+
+function emptyTarget(val) {
+    return Array.isArray(val) ? [] : {}
+}
+
+function cloneIfNecessary(value, optionsArgument) {
+    var clone = optionsArgument && optionsArgument.clone === true
+    return (clone && isMergeableObject(value)) ? deepmerge(emptyTarget(value), value, optionsArgument) : value
+}
+
+function defaultArrayMerge(target, source, optionsArgument) {
+    var destination = target.slice()
+    source.forEach(function(e, i) {
+        if (typeof destination[i] === 'undefined') {
+            destination[i] = cloneIfNecessary(e, optionsArgument)
+        } else if (isMergeableObject(e)) {
+            destination[i] = deepmerge(target[i], e, optionsArgument)
+        } else if (target.indexOf(e) === -1) {
+            destination.push(cloneIfNecessary(e, optionsArgument))
+        }
+    })
+    return destination
+}
+
+function mergeObject(target, source, optionsArgument) {
+    var destination = {}
+    if (isMergeableObject(target)) {
+        Object.keys(target).forEach(function (key) {
+            destination[key] = cloneIfNecessary(target[key], optionsArgument)
+        })
+    }
+    Object.keys(source).forEach(function (key) {
+        if (!isMergeableObject(source[key]) || !target[key]) {
+            destination[key] = cloneIfNecessary(source[key], optionsArgument)
+        } else {
+            destination[key] = deepmerge(target[key], source[key], optionsArgument)
+        }
+    })
+    return destination
+}
+
+function deepmerge(target, source, optionsArgument) {
+    var array = Array.isArray(source);
+    var options = optionsArgument || { arrayMerge: defaultArrayMerge }
+    var arrayMerge = options.arrayMerge || defaultArrayMerge
+
+    if (array) {
+        return Array.isArray(target) ? arrayMerge(target, source, optionsArgument) : cloneIfNecessary(source, optionsArgument)
+    } else {
+        return mergeObject(target, source, optionsArgument)
+    }
+}
+
+deepmerge.all = function deepmergeAll(array, optionsArgument) {
+    if (!Array.isArray(array) || array.length < 2) {
+        throw new Error('first argument should be an array with at least two elements')
+    }
+
+    // we are sure there are at least 2 values, so it is safe to have no initial value
+    return array.reduce(function(prev, next) {
+        return deepmerge(prev, next, optionsArgument)
+    })
+}
+
+return deepmerge
+
+}));
+
+
+/***/ }),
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__(4);

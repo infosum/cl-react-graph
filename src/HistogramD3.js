@@ -2,6 +2,8 @@ import * as d3 from 'd3';
 import type {HistogramData, ChartAdaptor, HistogramDataSet} from '../types';
 import colorScheme from './colors';
 import attrs from './d3/attrs';
+import merge from 'deepmerge';
+
 
 export const histogramD3 = ((): ChartAdaptor => {
   let svg,
@@ -23,71 +25,85 @@ export const histogramD3 = ((): ChartAdaptor => {
   }
 
   const defaultProps = {
-      barWidth: 50,
-      barMargin: 5,
-      className: 'histogram-d3',
-      colorScheme,
-      width: 200,
-      height: 200,
-      delay: 0,
-      duration: 400,
-      grid: {
-        x: {
-          style: {
-            'stroke': '#bbb',
-            'fill': 'none',
-            'stroke-width': '1'
-          },
-          visible: true,
-          ticks: 10
-        },
-        y: {
-          style: {
-            'stroke': '#bbb',
-            'fill': 'none',
-            'stroke-width': '1'
-          },
-          visible: true,
-          ticks: 10
-        }
+    axis: {
+      x: {
+        height: 20,
+        'stroke-width': 1
       },
-      margin: {
-        left: 5,
-        top: 5
-      },
-      stroke: {
-        color: '#005870',
-        dasharray: '',
-        width: 1,
-        linecap: 'butt'
-      },
-      tipContentFn: (bins: string[], i: number, d: number): string =>
-        bins[i] + '<br />' + d + '%',
-      tipContainer: 'body',
-      tip: {
-        fx: {
-          in: (tipContainer: Node) => {
-            tipContainer.style('left', (d3.event.pageX) + 'px')
-              .style('top', (d3.event.pageY - 55) + 'px');
-            tipContainer.transition()
-              .duration(200)
-              .style('opacity', 0.9);
-          },
-          move: (tipContainer: Node) => {
-            tipContainer.style('left', (d3.event.pageX) + 'px')
-              .style('top', (d3.event.pageY - 55) + 'px');
-          },
-          out: (tipContainer: Node) => {
-            tipContainer.transition()
-              .duration(500)
-              .style('opacity', 0);
-          }
-        }
-      },
-      xAxisHeight: 15,
-      yTicks: 10,
-      yXaisWidth: 18
+      y: {
+        width: 25,
+        ticks: 10,
+        'stroke-width': 1
+      }
     },
+    bar: {
+      width: 50,
+      margin: 10
+    },
+    className: 'histogram-d3',
+    colorScheme,
+    width: 200,
+    height: 200,
+    delay: 0,
+    duration: 400,
+    grid: {
+      x: {
+        style: {
+          'stroke': '#bbb',
+          'fill': 'none',
+          'stroke-width': 1,
+          'stroke-opacity': 0.7,
+          'shape-rendering': 'crispEdges'
+        },
+        visible: true,
+        ticks: 10
+      },
+      y: {
+        style: {
+          'stroke': '#bbb',
+          'fill': 'none',
+          'stroke-width': 1,
+          'stroke-opacity': 0.7,
+          'shape-rendering': 'crispEdges'
+        },
+        visible: true,
+        ticks: 10
+      }
+    },
+    margin: {
+      left: 5,
+      top: 5
+    },
+    stroke: {
+      color: '#005870',
+      dasharray: '',
+      width: 0,
+      linecap: 'butt'
+    },
+    tipContentFn: (bins: string[], i: number, d: number): string =>
+      bins[i] + '<br />' + d,
+    tipContainer: 'body',
+    tip: {
+      fx: {
+        in: (tipContainer: Node) => {
+          tipContainer.style('left', (d3.event.pageX) + 'px')
+            .style('top', (d3.event.pageY - 55) + 'px');
+          tipContainer.transition()
+            .duration(200)
+            .style('opacity', 0.9);
+        },
+        move: (tipContainer: Node) => {
+          tipContainer.style('left', (d3.event.pageX) + 'px')
+            .style('top', (d3.event.pageY - 55) + 'px');
+        },
+        out: (tipContainer: Node) => {
+          tipContainer.transition()
+            .duration(500)
+            .style('opacity', 0);
+        }
+      }
+    }
+  },
 
     HistogramD3 = {
     /**
@@ -96,7 +112,7 @@ export const histogramD3 = ((): ChartAdaptor => {
      * @param {Object} props Chart properties
      */
       create: function(el: Node, props: Object = {}) {
-        this.props = {...defaultProps, ...props};
+        this.props = merge(defaultProps, props);
         this.update(el, props);
       },
 
@@ -161,14 +177,13 @@ export const histogramD3 = ((): ChartAdaptor => {
      * @param {Object} data Chart data
      */
       _drawScales(data: HistogramData) {
-        const {xAxisHeight, margin, width,
-          height, yXaisWidth, yTicks} = this.props,
+        const {margin, width, height, axis} = this.props,
           valuesCount = this.valuesCount(data.counts);
 
         svg.selectAll('.y-axis').remove();
         svg.selectAll('.x-axis').remove();
 
-        let w = width - (margin.left * 2),
+        let w = this.gridWidth(),
           yDomain,
           xAxis, yAxis, yRange,
           allCounts = data.counts.reduce((a: number[], b: HistogramDataSet): number[] => {
@@ -185,20 +200,22 @@ export const histogramD3 = ((): ChartAdaptor => {
           xAxis.tickValues(x.domain().filter((d, i) => !(i % 10)));
         }
         svg.append('g').attr('class', 'x-axis')
-          .attr('transform', 'translate(' + yXaisWidth + ',' +
-            (height - xAxisHeight - (margin.left * 2)) + ')')
+          .attr('transform', 'translate(' + axis.y.width + ',' +
+            (height - axis.x.height - (margin.left * 2)) + ')')
           .call(xAxis);
 
         yDomain = d3.extent(allCounts, d => d);
+        console.log('yDomain', yDomain);
         yDomain[0] = 0;
-        yRange = [height - (margin.top * 2) - xAxisHeight, 0];
+        console.log('yDomain', yDomain);
+        yRange = [height - (margin.top * 2) - axis.x.height, 0];
         y.range(yRange)
         .domain(yDomain);
 
-        yAxis = d3.axisLeft(y).ticks(yTicks);
+        yAxis = d3.axisLeft(y).ticks(axis.y.ticks);
 
         svg.append('g').attr('class', 'y-axis')
-        .attr('transform', 'translate(' + yXaisWidth + ', 0)')
+        .attr('transform', 'translate(' + axis.y.width + ', 0)')
         .call(yAxis);
       },
 
@@ -209,8 +226,55 @@ export const histogramD3 = ((): ChartAdaptor => {
       _drawBars: function(info: HistogramData) {
         const valuesCount = this.valuesCount(info.counts);
         info.counts.forEach((set: HistogramDataSet, setIndex: number) => {
-          this.drawDataSet(info.bins, set, setIndex, info.counts.length, valuesCount);
+          this.drawDataSet(info.bins, set, setIndex, info.counts.length);
         });
+      },
+
+      /**
+       * Calculate the width of the area used to display the
+       * chart bars. Removes chart margins and Y axis from
+       * chart total width.
+       * @return {number} width
+       */
+      gridWidth() {
+        const {axis, width, margin} = this.props;
+        return width - (margin.left * 2) - axis.y.width
+      },
+
+      /**
+       * Calculate the height of the area used to display the
+       * chart bars. Removes chart margins and X axis from
+       * chart total height.
+       * @return {number} width
+       */
+      gridHeight() {
+        const {height, margin, axis} = this.props;
+        return height - (margin.top * 2) - axis.x.height;
+      },
+
+      /**
+       * Calculate the bar width
+       * @return {number} bar width
+       */
+      barWidth() {
+        const {axis, width, margin, data, bar, stroke} = this.props,
+          w = this.gridWidth(),
+          valuesCount = this.valuesCount(data.counts),
+          setCount = data.counts.length;
+        // let barWidth = Math.max(1, (w - (valuesCount + 1) * bar.margin) /
+        //   valuesCount);
+
+          let barWidth = (w / valuesCount) - (bar.margin * 2);
+
+        // Small bars - reduce margin and re-calcualate bar width
+        if (barWidth < 5) {
+          bar.margin = 1;
+          barWidth = Math.max(1, (w - (valuesCount + 1) * bar.margin) /
+            valuesCount);
+        }
+
+        // show data sets next to each other...
+        return barWidth / setCount;
       },
 
       /**
@@ -219,46 +283,32 @@ export const histogramD3 = ((): ChartAdaptor => {
        * @param {Object} set HistogramDataSet
        * @param {number} setIndex Data set index
        * @param {number} setCount Total number of data sets
-       * @param {number} valuesCount Max total number of
-       * values across all data sets
        */
       drawDataSet(bins: string[], set: HistogramDataSet,
-        setIndex: number, setCount: number, valuesCount: number) {
-        let {colorScheme, height, width, margin, barWidth, delay, duration,
-          xAxisHeight, yXaisWidth, barMargin, stroke,
-          tip, tipContentFn} = this.props,
-          bar,
-          w = width - (margin.left * 2),
-
+        setIndex: number, setCount: number) {
+        let {colorScheme, height, width, margin, bar, delay, duration,
+          axis, stroke, tip, tipContentFn} = this.props,
+          barItem,
+          barWidth = this.barWidth(),
           colors = d3.scaleOrdinal(colorScheme);
 
-        // Ensure we don't have negative bar widths
-        barWidth = Math.max(1, (w - (valuesCount + 1) * barMargin) /
-          valuesCount);
-
-        // Small bars - reduce margin and re-calcualate bar width
-        if (barWidth < 5) {
-          barMargin = 1;
-          barWidth = Math.max(1, (w - (valuesCount + 1) * barMargin) /
-            valuesCount);
-        }
-
-        // show data sets next to each other...
-        barWidth = barWidth / setCount;
         const selector = '.bar-' + setIndex,
           multiLineOffset = (index) => setCount === 1 ? 0 : ((index + setIndex) * barWidth);
 
         svg.selectAll(selector).remove();
-        bar = svg.selectAll(selector)
+        barItem = svg.selectAll(selector)
           .data(set.data)
           .enter()
           .append('rect')
             .attr('class', 'bar ' + selector)
-            .attr('x', (d, index, all) =>
-              ((barMargin + barWidth) * index) + barMargin + yXaisWidth
+            .attr('x', (d, index, all) => {
+              return axis.y.width
+              + axis.y['stroke-width']
+              + bar.margin
+              + (barWidth + (bar.margin * 2)) * (index)
               + multiLineOffset(index)
-              )
-            .attr('width', d => barWidth - barMargin / 2)
+            })
+            .attr('width', d => barWidth)
             .attr('fill', (d, i) => colors(i))
             .on('mouseover', (d: number, i: number) => {
               tipContent.html(() => tipContentFn(bins, i, d));
@@ -266,68 +316,88 @@ export const histogramD3 = ((): ChartAdaptor => {
             })
             .on('mousemove', () => tip.fx.move(tipContainer))
             .on('mouseout', () => tip.fx.out(tipContainer))
-            .attr('y', (d: number): number => {
-              return height - xAxisHeight - margin.top * 2;
-            })
+            .attr('y', (d: number): number => this.gridHeight())
             .attr('height', 0);
 
 
-        bar.attr('stroke', (d, i) => typeof stroke.color === 'function'
+        barItem.attr('stroke', (d, i) => typeof stroke.color === 'function'
           ? stroke.color(d, i, colors)
           : stroke.color)
+          .attr('shape-rendering', 'crispEdges')
           .attr('stroke-width', stroke.width)
           .attr('stroke-linecap', stroke.linecap);
 
         if (stroke.dasharray !== '') {
-          bar.attr('stroke-dasharray', stroke.dasharray);
+          barItem.attr('stroke-dasharray', stroke.dasharray);
         }
 
-        bar
+        barItem
           .transition()
           .duration(duration)
           .delay(delay)
           .attr('y', (d: number): number => {
             return y(d);
           })
+          // Hide bar's bottom border
+          .attr('stroke-dasharray',
+            (d: number): string => {
+              let currentHeight = this.gridHeight() - (y(d));
+              return `${barWidth} 0 ${currentHeight} ${barWidth}`;
+            })
           .attr('height',
             (d: number): number => {
-              return (height - xAxisHeight - margin.top * 2) - (y(d));
+              return this.gridHeight() - (y(d));
             });
 
-        bar.exit().remove();
+        barItem.exit().remove();
       },
 
       /**
-       * Draw a grid onto the chart backgroud
-       * @param {Object} data HistogramData
+       * Draw a grid onto the chart background
+       * @param {Object} props Props
        */
-      _drawGrid(data: HistogramData) {
-        const {height, width, yXaisWidth, grid} = this.props,
-          ticks = this.valuesCount(data.counts);
+      _drawGrid(props: Props) {
+        const {data, height, width, axis, grid, margin, bar} = props,
+          ticks = this.valuesCount(data.counts),
+          axisWidth = 1,
+          // (((this.barWidth()) + (bar.margin)) * (data.counts.length))
+          // axis.y.width + (this.barWidth() / 2),
+          offset = {
+            x: axis.y.width,
+            y: this.gridHeight()
+          };
         let g, gy;
 
         if (grid.x.visible) {
            // Add the X gridlines
           g = svg.append('g')
             .attr('class', 'grid gridX')
-            .attr('transform', 'translate(' + yXaisWidth + ',' + height + ')');
-console.log('grid x ticks', grid.x.ticks);
+            .attr('transform', `translate(${offset.x}, ${offset.y})`);
+
           g.call(make_x_gridlines(grid.x.ticks || ticks)
-                .tickSize(-height)
-                .tickFormat(''));
+            .tickSize(-height + axis.x.height + (margin.top * 2))
+            .tickFormat(''));
+
           attrs(g.selectAll('.tick line'), grid.x.style);
+          attrs(g.selectAll('.domain'), {stroke: 'transparent'});
         }
 
         if (grid.y.visible) {
         // add the Y gridlines
           gy = svg.append('g')
           .attr('class', 'grid gridY')
-          .attr('transform', 'translate(' + yXaisWidth + ', 0)')
+          .attr('transform', 'translate(' + (axis.y.width + axisWidth) + ', 0)')
           .call(make_y_gridlines(grid.y.ticks || ticks)
-              .tickSize(-width)
-              .tickFormat('')
+            .tickSize(-width + (margin.left * 2) + axis.y.width)
+            .tickFormat('')
           );
           attrs(gy.selectAll('.tick line'), grid.y.style);
+
+          // Hide the first horizontal grid line to show axis
+           gy.selectAll('.gridY .tick line').filter((d, i) => i === 0)
+            .attr('display', 'none');
+
+          attrs(gy.selectAll('.domain'), {stroke: 'transparent'});
         }
       },
 
@@ -338,14 +408,14 @@ console.log('grid x ticks', grid.x.ticks);
     */
       update: function(el: Node, props: Object) {
         if (!props.data) return;
-        this.props = {...defaultProps, ...props};
+        this.props = merge(defaultProps, props);
         this._makeSvg(el);
         if (!this.props.data.bins) {
           return;
         }
 
         this._drawScales(this.props.data);
-        this._drawGrid(this.props.data);
+        this._drawGrid(this.props);
         this._drawBars(this.props.data);
       },
 

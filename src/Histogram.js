@@ -8,6 +8,10 @@ import type {DOMEvent, ChartAdaptor, HistogramData} from '../types';
 type Props = {
   data: HistogramData,
   height: number,
+  stroke: {
+    color: (d, i, colors) => string | string,
+    width: number
+  },
   width: string | number
 };
 
@@ -35,7 +39,11 @@ class Histogram extends Component {
 
   static defaultProps = {
     width: '100%',
-    height: 200
+    height: 200,
+    stroke: {
+      color: (d, i, colors) => d3.rgb(colors(i)).darker(1),
+      width: 1
+    }
   };
 
   /**
@@ -88,21 +96,23 @@ class Histogram extends Component {
    * @return {Object} ChartState
    */
   getChartState(): ChartState {
-    let {width, height, data} = this.props;
+    let {width, height, data, stroke} = this.props;
     if (width === '100%') {
       width = this.state.parentWidth || 300;
     }
+
     return {
       data,
       height,
       tipContentFn: (bins: string[], i, d) =>
-        bins[i] + '<br />' + d.toFixed(2) + '%',
+        bins[i] + '<br />' + d.toFixed(2),
       width,
-      stroke: {
-        color: (d, i, colors) => d3.rgb(colors(i)).darker(1),
-        width: 2
-      },
-      yTicks: 0
+      stroke,
+      axis: {
+       y: {
+         ticks: 3
+       }
+      }
     };
   }
 
