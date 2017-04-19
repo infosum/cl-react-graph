@@ -71,7 +71,7 @@ total([1]);
    ],
    element = <div>
   <div>
-  {/*<Histogram data={data} width={'100%'} height={150} />*/}
+  <Histogram data={data} width={700} height={150} />
   <Histogram data={data2} width={700} height={150} />
   </div>
   <div>

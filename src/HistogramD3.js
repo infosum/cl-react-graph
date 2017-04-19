@@ -28,12 +28,34 @@ export const histogramD3 = ((): ChartAdaptor => {
     axis: {
       x: {
         height: 20,
-        'stroke-width': 1
+        text: {
+          style: {
+            'fill': '#666',
+          }
+        },
+        style: {
+          'stroke': '#666',
+          'fill': 'none',
+          'stroke-width': 1,
+          'stroke-opacity': 1,
+          'shape-rendering': 'crispEdges'
+        },
       },
       y: {
         width: 25,
         ticks: 10,
-        'stroke-width': 1
+        text: {
+          style: {
+            'fill': '#666',
+          }
+        },
+        style: {
+          'stroke': '#666',
+          'fill': 'none',
+          'stroke-width': 1,
+          'stroke-opacity': 1,
+          'shape-rendering': 'crispEdges'
+        },
       }
     },
     bar: {
@@ -205,9 +227,7 @@ export const histogramD3 = ((): ChartAdaptor => {
           .call(xAxis);
 
         yDomain = d3.extent(allCounts, d => d);
-        console.log('yDomain', yDomain);
         yDomain[0] = 0;
-        console.log('yDomain', yDomain);
         yRange = [height - (margin.top * 2) - axis.x.height, 0];
         y.range(yRange)
         .domain(yDomain);
@@ -217,6 +237,12 @@ export const histogramD3 = ((): ChartAdaptor => {
         svg.append('g').attr('class', 'y-axis')
         .attr('transform', 'translate(' + axis.y.width + ', 0)')
         .call(yAxis);
+
+        attrs(svg.selectAll('.y-axis .domain, .y-axis .tick line'), axis.y.style);
+        attrs(svg.selectAll('.y-axis .tick text'), axis.y.text.style);
+
+        attrs(svg.selectAll('.x-axis .domain, .x-axis .tick line'), axis.x.style);
+        attrs(svg.selectAll('.x-axis .tick text'), axis.x.text.style);
       },
 
       /**
@@ -236,7 +262,7 @@ export const histogramD3 = ((): ChartAdaptor => {
        * chart total width.
        * @return {number} width
        */
-      gridWidth() {
+      gridWidth(): number {
         const {axis, width, margin} = this.props;
         return width - (margin.left * 2) - axis.y.width
       },
@@ -247,9 +273,18 @@ export const histogramD3 = ((): ChartAdaptor => {
        * chart total height.
        * @return {number} width
        */
-      gridHeight() {
+      gridHeight(): number {
         const {height, margin, axis} = this.props;
         return height - (margin.top * 2) - axis.x.height;
+      },
+
+      /**
+       * Returns the margin between similar bars in different data sets
+       * @return {Number} Margin
+       */
+      groupedMargin(): number {
+        const {data} = this.props;
+        return ((data.counts.length - 1) * 3);
       },
 
       /**
@@ -261,10 +296,7 @@ export const histogramD3 = ((): ChartAdaptor => {
           w = this.gridWidth(),
           valuesCount = this.valuesCount(data.counts),
           setCount = data.counts.length;
-        // let barWidth = Math.max(1, (w - (valuesCount + 1) * bar.margin) /
-        //   valuesCount);
-
-          let barWidth = (w / valuesCount) - (bar.margin * 2);
+        let barWidth = (w / valuesCount) - (bar.margin * 2) - this.groupedMargin()
 
         // Small bars - reduce margin and re-calcualate bar width
         if (barWidth < 5) {
@@ -293,7 +325,7 @@ export const histogramD3 = ((): ChartAdaptor => {
           colors = d3.scaleOrdinal(colorScheme);
 
         const selector = '.bar-' + setIndex,
-          multiLineOffset = (index) => setCount === 1 ? 0 : ((index + setIndex) * barWidth);
+          multiLineOffset = (index) => setCount === 1 ? 0 : ((index + setIndex) * (barWidth + this.groupedMargin()));
 
         svg.selectAll(selector).remove();
         barItem = svg.selectAll(selector)
@@ -303,7 +335,7 @@ export const histogramD3 = ((): ChartAdaptor => {
             .attr('class', 'bar ' + selector)
             .attr('x', (d, index, all) => {
               return axis.y.width
-              + axis.y['stroke-width']
+              + axis.y.style['stroke-width']
               + bar.margin
               + (barWidth + (bar.margin * 2)) * (index)
               + multiLineOffset(index)

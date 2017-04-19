@@ -17071,12 +17071,34 @@ var histogramD3 = exports.histogramD3 = function histogramD3() {
     axis: {
       x: {
         height: 20,
-        'stroke-width': 1
+        text: {
+          style: {
+            'fill': '#666'
+          }
+        },
+        style: {
+          'stroke': '#666',
+          'fill': 'none',
+          'stroke-width': 1,
+          'stroke-opacity': 1,
+          'shape-rendering': 'crispEdges'
+        }
       },
       y: {
         width: 25,
         ticks: 10,
-        'stroke-width': 1
+        text: {
+          style: {
+            'fill': '#666'
+          }
+        },
+        style: {
+          'stroke': '#666',
+          'fill': 'none',
+          'stroke-width': 1,
+          'stroke-opacity': 1,
+          'shape-rendering': 'crispEdges'
+        }
       }
     },
     bar: {
@@ -17249,15 +17271,19 @@ var histogramD3 = exports.histogramD3 = function histogramD3() {
       yDomain = d3.extent(allCounts, function (d) {
         return d;
       });
-      console.log('yDomain', yDomain);
       yDomain[0] = 0;
-      console.log('yDomain', yDomain);
       yRange = [height - margin.top * 2 - axis.x.height, 0];
       y.range(yRange).domain(yDomain);
 
       yAxis = d3.axisLeft(y).ticks(axis.y.ticks);
 
       svg.append('g').attr('class', 'y-axis').attr('transform', 'translate(' + axis.y.width + ', 0)').call(yAxis);
+
+      (0, _attrs2.default)(svg.selectAll('.y-axis .domain, .y-axis .tick line'), axis.y.style);
+      (0, _attrs2.default)(svg.selectAll('.y-axis .tick text'), axis.y.text.style);
+
+      (0, _attrs2.default)(svg.selectAll('.x-axis .domain, .x-axis .tick line'), axis.x.style);
+      (0, _attrs2.default)(svg.selectAll('.x-axis .tick text'), axis.x.text.style);
     },
 
 
@@ -17307,6 +17333,17 @@ var histogramD3 = exports.histogramD3 = function histogramD3() {
 
 
     /**
+     * Returns the margin between similar bars in different data sets
+     * @return {Number} Margin
+     */
+    groupedMargin: function groupedMargin() {
+      var data = this.props.data;
+
+      return (data.counts.length - 1) * 3;
+    },
+
+
+    /**
      * Calculate the bar width
      * @return {number} bar width
      */
@@ -17321,10 +17358,8 @@ var histogramD3 = exports.histogramD3 = function histogramD3() {
           w = this.gridWidth(),
           valuesCount = this.valuesCount(data.counts),
           setCount = data.counts.length;
-      // let barWidth = Math.max(1, (w - (valuesCount + 1) * bar.margin) /
-      //   valuesCount);
 
-      var barWidth = w / valuesCount - bar.margin * 2;
+      var barWidth = w / valuesCount - bar.margin * 2 - this.groupedMargin();
 
       // Small bars - reduce margin and re-calcualate bar width
       if (barWidth < 5) {
@@ -17366,12 +17401,12 @@ var histogramD3 = exports.histogramD3 = function histogramD3() {
 
       var selector = '.bar-' + setIndex,
           multiLineOffset = function multiLineOffset(index) {
-        return setCount === 1 ? 0 : (index + setIndex) * barWidth;
+        return setCount === 1 ? 0 : (index + setIndex) * (barWidth + _this2.groupedMargin());
       };
 
       svg.selectAll(selector).remove();
       barItem = svg.selectAll(selector).data(set.data).enter().append('rect').attr('class', 'bar ' + selector).attr('x', function (d, index, all) {
-        return axis.y.width + axis.y['stroke-width'] + bar.margin + (barWidth + bar.margin * 2) * index + multiLineOffset(index);
+        return axis.y.width + axis.y.style['stroke-width'] + bar.margin + (barWidth + bar.margin * 2) * index + multiLineOffset(index);
       }).attr('width', function (d) {
         return barWidth;
       }).attr('fill', function (d, i) {
