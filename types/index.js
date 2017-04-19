@@ -5,7 +5,8 @@ export type D3Selection = {
 
 export type HistogramData = {
   bins: number[],
-  counts: HistogramDataSet[]
+  counts: HistogramDataSet[],
+  colorScheme?: string[]
 };
 
 export type HistogramDataSet = {

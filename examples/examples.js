@@ -13,11 +13,13 @@ total([1]);
      counts: [
        {
          label: 'Data 1',
-         data: [1, 2, 3, 4]
+         data: [1, 2, 3, 4],
+         colorScheme: d3.schemeCategory20
        },
        {
          label: 'Data 2',
-         data: [3, 2, 1, 5]
+         data: [3, 2, 1, 5],
+         colorScheme: d3.schemeCategory20b
        }
      ]
    },

@@ -17396,7 +17396,7 @@ var histogramD3 = exports.histogramD3 = function histogramD3() {
           tipContentFn = _props6.tipContentFn,
           barItem = void 0,
           barWidth = this.barWidth(),
-          colors = d3.scaleOrdinal(colorScheme);
+          colors = d3.scaleOrdinal(set.colorScheme || colorScheme);
 
 
       var selector = '.bar-' + setIndex,

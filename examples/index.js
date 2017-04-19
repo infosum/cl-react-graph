@@ -16809,10 +16809,12 @@ var data = {
   bins: [1, 2, 3, 4],
   counts: [{
     label: 'Data 1',
-    data: [1, 2, 3, 4]
+    data: [1, 2, 3, 4],
+    colorScheme: d3.schemeCategory20
   }, {
     label: 'Data 2',
-    data: [3, 2, 1, 5]
+    data: [3, 2, 1, 5],
+    colorScheme: d3.schemeCategory20b
   }]
 },
     data2 = {
@@ -17454,7 +17456,7 @@ var histogramD3 = exports.histogramD3 = function histogramD3() {
           tipContentFn = _props6.tipContentFn,
           barItem = void 0,
           barWidth = this.barWidth(),
-          colors = d3.scaleOrdinal(colorScheme);
+          colors = d3.scaleOrdinal(set.colorScheme || colorScheme);
 
 
       var selector = '.bar-' + setIndex,

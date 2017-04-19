@@ -322,7 +322,7 @@ export const histogramD3 = ((): ChartAdaptor => {
           axis, stroke, tip, tipContentFn} = this.props,
           barItem,
           barWidth = this.barWidth(),
-          colors = d3.scaleOrdinal(colorScheme);
+          colors = d3.scaleOrdinal(set.colorScheme || colorScheme);
 
         const selector = '.bar-' + setIndex,
           multiLineOffset = (index) => setCount === 1 ? 0 : ((index + setIndex) * (barWidth + this.groupedMargin()));
