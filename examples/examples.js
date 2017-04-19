@@ -26,7 +26,8 @@
      counts: [
        {
          label: 'Data 1',
-         data: [999, 9000, 15000, 25000, 15000, 9000, 888]
+         data: [999, 9000, 15000, 25000, 15000, 9000, 888],
+         borderColors: ['red'],
        }
      ]
    },
@@ -76,7 +77,7 @@
    },
    element = <div>
   <div>
-  {/*<Histogram data={data} width={700} height={150} />*/}
+  <Histogram data={data} width={700} height={150} />
   <Histogram data={data2} width={700} height={150} axis={axis} />
   </div>
   <div>

@@ -17394,7 +17394,8 @@ var histogramD3 = exports.histogramD3 = function histogramD3() {
           tipContentFn = _props6.tipContentFn,
           barItem = void 0,
           barWidth = this.barWidth(),
-          colors = d3.scaleOrdinal(set.colorScheme || colorScheme);
+          colors = d3.scaleOrdinal(set.colors || colorScheme),
+          borderColors = set.borderColors ? d3.scaleOrdinal(set.borderColors) : null;
 
 
       var selector = '.bar-' + setIndex,
@@ -17423,6 +17424,9 @@ var histogramD3 = exports.histogramD3 = function histogramD3() {
       }).attr('height', 0);
 
       barItem.attr('stroke', function (d, i) {
+        if (borderColors) {
+          return borderColors(i);
+        }
         return typeof stroke.color === 'function' ? stroke.color(d, i, colors) : stroke.color;
       }).attr('shape-rendering', 'crispEdges').attr('stroke-width', stroke.width).attr('stroke-linecap', stroke.linecap);
 
@@ -17501,9 +17505,6 @@ var histogramD3 = exports.histogramD3 = function histogramD3() {
     update: function update(el, props) {
       if (!props.data) return;
       this.props = (0, _deepmerge2.default)(defaultProps, props);
-      console.log(defaultProps);
-      console.log(props);
-      console.log(this.props);
       this._makeSvg(el);
       if (!this.props.data.bins) {
         return;

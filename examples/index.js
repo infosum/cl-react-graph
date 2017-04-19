@@ -16800,28 +16800,26 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function total(numbers) {}
-
-
-total([1]);
-
 var data = {
   bins: [1, 2, 3, 4],
   counts: [{
     label: 'Data 1',
     data: [1, 2, 3, 4],
-    colorScheme: d3.schemeCategory20
+    colors: d3.schemeCategory20,
+    borderColors: d3.schemeCategory20
   }, {
     label: 'Data 2',
     data: [3, 2, 1, 5],
-    colorScheme: d3.schemeCategory20b
+    colors: d3.schemeCategory20b,
+    borderColors: d3.schemeCategory20
   }]
 },
     data2 = {
   bins: ['1', '10', '25', '50', '75', '90', '99'],
   counts: [{
     label: 'Data 1',
-    data: [999, 9000, 15000, 25000, 15000, 9000, 888]
+    data: [999, 9000, 15000, 25000, 15000, 9000, 888],
+    borderColors: ['red']
   }]
 },
     points = [{
@@ -16858,6 +16856,7 @@ var data = {
   React.createElement(
     'div',
     null,
+    React.createElement(_src.Histogram, { data: data, width: 700, height: 150 }),
     React.createElement(_src.Histogram, { data: data2, width: 700, height: 150, axis: axis })
   ),
   React.createElement(
@@ -16871,6 +16870,7 @@ var data = {
     React.createElement(_src.ScatterPlot, { data: scatter })
   )
 );
+
 
 _reactDom2.default.render(element, document.getElementById('root'));
 
@@ -17459,7 +17459,8 @@ var histogramD3 = exports.histogramD3 = function histogramD3() {
           tipContentFn = _props6.tipContentFn,
           barItem = void 0,
           barWidth = this.barWidth(),
-          colors = d3.scaleOrdinal(set.colorScheme || colorScheme);
+          colors = d3.scaleOrdinal(set.colors || colorScheme),
+          borderColors = set.borderColors ? d3.scaleOrdinal(set.borderColors) : null;
 
 
       var selector = '.bar-' + setIndex,
@@ -17488,6 +17489,9 @@ var histogramD3 = exports.histogramD3 = function histogramD3() {
       }).attr('height', 0);
 
       barItem.attr('stroke', function (d, i) {
+        if (borderColors) {
+          return borderColors(i);
+        }
         return typeof stroke.color === 'function' ? stroke.color(d, i, colors) : stroke.color;
       }).attr('shape-rendering', 'crispEdges').attr('stroke-width', stroke.width).attr('stroke-linecap', stroke.linecap);
 
@@ -17566,9 +17570,6 @@ var histogramD3 = exports.histogramD3 = function histogramD3() {
     update: function update(el, props) {
       if (!props.data) return;
       this.props = (0, _deepmerge2.default)(defaultProps, props);
-      console.log(defaultProps);
-      console.log(props);
-      console.log(this.props);
       this._makeSvg(el);
       if (!this.props.data.bins) {
         return;

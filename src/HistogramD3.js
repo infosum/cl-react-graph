@@ -323,7 +323,7 @@ export const histogramD3 = ((): ChartAdaptor => {
           barItem,
           barWidth = this.barWidth(),
           colors = d3.scaleOrdinal(set.colors || colorScheme),
-          borderColors = set.borderColors ? d3.scaleOrdinal(set.borderColors) || null;
+          borderColors = set.borderColors ? d3.scaleOrdinal(set.borderColors) : null;
 
         const selector = '.bar-' + setIndex,
           multiLineOffset = (index) => setCount === 1 ? 0 : ((index + setIndex) * (barWidth + this.groupedMargin()));
@@ -354,13 +354,13 @@ export const histogramD3 = ((): ChartAdaptor => {
 
 
         barItem.attr('stroke', (d, i) => {
-         if (borderColors) {
-           return borderColors(i);
-         }
-         return typeof stroke.color === 'function'
-          ? stroke.color(d, i, colors)
-          : stroke.color)
-        }
+          if (borderColors) {
+            return borderColors(i);
+          }
+          return typeof stroke.color === 'function'
+            ? stroke.color(d, i, colors)
+            : stroke.color;
+          })
           .attr('shape-rendering', 'crispEdges')
           .attr('stroke-width', stroke.width)
           .attr('stroke-linecap', stroke.linecap);
