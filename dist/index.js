@@ -17099,7 +17099,7 @@ var histogramD3 = exports.histogramD3 = function histogramD3() {
           'shape-rendering': 'crispEdges'
         },
         visible: true,
-        ticks: 10
+        ticks: 5
       },
       y: {
         style: {
@@ -17110,7 +17110,7 @@ var histogramD3 = exports.histogramD3 = function histogramD3() {
           'shape-rendering': 'crispEdges'
         },
         visible: true,
-        ticks: 10
+        ticks: 5
       }
     },
     margin: {
@@ -17427,7 +17427,7 @@ var histogramD3 = exports.histogramD3 = function histogramD3() {
           ticks = this.valuesCount(data.counts),
           axisWidth = 1,
           offset = {
-        x: axis.y.width,
+        x: axis.y.width + this.barWidth() / 2 + bar.margin,
         y: this.gridHeight()
       };
 

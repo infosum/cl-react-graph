@@ -56,7 +56,7 @@ export const histogramD3 = ((): ChartAdaptor => {
           'shape-rendering': 'crispEdges'
         },
         visible: true,
-        ticks: 10
+        ticks: 5
       },
       y: {
         style: {
@@ -67,7 +67,7 @@ export const histogramD3 = ((): ChartAdaptor => {
           'shape-rendering': 'crispEdges'
         },
         visible: true,
-        ticks: 10
+        ticks: 5
       }
     },
     margin: {
@@ -360,10 +360,8 @@ export const histogramD3 = ((): ChartAdaptor => {
         const {data, height, width, axis, grid, margin, bar} = props,
           ticks = this.valuesCount(data.counts),
           axisWidth = 1,
-          // (((this.barWidth()) + (bar.margin)) * (data.counts.length))
-          // axis.y.width + (this.barWidth() / 2),
           offset = {
-            x: axis.y.width,
+            x: axis.y.width + (this.barWidth() / 2) + bar.margin,
             y: this.gridHeight()
           };
         let g, gy;
