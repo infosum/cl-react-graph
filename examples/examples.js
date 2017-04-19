@@ -3,23 +3,20 @@
  import * as d3 from 'd3';
  import {Histogram, LineChart, ScatterPlot} from '../src';
 
-function total(numbers: Array<number>) {
-}
-
-total([1]);
-
  const data = {
      bins: [1, 2, 3, 4],
      counts: [
        {
          label: 'Data 1',
          data: [1, 2, 3, 4],
-         colorScheme: d3.schemeCategory20
+         colors: d3.schemeCategory20,
+         borderColors: d3.schemeCategory20,
        },
        {
          label: 'Data 2',
          data: [3, 2, 1, 5],
-         colorScheme: d3.schemeCategory20b
+         colors: d3.schemeCategory20b,
+         borderColors: d3.schemeCategory20,
        }
      ]
    },

@@ -322,7 +322,8 @@ export const histogramD3 = ((): ChartAdaptor => {
           axis, stroke, tip, tipContentFn} = this.props,
           barItem,
           barWidth = this.barWidth(),
-          colors = d3.scaleOrdinal(set.colorScheme || colorScheme);
+          colors = d3.scaleOrdinal(set.colors || colorScheme),
+          borderColors = set.borderColors ? d3.scaleOrdinal(set.borderColors) || null;
 
         const selector = '.bar-' + setIndex,
           multiLineOffset = (index) => setCount === 1 ? 0 : ((index + setIndex) * (barWidth + this.groupedMargin()));
@@ -352,9 +353,14 @@ export const histogramD3 = ((): ChartAdaptor => {
             .attr('height', 0);
 
 
-        barItem.attr('stroke', (d, i) => typeof stroke.color === 'function'
+        barItem.attr('stroke', (d, i) => {
+         if (borderColors) {
+           return borderColors(i);
+         }
+         return typeof stroke.color === 'function'
           ? stroke.color(d, i, colors)
           : stroke.color)
+        }
           .attr('shape-rendering', 'crispEdges')
           .attr('stroke-width', stroke.width)
           .attr('stroke-linecap', stroke.linecap);
@@ -441,9 +447,6 @@ export const histogramD3 = ((): ChartAdaptor => {
       update: function(el: Node, props: Object) {
         if (!props.data) return;
         this.props = merge(defaultProps, props);
-        console.log(defaultProps);
-        console.log(props)
-        console.log(this.props);
         this._makeSvg(el);
         if (!this.props.data.bins) {
           return;
