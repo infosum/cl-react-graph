@@ -74,8 +74,7 @@ export const histogramD3 = ((): ChartAdaptor => {
           'stroke': '#bbb',
           'fill': 'none',
           'stroke-width': 1,
-          'stroke-opacity': 0.7,
-          'shape-rendering': 'crispEdges'
+          'stroke-opacity': 0.7
         },
         visible: true,
         ticks: 5
@@ -85,8 +84,7 @@ export const histogramD3 = ((): ChartAdaptor => {
           'stroke': '#bbb',
           'fill': 'none',
           'stroke-width': 1,
-          'stroke-opacity': 0.7,
-          'shape-rendering': 'crispEdges'
+          'stroke-opacity': 0.7
         },
         visible: true,
         ticks: 5
@@ -159,6 +157,7 @@ export const histogramD3 = ((): ChartAdaptor => {
         .attr('class', className)
         .attr('width', width)
         .attr('height', height)
+        .attr('viewBox', `0 0 ${width} ${height}`)
         .append('g')
         .attr('transform',
           'translate(' + margin.left + ',' + margin.top + ')');

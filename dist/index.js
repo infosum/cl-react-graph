@@ -17115,8 +17115,7 @@ var histogramD3 = exports.histogramD3 = function histogramD3() {
           'stroke': '#bbb',
           'fill': 'none',
           'stroke-width': 1,
-          'stroke-opacity': 0.7,
-          'shape-rendering': 'crispEdges'
+          'stroke-opacity': 0.7
         },
         visible: true,
         ticks: 5
@@ -17126,8 +17125,7 @@ var histogramD3 = exports.histogramD3 = function histogramD3() {
           'stroke': '#bbb',
           'fill': 'none',
           'stroke-width': 1,
-          'stroke-opacity': 0.7,
-          'shape-rendering': 'crispEdges'
+          'stroke-opacity': 0.7
         },
         visible: true,
         ticks: 5
@@ -17197,7 +17195,7 @@ var histogramD3 = exports.histogramD3 = function histogramD3() {
 
       // Reference to svg element containing chart
 
-      svg = d3.select(el).append('svg').attr('class', className).attr('width', width).attr('height', height).append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+      svg = d3.select(el).append('svg').attr('class', className).attr('width', width).attr('height', height).attr('viewBox', '0 0 ' + width + ' ' + height).append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
       this._makeTip();
     },
 
