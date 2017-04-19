@@ -391,9 +391,11 @@ export const histogramD3 = ((): ChartAdaptor => {
       _drawGrid(props: Props) {
         const {data, height, width, axis, grid, margin, bar} = props,
           ticks = this.valuesCount(data.counts),
-          axisWidth = 1,
+          setCount = data.counts.length,
+          axisWidth = axis.y.style['stroke-width'],
+          // x: axis.y.width + (this.barWidth() / 2) + bar.margin,
           offset = {
-            x: axis.y.width + (this.barWidth() / 2) + bar.margin,
+            x: axis.y.width + ((this.barWidth() * setCount) / 2) + bar.margin + this.groupedMargin() / 2,
             y: this.gridHeight()
           };
         let g, gy;

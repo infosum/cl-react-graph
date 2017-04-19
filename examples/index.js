@@ -17518,9 +17518,10 @@ var histogramD3 = exports.histogramD3 = function histogramD3() {
           margin = props.margin,
           bar = props.bar,
           ticks = this.valuesCount(data.counts),
-          axisWidth = 1,
+          setCount = data.counts.length,
+          axisWidth = axis.y.style['stroke-width'],
           offset = {
-        x: axis.y.width + this.barWidth() / 2 + bar.margin,
+        x: axis.y.width + this.barWidth() * setCount / 2 + bar.margin + this.groupedMargin() / 2,
         y: this.gridHeight()
       };
 
