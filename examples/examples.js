@@ -73,12 +73,13 @@ total([1]);
    ],
    axis = {
     y: {
+      ticks: 3,
       width: 50
     }
    },
    element = <div>
   <div>
-  <Histogram data={data} width={700} height={150} />
+  {/*<Histogram data={data} width={700} height={150} />*/}
   <Histogram data={data2} width={700} height={150} axis={axis} />
   </div>
   <div>

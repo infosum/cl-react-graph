@@ -110,12 +110,7 @@ class Histogram extends Component {
       tipContentFn: (bins: string[], i, d) =>
         bins[i] + '<br />' + d.toFixed(2),
       width,
-      stroke,
-      axis: {
-       y: {
-         ticks: 3
-       }
-      }
+      stroke
     };
   }
 

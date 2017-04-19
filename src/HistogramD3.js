@@ -441,6 +441,9 @@ export const histogramD3 = ((): ChartAdaptor => {
       update: function(el: Node, props: Object) {
         if (!props.data) return;
         this.props = merge(defaultProps, props);
+        console.log(defaultProps);
+        console.log(props)
+        console.log(this.props);
         this._makeSvg(el);
         if (!this.props.data.bins) {
           return;

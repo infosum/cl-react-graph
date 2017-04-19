@@ -16846,14 +16846,19 @@ var data = {
   data: [{ x: 2, y: 1 }, { x: 3, y: 2 }, { x: 4, y: 3 }, { x: 6, y: 4 }]
 }],
     scatter = [],
+    axis = {
+  y: {
+    ticks: 3,
+    width: 50
+  }
+},
     element = React.createElement(
   'div',
   null,
   React.createElement(
     'div',
     null,
-    React.createElement(_src.Histogram, { data: data, width: 700, height: 150 }),
-    React.createElement(_src.Histogram, { data: data2, width: 700, height: 150 })
+    React.createElement(_src.Histogram, { data: data2, width: 700, height: 150, axis: axis })
   ),
   React.createElement(
     'div',
@@ -16984,6 +16989,7 @@ var Histogram = function (_Component) {
     key: 'getChartState',
     value: function getChartState() {
       var _props = this.props,
+          axis = _props.axis,
           width = _props.width,
           height = _props.height,
           data = _props.data,
@@ -16994,18 +17000,14 @@ var Histogram = function (_Component) {
       }
 
       return {
+        axis: axis,
         data: data,
         height: height,
         tipContentFn: function tipContentFn(bins, i, d) {
           return bins[i] + '<br />' + d.toFixed(2);
         },
         width: width,
-        stroke: stroke,
-        axis: {
-          y: {
-            ticks: 3
-          }
-        }
+        stroke: stroke
       };
     }
 
@@ -17061,6 +17063,7 @@ var Histogram = function (_Component) {
 }(_react.Component);
 
 Histogram.defaultProps = {
+  axis: {},
   width: '100%',
   height: 200,
   stroke: {
@@ -17563,6 +17566,9 @@ var histogramD3 = exports.histogramD3 = function histogramD3() {
     update: function update(el, props) {
       if (!props.data) return;
       this.props = (0, _deepmerge2.default)(defaultProps, props);
+      console.log(defaultProps);
+      console.log(props);
+      console.log(this.props);
       this._makeSvg(el);
       if (!this.props.data.bins) {
         return;
