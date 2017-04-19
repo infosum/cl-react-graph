@@ -71,10 +71,15 @@ total([1]);
    scatter = [
 
    ],
+   axis = {
+    y: {
+      width: 50
+    }
+   },
    element = <div>
   <div>
   <Histogram data={data} width={700} height={150} />
-  <Histogram data={data2} width={700} height={150} />
+  <Histogram data={data2} width={700} height={150} axis={axis} />
   </div>
   <div>
    <LineChart data={points} width={300} />

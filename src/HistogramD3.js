@@ -426,7 +426,7 @@ export const histogramD3 = ((): ChartAdaptor => {
           attrs(gy.selectAll('.tick line'), grid.y.style);
 
           // Hide the first horizontal grid line to show axis
-           gy.selectAll('.gridY .tick line').filter((d, i) => i === 0)
+          gy.selectAll('.gridY .tick line').filter((d, i) => i === 0)
             .attr('display', 'none');
 
           attrs(gy.selectAll('.domain'), {stroke: 'transparent'});

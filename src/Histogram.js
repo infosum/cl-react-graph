@@ -3,9 +3,10 @@ import * as d3 from 'd3';
 import React, {Component, Element} from 'react';
 import ReactDOM from 'react-dom';
 import {histogramD3} from './HistogramD3';
-import type {DOMEvent, ChartAdaptor, HistogramData} from '../types';
+import type {Axes, DOMEvent, ChartAdaptor, HistogramData} from '../types';
 
 type Props = {
+  axis: Axes,
   data: HistogramData,
   height: number,
   stroke: {
@@ -38,6 +39,7 @@ class Histogram extends Component {
   }
 
   static defaultProps = {
+    axis: {},
     width: '100%',
     height: 200,
     stroke: {
@@ -96,12 +98,13 @@ class Histogram extends Component {
    * @return {Object} ChartState
    */
   getChartState(): ChartState {
-    let {width, height, data, stroke} = this.props;
+    let {axis, width, height, data, stroke} = this.props;
     if (width === '100%') {
       width = this.state.parentWidth || 300;
     }
 
     return {
+      axis,
       data,
       height,
       tipContentFn: (bins: string[], i, d) =>

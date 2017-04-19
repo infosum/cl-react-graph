@@ -14,6 +14,36 @@ export type HistogramDataSet = {
   data: number[]
 };
 
+export type SVGLineStyle = {
+  'stroke': string,
+  'fill': string,
+  'stroke-width': number,
+  'stroke-opacity': number,
+  'shape-rendering': string
+}
+
+export type SVGTextStyle = {
+  'fill': string,
+}
+
+export type Axes = {
+  x: {
+    height: number,
+    text: {
+      style: SVGTextStyle
+    },
+    style: SVGLineStyle,
+  },
+  y: {
+    width: number,
+    ticks: number,
+    text: {
+      style: SVGTextStyle
+    },
+    style: SVGLineStyle,
+  }
+}
+
 export type ChartAdaptor = {
   create: (el: Node, props: Object) => {},
   update: (el: Node, props: Object) => {},
