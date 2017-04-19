@@ -40,6 +40,7 @@ class Histogram extends Component {
 
   static defaultProps = {
     axis: {},
+    bar: {},
     width: '100%',
     height: 200,
     stroke: {
@@ -98,13 +99,14 @@ class Histogram extends Component {
    * @return {Object} ChartState
    */
   getChartState(): ChartState {
-    let {axis, width, height, data, stroke} = this.props;
+    let {axis, bar, width, height, data, stroke} = this.props;
     if (width === '100%') {
       width = this.state.parentWidth || 300;
     }
 
     return {
       axis,
+      bar,
       data,
       height,
       tipContentFn: (bins: string[], i, d) =>

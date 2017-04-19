@@ -16925,6 +16925,7 @@ var Histogram = function (_Component) {
     value: function getChartState() {
       var _props = this.props,
           axis = _props.axis,
+          bar = _props.bar,
           width = _props.width,
           height = _props.height,
           data = _props.data,
@@ -16936,6 +16937,7 @@ var Histogram = function (_Component) {
 
       return {
         axis: axis,
+        bar: bar,
         data: data,
         height: height,
         tipContentFn: function tipContentFn(bins, i, d) {
@@ -16999,6 +17001,7 @@ var Histogram = function (_Component) {
 
 Histogram.defaultProps = {
   axis: {},
+  bar: {},
   width: '100%',
   height: 200,
   stroke: {

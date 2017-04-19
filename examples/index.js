@@ -16857,7 +16857,7 @@ var data = {
     'div',
     null,
     React.createElement(_src.Histogram, { data: data, width: 700, height: 150 }),
-    React.createElement(_src.Histogram, { data: data2, width: 700, height: 150, axis: axis })
+    React.createElement(_src.Histogram, { data: data2, bar: { margin: 4 }, width: 700, height: 150, axis: axis })
   ),
   React.createElement(
     'div',
@@ -16990,6 +16990,7 @@ var Histogram = function (_Component) {
     value: function getChartState() {
       var _props = this.props,
           axis = _props.axis,
+          bar = _props.bar,
           width = _props.width,
           height = _props.height,
           data = _props.data,
@@ -17001,6 +17002,7 @@ var Histogram = function (_Component) {
 
       return {
         axis: axis,
+        bar: bar,
         data: data,
         height: height,
         tipContentFn: function tipContentFn(bins, i, d) {
@@ -17064,6 +17066,7 @@ var Histogram = function (_Component) {
 
 Histogram.defaultProps = {
   axis: {},
+  bar: {},
   width: '100%',
   height: 200,
   stroke: {
