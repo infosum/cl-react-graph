@@ -1,15 +1,18 @@
 A ReactJS wrapper around some standard D3 charts
 
-#Histogram
+Please checkout the examples folder to see this package in use
+
+Docs coming as and when ....
+# Histogram
 
  ## Grids
 
-``` json
+```
  {
      x: {
         visible: boolean,
         style: 'string - line style'
-        ticks: 
+        ticks: number
      },
      y: {
 
@@ -17,6 +20,6 @@ A ReactJS wrapper around some standard D3 charts
  }
  ```
 
- #Line
+ # Line
 
- #Scatter Plot
+ # Scatter Plot
