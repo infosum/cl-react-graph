@@ -41,6 +41,28 @@ class Histogram extends Component {
   static defaultProps = {
     axis: {},
     bar: {},
+    grid: {
+      x: {
+        style: {
+          'stroke': '#bbb',
+          'fill': 'none',
+          'stroke-width': 1,
+          'stroke-opacity': 0.7
+        },
+        visible: true,
+        ticks: 5
+      },
+      y: {
+        style: {
+          'stroke': '#bbb',
+          'fill': 'none',
+          'stroke-width': 1,
+          'stroke-opacity': 0.7
+        },
+        visible: true,
+        ticks: 5
+      }
+    },
     width: '100%',
     height: 200,
     stroke: {
@@ -99,7 +121,7 @@ class Histogram extends Component {
    * @return {Object} ChartState
    */
   getChartState(): ChartState {
-    let {axis, bar, width, height, data, stroke} = this.props;
+    let {axis, bar, grid, width, height, data, stroke} = this.props;
     if (width === '100%') {
       width = this.state.parentWidth || 300;
     }
@@ -108,6 +130,7 @@ class Histogram extends Component {
       axis,
       bar,
       data,
+      grid,
       height,
       tipContentFn: (bins: string[], i, d) =>
         bins[i] + '<br />' + d.toFixed(2),
