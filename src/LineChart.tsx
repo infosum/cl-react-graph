@@ -1,61 +1,53 @@
-// @flow
-import React, {Component} from 'react';
-import ReactDOM from 'react-dom';
+/// <reference path="./interfaces.d.ts" />
+import * as React from 'react';
+import {Component} from 'react';
+import * as ReactDOM from 'react-dom';
 import {lineChartD3} from './lineChartD3';
-import type {DataSet, DOMEvent, HistogramData, LineChartD3} from '../types';
 
-type Props = {
-  data: Object,
-  histogram: HistogramData,
-  title: string,
-  width: number | string
-};
+interface IState {
+  data: IChartPoint[];
+  width: number | string;
+  yTicks?: number;
+  height: number;
+  tipContainer?: string;
+  tipContentFn?: (info: IHistogramData, i: number, d: number) => string;
+  parentWidth?: number;
+}
 
-type ChartState = {
-  data: DataSet[],
-  width: number | string,
-  yTicks: number,
-  height: number,
-  tipContainer: string,
-  tipContentFn: (info: HistogramData, i: number, d: number) => string
-};
+class LineChart extends Component<ILineChartProps, IState> {
 
-class LineChart extends Component {
+  private lineChart;
 
-  lineChart: LineChartD3
-  props: Props
-
-  state: {
-    parentWidth?: number
-  }
-
-  constructor(props: Props) {
+  constructor(props: ILineChartProps) {
     super(props);
     this.state = {
-      parentWidth: 0
+      data: [],
+      height: 400,
+      parentWidth: 0,
+      width: 400,
     };
     this.lineChart = lineChartD3();
   }
 
-  handleResize(e: DOMEvent) {
-    let elem = this.getDOMNode(),
-      width = elem.offsetWidth;
+  private handleResize() {
+    const elem = this.getDOMNode();
+    const width = elem.offsetWidth;
 
     this.setState({
-      parentWidth: width
+      parentWidth: width,
     });
     this.lineChart.create(this.getDOMNode(), this.getChartState());
   }
 
-  componentDidMount() {
+  public componentDidMount() {
     this.lineChart.create(this.getDOMNode(), this.getChartState());
     if (this.props.width === '100%') {
-      window.addEventListener('resize', e => this.handleResize());
+      window.addEventListener('resize', (e) => this.handleResize());
       this.handleResize();
     }
   }
 
-  componentDidUpdate() {
+  public componentDidUpdate() {
     this.lineChart.update(this.getDOMNode(), this.getChartState());
   }
 
@@ -65,7 +57,7 @@ class LineChart extends Component {
    * a random normal dist
    * @return {Object} data and chart props
    */
-  getChartState(): ChartState {
+  public getChartState(): ILineChartProps {
     const {data} = this.props;
     let {width} = this.props;
 
@@ -75,31 +67,30 @@ class LineChart extends Component {
 
     return {
       data,
+      height: 200,
+      tipContentFn: (info, i, d) =>
+        info[i].x.toFixed(1),
       width,
       yTicks: 0,
-      height: 200,
-
-      tipContentFn: (info, i, d) =>
-        info[i].x.toFixed(1)
     };
   }
 
-  componentWillUnmount() {
+  public componentWillUnmount() {
     if (this.props.width === '100%') {
       window.removeEventListener('resize', this.handleResize);
     }
     this.lineChart.destroy(this.getDOMNode());
   }
 
-  getDOMNode(): Node {
-    return ReactDOM.findDOMNode(this);
+  public getDOMNode() {
+    return ReactDOM.findDOMNode<HTMLDivElement>(this);
   }
 
-  componentWillReceiveProps(props: Props) {
+  public componentWillReceiveProps(props: ILineChartProps) {
     this.lineChart.update(this.getDOMNode(), this.getChartState());
   }
 
-  render(): React$Element<any> | null {
+  public render(): JSX.Element {
     return <div className="chart-container"></div>;
   }
 }

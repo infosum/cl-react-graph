@@ -1,16 +1,15 @@
+/// <reference path="./interfaces.d.ts" />
 import * as d3 from 'd3';
-import type {HistogramData, ChartAdaptor, HistogramDataSet} from '../types';
+import * as merge from 'deepmerge';
 import colorScheme from './colors';
 import attrs from './d3/attrs';
-import merge from 'deepmerge';
 
-
-export const histogramD3 = ((): ChartAdaptor => {
-  let svg,
-    tipContainer,
-    tipContent,
-    y = d3.scaleLinear(),
-    x = d3.scaleBand();
+export const histogramD3 = ((): IChartAdaptor => {
+  let svg;
+  let tipContainer;
+  let tipContent;
+  const y = d3.scaleLinear();
+  const x = d3.scaleBand();
 
 // gridlines in x axis function
   function make_x_gridlines(ticks: number = 5) {
@@ -28,110 +27,111 @@ export const histogramD3 = ((): ChartAdaptor => {
     axis: {
       x: {
         height: 20,
+        style: {
+          'fill': 'none',
+          'shape-rendering': 'crispEdges',
+          'stroke': '#666',
+          'stroke-opacity': 1,
+          'stroke-width': 1,
+        },
         text: {
           style: {
-            'fill': '#666',
-          }
-        },
-        style: {
-          'stroke': '#666',
-          'fill': 'none',
-          'stroke-width': 1,
-          'stroke-opacity': 1,
-          'shape-rendering': 'crispEdges'
+            fill: '#666',
+          },
         },
       },
       y: {
-        width: 25,
-        ticks: 10,
+        style: {
+          'fill': 'none',
+          'shape-rendering': 'crispEdges',
+          'stroke': '#666',
+          'stroke-opacity': 1,
+          'stroke-width': 1,
+        },
         text: {
           style: {
-            'fill': '#666',
-          }
+            fill: '#666',
+          },
         },
-        style: {
-          'stroke': '#666',
-          'fill': 'none',
-          'stroke-width': 1,
-          'stroke-opacity': 1,
-          'shape-rendering': 'crispEdges'
-        },
-      }
+        ticks: 10,
+        width: 25,
+      },
     },
     bar: {
+      margin: 10,
       width: 50,
-      margin: 10
     },
     className: 'histogram-d3',
     colorScheme,
-    width: 200,
-    height: 200,
+    data: [],
     delay: 0,
     duration: 400,
     grid: {
       x: {
         style: {
-          'stroke': '#bbb',
           'fill': 'none',
+          'stroke': '#bbb',
+          'stroke-opacity': 0.7,
           'stroke-width': 1,
-          'stroke-opacity': 0.7
         },
+        ticks: 5,
         visible: true,
-        ticks: 5
       },
       y: {
         style: {
-          'stroke': '#bbb',
           'fill': 'none',
+          'stroke': '#bbb',
+          'stroke-opacity': 0.7,
           'stroke-width': 1,
-          'stroke-opacity': 0.7
         },
+        ticks: 5,
         visible: true,
-        ticks: 5
-      }
+      },
     },
+    height: 200,
     margin: {
       left: 5,
-      top: 5
+      top: 5,
     },
     stroke: {
       color: '#005870',
       dasharray: '',
+      linecap: 'butt',
       width: 0,
-      linecap: 'butt'
     },
-    tipContentFn: (bins: string[], i: number, d: number): string =>
-      bins[i] + '<br />' + d,
-    tipContainer: 'body',
     tip: {
       fx: {
-        in: (tipContainer: Node) => {
-          tipContainer.style('left', (d3.event.pageX) + 'px')
+        in: (container) => {
+          container.style('left', (d3.event.pageX) + 'px')
             .style('top', (d3.event.pageY - 55) + 'px');
-          tipContainer.transition()
+          container.transition()
             .duration(200)
             .style('opacity', 0.9);
         },
-        move: (tipContainer: Node) => {
-          tipContainer.style('left', (d3.event.pageX) + 'px')
+        move: (container) => {
+          container.style('left', (d3.event.pageX) + 'px')
             .style('top', (d3.event.pageY - 55) + 'px');
         },
-        out: (tipContainer: Node) => {
-          tipContainer.transition()
+        out: (container) => {
+          container.transition()
             .duration(500)
             .style('opacity', 0);
-        }
-      }
-    }
-  },
+        },
+      },
+    },
+    tipContainer: 'body',
+    tipContentFn: (bins: string[], i: number, d: number): string =>
+      bins[i] + '<br />' + d,
+    width: 200,
+  };
 
-    HistogramD3 = {
+  const HistogramD3 = {
     /**
      * Initialization
      * @param {Node} el Target DOM node
      * @param {Object} props Chart properties
      */
-      create: function(el: Node, props: Object = {}) {
+      create(el: HTMLElement, props = {}) {
         this.props = merge(defaultProps, props);
         this.update(el, props);
       },
@@ -141,11 +141,11 @@ export const histogramD3 = ((): ChartAdaptor => {
      * Recreate if it previously existed
      * @param {Dom} el Dom container node
      */
-      _makeSvg(el: Node) {
+      _makeSvg(el) {
         if (svg) {
           svg.selectAll('svg > *').remove();
           svg.remove();
-          let childNodes = el.getElementsByTagName('svg');
+          const childNodes = el.getElementsByTagName('svg');
           if (childNodes.length > 0) {
             el.removeChild(childNodes[0]);
           }
@@ -187,8 +187,8 @@ export const histogramD3 = ((): ChartAdaptor => {
        * @param {Object} counts Histogram data set values
        * @return {Number} count
        */
-      valuesCount(counts: HistogramDataSet): number {
-        return counts.reduce((a: number, b: HistogramDataSet): number => {
+      valuesCount(counts: IHistogramDataSet[]): number {
+        return counts.reduce((a: number, b: IHistogramDataSet): number => {
           return b.data.length > a ? b.data.length : a;
         }, 0);
       },
@@ -197,17 +197,19 @@ export const histogramD3 = ((): ChartAdaptor => {
      * Draw scales
      * @param {Object} data Chart data
      */
-      _drawScales(data: HistogramData) {
-        const {margin, width, height, axis} = this.props,
-          valuesCount = this.valuesCount(data.counts);
+      _drawScales(data: IHistogramData) {
+        const {margin, width, height, axis} = this.props;
+        const valuesCount = this.valuesCount(data.counts);
 
         svg.selectAll('.y-axis').remove();
         svg.selectAll('.x-axis').remove();
 
-        let w = this.gridWidth(),
-          yDomain,
-          xAxis, yAxis, yRange,
-          allCounts = data.counts.reduce((a: number[], b: HistogramDataSet): number[] => {
+        const w = this.gridWidth();
+        let yDomain;
+        let xAxis;
+        let yAxis;
+        let yRange;
+        const allCounts = data.counts.reduce((a: number[], b: IHistogramDataSet): number[] => {
             return [...a, ...b.data];
           }, []);
 
@@ -225,7 +227,7 @@ export const histogramD3 = ((): ChartAdaptor => {
             (height - axis.x.height - (margin.left * 2)) + ')')
           .call(xAxis);
 
-        yDomain = d3.extent(allCounts, d => d);
+        yDomain = d3.extent(allCounts, (d) => d);
         yDomain[0] = 0;
         yRange = [height - (margin.top * 2) - axis.x.height, 0];
         y.range(yRange)
@@ -248,9 +250,9 @@ export const histogramD3 = ((): ChartAdaptor => {
        * Draw the bars
        * @param {Object} info Bar data etc
        */
-      _drawBars: function(info: HistogramData) {
+      _drawBars(info: IHistogramData) {
         const valuesCount = this.valuesCount(info.counts);
-        info.counts.forEach((set: HistogramDataSet, setIndex: number) => {
+        info.counts.forEach((set: IHistogramDataSet, setIndex: number) => {
           this.drawDataSet(info.bins, set, setIndex, info.counts.length);
         });
       },
@@ -263,7 +265,7 @@ export const histogramD3 = ((): ChartAdaptor => {
        */
       gridWidth(): number {
         const {axis, width, margin} = this.props;
-        return width - (margin.left * 2) - axis.y.width
+        return width - (margin.left * 2) - axis.y.width;
       },
 
       /**
@@ -291,11 +293,11 @@ export const histogramD3 = ((): ChartAdaptor => {
        * @return {number} bar width
        */
       barWidth() {
-        const {axis, width, margin, data, bar, stroke} = this.props,
-          w = this.gridWidth(),
-          valuesCount = this.valuesCount(data.counts),
-          setCount = data.counts.length;
-        let barWidth = (w / valuesCount) - (bar.margin * 2) - this.groupedMargin()
+        const {axis, width, margin, data, bar, stroke} = this.props;
+        const w = this.gridWidth();
+        const valuesCount = this.valuesCount(data.counts);
+        const setCount = data.counts.length;
+        let barWidth = (w / valuesCount) - (bar.margin * 2) - this.groupedMargin();
 
         // Small bars - reduce margin and re-calcualate bar width
         if (barWidth < 5) {
@@ -315,17 +317,19 @@ export const histogramD3 = ((): ChartAdaptor => {
        * @param {number} setIndex Data set index
        * @param {number} setCount Total number of data sets
        */
-      drawDataSet(bins: string[], set: HistogramDataSet,
-        setIndex: number, setCount: number) {
-        let {colorScheme, height, width, margin, bar, delay, duration,
-          axis, stroke, tip, tipContentFn} = this.props,
-          barItem,
-          barWidth = this.barWidth(),
-          colors = d3.scaleOrdinal(set.colors || colorScheme),
-          borderColors = set.borderColors ? d3.scaleOrdinal(set.borderColors) : null;
+      drawDataSet(bins: string[], set: IHistogramDataSet,
+                  setIndex: number, setCount: number) {
+        const {colorScheme, height, width, margin, bar, delay, duration,
+          axis, stroke, tip, tipContentFn} = this.props;
+        let barItem;
+        const barWidth = this.barWidth();
+        const colors = d3.scaleOrdinal(set.colors || colorScheme);
+        const borderColors = set.borderColors ? d3.scaleOrdinal(set.borderColors) : null;
 
-        const selector = '.bar-' + setIndex,
-          multiLineOffset = (index) => setCount === 1 ? 0 : ((index + setIndex) * (barWidth + this.groupedMargin()));
+        const selector = '.bar-' + setIndex;
+        const multiLineOffset = (index) => setCount === 1
+          ? 0
+          : ((index + setIndex) * (barWidth + this.groupedMargin()));
 
         svg.selectAll(selector).remove();
         barItem = svg.selectAll(selector)
@@ -338,9 +342,9 @@ export const histogramD3 = ((): ChartAdaptor => {
               + axis.y.style['stroke-width']
               + bar.margin
               + (barWidth + (bar.margin * 2)) * (index)
-              + multiLineOffset(index)
+              + multiLineOffset(index);
             })
-            .attr('width', d => barWidth)
+            .attr('width', (d) => barWidth)
             .attr('fill', (d, i) => colors(i))
             .on('mouseover', (d: number, i: number) => {
               tipContent.html(() => tipContentFn(bins, i, d));
@@ -350,7 +354,6 @@ export const histogramD3 = ((): ChartAdaptor => {
             .on('mouseout', () => tip.fx.out(tipContainer))
             .attr('y', (d: number): number => this.gridHeight())
             .attr('height', 0);
-
 
         barItem.attr('stroke', (d, i) => {
           if (borderColors) {
@@ -378,7 +381,7 @@ export const histogramD3 = ((): ChartAdaptor => {
           // Hide bar's bottom border
           .attr('stroke-dasharray',
             (d: number): string => {
-              let currentHeight = this.gridHeight() - (y(d));
+              const currentHeight = this.gridHeight() - (y(d));
               return `${barWidth} 0 ${currentHeight} ${barWidth}`;
             })
           .attr('height',
@@ -393,17 +396,18 @@ export const histogramD3 = ((): ChartAdaptor => {
        * Draw a grid onto the chart background
        * @param {Object} props Props
        */
-      _drawGrid(props: Props) {
-        const {data, height, width, axis, grid, margin, bar} = props,
-          ticks = this.valuesCount(data.counts),
-          setCount = data.counts.length,
-          axisWidth = axis.y.style['stroke-width'],
+      _drawGrid(props: IHistogramChartState) {
+        const {data, height, width, axis, grid, margin, bar} = props;
+        const ticks = this.valuesCount(data.counts);
+        const setCount = data.counts.length;
+        const axisWidth = axis.y.style['stroke-width'];
           // x: axis.y.width + (this.barWidth() / 2) + bar.margin,
-          offset = {
+        const offset = {
             x: axis.y.width + ((this.barWidth() * setCount) / 2) + bar.margin + this.groupedMargin() / 2,
-            y: this.gridHeight()
+            y: this.gridHeight(),
           };
-        let g, gy;
+        let g;
+        let gy;
 
         if (grid.x.visible) {
            // Add the X gridlines
@@ -413,7 +417,7 @@ export const histogramD3 = ((): ChartAdaptor => {
 
           g.call(make_x_gridlines(grid.x.ticks || ticks)
             .tickSize(-height + axis.x.height + (margin.top * 2))
-            .tickFormat(''));
+            .tickFormat(() => ''));
 
           attrs(g.selectAll('.tick line'), grid.x.style);
           attrs(g.selectAll('.domain'), {stroke: 'transparent'});
@@ -426,7 +430,7 @@ export const histogramD3 = ((): ChartAdaptor => {
           .attr('transform', 'translate(' + (axis.y.width + axisWidth) + ', 0)')
           .call(make_y_gridlines(grid.y.ticks || ticks)
             .tickSize(-width + (margin.left * 2) + axis.y.width)
-            .tickFormat('')
+            .tickFormat(() => ''),
           );
           attrs(gy.selectAll('.tick line'), grid.y.style);
 
@@ -438,13 +442,15 @@ export const histogramD3 = ((): ChartAdaptor => {
         }
       },
 
-    /**
-     * Update chart
-     * @param {Node} el Chart element
-     * @param {Object} props Chart props
-    */
-      update: function(el: Node, props: Object) {
-        if (!props.data) return;
+      /**
+       * Update chart
+       * @param {HTMLElement} el Chart element
+       * @param {Object} props Chart props
+       */
+      update(el: HTMLElement, props: IHistogramChartState) {
+        if (!props.data) {
+          return;
+        }
         this.props = merge(defaultProps, props);
         this._makeSvg(el);
         if (!this.props.data.bins) {
@@ -456,13 +462,13 @@ export const histogramD3 = ((): ChartAdaptor => {
         this._drawBars(this.props.data);
       },
 
-    /**
-     * Any necessary clean up
-     * @param {Node} el To remove
-    */
-      destroy: function(el: Node) {
+      /**
+       * Any necessary clean up
+       * @param {Element} el To remove
+       */
+      destroy(el: HTMLElement) {
         svg.selectAll('svg > *').remove();
-      }
+      },
     };
   return HistogramD3;
 });

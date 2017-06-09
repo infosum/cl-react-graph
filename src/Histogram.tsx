@@ -1,110 +1,108 @@
-// @flow
+/// <reference path="./interfaces.d.ts" />
 import * as d3 from 'd3';
-import React, {Component, Element} from 'react';
-import ReactDOM from 'react-dom';
+import * as React from 'react';
+import {Component} from 'react';
+import * as ReactDOM from 'react-dom';
 import {histogramD3} from './HistogramD3';
-import type {Axes, DOMEvent, ChartAdaptor, HistogramData} from '../types';
 
-type Props = {
-  axis: Axes,
-  data: HistogramData,
-  height: number,
-  stroke: {
-    color: (d, i, colors) => string | string,
-    width: number
-  },
-  width: string | number
-};
-
-type ChartState = {
-  data: HistogramData,
-  height: number,
-  tipContainer: string,
-  tipContentFn: ((info: HistogramData, i: number, d: number) => string),
-  width: number | string,
-  yTicks: number
-};
+// interface Props {
+//   axis: Axes;
+//   data: HistogramData;
+//   height: number;
+//   stroke: {
+//     color: (d, i, colors) => string | string,
+//     width: number,
+//   };
+//   width: string | number;
+// }
 
 /**
  * Histogram component
  */
-class Histogram extends Component {
+class Histogram extends Component<IHistogramProps, IHistogramChartState> {
 
-  histogram: ChartAdaptor
+  private histogram: IChartAdaptor;
 
-  props: Props
-
-  state: {
-    parentWidth: number
-  }
-
-  static defaultProps = {
+  public static defaultProps = {
     axis: {},
-    bar: {},
+    bar: {
+      margin: 2,
+      width: 10,
+    },
     grid: {
       x: {
         style: {
-          'stroke': '#bbb',
           'fill': 'none',
+          'stroke': '#bbb',
+          'stroke-opacity': 0.7,
           'stroke-width': 1,
-          'stroke-opacity': 0.7
         },
+        ticks: 5,
         visible: true,
-        ticks: 5
       },
       y: {
         style: {
-          'stroke': '#bbb',
           'fill': 'none',
+          'stroke': '#bbb',
+          'stroke-opacity': 0.7,
           'stroke-width': 1,
-          'stroke-opacity': 0.7
         },
+        ticks: 5,
         visible: true,
-        ticks: 5
-      }
+      },
     },
-    width: '100%',
     height: 200,
     stroke: {
       color: (d, i, colors) => d3.rgb(colors(i)).darker(1),
-      width: 1
-    }
+      width: 1,
+    },
+    width: '100%',
   };
 
   /**
    * Constructor
    * @param {Object} props
    */
-  constructor(props: Props) {
+  constructor(props: IHistogramProps) {
     super(props);
     this.histogram = histogramD3();
+    const counts: IHistogramDataSet[] = [];
+    const bins: string[] = [];
     this.state = {
-      parentWidth: 300
+      bar: {
+        margin: 2,
+        width: 10,
+      },
+      data: {
+        bins,
+        counts,
+      },
+      parentWidth: 300,
+      width: props.width,
     };
   }
 
   /**
    * Handle the page resize
-   * @param {Event} e .
    */
-  handleResize(e: DOMEvent) {
-    let elem = this.getDOMNode(),
-      width = elem.offsetWidth;
+  private handleResize() {
+    const elem = this.getDOMNode();
+    const width = elem.offsetWidth ? elem.offsetWidth : 0;
 
     this.setState({
-      parentWidth: width
+      parentWidth: width,
     });
 
-    this.histogram.create(this.getDOMNode(), this.getChartState());
+    this.histogram.create(elem, this.getChartState());
   }
 
   /**
    * Component mounted
    */
-  componentDidMount() {
+  public componentDidMount() {
     this.histogram.create(this.getDOMNode(), this.getChartState());
     if (this.props.width === '100%') {
-      window.addEventListener('resize', e => this.handleResize());
+      window.addEventListener('resize', (e) => this.handleResize());
       this.handleResize();
     }
   }
@@ -112,7 +110,7 @@ class Histogram extends Component {
   /**
    * Component updated
    */
-  componentDidUpdate() {
+  public componentDidUpdate() {
     this.histogram.update(this.getDOMNode(), this.getChartState());
   }
 
@@ -120,8 +118,9 @@ class Histogram extends Component {
    * Get the chart state
    * @return {Object} ChartState
    */
-  getChartState(): ChartState {
-    let {axis, bar, grid, width, height, data, stroke} = this.props;
+  public getChartState(): IHistogramChartState {
+    let {width} = this.props;
+    const {axis, bar, grid, height, data, stroke} = this.props;
     if (width === '100%') {
       width = this.state.parentWidth || 300;
     }
@@ -132,10 +131,10 @@ class Histogram extends Component {
       data,
       grid,
       height,
+      stroke,
       tipContentFn: (bins: string[], i, d) =>
         bins[i] + '<br />' + d.toFixed(2),
       width,
-      stroke
     };
   }
 
@@ -143,7 +142,7 @@ class Histogram extends Component {
    * Props recieved, update the chart
    * @param {Object} props Props
    */
-  componentWillReceiveProps(props: Props) {
+  public componentWillReceiveProps(props: IHistogramProps) {
     this.histogram.update(this.getDOMNode(), this.getChartState());
   }
 
@@ -151,7 +150,7 @@ class Histogram extends Component {
    * Component will un mount, remove the chart and
    * any event listeners
    */
-  componentWillUnmount() {
+  public componentWillUnmount() {
     if (this.props.width === '100%') {
       window.removeEventListener('resize', this.handleResize);
     }
@@ -162,15 +161,15 @@ class Histogram extends Component {
    * Get the chart's dom node
    * @return {Element} dom noe
    */
-  getDOMNode(): Node {
-    return ReactDOM.findDOMNode(this);
+  private getDOMNode() {
+    return ReactDOM.findDOMNode<HTMLDivElement>(this);
   }
 
   /**
    * Render
    * @return {Dom} node
    */
-  render(): Element<any> {
+  public render(): JSX.Element {
     return (<div className="histogram-chart-container"></div>);
   }
 }

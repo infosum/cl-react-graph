@@ -1,0 +1,11 @@
+{
+    "extends": "tslint:recommended",
+    "rules": {
+        "quotemark": [true, "single", "jsx-double"],
+        "no-reference": false,
+        "ban-types": false,
+        "member-ordering": [true, {"order": "private-instance-method"}],
+        "no-console": [false],
+        "no-debugger": false
+    }
+}
