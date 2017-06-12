@@ -90,7 +90,10 @@ interface ILineChartDataSet {
     };
     line?: {
         show: boolean;
-        fill?: boolean;
+        fill?: {
+            show: boolean;
+            fill: string;
+        };
         curveType?: d3.CurveFactory;
         stroke?: string;
         strokeDashOffset?: number;

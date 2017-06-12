@@ -17140,6 +17140,10 @@ var points = [{
     label: 'test data',
     line: {
         curveType: d3.curveStepAfter,
+        fill: {
+            fill: 'rgba(10, 10, 10, 0.2)',
+            show: true
+        },
         show: true,
         stroke: 'orange',
         strokeDashArray: '10 5',
@@ -18389,7 +18393,7 @@ exports.lineChartD3 = function () {
             }).y(function (d) {
                 return y(d.y);
             });
-            if (datum.line.fill === true) {
+            if (datum.line.fill.show === true) {
                 area = d3.area().curve(curveType).x(function (d) {
                     return x(d.x) + axis.y.width + 1;
                 }).y0(function (d) {
@@ -18397,7 +18401,7 @@ exports.lineChartD3 = function () {
                 }).y1(function (d) {
                     return y(d.y);
                 });
-                svg.append('path').datum(datum.data).attr('class', 'curve-area').attr('d', area);
+                svg.append('path').datum(datum.data).attr('class', 'curve-area').attr('fill', datum.line.fill.fill).attr('d', area);
             }
             path.attr('d', function (d) {
                 return curve(d);

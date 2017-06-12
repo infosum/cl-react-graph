@@ -312,7 +312,7 @@ export const lineChartD3 = ((): IChartAdaptor => {
           .x((d: any) => x(d.x) + axis.y.width)
           .y((d: any) => y(d.y));
 
-        if (datum.line.fill === true) {
+        if (datum.line.fill.show === true) {
           area = d3.area()
           .curve(curveType)
           .x((d: any) => x(d.x) + axis.y.width + 1)
@@ -322,6 +322,7 @@ export const lineChartD3 = ((): IChartAdaptor => {
           svg.append('path')
           .datum(datum.data)
           .attr('class', 'curve-area')
+          .attr('fill', datum.line.fill.fill)
           .attr('d', area);
         }
 

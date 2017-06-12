@@ -70,6 +70,10 @@ const points = [
     label: 'test data',
     line: {
       curveType: d3.curveStepAfter,
+      fill: {
+        fill: 'rgba(10, 10, 10, 0.2)',
+        show: true,
+      },
       show: true,
       stroke: 'orange',
       strokeDashArray: '10 5',
