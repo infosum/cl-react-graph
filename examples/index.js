@@ -17158,6 +17158,17 @@ var points = [{
 }];
 var scatter = [];
 var axis = {
+    x: {
+        text: {
+            style: {
+                'dy': '.35em',
+                'text-anchor': 'start',
+                'transform': 'rotate(45)',
+                'x': 4,
+                'y': 0
+            }
+        }
+    },
     y: {
         style: {
             fill: 'none',
@@ -17172,7 +17183,10 @@ var axis = {
         width: 50
     }
 };
-var element = React.createElement("div", null, React.createElement("div", null, React.createElement(src_1.Histogram, { data: data, grid: grid, width: 700, height: 150 }), React.createElement(src_1.Histogram, { data: data2, bar: { margin: 4 }, width: 700, height: 150, axis: axis })), React.createElement("div", null, React.createElement(src_1.LineChart, { axis: axis, grid: grid, data: points, width: 300 })), React.createElement("div", null, React.createElement(src_1.ScatterPlot, { data: scatter, width: 300, height: 300 })));
+var tipContentFn = function tipContentFn(bins, i, d) {
+    return bins[i] + '<br />HI THere ' + d.toFixed(2);
+};
+var element = React.createElement("div", null, React.createElement("div", null, React.createElement(src_1.Histogram, { data: data, grid: grid, width: 700, height: 150, tipContentFn: tipContentFn }), React.createElement(src_1.Histogram, { data: data2, bar: { margin: 4 }, width: 700, height: 150, axis: axis })), React.createElement("div", null, React.createElement(src_1.LineChart, { axis: axis, grid: grid, data: points, width: 300 })), React.createElement("div", null, React.createElement(src_1.ScatterPlot, { data: scatter, width: 300, height: 300 })));
 ReactDOM.render(element, document.getElementById('root'));
 
 /***/ }),
@@ -17254,7 +17268,8 @@ var Histogram = function (_super) {
             grid = _a.grid,
             height = _a.height,
             data = _a.data,
-            stroke = _a.stroke;
+            stroke = _a.stroke,
+            tipContentFn = _a.tipContentFn;
         if (width === '100%') {
             width = this.state.parentWidth || 300;
         }
@@ -17265,9 +17280,7 @@ var Histogram = function (_super) {
             grid: grid,
             height: height,
             stroke: stroke,
-            tipContentFn: function tipContentFn(bins, i, d) {
-                return bins[i] + '<br />' + d.toFixed(2);
-            },
+            tipContentFn: tipContentFn,
             width: width
         };
     };
@@ -17322,6 +17335,9 @@ Histogram.defaultProps = {
             return d3.rgb(colors(i)).darker(1);
         },
         width: 1
+    },
+    tipContentFn: function tipContentFn(bins, i, d) {
+        return bins[i] + '<br />' + d.toFixed(2);
     },
     width: '100%'
 };

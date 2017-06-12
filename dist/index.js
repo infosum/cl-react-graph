@@ -17175,7 +17175,8 @@ var Histogram = function (_super) {
             grid = _a.grid,
             height = _a.height,
             data = _a.data,
-            stroke = _a.stroke;
+            stroke = _a.stroke,
+            tipContentFn = _a.tipContentFn;
         if (width === '100%') {
             width = this.state.parentWidth || 300;
         }
@@ -17186,9 +17187,7 @@ var Histogram = function (_super) {
             grid: grid,
             height: height,
             stroke: stroke,
-            tipContentFn: function tipContentFn(bins, i, d) {
-                return bins[i] + '<br />' + d.toFixed(2);
-            },
+            tipContentFn: tipContentFn,
             width: width
         };
     };
@@ -17243,6 +17242,9 @@ Histogram.defaultProps = {
             return d3.rgb(colors(i)).darker(1);
         },
         width: 1
+    },
+    tipContentFn: function tipContentFn(bins, i, d) {
+        return bins[i] + '<br />' + d.toFixed(2);
     },
     width: '100%'
 };

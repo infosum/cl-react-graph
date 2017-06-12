@@ -45,6 +45,8 @@ class Histogram extends Component<IHistogramProps, IHistogramChartState> {
       color: (d, i, colors) => d3.rgb(colors(i)).darker(1),
       width: 1,
     },
+    tipContentFn: (bins: string[], i, d) =>
+        bins[i] + '<br />' + d.toFixed(2),
     width: '100%',
   };
 
@@ -109,7 +111,7 @@ class Histogram extends Component<IHistogramProps, IHistogramChartState> {
    */
   public getChartState(): IHistogramChartState {
     let {width} = this.props;
-    const {axis, bar, grid, height, data, stroke} = this.props;
+    const {axis, bar, grid, height, data, stroke, tipContentFn} = this.props;
     if (width === '100%') {
       width = this.state.parentWidth || 300;
     }
@@ -121,8 +123,7 @@ class Histogram extends Component<IHistogramProps, IHistogramChartState> {
       grid,
       height,
       stroke,
-      tipContentFn: (bins: string[], i, d) =>
-        bins[i] + '<br />' + d.toFixed(2),
+      tipContentFn,
       width,
     };
   }

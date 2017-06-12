@@ -91,6 +91,17 @@ const scatter = [
 
    ];
 const axis = {
+  x: {
+    text: {
+      style: {
+        'dy': '.35em',
+        'text-anchor': 'start',
+        'transform': 'rotate(45)',
+        'x': 4,
+        'y': 0,
+      },
+    },
+  },
   y: {
     style: {
       fill: 'none',
@@ -104,10 +115,13 @@ const axis = {
     ticks: 3,
     width: 50,
   },
-  };
+};
+
+const tipContentFn = (bins: string[], i, d) =>
+        bins[i] + '<br />HI THere ' + d.toFixed(2);
 const element = <div>
   <div>
-  <Histogram data={data} grid={grid} width={700} height={150} />
+  <Histogram data={data} grid={grid} width={700} height={150} tipContentFn={tipContentFn} />
   <Histogram data={data2} bar={{margin: 4}} width={700} height={150} axis={axis} />
   </div>
   <div>
