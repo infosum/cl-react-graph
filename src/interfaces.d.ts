@@ -100,11 +100,13 @@ interface ILineChartDataSet {
 }
 
 interface ILineChartProps {
+    axis?: IAxes;
     data: ILineChartDataSet[];
+    grid?: IGrid;
     height?: number;
+    margin?: IMargin;
     width: number | string;
-    tipContentFn?: (info, i, d) => void
-    yTicks?: number,
+    tipContentFn?: (info, i, d) => void;
 }
 
 /**
@@ -120,7 +122,7 @@ interface IStroke {
     width: number;
 }
 
-interface IHistogramAxes {
+interface IAxes {
     y?: IAxis;
     x?: IAxis;
 }
@@ -138,7 +140,7 @@ interface IHistogramData {
 }
 
 interface IHistogramProps {
-    axis?: IHistogramAxes;
+    axis?: IAxes;
     bar?: IHistogramBar,
     grid?: IGrid;
     width: number | string;
@@ -148,7 +150,7 @@ interface IHistogramProps {
 }
 
 interface IHistogramChartState {
-    axis?: IHistogramAxes;
+    axis?: IAxes;
     bar?: IHistogramBar;
     data: IHistogramData;
     grid?: IGrid, 

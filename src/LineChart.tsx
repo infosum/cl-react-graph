@@ -7,7 +7,6 @@ import {lineChartD3} from './lineChartD3';
 interface IState {
   data: IChartPoint[];
   width: number | string;
-  yTicks?: number;
   height: number;
   tipContainer?: string;
   tipContentFn?: (info: IHistogramData, i: number, d: number) => string;
@@ -58,21 +57,28 @@ class LineChart extends Component<ILineChartProps, IState> {
    * @return {Object} data and chart props
    */
   public getChartState(): ILineChartProps {
-    const {data} = this.props;
+    const {axis, data, grid} = this.props;
     let {width} = this.props;
 
     if (width === '100%') {
       width = this.state.parentWidth || 300;
     }
 
-    return {
+    const r: ILineChartProps = {
       data,
       height: 200,
       tipContentFn: (info, i, d) =>
         info[i].x.toFixed(1),
       width,
-      yTicks: 0,
     };
+
+    if (axis) {
+      r.axis = axis;
+    }
+    if (grid) {
+      r.grid = grid;
+    }
+    return r;
   }
 
   public componentWillUnmount() {

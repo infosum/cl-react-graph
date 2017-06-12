@@ -19,7 +19,7 @@ const grid = {
         ticks: 5,
       },
     };
-console.log(d3.schemeCategory20);
+
 const data = {
      bins: ['1', '2', '3', '4'],
      counts: [
@@ -88,6 +88,15 @@ const scatter = [
    ];
 const axis = {
   y: {
+    style: {
+      fill: 'none',
+      stroke: '#eeAA00',
+    },
+    text: {
+      style: {
+        fill: '#eeAA00',
+      },
+    },
     ticks: 3,
     width: 50,
   },
@@ -98,7 +107,7 @@ const element = <div>
   <Histogram data={data2} bar={{margin: 4}} width={700} height={150} axis={axis} />
   </div>
   <div>
-   <LineChart data={points} width={300} />
+   <LineChart axis={axis} grid={grid} data={points} width={300} />
    </div>
    <div>
     <ScatterPlot data={scatter} width={300} height={300} />

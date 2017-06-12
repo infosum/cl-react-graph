@@ -11,13 +11,13 @@ export const histogramD3 = ((): IChartAdaptor => {
   const y = d3.scaleLinear();
   const x = d3.scaleBand();
 
-// gridlines in x axis function
+  // Gridlines in x axis function
   function make_x_gridlines(ticks: number = 5) {
     return d3.axisBottom(x)
         .ticks(ticks);
   }
 
-  // gridlines in y axis function
+  // Gridlines in y axis function
   function make_y_gridlines(ticks: number = 5) {
     return d3.axisLeft(y)
         .ticks(ticks);
