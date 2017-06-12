@@ -5,7 +5,7 @@
  * @param {Object} style Css styling
  * @return {Object} selection
  */
-export default (selection, style: {[key: string]: string}) => {
+export default (selection, style: ISVGLineStyle) => {
   Object.keys(style).forEach((k: string) => {
     selection.attr(k, style[k]);
   });

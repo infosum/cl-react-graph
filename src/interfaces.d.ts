@@ -2,15 +2,15 @@
  * General
  */
 interface ISVGLineStyle {
-    'stroke': string;
-    'fill': string;
-    'stroke-width': number;
-    'stroke-opacity': number;
-    'shape-rendering': string;
+    'stroke'?: string;
+    'fill'?: string;
+    'stroke-width'?: number;
+    'stroke-opacity'?: number;
+    'shape-rendering'?: string;
 }
 
 interface ISVGTextStyle {
-    'fill': string;
+    'fill'?: string;
 }
 
 interface IAxis {
@@ -29,20 +29,16 @@ interface IMargin {
 }
 
 interface IGrid {
-    x: {
-        height: number;
+    x?: {
+        height?: number;
         ticks?: number;
-        visible: boolean;
-        style: {
-            [key: string]: string;
-        };
+        visible?: boolean;
+        style?: ISVGLineStyle;
     };
-    y: {
-        style: {
-            [key: string]: string;
-        };
+    y?: {
+        style?: ISVGLineStyle;
         ticks?: number;
-        visible: boolean;
+        visible?: boolean;
     };
 }
 

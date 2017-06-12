@@ -5,17 +5,6 @@ import {Component} from 'react';
 import * as ReactDOM from 'react-dom';
 import {histogramD3} from './HistogramD3';
 
-// interface Props {
-//   axis: Axes;
-//   data: HistogramData;
-//   height: number;
-//   stroke: {
-//     color: (d, i, colors) => string | string,
-//     width: number,
-//   };
-//   width: string | number;
-// }
-
 /**
  * Histogram component
  */

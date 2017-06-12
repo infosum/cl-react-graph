@@ -6,16 +6,17 @@ import {Histogram, LineChart, ScatterPlot} from '../src';
 const grid = {
       x: {
         style: {
+          'stroke': '#eeAA00',
           'stroke-opacity': 0.4,
         },
-        ticks: 1,
+        ticks: 5,
       },
       y: {
         height: 20,
         style: {
           'stroke-opacity': 0.4,
         },
-        ticks: 1,
+        ticks: 5,
       },
     };
 console.log(d3.schemeCategory20);
@@ -93,7 +94,7 @@ const axis = {
   };
 const element = <div>
   <div>
-  <Histogram data={data} width={700} height={150} />
+  <Histogram data={data} grid={grid} width={700} height={150} />
   <Histogram data={data2} bar={{margin: 4}} width={700} height={150} axis={axis} />
   </div>
   <div>

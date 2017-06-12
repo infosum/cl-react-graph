@@ -17081,16 +17081,17 @@ var src_1 = __webpack_require__(12);
 var grid = {
     x: {
         style: {
+            'stroke': '#eeAA00',
             'stroke-opacity': 0.4
         },
-        ticks: 1
+        ticks: 5
     },
     y: {
         height: 20,
         style: {
             'stroke-opacity': 0.4
         },
-        ticks: 1
+        ticks: 5
     }
 };
 console.log(d3.schemeCategory20);
@@ -17144,7 +17145,7 @@ var axis = {
         width: 50
     }
 };
-var element = React.createElement("div", null, React.createElement("div", null, React.createElement(src_1.Histogram, { data: data, width: 700, height: 150 }), React.createElement(src_1.Histogram, { data: data2, bar: { margin: 4 }, width: 700, height: 150, axis: axis })), React.createElement("div", null, React.createElement(src_1.LineChart, { data: points, width: 300 })), React.createElement("div", null, React.createElement(src_1.ScatterPlot, { data: scatter, width: 300, height: 300 })));
+var element = React.createElement("div", null, React.createElement("div", null, React.createElement(src_1.Histogram, { data: data, grid: grid, width: 700, height: 150 }), React.createElement(src_1.Histogram, { data: data2, bar: { margin: 4 }, width: 700, height: 150, axis: axis })), React.createElement("div", null, React.createElement(src_1.LineChart, { data: points, width: 300 })), React.createElement("div", null, React.createElement(src_1.ScatterPlot, { data: scatter, width: 300, height: 300 })));
 ReactDOM.render(element, document.getElementById('root'));
 
 /***/ }),

@@ -7,7 +7,7 @@
 		exports["cl-react-graph"] = factory(require("react"), require("react-dom"));
 	else
 		root["cl-react-graph"] = factory(root["React"], root["ReactDOM"]);
-})(this, function(__WEBPACK_EXTERNAL_MODULE_1__, __WEBPACK_EXTERNAL_MODULE_2__) {
+})(this, function(__WEBPACK_EXTERNAL_MODULE_0__, __WEBPACK_EXTERNAL_MODULE_2__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -73,11 +73,17 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "/";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 14);
+/******/ 	return __webpack_require__(__webpack_require__.s = 13);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
+/***/ (function(module, exports) {
+
+module.exports = __WEBPACK_EXTERNAL_MODULE_0__;
+
+/***/ }),
+/* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // https://d3js.org Version 4.9.1. Copyright 2017 Mike Bostock.
@@ -16949,12 +16955,6 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 
 /***/ }),
-/* 1 */
-/***/ (function(module, exports) {
-
-module.exports = __WEBPACK_EXTERNAL_MODULE_1__;
-
-/***/ }),
 /* 2 */
 /***/ (function(module, exports) {
 
@@ -16974,1667 +16974,6 @@ exports.default = ['#4bbcad', '#d54539', '#5ab94d', '#8a5cd3', '#a4b243', '#ba5c
 
 /***/ }),
 /* 4 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var Histogram_1 = __webpack_require__(5);
-exports.Histogram = Histogram_1.default;
-var LineChart_1 = __webpack_require__(7);
-exports.LineChart = LineChart_1.default;
-var ScatterPlot_1 = __webpack_require__(8);
-exports.ScatterPlot = ScatterPlot_1.default;
-
-/***/ }),
-/* 5 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _d = __webpack_require__(0);
-
-var d3 = _interopRequireWildcard(_d);
-
-var _react = __webpack_require__(1);
-
-var _react2 = _interopRequireDefault(_react);
-
-var _reactDom = __webpack_require__(2);
-
-var _reactDom2 = _interopRequireDefault(_reactDom);
-
-var _HistogramD = __webpack_require__(6);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-/**
- * Histogram component
- */
-var Histogram = function (_Component) {
-  _inherits(Histogram, _Component);
-
-  /**
-   * Constructor
-   * @param {Object} props
-   */
-  function Histogram(props) {
-    _classCallCheck(this, Histogram);
-
-    var _this = _possibleConstructorReturn(this, (Histogram.__proto__ || Object.getPrototypeOf(Histogram)).call(this, props));
-
-    _this.histogram = (0, _HistogramD.histogramD3)();
-    _this.state = {
-      parentWidth: 300
-    };
-    return _this;
-  }
-
-  /**
-   * Handle the page resize
-   * @param {Event} e .
-   */
-
-
-  _createClass(Histogram, [{
-    key: 'handleResize',
-    value: function handleResize(e) {
-      var elem = this.getDOMNode(),
-          width = elem.offsetWidth;
-
-      this.setState({
-        parentWidth: width
-      });
-
-      this.histogram.create(this.getDOMNode(), this.getChartState());
-    }
-
-    /**
-     * Component mounted
-     */
-
-  }, {
-    key: 'componentDidMount',
-    value: function componentDidMount() {
-      var _this2 = this;
-
-      this.histogram.create(this.getDOMNode(), this.getChartState());
-      if (this.props.width === '100%') {
-        window.addEventListener('resize', function (e) {
-          return _this2.handleResize();
-        });
-        this.handleResize();
-      }
-    }
-
-    /**
-     * Component updated
-     */
-
-  }, {
-    key: 'componentDidUpdate',
-    value: function componentDidUpdate() {
-      this.histogram.update(this.getDOMNode(), this.getChartState());
-    }
-
-    /**
-     * Get the chart state
-     * @return {Object} ChartState
-     */
-
-  }, {
-    key: 'getChartState',
-    value: function getChartState() {
-      var _props = this.props,
-          axis = _props.axis,
-          bar = _props.bar,
-          grid = _props.grid,
-          width = _props.width,
-          height = _props.height,
-          data = _props.data,
-          stroke = _props.stroke;
-
-      if (width === '100%') {
-        width = this.state.parentWidth || 300;
-      }
-
-      return {
-        axis: axis,
-        bar: bar,
-        data: data,
-        grid: grid,
-        height: height,
-        tipContentFn: function tipContentFn(bins, i, d) {
-          return bins[i] + '<br />' + d.toFixed(2);
-        },
-        width: width,
-        stroke: stroke
-      };
-    }
-
-    /**
-     * Props recieved, update the chart
-     * @param {Object} props Props
-     */
-
-  }, {
-    key: 'componentWillReceiveProps',
-    value: function componentWillReceiveProps(props) {
-      this.histogram.update(this.getDOMNode(), this.getChartState());
-    }
-
-    /**
-     * Component will un mount, remove the chart and
-     * any event listeners
-     */
-
-  }, {
-    key: 'componentWillUnmount',
-    value: function componentWillUnmount() {
-      if (this.props.width === '100%') {
-        window.removeEventListener('resize', this.handleResize);
-      }
-      this.histogram.destroy(this.getDOMNode());
-    }
-
-    /**
-     * Get the chart's dom node
-     * @return {Element} dom noe
-     */
-
-  }, {
-    key: 'getDOMNode',
-    value: function getDOMNode() {
-      return _reactDom2.default.findDOMNode(this);
-    }
-
-    /**
-     * Render
-     * @return {Dom} node
-     */
-
-  }, {
-    key: 'render',
-    value: function render() {
-      return _react2.default.createElement('div', { className: 'histogram-chart-container' });
-    }
-  }]);
-
-  return Histogram;
-}(_react.Component);
-
-Histogram.defaultProps = {
-  axis: {},
-  bar: {},
-  grid: {
-    x: {
-      style: {
-        'stroke': '#bbb',
-        'fill': 'none',
-        'stroke-width': 1,
-        'stroke-opacity': 0.7
-      },
-      visible: true,
-      ticks: 5
-    },
-    y: {
-      style: {
-        'stroke': '#bbb',
-        'fill': 'none',
-        'stroke-width': 1,
-        'stroke-opacity': 0.7
-      },
-      visible: true,
-      ticks: 5
-    }
-  },
-  width: '100%',
-  height: 200,
-  stroke: {
-    color: function color(d, i, colors) {
-      return d3.rgb(colors(i)).darker(1);
-    },
-    width: 1
-  }
-};
-exports.default = Histogram;
-
-/***/ }),
-/* 6 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.histogramD3 = undefined;
-
-var _d = __webpack_require__(0);
-
-var d3 = _interopRequireWildcard(_d);
-
-var _colors = __webpack_require__(3);
-
-var _colors2 = _interopRequireDefault(_colors);
-
-var _attrs = __webpack_require__(10);
-
-var _attrs2 = _interopRequireDefault(_attrs);
-
-var _deepmerge = __webpack_require__(13);
-
-var _deepmerge2 = _interopRequireDefault(_deepmerge);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
-var histogramD3 = exports.histogramD3 = function histogramD3() {
-  var svg = void 0,
-      tipContainer = void 0,
-      tipContent = void 0,
-      y = d3.scaleLinear(),
-      x = d3.scaleBand();
-
-  // gridlines in x axis function
-  function make_x_gridlines() {
-    var ticks = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 5;
-
-    return d3.axisBottom(x).ticks(ticks);
-  }
-
-  // gridlines in y axis function
-  function make_y_gridlines() {
-    var ticks = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 5;
-
-    return d3.axisLeft(y).ticks(ticks);
-  }
-
-  var defaultProps = {
-    axis: {
-      x: {
-        height: 20,
-        text: {
-          style: {
-            'fill': '#666'
-          }
-        },
-        style: {
-          'stroke': '#666',
-          'fill': 'none',
-          'stroke-width': 1,
-          'stroke-opacity': 1,
-          'shape-rendering': 'crispEdges'
-        }
-      },
-      y: {
-        width: 25,
-        ticks: 10,
-        text: {
-          style: {
-            'fill': '#666'
-          }
-        },
-        style: {
-          'stroke': '#666',
-          'fill': 'none',
-          'stroke-width': 1,
-          'stroke-opacity': 1,
-          'shape-rendering': 'crispEdges'
-        }
-      }
-    },
-    bar: {
-      width: 50,
-      margin: 10
-    },
-    className: 'histogram-d3',
-    colorScheme: _colors2.default,
-    width: 200,
-    height: 200,
-    delay: 0,
-    duration: 400,
-    grid: {
-      x: {
-        style: {
-          'stroke': '#bbb',
-          'fill': 'none',
-          'stroke-width': 1,
-          'stroke-opacity': 0.7
-        },
-        visible: true,
-        ticks: 5
-      },
-      y: {
-        style: {
-          'stroke': '#bbb',
-          'fill': 'none',
-          'stroke-width': 1,
-          'stroke-opacity': 0.7
-        },
-        visible: true,
-        ticks: 5
-      }
-    },
-    margin: {
-      left: 5,
-      top: 5
-    },
-    stroke: {
-      color: '#005870',
-      dasharray: '',
-      width: 0,
-      linecap: 'butt'
-    },
-    tipContentFn: function tipContentFn(bins, i, d) {
-      return bins[i] + '<br />' + d;
-    },
-    tipContainer: 'body',
-    tip: {
-      fx: {
-        in: function _in(tipContainer) {
-          tipContainer.style('left', d3.event.pageX + 'px').style('top', d3.event.pageY - 55 + 'px');
-          tipContainer.transition().duration(200).style('opacity', 0.9);
-        },
-        move: function move(tipContainer) {
-          tipContainer.style('left', d3.event.pageX + 'px').style('top', d3.event.pageY - 55 + 'px');
-        },
-        out: function out(tipContainer) {
-          tipContainer.transition().duration(500).style('opacity', 0);
-        }
-      }
-    }
-  },
-      HistogramD3 = {
-    /**
-     * Initialization
-     * @param {Node} el Target DOM node
-     * @param {Object} props Chart properties
-     */
-    create: function create(el) {
-      var props = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-
-      this.props = (0, _deepmerge2.default)(defaultProps, props);
-      this.update(el, props);
-    },
-
-    /**
-     * Make the SVG container element
-     * Recreate if it previously existed
-     * @param {Dom} el Dom container node
-     */
-    _makeSvg: function _makeSvg(el) {
-      if (svg) {
-        svg.selectAll('svg > *').remove();
-        svg.remove();
-        var childNodes = el.getElementsByTagName('svg');
-        if (childNodes.length > 0) {
-          el.removeChild(childNodes[0]);
-        }
-      }
-      var _props = this.props,
-          margin = _props.margin,
-          width = _props.width,
-          height = _props.height,
-          className = _props.className;
-
-      // Reference to svg element containing chart
-
-      svg = d3.select(el).append('svg').attr('class', className).attr('width', width).attr('height', height).attr('viewBox', '0 0 ' + width + ' ' + height).append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
-      this._makeTip();
-    },
-
-
-    /**
-     * Create a bootstrap tip
-     */
-    _makeTip: function _makeTip() {
-      if (tipContainer) {
-        // Chart could be rebuilt - remove old tip
-        tipContainer.remove();
-      }
-      tipContainer = d3.select(this.props.tipContainer).append('div').attr('class', 'tooltip top').style('opacity', 0);
-
-      tipContainer.append('div').attr('class', 'tooltip-arrow');
-      tipContent = tipContainer.append('div').attr('class', 'tooltip-inner');
-    },
-
-
-    /**
-     * Get a max count of values in each data set
-     * @param {Object} counts Histogram data set values
-     * @return {Number} count
-     */
-    valuesCount: function valuesCount(counts) {
-      return counts.reduce(function (a, b) {
-        return b.data.length > a ? b.data.length : a;
-      }, 0);
-    },
-
-
-    /**
-     * Draw scales
-     * @param {Object} data Chart data
-     */
-    _drawScales: function _drawScales(data) {
-      var _props2 = this.props,
-          margin = _props2.margin,
-          width = _props2.width,
-          height = _props2.height,
-          axis = _props2.axis,
-          valuesCount = this.valuesCount(data.counts);
-
-
-      svg.selectAll('.y-axis').remove();
-      svg.selectAll('.x-axis').remove();
-
-      var w = this.gridWidth(),
-          yDomain = void 0,
-          xAxis = void 0,
-          yAxis = void 0,
-          yRange = void 0,
-          allCounts = data.counts.reduce(function (a, b) {
-        return [].concat(_toConsumableArray(a), _toConsumableArray(b.data));
-      }, []);
-
-      x.domain(data.bins).rangeRound([0, w]);
-
-      xAxis = d3.axisBottom(x);
-
-      if (w / valuesCount < 10) {
-        // Show one in 10 x axis labels
-        xAxis.tickValues(x.domain().filter(function (d, i) {
-          return !(i % 10);
-        }));
-      }
-      svg.append('g').attr('class', 'x-axis').attr('transform', 'translate(' + axis.y.width + ',' + (height - axis.x.height - margin.left * 2) + ')').call(xAxis);
-
-      yDomain = d3.extent(allCounts, function (d) {
-        return d;
-      });
-      yDomain[0] = 0;
-      yRange = [height - margin.top * 2 - axis.x.height, 0];
-      y.range(yRange).domain(yDomain);
-
-      yAxis = d3.axisLeft(y).ticks(axis.y.ticks);
-
-      svg.append('g').attr('class', 'y-axis').attr('transform', 'translate(' + axis.y.width + ', 0)').call(yAxis);
-
-      (0, _attrs2.default)(svg.selectAll('.y-axis .domain, .y-axis .tick line'), axis.y.style);
-      (0, _attrs2.default)(svg.selectAll('.y-axis .tick text'), axis.y.text.style);
-
-      (0, _attrs2.default)(svg.selectAll('.x-axis .domain, .x-axis .tick line'), axis.x.style);
-      (0, _attrs2.default)(svg.selectAll('.x-axis .tick text'), axis.x.text.style);
-    },
-
-
-    /**
-     * Draw the bars
-     * @param {Object} info Bar data etc
-     */
-    _drawBars: function _drawBars(info) {
-      var _this = this;
-
-      var valuesCount = this.valuesCount(info.counts);
-      info.counts.forEach(function (set, setIndex) {
-        _this.drawDataSet(info.bins, set, setIndex, info.counts.length);
-      });
-    },
-
-    /**
-     * Calculate the width of the area used to display the
-     * chart bars. Removes chart margins and Y axis from
-     * chart total width.
-     * @return {number} width
-     */
-    gridWidth: function gridWidth() {
-      var _props3 = this.props,
-          axis = _props3.axis,
-          width = _props3.width,
-          margin = _props3.margin;
-
-      return width - margin.left * 2 - axis.y.width;
-    },
-
-
-    /**
-     * Calculate the height of the area used to display the
-     * chart bars. Removes chart margins and X axis from
-     * chart total height.
-     * @return {number} width
-     */
-    gridHeight: function gridHeight() {
-      var _props4 = this.props,
-          height = _props4.height,
-          margin = _props4.margin,
-          axis = _props4.axis;
-
-      return height - margin.top * 2 - axis.x.height;
-    },
-
-
-    /**
-     * Returns the margin between similar bars in different data sets
-     * @return {Number} Margin
-     */
-    groupedMargin: function groupedMargin() {
-      var data = this.props.data;
-
-      return (data.counts.length - 1) * 3;
-    },
-
-
-    /**
-     * Calculate the bar width
-     * @return {number} bar width
-     */
-    barWidth: function barWidth() {
-      var _props5 = this.props,
-          axis = _props5.axis,
-          width = _props5.width,
-          margin = _props5.margin,
-          data = _props5.data,
-          bar = _props5.bar,
-          stroke = _props5.stroke,
-          w = this.gridWidth(),
-          valuesCount = this.valuesCount(data.counts),
-          setCount = data.counts.length;
-
-      var barWidth = w / valuesCount - bar.margin * 2 - this.groupedMargin
-
-      // Small bars - reduce margin and re-calcualate bar width
-      ();if (barWidth < 5) {
-        bar.margin = 1;
-        barWidth = Math.max(1, (w - (valuesCount + 1) * bar.margin) / valuesCount);
-      }
-
-      // show data sets next to each other...
-      return barWidth / setCount;
-    },
-
-
-    /**
-     * Draw a single data set into the chart
-     * @param {Array} bins Data set labels
-     * @param {Object} set HistogramDataSet
-     * @param {number} setIndex Data set index
-     * @param {number} setCount Total number of data sets
-     */
-    drawDataSet: function drawDataSet(bins, set, setIndex, setCount) {
-      var _this2 = this;
-
-      var _props6 = this.props,
-          colorScheme = _props6.colorScheme,
-          height = _props6.height,
-          width = _props6.width,
-          margin = _props6.margin,
-          bar = _props6.bar,
-          delay = _props6.delay,
-          duration = _props6.duration,
-          axis = _props6.axis,
-          stroke = _props6.stroke,
-          tip = _props6.tip,
-          tipContentFn = _props6.tipContentFn,
-          barItem = void 0,
-          barWidth = this.barWidth(),
-          colors = d3.scaleOrdinal(set.colors || colorScheme),
-          borderColors = set.borderColors ? d3.scaleOrdinal(set.borderColors) : null;
-
-
-      var selector = '.bar-' + setIndex,
-          multiLineOffset = function multiLineOffset(index) {
-        return setCount === 1 ? 0 : (index + setIndex) * (barWidth + _this2.groupedMargin());
-      };
-
-      svg.selectAll(selector).remove();
-      barItem = svg.selectAll(selector).data(set.data).enter().append('rect').attr('class', 'bar ' + selector).attr('x', function (d, index, all) {
-        return axis.y.width + axis.y.style['stroke-width'] + bar.margin + (barWidth + bar.margin * 2) * index + multiLineOffset(index);
-      }).attr('width', function (d) {
-        return barWidth;
-      }).attr('fill', function (d, i) {
-        return colors(i);
-      }).on('mouseover', function (d, i) {
-        tipContent.html(function () {
-          return tipContentFn(bins, i, d);
-        });
-        tip.fx.in(tipContainer);
-      }).on('mousemove', function () {
-        return tip.fx.move(tipContainer);
-      }).on('mouseout', function () {
-        return tip.fx.out(tipContainer);
-      }).attr('y', function (d) {
-        return _this2.gridHeight();
-      }).attr('height', 0);
-
-      barItem.attr('stroke', function (d, i) {
-        if (borderColors) {
-          return borderColors(i);
-        }
-        return typeof stroke.color === 'function' ? stroke.color(d, i, colors) : stroke.color;
-      }).attr('shape-rendering', 'crispEdges').attr('stroke-width', stroke.width).attr('stroke-linecap', stroke.linecap);
-
-      if (stroke.dasharray !== '') {
-        barItem.attr('stroke-dasharray', stroke.dasharray);
-      }
-
-      barItem.transition().duration(duration).delay(delay).attr('y', function (d) {
-        return y(d);
-      }
-      // Hide bar's bottom border
-      ).attr('stroke-dasharray', function (d) {
-        var currentHeight = _this2.gridHeight() - y(d);
-        return barWidth + ' 0 ' + currentHeight + ' ' + barWidth;
-      }).attr('height', function (d) {
-        return _this2.gridHeight() - y(d);
-      });
-
-      barItem.exit().remove();
-    },
-
-
-    /**
-     * Draw a grid onto the chart background
-     * @param {Object} props Props
-     */
-    _drawGrid: function _drawGrid(props) {
-      var data = props.data,
-          height = props.height,
-          width = props.width,
-          axis = props.axis,
-          grid = props.grid,
-          margin = props.margin,
-          bar = props.bar,
-          ticks = this.valuesCount(data.counts),
-          setCount = data.counts.length,
-          axisWidth = axis.y.style['stroke-width'],
-          offset = {
-        x: axis.y.width + this.barWidth() * setCount / 2 + bar.margin + this.groupedMargin() / 2,
-        y: this.gridHeight()
-      };
-
-      var g = void 0,
-          gy = void 0;
-
-      if (grid.x.visible) {
-        // Add the X gridlines
-        g = svg.append('g').attr('class', 'grid gridX').attr('transform', 'translate(' + offset.x + ', ' + offset.y + ')');
-
-        g.call(make_x_gridlines(grid.x.ticks || ticks).tickSize(-height + axis.x.height + margin.top * 2).tickFormat(''));
-
-        (0, _attrs2.default)(g.selectAll('.tick line'), grid.x.style);
-        (0, _attrs2.default)(g.selectAll('.domain'), { stroke: 'transparent' });
-      }
-
-      if (grid.y.visible) {
-        // add the Y gridlines
-        gy = svg.append('g').attr('class', 'grid gridY').attr('transform', 'translate(' + (axis.y.width + axisWidth) + ', 0)').call(make_y_gridlines(grid.y.ticks || ticks).tickSize(-width + margin.left * 2 + axis.y.width).tickFormat(''));
-        (0, _attrs2.default)(gy.selectAll('.tick line'), grid.y.style);
-
-        // Hide the first horizontal grid line to show axis
-        gy.selectAll('.gridY .tick line').filter(function (d, i) {
-          return i === 0;
-        }).attr('display', 'none');
-
-        (0, _attrs2.default)(gy.selectAll('.domain'), { stroke: 'transparent' });
-      }
-    },
-
-
-    /**
-     * Update chart
-     * @param {Node} el Chart element
-     * @param {Object} props Chart props
-    */
-    update: function update(el, props) {
-      if (!props.data) return;
-      this.props = (0, _deepmerge2.default)(defaultProps, props);
-      this._makeSvg(el);
-      if (!this.props.data.bins) {
-        return;
-      }
-
-      this._drawScales(this.props.data);
-      this._drawGrid(this.props);
-      this._drawBars(this.props.data);
-    },
-
-    /**
-     * Any necessary clean up
-     * @param {Node} el To remove
-    */
-    destroy: function destroy(el) {
-      svg.selectAll('svg > *').remove();
-    }
-  };
-  return HistogramD3;
-};
-
-/***/ }),
-/* 7 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _react = __webpack_require__(1);
-
-var _react2 = _interopRequireDefault(_react);
-
-var _reactDom = __webpack_require__(2);
-
-var _reactDom2 = _interopRequireDefault(_reactDom);
-
-var _lineChartD = __webpack_require__(11);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var LineChart = function (_Component) {
-  _inherits(LineChart, _Component);
-
-  function LineChart(props) {
-    _classCallCheck(this, LineChart);
-
-    var _this = _possibleConstructorReturn(this, (LineChart.__proto__ || Object.getPrototypeOf(LineChart)).call(this, props));
-
-    _this.state = {
-      parentWidth: 0
-    };
-    _this.lineChart = (0, _lineChartD.lineChartD3)();
-    return _this;
-  }
-
-  _createClass(LineChart, [{
-    key: 'handleResize',
-    value: function handleResize(e) {
-      var elem = this.getDOMNode(),
-          width = elem.offsetWidth;
-
-      this.setState({
-        parentWidth: width
-      });
-      this.lineChart.create(this.getDOMNode(), this.getChartState());
-    }
-  }, {
-    key: 'componentDidMount',
-    value: function componentDidMount() {
-      var _this2 = this;
-
-      this.lineChart.create(this.getDOMNode(), this.getChartState());
-      if (this.props.width === '100%') {
-        window.addEventListener('resize', function (e) {
-          return _this2.handleResize();
-        });
-        this.handleResize();
-      }
-    }
-  }, {
-    key: 'componentDidUpdate',
-    value: function componentDidUpdate() {
-      this.lineChart.update(this.getDOMNode(), this.getChartState());
-    }
-
-    /**
-     * Get the chart state. If a histogram has been assigned
-     * to the props, then render this data. Otherwise generate
-     * a random normal dist
-     * @return {Object} data and chart props
-     */
-
-  }, {
-    key: 'getChartState',
-    value: function getChartState() {
-      var data = this.props.data;
-      var width = this.props.width;
-
-
-      if (width === '100%') {
-        width = this.state.parentWidth || 300;
-      }
-
-      return {
-        data: data,
-        width: width,
-        yTicks: 0,
-        height: 200,
-
-        tipContentFn: function tipContentFn(info, i, d) {
-          return info[i].x.toFixed(1);
-        }
-      };
-    }
-  }, {
-    key: 'componentWillUnmount',
-    value: function componentWillUnmount() {
-      if (this.props.width === '100%') {
-        window.removeEventListener('resize', this.handleResize);
-      }
-      this.lineChart.destroy(this.getDOMNode());
-    }
-  }, {
-    key: 'getDOMNode',
-    value: function getDOMNode() {
-      return _reactDom2.default.findDOMNode(this);
-    }
-  }, {
-    key: 'componentWillReceiveProps',
-    value: function componentWillReceiveProps(props) {
-      this.lineChart.update(this.getDOMNode(), this.getChartState());
-    }
-  }, {
-    key: 'render',
-    value: function render() {
-      return _react2.default.createElement('div', { className: 'chart-container' });
-    }
-  }]);
-
-  return LineChart;
-}(_react.Component);
-
-exports.default = LineChart;
-
-/***/ }),
-/* 8 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _react = __webpack_require__(1);
-
-var _react2 = _interopRequireDefault(_react);
-
-var _reactDom = __webpack_require__(2);
-
-var _reactDom2 = _interopRequireDefault(_reactDom);
-
-var _ScatterPlotD = __webpack_require__(9);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var ScatterPlot = function (_Component) {
-  _inherits(ScatterPlot, _Component);
-
-  // static defaultProps = {
-  //   chartSize: '100%',
-  //   padding: 20,
-  //   legendWidth: 100
-  // };
-
-  function ScatterPlot(props) {
-    _classCallCheck(this, ScatterPlot);
-
-    var _this = _possibleConstructorReturn(this, (ScatterPlot.__proto__ || Object.getPrototypeOf(ScatterPlot)).call(this, props));
-
-    _this.chart = (0, _ScatterPlotD.scatterPlotD3)();
-    _this.state = {
-      parentWidth: 400
-    };
-    return _this;
-  }
-
-  _createClass(ScatterPlot, [{
-    key: 'handleResize',
-    value: function handleResize(e) {
-      var _props = this.props,
-          legendWidth = _props.legendWidth,
-          padding = _props.padding;
-
-      var elem = this.getDOMNode(),
-          chartWidth = Math.max(200, elem.offsetWidth - padding - legendWidth),
-          chartHeight = Math.max(200, window.innerHeight - padding - elem.getBoundingClientRect().top),
-          chartSize = Math.min(chartHeight, chartWidth);
-
-      this.setState({
-        parentWidth: chartSize
-      });
-
-      this.chart.create(this.getDOMNode(), this.getChartState());
-    }
-  }, {
-    key: 'componentDidMount',
-    value: function componentDidMount() {
-      var _this2 = this;
-
-      this.chart.create(this.getDOMNode(), this.getChartState());
-      if (this.props.chartSize === '100%') {
-        window.addEventListener('resize', function (e) {
-          return _this2.handleResize();
-        });
-        this.handleResize();
-      }
-    }
-  }, {
-    key: 'componentDidUpdate',
-    value: function componentDidUpdate() {
-      this.chart.update(this.getDOMNode(), this.getChartState());
-    }
-  }, {
-    key: 'getChartState',
-    value: function getChartState() {
-      var _props2 = this.props,
-          chartSize = _props2.chartSize,
-          data = _props2.data,
-          choices = _props2.choices,
-          split = _props2.split,
-          distModels = _props2.distModels;
-
-      if (chartSize === '100%') {
-        chartSize = this.state.parentWidth || 300;
-      }
-
-      return {
-        chartSize: chartSize,
-        choices: choices,
-        data: data,
-        distModels: distModels,
-        split: split
-      };
-    }
-  }, {
-    key: 'componentWillReceiveProps',
-    value: function componentWillReceiveProps(props) {
-      this.chart.update(this.getDOMNode(), this.getChartState());
-    }
-  }, {
-    key: 'componentWillUnmount',
-    value: function componentWillUnmount() {
-      if (this.props.chartSize === '100%') {
-        window.removeEventListener('resize', this.handleResize);
-      }
-      this.chart.destroy(this.getDOMNode());
-    }
-  }, {
-    key: 'getDOMNode',
-    value: function getDOMNode() {
-      return _reactDom2.default.findDOMNode(this);
-    }
-  }, {
-    key: 'render',
-    value: function render() {
-      return _react2.default.createElement('div', { className: 'scatterplot-chart-container' });
-    }
-  }]);
-
-  return ScatterPlot;
-}(_react.Component);
-
-exports.default = ScatterPlot;
-
-/***/ }),
-/* 9 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.scatterPlotD3 = undefined;
-
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-var _d = __webpack_require__(0);
-
-var d3 = _interopRequireWildcard(_d);
-
-var _colors = __webpack_require__(3);
-
-var _colors2 = _interopRequireDefault(_colors);
-
-var _types = __webpack_require__(12);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-var scatterPlotD3 = exports.scatterPlotD3 = function scatterPlotD3() {
-  var svg = void 0,
-      yScale = d3.scaleLinear(),
-      xScale = d3.scaleLinear(),
-      domainByTrait = {},
-      xAxis = void 0,
-      color = void 0,
-      yAxis = void 0;
-
-  var defaultProps = {
-    choices: [],
-    className: 'scatter-plot-d3',
-    chartSize: 400,
-    delay: 0,
-    duration: 400,
-    legendWidth: 100,
-    colorScheme: _colors2.default,
-    padding: 20,
-    radius: 4
-  },
-      scatterPlotD3 = {
-    /**
-     * Initialization
-     * @param {Node} el Target DOM node
-     * @param {Object} props Chart properties
-     */
-    create: function create(el) {
-      var props = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : defaultProps;
-
-      this.props = _extends({}, defaultProps, props);
-      this.update(el, props);
-    },
-
-    /**
-     * Make the SVG container element
-     * Recreate if it previously existed
-     * @param {Dom} el Dom container node
-     * @param {Array} data Chart data
-     */
-    _makeSvg: function _makeSvg(el, data) {
-      if (svg) {
-        svg.selectAll('svg > *').remove();
-        svg.remove();
-        var childNodes = el.getElementsByTagName('svg');
-        if (childNodes.length > 0) {
-          el.removeChild(childNodes[0]);
-        }
-      }
-      var _props = this.props,
-          chartSize = _props.chartSize,
-          className = _props.className,
-          colorScheme = _props.colorScheme,
-          legendWidth = _props.legendWidth,
-          padding = _props.padding;
-
-      // Reference to svg element containing chart
-
-      svg = d3.select(el).append('svg').attr('class', className).attr('width', chartSize + padding + legendWidth).attr('height', chartSize + padding).append('g').attr('transform', 'translate(' + padding + ',' + padding / 2 + ')');
-
-      color = d3.scaleOrdinal(colorScheme);
-    },
-
-
-    /**
-     * Draw the chart scales
-     * @param {Object} data Chart data
-     */
-    _drawScales: function _drawScales(data) {
-      var _props2 = this.props,
-          chartSize = _props2.chartSize,
-          padding = _props2.padding,
-          size = chartSize / data.length;
-
-      xScale.range([padding / 2, size - padding / 2]);
-      yScale.range([size - padding / 2, padding / 2]);
-
-      svg.selectAll('.x.axis').data(data).enter().append('g').attr('class', 'x axis').attr('transform', function (d, i) {
-        return 'translate(' + (data.length - i - 1) * size + ',0)';
-      }).each(function (d) {
-        xScale.domain(domainByTrait[d]);
-        d3.select(this).call(xAxis);
-      });
-
-      svg.selectAll('.y.axis').data(data).enter().append('g').attr('class', 'y axis').attr('transform', function (d, i) {
-        return 'translate(0,' + i * size + ')';
-      }).each(function (d) {
-        yScale.domain(domainByTrait[d]);
-        d3.select(this).call(yAxis);
-      });
-    },
-
-    /**
-     * Make a legend showing spit choice options
-     */
-    _drawLegend: function _drawLegend() {
-      var _props3 = this.props,
-          choices = _props3.choices,
-          padding = _props3.padding,
-          chartSize = _props3.chartSize,
-          split = _props3.split,
-          legend = svg.append('g').attr('transform', 'translate(' + (chartSize + padding / 2) + ', ' + (padding + 50) + ')');
-
-
-      legend.append('g').append('text').attr('x', 0).attr('y', 0).attr('dy', '.71em').text(function (d) {
-        return split;
-      });
-      legend.selectAll('.legendItem').data(choices).enter().append('g').each(function (c, i) {
-        var cell = d3.select(this);
-        cell.append('rect').attr('class', 'legendItem').attr('x', 0).attr('y', 20 + i * 15).attr('fill', color(i)).attr('height', 10).attr('width', 10);
-
-        cell.append('text').attr('x', 15).attr('y', 20 + i * 15).attr('dy', '.71em').text(function (d) {
-          return c;
-        });
-      });
-
-      legend.exit().remove();
-    },
-
-
-    /**
-     * Draw scatter points
-     * @param {Object} traits Chart data
-     * @param {Number} size Chart size
-     */
-    _drawPoints: function _drawPoints(traits, size) {
-      var _props4 = this.props,
-          data = _props4.data,
-          delay = _props4.delay,
-          duration = _props4.duration,
-          choices = _props4.choices,
-          split = _props4.split,
-          padding = _props4.padding,
-          radius = _props4.radius,
-          n = traits.length;
-
-      var cell = svg.selectAll('.cell').data(cross(traits, traits)).enter().append('g').attr('class', 'cell').attr('transform', function (d) {
-        return 'translate(' + (n - d.i - 1) * size + ',' + d.j * size + ')';
-      }).each(plot);
-
-      // Titles for the diagonal.
-      cell.filter(function (d) {
-        return d.i === d.j;
-      }).append('text').attr('x', padding).attr('y', padding).attr('dy', '.71em').text(function (d) {
-        return d.x;
-      });
-
-      /**
-       * Plot a point
-       * @param {Object} p Point
-       */
-      function plot(p) {
-        var cell = void 0,
-            circle = void 0;
-        cell = d3.select(this);
-        xScale.domain(domainByTrait[p.x]);
-        yScale.domain(domainByTrait[p.y]);
-
-        cell.append('rect').attr('class', 'frame').attr('x', padding / 2).attr('y', padding / 2).attr('width', size - padding).attr('height', size - padding);
-
-        circle = cell.selectAll('circle').data(data.values).enter().append('circle').attr('r', function (d) {
-          return radius;
-        }).attr('cx', function (d) {
-          return xScale(d[p.x]);
-        }).attr('cy', function (d) {
-          return yScale(d[p.y]);
-        }).style('fill', function (d) {
-          if (d[split]) {
-            var i = choices.findIndex(function (c) {
-              return c === d[split];
-            });
-            return color(i);
-          }
-          return '#eeaabb';
-        });
-
-        circle.transition().duration(duration).delay(delay).attr('r', function (d) {
-          return radius;
-        });
-      }
-
-      /**
-       * Create cross array
-       * // @TODO looks like d3 has its own cross function now...
-       * @param {Object} a point
-       * @param {Object} b point
-       * @return {Array} data
-       */
-      function cross(a, b) {
-        var c = [],
-            n = a.length,
-            m = b.length,
-            i = void 0,
-            j = void 0;
-        for (i = -1; ++i < n;) {
-          for (j = -1; ++j < m;) {
-            c.push({ x: a[i], i: i, y: b[j], j: j });
-          }
-        }
-        return c;
-      }
-    },
-
-
-    /**
-     * Update chart
-     * @param {Node} el Chart element
-     * @param {Object} props Chart props
-    */
-    update: function update(el, props) {
-      this.props = _extends({}, this.props, props);
-      if (!props.data) return;
-      var _props5 = this.props,
-          chartSize = _props5.chartSize,
-          data = _props5.data,
-          distModels = _props5.distModels;
-
-      this._makeSvg(el, props.data);
-      this._drawLegend();
-      var traits = data.keys.filter(function (k) {
-        return distModels.indexOf(k) !== -1;
-      }),
-          size = chartSize / traits.length,
-          n = traits.length;
-
-      traits.forEach(function (trait) {
-        domainByTrait[trait] = d3.extent(data.values, function (d) {
-          return d[trait];
-        });
-      });
-      xAxis = d3.axisBottom(xScale).ticks(6).tickSize(size * n);
-      yAxis = d3.axisLeft(yScale).ticks(6).tickSize(-size * n);
-
-      this._drawScales(traits);
-      this._drawPoints(traits, size);
-    },
-
-    /**
-     * Any necessary clean up
-     * @param {Node} el To remove
-    */
-    destroy: function destroy(el) {
-      svg.selectAll('svg > *').remove();
-    }
-  };
-  return scatterPlotD3;
-};
-
-/***/ }),
-/* 10 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-/**
- * Apply style object to a d3 selection
- * @param {Object} selection D3 selection
- * @param {Object} style Css styling
- * @return {Object} selection
- */
-exports.default = function (selection, style) {
-  Object.keys(style).forEach(function (k) {
-    selection.attr(k, style[k]);
-  });
-  return selection;
-};
-
-/***/ }),
-/* 11 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.lineChartD3 = undefined;
-
-var _d = __webpack_require__(0);
-
-var d3 = _interopRequireWildcard(_d);
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-var lineChartD3 = exports.lineChartD3 = function lineChartD3() {
-  var svg = void 0,
-      tipContainer = void 0,
-      tipContent = void 0,
-      y = d3.scaleLinear(),
-      x = d3.scaleLinear();
-
-  var lineProps = {
-    curveType: d3.curveCatmullRom,
-    show: true,
-    fill: false,
-    stroke: '#005870',
-    strokeDashArray: '5 5',
-    strokeDashOffset: 0
-  },
-      pointProps = {
-    fill: 'rgba(255, 255, 255, 0)',
-    radius: 4,
-    stroke: '#005870'
-  },
-      defaultProps = {
-    className: 'line-chart-d3',
-    fx: d3.easeCubic,
-    width: 200,
-    height: 250,
-    xAxisHeight: 15,
-    yXaisWidth: 18,
-    line: lineProps,
-    xTicks: 5,
-    yTicks: 10,
-    point: pointProps,
-    tipContainer: null,
-    tipContentFn: function tipContentFn(info, i, d) {
-      return info[i].x.toFixed(3) + ',' + info[i].y;
-    },
-    tip: {
-      fx: {
-        in: function _in(tipContainer) {
-          tipContainer.style('left', d3.event.pageX + 'px').style('top', d3.event.pageY - 55 + 'px');
-          tipContainer.transition().duration(200).style('opacity', 0.9);
-        },
-        move: function move(tipContainer) {
-          tipContainer.style('left', d3.event.pageX + 'px').style('top', d3.event.pageY - 55 + 'px');
-        },
-        out: function out(tipContainer) {
-          tipContainer.transition().duration(500).style('opacity', 0);
-        }
-      }
-    },
-    margin: {
-      left: 5,
-      top: 5
-    }
-  },
-      datumProps = {
-    line: lineProps,
-    point: pointProps
-  },
-      LineChartD3 = {
-    /**
-     * Initialization
-     * @param {Node} el Target DOM node
-     * @param {Object} props Chart properties
-     */
-    create: function create(el) {
-      var props = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-
-      this.props = Object.assign({}, defaultProps, props);
-      this.update(el, props);
-    },
-
-    /**
-     * Make the SVG container element
-     * Recreate if it previously existed
-     * @param {Dom} el Dom container node
-     */
-    _makeSvg: function _makeSvg(el) {
-      if (svg) {
-        svg.selectAll('svg > *').remove();
-        svg.remove();
-        var childNodes = el.getElementsByTagName('svg');
-        if (childNodes.length > 0) {
-          el.removeChild(childNodes[0]);
-        }
-      }
-      var _props = this.props,
-          margin = _props.margin,
-          width = _props.width,
-          height = _props.height,
-          className = _props.className;
-
-      // Reference to svg element containing chart
-
-      svg = d3.select(el).append('svg').attr('class', className).attr('width', width).attr('height', height).append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
-
-      this._makeTip(el);
-    },
-
-
-    /**
-     * Create a bootstrap tip
-     * @param {Node} el Container
-     */
-    _makeTip: function _makeTip(el) {
-      if (tipContainer) {
-        // Chart could be rebuilt - remove old tip
-        tipContainer.remove();
-      }
-      tipContainer = d3.select(this.props.tipContainer || el).append('div').attr('class', 'tooltip top').style('opacity', 0);
-
-      tipContainer.append('div').attr('class', 'tooltip-arrow');
-      tipContent = tipContainer.append('div').attr('class', 'tooltip-inner');
-    },
-
-
-    /**
-     * Iterate over the dataset drawing points for sets marked as
-     * requiring points.
-     * @param {Array} data LineChartDataSet
-     */
-    _drawDataPointSet: function _drawDataPointSet(data) {
-      var _this = this;
-
-      data.forEach(function (datum, i) {
-        if (datum.point.show !== false) {
-          _this._drawDataPoints(datum, '.points-' + i);
-        }
-      });
-    },
-
-    /**
-     * Draw data points
-     * @param {Object} datum LineChartDataSet
-     * @param {String} selector Class name
-     */
-    _drawDataPoints: function _drawDataPoints(datum, selector) {
-      var _props2 = this.props,
-          yXaisWidth = _props2.yXaisWidth,
-          tip = _props2.tip,
-          tipContentFn = _props2.tipContentFn,
-          _datum$point = datum.point,
-          radius = _datum$point.radius,
-          stroke = _datum$point.stroke,
-          fill = _datum$point.fill;
-
-      svg.selectAll(selector).remove();
-      var point = svg.selectAll(selector).data(datum.data).enter().append('circle').attr('class', 'point').attr('cx', function (d) {
-        return x(d.x) + yXaisWidth;
-      }).attr('cy', function (d) {
-        return y(d.y);
-      }).attr('r', function (d, i) {
-        return 0;
-      }).attr('fill', fill).attr('stroke', stroke).on('mouseover', function (d, i) {
-        tipContent.html(function () {
-          return tipContentFn(datum.data, i, d);
-        });
-        tip.fx.in(tipContainer);
-      }).on('mousemove', function () {
-        return tip.fx.move(tipContainer);
-      }).on('mouseout', function () {
-        return tip.fx.out(tipContainer);
-      });
-
-      point.transition().duration(400).attr('r', function () {
-        return radius;
-      }).delay(50);
-
-      point.exit().remove();
-    },
-
-    /**
-     * Draw the chart scales
-     * @param {Array} data LineChartDataSet
-     */
-    _drawScales: function _drawScales(data) {
-      svg.selectAll('.y-axis').remove();
-      svg.selectAll('.x-axis').remove();
-      var _props3 = this.props,
-          margin = _props3.margin,
-          width = _props3.width,
-          height = _props3.height,
-          yXaisWidth = _props3.yXaisWidth,
-          xTicks = _props3.xTicks,
-          yTicks = _props3.yTicks,
-          xAxisHeight = 15,
-          yDomain = void 0,
-          xDomain = void 0,
-          ys = [],
-          xs = [],
-          yAxis = d3.axisLeft(y).ticks(yTicks),
-          xAxis = d3.axisBottom(x).ticks(xTicks);
-
-
-      data.forEach(function (datum) {
-        datum.data.forEach(function (d) {
-          ys.push(d.y);
-          xs.push(d.x);
-        });
-      });
-      yDomain = d3.extent(ys);
-      xDomain = d3.extent(xs);
-      x.domain(xDomain);
-      x.range([0, width - margin.left * 2]);
-      y.domain(yDomain);
-      y.range([height - margin.top * 2 - xAxisHeight, 0]);
-
-      svg.append('g').attr('class', 'y-axis').attr('transform', 'translate(' + yXaisWidth + ', 0)').call(yAxis);
-
-      svg.append('g').attr('class', 'x-axis').attr('transform', 'translate(' + yXaisWidth + ',' + (height - xAxisHeight - margin.left * 2) + ')').call(xAxis);
-    },
-
-    /**
-     * Iterate over data and draw lines
-     * @param {Array} data Chart data objects
-     */
-    _drawLines: function _drawLines(data) {
-      var _this2 = this;
-
-      data.forEach(function (datum, i) {
-        if (datum.line.show !== false) {
-          _this2._drawLine(datum, '.line-' + i);
-        }
-      });
-    },
-
-    /**
-     * Draw the chart's line
-     * @param {Object} datum LineChartDataSet
-     * @param {String} selector Line selector
-     */
-    _drawLine: function _drawLine(datum, selector) {
-      // @Todo fx transition not working.
-      svg.selectAll(selector).remove();
-      var _props4 = this.props,
-          fx = _props4.fx,
-          height = _props4.height,
-          margin = _props4.margin,
-          yXaisWidth = _props4.yXaisWidth,
-          xAxisHeight = _props4.xAxisHeight,
-          _datum$line = datum.line,
-          curveType = _datum$line.curveType,
-          stroke = _datum$line.stroke,
-          strokeDashOffset = _datum$line.strokeDashOffset,
-          strokeDashArray = _datum$line.strokeDashArray,
-          path = svg.selectAll(selector).data([datum.data]),
-          area = void 0,
-          curve = d3.line().curve(curveType).x(function (d) {
-        return x(d.x) + yXaisWidth;
-      }).y(function (d) {
-        return y(d.y);
-      });
-
-
-      if (datum.line.fill === true) {
-        area = d3.area().curve(curveType).x(function (d) {
-          return x(d.x) + yXaisWidth + 1;
-        }).y0(function (d) {
-          return height - margin.top * 2 - xAxisHeight;
-        }).y1(function (d) {
-          return y(d.y);
-        });
-
-        svg.append('path').datum(datum.data).attr('class', 'curve-area').attr('d', area);
-      }
-
-      path.attr('d', function (d) {
-        return curve(d);
-      }).attr('class', 'path').attr('fill', 'none').attr('stroke-dashoffset', strokeDashOffset).attr('stroke-dasharray', strokeDashArray).attr('stroke', stroke);
-
-      path.transition().duration(1000).ease(fx);
-
-      path.enter().append('path').attr('d', curve).attr('class', 'path').attr('fill', 'none').attr('stroke', stroke);
-
-      path.exit().remove();
-    },
-
-    /**
-     * Update chart
-     * @param {Node} el Chart element
-     * @param {Object} props Chart props
-    */
-    update: function update(el, props) {
-      this.props = Object.assign({}, this.props, props);
-      if (!props.data) return;
-      this._makeSvg(el);
-      var data = props.data;
-      data = data.map(function (datum) {
-        return Object.assign({}, datumProps, datum);
-      });
-      this._drawScales(data);
-      this._drawLines(data);
-      this._drawDataPointSet(data);
-    },
-
-    /**
-     * Any necessary clean up
-     * @param {Node} el To remove
-    */
-    destroy: function destroy(el) {
-      svg.selectAll('svg > *').remove();
-    }
-  };
-  return LineChartD3;
-};
-
-/***/ }),
-/* 12 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-/***/ }),
-/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;(function (root, factory) {
@@ -18728,10 +17067,1207 @@ return deepmerge
 
 
 /***/ }),
-/* 14 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(4);
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var Histogram_1 = __webpack_require__(6);
+exports.Histogram = Histogram_1.default;
+var LineChart_1 = __webpack_require__(8);
+exports.LineChart = LineChart_1.default;
+var ScatterPlot_1 = __webpack_require__(9);
+exports.ScatterPlot = ScatterPlot_1.default;
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var __extends = undefined && undefined.__extends || function () {
+    var extendStatics = Object.setPrototypeOf || { __proto__: [] } instanceof Array && function (d, b) {
+        d.__proto__ = b;
+    } || function (d, b) {
+        for (var p in b) {
+            if (b.hasOwnProperty(p)) d[p] = b[p];
+        }
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() {
+            this.constructor = d;
+        }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+}();
+Object.defineProperty(exports, "__esModule", { value: true });
+var d3 = __webpack_require__(1);
+var React = __webpack_require__(0);
+var react_1 = __webpack_require__(0);
+var ReactDOM = __webpack_require__(2);
+var HistogramD3_1 = __webpack_require__(7);
+var Histogram = function (_super) {
+    __extends(Histogram, _super);
+    function Histogram(props) {
+        var _this = _super.call(this, props) || this;
+        _this.histogram = HistogramD3_1.histogramD3();
+        var counts = [];
+        var bins = [];
+        _this.state = {
+            bar: {
+                margin: 2,
+                width: 10
+            },
+            data: {
+                bins: bins,
+                counts: counts
+            },
+            parentWidth: 300,
+            width: props.width
+        };
+        return _this;
+    }
+    Histogram.prototype.handleResize = function () {
+        var elem = this.getDOMNode();
+        var width = elem.offsetWidth ? elem.offsetWidth : 0;
+        this.setState({
+            parentWidth: width
+        });
+        this.histogram.create(elem, this.getChartState());
+    };
+    Histogram.prototype.componentDidMount = function () {
+        var _this = this;
+        this.histogram.create(this.getDOMNode(), this.getChartState());
+        if (this.props.width === '100%') {
+            window.addEventListener('resize', function (e) {
+                return _this.handleResize();
+            });
+            this.handleResize();
+        }
+    };
+    Histogram.prototype.componentDidUpdate = function () {
+        this.histogram.update(this.getDOMNode(), this.getChartState());
+    };
+    Histogram.prototype.getChartState = function () {
+        var width = this.props.width;
+        var _a = this.props,
+            axis = _a.axis,
+            bar = _a.bar,
+            grid = _a.grid,
+            height = _a.height,
+            data = _a.data,
+            stroke = _a.stroke;
+        if (width === '100%') {
+            width = this.state.parentWidth || 300;
+        }
+        return {
+            axis: axis,
+            bar: bar,
+            data: data,
+            grid: grid,
+            height: height,
+            stroke: stroke,
+            tipContentFn: function tipContentFn(bins, i, d) {
+                return bins[i] + '<br />' + d.toFixed(2);
+            },
+            width: width
+        };
+    };
+    Histogram.prototype.componentWillReceiveProps = function (props) {
+        this.histogram.update(this.getDOMNode(), this.getChartState());
+    };
+    Histogram.prototype.componentWillUnmount = function () {
+        if (this.props.width === '100%') {
+            window.removeEventListener('resize', this.handleResize);
+        }
+        this.histogram.destroy(this.getDOMNode());
+    };
+    Histogram.prototype.getDOMNode = function () {
+        return ReactDOM.findDOMNode(this);
+    };
+    Histogram.prototype.render = function () {
+        return React.createElement("div", { className: "histogram-chart-container" });
+    };
+    return Histogram;
+}(react_1.Component);
+Histogram.defaultProps = {
+    axis: {},
+    bar: {
+        margin: 2,
+        width: 10
+    },
+    grid: {
+        x: {
+            style: {
+                'fill': 'none',
+                'stroke': '#bbb',
+                'stroke-opacity': 0.7,
+                'stroke-width': 1
+            },
+            ticks: 5,
+            visible: true
+        },
+        y: {
+            style: {
+                'fill': 'none',
+                'stroke': '#bbb',
+                'stroke-opacity': 0.7,
+                'stroke-width': 1
+            },
+            ticks: 5,
+            visible: true
+        }
+    },
+    height: 200,
+    stroke: {
+        color: function color(d, i, colors) {
+            return d3.rgb(colors(i)).darker(1);
+        },
+        width: 1
+    },
+    width: '100%'
+};
+exports.default = Histogram;
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var d3 = __webpack_require__(1);
+var merge = __webpack_require__(4);
+var colors_1 = __webpack_require__(3);
+var attrs_1 = __webpack_require__(11);
+exports.histogramD3 = function () {
+    var svg;
+    var tipContainer;
+    var tipContent;
+    var y = d3.scaleLinear();
+    var x = d3.scaleBand();
+    function make_x_gridlines(ticks) {
+        if (ticks === void 0) {
+            ticks = 5;
+        }
+        return d3.axisBottom(x).ticks(ticks);
+    }
+    function make_y_gridlines(ticks) {
+        if (ticks === void 0) {
+            ticks = 5;
+        }
+        return d3.axisLeft(y).ticks(ticks);
+    }
+    var defaultProps = {
+        axis: {
+            x: {
+                height: 20,
+                style: {
+                    'fill': 'none',
+                    'shape-rendering': 'crispEdges',
+                    'stroke': '#666',
+                    'stroke-opacity': 1,
+                    'stroke-width': 1
+                },
+                text: {
+                    style: {
+                        fill: '#666'
+                    }
+                }
+            },
+            y: {
+                style: {
+                    'fill': 'none',
+                    'shape-rendering': 'crispEdges',
+                    'stroke': '#666',
+                    'stroke-opacity': 1,
+                    'stroke-width': 1
+                },
+                text: {
+                    style: {
+                        fill: '#666'
+                    }
+                },
+                ticks: 10,
+                width: 25
+            }
+        },
+        bar: {
+            margin: 10,
+            width: 50
+        },
+        className: 'histogram-d3',
+        colorScheme: colors_1.default,
+        data: [],
+        delay: 0,
+        duration: 400,
+        grid: {
+            x: {
+                style: {
+                    'fill': 'none',
+                    'stroke': '#bbb',
+                    'stroke-opacity': 0.7,
+                    'stroke-width': 1
+                },
+                ticks: 5,
+                visible: true
+            },
+            y: {
+                style: {
+                    'fill': 'none',
+                    'stroke': '#bbb',
+                    'stroke-opacity': 0.7,
+                    'stroke-width': 1
+                },
+                ticks: 5,
+                visible: true
+            }
+        },
+        height: 200,
+        margin: {
+            left: 5,
+            top: 5
+        },
+        stroke: {
+            color: '#005870',
+            dasharray: '',
+            linecap: 'butt',
+            width: 0
+        },
+        tip: {
+            fx: {
+                in: function _in(container) {
+                    container.style('left', d3.event.pageX + 'px').style('top', d3.event.pageY - 55 + 'px');
+                    container.transition().duration(200).style('opacity', 0.9);
+                },
+                move: function move(container) {
+                    container.style('left', d3.event.pageX + 'px').style('top', d3.event.pageY - 55 + 'px');
+                },
+                out: function out(container) {
+                    container.transition().duration(500).style('opacity', 0);
+                }
+            }
+        },
+        tipContainer: 'body',
+        tipContentFn: function tipContentFn(bins, i, d) {
+            return bins[i] + '<br />' + d;
+        },
+        width: 200
+    };
+    var HistogramD3 = {
+        create: function create(el, props) {
+            if (props === void 0) {
+                props = {};
+            }
+            this.props = merge(defaultProps, props);
+            this.update(el, props);
+        },
+        _makeSvg: function _makeSvg(el) {
+            if (svg) {
+                svg.selectAll('svg > *').remove();
+                svg.remove();
+                var childNodes = el.getElementsByTagName('svg');
+                if (childNodes.length > 0) {
+                    el.removeChild(childNodes[0]);
+                }
+            }
+            var _a = this.props,
+                margin = _a.margin,
+                width = _a.width,
+                height = _a.height,
+                className = _a.className;
+            svg = d3.select(el).append('svg').attr('class', className).attr('width', width).attr('height', height).attr('viewBox', "0 0 " + width + " " + height).append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+            this._makeTip();
+        },
+        _makeTip: function _makeTip() {
+            if (tipContainer) {
+                tipContainer.remove();
+            }
+            tipContainer = d3.select(this.props.tipContainer).append('div').attr('class', 'tooltip top').style('opacity', 0);
+            tipContainer.append('div').attr('class', 'tooltip-arrow');
+            tipContent = tipContainer.append('div').attr('class', 'tooltip-inner');
+        },
+        valuesCount: function valuesCount(counts) {
+            return counts.reduce(function (a, b) {
+                return b.data.length > a ? b.data.length : a;
+            }, 0);
+        },
+        _drawScales: function _drawScales(data) {
+            var _a = this.props,
+                margin = _a.margin,
+                width = _a.width,
+                height = _a.height,
+                axis = _a.axis;
+            var valuesCount = this.valuesCount(data.counts);
+            svg.selectAll('.y-axis').remove();
+            svg.selectAll('.x-axis').remove();
+            var w = this.gridWidth();
+            var yDomain;
+            var xAxis;
+            var yAxis;
+            var yRange;
+            var allCounts = data.counts.reduce(function (a, b) {
+                return a.concat(b.data);
+            }, []);
+            x.domain(data.bins).rangeRound([0, w]);
+            xAxis = d3.axisBottom(x);
+            if (w / valuesCount < 10) {
+                xAxis.tickValues(x.domain().filter(function (d, i) {
+                    return !(i % 10);
+                }));
+            }
+            svg.append('g').attr('class', 'x-axis').attr('transform', 'translate(' + axis.y.width + ',' + (height - axis.x.height - margin.left * 2) + ')').call(xAxis);
+            yDomain = d3.extent(allCounts, function (d) {
+                return d;
+            });
+            yDomain[0] = 0;
+            yRange = [height - margin.top * 2 - axis.x.height, 0];
+            y.range(yRange).domain(yDomain);
+            yAxis = d3.axisLeft(y).ticks(axis.y.ticks);
+            svg.append('g').attr('class', 'y-axis').attr('transform', 'translate(' + axis.y.width + ', 0)').call(yAxis);
+            attrs_1.default(svg.selectAll('.y-axis .domain, .y-axis .tick line'), axis.y.style);
+            attrs_1.default(svg.selectAll('.y-axis .tick text'), axis.y.text.style);
+            attrs_1.default(svg.selectAll('.x-axis .domain, .x-axis .tick line'), axis.x.style);
+            attrs_1.default(svg.selectAll('.x-axis .tick text'), axis.x.text.style);
+        },
+        _drawBars: function _drawBars(info) {
+            var _this = this;
+            var valuesCount = this.valuesCount(info.counts);
+            info.counts.forEach(function (set, setIndex) {
+                _this.drawDataSet(info.bins, set, setIndex, info.counts.length);
+            });
+        },
+        gridWidth: function gridWidth() {
+            var _a = this.props,
+                axis = _a.axis,
+                width = _a.width,
+                margin = _a.margin;
+            return width - margin.left * 2 - axis.y.width;
+        },
+        gridHeight: function gridHeight() {
+            var _a = this.props,
+                height = _a.height,
+                margin = _a.margin,
+                axis = _a.axis;
+            return height - margin.top * 2 - axis.x.height;
+        },
+        groupedMargin: function groupedMargin() {
+            var data = this.props.data;
+            return (data.counts.length - 1) * 3;
+        },
+        barWidth: function barWidth() {
+            var _a = this.props,
+                axis = _a.axis,
+                width = _a.width,
+                margin = _a.margin,
+                data = _a.data,
+                bar = _a.bar,
+                stroke = _a.stroke;
+            var w = this.gridWidth();
+            var valuesCount = this.valuesCount(data.counts);
+            var setCount = data.counts.length;
+            var barWidth = w / valuesCount - bar.margin * 2 - this.groupedMargin();
+            if (barWidth < 5) {
+                bar.margin = 1;
+                barWidth = Math.max(1, (w - (valuesCount + 1) * bar.margin) / valuesCount);
+            }
+            return barWidth / setCount;
+        },
+        drawDataSet: function drawDataSet(bins, set, setIndex, setCount) {
+            var _this = this;
+            var _a = this.props,
+                colorScheme = _a.colorScheme,
+                height = _a.height,
+                width = _a.width,
+                margin = _a.margin,
+                bar = _a.bar,
+                delay = _a.delay,
+                duration = _a.duration,
+                axis = _a.axis,
+                stroke = _a.stroke,
+                tip = _a.tip,
+                tipContentFn = _a.tipContentFn;
+            var barItem;
+            var barWidth = this.barWidth();
+            var colors = d3.scaleOrdinal(set.colors || colorScheme);
+            var borderColors = set.borderColors ? d3.scaleOrdinal(set.borderColors) : null;
+            var selector = '.bar-' + setIndex;
+            var multiLineOffset = function multiLineOffset(index) {
+                return setCount === 1 ? 0 : (index + setIndex) * (barWidth + _this.groupedMargin());
+            };
+            svg.selectAll(selector).remove();
+            barItem = svg.selectAll(selector).data(set.data).enter().append('rect').attr('class', 'bar ' + selector).attr('x', function (d, index, all) {
+                return axis.y.width + axis.y.style['stroke-width'] + bar.margin + (barWidth + bar.margin * 2) * index + multiLineOffset(index);
+            }).attr('width', function (d) {
+                return barWidth;
+            }).attr('fill', function (d, i) {
+                return colors(i);
+            }).on('mouseover', function (d, i) {
+                tipContent.html(function () {
+                    return tipContentFn(bins, i, d);
+                });
+                tip.fx.in(tipContainer);
+            }).on('mousemove', function () {
+                return tip.fx.move(tipContainer);
+            }).on('mouseout', function () {
+                return tip.fx.out(tipContainer);
+            }).attr('y', function (d) {
+                return _this.gridHeight();
+            }).attr('height', 0);
+            barItem.attr('stroke', function (d, i) {
+                if (borderColors) {
+                    return borderColors(i);
+                }
+                return typeof stroke.color === 'function' ? stroke.color(d, i, colors) : stroke.color;
+            }).attr('shape-rendering', 'crispEdges').attr('stroke-width', stroke.width).attr('stroke-linecap', stroke.linecap);
+            if (stroke.dasharray !== '') {
+                barItem.attr('stroke-dasharray', stroke.dasharray);
+            }
+            barItem.transition().duration(duration).delay(delay).attr('y', function (d) {
+                return y(d);
+            }).attr('stroke-dasharray', function (d) {
+                var currentHeight = _this.gridHeight() - y(d);
+                return barWidth + " 0 " + currentHeight + " " + barWidth;
+            }).attr('height', function (d) {
+                return _this.gridHeight() - y(d);
+            });
+            barItem.exit().remove();
+        },
+        _drawGrid: function _drawGrid(props) {
+            var data = props.data,
+                height = props.height,
+                width = props.width,
+                axis = props.axis,
+                grid = props.grid,
+                margin = props.margin,
+                bar = props.bar;
+            var ticks = this.valuesCount(data.counts);
+            var setCount = data.counts.length;
+            var axisWidth = axis.y.style['stroke-width'];
+            var offset = {
+                x: axis.y.width + this.barWidth() * setCount / 2 + bar.margin + this.groupedMargin() / 2,
+                y: this.gridHeight()
+            };
+            var g;
+            var gy;
+            if (grid.x.visible) {
+                g = svg.append('g').attr('class', 'grid gridX').attr('transform', "translate(" + offset.x + ", " + offset.y + ")");
+                g.call(make_x_gridlines(grid.x.ticks || ticks).tickSize(-height + axis.x.height + margin.top * 2).tickFormat(function () {
+                    return '';
+                }));
+                attrs_1.default(g.selectAll('.tick line'), grid.x.style);
+                attrs_1.default(g.selectAll('.domain'), { stroke: 'transparent' });
+            }
+            if (grid.y.visible) {
+                gy = svg.append('g').attr('class', 'grid gridY').attr('transform', 'translate(' + (axis.y.width + axisWidth) + ', 0)').call(make_y_gridlines(grid.y.ticks || ticks).tickSize(-width + margin.left * 2 + axis.y.width).tickFormat(function () {
+                    return '';
+                }));
+                attrs_1.default(gy.selectAll('.tick line'), grid.y.style);
+                gy.selectAll('.gridY .tick line').filter(function (d, i) {
+                    return i === 0;
+                }).attr('display', 'none');
+                attrs_1.default(gy.selectAll('.domain'), { stroke: 'transparent' });
+            }
+        },
+        update: function update(el, props) {
+            if (!props.data) {
+                return;
+            }
+            this.props = merge(defaultProps, props);
+            this._makeSvg(el);
+            if (!this.props.data.bins) {
+                return;
+            }
+            this._drawScales(this.props.data);
+            this._drawGrid(this.props);
+            this._drawBars(this.props.data);
+        },
+        destroy: function destroy(el) {
+            svg.selectAll('svg > *').remove();
+        }
+    };
+    return HistogramD3;
+};
+
+/***/ }),
+/* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var __extends = undefined && undefined.__extends || function () {
+    var extendStatics = Object.setPrototypeOf || { __proto__: [] } instanceof Array && function (d, b) {
+        d.__proto__ = b;
+    } || function (d, b) {
+        for (var p in b) {
+            if (b.hasOwnProperty(p)) d[p] = b[p];
+        }
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() {
+            this.constructor = d;
+        }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+}();
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(0);
+var react_1 = __webpack_require__(0);
+var ReactDOM = __webpack_require__(2);
+var lineChartD3_1 = __webpack_require__(12);
+var LineChart = function (_super) {
+    __extends(LineChart, _super);
+    function LineChart(props) {
+        var _this = _super.call(this, props) || this;
+        _this.state = {
+            data: [],
+            height: 400,
+            parentWidth: 0,
+            width: 400
+        };
+        _this.lineChart = lineChartD3_1.lineChartD3();
+        return _this;
+    }
+    LineChart.prototype.handleResize = function () {
+        var elem = this.getDOMNode();
+        var width = elem.offsetWidth;
+        this.setState({
+            parentWidth: width
+        });
+        this.lineChart.create(this.getDOMNode(), this.getChartState());
+    };
+    LineChart.prototype.componentDidMount = function () {
+        var _this = this;
+        this.lineChart.create(this.getDOMNode(), this.getChartState());
+        if (this.props.width === '100%') {
+            window.addEventListener('resize', function (e) {
+                return _this.handleResize();
+            });
+            this.handleResize();
+        }
+    };
+    LineChart.prototype.componentDidUpdate = function () {
+        this.lineChart.update(this.getDOMNode(), this.getChartState());
+    };
+    LineChart.prototype.getChartState = function () {
+        var data = this.props.data;
+        var width = this.props.width;
+        if (width === '100%') {
+            width = this.state.parentWidth || 300;
+        }
+        return {
+            data: data,
+            height: 200,
+            tipContentFn: function tipContentFn(info, i, d) {
+                return info[i].x.toFixed(1);
+            },
+            width: width,
+            yTicks: 0
+        };
+    };
+    LineChart.prototype.componentWillUnmount = function () {
+        if (this.props.width === '100%') {
+            window.removeEventListener('resize', this.handleResize);
+        }
+        this.lineChart.destroy(this.getDOMNode());
+    };
+    LineChart.prototype.getDOMNode = function () {
+        return ReactDOM.findDOMNode(this);
+    };
+    LineChart.prototype.componentWillReceiveProps = function (props) {
+        this.lineChart.update(this.getDOMNode(), this.getChartState());
+    };
+    LineChart.prototype.render = function () {
+        return React.createElement("div", { className: "chart-container" });
+    };
+    return LineChart;
+}(react_1.Component);
+exports.default = LineChart;
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var __extends = undefined && undefined.__extends || function () {
+    var extendStatics = Object.setPrototypeOf || { __proto__: [] } instanceof Array && function (d, b) {
+        d.__proto__ = b;
+    } || function (d, b) {
+        for (var p in b) {
+            if (b.hasOwnProperty(p)) d[p] = b[p];
+        }
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() {
+            this.constructor = d;
+        }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+}();
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(0);
+var react_1 = __webpack_require__(0);
+var ReactDOM = __webpack_require__(2);
+var ScatterPlotD3_1 = __webpack_require__(10);
+var ScatterPlot = function (_super) {
+    __extends(ScatterPlot, _super);
+    function ScatterPlot(props) {
+        var _this = _super.call(this, props) || this;
+        _this.chart = ScatterPlotD3_1.scatterPlotD3();
+        _this.state = {
+            choices: [],
+            data: [],
+            distModels: [],
+            height: _this.props.height,
+            parentWidth: 400,
+            split: '',
+            width: _this.props.width
+        };
+        return _this;
+    }
+    ScatterPlot.prototype.handleResize = function () {
+        var _a = this.props,
+            legendWidth = _a.legendWidth,
+            padding = _a.padding;
+        var elem = this.getDOMNode();
+        var chartWidth = Math.max(200, elem.offsetWidth - padding - legendWidth);
+        var chartHeight = Math.max(200, window.innerHeight - padding - elem.getBoundingClientRect().top);
+        var chartSize = Math.min(chartHeight, chartWidth);
+        this.setState({
+            parentWidth: chartSize
+        });
+        this.chart.create(this.getDOMNode(), this.getChartState());
+    };
+    ScatterPlot.prototype.componentDidMount = function () {
+        var _this = this;
+        this.chart.create(this.getDOMNode(), this.getChartState());
+        var width = this.props.width;
+        if (typeof width === 'string' && width === '100%') {
+            window.addEventListener('resize', function (e) {
+                return _this.handleResize();
+            });
+            this.handleResize();
+        }
+    };
+    ScatterPlot.prototype.componentDidUpdate = function () {
+        this.chart.update(this.getDOMNode(), this.getChartState());
+    };
+    ScatterPlot.prototype.getChartState = function () {
+        var width = this.props.width;
+        var _a = this.props,
+            data = _a.data,
+            choices = _a.choices,
+            split = _a.split,
+            distModels = _a.distModels,
+            height = _a.height;
+        if (typeof width === 'string' && width === '100%') {
+            width = this.state.parentWidth || 300;
+        }
+        return {
+            choices: choices,
+            data: data,
+            distModels: distModels,
+            height: height,
+            parentWidth: this.state.parentWidth,
+            split: split,
+            width: width
+        };
+    };
+    ScatterPlot.prototype.componentWillReceiveProps = function (props) {
+        this.chart.update(this.getDOMNode(), this.getChartState());
+    };
+    ScatterPlot.prototype.componentWillUnmount = function () {
+        var width = this.props.width;
+        if (typeof width === 'string' && width === '100%') {
+            window.removeEventListener('resize', this.handleResize);
+        }
+        this.chart.destroy(this.getDOMNode());
+    };
+    ScatterPlot.prototype.getDOMNode = function () {
+        return ReactDOM.findDOMNode(this);
+    };
+    ScatterPlot.prototype.render = function () {
+        return React.createElement("div", { className: "scatterplot-chart-container" });
+    };
+    return ScatterPlot;
+}(react_1.Component);
+ScatterPlot.defaultProps = {
+    height: 400,
+    width: '100%'
+};
+exports.default = ScatterPlot;
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var __assign = undefined && undefined.__assign || Object.assign || function (t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+        s = arguments[i];
+        for (var p in s) {
+            if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+        }
+    }
+    return t;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var d3 = __webpack_require__(1);
+var merge = __webpack_require__(4);
+var colors_1 = __webpack_require__(3);
+exports.scatterPlotD3 = function () {
+    var svg;
+    var yScale = d3.scaleLinear();
+    var xScale = d3.scaleLinear();
+    var domainByTrait = {};
+    var xAxis;
+    var color;
+    var yAxis;
+    var defaultProps = {
+        choices: [],
+        className: 'scatter-plot-d3',
+        colorScheme: colors_1.default,
+        data: [],
+        delay: 0,
+        duration: 400,
+        height: 300,
+        legendWidth: 100,
+        padding: 20,
+        radius: 4,
+        width: '100%'
+    };
+    var GenerateChart = {
+        create: function create(el, props) {
+            if (props === void 0) {
+                props = defaultProps;
+            }
+            console.log('create scatter', props);
+            this.props = merge(defaultProps, props);
+            this.update(el, props);
+        },
+        _makeSvg: function _makeSvg(el, data) {
+            if (svg) {
+                svg.selectAll('svg > *').remove();
+                svg.remove();
+                var childNodes = el.getElementsByTagName('svg');
+                if (childNodes.length > 0) {
+                    el.removeChild(childNodes[0]);
+                }
+            }
+            var _a = this.props,
+                width = _a.width,
+                className = _a.className,
+                height = _a.height,
+                colorScheme = _a.colorScheme,
+                legendWidth = _a.legendWidth,
+                padding = _a.padding;
+            svg = d3.select(el).append('svg').attr('class', className).attr('width', width + padding + legendWidth).attr('height', height + padding).append('g').attr('transform', 'translate(' + padding + ',' + padding / 2 + ')');
+            color = d3.scaleOrdinal(colorScheme);
+        },
+        _drawScales: function _drawScales(data) {
+            var _a = this.props,
+                height = _a.height,
+                padding = _a.padding,
+                width = _a.width;
+            var xSize = width / data.length;
+            var ySize = height / data.length;
+            xScale.range([padding / 2, xSize - padding / 2]);
+            yScale.range([height - padding / 2, padding / 2]);
+            svg.selectAll('.x.axis').data(data).enter().append('g').attr('class', 'x axis').attr('transform', function (d, i) {
+                return 'translate(' + (data.length - i - 1) * xSize + ',0)';
+            }).each(function (d) {
+                xScale.domain(domainByTrait[d]);
+                d3.select(this).call(xAxis);
+            });
+            svg.selectAll('.y.axis').data(data).enter().append('g').attr('class', 'y axis').attr('transform', function (d, i) {
+                return 'translate(0,' + i * ySize + ')';
+            }).each(function (d) {
+                yScale.domain(domainByTrait[d]);
+                d3.select(this).call(yAxis);
+            });
+        },
+        _drawLegend: function _drawLegend() {
+            var _a = this.props,
+                choices = _a.choices,
+                padding = _a.padding,
+                width = _a.width,
+                split = _a.split;
+            if (choices === undefined) {
+                return;
+            }
+            var legend = svg.append('g').attr('transform', 'translate(' + (width + padding / 2) + ', ' + (padding + 50) + ')');
+            legend.append('g').append('text').attr('x', 0).attr('y', 0).attr('dy', '.71em').text(function (d) {
+                return split;
+            });
+            legend.selectAll('.legendItem').data(choices).enter().append('g').each(function (c, i) {
+                var cell = d3.select(this);
+                cell.append('rect').attr('class', 'legendItem').attr('x', 0).attr('y', 20 + i * 15).attr('fill', color(i)).attr('height', 10).attr('width', 10);
+                cell.append('text').attr('x', 15).attr('y', 20 + i * 15).attr('dy', '.71em').text(function (d) {
+                    return c;
+                });
+            });
+            legend.exit().remove();
+        },
+        _drawPoints: function _drawPoints(traits, width, height) {
+            var _a = this.props,
+                data = _a.data,
+                delay = _a.delay,
+                duration = _a.duration,
+                choices = _a.choices,
+                split = _a.split,
+                padding = _a.padding,
+                radius = _a.radius;
+            var n = traits.length;
+            var cell = svg.selectAll('.cell').data(cross(traits, traits)).enter().append('g').attr('class', 'cell').attr('transform', function (d) {
+                return 'translate(' + (n - d.i - 1) * width + ',' + d.j * width + ')';
+            }).each(plot);
+            cell.filter(function (d) {
+                return d.i === d.j;
+            }).append('text').attr('x', padding).attr('y', padding).attr('dy', '.71em').text(function (d) {
+                return d.x;
+            });
+            function plot(p) {
+                var plotCell = d3.select(this);
+                var circle;
+                xScale.domain(domainByTrait[p.x]);
+                yScale.domain(domainByTrait[p.y]);
+                plotCell.append('rect').attr('class', 'frame').attr('x', padding / 2).attr('y', padding / 2).attr('width', width - padding).attr('height', height - padding);
+                circle = plotCell.selectAll('circle').data(data.values).enter().append('circle').attr('r', function (d) {
+                    return radius;
+                }).attr('cx', function (d) {
+                    return xScale(d[p.x]);
+                }).attr('cy', function (d) {
+                    return yScale(d[p.y]);
+                }).style('fill', function (d) {
+                    if (d[split]) {
+                        var i = choices.findIndex(function (c) {
+                            return c === d[split];
+                        });
+                        return color(i);
+                    }
+                    return '#eeaabb';
+                });
+                circle.transition().duration(duration).delay(delay).attr('r', function (d) {
+                    return radius;
+                });
+            }
+            function cross(a, b) {
+                var c = [];
+                var nx = a.length;
+                var m = b.length;
+                var i;
+                var j;
+                for (i = -1; ++i < nx;) {
+                    for (j = -1; ++j < m;) {
+                        c.push({ x: a[i], i: i, y: b[j], j: j });
+                    }
+                }
+                return c;
+            }
+        },
+        update: function update(el, props) {
+            this.props = __assign({}, this.props, props);
+            if (!props.data) {
+                return;
+            }
+            var _a = this.props,
+                data = _a.data,
+                distModels = _a.distModels,
+                height = _a.height,
+                width = _a.width;
+            this._makeSvg(el, props.data);
+            this._drawLegend();
+            var traits = data.keys.filter(function (k) {
+                return distModels.indexOf(k) !== -1;
+            });
+            var xSize = width / traits.length;
+            var ySize = height / traits.length;
+            var n = traits.length;
+            traits.forEach(function (trait) {
+                domainByTrait[trait] = d3.extent(data.values, function (d) {
+                    return d[trait];
+                });
+            });
+            xAxis = d3.axisBottom(xScale).ticks(6).tickSize(xSize * n);
+            yAxis = d3.axisLeft(yScale).ticks(6).tickSize(-ySize * n);
+            this._drawScales(traits);
+            this._drawPoints(traits, xSize, ySize);
+        },
+        destroy: function destroy(el) {
+            svg.selectAll('svg > *').remove();
+        }
+    };
+    return GenerateChart;
+};
+
+/***/ }),
+/* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = function (selection, style) {
+    Object.keys(style).forEach(function (k) {
+        selection.attr(k, style[k]);
+    });
+    return selection;
+};
+
+/***/ }),
+/* 12 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var d3 = __webpack_require__(1);
+exports.lineChartD3 = function () {
+    var svg;
+    var tipContainer;
+    var tipContent;
+    var y = d3.scaleLinear();
+    var x = d3.scaleLinear();
+    var lineProps = {
+        curveType: d3.curveCatmullRom,
+        fill: false,
+        show: true,
+        stroke: '#005870',
+        strokeDashArray: '5 5',
+        strokeDashOffset: 0
+    };
+    var pointProps = {
+        fill: 'rgba(255, 255, 255, 0)',
+        radius: 4,
+        stroke: '#005870'
+    };
+    var defaultProps = {
+        className: 'line-chart-d3',
+        fx: d3.easeCubic,
+        height: 250,
+        line: lineProps,
+        margin: {
+            left: 5,
+            top: 5
+        },
+        point: pointProps,
+        tip: {
+            fx: {
+                in: function _in(container) {
+                    container.style('left', d3.event.pageX + 'px').style('top', d3.event.pageY - 55 + 'px');
+                    container.transition().duration(200).style('opacity', 0.9);
+                },
+                move: function move(container) {
+                    container.style('left', d3.event.pageX + 'px').style('top', d3.event.pageY - 55 + 'px');
+                },
+                out: function out(container) {
+                    container.transition().duration(500).style('opacity', 0);
+                }
+            }
+        },
+        tipContainer: null,
+        tipContentFn: function tipContentFn(info, i, d) {
+            return info[i].x.toFixed(3) + ',' + info[i].y;
+        },
+        width: 200,
+        xAxisHeight: 15,
+        xTicks: 5,
+        yTicks: 10,
+        yXaisWidth: 18
+    };
+    var datumProps = {
+        line: lineProps,
+        point: pointProps
+    };
+    var LineChartD3 = {
+        create: function create(el, props) {
+            if (props === void 0) {
+                props = {};
+            }
+            this.props = Object.assign({}, defaultProps, props);
+            this.update(el, props);
+        },
+        _makeSvg: function _makeSvg(el) {
+            if (svg) {
+                svg.selectAll('svg > *').remove();
+                svg.remove();
+                var childNodes = el.getElementsByTagName('svg');
+                if (childNodes.length > 0) {
+                    el.removeChild(childNodes[0]);
+                }
+            }
+            var _a = this.props,
+                margin = _a.margin,
+                width = _a.width,
+                height = _a.height,
+                className = _a.className;
+            svg = d3.select(el).append('svg').attr('class', className).attr('width', width).attr('height', height).append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+            this._makeTip(el);
+        },
+        _makeTip: function _makeTip(el) {
+            if (tipContainer) {
+                tipContainer.remove();
+            }
+            tipContainer = d3.select(this.props.tipContainer || el).append('div').attr('class', 'tooltip top').style('opacity', 0);
+            tipContainer.append('div').attr('class', 'tooltip-arrow');
+            tipContent = tipContainer.append('div').attr('class', 'tooltip-inner');
+        },
+        _drawDataPointSet: function _drawDataPointSet(data) {
+            var _this = this;
+            data.forEach(function (datum, i) {
+                if (datum.point.show !== false) {
+                    _this._drawDataPoints(datum, '.points-' + i);
+                }
+            });
+        },
+        _drawDataPoints: function _drawDataPoints(datum, selector) {
+            var _a = this.props,
+                yXaisWidth = _a.yXaisWidth,
+                tip = _a.tip,
+                tipContentFn = _a.tipContentFn;
+            var _b = datum.point,
+                radius = _b.radius,
+                stroke = _b.stroke,
+                fill = _b.fill;
+            svg.selectAll(selector).remove();
+            var point = svg.selectAll(selector).data(datum.data).enter().append('circle').attr('class', 'point').attr('cx', function (d) {
+                return x(d.x) + yXaisWidth;
+            }).attr('cy', function (d) {
+                return y(d.y);
+            }).attr('r', function (d, i) {
+                return 0;
+            }).attr('fill', fill).attr('stroke', stroke).on('mouseover', function (d, i) {
+                tipContent.html(function () {
+                    return tipContentFn(datum.data, i, d);
+                });
+                tip.fx.in(tipContainer);
+            }).on('mousemove', function () {
+                return tip.fx.move(tipContainer);
+            }).on('mouseout', function () {
+                return tip.fx.out(tipContainer);
+            });
+            point.transition().duration(400).attr('r', function () {
+                return radius;
+            }).delay(50);
+            point.exit().remove();
+        },
+        _drawScales: function _drawScales(data) {
+            svg.selectAll('.y-axis').remove();
+            svg.selectAll('.x-axis').remove();
+            var _a = this.props,
+                margin = _a.margin,
+                width = _a.width,
+                height = _a.height,
+                yXaisWidth = _a.yXaisWidth,
+                xTicks = _a.xTicks,
+                yTicks = _a.yTicks;
+            var xAxisHeight = 15;
+            var yDomain;
+            var xDomain;
+            var ys = [];
+            var xs = [];
+            var yAxis = d3.axisLeft(y).ticks(yTicks);
+            var xAxis = d3.axisBottom(x).ticks(xTicks);
+            data.forEach(function (datum) {
+                datum.data.forEach(function (d) {
+                    ys.push(d.y);
+                    xs.push(d.x);
+                });
+            });
+            yDomain = d3.extent(ys);
+            xDomain = d3.extent(xs);
+            x.domain(xDomain);
+            x.range([0, width - margin.left * 2]);
+            y.domain(yDomain);
+            y.range([height - margin.top * 2 - xAxisHeight, 0]);
+            svg.append('g').attr('class', 'y-axis').attr('transform', 'translate(' + yXaisWidth + ', 0)').call(yAxis);
+            svg.append('g').attr('class', 'x-axis').attr('transform', 'translate(' + yXaisWidth + ',' + (height - xAxisHeight - margin.left * 2) + ')').call(xAxis);
+        },
+        _drawLines: function _drawLines(data) {
+            var _this = this;
+            data.forEach(function (datum, i) {
+                if (datum.line.show !== false) {
+                    _this._drawLine(datum, '.line-' + i);
+                }
+            });
+        },
+        _drawLine: function _drawLine(datum, selector) {
+            svg.selectAll(selector).remove();
+            var _a = this.props,
+                fx = _a.fx,
+                height = _a.height,
+                margin = _a.margin,
+                yXaisWidth = _a.yXaisWidth,
+                xAxisHeight = _a.xAxisHeight;
+            var _b = datum.line,
+                curveType = _b.curveType,
+                stroke = _b.stroke,
+                strokeDashOffset = _b.strokeDashOffset,
+                strokeDashArray = _b.strokeDashArray;
+            var path = svg.selectAll(selector).data([datum.data]);
+            var area;
+            var curve = d3.line().curve(curveType).x(function (d) {
+                return x(d.x) + yXaisWidth;
+            }).y(function (d) {
+                return y(d.y);
+            });
+            if (datum.line.fill === true) {
+                area = d3.area().curve(curveType).x(function (d) {
+                    return x(d.x) + yXaisWidth + 1;
+                }).y0(function (d) {
+                    return height - margin.top * 2 - xAxisHeight;
+                }).y1(function (d) {
+                    return y(d.y);
+                });
+                svg.append('path').datum(datum.data).attr('class', 'curve-area').attr('d', area);
+            }
+            path.attr('d', function (d) {
+                return curve(d);
+            }).attr('class', 'path').attr('fill', 'none').attr('stroke-dashoffset', strokeDashOffset).attr('stroke-dasharray', strokeDashArray).attr('stroke', stroke);
+            path.transition().duration(1000).ease(fx);
+            path.enter().append('path').attr('d', curve).attr('class', 'path').attr('fill', 'none').attr('stroke', stroke);
+            path.exit().remove();
+        },
+        update: function update(el, props) {
+            this.props = Object.assign({}, this.props, props);
+            if (!props.data) {
+                return;
+            }
+            this._makeSvg(el);
+            var data = props.data;
+            data = data.map(function (datum) {
+                return Object.assign({}, datumProps, datum);
+            });
+            this._drawScales(data);
+            this._drawLines(data);
+            this._drawDataPointSet(data);
+        },
+        destroy: function destroy(el) {
+            svg.selectAll('svg > *').remove();
+        }
+    };
+    return LineChartD3;
+};
+
+/***/ }),
+/* 13 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(5);
 
 
 /***/ })
