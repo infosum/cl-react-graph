@@ -1,12 +1,11 @@
 {
   "name": "cl-react-graph",
-  "version": "1.0.5",
+  "version": "1.1.0",
   "description": "React D3 Charts",
   "main": "dist/index.js",
   "scripts": {
     "build": "webpack --config ./webpack.config.js",
     "build-examples": "webpack --config ./webpack.config.examples.js",
-    "flow": "flow; test $? -eq 0 -o $? -eq 2",
     "test": "istanbul cover _mocha --recursive -x '**/*.spec.js' -x '**/config/**' -x '**/node_modules/**' -g './{,!(node_modules)/**/}*.spec.js'"
   },
   "repository": {
@@ -18,7 +17,7 @@
     "D3",
     "Charts"
   ],
-  "author": "Rob Clayburn - Cognitive Logic",
+  "author": "Rob Clayburn - Infosum",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/cognitivelogic/cl-react-graph/issues"
@@ -31,7 +30,7 @@
     "babel-core": "^6.26.0",
     "babel-eslint": "^8.0.2",
     "babel-loader": "^7.1.2",
-    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-env": "^1.6.1",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
     "chai": "^4.1.2",
@@ -47,7 +46,7 @@
       "transform-flow-strip-types"
     ],
     "presets": [
-      "es2015",
+      "env",
       "stage-0",
       "react"
     ]
@@ -55,7 +54,7 @@
   "dependencies": {
     "d3": "^4.12.0",
     "d3-selection-multi": "^1.0.1",
-    "deepmerge": "^2.0.1",
+    "deepmerge": "^1.3.2",
     "react": "^16.1.1",
     "react-dom": "^16.1.1",
     "ts-loader": "^3.1.1",

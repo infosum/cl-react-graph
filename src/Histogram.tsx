@@ -1,9 +1,9 @@
 /// <reference path="./interfaces.d.ts" />
 import * as d3 from 'd3';
 import * as React from 'react';
-import {Component} from 'react';
+import { Component } from 'react';
 import * as ReactDOM from 'react-dom';
-import {histogramD3} from './HistogramD3';
+import { histogramD3 } from './HistogramD3';
 
 /**
  * Histogram component
@@ -11,6 +11,7 @@ import {histogramD3} from './HistogramD3';
 class Histogram extends Component<IHistogramProps, IHistogramChartState> {
 
   private histogram: IChartAdaptor;
+  private ref;
 
   public static defaultProps = {
     axis: {},
@@ -46,7 +47,7 @@ class Histogram extends Component<IHistogramProps, IHistogramChartState> {
       width: 1,
     },
     tipContentFn: (bins: string[], i, d) =>
-        bins[i] + '<br />' + d.toFixed(2),
+      bins[i] + '<br />' + d.toFixed(2),
     width: '100%',
   };
 
@@ -78,7 +79,7 @@ class Histogram extends Component<IHistogramProps, IHistogramChartState> {
    */
   private handleResize() {
     const elem = this.getDOMNode();
-    const width = elem.offsetWidth ? elem.offsetWidth : 0;
+    const width = this.ref.offsetWidth ? this.ref.offsetWidth : 0;
 
     this.setState({
       parentWidth: width,
@@ -110,8 +111,8 @@ class Histogram extends Component<IHistogramProps, IHistogramChartState> {
    * @return {Object} ChartState
    */
   public getChartState(): IHistogramChartState {
-    let {width} = this.props;
-    const {axis, bar, grid, height, data, stroke, tipContentFn} = this.props;
+    let { width } = this.props;
+    const { axis, bar, grid, height, data, stroke, tipContentFn } = this.props;
     if (width === '100%') {
       width = this.state.parentWidth || 300;
     }
@@ -152,7 +153,7 @@ class Histogram extends Component<IHistogramProps, IHistogramChartState> {
    * @return {Element} dom noe
    */
   private getDOMNode() {
-    return ReactDOM.findDOMNode<HTMLDivElement>(this);
+    return ReactDOM.findDOMNode(this.ref);
   }
 
   /**
@@ -160,7 +161,7 @@ class Histogram extends Component<IHistogramProps, IHistogramChartState> {
    * @return {Dom} node
    */
   public render(): JSX.Element {
-    return (<div className="histogram-chart-container"></div>);
+    return (<div ref={(ref) => this.ref = ref} className="histogram-chart-container"></div>);
   }
 }
 

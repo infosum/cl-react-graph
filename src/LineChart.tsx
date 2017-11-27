@@ -1,8 +1,8 @@
 /// <reference path="./interfaces.d.ts" />
 import * as React from 'react';
-import {Component} from 'react';
+import { Component } from 'react';
 import * as ReactDOM from 'react-dom';
-import {lineChartD3} from './lineChartD3';
+import { lineChartD3 } from './lineChartD3';
 
 interface IState {
   data: IChartPoint[];
@@ -16,6 +16,7 @@ interface IState {
 class LineChart extends Component<ILineChartProps, IState> {
 
   private lineChart;
+  private ref;
 
   constructor(props: ILineChartProps) {
     super(props);
@@ -29,7 +30,7 @@ class LineChart extends Component<ILineChartProps, IState> {
   }
 
   private handleResize() {
-    const elem = this.getDOMNode();
+    const elem = this.ref;
     const width = elem.offsetWidth;
 
     this.setState({
@@ -57,8 +58,8 @@ class LineChart extends Component<ILineChartProps, IState> {
    * @return {Object} data and chart props
    */
   public getChartState(): ILineChartProps {
-    const {axis, data, grid} = this.props;
-    let {width} = this.props;
+    const { axis, data, grid } = this.props;
+    let { width } = this.props;
 
     if (width === '100%') {
       width = this.state.parentWidth || 300;
@@ -89,7 +90,7 @@ class LineChart extends Component<ILineChartProps, IState> {
   }
 
   public getDOMNode() {
-    return ReactDOM.findDOMNode<HTMLDivElement>(this);
+    return ReactDOM.findDOMNode(this.ref);
   }
 
   public componentWillReceiveProps(props: ILineChartProps) {
@@ -97,7 +98,7 @@ class LineChart extends Component<ILineChartProps, IState> {
   }
 
   public render(): JSX.Element {
-    return <div className="chart-container"></div>;
+    return <div ref={(ref) => this.ref = ref} className="chart-container"></div>;
   }
 }
 
