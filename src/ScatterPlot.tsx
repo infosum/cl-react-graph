@@ -1,8 +1,8 @@
 /// <reference path="./interfaces.d.ts" />
 import * as React from 'react';
-import {Component} from 'react';
+import { Component } from 'react';
 import * as ReactDOM from 'react-dom';
-import {scatterPlotD3} from './ScatterPlotD3';
+import { scatterPlotD3 } from './ScatterPlotD3';
 
 interface IChartState {
   choices: string[];
@@ -17,6 +17,7 @@ interface IChartState {
 class ScatterPlot extends Component<IScatterPlotProps, IChartState> {
 
   private chart;
+  private ref;
 
   public static defaultProps = {
     height: 400,
@@ -38,11 +39,10 @@ class ScatterPlot extends Component<IScatterPlotProps, IChartState> {
   }
 
   private handleResize() {
-    const {legendWidth, padding} = this.props;
-    const elem = this.getDOMNode();
-    const chartWidth = Math.max(200, elem.offsetWidth - padding - legendWidth);
+    const { legendWidth, padding } = this.props;
+    const chartWidth = Math.max(200, this.ref.offsetWidth - padding - legendWidth);
     const chartHeight = Math.max(200, window.innerHeight - padding -
-        elem.getBoundingClientRect().top);
+      this.ref.getBoundingClientRect().top);
     const chartSize = Math.min(chartHeight, chartWidth);
 
     this.setState({
@@ -54,7 +54,7 @@ class ScatterPlot extends Component<IScatterPlotProps, IChartState> {
 
   public componentDidMount() {
     this.chart.create(this.getDOMNode(), this.getChartState());
-    const {width} = this.props;
+    const { width } = this.props;
     if (typeof width === 'string' && width === '100%') {
       window.addEventListener('resize', (e) => this.handleResize());
       this.handleResize();
@@ -66,8 +66,8 @@ class ScatterPlot extends Component<IScatterPlotProps, IChartState> {
   }
 
   private getChartState(): IChartState {
-    let {width} = this.props;
-    const {data, choices, split, distModels, height} = this.props;
+    let { width } = this.props;
+    const { data, choices, split, distModels, height } = this.props;
     if (typeof width === 'string' && width === '100%') {
       width = this.state.parentWidth || 300;
     }
@@ -88,7 +88,7 @@ class ScatterPlot extends Component<IScatterPlotProps, IChartState> {
   }
 
   public componentWillUnmount() {
-    const {width} = this.props;
+    const { width } = this.props;
     if (typeof width === 'string' && width === '100%') {
       window.removeEventListener('resize', this.handleResize);
     }
@@ -96,11 +96,11 @@ class ScatterPlot extends Component<IScatterPlotProps, IChartState> {
   }
 
   private getDOMNode() {
-    return ReactDOM.findDOMNode<HTMLDivElement>(this);
+    return ReactDOM.findDOMNode(this.ref);
   }
 
-  public render(): JSX.Element {
-    return <div className="scatterplot-chart-container"></div>;
+  public render() {
+    return <div ref={(ref) => this.ref = ref} className="scatterplot-chart-container"></div>;
   }
 }
 

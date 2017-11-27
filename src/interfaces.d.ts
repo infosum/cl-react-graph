@@ -32,8 +32,10 @@ interface IAxis {
 }
 
 interface IMargin {
-    top: number;
-    left: number;
+    top?: number;
+    left?: number;
+    right?: number;
+    bottom?: number;
 }
 
 interface IGrid {
@@ -156,6 +158,7 @@ interface IHistogramProps {
     grid?: IGrid;
     width: number | string;
     height: number;
+    margin?: IMargin;
     data: IHistogramData;
     stroke?: IStroke;
     tipContentFn? 
