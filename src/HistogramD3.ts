@@ -236,8 +236,8 @@ export const histogramD3 = ((): IChartAdaptor => {
         yAxis = d3.axisLeft(y).ticks(axis.y.ticks);
 
         svg.append('g').attr('class', 'y-axis')
-        .attr('transform', 'translate(' + axis.y.width + ', 0)')
-        .call(yAxis);
+          .attr('transform', 'translate(' + axis.y.width + ', 0)')
+          .call(yAxis);
 
         attrs(svg.selectAll('.y-axis .domain, .y-axis .tick line'), axis.y.style);
         attrs(svg.selectAll('.y-axis .tick text'), axis.y.text.style);

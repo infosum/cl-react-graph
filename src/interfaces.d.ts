@@ -1,6 +1,9 @@
 /**
  * General
  */
+
+type TipContentFn = (bins: string[], i: number, d: number) => string;
+
 interface ISVGLineStyle {
     'stroke'?: string;
     'fill'?: string;
@@ -10,11 +13,16 @@ interface ISVGLineStyle {
 }
 
 interface ISVGTextStyle {
-    'fill'?: string;
+    fill?: string;
+    dy?: string | number;
+    'text-anchor'?: string;
+    transform?: string;
+    x?: string | number;
+    y?: string | number;
 }
 
 interface IAxis {
-    ticks: number;
+    ticks?: number;
     height?: number;
     width?: number;
     style?: ISVGLineStyle;
@@ -24,8 +32,10 @@ interface IAxis {
 }
 
 interface IMargin {
-    top: number;
-    left: number;
+    top?: number;
+    left?: number;
+    right?: number;
+    bottom?: number;
 }
 
 interface IGrid {
@@ -109,7 +119,7 @@ interface ILineChartProps {
     height?: number;
     margin?: IMargin;
     width: number | string;
-    tipContentFn?: (info, i, d) => void;
+    tipContentFn?: (bins: ILineChartDataSet, i: number, d: number) => string;
 }
 
 /**
@@ -148,8 +158,10 @@ interface IHistogramProps {
     grid?: IGrid;
     width: number | string;
     height: number;
+    margin?: IMargin;
     data: IHistogramData;
     stroke?: IStroke;
+    tipContentFn? 
 }
 
 interface IHistogramChartState {
@@ -162,7 +174,7 @@ interface IHistogramChartState {
     stroke?: IStroke
     parentWidth?: number;
     tipContainer?: string;
-    tipContentFn?: ((bins: string[], i: number, d: number) => string);
+    tipContentFn?: TipContentFn;
     width: number | string;
 }
 
