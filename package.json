@@ -1,6 +1,6 @@
 {
   "name": "cl-react-graph",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "React D3 Charts",
   "main": "dist/index.js",
   "scripts": {
@@ -25,26 +25,23 @@
   "homepage": "https://github.com/cognitivelogic/cl-react-graph#readme",
   "devDependencies": {
     "@types/d3": "^4.12.0",
-    "@types/react": "^16.0.25",
+    "@types/react": "^16.0.34",
     "@types/react-dom": "^16.0.3",
     "babel-core": "^6.26.0",
-    "babel-eslint": "^8.0.2",
+    "babel-eslint": "^8.2.0",
     "babel-loader": "^7.1.2",
     "babel-preset-env": "^1.6.1",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
     "chai": "^4.1.2",
-    "eslint": "^4.12.0",
+    "eslint": "^4.15.0",
     "istanbul": "^0.4.5",
-    "mocha": "^4.0.1",
+    "mocha": "^4.1.0",
     "tslint": "^5.8.0",
-    "typescript": "^2.6.1",
-    "webpack": "^3.8.1"
+    "typescript": "^2.6.2",
+    "webpack": "^3.10.0"
   },
   "babel": {
-    "plugins": [
-      "transform-flow-strip-types"
-    ],
     "presets": [
       "env",
       "stage-0",
@@ -52,12 +49,13 @@
     ]
   },
   "dependencies": {
-    "d3": "^4.12.0",
+    "@types/deepmerge": "^1.3.3",
+    "d3": "^4.12.2",
     "d3-selection-multi": "^1.0.1",
-    "deepmerge": "^1.3.2",
-    "react": "^16.1.1",
-    "react-dom": "^16.1.1",
-    "ts-loader": "^3.1.1",
+    "deepmerge": "^2.0.1",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "ts-loader": "^3.2.0",
     "tslint-eslint-rules": "^4.1.1"
   }
 }
