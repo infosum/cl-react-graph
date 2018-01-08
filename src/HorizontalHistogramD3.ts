@@ -13,13 +13,13 @@ export const horizontalHistogramD3 = ((): IChartAdaptor => {
 
   // Gridlines in y axis function
   function make_y_gridlines(ticks: number = 5) {
-    return d3.axisBottom(y)
+    return d3.axisBottom(x)
       .ticks(ticks);
   }
 
   // Gridlines in x axis function
   function make_x_gridlines(ticks: number = 5) {
-    return d3.axisLeft(x)
+    return d3.axisLeft(y)
       .ticks(ticks);
   }
 
@@ -203,7 +203,7 @@ export const horizontalHistogramD3 = ((): IChartAdaptor => {
 
       svg.selectAll('.y-axis').remove();
       svg.selectAll('.x-axis').remove();
-      debugger;
+
       const h = this.gridHeight();
       let xDomain;
       let xAxis;
@@ -216,29 +216,28 @@ export const horizontalHistogramD3 = ((): IChartAdaptor => {
       y.domain(data.bins)
         .rangeRound([0, h]);
 
-      xAxis = d3.axisBottom(x);
+      xAxis = d3.axisBottom(x).ticks(axis.x.ticks);
+      yAxis = d3.axisLeft(y).ticks(axis.y.ticks);
 
       if (h / valuesCount < 10) {
         // Show one in 10 x axis labels
         xAxis.tickValues(x.domain().filter((d, i) => !(i % 10)));
       }
-      svg.append('g').attr('class', 'x-axis')
-        .attr('transform', 'translate(' + axis.y.width + ',' +
-        (height - axis.x.height - (margin.left * 2)) + ')')
-        .call(xAxis);
 
       xDomain = d3.extent(allCounts, (d) => d);
       xDomain[0] = 0;
-      console.log('xDomain', xDomain);
-      xRange = [0, height - (margin.top * 2) - axis.y.width];
+      xRange = [0, width - (margin.top * 2) - axis.y.width];
       x.range(xRange)
         .domain(xDomain);
-      console.log('xRange', xRange);
-      yAxis = d3.axisLeft(y).ticks(axis.y.ticks);
 
       svg.append('g').attr('class', 'y-axis')
         .attr('transform', 'translate(' + axis.y.width + ', 0)')
         .call(yAxis);
+
+      svg.append('g').attr('class', 'x-axis')
+        .attr('transform', 'translate(' + axis.y.width + ',' +
+        (height - axis.x.height - (margin.left * 2)) + ')')
+        .call(xAxis);
 
       attrs(svg.selectAll('.y-axis .domain, .y-axis .tick line'), axis.y.style);
       attrs(svg.selectAll('.y-axis .tick text'), axis.y.text.style);
@@ -322,7 +321,6 @@ export const horizontalHistogramD3 = ((): IChartAdaptor => {
       bins: string[], set: IHistogramDataSet,
       setIndex: number, setCount: number,
     ) {
-      debugger;
       const { height, width, margin, bar, delay, duration,
         axis, stroke, tip, tipContentFn } = this.props;
       let barItem;
@@ -402,41 +400,40 @@ export const horizontalHistogramD3 = ((): IChartAdaptor => {
       const setCount = data.counts.length;
       const axisWidth = axis.y.style['stroke-width'];
       const offset = {
-        x: axis.y.width + ((this.barHeight() * setCount) / 2) + bar.margin + this.groupedMargin() / 2,
+        x: axis.y.width + this.groupedMargin() / 2,
         y: 0,
       };
       let g;
       let gy;
 
+      // Horizontal lines
       if (grid.x.visible) {
         // Add the X gridlines
         g = svg.append('g')
           .attr('class', 'grid gridX')
           .attr('transform', `translate(${offset.x}, ${offset.y})`);
 
+        console.log('# x ticks = ', ticks, grid.x.ticks);
         g.call(make_x_gridlines(grid.x.ticks || ticks)
-          .tickSize(-height + axis.x.height + (margin.top * 2))
+          .tickSize(-width + (margin.left * 2) + axis.y.width)
           .tickFormat(() => ''));
 
         attrs(g.selectAll('.tick line'), grid.x.style);
         attrs(g.selectAll('.domain'), { stroke: 'transparent' });
       }
 
+      // Vertical lines.....
       if (grid.y.visible) {
         // add the Y gridlines
         gy = svg.append('g')
           .attr('class', 'grid gridY')
           .attr('transform', 'translate(' + (axis.y.width + axisWidth) + ', '
-          + (height - axis.x.height - margin.top) + ')')
+          + (height - axis.x.height - (margin.top * 2)) + ')')
           .call(make_y_gridlines(grid.y.ticks || ticks)
-            .tickSize(-width + (margin.left * 2) + axis.y.width)
+            .tickSize(-height + (margin.left * 2) + axis.x.height) // Line Length
             .tickFormat(() => ''),
         );
         attrs(gy.selectAll('.tick line'), grid.y.style);
-
-        // Hide the first horizontal grid line to show axis
-        gy.selectAll('.gridY .tick line').filter((d, i) => i === 0)
-          .attr('display', 'none');
 
         attrs(gy.selectAll('.domain'), { stroke: 'transparent' });
       }

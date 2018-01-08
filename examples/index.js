@@ -7,7 +7,7 @@
 		exports["cl-react-graph"] = factory(require("react"), require("react-dom"));
 	else
 		root["cl-react-graph"] = factory(root["React"], root["ReactDOM"]);
-})(this, function(__WEBPACK_EXTERNAL_MODULE_10__, __WEBPACK_EXTERNAL_MODULE_35__) {
+})(typeof self !== 'undefined' ? self : this, function(__WEBPACK_EXTERNAL_MODULE_10__, __WEBPACK_EXTERNAL_MODULE_35__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -3102,11 +3102,10 @@ Cardinal.prototype = {
 
 /***/ }),
 /* 52 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-
-
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 var isMergeableObject = function isMergeableObject(value) {
 	return isNonNullObject(value)
 		&& !isSpecial(value)
@@ -3133,75 +3132,69 @@ function isReactElement(value) {
 }
 
 function emptyTarget(val) {
-    return Array.isArray(val) ? [] : {}
+	return Array.isArray(val) ? [] : {}
 }
 
-function cloneIfNecessary(value, optionsArgument) {
-    var clone = optionsArgument && optionsArgument.clone === true;
-    return (clone && isMergeableObject(value)) ? deepmerge(emptyTarget(value), value, optionsArgument) : value
+function cloneUnlessOtherwiseSpecified(value, optionsArgument) {
+	var clone = !optionsArgument || optionsArgument.clone !== false;
+
+	return (clone && isMergeableObject(value))
+		? deepmerge(emptyTarget(value), value, optionsArgument)
+		: value
 }
 
 function defaultArrayMerge(target, source, optionsArgument) {
-    var destination = target.slice();
-    source.forEach(function(e, i) {
-        if (typeof destination[i] === 'undefined') {
-            destination[i] = cloneIfNecessary(e, optionsArgument);
-        } else if (isMergeableObject(e)) {
-            destination[i] = deepmerge(target[i], e, optionsArgument);
-        } else if (target.indexOf(e) === -1) {
-            destination.push(cloneIfNecessary(e, optionsArgument));
-        }
-    });
-    return destination
+	return target.concat(source).map(function(element) {
+		return cloneUnlessOtherwiseSpecified(element, optionsArgument)
+	})
 }
 
 function mergeObject(target, source, optionsArgument) {
-    var destination = {};
-    if (isMergeableObject(target)) {
-        Object.keys(target).forEach(function(key) {
-            destination[key] = cloneIfNecessary(target[key], optionsArgument);
-        });
-    }
-    Object.keys(source).forEach(function(key) {
-        if (!isMergeableObject(source[key]) || !target[key]) {
-            destination[key] = cloneIfNecessary(source[key], optionsArgument);
-        } else {
-            destination[key] = deepmerge(target[key], source[key], optionsArgument);
-        }
-    });
-    return destination
+	var destination = {};
+	if (isMergeableObject(target)) {
+		Object.keys(target).forEach(function(key) {
+			destination[key] = cloneUnlessOtherwiseSpecified(target[key], optionsArgument);
+		});
+	}
+	Object.keys(source).forEach(function(key) {
+		if (!isMergeableObject(source[key]) || !target[key]) {
+			destination[key] = cloneUnlessOtherwiseSpecified(source[key], optionsArgument);
+		} else {
+			destination[key] = deepmerge(target[key], source[key], optionsArgument);
+		}
+	});
+	return destination
 }
 
 function deepmerge(target, source, optionsArgument) {
-    var sourceIsArray = Array.isArray(source);
-    var targetIsArray = Array.isArray(target);
-    var options = optionsArgument || { arrayMerge: defaultArrayMerge };
-    var sourceAndTargetTypesMatch = sourceIsArray === targetIsArray;
+	var sourceIsArray = Array.isArray(source);
+	var targetIsArray = Array.isArray(target);
+	var options = optionsArgument || { arrayMerge: defaultArrayMerge };
+	var sourceAndTargetTypesMatch = sourceIsArray === targetIsArray;
 
-    if (!sourceAndTargetTypesMatch) {
-        return cloneIfNecessary(source, optionsArgument)
-    } else if (sourceIsArray) {
-        var arrayMerge = options.arrayMerge || defaultArrayMerge;
-        return arrayMerge(target, source, optionsArgument)
-    } else {
-        return mergeObject(target, source, optionsArgument)
-    }
+	if (!sourceAndTargetTypesMatch) {
+		return cloneUnlessOtherwiseSpecified(source, optionsArgument)
+	} else if (sourceIsArray) {
+		var arrayMerge = options.arrayMerge || defaultArrayMerge;
+		return arrayMerge(target, source, optionsArgument)
+	} else {
+		return mergeObject(target, source, optionsArgument)
+	}
 }
 
 deepmerge.all = function deepmergeAll(array, optionsArgument) {
-    if (!Array.isArray(array) || array.length < 2) {
-        throw new Error('first argument should be an array with at least two elements')
-    }
+	if (!Array.isArray(array)) {
+		throw new Error('first argument should be an array')
+	}
 
-    // we are sure there are at least 2 values, so it is safe to have no initial value
-    return array.reduce(function(prev, next) {
-        return deepmerge(prev, next, optionsArgument)
-    })
+	return array.reduce(function(prev, next) {
+		return deepmerge(prev, next, optionsArgument)
+	}, {})
 };
 
 var deepmerge_1 = deepmerge;
 
-module.exports = deepmerge_1;
+/* harmony default export */ __webpack_exports__["default"] = (deepmerge_1);
 
 
 /***/ }),
@@ -10162,7 +10155,7 @@ var axis = {
     }
 };
 var App = function App() {
-    return React.createElement("div", null, React.createElement("div", null, React.createElement(src_1.HorizontalHistogram, { data: data2, width: 400, height: 400 }), React.createElement(src_1.Histogram, { data: data2, width: 400, height: 400 })));
+    return React.createElement("div", null, React.createElement("div", null, React.createElement(src_1.HorizontalHistogram, { data: data2, width: 500, height: 400 }), React.createElement(src_1.Histogram, { data: data2, width: 400, height: 400 })), React.createElement("div", null, React.createElement(src_1.Histogram, { data: data, grid: grid, width: 700, height: 150, tipContentFn: tipContentFn }), React.createElement(src_1.Histogram, { data: data2, bar: { margin: 4 }, width: 700, height: 150, axis: axis })), React.createElement("div", null, React.createElement(src_1.LineChart, { axis: axis, grid: grid, data: points, width: 300 })), React.createElement("div", null, React.createElement(src_1.ScatterPlot, { data: scatter, width: 300, height: 300 })));
 };
 var tipContentFn = function tipContentFn(bins, i, d) {
     return bins[i] + '<br />HI THere ' + d.toFixed(2);
@@ -10190,20 +10183,20 @@ ReactDOM.render(React.createElement(App, null), document.getElementById('root'))
 /* unused harmony export devDependencies */
 /* unused harmony export dependencies */
 var name = "d3";
-var version = "4.12.0";
+var version = "4.12.2";
 var description = "Data-Driven Documents";
 var keywords = ["dom","visualization","svg","animation","canvas"];
 var homepage = "https://d3js.org";
 var license = "BSD-3-Clause";
 var author = {"name":"Mike Bostock","url":"https://bost.ocks.org/mike"};
 var main = "build/d3.node.js";
-var unpkg = "build/d3.js";
-var jsdelivr = "build/d3.js";
+var unpkg = "build/d3.min.js";
+var jsdelivr = "build/d3.min.js";
 var module = "index";
 var repository = {"type":"git","url":"https://github.com/d3/d3.git"};
 var scripts = {"pretest":"rimraf build && mkdir build && json2module package.json > build/package.js && node rollup.node","test":"tape 'test/**/*-test.js'","prepublishOnly":"npm run test && rollup -c --banner \"$(preamble)\" && uglifyjs -b beautify=false,preamble=\"'$(preamble)'\" build/d3.js -c negate_iife=false -m -o build/d3.min.js","postpublish":"git push && git push --tags && cd ../d3.github.com && git pull && cp ../d3/build/d3.js d3.v4.js && cp ../d3/build/d3.min.js d3.v4.min.js && git add d3.v4.js d3.v4.min.js && git commit -m \"d3 ${npm_package_version}\" && git push && cd - && cd ../d3-bower && git pull && cp ../d3/LICENSE ../d3/README.md ../d3/build/d3.js ../d3/build/d3.min.js . && git add -- LICENSE README.md d3.js d3.min.js && git commit -m \"${npm_package_version}\" && git tag -am \"${npm_package_version}\" v${npm_package_version} && git push && git push --tags && cd - && zip -j build/d3.zip -- LICENSE README.md API.md CHANGES.md build/d3.js build/d3.min.js"};
-var devDependencies = {"json2module":"0.0","package-preamble":"0.1","rimraf":"2","rollup":"0.51","rollup-plugin-ascii":"0.0","rollup-plugin-node-resolve":"3","tape":"4","uglify-js":"3"};
-var dependencies = {"d3-array":"1.2.1","d3-axis":"1.0.8","d3-brush":"1.0.4","d3-chord":"1.0.4","d3-collection":"1.0.4","d3-color":"1.0.3","d3-dispatch":"1.0.3","d3-drag":"1.2.1","d3-dsv":"1.0.8","d3-ease":"1.0.3","d3-force":"1.1.0","d3-format":"1.2.1","d3-geo":"1.9.0","d3-hierarchy":"1.1.5","d3-interpolate":"1.1.6","d3-path":"1.0.5","d3-polygon":"1.0.3","d3-quadtree":"1.0.3","d3-queue":"3.0.7","d3-random":"1.1.0","d3-request":"1.0.6","d3-scale":"1.0.7","d3-selection":"1.2.0","d3-shape":"1.2.0","d3-time":"1.0.8","d3-time-format":"2.1.1","d3-timer":"1.0.7","d3-transition":"1.1.1","d3-voronoi":"1.1.2","d3-zoom":"1.7.1"};
+var devDependencies = {"json2module":"0.0","package-preamble":"0.1","rimraf":"2","rollup":"0.53","rollup-plugin-ascii":"0.0","rollup-plugin-node-resolve":"3","tape":"4","uglify-js":"3.2"};
+var dependencies = {"d3-array":"1.2.1","d3-axis":"1.0.8","d3-brush":"1.0.4","d3-chord":"1.0.4","d3-collection":"1.0.4","d3-color":"1.0.3","d3-dispatch":"1.0.3","d3-drag":"1.2.1","d3-dsv":"1.0.8","d3-ease":"1.0.3","d3-force":"1.1.0","d3-format":"1.2.1","d3-geo":"1.9.1","d3-hierarchy":"1.1.5","d3-interpolate":"1.1.6","d3-path":"1.0.5","d3-polygon":"1.0.3","d3-quadtree":"1.0.3","d3-queue":"3.0.7","d3-random":"1.1.0","d3-request":"1.0.6","d3-scale":"1.0.7","d3-selection":"1.2.0","d3-shape":"1.2.0","d3-time":"1.0.8","d3-time-format":"2.1.1","d3-timer":"1.0.7","d3-transition":"1.1.1","d3-voronoi":"1.1.2","d3-zoom":"1.7.1"};
 
 
 /***/ }),
@@ -23957,13 +23950,13 @@ exports.horizontalHistogramD3 = function () {
         if (ticks === void 0) {
             ticks = 5;
         }
-        return d3.axisBottom(y).ticks(ticks);
+        return d3.axisBottom(x).ticks(ticks);
     }
     function make_x_gridlines(ticks) {
         if (ticks === void 0) {
             ticks = 5;
         }
-        return d3.axisLeft(x).ticks(ticks);
+        return d3.axisLeft(y).ticks(ticks);
     }
     var defaultProps = {
         axis: {
@@ -24108,7 +24101,6 @@ exports.horizontalHistogramD3 = function () {
             var valuesCount = this.valuesCount(data.counts);
             svg.selectAll('.y-axis').remove();
             svg.selectAll('.x-axis').remove();
-            debugger;
             var h = this.gridHeight();
             var xDomain;
             var xAxis;
@@ -24118,23 +24110,21 @@ exports.horizontalHistogramD3 = function () {
                 return a.concat(b.data);
             }, []);
             y.domain(data.bins).rangeRound([0, h]);
-            xAxis = d3.axisBottom(x);
+            xAxis = d3.axisBottom(x).ticks(axis.x.ticks);
+            yAxis = d3.axisLeft(y).ticks(axis.y.ticks);
             if (h / valuesCount < 10) {
                 xAxis.tickValues(x.domain().filter(function (d, i) {
                     return !(i % 10);
                 }));
             }
-            svg.append('g').attr('class', 'x-axis').attr('transform', 'translate(' + axis.y.width + ',' + (height - axis.x.height - margin.left * 2) + ')').call(xAxis);
             xDomain = d3.extent(allCounts, function (d) {
                 return d;
             });
             xDomain[0] = 0;
-            console.log('xDomain', xDomain);
-            xRange = [0, height - margin.top * 2 - axis.y.width];
+            xRange = [0, width - margin.top * 2 - axis.y.width];
             x.range(xRange).domain(xDomain);
-            console.log('xRange', xRange);
-            yAxis = d3.axisLeft(y).ticks(axis.y.ticks);
             svg.append('g').attr('class', 'y-axis').attr('transform', 'translate(' + axis.y.width + ', 0)').call(yAxis);
+            svg.append('g').attr('class', 'x-axis').attr('transform', 'translate(' + axis.y.width + ',' + (height - axis.x.height - margin.left * 2) + ')').call(xAxis);
             attrs_1.default(svg.selectAll('.y-axis .domain, .y-axis .tick line'), axis.y.style);
             attrs_1.default(svg.selectAll('.y-axis .tick text'), axis.y.text.style);
             attrs_1.default(svg.selectAll('.x-axis .domain, .x-axis .tick line'), axis.x.style);
@@ -24185,7 +24175,6 @@ exports.horizontalHistogramD3 = function () {
         },
         drawDataSet: function drawDataSet(bins, set, setIndex, setCount) {
             var _this = this;
-            debugger;
             var _a = this.props,
                 height = _a.height,
                 width = _a.width,
@@ -24253,27 +24242,25 @@ exports.horizontalHistogramD3 = function () {
             var setCount = data.counts.length;
             var axisWidth = axis.y.style['stroke-width'];
             var offset = {
-                x: axis.y.width + this.barHeight() * setCount / 2 + bar.margin + this.groupedMargin() / 2,
+                x: axis.y.width + this.groupedMargin() / 2,
                 y: 0
             };
             var g;
             var gy;
             if (grid.x.visible) {
                 g = svg.append('g').attr('class', 'grid gridX').attr('transform', "translate(" + offset.x + ", " + offset.y + ")");
-                g.call(make_x_gridlines(grid.x.ticks || ticks).tickSize(-height + axis.x.height + margin.top * 2).tickFormat(function () {
+                console.log('# x ticks = ', ticks, grid.x.ticks);
+                g.call(make_x_gridlines(grid.x.ticks || ticks).tickSize(-width + margin.left * 2 + axis.y.width).tickFormat(function () {
                     return '';
                 }));
                 attrs_1.default(g.selectAll('.tick line'), grid.x.style);
                 attrs_1.default(g.selectAll('.domain'), { stroke: 'transparent' });
             }
             if (grid.y.visible) {
-                gy = svg.append('g').attr('class', 'grid gridY').attr('transform', 'translate(' + (axis.y.width + axisWidth) + ', ' + (height - axis.x.height - margin.top) + ')').call(make_y_gridlines(grid.y.ticks || ticks).tickSize(-width + margin.left * 2 + axis.y.width).tickFormat(function () {
+                gy = svg.append('g').attr('class', 'grid gridY').attr('transform', 'translate(' + (axis.y.width + axisWidth) + ', ' + (height - axis.x.height - margin.top * 2) + ')').call(make_y_gridlines(grid.y.ticks || ticks).tickSize(-height + margin.left * 2 + axis.x.height).tickFormat(function () {
                     return '';
                 }));
                 attrs_1.default(gy.selectAll('.tick line'), grid.y.style);
-                gy.selectAll('.gridY .tick line').filter(function (d, i) {
-                    return i === 0;
-                }).attr('display', 'none');
                 attrs_1.default(gy.selectAll('.domain'), { stroke: 'transparent' });
             }
         },
