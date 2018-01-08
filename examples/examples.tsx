@@ -1,7 +1,7 @@
 import * as d3 from 'd3';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { Histogram, LineChart, ScatterPlot } from '../src';
+import { Histogram, HorizontalHistogram, LineChart, ScatterPlot } from '../src';
 
 const grid = {
   x: {
@@ -119,6 +119,10 @@ const axis = {
 
 const App: React.SFC<{}> = (): JSX.Element => <div>
   <div>
+    <HorizontalHistogram data={data2} width={400} height={400} />
+    <Histogram data={data2} width={400} height={400} />
+  </div>
+  {/* <div>
     <Histogram data={data} grid={grid} width={700} height={150} tipContentFn={tipContentFn} />
     <Histogram data={data2} bar={{ margin: 4 }} width={700} height={150} axis={axis} />
   </div>
@@ -127,7 +131,7 @@ const App: React.SFC<{}> = (): JSX.Element => <div>
   </div>
   <div>
     <ScatterPlot data={scatter} width={300} height={300} />
-  </div>
+  </div> */}
 </div>;
 const tipContentFn = (bins: string[], i, d) =>
   bins[i] + '<br />HI THere ' + d.toFixed(2);

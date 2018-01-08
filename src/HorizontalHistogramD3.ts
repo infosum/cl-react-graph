@@ -4,29 +4,29 @@ import * as merge from 'deepmerge';
 import colorScheme from './colors';
 import attrs from './d3/attrs';
 
-export const histogramD3 = ((): IChartAdaptor => {
+export const horizontalHistogramD3 = ((): IChartAdaptor => {
   let svg;
   let tipContainer;
   let tipContent;
-  const y = d3.scaleLinear();
-  const x = d3.scaleBand();
-
-  // Gridlines in x axis function
-  function make_x_gridlines(ticks: number = 5) {
-    return d3.axisBottom(x)
-      .ticks(ticks);
-  }
+  const x = d3.scaleLinear();
+  const y = d3.scaleBand();
 
   // Gridlines in y axis function
   function make_y_gridlines(ticks: number = 5) {
-    return d3.axisLeft(y)
+    return d3.axisBottom(y)
+      .ticks(ticks);
+  }
+
+  // Gridlines in x axis function
+  function make_x_gridlines(ticks: number = 5) {
+    return d3.axisLeft(x)
       .ticks(ticks);
   }
 
   const defaultProps = {
     axis: {
       x: {
-        height: 20,
+        height: 25,
         style: {
           'fill': 'none',
           'shape-rendering': 'crispEdges',
@@ -39,6 +39,7 @@ export const histogramD3 = ((): IChartAdaptor => {
             fill: '#666',
           },
         },
+        ticks: 10,
       },
       y: {
         style: {
@@ -53,13 +54,12 @@ export const histogramD3 = ((): IChartAdaptor => {
             fill: '#666',
           },
         },
-        ticks: 10,
-        width: 25,
+        width: 20,
       },
     },
     bar: {
+      height: 50,
       margin: 10,
-      width: 50,
     },
     className: 'histogram-d3',
     colorScheme,
@@ -125,7 +125,7 @@ export const histogramD3 = ((): IChartAdaptor => {
     width: 200,
   };
 
-  const HistogramD3 = {
+  const HorizontalHistogramD3 = {
     /**
      * Initialization
      * @param {Node} el Target DOM node
@@ -203,22 +203,22 @@ export const histogramD3 = ((): IChartAdaptor => {
 
       svg.selectAll('.y-axis').remove();
       svg.selectAll('.x-axis').remove();
-
-      const w = this.gridWidth();
-      let yDomain;
+      debugger;
+      const h = this.gridHeight();
+      let xDomain;
       let xAxis;
       let yAxis;
-      let yRange;
+      let xRange;
       const allCounts = data.counts.reduce((a: number[], b: IHistogramDataSet): number[] => {
         return [...a, ...b.data];
       }, []);
 
-      x.domain(data.bins)
-        .rangeRound([0, w]);
+      y.domain(data.bins)
+        .rangeRound([0, h]);
 
       xAxis = d3.axisBottom(x);
 
-      if (w / valuesCount < 10) {
+      if (h / valuesCount < 10) {
         // Show one in 10 x axis labels
         xAxis.tickValues(x.domain().filter((d, i) => !(i % 10)));
       }
@@ -227,12 +227,13 @@ export const histogramD3 = ((): IChartAdaptor => {
         (height - axis.x.height - (margin.left * 2)) + ')')
         .call(xAxis);
 
-      yDomain = d3.extent(allCounts, (d) => d);
-      yDomain[0] = 0;
-      yRange = [height - (margin.top * 2) - axis.x.height, 0];
-      y.range(yRange)
-        .domain(yDomain);
-
+      xDomain = d3.extent(allCounts, (d) => d);
+      xDomain[0] = 0;
+      console.log('xDomain', xDomain);
+      xRange = [0, height - (margin.top * 2) - axis.y.width];
+      x.range(xRange)
+        .domain(xDomain);
+      console.log('xRange', xRange);
       yAxis = d3.axisLeft(y).ticks(axis.y.ticks);
 
       svg.append('g').attr('class', 'y-axis')
@@ -289,25 +290,25 @@ export const histogramD3 = ((): IChartAdaptor => {
     },
 
     /**
-     * Calculate the bar width
-     * @return {number} bar width
+     * Calculate the bar height
+     * @return {number} bar height
      */
-    barWidth() {
+    barHeight() {
       const { axis, width, margin, data, bar, stroke } = this.props;
-      const w = this.gridWidth();
+      const h = this.gridHeight();
       const valuesCount = this.valuesCount(data.counts);
       const setCount = data.counts.length;
-      let barWidth = (w / valuesCount) - (bar.margin * 2) - this.groupedMargin();
+      let barHeight = (h / valuesCount) - (bar.margin * 2) - this.groupedMargin();
 
       // Small bars - reduce margin and re-calcualate bar width
-      if (barWidth < 5) {
+      if (barHeight < 5) {
         bar.margin = 1;
-        barWidth = Math.max(1, (w - (valuesCount + 1) * bar.margin) /
+        barHeight = Math.max(1, (h - (valuesCount + 1) * bar.margin) /
           valuesCount);
       }
 
       // show data sets next to each other...
-      return barWidth / setCount;
+      return barHeight / setCount;
     },
 
     /**
@@ -321,32 +322,33 @@ export const histogramD3 = ((): IChartAdaptor => {
       bins: string[], set: IHistogramDataSet,
       setIndex: number, setCount: number,
     ) {
+      debugger;
       const { height, width, margin, bar, delay, duration,
         axis, stroke, tip, tipContentFn } = this.props;
       let barItem;
-      const barWidth = this.barWidth();
+      const barHeight = this.barHeight();
       const colors = d3.scaleOrdinal(set.colors || this.props.colorScheme);
       const borderColors = set.borderColors ? d3.scaleOrdinal(set.borderColors) : null;
 
       const selector = '.bar-' + setIndex;
       const multiLineOffset = (index) => setCount === 1
         ? 0
-        : ((index + setIndex) * (barWidth + this.groupedMargin()));
+        : ((index + setIndex) * (barHeight + this.groupedMargin()));
 
       svg.selectAll(selector).remove();
+
+      // Set up bar initial props
       barItem = svg.selectAll(selector)
         .data(set.data)
         .enter()
         .append('rect')
         .attr('class', 'bar ' + selector)
-        .attr('x', (d, index, all) => {
-          return axis.y.width
-            + axis.y.style['stroke-width']
-            + bar.margin
-            + (barWidth + (bar.margin * 2)) * (index)
+        .attr('y', (d, index, all) => {
+          return bar.margin
+            + (barHeight + (bar.margin * 2)) * (index)
             + multiLineOffset(index);
         })
-        .attr('width', (d) => barWidth)
+        .attr('height', (d) => barHeight)
         .attr('fill', (d, i) => colors(i))
         .on('mouseover', (d: number, i: number) => {
           tipContent.html(() => tipContentFn(bins, i, d));
@@ -354,8 +356,8 @@ export const histogramD3 = ((): IChartAdaptor => {
         })
         .on('mousemove', () => tip.fx.move(tipContainer))
         .on('mouseout', () => tip.fx.out(tipContainer))
-        .attr('y', (d: number): number => this.gridHeight())
-        .attr('height', 0);
+        .attr('x', (d: number): number => axis.y.width + axis.y.style['stroke-width'])
+        .attr('width', 0);
 
       barItem.attr('stroke', (d, i) => {
         if (borderColors) {
@@ -373,23 +375,19 @@ export const histogramD3 = ((): IChartAdaptor => {
         barItem.attr('stroke-dasharray', stroke.dasharray);
       }
 
+      // Animate in bar
       barItem
         .transition()
         .duration(duration)
         .delay(delay)
-        .attr('y', (d: number): number => {
-          return y(d);
-        })
-        // Hide bar's bottom border
+        // Hide bar's left border
         .attr('stroke-dasharray',
         (d: number): string => {
-          const currentHeight = this.gridHeight() - (y(d));
-          return `${barWidth} 0 ${currentHeight} ${barWidth}`;
+          const currentWidth = x(d);
+          return `${currentWidth + barHeight + currentWidth} ${barHeight}`;
         })
-        .attr('height',
-        (d: number): number => {
-          return this.gridHeight() - (y(d));
-        });
+        .attr('width',
+        (d: number): number => x(d));
 
       barItem.exit().remove();
     },
@@ -403,10 +401,9 @@ export const histogramD3 = ((): IChartAdaptor => {
       const ticks = this.valuesCount(data.counts);
       const setCount = data.counts.length;
       const axisWidth = axis.y.style['stroke-width'];
-      // x: axis.y.width + (this.barWidth() / 2) + bar.margin,
       const offset = {
-        x: axis.y.width + ((this.barWidth() * setCount) / 2) + bar.margin + this.groupedMargin() / 2,
-        y: this.gridHeight(),
+        x: axis.y.width + ((this.barHeight() * setCount) / 2) + bar.margin + this.groupedMargin() / 2,
+        y: 0,
       };
       let g;
       let gy;
@@ -429,7 +426,8 @@ export const histogramD3 = ((): IChartAdaptor => {
         // add the Y gridlines
         gy = svg.append('g')
           .attr('class', 'grid gridY')
-          .attr('transform', 'translate(' + (axis.y.width + axisWidth) + ', 0)')
+          .attr('transform', 'translate(' + (axis.y.width + axisWidth) + ', '
+          + (height - axis.x.height - margin.top) + ')')
           .call(make_y_gridlines(grid.y.ticks || ticks)
             .tickSize(-width + (margin.left * 2) + axis.y.width)
             .tickFormat(() => ''),
@@ -472,5 +470,5 @@ export const histogramD3 = ((): IChartAdaptor => {
       svg.selectAll('svg > *').remove();
     },
   };
-  return HistogramD3;
+  return HorizontalHistogramD3;
 });
