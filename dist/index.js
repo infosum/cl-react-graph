@@ -23310,7 +23310,7 @@ function nopropagation() {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var d3 = __webpack_require__(18);
-var merge = __webpack_require__(52);
+var deepmerge_1 = __webpack_require__(52);
 var colors_1 = __webpack_require__(94);
 var attrs_1 = __webpack_require__(95);
 exports.histogramD3 = function () {
@@ -23432,7 +23432,7 @@ exports.histogramD3 = function () {
             if (props === void 0) {
                 props = {};
             }
-            this.props = merge(defaultProps, props);
+            this.props = deepmerge_1.default(defaultProps, props);
             this.update(el, props);
         },
         _makeSvg: function _makeSvg(el) {
@@ -23645,7 +23645,7 @@ exports.histogramD3 = function () {
             if (!props.data) {
                 return;
             }
-            this.props = merge(defaultProps, props);
+            this.props = deepmerge_1.default(defaultProps, props);
             this._makeSvg(el);
             if (!this.props.data.bins) {
                 return;
@@ -23827,7 +23827,7 @@ exports.default = HorizontalHistogram;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var d3 = __webpack_require__(18);
-var merge = __webpack_require__(52);
+var deepmerge_1 = __webpack_require__(52);
 var colors_1 = __webpack_require__(94);
 var attrs_1 = __webpack_require__(95);
 exports.horizontalHistogramD3 = function () {
@@ -23949,7 +23949,7 @@ exports.horizontalHistogramD3 = function () {
             if (props === void 0) {
                 props = {};
             }
-            this.props = merge(defaultProps, props);
+            this.props = deepmerge_1.default(defaultProps, props);
             this.update(el, props);
         },
         _makeSvg: function _makeSvg(el) {
@@ -24139,7 +24139,6 @@ exports.horizontalHistogramD3 = function () {
             var gy;
             if (grid.x.visible) {
                 g = svg.append('g').attr('class', 'grid gridX').attr('transform', "translate(" + offset.x + ", " + offset.y + ")");
-                console.log('# x ticks = ', ticks, grid.x.ticks);
                 g.call(make_x_gridlines(grid.x.ticks || ticks).tickSize(-width + margin.left * 2 + axis.y.width).tickFormat(function () {
                     return '';
                 }));
@@ -24158,7 +24157,7 @@ exports.horizontalHistogramD3 = function () {
             if (!props.data) {
                 return;
             }
-            this.props = merge(defaultProps, props);
+            this.props = deepmerge_1.default(defaultProps, props);
             this._makeSvg(el);
             if (!this.props.data.bins) {
                 return;
@@ -24292,7 +24291,7 @@ exports.default = LineChart;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var d3 = __webpack_require__(18);
-var merge = __webpack_require__(52);
+var deepmerge_1 = __webpack_require__(52);
 var attrs_1 = __webpack_require__(95);
 exports.lineChartD3 = function () {
     var svg;
@@ -24419,7 +24418,7 @@ exports.lineChartD3 = function () {
             if (props === void 0) {
                 props = {};
             }
-            this.props = merge(defaultProps, props);
+            this.props = deepmerge_1.default(defaultProps, props);
             this.update(el, props);
         },
         _makeSvg: function _makeSvg(el) {
@@ -24614,7 +24613,7 @@ exports.lineChartD3 = function () {
             if (!props.data) {
                 return;
             }
-            this.props = merge(defaultProps, props);
+            this.props = deepmerge_1.default(defaultProps, props);
             this._makeSvg(el);
             var data = props.data;
             data = data.map(function (datum) {
@@ -24768,7 +24767,7 @@ var __assign = undefined && undefined.__assign || Object.assign || function (t) 
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var d3 = __webpack_require__(18);
-var merge = __webpack_require__(52);
+var deepmerge_1 = __webpack_require__(52);
 var colors_1 = __webpack_require__(94);
 exports.scatterPlotD3 = function () {
     var svg;
@@ -24796,8 +24795,7 @@ exports.scatterPlotD3 = function () {
             if (props === void 0) {
                 props = defaultProps;
             }
-            console.log('create scatter', props);
-            this.props = merge(defaultProps, props);
+            this.props = deepmerge_1.default(defaultProps, props);
             this.update(el, props);
         },
         _makeSvg: function _makeSvg(el, data) {

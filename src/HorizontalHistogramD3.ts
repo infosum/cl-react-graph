@@ -1,6 +1,6 @@
 /// <reference path="./interfaces.d.ts" />
 import * as d3 from 'd3';
-import * as merge from 'deepmerge';
+import merge from 'deepmerge';
 import colorScheme from './colors';
 import attrs from './d3/attrs';
 
@@ -413,7 +413,6 @@ export const horizontalHistogramD3 = ((): IChartAdaptor => {
           .attr('class', 'grid gridX')
           .attr('transform', `translate(${offset.x}, ${offset.y})`);
 
-        console.log('# x ticks = ', ticks, grid.x.ticks);
         g.call(make_x_gridlines(grid.x.ticks || ticks)
           .tickSize(-width + (margin.left * 2) + axis.y.width)
           .tickFormat(() => ''));

@@ -1,6 +1,6 @@
 /// <reference path="./interfaces.d.ts" />
 import * as d3 from 'd3';
-import * as merge from 'deepmerge';
+import merge from 'deepmerge';
 import colorScheme from './colors';
 import attrs from './d3/attrs';
 

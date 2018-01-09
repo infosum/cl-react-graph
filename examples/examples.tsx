@@ -129,9 +129,9 @@ const App: React.SFC<{}> = (): JSX.Element => <div>
   <div>
     <LineChart axis={axis} grid={grid} data={points} width={300} />
   </div>
-  <div>
+  {/* <div>
     <ScatterPlot data={scatter} width={300} height={300} />
-  </div>
+  </div> */}
 </div>;
 const tipContentFn = (bins: string[], i, d) =>
   bins[i] + '<br />HI THere ' + d.toFixed(2);
