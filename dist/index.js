@@ -10148,6 +10148,7 @@ var Histogram = function (_super) {
             grid = _a.grid,
             height = _a.height,
             data = _a.data,
+            margin = _a.margin,
             stroke = _a.stroke,
             tipContentFn = _a.tipContentFn;
         if (width === '100%') {
@@ -10159,6 +10160,7 @@ var Histogram = function (_super) {
             data: data,
             grid: grid,
             height: height,
+            margin: margin,
             stroke: stroke,
             tipContentFn: tipContentFn,
             width: width
@@ -10211,6 +10213,10 @@ var Histogram = function (_super) {
             }
         },
         height: 200,
+        margin: {
+            left: 5,
+            top: 5
+        },
         stroke: {
             color: function color(d, i, colors) {
                 return d3.rgb(colors(i)).darker(1);
@@ -23740,6 +23746,7 @@ var HorizontalHistogram = function (_super) {
             grid = _a.grid,
             height = _a.height,
             data = _a.data,
+            margin = _a.margin,
             stroke = _a.stroke,
             tipContentFn = _a.tipContentFn;
         if (width === '100%') {
@@ -23751,6 +23758,7 @@ var HorizontalHistogram = function (_super) {
             data: data,
             grid: grid,
             height: height,
+            margin: margin,
             stroke: stroke,
             tipContentFn: tipContentFn,
             width: width
@@ -23803,6 +23811,10 @@ var HorizontalHistogram = function (_super) {
             }
         },
         height: 200,
+        margin: {
+            left: 5,
+            top: 5
+        },
         stroke: {
             color: function color(d, i, colors) {
                 return d3.rgb(colors(i)).darker(1);

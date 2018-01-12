@@ -119,8 +119,14 @@ const axis = {
 
 const App: React.SFC<{}> = (): JSX.Element => <div>
   <div>
-    <HorizontalHistogram data={data2} width={500} height={400} />
-    <Histogram data={data2} width={400} height={400} />
+    <HorizontalHistogram data={data2} width={500} height={400} margin={{
+      left: 30,
+      top: 30,
+    }} />
+    <Histogram data={data2} width={400} height={400} margin={{
+      left: 30,
+      top: 30,
+    }} />
   </div>
   <div>
     <Histogram data={data} grid={grid} width={700} height={150} tipContentFn={tipContentFn} />

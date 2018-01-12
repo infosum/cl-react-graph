@@ -10155,7 +10155,13 @@ var axis = {
     }
 };
 var App = function App() {
-    return React.createElement("div", null, React.createElement("div", null, React.createElement(src_1.HorizontalHistogram, { data: data2, width: 500, height: 400 }), React.createElement(src_1.Histogram, { data: data2, width: 400, height: 400 })), React.createElement("div", null, React.createElement(src_1.Histogram, { data: data, grid: grid, width: 700, height: 150, tipContentFn: tipContentFn }), React.createElement(src_1.Histogram, { data: data2, bar: { margin: 4 }, width: 700, height: 150, axis: axis })), React.createElement("div", null, React.createElement(src_1.LineChart, { axis: axis, grid: grid, data: points, width: 300 })));
+    return React.createElement("div", null, React.createElement("div", null, React.createElement(src_1.HorizontalHistogram, { data: data2, width: 500, height: 400, margin: {
+            left: 30,
+            top: 30
+        } }), React.createElement(src_1.Histogram, { data: data2, width: 400, height: 400, margin: {
+            left: 30,
+            top: 30
+        } })), React.createElement("div", null, React.createElement(src_1.Histogram, { data: data, grid: grid, width: 700, height: 150, tipContentFn: tipContentFn }), React.createElement(src_1.Histogram, { data: data2, bar: { margin: 4 }, width: 700, height: 150, axis: axis })), React.createElement("div", null, React.createElement(src_1.LineChart, { axis: axis, grid: grid, data: points, width: 300 })));
 };
 var tipContentFn = function tipContentFn(bins, i, d) {
     return bins[i] + '<br />HI THere ' + d.toFixed(2);
@@ -23333,6 +23339,7 @@ var Histogram = function (_super) {
             grid = _a.grid,
             height = _a.height,
             data = _a.data,
+            margin = _a.margin,
             stroke = _a.stroke,
             tipContentFn = _a.tipContentFn;
         if (width === '100%') {
@@ -23344,6 +23351,7 @@ var Histogram = function (_super) {
             data: data,
             grid: grid,
             height: height,
+            margin: margin,
             stroke: stroke,
             tipContentFn: tipContentFn,
             width: width
@@ -23396,6 +23404,10 @@ var Histogram = function (_super) {
             }
         },
         height: 200,
+        margin: {
+            left: 5,
+            top: 5
+        },
         stroke: {
             color: function color(d, i, colors) {
                 return d3.rgb(colors(i)).darker(1);
@@ -23850,6 +23862,7 @@ var HorizontalHistogram = function (_super) {
             grid = _a.grid,
             height = _a.height,
             data = _a.data,
+            margin = _a.margin,
             stroke = _a.stroke,
             tipContentFn = _a.tipContentFn;
         if (width === '100%') {
@@ -23861,6 +23874,7 @@ var HorizontalHistogram = function (_super) {
             data: data,
             grid: grid,
             height: height,
+            margin: margin,
             stroke: stroke,
             tipContentFn: tipContentFn,
             width: width
@@ -23913,6 +23927,10 @@ var HorizontalHistogram = function (_super) {
             }
         },
         height: 200,
+        margin: {
+            left: 5,
+            top: 5
+        },
         stroke: {
             color: function color(d, i, colors) {
                 return d3.rgb(colors(i)).darker(1);

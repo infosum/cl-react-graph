@@ -42,6 +42,10 @@ class HorizontalHistogram extends Component<IHistogramProps, IHistogramChartStat
       },
     },
     height: 200,
+    margin: {
+      left: 5,
+      top: 5,
+    },
     stroke: {
       color: (d, i, colors) => d3.rgb(colors(i)).darker(1),
       width: 1,
@@ -112,7 +116,7 @@ class HorizontalHistogram extends Component<IHistogramProps, IHistogramChartStat
    */
   public getChartState(): IHistogramChartState {
     let { width } = this.props;
-    const { axis, bar, grid, height, data, stroke, tipContentFn } = this.props;
+    const { axis, bar, grid, height, data, margin, stroke, tipContentFn } = this.props;
     if (width === '100%') {
       width = this.state.parentWidth || 300;
     }
@@ -123,6 +127,7 @@ class HorizontalHistogram extends Component<IHistogramProps, IHistogramChartStat
       data,
       grid,
       height,
+      margin,
       stroke,
       tipContentFn,
       width,
