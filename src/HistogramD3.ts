@@ -1,5 +1,6 @@
 /// <reference path="./interfaces.d.ts" />
 import * as d3 from 'd3';
+import { ScaleLinear } from 'd3';
 import merge from 'deepmerge';
 import colorScheme from './colors';
 import attrs from './d3/attrs';
@@ -65,6 +66,10 @@ export const histogramD3 = ((): IChartAdaptor => {
     colorScheme,
     data: [],
     delay: 0,
+    domain: {
+      max: null,
+      min: null,
+    },
     duration: 400,
     grid: {
       x: {
@@ -194,24 +199,42 @@ export const histogramD3 = ((): IChartAdaptor => {
     },
 
     /**
+     * Update a linear scale with range and domain values taken either from the data set
+     * or from props.
+     */
+    appendDomainRange(scale: ScaleLinear<number, number>, data: IHistogramData): void {
+      const yDomain: number[] = [];
+      const { axis, domain, margin, height } = this.props;
+      const allCounts = data.counts.reduce((a: number[], b: IHistogramDataSet): number[] => {
+        return [...a, ...b.data];
+      }, []);
+      const extent = d3.extent(allCounts, (d) => d);
+      yDomain[1] = domain && domain.max
+        ? domain.max
+        : extent[1];
+      yDomain[0] = domain && domain.min
+        ? domain.min
+        : extent[0];
+      const yRange = [height - (margin.top * 2) - axis.x.height, 0];
+      scale.range(yRange)
+        .domain(yDomain);
+    },
+
+    /**
      * Draw scales
      * @param {Object} data Chart data
      */
     _drawScales(data: IHistogramData) {
-      const { margin, width, height, axis } = this.props;
+      const { domain, margin, width, height, axis } = this.props;
       const valuesCount = this.valuesCount(data.counts);
 
       svg.selectAll('.y-axis').remove();
       svg.selectAll('.x-axis').remove();
 
       const w = this.gridWidth();
-      let yDomain;
+
       let xAxis;
       let yAxis;
-      let yRange;
-      const allCounts = data.counts.reduce((a: number[], b: IHistogramDataSet): number[] => {
-        return [...a, ...b.data];
-      }, []);
 
       x.domain(data.bins)
         .rangeRound([0, w]);
@@ -227,11 +250,7 @@ export const histogramD3 = ((): IChartAdaptor => {
         (height - axis.x.height - (margin.left * 2)) + ')')
         .call(xAxis);
 
-      yDomain = d3.extent(allCounts, (d) => d);
-      yDomain[0] = 0;
-      yRange = [height - (margin.top * 2) - axis.x.height, 0];
-      y.range(yRange)
-        .domain(yDomain);
+      this.appendDomainRange(y, data);
 
       yAxis = d3.axisLeft(y).ticks(axis.y.ticks);
 

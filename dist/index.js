@@ -10145,6 +10145,7 @@ var Histogram = function (_super) {
         var _a = this.props,
             axis = _a.axis,
             bar = _a.bar,
+            domain = _a.domain,
             grid = _a.grid,
             height = _a.height,
             data = _a.data,
@@ -10158,6 +10159,7 @@ var Histogram = function (_super) {
             axis: axis,
             bar: bar,
             data: data,
+            domain: domain,
             grid: grid,
             height: height,
             margin: margin,
@@ -23379,6 +23381,10 @@ exports.histogramD3 = function () {
         colorScheme: colors_1.default,
         data: [],
         delay: 0,
+        domain: {
+            max: null,
+            min: null
+        },
         duration: 400,
         grid: {
             x: {
@@ -23473,15 +23479,17 @@ exports.histogramD3 = function () {
         },
         _drawScales: function _drawScales(data) {
             var _a = this.props,
+                domain = _a.domain,
                 margin = _a.margin,
                 width = _a.width,
                 height = _a.height,
                 axis = _a.axis;
             var valuesCount = this.valuesCount(data.counts);
+            console.log('d3 domain', domain);
             svg.selectAll('.y-axis').remove();
             svg.selectAll('.x-axis').remove();
             var w = this.gridWidth();
-            var yDomain;
+            var yDomain = [];
             var xAxis;
             var yAxis;
             var yRange;
@@ -23496,10 +23504,10 @@ exports.histogramD3 = function () {
                 }));
             }
             svg.append('g').attr('class', 'x-axis').attr('transform', 'translate(' + axis.y.width + ',' + (height - axis.x.height - margin.left * 2) + ')').call(xAxis);
-            yDomain = d3.extent(allCounts, function (d) {
+            yDomain[1] = domain.max ? domain.max : d3.extent(allCounts, function (d) {
                 return d;
             });
-            yDomain[0] = 0;
+            yDomain[0] = domain.min ? domain.min : 0;
             yRange = [height - margin.top * 2 - axis.x.height, 0];
             y.range(yRange).domain(yDomain);
             yAxis = d3.axisLeft(y).ticks(axis.y.ticks);

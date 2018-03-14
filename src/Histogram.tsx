@@ -116,7 +116,7 @@ class Histogram extends Component<IHistogramProps, IHistogramChartState> {
    */
   public getChartState(): IHistogramChartState {
     let { width } = this.props;
-    const { axis, bar, grid, height, data, margin, stroke, tipContentFn } = this.props;
+    const { axis, bar, domain, grid, height, data, margin, stroke, tipContentFn } = this.props;
     if (width === '100%') {
       width = this.state.parentWidth || 300;
     }
@@ -125,6 +125,7 @@ class Histogram extends Component<IHistogramProps, IHistogramChartState> {
       axis,
       bar,
       data,
+      domain,
       grid,
       height,
       margin,

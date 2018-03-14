@@ -10161,7 +10161,7 @@ var App = function App() {
         } }), React.createElement(src_1.Histogram, { data: data2, width: 400, height: 400, margin: {
             left: 30,
             top: 30
-        } })), React.createElement("div", null, React.createElement(src_1.Histogram, { data: data, grid: grid, width: 700, height: 150, tipContentFn: tipContentFn }), React.createElement(src_1.Histogram, { data: data2, bar: { margin: 4 }, width: 700, height: 150, axis: axis })), React.createElement("div", null, React.createElement(src_1.LineChart, { axis: axis, grid: grid, data: points, width: 300 })));
+        }, domain: { min: 0, max: 50000 } })), React.createElement("div", null, React.createElement(src_1.Histogram, { data: data, grid: grid, width: 700, height: 150, tipContentFn: tipContentFn }), React.createElement(src_1.Histogram, { data: data2, bar: { margin: 4 }, width: 700, height: 150, axis: axis })), React.createElement("div", null, React.createElement(src_1.LineChart, { axis: axis, grid: grid, data: points, width: 300 })));
 };
 var tipContentFn = function tipContentFn(bins, i, d) {
     return bins[i] + '<br />HI THere ' + d.toFixed(2);
@@ -23336,6 +23336,7 @@ var Histogram = function (_super) {
         var _a = this.props,
             axis = _a.axis,
             bar = _a.bar,
+            domain = _a.domain,
             grid = _a.grid,
             height = _a.height,
             data = _a.data,
@@ -23349,6 +23350,7 @@ var Histogram = function (_super) {
             axis: axis,
             bar: bar,
             data: data,
+            domain: domain,
             grid: grid,
             height: height,
             margin: margin,
@@ -23495,6 +23497,10 @@ exports.histogramD3 = function () {
         colorScheme: colors_1.default,
         data: [],
         delay: 0,
+        domain: {
+            max: null,
+            min: null
+        },
         duration: 400,
         grid: {
             x: {
@@ -23587,23 +23593,38 @@ exports.histogramD3 = function () {
                 return b.data.length > a ? b.data.length : a;
             }, 0);
         },
+        buildDomainRange: function buildDomainRange(scale, data) {
+            var yDomain = [];
+            var _a = this.props,
+                axis = _a.axis,
+                domain = _a.domain,
+                margin = _a.margin,
+                height = _a.height;
+            var allCounts = data.counts.reduce(function (a, b) {
+                return a.concat(b.data);
+            }, []);
+            var extent = d3.extent(allCounts, function (d) {
+                return d;
+            });
+            yDomain[1] = domain && domain.max ? domain.max : extent[1];
+            yDomain[0] = domain && domain.min ? domain.min : extent[0];
+            var yRange = [height - margin.top * 2 - axis.x.height, 0];
+            scale.range(yRange).domain(yDomain);
+        },
         _drawScales: function _drawScales(data) {
             var _a = this.props,
+                domain = _a.domain,
                 margin = _a.margin,
                 width = _a.width,
                 height = _a.height,
                 axis = _a.axis;
             var valuesCount = this.valuesCount(data.counts);
+            console.log('d3 domain', domain);
             svg.selectAll('.y-axis').remove();
             svg.selectAll('.x-axis').remove();
             var w = this.gridWidth();
-            var yDomain;
             var xAxis;
             var yAxis;
-            var yRange;
-            var allCounts = data.counts.reduce(function (a, b) {
-                return a.concat(b.data);
-            }, []);
             x.domain(data.bins).rangeRound([0, w]);
             xAxis = d3.axisBottom(x);
             if (w / valuesCount < 10) {
@@ -23612,12 +23633,7 @@ exports.histogramD3 = function () {
                 }));
             }
             svg.append('g').attr('class', 'x-axis').attr('transform', 'translate(' + axis.y.width + ',' + (height - axis.x.height - margin.left * 2) + ')').call(xAxis);
-            yDomain = d3.extent(allCounts, function (d) {
-                return d;
-            });
-            yDomain[0] = 0;
-            yRange = [height - margin.top * 2 - axis.x.height, 0];
-            y.range(yRange).domain(yDomain);
+            this.buildDomainRange(y, data);
             yAxis = d3.axisLeft(y).ticks(axis.y.ticks);
             svg.append('g').attr('class', 'y-axis').attr('transform', 'translate(' + axis.y.width + ', 0)').call(yAxis);
             attrs_1.default(svg.selectAll('.y-axis .domain, .y-axis .tick line'), axis.y.style);
