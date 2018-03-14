@@ -23477,6 +23477,24 @@ exports.histogramD3 = function () {
                 return b.data.length > a ? b.data.length : a;
             }, 0);
         },
+        appendDomainRange: function appendDomainRange(scale, data) {
+            var yDomain = [];
+            var _a = this.props,
+                axis = _a.axis,
+                domain = _a.domain,
+                margin = _a.margin,
+                height = _a.height;
+            var allCounts = data.counts.reduce(function (a, b) {
+                return a.concat(b.data);
+            }, []);
+            var extent = d3.extent(allCounts, function (d) {
+                return d;
+            });
+            yDomain[1] = domain && domain.max ? domain.max : extent[1];
+            yDomain[0] = domain && domain.min ? domain.min : extent[0];
+            var yRange = [height - margin.top * 2 - axis.x.height, 0];
+            scale.range(yRange).domain(yDomain);
+        },
         _drawScales: function _drawScales(data) {
             var _a = this.props,
                 domain = _a.domain,
@@ -23485,17 +23503,11 @@ exports.histogramD3 = function () {
                 height = _a.height,
                 axis = _a.axis;
             var valuesCount = this.valuesCount(data.counts);
-            console.log('d3 domain', domain);
             svg.selectAll('.y-axis').remove();
             svg.selectAll('.x-axis').remove();
             var w = this.gridWidth();
-            var yDomain = [];
             var xAxis;
             var yAxis;
-            var yRange;
-            var allCounts = data.counts.reduce(function (a, b) {
-                return a.concat(b.data);
-            }, []);
             x.domain(data.bins).rangeRound([0, w]);
             xAxis = d3.axisBottom(x);
             if (w / valuesCount < 10) {
@@ -23504,12 +23516,7 @@ exports.histogramD3 = function () {
                 }));
             }
             svg.append('g').attr('class', 'x-axis').attr('transform', 'translate(' + axis.y.width + ',' + (height - axis.x.height - margin.left * 2) + ')').call(xAxis);
-            yDomain[1] = domain.max ? domain.max : d3.extent(allCounts, function (d) {
-                return d;
-            });
-            yDomain[0] = domain.min ? domain.min : 0;
-            yRange = [height - margin.top * 2 - axis.x.height, 0];
-            y.range(yRange).domain(yDomain);
+            this.appendDomainRange(y, data);
             yAxis = d3.axisLeft(y).ticks(axis.y.ticks);
             svg.append('g').attr('class', 'y-axis').attr('transform', 'translate(' + axis.y.width + ', 0)').call(yAxis);
             attrs_1.default(svg.selectAll('.y-axis .domain, .y-axis .tick line'), axis.y.style);

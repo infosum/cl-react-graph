@@ -23593,7 +23593,7 @@ exports.histogramD3 = function () {
                 return b.data.length > a ? b.data.length : a;
             }, 0);
         },
-        buildDomainRange: function buildDomainRange(scale, data) {
+        appendDomainRange: function appendDomainRange(scale, data) {
             var yDomain = [];
             var _a = this.props,
                 axis = _a.axis,
@@ -23619,7 +23619,6 @@ exports.histogramD3 = function () {
                 height = _a.height,
                 axis = _a.axis;
             var valuesCount = this.valuesCount(data.counts);
-            console.log('d3 domain', domain);
             svg.selectAll('.y-axis').remove();
             svg.selectAll('.x-axis').remove();
             var w = this.gridWidth();
@@ -23633,7 +23632,7 @@ exports.histogramD3 = function () {
                 }));
             }
             svg.append('g').attr('class', 'x-axis').attr('transform', 'translate(' + axis.y.width + ',' + (height - axis.x.height - margin.left * 2) + ')').call(xAxis);
-            this.buildDomainRange(y, data);
+            this.appendDomainRange(y, data);
             yAxis = d3.axisLeft(y).ticks(axis.y.ticks);
             svg.append('g').attr('class', 'y-axis').attr('transform', 'translate(' + axis.y.width + ', 0)').call(yAxis);
             attrs_1.default(svg.selectAll('.y-axis .domain, .y-axis .tick line'), axis.y.style);
