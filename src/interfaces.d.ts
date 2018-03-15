@@ -27,7 +27,7 @@ interface IAxis {
     width?: number;
     style?: ISVGLineStyle;
     text?: {
-      style: ISVGTextStyle
+        style: ISVGTextStyle
     },
 }
 
@@ -54,8 +54,8 @@ interface IGrid {
 
 
 interface IChartAdaptor {
-    create: (el: Element, props: {[key: string] : any}) => void,
-    update: (el: Element, props: {[key: string] : any}) => void,
+    create: (el: Element, props: { [key: string]: any }) => void,
+    update: (el: Element, props: { [key: string]: any }) => void,
     destroy: (el: Element) => void
 }
 
@@ -66,20 +66,20 @@ interface IChartAdaptor {
 type ScatterPlotData = any[]
 
 interface IScatterPlotProps {
-  choices?: any[];
-  className?: string;
-  chartSize?: number;
-  data: ScatterPlotData,
-  delay?: number;
-  distModels?: string[];
-  duration?: number;
-  height: number;
-  legendWidth?: number;
-  colorScheme?: string[];
-  padding?: number;
-  radius?: number;
-  split?: string;
-  width: string | number;
+    choices?: any[];
+    className?: string;
+    chartSize?: number;
+    data: ScatterPlotData,
+    delay?: number;
+    distModels?: string[];
+    duration?: number;
+    height: number;
+    legendWidth?: number;
+    colorScheme?: string[];
+    padding?: number;
+    radius?: number;
+    split?: string;
+    width: string | number;
 }
 
 /**
@@ -140,7 +140,7 @@ interface IAxes {
     x?: IAxis;
 }
 interface IHistogramDataSet {
-    borderColors? : string[];
+    borderColors?: string[];
     colors?: string[];
     label: string;
     data: number[];
@@ -152,23 +152,30 @@ interface IHistogramData {
     colorScheme?: string[];
 }
 
+interface IDomain {
+    max: number;
+    min: number;
+}
+
 interface IHistogramProps {
     axis?: IAxes;
     bar?: IHistogramBar,
+    domain?: IDomain;
     grid?: IGrid;
     width: number | string;
     height: number;
     margin?: IMargin;
     data: IHistogramData;
     stroke?: IStroke;
-    tipContentFn? 
+    tipContentFn?
 }
 
 interface IHistogramChartState {
     axis?: IAxes;
     bar?: IHistogramBar;
     data: IHistogramData;
-    grid?: IGrid, 
+    domain?: IDomain;
+    grid?: IGrid,
     height?: number;
     margin?: IMargin;
     stroke?: IStroke

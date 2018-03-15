@@ -1,5 +1,6 @@
 /// <reference path="./interfaces.d.ts" />
 import * as d3 from 'd3';
+import { ScaleLinear } from 'd3';
 import merge from 'deepmerge';
 import colorScheme from './colors';
 import attrs from './d3/attrs';
@@ -27,6 +28,7 @@ export const histogramD3 = ((): IChartAdaptor => {
     axis: {
       x: {
         height: 20,
+        label: '',
         style: {
           'fill': 'none',
           'shape-rendering': 'crispEdges',
@@ -41,6 +43,7 @@ export const histogramD3 = ((): IChartAdaptor => {
         },
       },
       y: {
+        label: '',
         style: {
           'fill': 'none',
           'shape-rendering': 'crispEdges',
@@ -65,6 +68,10 @@ export const histogramD3 = ((): IChartAdaptor => {
     colorScheme,
     data: [],
     delay: 0,
+    domain: {
+      max: null,
+      min: null,
+    },
     duration: 400,
     grid: {
       x: {
@@ -194,24 +201,56 @@ export const histogramD3 = ((): IChartAdaptor => {
     },
 
     /**
+     * Update a linear scale with range and domain values taken either from the data set
+     * or from props.
+     */
+    appendDomainRange(scale: ScaleLinear<number, number>, data: IHistogramData): void {
+      const yDomain: number[] = [];
+      const { axis, domain, margin, height } = this.props;
+      const allCounts = data.counts.reduce((a: number[], b: IHistogramDataSet): number[] => {
+        return [...a, ...b.data];
+      }, []);
+      const extent = d3.extent(allCounts, (d) => d);
+      yDomain[1] = domain && domain.max
+        ? domain.max
+        : extent[1];
+      yDomain[0] = domain && domain.min
+        ? domain.min
+        : extent[0];
+      const yRange = [height - (margin.top * 2) - this.xAxisHeight(), 0];
+      scale.range(yRange)
+        .domain(yDomain);
+    },
+
+    yAxisWidth() {
+      const { axis } = this.props;
+      return axis.y.label === ''
+        ? axis.y.width
+        : axis.y.width + 30;
+    },
+
+    xAxisHeight() {
+      const { axis } = this.props;
+      return axis.x.label === ''
+        ? axis.x.height
+        : axis.x.height + 30;
+    },
+
+    /**
      * Draw scales
      * @param {Object} data Chart data
      */
     _drawScales(data: IHistogramData) {
-      const { margin, width, height, axis } = this.props;
+      const { domain, margin, width, height, axis } = this.props;
       const valuesCount = this.valuesCount(data.counts);
 
       svg.selectAll('.y-axis').remove();
       svg.selectAll('.x-axis').remove();
 
       const w = this.gridWidth();
-      let yDomain;
+
       let xAxis;
       let yAxis;
-      let yRange;
-      const allCounts = data.counts.reduce((a: number[], b: IHistogramDataSet): number[] => {
-        return [...a, ...b.data];
-      }, []);
 
       x.domain(data.bins)
         .rangeRound([0, w]);
@@ -223,27 +262,48 @@ export const histogramD3 = ((): IChartAdaptor => {
         xAxis.tickValues(x.domain().filter((d, i) => !(i % 10)));
       }
       svg.append('g').attr('class', 'x-axis')
-        .attr('transform', 'translate(' + axis.y.width + ',' +
-        (height - axis.x.height - (margin.left * 2)) + ')')
+        .attr('transform', 'translate(' + this.yAxisWidth() + ',' +
+        (height - this.xAxisHeight() - (margin.left * 2)) + ')')
         .call(xAxis);
 
-      yDomain = d3.extent(allCounts, (d) => d);
-      yDomain[0] = 0;
-      yRange = [height - (margin.top * 2) - axis.x.height, 0];
-      y.range(yRange)
-        .domain(yDomain);
+      if (axis.x.label !== '') {
+        svg.append('text')
+          .attr('class', 'x-axis-label')
+          .attr('transform',
+          'translate(' + (width / 2) + ' ,' +
+          ((height - this.xAxisHeight() - (margin.left * 2)) + 25) + ')')
+          .style('text-anchor', 'middle')
+          .text(axis.x.label);
+      }
+
+      this.appendDomainRange(y, data);
 
       yAxis = d3.axisLeft(y).ticks(axis.y.ticks);
 
       svg.append('g').attr('class', 'y-axis')
-        .attr('transform', 'translate(' + axis.y.width + ', 0)')
+        .attr('transform', 'translate(' + this.yAxisWidth() + ', 0)')
         .call(yAxis);
 
+      if (axis.y.label !== '') {
+        svg.append('text')
+          .attr('class', 'y-axis-label')
+          .attr('transform', 'rotate(-90)')
+          .attr('y', 0 - margin.left)
+          .attr('x', 0 - (height / 2 - (margin.top * 2)))
+          .attr('dy', '1em')
+          .style('text-anchor', 'middle')
+          .text(axis.y.label);
+      }
+
+      const { transform, x: xx, y: yy, ...xLabelStyle } = axis.x.text.style;
+      const { transform: yt, x: xxx, y: yyy, ...yLabelStyle } = axis.y.text.style;
       attrs(svg.selectAll('.y-axis .domain, .y-axis .tick line'), axis.y.style);
       attrs(svg.selectAll('.y-axis .tick text'), axis.y.text.style);
+      attrs(svg.selectAll('.y-axis-label'), yLabelStyle);
 
       attrs(svg.selectAll('.x-axis .domain, .x-axis .tick line'), axis.x.style);
       attrs(svg.selectAll('.x-axis .tick text'), axis.x.text.style);
+      attrs(svg.selectAll('.x-axis-label'), xLabelStyle);
     },
 
     /**
@@ -265,7 +325,7 @@ export const histogramD3 = ((): IChartAdaptor => {
      */
     gridWidth(): number {
       const { axis, width, margin } = this.props;
-      return width - (margin.left * 2) - axis.y.width;
+      return width - (margin.left * 2) - this.yAxisWidth();
     },
 
     /**
@@ -276,7 +336,7 @@ export const histogramD3 = ((): IChartAdaptor => {
      */
     gridHeight(): number {
       const { height, margin, axis } = this.props;
-      return height - (margin.top * 2) - axis.x.height;
+      return height - (margin.top * 2) - this.xAxisHeight();
     },
 
     /**
@@ -340,7 +400,7 @@ export const histogramD3 = ((): IChartAdaptor => {
         .append('rect')
         .attr('class', 'bar ' + selector)
         .attr('x', (d, index, all) => {
-          return axis.y.width
+          return this.yAxisWidth()
             + axis.y.style['stroke-width']
             + bar.margin
             + (barWidth + (bar.margin * 2)) * (index)
@@ -403,9 +463,9 @@ export const histogramD3 = ((): IChartAdaptor => {
       const ticks = this.valuesCount(data.counts);
       const setCount = data.counts.length;
       const axisWidth = axis.y.style['stroke-width'];
-      // x: axis.y.width + (this.barWidth() / 2) + bar.margin,
+
       const offset = {
-        x: axis.y.width + ((this.barWidth() * setCount) / 2) + bar.margin + this.groupedMargin() / 2,
+        x: this.yAxisWidth() + ((this.barWidth() * setCount) / 2) + bar.margin + this.groupedMargin() / 2,
         y: this.gridHeight(),
       };
       let g;
@@ -418,7 +478,7 @@ export const histogramD3 = ((): IChartAdaptor => {
           .attr('transform', `translate(${offset.x}, ${offset.y})`);
 
         g.call(make_x_gridlines(grid.x.ticks || ticks)
-          .tickSize(-height + axis.x.height + (margin.top * 2))
+          .tickSize(-height + this.xAxisHeight() + (margin.top * 2))
           .tickFormat(() => ''));
 
         attrs(g.selectAll('.tick line'), grid.x.style);
@@ -429,9 +489,9 @@ export const histogramD3 = ((): IChartAdaptor => {
         // add the Y gridlines
         gy = svg.append('g')
           .attr('class', 'grid gridY')
-          .attr('transform', 'translate(' + (axis.y.width + axisWidth) + ', 0)')
+          .attr('transform', 'translate(' + (this.yAxisWidth() + axisWidth) + ', 0)')
           .call(make_y_gridlines(grid.y.ticks || ticks)
-            .tickSize(-width + (margin.left * 2) + axis.y.width)
+            .tickSize(-width + (margin.left * 2) + this.yAxisWidth())
             .tickFormat(() => ''),
         );
         attrs(gy.selectAll('.tick line'), grid.y.style);

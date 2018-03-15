@@ -92,6 +92,7 @@ const scatter = [
 ];
 const axis = {
   x: {
+    label: 'X Axis',
     text: {
       style: {
         'dy': '.35em',
@@ -103,6 +104,7 @@ const axis = {
     },
   },
   y: {
+    label: 'Y Axis!',
     style: {
       fill: 'none',
       stroke: '#eeAA00',
@@ -126,7 +128,8 @@ const App: React.SFC<{}> = (): JSX.Element => <div>
     <Histogram data={data2} width={400} height={400} margin={{
       left: 30,
       top: 30,
-    }} />
+    }}
+      domain={{ min: 0, max: 50000 }} />
   </div>
   <div>
     <Histogram data={data} grid={grid} width={700} height={150} tipContentFn={tipContentFn} />
