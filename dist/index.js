@@ -23316,6 +23316,14 @@ function nopropagation() {
 "use strict";
 
 
+var __rest = undefined && undefined.__rest || function (s, e) {
+    var t = {};
+    for (var p in s) {
+        if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0) t[p] = s[p];
+    }if (s != null && typeof Object.getOwnPropertySymbols === "function") for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+        if (e.indexOf(p[i]) < 0) t[p[i]] = s[p[i]];
+    }return t;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var d3 = __webpack_require__(18);
 var deepmerge_1 = __webpack_require__(52);
@@ -23343,6 +23351,7 @@ exports.histogramD3 = function () {
         axis: {
             x: {
                 height: 20,
+                label: '',
                 style: {
                     'fill': 'none',
                     'shape-rendering': 'crispEdges',
@@ -23357,6 +23366,7 @@ exports.histogramD3 = function () {
                 }
             },
             y: {
+                label: '',
                 style: {
                     'fill': 'none',
                     'shape-rendering': 'crispEdges',
@@ -23492,8 +23502,16 @@ exports.histogramD3 = function () {
             });
             yDomain[1] = domain && domain.max ? domain.max : extent[1];
             yDomain[0] = domain && domain.min ? domain.min : extent[0];
-            var yRange = [height - margin.top * 2 - axis.x.height, 0];
+            var yRange = [height - margin.top * 2 - this.xAxisHeight(), 0];
             scale.range(yRange).domain(yDomain);
+        },
+        yAxisWidth: function yAxisWidth() {
+            var axis = this.props.axis;
+            return axis.y.label === '' ? axis.y.width : axis.y.width + 30;
+        },
+        xAxisHeight: function xAxisHeight() {
+            var axis = this.props.axis;
+            return axis.x.label === '' ? axis.x.height : axis.x.height + 30;
         },
         _drawScales: function _drawScales(data) {
             var _a = this.props,
@@ -23515,14 +23533,32 @@ exports.histogramD3 = function () {
                     return !(i % 10);
                 }));
             }
-            svg.append('g').attr('class', 'x-axis').attr('transform', 'translate(' + axis.y.width + ',' + (height - axis.x.height - margin.left * 2) + ')').call(xAxis);
+            svg.append('g').attr('class', 'x-axis').attr('transform', 'translate(' + this.yAxisWidth() + ',' + (height - this.xAxisHeight() - margin.left * 2) + ')').call(xAxis);
+            if (axis.x.label !== '') {
+                svg.append('text').attr('class', 'x-axis-label').attr('transform', 'translate(' + width / 2 + ' ,' + (height - this.xAxisHeight() - margin.left * 2 + 25) + ')').style('text-anchor', 'middle').text(axis.x.label);
+            }
             this.appendDomainRange(y, data);
             yAxis = d3.axisLeft(y).ticks(axis.y.ticks);
-            svg.append('g').attr('class', 'y-axis').attr('transform', 'translate(' + axis.y.width + ', 0)').call(yAxis);
+            svg.append('g').attr('class', 'y-axis').attr('transform', 'translate(' + this.yAxisWidth() + ', 0)').call(yAxis);
+            if (axis.y.label !== '') {
+                svg.append('text').attr('class', 'y-axis-label').attr('transform', 'rotate(-90)').attr('y', 0 - margin.left).attr('x', 0 - (height / 2 - margin.top * 2)).attr('dy', '1em').style('text-anchor', 'middle').text(axis.y.label);
+            }
+            var _b = axis.x.text.style,
+                transform = _b.transform,
+                xx = _b.x,
+                yy = _b.y,
+                xLabelStyle = __rest(_b, ["transform", "x", "y"]);
+            var _c = axis.y.text.style,
+                yt = _c.transform,
+                xxx = _c.x,
+                yyy = _c.y,
+                yLabelStyle = __rest(_c, ["transform", "x", "y"]);
             attrs_1.default(svg.selectAll('.y-axis .domain, .y-axis .tick line'), axis.y.style);
             attrs_1.default(svg.selectAll('.y-axis .tick text'), axis.y.text.style);
+            attrs_1.default(svg.selectAll('.y-axis-label'), yLabelStyle);
             attrs_1.default(svg.selectAll('.x-axis .domain, .x-axis .tick line'), axis.x.style);
             attrs_1.default(svg.selectAll('.x-axis .tick text'), axis.x.text.style);
+            attrs_1.default(svg.selectAll('.x-axis-label'), xLabelStyle);
         },
         _drawBars: function _drawBars(info) {
             var _this = this;
@@ -23536,14 +23572,14 @@ exports.histogramD3 = function () {
                 axis = _a.axis,
                 width = _a.width,
                 margin = _a.margin;
-            return width - margin.left * 2 - axis.y.width;
+            return width - margin.left * 2 - this.yAxisWidth();
         },
         gridHeight: function gridHeight() {
             var _a = this.props,
                 height = _a.height,
                 margin = _a.margin,
                 axis = _a.axis;
-            return height - margin.top * 2 - axis.x.height;
+            return height - margin.top * 2 - this.xAxisHeight();
         },
         groupedMargin: function groupedMargin() {
             var data = this.props.data;
@@ -23590,7 +23626,7 @@ exports.histogramD3 = function () {
             };
             svg.selectAll(selector).remove();
             barItem = svg.selectAll(selector).data(set.data).enter().append('rect').attr('class', 'bar ' + selector).attr('x', function (d, index, all) {
-                return axis.y.width + axis.y.style['stroke-width'] + bar.margin + (barWidth + bar.margin * 2) * index + multiLineOffset(index);
+                return _this.yAxisWidth() + axis.y.style['stroke-width'] + bar.margin + (barWidth + bar.margin * 2) * index + multiLineOffset(index);
             }).attr('width', function (d) {
                 return barWidth;
             }).attr('fill', function (d, i) {
@@ -23638,21 +23674,21 @@ exports.histogramD3 = function () {
             var setCount = data.counts.length;
             var axisWidth = axis.y.style['stroke-width'];
             var offset = {
-                x: axis.y.width + this.barWidth() * setCount / 2 + bar.margin + this.groupedMargin() / 2,
+                x: this.yAxisWidth() + this.barWidth() * setCount / 2 + bar.margin + this.groupedMargin() / 2,
                 y: this.gridHeight()
             };
             var g;
             var gy;
             if (grid.x.visible) {
                 g = svg.append('g').attr('class', 'grid gridX').attr('transform', "translate(" + offset.x + ", " + offset.y + ")");
-                g.call(make_x_gridlines(grid.x.ticks || ticks).tickSize(-height + axis.x.height + margin.top * 2).tickFormat(function () {
+                g.call(make_x_gridlines(grid.x.ticks || ticks).tickSize(-height + this.xAxisHeight() + margin.top * 2).tickFormat(function () {
                     return '';
                 }));
                 attrs_1.default(g.selectAll('.tick line'), grid.x.style);
                 attrs_1.default(g.selectAll('.domain'), { stroke: 'transparent' });
             }
             if (grid.y.visible) {
-                gy = svg.append('g').attr('class', 'grid gridY').attr('transform', 'translate(' + (axis.y.width + axisWidth) + ', 0)').call(make_y_gridlines(grid.y.ticks || ticks).tickSize(-width + margin.left * 2 + axis.y.width).tickFormat(function () {
+                gy = svg.append('g').attr('class', 'grid gridY').attr('transform', 'translate(' + (this.yAxisWidth() + axisWidth) + ', 0)').call(make_y_gridlines(grid.y.ticks || ticks).tickSize(-width + margin.left * 2 + this.yAxisWidth()).tickFormat(function () {
                     return '';
                 }));
                 attrs_1.default(gy.selectAll('.tick line'), grid.y.style);
