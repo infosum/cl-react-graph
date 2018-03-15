@@ -92,6 +92,7 @@ const scatter = [
 ];
 const axis = {
   x: {
+    label: 'X Axis',
     text: {
       style: {
         'dy': '.35em',
@@ -103,6 +104,7 @@ const axis = {
     },
   },
   y: {
+    label: 'Y Axis!',
     style: {
       fill: 'none',
       stroke: '#eeAA00',
