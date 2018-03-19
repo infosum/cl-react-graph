@@ -211,10 +211,10 @@ export const histogramD3 = ((): IChartAdaptor => {
         return [...a, ...b.data];
       }, []);
       const extent = d3.extent(allCounts, (d) => d);
-      yDomain[1] = domain && domain.max
+      yDomain[1] = domain && domain.hasOwnProperty('max')
         ? domain.max
         : extent[1];
-      yDomain[0] = domain && domain.min
+      yDomain[0] = domain && domain.hasOwnProperty('min')
         ? domain.min
         : extent[0];
       const yRange = [height - (margin.top * 2) - this.xAxisHeight(), 0];

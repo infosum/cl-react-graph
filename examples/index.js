@@ -23618,8 +23618,8 @@ exports.histogramD3 = function () {
             var extent = d3.extent(allCounts, function (d) {
                 return d;
             });
-            yDomain[1] = domain && domain.max ? domain.max : extent[1];
-            yDomain[0] = domain && domain.min ? domain.min : extent[0];
+            yDomain[1] = domain && domain.hasOwnProperty('max') ? domain.max : extent[1];
+            yDomain[0] = domain && domain.hasOwnProperty('min') ? domain.min : extent[0];
             var yRange = [height - margin.top * 2 - this.xAxisHeight(), 0];
             scale.range(yRange).domain(yDomain);
         },
