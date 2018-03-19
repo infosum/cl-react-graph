@@ -102,6 +102,7 @@ const axis = {
         'y': 0,
       },
     },
+    tickSize: 0,
   },
   y: {
     label: 'Y Axis!',
@@ -114,6 +115,7 @@ const axis = {
         fill: '#eeAA00',
       },
     },
+    tickSize: 20,
     ticks: 3,
     width: 50,
   },

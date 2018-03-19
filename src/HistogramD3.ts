@@ -2,6 +2,7 @@
 import * as d3 from 'd3';
 import { ScaleLinear } from 'd3';
 import merge from 'deepmerge';
+import { get } from 'lodash';
 import colorScheme from './colors';
 import attrs from './d3/attrs';
 
@@ -257,10 +258,16 @@ export const histogramD3 = ((): IChartAdaptor => {
 
       xAxis = d3.axisBottom(x);
 
-      if (w / valuesCount < 10) {
-        // Show one in 10 x axis labels
-        xAxis.tickValues(x.domain().filter((d, i) => !(i % 10)));
+      const tickSize = get(axis, 'x.tickSize', undefined);
+      if (tickSize !== undefined) {
+        xAxis.tickSize(tickSize);
+      } else {
+        if (w / valuesCount < 10) {
+          // Show one in 10 x axis labels
+          xAxis.tickValues(x.domain().filter((d, i) => !(i % 10)));
+        }
       }
+
       svg.append('g').attr('class', 'x-axis')
         .attr('transform', 'translate(' + this.yAxisWidth() + ',' +
         (height - this.xAxisHeight() - (margin.left * 2)) + ')')
@@ -279,6 +286,11 @@ export const histogramD3 = ((): IChartAdaptor => {
       this.appendDomainRange(y, data);
 
       yAxis = d3.axisLeft(y).ticks(axis.y.ticks);
+
+      const yTickSize = get(axis, 'y.tickSize', undefined);
+      if (yTickSize !== undefined) {
+        yAxis.tickSize(yTickSize);
+      }
 
       svg.append('g').attr('class', 'y-axis')
         .attr('transform', 'translate(' + this.yAxisWidth() + ', 0)')
@@ -477,7 +489,7 @@ export const histogramD3 = ((): IChartAdaptor => {
           .attr('class', 'grid gridX')
           .attr('transform', `translate(${offset.x}, ${offset.y})`);
 
-        g.call(make_x_gridlines(grid.x.ticks || ticks)
+        g.call(make_x_gridlines(get(grid, 'x.ticks', ticks))
           .tickSize(-height + this.xAxisHeight() + (margin.top * 2))
           .tickFormat(() => ''));
 
@@ -490,7 +502,7 @@ export const histogramD3 = ((): IChartAdaptor => {
         gy = svg.append('g')
           .attr('class', 'grid gridY')
           .attr('transform', 'translate(' + (this.yAxisWidth() + axisWidth) + ', 0)')
-          .call(make_y_gridlines(grid.y.ticks || ticks)
+          .call(make_y_gridlines(get(grid, 'y.ticks', ticks))
             .tickSize(-width + (margin.left * 2) + this.yAxisWidth())
             .tickFormat(() => ''),
         );
