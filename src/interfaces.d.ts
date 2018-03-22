@@ -4,6 +4,9 @@
 
 type TipContentFn = (bins: string[], i: number, d: number) => string;
 
+interface IChartState {
+    parentWidth?: number;
+}
 interface ISVGLineStyle {
     'stroke'?: string;
     'fill'?: string;

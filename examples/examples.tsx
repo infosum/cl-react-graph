@@ -1,7 +1,7 @@
 import * as d3 from 'd3';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { Histogram, HorizontalHistogram, LineChart, ScatterPlot } from '../src';
+import { Histogram, HorizontalHistogram, LineChart, PieChart, ScatterPlot } from '../src';
 
 const grid = {
   x: {
@@ -21,18 +21,18 @@ const grid = {
 };
 
 const data = {
-  bins: ['1', '2', '3', '4'],
+  bins: ['Data 1', 'Data 6', 'Data 3', 'Dat 4'],
   counts: [
     {
       borderColors: d3.schemeCategory20,
       colors: d3.schemeCategory20,
-      data: [1, 2, 3, 4, 5],
+      data: [1, 2, 3, 4],
       label: 'Data 1',
     },
     {
       borderColors: d3.schemeCategory20,
       colors: d3.schemeCategory20b,
-      data: [3, 2, 1, 5],
+      data: [13, 2, 1, 5],
       label: 'Data 2',
     },
   ],
@@ -40,11 +40,22 @@ const data = {
 };
 
 const data2 = {
-  bins: ['1', '10', '25', '50', '75', '90', '99'],
+  bins: ['bin 1', 'bin 2', 'bin 3', 'bin 4', 'bin 5', 'bin 9', 'bin 7'],
   counts: [
     {
       borderColors: ['red'],
       data: [999, 9000, 15000, 25000, 15000, 9000, 888],
+      label: 'Data 1',
+    },
+  ],
+};
+
+const data3 = {
+  bins: ['bin 1', 'bin 2'],
+  counts: [
+    {
+      borderColors: ['red'],
+      data: [100, 50],
       label: 'Data 1',
     },
   ],
@@ -121,7 +132,31 @@ const axis = {
   },
 };
 
-const App: React.SFC<{}> = (): JSX.Element => <div>
+const legend = {
+  display: true,
+  fontSize: '10px',
+  rectSize: 12,
+  spacing: 4,
+};
+
+const labels = {
+  display: true,
+};
+
+const App: React.SFC<{}> = (): JSX.Element => <div style={{ padding: '20px' }}>
+  <h3>Pie Chart</h3>
+  {/* <PieChart
+    width={300}
+    height={300}
+    data={data} /> */}
+
+  <h4>Donut</h4>
+  <PieChart width={200}
+    height={200}
+    donutWidth={10}
+    data={data3}
+    legend={legend}
+    labels={labels} />
   <div>
     <HorizontalHistogram data={data2} width={500} height={400} margin={{
       left: 30,
