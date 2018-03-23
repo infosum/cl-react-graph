@@ -51,11 +51,11 @@ const data2 = {
 };
 
 const data3 = {
-  bins: ['bin 1', 'bin 2'],
+  bins: ['bin 1', 'bin 2', 'bin 3'],
   counts: [
     {
       borderColors: ['red'],
-      data: [100, 50],
+      data: [100, 50, 40],
       label: 'Data 1',
     },
   ],

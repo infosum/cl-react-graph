@@ -136,10 +136,10 @@ var data2 = {
     }]
 };
 var data3 = {
-    bins: ['bin 1', 'bin 2'],
+    bins: ['bin 1', 'bin 2', 'bin 3'],
     counts: [{
         borderColors: ['red'],
-        data: [100, 50],
+        data: [100, 50, 40],
         label: 'Data 1'
     }]
 };
@@ -47811,11 +47811,11 @@ var deepmerge_1 = __webpack_require__(/*! deepmerge */ "./node_modules/deepmerge
 var textWidth = __webpack_require__(/*! text-width */ "./node_modules/text-width/index.js");
 var colors_1 = __webpack_require__(/*! ./colors */ "./src/colors/index.js");
 exports.pieChartD3 = function () {
-    var rings = [];
     var svg;
-    var tipContainer;
-    var tipContent;
+    var arc;
+    var path;
     var pie;
+    var groups;
     var defaultProps = {
         className: 'piechart-d3',
         colorScheme: colors_1.default,
@@ -47834,19 +47834,6 @@ exports.pieChartD3 = function () {
         },
         width: 200
     };
-    var tau = 2 * Math.PI;
-    function arcTween(arc, newAngle) {
-        return function (d) {
-            console.log('d', d);
-            var interpolate = d3.interpolate(d.value, newAngle);
-            return function (t) {
-                d.value = interpolate(t);
-                console.log(d, d.value);
-                console.log(arc(d));
-                return arc(d);
-            };
-        };
-    }
     var PieChartD3 = {
         create: function create(el, props) {
             if (props === void 0) {
@@ -47871,15 +47858,6 @@ exports.pieChartD3 = function () {
                 height = _a.height,
                 className = _a.className;
             svg = d3.select(el).append('svg').attr('class', className).attr('width', width).attr('height', height).attr('viewBox', "0 0 " + width + " " + height).append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
-            this._makeTip();
-        },
-        _makeTip: function _makeTip() {
-            if (tipContainer) {
-                tipContainer.remove();
-            }
-            tipContainer = d3.select(this.props.tipContainer).append('div').attr('class', 'tooltip top').style('opacity', 0);
-            tipContainer.append('div').attr('class', 'tooltip-arrow');
-            tipContent = tipContainer.append('div').attr('class', 'tooltip-inner');
         },
         update: function update(el, props) {
             if (!props.data) {
@@ -47890,83 +47868,7 @@ exports.pieChartD3 = function () {
             if (!this.props.data.bins) {
                 return;
             }
-            this._drawChart(this.props.data);
-        },
-        destroy: function destroy(el) {
-            svg.selectAll('svg > *').remove();
-        },
-        _drawChart: function _drawChart(data) {
-            var _this = this;
-            this.drawLegend();
-            data.counts.forEach(function (set, setIndex) {
-                var dataSet = set.data.map(function (count, i) {
-                    return {
-                        count: count,
-                        enabled: true,
-                        label: data.bins[i]
-                    };
-                });
-                _this.drawDataSet(data.bins, dataSet, setIndex, data.counts.length);
-            });
-        },
-        drawLegend: function drawLegend() {
-            var _this = this;
-            if (!this.props.legend.display) {
-                return;
-            }
-            var _a = this.props,
-                data = _a.data,
-                width = _a.width;
-            var _b = this.props.legend,
-                _c = _b.rectSize,
-                rectSize = _c === void 0 ? 10 : _c,
-                _d = _b.spacing,
-                spacing = _d === void 0 ? 4 : _d,
-                _e = _b.fontSize,
-                fontSize = _e === void 0 ? '12px' : _e;
-            var colors = d3.scaleOrdinal(this.props.colorScheme);
-            var x = this.outerRadius(0);
-            var legend = svg.selectAll('.legend').data(this.props.data.bins).enter().append('g').attr('class', 'legend').attr('transform', function (d, i) {
-                var height = rectSize + spacing;
-                var offset = height * colors.domain().length / 2;
-                var vert = i * height - offset;
-                return 'translate(' + (width - _this.legendWidth()) + ',' + vert + ')';
-            });
-            var selectedBins = this.selectedBins;
-            legend.append('rect').attr('width', rectSize).attr('height', rectSize).style('fill', colors).attr('class', '').style('stroke-width', 2).on('click', function (label) {
-                debugger;
-                var rect = d3.select(this);
-                var enabled = true;
-                var totalEnabled = d3.sum(selectedBins.filter(function (d) {
-                    return d;
-                }));
-                if (rect.attr('class') === 'disabled') {
-                    rect.attr('class', '');
-                } else {
-                    if (totalEnabled < 2) {
-                        return;
-                    }
-                    rect.attr('class', 'disabled');
-                    enabled = false;
-                }
-                pie.value(function (d) {
-                    if (d.label === label) {
-                        d.enabled = enabled;
-                    }
-                    console.log('value', d.label, d.enabled ? d.count : 0);
-                    return d.enabled ? d.count : 0;
-                });
-                rings.forEach(function (ring) {
-                    var arc = ring.arc,
-                        path = ring.path;
-                    path = path.data(pie(ring.set));
-                    console.log('path', path);
-                    path.transition().duration(750).attrTween('d', arcTween(arc, Math.random() * tau));
-                });
-            }).style('stroke', colors);
-            legend.append('text').style('font-size', fontSize).attr('x', rectSize + spacing).attr('y', rectSize - spacing).text(function (d) {
-                return d;
-            });
+            this.drawCharts();
         },
         legendWidth: function legendWidth() {
             var _a = this.props,
@@ -48012,45 +47914,99 @@ exports.pieChartD3 = function () {
             var radius = Math.min(width, height) / 2 - this.legendWidth();
             return donutWidth === 0 ? 0 : radius - 10 - donutWidth - setIndex * (donutWidth + 10);
         },
-        drawDataSet: function drawDataSet(bins, set, setIndex, setCount) {
+        drawLegend: function drawLegend() {
+            var _this = this;
+            if (!this.props.legend.display) {
+                return;
+            }
             var _a = this.props,
-                _b = _a.donutWidth,
-                donutWidth = _b === void 0 ? 0 : _b,
-                width = _a.width,
-                height = _a.height,
-                labels = _a.labels;
-            var radius = Math.min(width, height) / 2;
-            var g = svg.append('g').attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')');
+                data = _a.data,
+                width = _a.width;
+            var _b = this.props.legend,
+                _c = _b.rectSize,
+                rectSize = _c === void 0 ? 10 : _c,
+                _d = _b.spacing,
+                spacing = _d === void 0 ? 4 : _d,
+                _e = _b.fontSize,
+                fontSize = _e === void 0 ? '12px' : _e;
             var colors = d3.scaleOrdinal(this.props.colorScheme);
-            var innerRadius = this.innerRadius(setIndex);
-            var outerRadius = this.outerRadius(setIndex);
-            var arc = d3.arc().outerRadius(outerRadius).innerRadius(innerRadius);
+            var x = this.outerRadius(0);
+            var legend = svg.selectAll('.legend').data(this.props.data.bins).enter().append('g').attr('class', 'legend').attr('transform', function (d, i) {
+                var height = rectSize + spacing;
+                var offset = height * colors.domain().length / 2;
+                var vert = i * height - offset;
+                return 'translate(' + (width - _this.legendWidth()) + ',' + vert + ')';
+            });
+            var selectedBins = this.selectedBins;
+            legend.append('rect').attr('width', rectSize).attr('height', rectSize).style('fill', colors).attr('class', '').style('stroke-width', 2).on('click', function (label) {
+                this.visible[label] = !this.visible[label];
+                var enabled = this.visible[label];
+                pie.value(function (d) {
+                    if (d.label === label) {
+                        d.enabled = enabled;
+                    }
+                    return d.enabled ? d.count : 0;
+                });
+                path = path.data(pie);
+                path.transition().duration(750).attrTween('d', arcTween(arc));
+            }.bind(this)).style('stroke', colors);
+            legend.append('text').style('font-size', fontSize).attr('x', rectSize + spacing).attr('y', rectSize - spacing).text(function (d) {
+                return d;
+            });
+        },
+        drawCharts: function drawCharts() {
+            var _this = this;
+            var data = this.props.data;
+            this.drawLegend();
+            this.visible = {};
+            data.bins.forEach(function (bin) {
+                _this.visible[bin] = true;
+            });
+            this.dataSets = data.counts.map(function (set, setIndex) {
+                return set.data.map(function (count, i) {
+                    return {
+                        count: count,
+                        enabled: true,
+                        label: data.bins[i],
+                        nextCount: Math.random() * 100
+                    };
+                });
+            });
+            this.dataSets.forEach(function (dataSet) {
+                return _this.drawChart(dataSet);
+            });
+        },
+        drawChart: function drawChart(data) {
+            var outerRadius = 100;
+            var innerRadius = 80;
             pie = d3.pie().sort(null).value(function (d) {
-                console.log('d', d);
                 return d.count;
             });
-            console.log('set', set);
-            var group = g.selectAll('.arc').data(pie(set)).enter().append('g').attr('class', 'arc').attr('stroke-width', 1).attr('stroke', function (d, i) {}).each(function (d) {
-                console.log('set current', d, d.value);
-                this._current = d.value;
+            var arcs = pie(data);
+            var color = d3.scaleOrdinal(this.props.colorScheme);
+            arc = d3.arc().outerRadius(this.outerRadius()).innerRadius(this.innerRadius());
+            path = svg.datum(data).selectAll('path').data(pie).enter().append('g').attr('class', 'arc').attr('transform', 'translate(' + outerRadius + ', ' + outerRadius + ')').append('path').attr('fill', function (d, i) {
+                return color(i);
+            }).attr('d', arc).each(function (d) {
+                this._current = d;
             });
-            var path = group.append('path').attr('d', arc).attr('fill', function (d) {
-                return colors(d.data.count);
-            });
-            if (labels.display) {
-                var label_1 = d3.arc().outerRadius(outerRadius).innerRadius(innerRadius);
-                path.append('text').attr('transform', function (d) {
-                    return 'translate(' + label_1.centroid(d) + ')';
-                }).attr('dy', '0.35em').text(function (d, i) {
-                    return set[i].count;
-                });
-            }
-            rings.push({ arc: arc, set: set, path: path });
-            console.log('rings', rings);
+        },
+        destroy: function destroy(el) {
+            svg.selectAll('svg > *').remove();
         }
     };
     return PieChartD3;
 };
+function arcTween(arc) {
+    return function (d) {
+        console.log('arcTween', d, arc, this);
+        var i = d3.interpolate(this._current, d);
+        this._current = i(0);
+        return function (t) {
+            return arc(i(t));
+        };
+    };
+}
 
 /***/ }),
 
