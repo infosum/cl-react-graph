@@ -27195,14 +27195,13 @@ function defaultConstrain(transform, extent, translateExtent) {
 /*!*****************************************!*\
   !*** ./node_modules/d3/dist/package.js ***!
   \*****************************************/
-/*! exports provided: name, version, publishConfig, description, keywords, homepage, license, author, main, unpkg, jsdelivr, module, repository, scripts, devDependencies, dependencies */
+/*! exports provided: name, version, description, keywords, homepage, license, author, main, unpkg, jsdelivr, module, repository, scripts, devDependencies, dependencies */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "name", function() { return name; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "version", function() { return version; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "publishConfig", function() { return publishConfig; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "description", function() { return description; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "keywords", function() { return keywords; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "homepage", function() { return homepage; });
@@ -27217,8 +27216,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "devDependencies", function() { return devDependencies; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "dependencies", function() { return dependencies; });
 var name = "d3";
-var version = "5.0.0-rc.4";
-var publishConfig = {"tag":"next"};
+var version = "5.0.0";
 var description = "Data-Driven Documents";
 var keywords = ["dom","visualization","svg","animation","canvas"];
 var homepage = "https://d3js.org";
@@ -27230,7 +27228,7 @@ var jsdelivr = "dist/d3.min.js";
 var module = "index";
 var repository = {"type":"git","url":"https://github.com/d3/d3.git"};
 var scripts = {"pretest":"rimraf dist && mkdir dist && json2module package.json > dist/package.js && node rollup.node","test":"tape 'test/**/*-test.js'","prepublishOnly":"npm run test && rollup -c --banner \"$(preamble)\" && uglifyjs -b beautify=false,preamble=\"'$(preamble)'\" dist/d3.js -c negate_iife=false -m -o dist/d3.min.js","postpublish":"git push && git push --tags && cd ../d3.github.com && git pull && cp ../d3/dist/d3.js d3.v5.js && cp ../d3/dist/d3.min.js d3.v5.min.js && git add d3.v5.js d3.v5.min.js && git commit -m \"d3 ${npm_package_version}\" && git push && cd - && cd ../d3-bower && git pull && cp ../d3/LICENSE ../d3/README.md ../d3/dist/d3.js ../d3/dist/d3.min.js . && git add -- LICENSE README.md d3.js d3.min.js && git commit -m \"${npm_package_version}\" && git tag -am \"${npm_package_version}\" v${npm_package_version} && git push && git push --tags && cd - && zip -j dist/d3.zip -- LICENSE README.md API.md CHANGES.md dist/d3.js dist/d3.min.js"};
-var devDependencies = {"json2module":"0.0","package-preamble":"0.1","rimraf":"2","rollup":"0.55","rollup-plugin-ascii":"0.0","rollup-plugin-node-resolve":"3","tape":"4","uglify-js":"3.2"};
+var devDependencies = {"json2module":"0.0","package-preamble":"0.1","rimraf":"2","rollup":"0.57","rollup-plugin-ascii":"0.0","rollup-plugin-node-resolve":"3","tape":"4","uglify-js":"3.2"};
 var dependencies = {"d3-array":"1","d3-axis":"1","d3-brush":"1","d3-chord":"1","d3-collection":"1","d3-color":"1","d3-contour":"1","d3-dispatch":"1","d3-drag":"1","d3-dsv":"1","d3-ease":"1","d3-fetch":"1","d3-force":"1","d3-format":"1","d3-geo":"1","d3-hierarchy":"1","d3-interpolate":"1","d3-path":"1","d3-polygon":"1","d3-quadtree":"1","d3-random":"1","d3-scale":"2","d3-scale-chromatic":"1","d3-selection":"1","d3-shape":"1","d3-time":"1","d3-time-format":"2","d3-timer":"1","d3-transition":"1","d3-voronoi":"1","d3-zoom":"1"};
 
 
@@ -47737,7 +47735,6 @@ var PieChart = function (_super) {
         if (width === '100%') {
             width = this.state.parentWidth || 300;
         }
-        console.log('rest', rest);
         return __assign({}, rest, { width: width });
     };
     PieChart.prototype.componentWillReceiveProps = function (props) {
@@ -48009,7 +48006,6 @@ exports.pieChartD3 = function () {
             }).attr('d', arc).each(function (d) {
                 this._current = d;
             }).on('mouseover', function (d, ix) {
-                debugger;
                 tipContent.html(function () {
                     return tipContentFn(bins, ix, d.data.count);
                 });

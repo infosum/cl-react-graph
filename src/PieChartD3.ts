@@ -266,10 +266,7 @@ export const pieChartD3 = ((): IChartAdaptor => {
         .attr('d', arc)
         .each(function (d) { this._current = d; }) // store the initial angles
         .on('mouseover', (d: any, ix: number) => {
-          debugger;
-          // tipContent.html(bins[ix]);
           tipContent.html(() => tipContentFn(bins, ix, d.data.count));
-
           tip.fx.in(tipContainer);
         })
 

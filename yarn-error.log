@@ -1,5 +1,5 @@
 Arguments: 
-  /home/rob/.nvm/versions/node/v9.5.0/bin/node /usr/bin/yarn build-examples
+  /home/rob/.nvm/versions/node/v9.5.0/bin/node /usr/bin/yarn upgrade
 
 PATH: 
   /home/rob/.nvm/versions/node/v9.5.0/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl
@@ -52,11 +52,11 @@ npm manifest:
       "chai": "^4.1.2",
       "eslint": "^4.19.1",
       "istanbul": "^0.4.5",
-      "mocha": "^5.0.4",
+      "mocha": "^5.0.5",
       "tslint": "^5.9.1",
       "typescript": "^2.7.2",
       "webpack": "^4.2.0",
-      "webpack-cli": "^2.0.12"
+      "webpack-cli": "^2.0.13"
     },
     "babel": {
       "presets": [
@@ -67,7 +67,7 @@ npm manifest:
     },
     "dependencies": {
       "@types/deepmerge": "^2.1.0",
-      "d3": "^5.0.0-rc.4",
+      "d3": "^5.0.0",
       "d3-selection-multi": "^1.0.1",
       "deepmerge": "^2.1.0",
       "lodash.get": "^4.4.2",
@@ -6159,16 +6159,14 @@ Lockfile:
       yeoman-environment "^2.0.5"
 
 Trace: 
-  Error: Command failed.
-  Exit code: 2
-  Command: sh
-  Arguments: -c webpack --config ./webpack.config.examples.js
-  Directory: /home/rob/cl-react-graph
-  Output:
-  
-      at ProcessTermError.MessageError (/usr/lib/node_modules/yarn/lib/cli.js:186:110)
-      at new ProcessTermError (/usr/lib/node_modules/yarn/lib/cli.js:226:113)
-      at ChildProcess.<anonymous> (/usr/lib/node_modules/yarn/lib/cli.js:30281:17)
-      at ChildProcess.emit (events.js:160:13)
-      at maybeClose (internal/child_process.js:943:16)
-      at Process.ChildProcess._handle.onexit (internal/child_process.js:220:5)
+  Error: Outdated lockfile. Please run `yarn install` and try again.
+      at new MessageError (/usr/lib/node_modules/yarn/lib/cli.js:186:110)
+      at /usr/lib/node_modules/yarn/lib/cli.js:36620:19
+      at Generator.next (<anonymous>)
+      at step (/usr/lib/node_modules/yarn/lib/cli.js:98:30)
+      at /usr/lib/node_modules/yarn/lib/cli.js:116:14
+      at new Promise (<anonymous>)
+      at new F (/usr/lib/node_modules/yarn/lib/cli.js:23451:28)
+      at /usr/lib/node_modules/yarn/lib/cli.js:95:12
+      at /usr/lib/node_modules/yarn/lib/cli.js:36660:25
+      at Array.map (<anonymous>)
