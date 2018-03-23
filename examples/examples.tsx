@@ -58,6 +58,7 @@ const data3 = {
       data: [100, 50, 40],
       label: 'Data 1',
     },
+
   ],
 };
 

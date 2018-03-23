@@ -47815,7 +47815,6 @@ exports.pieChartD3 = function () {
     var arc;
     var path;
     var pie;
-    var groups;
     var defaultProps = {
         className: 'piechart-d3',
         colorScheme: colors_1.default,
@@ -47939,8 +47938,9 @@ exports.pieChartD3 = function () {
             });
             var selectedBins = this.selectedBins;
             legend.append('rect').attr('width', rectSize).attr('height', rectSize).style('fill', colors).attr('class', '').style('stroke-width', 2).on('click', function (label) {
-                this.visible[label] = !this.visible[label];
-                var enabled = this.visible[label];
+                var rect = d3.select(this);
+                var enabled = rect.attr('class') === 'disabled';
+                rect.attr('class', enabled ? '' : 'disabled');
                 pie.value(function (d) {
                     if (d.label === label) {
                         d.enabled = enabled;
@@ -47949,7 +47949,7 @@ exports.pieChartD3 = function () {
                 });
                 path = path.data(pie);
                 path.transition().duration(750).attrTween('d', arcTween(arc));
-            }.bind(this)).style('stroke', colors);
+            }).style('stroke', colors);
             legend.append('text').style('font-size', fontSize).attr('x', rectSize + spacing).attr('y', rectSize - spacing).text(function (d) {
                 return d;
             });
@@ -47977,6 +47977,7 @@ exports.pieChartD3 = function () {
             });
         },
         drawChart: function drawChart(data) {
+            console.log('drawChart', data);
             var outerRadius = 100;
             var innerRadius = 80;
             pie = d3.pie().sort(null).value(function (d) {
@@ -47999,7 +48000,6 @@ exports.pieChartD3 = function () {
 };
 function arcTween(arc) {
     return function (d) {
-        console.log('arcTween', d, arc, this);
         var i = d3.interpolate(this._current, d);
         this._current = i(0);
         return function (t) {

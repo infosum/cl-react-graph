@@ -134,8 +134,9 @@ export const pieChartD3 = ((): IChartAdaptor => {
         .attr('class', '')
         .style('stroke-width', 2)
         .on('click', function (label) {
-          this.visible[label] = !this.visible[label];
-          const enabled = this.visible[label];
+          const rect = d3.select(this);
+          const enabled = rect.attr('class') === 'disabled';
+          rect.attr('class', enabled ? '' : 'disabled');
 
           pie.value(function (d) {
             if (d.label === label) { d.enabled = enabled; }
@@ -144,7 +145,7 @@ export const pieChartD3 = ((): IChartAdaptor => {
 
           path = path.data(pie); // compute the new angles
           path.transition().duration(750).attrTween('d', arcTween(arc)); // redraw the arcs
-        }.bind(this))
+        })
 
         .style('stroke', colors);
 
@@ -174,6 +175,7 @@ export const pieChartD3 = ((): IChartAdaptor => {
     },
 
     drawChart(data) {
+      console.log('drawChart', data);
 
       const outerRadius = 100;
       const innerRadius = 80;
