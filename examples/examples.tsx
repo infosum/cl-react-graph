@@ -58,7 +58,11 @@ const data3 = {
       data: [100, 50, 40],
       label: 'Data 1',
     },
-
+    {
+      borderColors: ['red'],
+      data: [32, 1, 5],
+      label: 'Data 2',
+    },
   ],
 };
 

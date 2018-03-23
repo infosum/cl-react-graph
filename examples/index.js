@@ -141,6 +141,10 @@ var data3 = {
         borderColors: ['red'],
         data: [100, 50, 40],
         label: 'Data 1'
+    }, {
+        borderColors: ['red'],
+        data: [32, 1, 5],
+        label: 'Data 2'
     }]
 };
 var points = [{
@@ -47812,9 +47816,7 @@ var textWidth = __webpack_require__(/*! text-width */ "./node_modules/text-width
 var colors_1 = __webpack_require__(/*! ./colors */ "./src/colors/index.js");
 exports.pieChartD3 = function () {
     var svg;
-    var arc;
-    var path;
-    var pie;
+    var renderedCharts = [];
     var defaultProps = {
         className: 'piechart-d3',
         colorScheme: colors_1.default,
@@ -47941,14 +47943,16 @@ exports.pieChartD3 = function () {
                 var rect = d3.select(this);
                 var enabled = rect.attr('class') === 'disabled';
                 rect.attr('class', enabled ? '' : 'disabled');
-                pie.value(function (d) {
-                    if (d.label === label) {
-                        d.enabled = enabled;
-                    }
-                    return d.enabled ? d.count : 0;
+                renderedCharts.forEach(function (chart) {
+                    chart.pie.value(function (d) {
+                        if (d.label === label) {
+                            d.enabled = enabled;
+                        }
+                        return d.enabled ? d.count : 0;
+                    });
+                    chart.path = chart.path.data(chart.pie);
+                    chart.path.transition().duration(750).attrTween('d', arcTween(chart.arc));
                 });
-                path = path.data(pie);
-                path.transition().duration(750).attrTween('d', arcTween(arc));
             }).style('stroke', colors);
             legend.append('text').style('font-size', fontSize).attr('x', rectSize + spacing).attr('y', rectSize - spacing).text(function (d) {
                 return d;
@@ -47972,25 +47976,28 @@ exports.pieChartD3 = function () {
                     };
                 });
             });
-            this.dataSets.forEach(function (dataSet) {
-                return _this.drawChart(dataSet);
+            this.dataSets.forEach(function (dataSet, i) {
+                return _this.drawChart(dataSet, i);
             });
         },
-        drawChart: function drawChart(data) {
-            console.log('drawChart', data);
-            var outerRadius = 100;
-            var innerRadius = 80;
-            pie = d3.pie().sort(null).value(function (d) {
+        drawChart: function drawChart(data, i) {
+            var _a = this.props,
+                width = _a.width,
+                height = _a.height;
+            var outerRadius = this.outerRadius(i);
+            var innerRadius = this.innerRadius(i);
+            var pie = d3.pie().sort(null).value(function (d) {
                 return d.count;
             });
             var arcs = pie(data);
             var color = d3.scaleOrdinal(this.props.colorScheme);
-            arc = d3.arc().outerRadius(this.outerRadius()).innerRadius(this.innerRadius());
-            path = svg.datum(data).selectAll('path').data(pie).enter().append('g').attr('class', 'arc').attr('transform', 'translate(' + outerRadius + ', ' + outerRadius + ')').append('path').attr('fill', function (d, i) {
+            var arc = d3.arc().outerRadius(outerRadius).innerRadius(innerRadius);
+            var path = svg.append('g').attr('class', 'pie-container').datum(data).selectAll('path').data(pie).enter().append('g').attr('class', 'arc').attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')').append('path').attr('fill', function (d, i) {
                 return color(i);
             }).attr('d', arc).each(function (d) {
                 this._current = d;
             });
+            renderedCharts.push({ path: path, pie: pie, arc: arc });
         },
         destroy: function destroy(el) {
             svg.selectAll('svg > *').remove();

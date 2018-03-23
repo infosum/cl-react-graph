@@ -7,9 +7,7 @@ import colorScheme from './colors';
 export const pieChartD3 = ((): IChartAdaptor => {
 
   let svg;
-  let arc;
-  let path;
-  let pie;
+  const renderedCharts = [];
 
   const defaultProps = {
     className: 'piechart-d3',
@@ -138,13 +136,15 @@ export const pieChartD3 = ((): IChartAdaptor => {
           const enabled = rect.attr('class') === 'disabled';
           rect.attr('class', enabled ? '' : 'disabled');
 
-          pie.value(function (d) {
-            if (d.label === label) { d.enabled = enabled; }
-            return (d.enabled) ? d.count : 0;
+          renderedCharts.forEach((chart) => {
+            chart.pie.value(function (d) {
+              if (d.label === label) { d.enabled = enabled; }
+              return (d.enabled) ? d.count : 0;
+            });
+            chart.path = chart.path.data(chart.pie); // compute the new angles
+            chart.path.transition().duration(750).attrTween('d', arcTween(chart.arc)); // redraw the arcs
           });
 
-          path = path.data(pie); // compute the new angles
-          path.transition().duration(750).attrTween('d', arcTween(arc)); // redraw the arcs
         })
 
         .style('stroke', colors);
@@ -171,17 +171,17 @@ export const pieChartD3 = ((): IChartAdaptor => {
           nextCount: Math.random() * 100,
         }));
       });
-      this.dataSets.forEach((dataSet) => this.drawChart(dataSet));
+      this.dataSets.forEach((dataSet, i) => this.drawChart(dataSet, i));
     },
 
-    drawChart(data) {
-      console.log('drawChart', data);
-
-      const outerRadius = 100;
-      const innerRadius = 80;
+    drawChart(data, i) {
+      const { width, height } = this.props;
+      // Stack multiple charts in concentric circles
+      const outerRadius = this.outerRadius(i);
+      const innerRadius = this.innerRadius(i);
 
       // Function to calculate pie chart paths from data
-      pie = d3
+      const pie = d3
         .pie()
         .sort(null)
         .value((d: any) => {
@@ -192,21 +192,25 @@ export const pieChartD3 = ((): IChartAdaptor => {
       const arcs = pie(data);
 
       const color = d3.scaleOrdinal(this.props.colorScheme);
-      arc = d3.arc()
-        .outerRadius(this.outerRadius())
-        .innerRadius(this.innerRadius());
+      const arc = d3.arc()
+        .outerRadius(outerRadius)
+        .innerRadius(innerRadius);
 
-      path = svg.datum(data).selectAll('path')
+      const path = svg
+        .append('g')
+        .attr('class', 'pie-container')
+        .datum(data).selectAll('path')
         .data(pie)
         .enter()
         .append('g')
         .attr('class', 'arc')
-        .attr('transform', 'translate(' + outerRadius + ', ' + outerRadius + ')')
+        .attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')')
         .append('path')
         .attr('fill', function (d, i) { return color(i); })
         .attr('d', arc)
         .each(function (d) { this._current = d; }); // store the initial angles
 
+      renderedCharts.push({ path, pie, arc });
     },
 
     /**
