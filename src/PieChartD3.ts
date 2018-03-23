@@ -35,7 +35,7 @@ export const pieChartD3 = ((): IChartAdaptor => {
 
   // Returns a tween for a transition’s "d" attribute, transitioning any selected
   // arcs from their current angle to the specified new angle.
-  function arcTween(arc, newAngle) {
+  function arcTween(arc) {
 
     // The function passed to attrTween is invoked for each selected element when
     // the transition starts, and for each element returns the interpolator to use
@@ -51,8 +51,9 @@ export const pieChartD3 = ((): IChartAdaptor => {
       // single argument t and returns a number between the starting angle and the
       // ending angle. When t = 0, it returns d.endAngle; when t = 1, it returns
       // newAngle; and for 0 < t < 1 it returns an angle in-between.
-      const interpolate = d3.interpolate(d.value, newAngle);
-
+      console.log('interpolate between', this._current, d.value);
+      const interpolate = d3.interpolate(this._current, d.value);
+      this._current = d.value;
       // The return value of the attrTween is also a function: the function that
       // we want to run for each tick of the transition. Because we used
       // attrTween("d"), the return value of this last function will be set to the
@@ -72,7 +73,7 @@ export const pieChartD3 = ((): IChartAdaptor => {
         // with its appearance. Whenever we start a new arc transition, the
         // correct starting angle can be inferred from the data.
         d.value = interpolate(t);
-        console.log(d, d.value);
+        //console.log(d.value, tmp);
         // Lastly, compute the arc path given the updated data! In effect, this
         // transition uses data-space interpolation: the data is interpolated
         // (that is, the end angle) rather than the path string itself.
@@ -220,11 +221,13 @@ export const pieChartD3 = ((): IChartAdaptor => {
           rings.forEach((ring) => {
             let { arc, path } = ring;
 
+            // Redifine the path data base on if a value is disabled
             path = path.data(pie(ring.set));
+
             console.log('path', path);
             path.transition()
               .duration(750)
-              .attrTween('d', arcTween(arc, Math.random() * tau));
+              .attrTween('d', arcTween(arc));
             // .attrTween('d', function (d) {
             //   console.log('interpolate =', this._current, d.value);
             //   const interpolate = d3.interpolate(this._current, d.value);
@@ -312,37 +315,37 @@ export const pieChartD3 = ((): IChartAdaptor => {
           // if (borderColors) {
           //   return borderColors(i);
           // }
-        })
-        .each(function (d) {
-          console.log('set current', d, d.value);
-          this._current = d.value;
         });
+      // .each(function (d) {
+      //   console.log('set current', d, d.value);
+      //   this._current = d.value;
+      // });
 
       const path = group.append('path')
         .attr('d', arc)
         .attr('fill', (d) => {
           return colors(d.data.count);
+        })
+        .each(function (d) {
+          console.log('set current', d, d.value);
+          this._current = d.value;
         });
-      // .each(function (d) {
-      //   console.log('set current', d, d.data.count);
-      //   this._current = d.data.count;
-      // })
       // .each(function (d) {
       //   console.log('current', this._current);
       // });
 
-      if (labels.display) {
-        const label = d3.arc()
-          .outerRadius(outerRadius)
-          .innerRadius(innerRadius);
+      // if (labels.display) {
+      //   const label = d3.arc()
+      //     .outerRadius(outerRadius)
+      //     .innerRadius(innerRadius);
 
-        path.append('text')
-          .attr('transform', (d) => 'translate(' + label.centroid(d) + ')')
-          .attr('dy', '0.35em')
-          .text((d, i) => {
-            return set[i].count;
-          });
-      }
+      //   path.append('text')
+      //     .attr('transform', (d) => 'translate(' + label.centroid(d) + ')')
+      //     .attr('dy', '0.35em')
+      //     .text((d, i) => {
+      //       return set[i].count;
+      //     });
+      // }
 
       rings.push({ arc, set, path });
       console.log('rings', rings);
