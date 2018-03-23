@@ -145,19 +145,20 @@ const legend = {
 };
 
 const labels = {
-  display: true,
+  display: false,
 };
 
 const App: React.SFC<{}> = (): JSX.Element => <div style={{ padding: '20px' }}>
   <h3>Pie Chart</h3>
-  {/* <PieChart
-    width={300}
-    height={300}
-    data={data} /> */}
+  <PieChart
+    width={200}
+    height={200}
+    data={data} />
 
   <h4>Donut</h4>
-  <PieChart width={200}
-    height={200}
+  <PieChart width={300}
+    backgroundColor="#eee"
+    height={300}
     donutWidth={10}
     data={data3}
     legend={legend}

@@ -5,6 +5,7 @@ import merge from 'deepmerge';
 import { get } from 'lodash';
 import colorScheme from './colors';
 import attrs from './d3/attrs';
+import tip from './tip';
 
 export const histogramD3 = ((): IChartAdaptor => {
   let svg;
@@ -107,26 +108,7 @@ export const histogramD3 = ((): IChartAdaptor => {
       linecap: 'butt',
       width: 0,
     },
-    tip: {
-      fx: {
-        in: (container) => {
-          container.style('left', (d3.event.pageX) + 'px')
-            .style('top', (d3.event.pageY - 55) + 'px');
-          container.transition()
-            .duration(200)
-            .style('opacity', 0.9);
-        },
-        move: (container) => {
-          container.style('left', (d3.event.pageX) + 'px')
-            .style('top', (d3.event.pageY - 55) + 'px');
-        },
-        out: (container) => {
-          container.transition()
-            .duration(500)
-            .style('opacity', 0);
-        },
-      },
-    },
+    tip,
     tipContainer: 'body',
     tipContentFn: (bins: string[], i: number, d: number): string =>
       bins[i] + '<br />' + d,

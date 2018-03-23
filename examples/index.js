@@ -209,10 +209,10 @@ var legend = {
     spacing: 4
 };
 var labels = {
-    display: true
+    display: false
 };
 var App = function App() {
-    return React.createElement("div", { style: { padding: '20px' } }, React.createElement("h3", null, "Pie Chart"), React.createElement("h4", null, "Donut"), React.createElement(src_1.PieChart, { width: 200, height: 200, donutWidth: 10, data: data3, legend: legend, labels: labels }), React.createElement("div", null, React.createElement(src_1.HorizontalHistogram, { data: data2, width: 500, height: 400, margin: {
+    return React.createElement("div", { style: { padding: '20px' } }, React.createElement("h3", null, "Pie Chart"), React.createElement(src_1.PieChart, { width: 200, height: 200, data: data }), React.createElement("h4", null, "Donut"), React.createElement(src_1.PieChart, { width: 300, backgroundColor: "#eee", height: 300, donutWidth: 10, data: data3, legend: legend, labels: labels }), React.createElement("div", null, React.createElement(src_1.HorizontalHistogram, { data: data2, width: 500, height: 400, margin: {
             left: 30,
             top: 30
         } }), React.createElement(src_1.Histogram, { data: data2, width: 400, height: 400, margin: {
@@ -46632,6 +46632,7 @@ var deepmerge_1 = __webpack_require__(/*! deepmerge */ "./node_modules/deepmerge
 var lodash_1 = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
 var colors_1 = __webpack_require__(/*! ./colors */ "./src/colors/index.js");
 var attrs_1 = __webpack_require__(/*! ./d3/attrs */ "./src/d3/attrs.ts");
+var tip_1 = __webpack_require__(/*! ./tip */ "./src/tip.ts");
 exports.histogramD3 = function () {
     var svg;
     var tipContainer;
@@ -46732,20 +46733,7 @@ exports.histogramD3 = function () {
             linecap: 'butt',
             width: 0
         },
-        tip: {
-            fx: {
-                in: function _in(container) {
-                    container.style('left', d3.event.pageX + 'px').style('top', d3.event.pageY - 55 + 'px');
-                    container.transition().duration(200).style('opacity', 0.9);
-                },
-                move: function move(container) {
-                    container.style('left', d3.event.pageX + 'px').style('top', d3.event.pageY - 55 + 'px');
-                },
-                out: function out(container) {
-                    container.transition().duration(500).style('opacity', 0);
-                }
-            }
-        },
+        tip: tip_1.default,
         tipContainer: 'body',
         tipContentFn: function tipContentFn(bins, i, d) {
             return bins[i] + '<br />' + d;
@@ -47215,6 +47203,7 @@ var d3 = __webpack_require__(/*! d3 */ "./node_modules/d3/index.js");
 var deepmerge_1 = __webpack_require__(/*! deepmerge */ "./node_modules/deepmerge/dist/es.js");
 var colors_1 = __webpack_require__(/*! ./colors */ "./src/colors/index.js");
 var attrs_1 = __webpack_require__(/*! ./d3/attrs */ "./src/d3/attrs.ts");
+var tip_1 = __webpack_require__(/*! ./tip */ "./src/tip.ts");
 exports.horizontalHistogramD3 = function () {
     var svg;
     var tipContainer;
@@ -47309,20 +47298,7 @@ exports.horizontalHistogramD3 = function () {
             linecap: 'butt',
             width: 0
         },
-        tip: {
-            fx: {
-                in: function _in(container) {
-                    container.style('left', d3.event.pageX + 'px').style('top', d3.event.pageY - 55 + 'px');
-                    container.transition().duration(200).style('opacity', 0.9);
-                },
-                move: function move(container) {
-                    container.style('left', d3.event.pageX + 'px').style('top', d3.event.pageY - 55 + 'px');
-                },
-                out: function out(container) {
-                    container.transition().duration(500).style('opacity', 0);
-                }
-            }
-        },
+        tip: tip_1.default,
         tipContainer: 'body',
         tipContentFn: function tipContentFn(bins, i, d) {
             return bins[i] + '<br />' + d;
@@ -47783,6 +47759,7 @@ var PieChart = function (_super) {
             }, className: "piechart-chart-container" });
     };
     PieChart.defaultProps = {
+        backgroundColor: '#ddd',
         donutWidth: 0,
         height: 200,
         legend: {
@@ -47814,10 +47791,14 @@ var d3 = __webpack_require__(/*! d3 */ "./node_modules/d3/index.js");
 var deepmerge_1 = __webpack_require__(/*! deepmerge */ "./node_modules/deepmerge/dist/es.js");
 var textWidth = __webpack_require__(/*! text-width */ "./node_modules/text-width/index.js");
 var colors_1 = __webpack_require__(/*! ./colors */ "./src/colors/index.js");
+var tip_1 = __webpack_require__(/*! ./tip */ "./src/tip.ts");
 exports.pieChartD3 = function () {
     var svg;
+    var tipContainer;
+    var tipContent;
     var renderedCharts = [];
     var defaultProps = {
+        backgroundColor: '#ddd',
         className: 'piechart-d3',
         colorScheme: colors_1.default,
         data: [],
@@ -47832,6 +47813,11 @@ exports.pieChartD3 = function () {
         margin: {
             left: 10,
             top: 10
+        },
+        tip: tip_1.default,
+        tipContainer: 'body',
+        tipContentFn: function tipContentFn(bins, i, d) {
+            return bins[i] + '<br />' + d;
         },
         width: 200
     };
@@ -47859,6 +47845,15 @@ exports.pieChartD3 = function () {
                 height = _a.height,
                 className = _a.className;
             svg = d3.select(el).append('svg').attr('class', className).attr('width', width).attr('height', height).attr('viewBox', "0 0 " + width + " " + height).append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+            this._makeTip();
+        },
+        _makeTip: function _makeTip() {
+            if (tipContainer) {
+                tipContainer.remove();
+            }
+            tipContainer = d3.select(this.props.tipContainer).append('div').attr('class', 'tooltip top pietip').style('opacity', 0);
+            tipContainer.append('div').attr('class', 'tooltip-arrow');
+            tipContent = tipContainer.append('div').attr('class', 'tooltip-inner');
         },
         update: function update(el, props) {
             if (!props.data) {
@@ -47977,13 +47972,29 @@ exports.pieChartD3 = function () {
                 });
             });
             this.dataSets.forEach(function (dataSet, i) {
-                return _this.drawChart(dataSet, i);
+                _this.drawChartBg(data, i);
+                _this.drawChart(dataSet, i, data.bins);
             });
         },
-        drawChart: function drawChart(data, i) {
+        drawChartBg: function drawChartBg(data, i) {
             var _a = this.props,
+                backgroundColor = _a.backgroundColor,
                 width = _a.width,
                 height = _a.height;
+            var tau = 2 * Math.PI;
+            var outerRadius = this.outerRadius(i);
+            var innerRadius = this.innerRadius(i);
+            var bgArc = d3.arc().innerRadius(innerRadius).outerRadius(outerRadius).startAngle(0).endAngle(tau);
+            var container = svg.append('g').attr('class', 'pie-bg');
+            var background = container.append('path').attr('class', 'pie-background').style('fill', backgroundColor).attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')').attr('d', bgArc);
+        },
+        drawChart: function drawChart(data, i, bins) {
+            var _a = this.props,
+                labels = _a.labels,
+                width = _a.width,
+                height = _a.height,
+                tip = _a.tip,
+                tipContentFn = _a.tipContentFn;
             var outerRadius = this.outerRadius(i);
             var innerRadius = this.innerRadius(i);
             var pie = d3.pie().sort(null).value(function (d) {
@@ -47992,11 +48003,30 @@ exports.pieChartD3 = function () {
             var arcs = pie(data);
             var color = d3.scaleOrdinal(this.props.colorScheme);
             var arc = d3.arc().outerRadius(outerRadius).innerRadius(innerRadius);
-            var path = svg.append('g').attr('class', 'pie-container').datum(data).selectAll('path').data(pie).enter().append('g').attr('class', 'arc').attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')').append('path').attr('fill', function (d, i) {
+            var container = svg.append('g').attr('class', 'pie-container').datum(data).selectAll('path').data(pie).enter().append('g').attr('class', 'arc').attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')');
+            var path = container.append('path').attr('fill', function (d, i) {
                 return color(i);
             }).attr('d', arc).each(function (d) {
                 this._current = d;
+            }).on('mouseover', function (d, ix) {
+                debugger;
+                tipContent.html(function () {
+                    return tipContentFn(bins, ix, d.data.count);
+                });
+                tip.fx.in(tipContainer);
+            }).on('mousemove', function () {
+                return tip.fx.move(tipContainer);
+            }).on('mouseout', function () {
+                return tip.fx.out(tipContainer);
             });
+            if (labels.display) {
+                var label_1 = d3.arc().outerRadius(outerRadius).innerRadius(innerRadius);
+                container.append('text').attr('transform', function (d) {
+                    return 'translate(' + label_1.centroid(d) + ')';
+                }).attr('dy', '0.35em').text(function (d, i) {
+                    return data[i].count;
+                });
+            }
             renderedCharts.push({ path: path, pie: pie, arc: arc });
         },
         destroy: function destroy(el) {
@@ -48424,6 +48454,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var d3 = __webpack_require__(/*! d3 */ "./node_modules/d3/index.js");
 var deepmerge_1 = __webpack_require__(/*! deepmerge */ "./node_modules/deepmerge/dist/es.js");
 var attrs_1 = __webpack_require__(/*! ./d3/attrs */ "./src/d3/attrs.ts");
+var tip_1 = __webpack_require__(/*! ./tip */ "./src/tip.ts");
 exports.lineChartD3 = function () {
     var svg;
     var tipContainer;
@@ -48508,20 +48539,7 @@ exports.lineChartD3 = function () {
             top: 5
         },
         point: pointProps,
-        tip: {
-            fx: {
-                in: function _in(container) {
-                    container.style('left', d3.event.pageX + 'px').style('top', d3.event.pageY - 55 + 'px');
-                    container.transition().duration(200).style('opacity', 0.9);
-                },
-                move: function move(container) {
-                    container.style('left', d3.event.pageX + 'px').style('top', d3.event.pageY - 55 + 'px');
-                },
-                out: function out(container) {
-                    container.transition().duration(500).style('opacity', 0);
-                }
-            }
-        },
+        tip: tip_1.default,
         tipContainer: null,
         tipContentFn: function tipContentFn(info, i, d) {
             return info[i].x.toFixed(3) + ',' + info[i].y;
@@ -48760,6 +48778,35 @@ exports.lineChartD3 = function () {
         }
     };
     return LineChartD3;
+};
+
+/***/ }),
+
+/***/ "./src/tip.ts":
+/*!********************!*\
+  !*** ./src/tip.ts ***!
+  \********************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var d3 = __webpack_require__(/*! d3 */ "./node_modules/d3/index.js");
+exports.default = {
+    fx: {
+        in: function _in(container) {
+            container.style('left', d3.event.pageX + 'px').style('top', d3.event.pageY - 55 + 'px');
+            container.transition().duration(200).style('opacity', 0.9);
+        },
+        move: function move(container) {
+            container.style('left', d3.event.pageX + 'px').style('top', d3.event.pageY - 55 + 'px');
+        },
+        out: function out(container) {
+            container.transition().duration(100).style('opacity', 0);
+        }
+    }
 };
 
 /***/ }),

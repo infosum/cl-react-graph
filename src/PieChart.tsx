@@ -18,6 +18,7 @@ interface ILabels {
 
 interface IPieChartProps {
   data: any;
+  backgroundColor?: string;
   donutWidth?: number;
   labels?: ILabels;
   legend?: ILegend;
@@ -35,6 +36,7 @@ class PieChart extends Component<IPieChartProps, IChartState> {
   private ref;
 
   public static defaultProps = {
+    backgroundColor: '#ddd',
     donutWidth: 0,
     height: 200,
     legend: {
@@ -101,7 +103,6 @@ class PieChart extends Component<IPieChartProps, IChartState> {
     if (width === '100%') {
       width = this.state.parentWidth || 300;
     }
-    console.log('rest', rest);
     return {
       ...rest,
       width,

@@ -2,6 +2,7 @@
 import * as d3 from 'd3';
 import merge from 'deepmerge';
 import attrs from './d3/attrs';
+import tips from './tip';
 
 export const lineChartD3 = ((): IChartAdaptor => {
   let svg;
@@ -91,26 +92,7 @@ export const lineChartD3 = ((): IChartAdaptor => {
       top: 5,
     },
     point: pointProps,
-    tip: {
-      fx: {
-        in: (container) => {
-          container.style('left', (d3.event.pageX) + 'px')
-            .style('top', (d3.event.pageY - 55) + 'px');
-          container.transition()
-            .duration(200)
-            .style('opacity', 0.9);
-        },
-        move: (container) => {
-          container.style('left', (d3.event.pageX) + 'px')
-            .style('top', (d3.event.pageY - 55) + 'px');
-        },
-        out: (container) => {
-          container.transition()
-            .duration(500)
-            .style('opacity', 0);
-        },
-      },
-    },
+    tip: tips,
     tipContainer: null,
     tipContentFn: (info, i, d) => info[i].x.toFixed(3) + ',' + info[i].y,
     width: 200,
