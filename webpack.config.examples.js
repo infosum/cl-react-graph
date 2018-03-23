@@ -4,13 +4,14 @@ var webpack = require('webpack'),
   entry = [
     './examples/examples.tsx'
   ],
+
   plugins = [
     new webpack.NoEmitOnErrorsPlugin()
   ],
-  loaders = [
+  rules = [
     {
       test: /\.ts(x?)$/,
-      exclude: /(node_modules)/, 
+      exclude: /(node_modules)/,
       use: [
         {
           loader: 'babel-loader'
@@ -34,6 +35,7 @@ var webpack = require('webpack'),
 module.exports = {
   devtool: 'cheap-module-source-map',
   entry: entry,
+  mode: 'development',
   output: {
     path: path.join(__dirname, 'examples'),
     publicPath: '/',
@@ -43,7 +45,7 @@ module.exports = {
     umdNamedDefine: true
   },
   module: {
-    loaders: loaders
+    rules: rules
   },
   plugins: plugins,
   watchOptions: {

@@ -7,10 +7,10 @@ var webpack = require('webpack'),
   plugins = [
     new webpack.NoEmitOnErrorsPlugin()
   ],
-  loaders = [
+  rules = [
     {
       test: /\.ts(x?)$/,
-      exclude: /(node_modules)/, 
+      exclude: /(node_modules)/,
       use: [
         {
           loader: 'babel-loader'
@@ -43,7 +43,7 @@ module.exports = {
     umdNamedDefine: true
   },
   module: {
-    loaders: loaders
+    rules: rules
   },
   plugins: plugins,
   watchOptions: {
