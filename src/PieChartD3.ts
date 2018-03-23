@@ -71,13 +71,14 @@ export const pieChartD3 = ((): IChartAdaptor => {
         // interrupted, the data bound to the element would still be consistent
         // with its appearance. Whenever we start a new arc transition, the
         // correct starting angle can be inferred from the data.
-        d.value = d.data.count = interpolate(t);
+        d.value = interpolate(t);
         console.log(d, d.value);
         // Lastly, compute the arc path given the updated data! In effect, this
         // transition uses data-space interpolation: the data is interpolated
         // (that is, the end angle) rather than the path string itself.
         // Interpolating the angles in polar coordinates, rather than the raw path
         // string, produces valid intermediate arcs during the transition.
+        console.log(arc(d));
         return arc(d);
       };
     };
@@ -302,7 +303,7 @@ export const pieChartD3 = ((): IChartAdaptor => {
           return d.count;
         });
       console.log('set', set);
-      const path = g.selectAll('.arc')
+      const group = g.selectAll('.arc')
         .data(pie(set))
         .enter().append('g')
         .attr('class', 'arc')
@@ -317,7 +318,7 @@ export const pieChartD3 = ((): IChartAdaptor => {
           this._current = d.value;
         });
 
-      path.append('path')
+      const path = group.append('path')
         .attr('d', arc)
         .attr('fill', (d) => {
           return colors(d.data.count);
@@ -349,4 +350,4 @@ export const pieChartD3 = ((): IChartAdaptor => {
   };
 
   return PieChartD3;
-})
+});

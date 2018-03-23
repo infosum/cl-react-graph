@@ -47840,8 +47840,9 @@ exports.pieChartD3 = function () {
             console.log('d', d);
             var interpolate = d3.interpolate(d.value, newAngle);
             return function (t) {
-                d.value = d.data.count = interpolate(t);
+                d.value = interpolate(t);
                 console.log(d, d.value);
+                console.log(arc(d));
                 return arc(d);
             };
         };
@@ -48029,11 +48030,11 @@ exports.pieChartD3 = function () {
                 return d.count;
             });
             console.log('set', set);
-            var path = g.selectAll('.arc').data(pie(set)).enter().append('g').attr('class', 'arc').attr('stroke-width', 1).attr('stroke', function (d, i) {}).each(function (d) {
+            var group = g.selectAll('.arc').data(pie(set)).enter().append('g').attr('class', 'arc').attr('stroke-width', 1).attr('stroke', function (d, i) {}).each(function (d) {
                 console.log('set current', d, d.value);
                 this._current = d.value;
             });
-            path.append('path').attr('d', arc).attr('fill', function (d) {
+            var path = group.append('path').attr('d', arc).attr('fill', function (d) {
                 return colors(d.data.count);
             });
             if (labels.display) {
