@@ -14,16 +14,22 @@ interface ILegend {
 
 interface ILabels {
   display: boolean;
+  displayFn?: (d: any, ix: number) => string | number;
 }
 
-interface IPieChartProps {
+export interface IPieChartProps {
   data: any;
   backgroundColor?: string;
+  className?: string;
+  colorScheme?: string[];
   donutWidth?: number;
+  height: number;
   labels?: ILabels;
   legend?: ILegend;
-  height: number;
   margin?: IMargin;
+  tip?: any;
+  tipContainer?: string;
+  tipContentFn?: TipContentFn;
   width: number | string;
 }
 
@@ -52,7 +58,7 @@ class PieChart extends Component<IPieChartProps, IChartState> {
    * Constructor
    * @param {Object} props
    */
-  constructor(props: IHistogramProps) {
+  constructor(props: IPieChartProps) {
     super(props);
     this.chart = pieChartD3();
 

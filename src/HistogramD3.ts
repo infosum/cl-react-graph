@@ -5,7 +5,7 @@ import merge from 'deepmerge';
 import { get } from 'lodash';
 import colorScheme from './colors';
 import attrs from './d3/attrs';
-import tip from './tip';
+import tips from './tip';
 
 export const histogramD3 = ((): IChartAdaptor => {
   let svg;
@@ -108,7 +108,7 @@ export const histogramD3 = ((): IChartAdaptor => {
       linecap: 'butt',
       width: 0,
     },
-    tip,
+    tip: tips,
     tipContainer: 'body',
     tipContentFn: (bins: string[], i: number, d: number): string =>
       bins[i] + '<br />' + d,

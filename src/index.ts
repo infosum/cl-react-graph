@@ -1,3 +1,4 @@
+import filterRange from './colors/filterRange';
 import Histogram from './Histogram';
 import HorizontalHistogram from './HorizontalHistogram';
 import LineChart from './LineChart';
@@ -10,4 +11,5 @@ export {
   LineChart,
   PieChart,
   ScatterPlot,
+  filterRange,
 };

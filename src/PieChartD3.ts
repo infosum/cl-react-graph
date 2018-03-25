@@ -3,6 +3,7 @@ import * as d3 from 'd3';
 import merge from 'deepmerge';
 import * as textWidth from 'text-width';
 import colorScheme from './colors';
+import { IPieChartProps } from './PieChart';
 import tips from './tip';
 
 export const pieChartD3 = ((): IChartAdaptor => {
@@ -12,7 +13,7 @@ export const pieChartD3 = ((): IChartAdaptor => {
   let tipContent;
   const renderedCharts = [];
 
-  const defaultProps = {
+  const defaultProps: IPieChartProps = {
     backgroundColor: '#ddd',
     className: 'piechart-d3',
     colorScheme,
@@ -21,6 +22,7 @@ export const pieChartD3 = ((): IChartAdaptor => {
     height: 200,
     labels: {
       display: true,
+      displayFn: (d, ix) => d.value,
     },
     legend: {
       display: false,
@@ -40,8 +42,8 @@ export const pieChartD3 = ((): IChartAdaptor => {
 
   const PieChartD3 = {
 
-    create(el: HTMLElement, props = {}) {
-      this.props = merge(defaultProps, props);
+    create(el: HTMLElement, props: Partial<IPieChartProps> = {}) {
+      this.props = merge(defaultProps, { ...props });
       this.selectedBins = Array(this.props.data.bins.length).fill(true);
       this.update(el, props);
     },
@@ -89,11 +91,14 @@ export const pieChartD3 = ((): IChartAdaptor => {
         .attr('class', 'tooltip-inner');
     },
 
-    update(el: HTMLElement, props: IHistogramChartState) {
+    update(el: HTMLElement, props: Partial<IPieChartProps>) {
       if (!props.data) {
         return;
       }
       this.props = merge(defaultProps, props);
+      if (props.colorScheme) {
+        this.props.colorScheme = props.colorScheme;
+      }
       this._makeSvg(el);
       if (!this.props.data.bins) {
         return;
@@ -140,7 +145,6 @@ export const pieChartD3 = ((): IChartAdaptor => {
       const { data, width } = this.props;
       const { rectSize = 10, spacing = 4, fontSize = '12px' } = this.props.legend;
       const colors = d3.scaleOrdinal(this.props.colorScheme);
-
       const x = this.outerRadius(0);
       const legend = svg.selectAll('.legend')
         .data(this.props.data.bins)
@@ -162,10 +166,20 @@ export const pieChartD3 = ((): IChartAdaptor => {
         .style('fill', colors)
         .attr('class', '')
         .style('stroke-width', 2)
-        .on('click', function (label) {
+        .style('cursor', 'pointer')
+        .on('click', function (label, i) {
           const rect = d3.select(this);
           const enabled = rect.attr('class') === 'disabled';
           rect.attr('class', enabled ? '' : 'disabled');
+
+          if (enabled) {
+            rect.style('opacity', 1);
+            rect.style('fill', function (d: any): string {
+              return colors(d).toString();
+            });
+          } else {
+            rect.style('fill', '#FFF');
+          }
 
           renderedCharts.forEach((chart) => {
             chart.pie.value(function (d) {
@@ -245,7 +259,7 @@ export const pieChartD3 = ((): IChartAdaptor => {
       // Formated pie chart arcs based on current data
       const arcs = pie(data);
 
-      const color = d3.scaleOrdinal(this.props.colorScheme);
+      const colors = d3.scaleOrdinal(this.props.colorScheme);
 
       const arc = d3.arc()
         .outerRadius(outerRadius)
@@ -262,7 +276,7 @@ export const pieChartD3 = ((): IChartAdaptor => {
         .attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')');
 
       const path = container.append('path')
-        .attr('fill', function (d, i) { return color(i); })
+        .attr('fill', function (d, j) { return colors(j); })
         .attr('d', arc)
         .each(function (d) { this._current = d; }) // store the initial angles
         .on('mouseover', (d: any, ix: number) => {
@@ -281,9 +295,7 @@ export const pieChartD3 = ((): IChartAdaptor => {
         container.append('text')
           .attr('transform', (d) => 'translate(' + label.centroid(d) + ')')
           .attr('dy', '0.35em')
-          .text((d, i) => {
-            return data[i].count;
-          });
+          .text((d, ix) => labels.displayFn(d, ix));
       }
 
       renderedCharts.push({ path, pie, arc });

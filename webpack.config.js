@@ -5,7 +5,7 @@ var webpack = require('webpack'),
     './src/index.ts'
   ],
   plugins = [
-    new webpack.NoEmitOnErrorsPlugin()
+    new webpack.NoEmitOnErrorsPlugin(),
   ],
   rules = [
     {
@@ -34,6 +34,7 @@ var webpack = require('webpack'),
 module.exports = {
   devtool: 'cheap-module-source-map',
   entry: entry,
+  mode: 'production',
   output: {
     path: path.join(__dirname, 'dist'),
     publicPath: '/',
