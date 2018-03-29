@@ -81,6 +81,141 @@ return /******/ (function(modules) { // webpackBootstrap
 /************************************************************************/
 /******/ ({
 
+/***/ "./examples/Pie.tsx":
+/*!**************************!*\
+  !*** ./examples/Pie.tsx ***!
+  \**************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var __extends = undefined && undefined.__extends || function () {
+    var extendStatics = Object.setPrototypeOf || { __proto__: [] } instanceof Array && function (d, b) {
+        d.__proto__ = b;
+    } || function (d, b) {
+        for (var p in b) {
+            if (b.hasOwnProperty(p)) d[p] = b[p];
+        }
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() {
+            this.constructor = d;
+        }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+}();
+var __assign = undefined && undefined.__assign || Object.assign || function (t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+        s = arguments[i];
+        for (var p in s) {
+            if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+        }
+    }
+    return t;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "react");
+var react_1 = __webpack_require__(/*! react */ "react");
+var src_1 = __webpack_require__(/*! ../src */ "./src/index.ts");
+var data_1 = __webpack_require__(/*! ./data */ "./examples/data.ts");
+var PieExamples = function (_super) {
+    __extends(PieExamples, _super);
+    function PieExamples(props) {
+        var _this = _super.call(this, props) || this;
+        _this.state = {
+            visible: {}
+        };
+        return _this;
+    }
+    PieExamples.prototype.toggleVisible = function (key) {
+        var v = this.state.visible.hasOwnProperty(key) ? !this.state.visible[key] : false;
+        this.setState({
+            visible: __assign({}, this.state.visible, (_a = {}, _a[key] = v, _a))
+        });
+        var _a;
+    };
+    PieExamples.prototype.render = function () {
+        var _this = this;
+        var theme = this.props.theme;
+        var visible = this.state.visible;
+        var labels = {
+            display: true
+        };
+        return React.createElement("div", null, React.createElement("h3", null, "Pie Chart"), React.createElement("h4", null, "Donut"), React.createElement(src_1.PieChart, { width: 300, colorScheme: theme, backgroundColor: "#eee", height: 300, donutWidth: 10, data: data_1.data3, visible: visible, labels: labels }), React.createElement(src_1.Legend, { theme: theme, data: data_1.data3, onSelect: function onSelect(label) {
+                return _this.toggleVisible(label);
+            }, visible: visible }));
+    };
+    return PieExamples;
+}(react_1.Component);
+exports.default = PieExamples;
+
+/***/ }),
+
+/***/ "./examples/data.ts":
+/*!**************************!*\
+  !*** ./examples/data.ts ***!
+  \**************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var d3 = __webpack_require__(/*! d3 */ "./node_modules/d3/index.js");
+exports.grid = {
+    x: {
+        style: {
+            'stroke': '#eeAA00',
+            'stroke-opacity': 0.4
+        },
+        ticks: 5
+    },
+    y: {
+        height: 20,
+        style: {
+            'stroke-opacity': 0.4
+        },
+        ticks: 5
+    }
+};
+exports.data = {
+    bins: ['Data 1', 'Data 6', 'Data 3', 'Dat 4'],
+    counts: [{
+        borderColors: d3.schemeCategory20,
+        colors: d3.schemeCategory20,
+        data: [1, 2, 3, 4],
+        label: 'Data 1'
+    }, {
+        borderColors: d3.schemeCategory20,
+        colors: d3.schemeCategory20b,
+        data: [13, 2, 1, 5],
+        label: 'Data 2'
+    }],
+    grid: exports.grid
+};
+exports.data2 = {
+    bins: ['bin 1', 'bin 2', 'bin 3', 'bin 4', 'bin 5', 'bin 9', 'bin 7'],
+    counts: [{
+        borderColors: ['red'],
+        data: [999, 9000, 15000, 25000, 15000, 9000, 888],
+        label: 'Data 1'
+    }]
+};
+exports.data3 = {
+    bins: ['bin 1', 'bin 2', 'bin 3'],
+    counts: [{
+        borderColors: ['red'],
+        data: [100, 50, 40],
+        label: 'Data 1'
+    }]
+};
+
+/***/ }),
+
 /***/ "./examples/examples.tsx":
 /*!*******************************!*\
   !*** ./examples/examples.tsx ***!
@@ -97,57 +232,8 @@ var React = __webpack_require__(/*! react */ "react");
 var ReactDOM = __webpack_require__(/*! react-dom */ "react-dom");
 var src_1 = __webpack_require__(/*! ../src */ "./src/index.ts");
 var filterRange_1 = __webpack_require__(/*! ../src/colors/filterRange */ "./src/colors/filterRange.ts");
-var grid = {
-    x: {
-        style: {
-            'stroke': '#eeAA00',
-            'stroke-opacity': 0.4
-        },
-        ticks: 5
-    },
-    y: {
-        height: 20,
-        style: {
-            'stroke-opacity': 0.4
-        },
-        ticks: 5
-    }
-};
-var data = {
-    bins: ['Data 1', 'Data 6', 'Data 3', 'Dat 4'],
-    counts: [{
-        borderColors: d3.schemeCategory20,
-        colors: d3.schemeCategory20,
-        data: [1, 2, 3, 4],
-        label: 'Data 1'
-    }, {
-        borderColors: d3.schemeCategory20,
-        colors: d3.schemeCategory20b,
-        data: [13, 2, 1, 5],
-        label: 'Data 2'
-    }],
-    grid: grid
-};
-var data2 = {
-    bins: ['bin 1', 'bin 2', 'bin 3', 'bin 4', 'bin 5', 'bin 9', 'bin 7'],
-    counts: [{
-        borderColors: ['red'],
-        data: [999, 9000, 15000, 25000, 15000, 9000, 888],
-        label: 'Data 1'
-    }]
-};
-var data3 = {
-    bins: ['bin 1', 'bin 2', 'bin 3'],
-    counts: [{
-        borderColors: ['red'],
-        data: [100, 50, 40],
-        label: 'Data 1'
-    }, {
-        borderColors: ['red'],
-        data: [32, 1, 5],
-        label: 'Data 2'
-    }]
-};
+var data_1 = __webpack_require__(/*! ./data */ "./examples/data.ts");
+var Pie_1 = __webpack_require__(/*! ./Pie */ "./examples/Pie.tsx");
 var points = [{
     data: [{ x: 1, y: 1 }, { x: 2, y: 2 }, { x: 3, y: 3 }, { x: 4, y: 4 }],
     label: 'test data'
@@ -203,24 +289,18 @@ var axis = {
         width: 50
     }
 };
-var legend = {
-    display: true,
-    fontSize: '10px',
-    rectSize: 12,
-    spacing: 4
-};
 var labels = {
     display: true
 };
 var theme = filterRange_1.default(['rgba(255, 113, 1, 0.5)', '#fff6ef', 'rgba(0, 169, 123, 0.5)', '#f6fffd', '#D7263D', 'rgba(215, 38, 61, 0.05)', '#0f2629', '#ededed', 'rgba(86, 180, 191, 0.5)', '#f5fbfb', '#000000', '#0f2629', '#D7263D', '#FBD7D9', '#ffebec', '#963540', '#22545a', '#56b4bf', '#56b4bf', '#56b4bf', '#FF7101', '#449098', '#77c3cb', '#d4eef8', '#ff7101', '#FF7101', '#cc5a00', '#ff8d33', '#fef9e5', '#7d5d2e', '#00a97b', '#008762', '#33ba95', '#dbf1d6', '#227839', '#0f5e7b', '#d4eef8', '#0f5e7b', '#F9C80E', ' 63.75rem', '#007656', '#c5e5e9', '#f9c80e', '#a9a9a9', '#dbdbdb', '#cccccc', '#e6e6e6', '#56b4bf', '#449098', '#77c3cb', '#22545a', '#ff7101', '#cdcdcd', '#ffffff', 'd7263d', '#00a97b', '#888888', '#e6e6e6', '#f2f2f2', '#f4f4f4']);
 var App = function App() {
-    return React.createElement("div", { style: { padding: '20px' } }, React.createElement("h3", null, "Pie Chart"), React.createElement(src_1.PieChart, { width: 200, height: 200, data: data }), React.createElement("h4", null, "Donut"), React.createElement(src_1.PieChart, { width: 300, colorScheme: theme, backgroundColor: "#eee", height: 300, donutWidth: 10, data: data3, legend: legend, labels: labels }), React.createElement("div", null, React.createElement(src_1.HorizontalHistogram, { data: data2, width: 500, height: 400, margin: {
+    return React.createElement("div", { style: { padding: '20px' } }, React.createElement(Pie_1.default, { theme: theme }), React.createElement("div", null, React.createElement(src_1.HorizontalHistogram, { data: data_1.data2, width: 500, height: 400, margin: {
             left: 30,
             top: 30
-        } }), React.createElement(src_1.Histogram, { data: data2, width: 400, height: 400, margin: {
+        } }), React.createElement(src_1.Histogram, { data: data_1.data2, width: 400, height: 400, margin: {
             left: 30,
             top: 30
-        }, domain: { min: 0, max: 50000 } })), React.createElement("div", null, React.createElement(src_1.Histogram, { data: data, grid: grid, width: 700, height: 150, tipContentFn: tipContentFn }), React.createElement(src_1.Histogram, { data: data2, bar: { margin: 4 }, width: 700, height: 150, axis: axis })), React.createElement("div", null, React.createElement(src_1.LineChart, { axis: axis, grid: grid, data: points, width: 300 })));
+        }, domain: { min: 0, max: 50000 } })), React.createElement("div", null, React.createElement(src_1.Histogram, { data: data_1.data, grid: data_1.grid, width: 700, height: 150, tipContentFn: tipContentFn }), React.createElement(src_1.Histogram, { data: data_1.data2, bar: { margin: 4 }, width: 700, height: 150, axis: axis })), React.createElement("div", null, React.createElement(src_1.LineChart, { axis: axis, grid: data_1.grid, data: points, width: 300 })));
 };
 var tipContentFn = function tipContentFn(bins, i, d) {
     return bins[i] + '<br />HI THere ' + d.toFixed(2);
@@ -47426,201 +47506,6 @@ module.exports = function isArrayish(obj) {
 
 /***/ }),
 
-/***/ "./node_modules/process/browser.js":
-/*!*****************************************!*\
-  !*** ./node_modules/process/browser.js ***!
-  \*****************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-// shim for using process in browser
-var process = module.exports = {};
-
-// cached from whatever global is present so that test runners that stub it
-// don't break things.  But we need to wrap it in a try catch in case it is
-// wrapped in strict mode code which doesn't define any globals.  It's inside a
-// function because try/catches deoptimize in certain engines.
-
-var cachedSetTimeout;
-var cachedClearTimeout;
-
-function defaultSetTimout() {
-    throw new Error('setTimeout has not been defined');
-}
-function defaultClearTimeout () {
-    throw new Error('clearTimeout has not been defined');
-}
-(function () {
-    try {
-        if (typeof setTimeout === 'function') {
-            cachedSetTimeout = setTimeout;
-        } else {
-            cachedSetTimeout = defaultSetTimout;
-        }
-    } catch (e) {
-        cachedSetTimeout = defaultSetTimout;
-    }
-    try {
-        if (typeof clearTimeout === 'function') {
-            cachedClearTimeout = clearTimeout;
-        } else {
-            cachedClearTimeout = defaultClearTimeout;
-        }
-    } catch (e) {
-        cachedClearTimeout = defaultClearTimeout;
-    }
-} ())
-function runTimeout(fun) {
-    if (cachedSetTimeout === setTimeout) {
-        //normal enviroments in sane situations
-        return setTimeout(fun, 0);
-    }
-    // if setTimeout wasn't available but was latter defined
-    if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
-        cachedSetTimeout = setTimeout;
-        return setTimeout(fun, 0);
-    }
-    try {
-        // when when somebody has screwed with setTimeout but no I.E. maddness
-        return cachedSetTimeout(fun, 0);
-    } catch(e){
-        try {
-            // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
-            return cachedSetTimeout.call(null, fun, 0);
-        } catch(e){
-            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
-            return cachedSetTimeout.call(this, fun, 0);
-        }
-    }
-
-
-}
-function runClearTimeout(marker) {
-    if (cachedClearTimeout === clearTimeout) {
-        //normal enviroments in sane situations
-        return clearTimeout(marker);
-    }
-    // if clearTimeout wasn't available but was latter defined
-    if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
-        cachedClearTimeout = clearTimeout;
-        return clearTimeout(marker);
-    }
-    try {
-        // when when somebody has screwed with setTimeout but no I.E. maddness
-        return cachedClearTimeout(marker);
-    } catch (e){
-        try {
-            // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
-            return cachedClearTimeout.call(null, marker);
-        } catch (e){
-            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
-            // Some versions of I.E. have different rules for clearTimeout vs setTimeout
-            return cachedClearTimeout.call(this, marker);
-        }
-    }
-
-
-
-}
-var queue = [];
-var draining = false;
-var currentQueue;
-var queueIndex = -1;
-
-function cleanUpNextTick() {
-    if (!draining || !currentQueue) {
-        return;
-    }
-    draining = false;
-    if (currentQueue.length) {
-        queue = currentQueue.concat(queue);
-    } else {
-        queueIndex = -1;
-    }
-    if (queue.length) {
-        drainQueue();
-    }
-}
-
-function drainQueue() {
-    if (draining) {
-        return;
-    }
-    var timeout = runTimeout(cleanUpNextTick);
-    draining = true;
-
-    var len = queue.length;
-    while(len) {
-        currentQueue = queue;
-        queue = [];
-        while (++queueIndex < len) {
-            if (currentQueue) {
-                currentQueue[queueIndex].run();
-            }
-        }
-        queueIndex = -1;
-        len = queue.length;
-    }
-    currentQueue = null;
-    draining = false;
-    runClearTimeout(timeout);
-}
-
-process.nextTick = function (fun) {
-    var args = new Array(arguments.length - 1);
-    if (arguments.length > 1) {
-        for (var i = 1; i < arguments.length; i++) {
-            args[i - 1] = arguments[i];
-        }
-    }
-    queue.push(new Item(fun, args));
-    if (queue.length === 1 && !draining) {
-        runTimeout(drainQueue);
-    }
-};
-
-// v8 likes predictible objects
-function Item(fun, array) {
-    this.fun = fun;
-    this.array = array;
-}
-Item.prototype.run = function () {
-    this.fun.apply(null, this.array);
-};
-process.title = 'browser';
-process.browser = true;
-process.env = {};
-process.argv = [];
-process.version = ''; // empty string to avoid regexp issues
-process.versions = {};
-
-function noop() {}
-
-process.on = noop;
-process.addListener = noop;
-process.once = noop;
-process.off = noop;
-process.removeListener = noop;
-process.removeAllListeners = noop;
-process.emit = noop;
-process.prependListener = noop;
-process.prependOnceListener = noop;
-
-process.listeners = function (name) { return [] }
-
-process.binding = function (name) {
-    throw new Error('process.binding is not supported');
-};
-
-process.cwd = function () { return '/' };
-process.chdir = function (dir) {
-    throw new Error('process.chdir is not supported');
-};
-process.umask = function() { return 0; };
-
-
-/***/ }),
-
 /***/ "./node_modules/simple-swizzle/index.js":
 /*!**********************************************!*\
   !*** ./node_modules/simple-swizzle/index.js ***!
@@ -47659,720 +47544,6 @@ swizzle.wrap = function (fn) {
 	};
 };
 
-
-/***/ }),
-
-/***/ "./node_modules/text-width/index.js":
-/*!******************************************!*\
-  !*** ./node_modules/text-width/index.js ***!
-  \******************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-var util = __webpack_require__(/*! util */ "./node_modules/util/util.js");
-var extend = __webpack_require__(/*! xtend */ "./node_modules/xtend/immutable.js");
-
-var supported = function() {
-	if(typeof document === 'undefined' || typeof document.createElement !== 'function') return false;
-
-	var canvas = document.createElement('canvas');
-	if(typeof canvas.getContext !== 'function') return false;
-
-	var context = canvas.getContext('2d');
-	return !!context && (typeof context.measureText === 'function');
-};
-
-var initialize = function() {
-	var canvas = document.createElement('canvas');
-	var context = canvas.getContext('2d');
-
-	var width = function(str, options) {
-		options = extend({
-			style: 'normal',
-			variant: 'normal',
-			weight: 'normal',
-			size: 'medium',
-			family: 'sans-serif',
-			align: 'start',
-			baseline: 'alphabetic'
-		}, options);
-
-		var size = options.size;
-		if(typeof size === 'number') size = size + 'px';
-
-		context.font = util.format('%s %s %s %s %s',
-			options.style,
-			options.variant,
-			options.weight,
-			size,
-			options.family);
-		context.textAlign = options.align;
-		context.textBaseline = options.baseline;
-
-		return context.measureText(str).width;
-	};
-
-	width.supported = true;
-	return width;
-};
-
-module.exports = supported() ? initialize() : (function() {
-	var width = function() {
-		return 0;
-	};
-
-	width.supported = false;
-	return width;
-}());
-
-
-/***/ }),
-
-/***/ "./node_modules/util/node_modules/inherits/inherits_browser.js":
-/*!*********************************************************************!*\
-  !*** ./node_modules/util/node_modules/inherits/inherits_browser.js ***!
-  \*********************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-if (typeof Object.create === 'function') {
-  // implementation from standard node.js 'util' module
-  module.exports = function inherits(ctor, superCtor) {
-    ctor.super_ = superCtor
-    ctor.prototype = Object.create(superCtor.prototype, {
-      constructor: {
-        value: ctor,
-        enumerable: false,
-        writable: true,
-        configurable: true
-      }
-    });
-  };
-} else {
-  // old school shim for old browsers
-  module.exports = function inherits(ctor, superCtor) {
-    ctor.super_ = superCtor
-    var TempCtor = function () {}
-    TempCtor.prototype = superCtor.prototype
-    ctor.prototype = new TempCtor()
-    ctor.prototype.constructor = ctor
-  }
-}
-
-
-/***/ }),
-
-/***/ "./node_modules/util/support/isBufferBrowser.js":
-/*!******************************************************!*\
-  !*** ./node_modules/util/support/isBufferBrowser.js ***!
-  \******************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = function isBuffer(arg) {
-  return arg && typeof arg === 'object'
-    && typeof arg.copy === 'function'
-    && typeof arg.fill === 'function'
-    && typeof arg.readUInt8 === 'function';
-}
-
-/***/ }),
-
-/***/ "./node_modules/util/util.js":
-/*!***********************************!*\
-  !*** ./node_modules/util/util.js ***!
-  \***********************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-/* WEBPACK VAR INJECTION */(function(global, process) {// Copyright Joyent, Inc. and other Node contributors.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a
-// copy of this software and associated documentation files (the
-// "Software"), to deal in the Software without restriction, including
-// without limitation the rights to use, copy, modify, merge, publish,
-// distribute, sublicense, and/or sell copies of the Software, and to permit
-// persons to whom the Software is furnished to do so, subject to the
-// following conditions:
-//
-// The above copyright notice and this permission notice shall be included
-// in all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
-// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
-// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
-// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
-// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
-// USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-var formatRegExp = /%[sdj%]/g;
-exports.format = function(f) {
-  if (!isString(f)) {
-    var objects = [];
-    for (var i = 0; i < arguments.length; i++) {
-      objects.push(inspect(arguments[i]));
-    }
-    return objects.join(' ');
-  }
-
-  var i = 1;
-  var args = arguments;
-  var len = args.length;
-  var str = String(f).replace(formatRegExp, function(x) {
-    if (x === '%%') return '%';
-    if (i >= len) return x;
-    switch (x) {
-      case '%s': return String(args[i++]);
-      case '%d': return Number(args[i++]);
-      case '%j':
-        try {
-          return JSON.stringify(args[i++]);
-        } catch (_) {
-          return '[Circular]';
-        }
-      default:
-        return x;
-    }
-  });
-  for (var x = args[i]; i < len; x = args[++i]) {
-    if (isNull(x) || !isObject(x)) {
-      str += ' ' + x;
-    } else {
-      str += ' ' + inspect(x);
-    }
-  }
-  return str;
-};
-
-
-// Mark that a method should not be used.
-// Returns a modified function which warns once by default.
-// If --no-deprecation is set, then it is a no-op.
-exports.deprecate = function(fn, msg) {
-  // Allow for deprecating things in the process of starting up.
-  if (isUndefined(global.process)) {
-    return function() {
-      return exports.deprecate(fn, msg).apply(this, arguments);
-    };
-  }
-
-  if (process.noDeprecation === true) {
-    return fn;
-  }
-
-  var warned = false;
-  function deprecated() {
-    if (!warned) {
-      if (process.throwDeprecation) {
-        throw new Error(msg);
-      } else if (process.traceDeprecation) {
-        console.trace(msg);
-      } else {
-        console.error(msg);
-      }
-      warned = true;
-    }
-    return fn.apply(this, arguments);
-  }
-
-  return deprecated;
-};
-
-
-var debugs = {};
-var debugEnviron;
-exports.debuglog = function(set) {
-  if (isUndefined(debugEnviron))
-    debugEnviron = process.env.NODE_DEBUG || '';
-  set = set.toUpperCase();
-  if (!debugs[set]) {
-    if (new RegExp('\\b' + set + '\\b', 'i').test(debugEnviron)) {
-      var pid = process.pid;
-      debugs[set] = function() {
-        var msg = exports.format.apply(exports, arguments);
-        console.error('%s %d: %s', set, pid, msg);
-      };
-    } else {
-      debugs[set] = function() {};
-    }
-  }
-  return debugs[set];
-};
-
-
-/**
- * Echos the value of a value. Trys to print the value out
- * in the best way possible given the different types.
- *
- * @param {Object} obj The object to print out.
- * @param {Object} opts Optional options object that alters the output.
- */
-/* legacy: obj, showHidden, depth, colors*/
-function inspect(obj, opts) {
-  // default options
-  var ctx = {
-    seen: [],
-    stylize: stylizeNoColor
-  };
-  // legacy...
-  if (arguments.length >= 3) ctx.depth = arguments[2];
-  if (arguments.length >= 4) ctx.colors = arguments[3];
-  if (isBoolean(opts)) {
-    // legacy...
-    ctx.showHidden = opts;
-  } else if (opts) {
-    // got an "options" object
-    exports._extend(ctx, opts);
-  }
-  // set default options
-  if (isUndefined(ctx.showHidden)) ctx.showHidden = false;
-  if (isUndefined(ctx.depth)) ctx.depth = 2;
-  if (isUndefined(ctx.colors)) ctx.colors = false;
-  if (isUndefined(ctx.customInspect)) ctx.customInspect = true;
-  if (ctx.colors) ctx.stylize = stylizeWithColor;
-  return formatValue(ctx, obj, ctx.depth);
-}
-exports.inspect = inspect;
-
-
-// http://en.wikipedia.org/wiki/ANSI_escape_code#graphics
-inspect.colors = {
-  'bold' : [1, 22],
-  'italic' : [3, 23],
-  'underline' : [4, 24],
-  'inverse' : [7, 27],
-  'white' : [37, 39],
-  'grey' : [90, 39],
-  'black' : [30, 39],
-  'blue' : [34, 39],
-  'cyan' : [36, 39],
-  'green' : [32, 39],
-  'magenta' : [35, 39],
-  'red' : [31, 39],
-  'yellow' : [33, 39]
-};
-
-// Don't use 'blue' not visible on cmd.exe
-inspect.styles = {
-  'special': 'cyan',
-  'number': 'yellow',
-  'boolean': 'yellow',
-  'undefined': 'grey',
-  'null': 'bold',
-  'string': 'green',
-  'date': 'magenta',
-  // "name": intentionally not styling
-  'regexp': 'red'
-};
-
-
-function stylizeWithColor(str, styleType) {
-  var style = inspect.styles[styleType];
-
-  if (style) {
-    return '\u001b[' + inspect.colors[style][0] + 'm' + str +
-           '\u001b[' + inspect.colors[style][1] + 'm';
-  } else {
-    return str;
-  }
-}
-
-
-function stylizeNoColor(str, styleType) {
-  return str;
-}
-
-
-function arrayToHash(array) {
-  var hash = {};
-
-  array.forEach(function(val, idx) {
-    hash[val] = true;
-  });
-
-  return hash;
-}
-
-
-function formatValue(ctx, value, recurseTimes) {
-  // Provide a hook for user-specified inspect functions.
-  // Check that value is an object with an inspect function on it
-  if (ctx.customInspect &&
-      value &&
-      isFunction(value.inspect) &&
-      // Filter out the util module, it's inspect function is special
-      value.inspect !== exports.inspect &&
-      // Also filter out any prototype objects using the circular check.
-      !(value.constructor && value.constructor.prototype === value)) {
-    var ret = value.inspect(recurseTimes, ctx);
-    if (!isString(ret)) {
-      ret = formatValue(ctx, ret, recurseTimes);
-    }
-    return ret;
-  }
-
-  // Primitive types cannot have properties
-  var primitive = formatPrimitive(ctx, value);
-  if (primitive) {
-    return primitive;
-  }
-
-  // Look up the keys of the object.
-  var keys = Object.keys(value);
-  var visibleKeys = arrayToHash(keys);
-
-  if (ctx.showHidden) {
-    keys = Object.getOwnPropertyNames(value);
-  }
-
-  // IE doesn't make error fields non-enumerable
-  // http://msdn.microsoft.com/en-us/library/ie/dww52sbt(v=vs.94).aspx
-  if (isError(value)
-      && (keys.indexOf('message') >= 0 || keys.indexOf('description') >= 0)) {
-    return formatError(value);
-  }
-
-  // Some type of object without properties can be shortcutted.
-  if (keys.length === 0) {
-    if (isFunction(value)) {
-      var name = value.name ? ': ' + value.name : '';
-      return ctx.stylize('[Function' + name + ']', 'special');
-    }
-    if (isRegExp(value)) {
-      return ctx.stylize(RegExp.prototype.toString.call(value), 'regexp');
-    }
-    if (isDate(value)) {
-      return ctx.stylize(Date.prototype.toString.call(value), 'date');
-    }
-    if (isError(value)) {
-      return formatError(value);
-    }
-  }
-
-  var base = '', array = false, braces = ['{', '}'];
-
-  // Make Array say that they are Array
-  if (isArray(value)) {
-    array = true;
-    braces = ['[', ']'];
-  }
-
-  // Make functions say that they are functions
-  if (isFunction(value)) {
-    var n = value.name ? ': ' + value.name : '';
-    base = ' [Function' + n + ']';
-  }
-
-  // Make RegExps say that they are RegExps
-  if (isRegExp(value)) {
-    base = ' ' + RegExp.prototype.toString.call(value);
-  }
-
-  // Make dates with properties first say the date
-  if (isDate(value)) {
-    base = ' ' + Date.prototype.toUTCString.call(value);
-  }
-
-  // Make error with message first say the error
-  if (isError(value)) {
-    base = ' ' + formatError(value);
-  }
-
-  if (keys.length === 0 && (!array || value.length == 0)) {
-    return braces[0] + base + braces[1];
-  }
-
-  if (recurseTimes < 0) {
-    if (isRegExp(value)) {
-      return ctx.stylize(RegExp.prototype.toString.call(value), 'regexp');
-    } else {
-      return ctx.stylize('[Object]', 'special');
-    }
-  }
-
-  ctx.seen.push(value);
-
-  var output;
-  if (array) {
-    output = formatArray(ctx, value, recurseTimes, visibleKeys, keys);
-  } else {
-    output = keys.map(function(key) {
-      return formatProperty(ctx, value, recurseTimes, visibleKeys, key, array);
-    });
-  }
-
-  ctx.seen.pop();
-
-  return reduceToSingleString(output, base, braces);
-}
-
-
-function formatPrimitive(ctx, value) {
-  if (isUndefined(value))
-    return ctx.stylize('undefined', 'undefined');
-  if (isString(value)) {
-    var simple = '\'' + JSON.stringify(value).replace(/^"|"$/g, '')
-                                             .replace(/'/g, "\\'")
-                                             .replace(/\\"/g, '"') + '\'';
-    return ctx.stylize(simple, 'string');
-  }
-  if (isNumber(value))
-    return ctx.stylize('' + value, 'number');
-  if (isBoolean(value))
-    return ctx.stylize('' + value, 'boolean');
-  // For some reason typeof null is "object", so special case here.
-  if (isNull(value))
-    return ctx.stylize('null', 'null');
-}
-
-
-function formatError(value) {
-  return '[' + Error.prototype.toString.call(value) + ']';
-}
-
-
-function formatArray(ctx, value, recurseTimes, visibleKeys, keys) {
-  var output = [];
-  for (var i = 0, l = value.length; i < l; ++i) {
-    if (hasOwnProperty(value, String(i))) {
-      output.push(formatProperty(ctx, value, recurseTimes, visibleKeys,
-          String(i), true));
-    } else {
-      output.push('');
-    }
-  }
-  keys.forEach(function(key) {
-    if (!key.match(/^\d+$/)) {
-      output.push(formatProperty(ctx, value, recurseTimes, visibleKeys,
-          key, true));
-    }
-  });
-  return output;
-}
-
-
-function formatProperty(ctx, value, recurseTimes, visibleKeys, key, array) {
-  var name, str, desc;
-  desc = Object.getOwnPropertyDescriptor(value, key) || { value: value[key] };
-  if (desc.get) {
-    if (desc.set) {
-      str = ctx.stylize('[Getter/Setter]', 'special');
-    } else {
-      str = ctx.stylize('[Getter]', 'special');
-    }
-  } else {
-    if (desc.set) {
-      str = ctx.stylize('[Setter]', 'special');
-    }
-  }
-  if (!hasOwnProperty(visibleKeys, key)) {
-    name = '[' + key + ']';
-  }
-  if (!str) {
-    if (ctx.seen.indexOf(desc.value) < 0) {
-      if (isNull(recurseTimes)) {
-        str = formatValue(ctx, desc.value, null);
-      } else {
-        str = formatValue(ctx, desc.value, recurseTimes - 1);
-      }
-      if (str.indexOf('\n') > -1) {
-        if (array) {
-          str = str.split('\n').map(function(line) {
-            return '  ' + line;
-          }).join('\n').substr(2);
-        } else {
-          str = '\n' + str.split('\n').map(function(line) {
-            return '   ' + line;
-          }).join('\n');
-        }
-      }
-    } else {
-      str = ctx.stylize('[Circular]', 'special');
-    }
-  }
-  if (isUndefined(name)) {
-    if (array && key.match(/^\d+$/)) {
-      return str;
-    }
-    name = JSON.stringify('' + key);
-    if (name.match(/^"([a-zA-Z_][a-zA-Z_0-9]*)"$/)) {
-      name = name.substr(1, name.length - 2);
-      name = ctx.stylize(name, 'name');
-    } else {
-      name = name.replace(/'/g, "\\'")
-                 .replace(/\\"/g, '"')
-                 .replace(/(^"|"$)/g, "'");
-      name = ctx.stylize(name, 'string');
-    }
-  }
-
-  return name + ': ' + str;
-}
-
-
-function reduceToSingleString(output, base, braces) {
-  var numLinesEst = 0;
-  var length = output.reduce(function(prev, cur) {
-    numLinesEst++;
-    if (cur.indexOf('\n') >= 0) numLinesEst++;
-    return prev + cur.replace(/\u001b\[\d\d?m/g, '').length + 1;
-  }, 0);
-
-  if (length > 60) {
-    return braces[0] +
-           (base === '' ? '' : base + '\n ') +
-           ' ' +
-           output.join(',\n  ') +
-           ' ' +
-           braces[1];
-  }
-
-  return braces[0] + base + ' ' + output.join(', ') + ' ' + braces[1];
-}
-
-
-// NOTE: These type checking functions intentionally don't use `instanceof`
-// because it is fragile and can be easily faked with `Object.create()`.
-function isArray(ar) {
-  return Array.isArray(ar);
-}
-exports.isArray = isArray;
-
-function isBoolean(arg) {
-  return typeof arg === 'boolean';
-}
-exports.isBoolean = isBoolean;
-
-function isNull(arg) {
-  return arg === null;
-}
-exports.isNull = isNull;
-
-function isNullOrUndefined(arg) {
-  return arg == null;
-}
-exports.isNullOrUndefined = isNullOrUndefined;
-
-function isNumber(arg) {
-  return typeof arg === 'number';
-}
-exports.isNumber = isNumber;
-
-function isString(arg) {
-  return typeof arg === 'string';
-}
-exports.isString = isString;
-
-function isSymbol(arg) {
-  return typeof arg === 'symbol';
-}
-exports.isSymbol = isSymbol;
-
-function isUndefined(arg) {
-  return arg === void 0;
-}
-exports.isUndefined = isUndefined;
-
-function isRegExp(re) {
-  return isObject(re) && objectToString(re) === '[object RegExp]';
-}
-exports.isRegExp = isRegExp;
-
-function isObject(arg) {
-  return typeof arg === 'object' && arg !== null;
-}
-exports.isObject = isObject;
-
-function isDate(d) {
-  return isObject(d) && objectToString(d) === '[object Date]';
-}
-exports.isDate = isDate;
-
-function isError(e) {
-  return isObject(e) &&
-      (objectToString(e) === '[object Error]' || e instanceof Error);
-}
-exports.isError = isError;
-
-function isFunction(arg) {
-  return typeof arg === 'function';
-}
-exports.isFunction = isFunction;
-
-function isPrimitive(arg) {
-  return arg === null ||
-         typeof arg === 'boolean' ||
-         typeof arg === 'number' ||
-         typeof arg === 'string' ||
-         typeof arg === 'symbol' ||  // ES6 symbol
-         typeof arg === 'undefined';
-}
-exports.isPrimitive = isPrimitive;
-
-exports.isBuffer = __webpack_require__(/*! ./support/isBuffer */ "./node_modules/util/support/isBufferBrowser.js");
-
-function objectToString(o) {
-  return Object.prototype.toString.call(o);
-}
-
-
-function pad(n) {
-  return n < 10 ? '0' + n.toString(10) : n.toString(10);
-}
-
-
-var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep',
-              'Oct', 'Nov', 'Dec'];
-
-// 26 Feb 16:19:34
-function timestamp() {
-  var d = new Date();
-  var time = [pad(d.getHours()),
-              pad(d.getMinutes()),
-              pad(d.getSeconds())].join(':');
-  return [d.getDate(), months[d.getMonth()], time].join(' ');
-}
-
-
-// log is just a thin wrapper to console.log that prepends a timestamp
-exports.log = function() {
-  console.log('%s - %s', timestamp(), exports.format.apply(exports, arguments));
-};
-
-
-/**
- * Inherit the prototype methods from one constructor into another.
- *
- * The Function.prototype.inherits from lang.js rewritten as a standalone
- * function (not on Function.prototype). NOTE: If this file is to be loaded
- * during bootstrapping this function needs to be rewritten using some native
- * functions as prototype setup using normal JavaScript does not work as
- * expected during bootstrapping (see mirror.js in r114903).
- *
- * @param {function} ctor Constructor function which needs to inherit the
- *     prototype.
- * @param {function} superCtor Constructor function to inherit prototype from.
- */
-exports.inherits = __webpack_require__(/*! inherits */ "./node_modules/util/node_modules/inherits/inherits_browser.js");
-
-exports._extend = function(origin, add) {
-  // Don't do anything if add isn't an object
-  if (!add || !isObject(add)) return origin;
-
-  var keys = Object.keys(add);
-  var i = keys.length;
-  while (i--) {
-    origin[keys[i]] = add[keys[i]];
-  }
-  return origin;
-};
-
-function hasOwnProperty(obj, prop) {
-  return Object.prototype.hasOwnProperty.call(obj, prop);
-}
-
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../webpack/buildin/global.js */ "./node_modules/webpack/buildin/global.js"), __webpack_require__(/*! ./../process/browser.js */ "./node_modules/process/browser.js")))
 
 /***/ }),
 
@@ -48436,36 +47607,6 @@ module.exports = function(module) {
 	}
 	return module;
 };
-
-
-/***/ }),
-
-/***/ "./node_modules/xtend/immutable.js":
-/*!*****************************************!*\
-  !*** ./node_modules/xtend/immutable.js ***!
-  \*****************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = extend
-
-var hasOwnProperty = Object.prototype.hasOwnProperty;
-
-function extend() {
-    var target = {}
-
-    for (var i = 0; i < arguments.length; i++) {
-        var source = arguments[i]
-
-        for (var key in source) {
-            if (hasOwnProperty.call(source, key)) {
-                target[key] = source[key]
-            }
-        }
-    }
-
-    return target
-}
 
 
 /***/ }),
@@ -49568,6 +48709,59 @@ exports.horizontalHistogramD3 = function () {
 
 /***/ }),
 
+/***/ "./src/Legend.tsx":
+/*!************************!*\
+  !*** ./src/Legend.tsx ***!
+  \************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var __assign = undefined && undefined.__assign || Object.assign || function (t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+        s = arguments[i];
+        for (var p in s) {
+            if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+        }
+    }
+    return t;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var d3 = __webpack_require__(/*! d3 */ "./node_modules/d3/index.js");
+var React = __webpack_require__(/*! react */ "react");
+var colors_1 = __webpack_require__(/*! ./colors */ "./src/colors/index.js");
+var legendIconStyle = {
+    cursor: 'pointer',
+    display: 'inline-block',
+    height: '1rem',
+    margin: '0.25rem 0.5rem',
+    width: '1rem'
+};
+var listStyle = {
+    listStyle: 'none'
+};
+var Legend = function Legend(_a) {
+    var className = _a.className,
+        _b = _a.theme,
+        theme = _b === void 0 ? colors_1.default : _b,
+        data = _a.data,
+        onSelect = _a.onSelect,
+        visible = _a.visible;
+    var scheme = d3.scaleOrdinal(theme);
+    var labels = data.bins;
+    return React.createElement("div", { className: className }, React.createElement("ul", { style: listStyle }, labels.map(function (label) {
+        var active = visible.hasOwnProperty(label) && visible[label] || !visible.hasOwnProperty(label);
+        return React.createElement("li", { key: label }, React.createElement("div", { style: __assign({}, legendIconStyle, { backgroundColor: active ? scheme(label) : '#FFF', border: '2px solid ' + scheme(label) }), onClick: function onClick() {
+                return onSelect(label);
+            } }), " ", label);
+    })));
+};
+exports.default = Legend;
+
+/***/ }),
+
 /***/ "./src/LineChart.tsx":
 /*!***************************!*\
   !*** ./src/LineChart.tsx ***!
@@ -49771,9 +48965,6 @@ var PieChart = function (_super) {
         }
         return __assign({}, rest, { width: width });
     };
-    PieChart.prototype.componentWillReceiveProps = function (props) {
-        this.chart.update(this.getDOMNode(), this.getChartState());
-    };
     PieChart.prototype.componentWillUnmount = function () {
         if (this.props.width === '100%') {
             window.removeEventListener('resize', this.handleResize);
@@ -49829,14 +49020,12 @@ var __assign = undefined && undefined.__assign || Object.assign || function (t) 
 Object.defineProperty(exports, "__esModule", { value: true });
 var d3 = __webpack_require__(/*! d3 */ "./node_modules/d3/index.js");
 var deepmerge_1 = __webpack_require__(/*! deepmerge */ "./node_modules/deepmerge/dist/es.js");
-var textWidth = __webpack_require__(/*! text-width */ "./node_modules/text-width/index.js");
 var colors_1 = __webpack_require__(/*! ./colors */ "./src/colors/index.js");
 var tip_1 = __webpack_require__(/*! ./tip */ "./src/tip.ts");
 exports.pieChartD3 = function () {
     var svg;
     var tipContainer;
     var tipContent;
-    var renderedCharts = [];
     var defaultProps = {
         backgroundColor: '#ddd',
         className: 'piechart-d3',
@@ -49853,9 +49042,6 @@ exports.pieChartD3 = function () {
                 return d.value;
             }
         },
-        legend: {
-            display: false
-        },
         margin: {
             left: 10,
             top: 10
@@ -49865,15 +49051,30 @@ exports.pieChartD3 = function () {
         tipContentFn: function tipContentFn(bins, i, d) {
             return bins[i] + '<br />' + d;
         },
+        visible: {},
         width: 200
     };
     var PieChartD3 = {
         create: function create(el, props) {
+            var _this = this;
             if (props === void 0) {
                 props = {};
             }
+            console.log('create', props.data);
             this.props = deepmerge_1.default(defaultProps, __assign({}, props));
-            this.selectedBins = Array(this.props.data.bins.length).fill(true);
+            this.previousData = props.data.counts.map(function (set, setIndex) {
+                return set.data.map(function (count, i) {
+                    return {
+                        count: count,
+                        label: props.data.bins[i]
+                    };
+                });
+            });
+            this._makeSvg(el);
+            this.containers = [];
+            this.previousData.forEach(function (dataSet, i) {
+                _this.drawChartBg(_this.props.data, i);
+            });
             this.update(el, props);
         },
         _makeSvg: function _makeSvg(el) {
@@ -49902,6 +49103,7 @@ exports.pieChartD3 = function () {
             tipContent = tipContainer.append('div').attr('class', 'tooltip-inner');
         },
         update: function update(el, props) {
+            console.log('update', props.data, props.visible);
             if (!props.data) {
                 return;
             }
@@ -49909,31 +49111,10 @@ exports.pieChartD3 = function () {
             if (props.colorScheme) {
                 this.props.colorScheme = props.colorScheme;
             }
-            this._makeSvg(el);
             if (!this.props.data.bins) {
                 return;
             }
             this.drawCharts();
-        },
-        legendWidth: function legendWidth() {
-            var _a = this.props,
-                legend = _a.legend,
-                data = _a.data;
-            var _b = legend.rectSize,
-                rectSize = _b === void 0 ? 10 : _b,
-                _c = legend.spacing,
-                spacing = _c === void 0 ? 4 : _c;
-            if (!legend.display) {
-                return 0;
-            }
-            var horz = -2 * rectSize;
-            var longest = data.bins.reduce(function (prev, next) {
-                return next.length > prev.length ? next : prev;
-            }, '');
-            return textWidth(longest, {
-                family: 'Arial',
-                size: 12
-            }) - horz;
         },
         outerRadius: function outerRadius(setIndex) {
             if (setIndex === void 0) {
@@ -49944,7 +49125,7 @@ exports.pieChartD3 = function () {
                 donutWidth = _b === void 0 ? 0 : _b,
                 width = _a.width,
                 height = _a.height;
-            var radius = Math.min(width, height) / 2 - this.legendWidth();
+            var radius = Math.min(width, height) / 2;
             return donutWidth === 0 ? radius - 10 : radius - 10 - setIndex * (donutWidth + 10);
         },
         innerRadius: function innerRadius(setIndex) {
@@ -49956,84 +49137,30 @@ exports.pieChartD3 = function () {
                 donutWidth = _b === void 0 ? 0 : _b,
                 width = _a.width,
                 height = _a.height;
-            var radius = Math.min(width, height) / 2 - this.legendWidth();
+            var radius = Math.min(width, height) / 2;
             return donutWidth === 0 ? 0 : radius - 10 - donutWidth - setIndex * (donutWidth + 10);
-        },
-        drawLegend: function drawLegend() {
-            var _this = this;
-            if (!this.props.legend.display) {
-                return;
-            }
-            var _a = this.props,
-                data = _a.data,
-                width = _a.width;
-            var _b = this.props.legend,
-                _c = _b.rectSize,
-                rectSize = _c === void 0 ? 10 : _c,
-                _d = _b.spacing,
-                spacing = _d === void 0 ? 4 : _d,
-                _e = _b.fontSize,
-                fontSize = _e === void 0 ? '12px' : _e;
-            var colors = d3.scaleOrdinal(this.props.colorScheme);
-            var x = this.outerRadius(0);
-            var legend = svg.selectAll('.legend').enter().append('g').attr('class', 'legend').attr('transform', function (d, i) {
-                var height = rectSize + spacing;
-                var offset = height * colors.domain().length / 2;
-                var vert = i * height - offset;
-                return 'translate(' + (width - _this.legendWidth()) + ',' + vert + ')';
-            });
-            var selectedBins = this.selectedBins;
-            legend.append('rect').attr('width', rectSize).attr('height', rectSize).style('fill', colors).attr('class', '').style('stroke-width', 2).style('cursor', 'pointer').on('click', function (label, i) {
-                var rect = d3.select(this);
-                var enabled = rect.attr('class') === 'disabled';
-                rect.attr('class', enabled ? '' : 'disabled');
-                if (enabled) {
-                    rect.style('opacity', 1);
-                    rect.style('fill', function (d) {
-                        return colors(d).toString();
-                    });
-                } else {
-                    rect.style('fill', '#FFF');
-                }
-                renderedCharts.forEach(function (chart) {
-                    chart.pie.value(function (d) {
-                        if (d.label === label) {
-                            d.enabled = enabled;
-                        }
-                        return d.enabled ? d.count : 0;
-                    });
-                    chart.path = chart.path.data(chart.pie);
-                    chart.path.transition().duration(750).attrTween('d', arcTween(chart.arc));
-                });
-            }).style('stroke', colors);
-            legend.append('text').style('font-size', fontSize).attr('x', rectSize + spacing).attr('y', rectSize - spacing).text(function (d) {
-                return d;
-            });
         },
         drawCharts: function drawCharts() {
             var _this = this;
-            var data = this.props.data;
-            this.drawLegend();
-            this.visible = {};
-            data.bins.forEach(function (bin) {
-                _this.visible[bin] = true;
-            });
+            var _a = this.props,
+                data = _a.data,
+                visible = _a.visible;
             this.dataSets = data.counts.map(function (set, setIndex) {
                 return set.data.map(function (count, i) {
                     return {
-                        count: count,
-                        enabled: true,
-                        label: data.bins[i],
-                        nextCount: Math.random() * 100
+                        count: visible[data.bins[i]] !== false ? count : 0,
+                        label: data.bins[i]
                     };
                 });
             });
             this.dataSets.forEach(function (dataSet, i) {
-                _this.drawChartBg(data, i);
                 _this.drawChart(dataSet, i, data.bins);
+                _this.updateChart(dataSet, i, data.bins);
             });
+            this.previousData = this.dataSets;
         },
         drawChartBg: function drawChartBg(data, i) {
+            console.log('drawChartBg', data);
             var _a = this.props,
                 backgroundColor = _a.backgroundColor,
                 width = _a.width,
@@ -50044,8 +49171,36 @@ exports.pieChartD3 = function () {
             var bgArc = d3.arc().innerRadius(innerRadius).outerRadius(outerRadius).startAngle(0).endAngle(tau);
             var container = svg.append('g').attr('class', 'pie-bg');
             var background = container.append('path').attr('class', 'pie-background').style('fill', backgroundColor).attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')').attr('d', bgArc);
+            if (!this.containers[i]) {
+                this.containers[i] = svg.append('g').attr('class', 'pie-container');
+            }
+        },
+        updateChart: function updateChart(data, i, bins) {
+            console.log('data', data);
+            var _a = this.props,
+                labels = _a.labels,
+                width = _a.width,
+                height = _a.height,
+                tip = _a.tip,
+                tipContentFn = _a.tipContentFn;
+            var outerRadius = this.outerRadius(i);
+            var innerRadius = this.innerRadius(i);
+            var colors = d3.scaleOrdinal(this.props.colorScheme);
+            var arc = d3.arc().outerRadius(outerRadius).innerRadius(innerRadius);
+            var pie = d3.pie().sort(null).value(function (d) {
+                return d.count;
+            });
+            var text = this.containers[i].selectAll('text').data(data);
+            text.attr('class', 'update');
+            text.enter().append('text').attr('class', 'enter').attr('x', function (d, i) {
+                return i * 32;
+            }).attr('dy', '.35em').merge(text).text(function (d) {
+                return d.count;
+            });
+            text.exit().remove();
         },
         drawChart: function drawChart(data, i, bins) {
+            console.log('drawChart', data);
             var _a = this.props,
                 labels = _a.labels,
                 width = _a.width,
@@ -50057,14 +49212,14 @@ exports.pieChartD3 = function () {
             var pie = d3.pie().sort(null).value(function (d) {
                 return d.count;
             });
-            var arcs = pie(data);
+            var arcs = pie(this.previousData[i]);
             var colors = d3.scaleOrdinal(this.props.colorScheme);
             var arc = d3.arc().outerRadius(outerRadius).innerRadius(innerRadius);
-            var container = svg.append('g').attr('class', 'pie-container').datum(data).selectAll('path').data(pie).enter().append('g').attr('class', 'arc').attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')');
-            var path = container.append('path').attr('fill', function (d, j) {
+            var container = this.containers[i].datum(data).selectAll('path').data(pie).enter().append('g').attr('class', 'arc').attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')');
+            var path = container.append('path').attr('stroke', '#FFF').attr('fill', function (d, j) {
                 return colors(j);
-            }).attr('d', arc).each(function (d) {
-                this._current = d;
+            }).attr('d', arc).each(function (d, j) {
+                this._current = arcs[j];
             }).on('mouseover', function (d, ix) {
                 tipContent.html(function () {
                     return tipContentFn(bins, ix, d.data.count);
@@ -50075,15 +49230,16 @@ exports.pieChartD3 = function () {
             }).on('mouseout', function () {
                 return tip.fx.out(tipContainer);
             });
+            path.merge(path);
+            path.transition().duration(500).attrTween('d', arcTween(arc));
             if (labels.display) {
-                var label_1 = d3.arc().outerRadius(outerRadius).innerRadius(innerRadius);
-                container.append('text').attr('transform', function (d) {
-                    return 'translate(' + label_1.centroid(d) + ')';
+                var texts = container.append('text').attr('class', 'label').attr('transform', function (d) {
+                    return 'translate(' + arc.centroid(d) + ')';
                 }).attr('dy', '0.35em').text(function (d, ix) {
                     return labels.displayFn(d, ix);
                 });
             }
-            renderedCharts.push({ path: path, pie: pie, arc: arc });
+            path.exit().remove();
         },
         destroy: function destroy(el) {
             svg.selectAll('svg > *').remove();
@@ -50523,6 +49679,8 @@ var Histogram_1 = __webpack_require__(/*! ./Histogram */ "./src/Histogram.tsx");
 exports.Histogram = Histogram_1.default;
 var HorizontalHistogram_1 = __webpack_require__(/*! ./HorizontalHistogram */ "./src/HorizontalHistogram.tsx");
 exports.HorizontalHistogram = HorizontalHistogram_1.default;
+var Legend_1 = __webpack_require__(/*! ./Legend */ "./src/Legend.tsx");
+exports.Legend = Legend_1.default;
 var LineChart_1 = __webpack_require__(/*! ./LineChart */ "./src/LineChart.tsx");
 exports.LineChart = LineChart_1.default;
 var PieChart_1 = __webpack_require__(/*! ./PieChart */ "./src/PieChart.tsx");

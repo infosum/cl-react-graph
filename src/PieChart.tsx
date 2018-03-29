@@ -5,13 +5,6 @@ import { Component } from 'react';
 import * as ReactDOM from 'react-dom';
 import { pieChartD3 } from './PieChartD3';
 
-interface ILegend {
-  display: boolean;
-  fontSize?: string;
-  rectSize?: number;
-  spacing?: number;
-}
-
 interface ILabels {
   display: boolean;
   displayFn?: (d: any, ix: number) => string | number;
@@ -28,11 +21,11 @@ export interface IPieChartProps {
   donutWidth?: number;
   height: number;
   labels?: ILabels;
-  legend?: ILegend;
   margin?: IMargin;
   tip?: any;
   tipContainer?: string;
   tipContentFn?: TipContentFn;
+  visible?: { [key: string]: boolean };
   width: number | string;
 }
 
@@ -122,9 +115,9 @@ class PieChart extends Component<IPieChartProps, IChartState> {
    * Props recieved, update the chart
    * @param {Object} props Props
    */
-  public componentWillReceiveProps(props: IHistogramProps) {
-    this.chart.update(this.getDOMNode(), this.getChartState());
-  }
+  // public componentWillReceiveProps(props: IHistogramProps) {
+  //   this.chart.update(this.getDOMNode(), this.getChartState());
+  // }
 
   /**
    * Component will un mount, remove the chart and

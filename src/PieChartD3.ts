@@ -11,7 +11,6 @@ export const pieChartD3 = ((): IChartAdaptor => {
   let svg;
   let tipContainer;
   let tipContent;
-  const renderedCharts = [];
 
   const defaultProps: IPieChartProps = {
     backgroundColor: '#ddd',
@@ -27,9 +26,6 @@ export const pieChartD3 = ((): IChartAdaptor => {
       display: true,
       displayFn: (d, ix) => d.value,
     },
-    legend: {
-      display: false,
-    },
     margin: {
       left: 10,
       top: 10,
@@ -38,16 +34,30 @@ export const pieChartD3 = ((): IChartAdaptor => {
     tipContainer: 'body',
     tipContentFn: (bins: string[], i: number, d: number): string => {
       return bins[i] + '<br />' + d;
-    }
-    ,
+    },
+    visible: {},
     width: 200,
   };
 
   const PieChartD3 = {
 
     create(el: HTMLElement, props: Partial<IPieChartProps> = {}) {
+      console.log('create', props.data);
       this.props = merge(defaultProps, { ...props });
-      this.selectedBins = Array(this.props.data.bins.length).fill(true);
+      this.previousData = props.data.counts.map((set: IHistogramDataSet, setIndex: number) => {
+        return set.data
+          .map((count, i) => ({
+            count,
+            label: props.data.bins[i],
+          }));
+      });
+      this._makeSvg(el);
+      this.containers = [];
+      this.previousData.forEach((dataSet, i) => {
+        this.drawChartBg(this.props.data, i);
+        // this.drawChart(dataSet, i, this.props.data.bins);
+      });
+
       this.update(el, props);
     },
 
@@ -95,6 +105,7 @@ export const pieChartD3 = ((): IChartAdaptor => {
     },
 
     update(el: HTMLElement, props: Partial<IPieChartProps>) {
+      console.log('update', props.data, props.visible);
       if (!props.data) {
         return;
       }
@@ -102,7 +113,7 @@ export const pieChartD3 = ((): IChartAdaptor => {
       if (props.colorScheme) {
         this.props.colorScheme = props.colorScheme;
       }
-      this._makeSvg(el);
+      // this._makeSvg(el);
       if (!this.props.data.bins) {
         return;
       }
@@ -110,24 +121,10 @@ export const pieChartD3 = ((): IChartAdaptor => {
       this.drawCharts();
     },
 
-    legendWidth() {
-      const { legend, data } = this.props;
-      const { rectSize = 10, spacing = 4 } = legend;
-      if (!legend.display) {
-        return 0;
-      }
-      const horz = -2 * rectSize;
-      const longest = data.bins.reduce((prev, next) => next.length > prev.length ? next : prev, '');
-      return textWidth(longest, {
-        family: 'Arial',
-        size: 12,
-      }) - horz;
-    },
-
     outerRadius(setIndex = 0) {
       const { donutWidth = 0, width, height } = this.props;
 
-      const radius = Math.min(width, height) / 2 - this.legendWidth();
+      const radius = Math.min(width, height) / 2;
       return donutWidth === 0
         ? radius - 10
         : radius - 10 - (setIndex * (donutWidth + 10));
@@ -135,96 +132,30 @@ export const pieChartD3 = ((): IChartAdaptor => {
 
     innerRadius(setIndex = 0) {
       const { donutWidth = 0, width, height } = this.props;
-      const radius = Math.min(width, height) / 2 - this.legendWidth();
+      const radius = Math.min(width, height) / 2;
       return donutWidth === 0
         ? 0
         : radius - 10 - donutWidth - (setIndex * (donutWidth + 10));
     },
 
-    drawLegend() {
-      if (!this.props.legend.display) {
-        return;
-      }
-      const { data, width } = this.props;
-      const { rectSize = 10, spacing = 4, fontSize = '12px' } = this.props.legend;
-      const colors = d3.scaleOrdinal(this.props.colorScheme);
-      const x = this.outerRadius(0);
-      const legend = svg.selectAll('.legend')
-        .enter()
-        .append('g')
-        .attr('class', 'legend')
-        .attr('transform', (d, i) => {
-          const height = rectSize + spacing;
-          const offset = height * colors.domain().length / 2;
-
-          const vert = i * height - offset;
-          return 'translate(' + (width - this.legendWidth()) + ',' + vert + ')';
-        });
-
-      const selectedBins = this.selectedBins;
-      legend.append('rect')
-        .attr('width', rectSize)
-        .attr('height', rectSize)
-        .style('fill', colors)
-        .attr('class', '')
-        .style('stroke-width', 2)
-        .style('cursor', 'pointer')
-        .on('click', function (label, i) {
-          const rect = d3.select(this);
-          const enabled = rect.attr('class') === 'disabled';
-          rect.attr('class', enabled ? '' : 'disabled');
-
-          if (enabled) {
-            rect.style('opacity', 1);
-            rect.style('fill', function (d: any): string {
-              return colors(d).toString();
-            });
-          } else {
-            rect.style('fill', '#FFF');
-          }
-
-          renderedCharts.forEach((chart) => {
-            chart.pie.value(function (d) {
-              if (d.label === label) { d.enabled = enabled; }
-              return (d.enabled) ? d.count : 0;
-            });
-            chart.path = chart.path.data(chart.pie); // compute the new angles
-            chart.path.transition().duration(750).attrTween('d', arcTween(chart.arc)); // redraw the arcs
-          });
-
-        })
-
-        .style('stroke', colors);
-
-      legend.append('text')
-        .style('font-size', fontSize)
-        .attr('x', rectSize + spacing)
-        .attr('y', rectSize - spacing)
-        .text((d) => d);
-    },
-
     drawCharts() {
-      const { data } = this.props;
-      this.drawLegend();
-      this.visible = {};
-      data.bins.forEach((bin) => {
-        this.visible[bin] = true;
-      });
+      const { data, visible } = this.props;
       this.dataSets = data.counts.map((set: IHistogramDataSet, setIndex: number) => {
-        return set.data.map((count, i) => ({
-          count,
-          enabled: true,
-          label: data.bins[i],
-          nextCount: Math.random() * 100,
-        }));
+        return set.data
+          .map((count, i) => ({
+            count: visible[data.bins[i]] !== false ? count : 0,
+            label: data.bins[i],
+          }));
       });
       this.dataSets.forEach((dataSet, i) => {
-        this.drawChartBg(data, i);
         this.drawChart(dataSet, i, data.bins);
+        this.updateChart(dataSet, i, data.bins);
       });
+      this.previousData = this.dataSets;
     },
 
     drawChartBg(data, i) {
+      console.log('drawChartBg', data);
       const { backgroundColor, width, height } = this.props;
       const tau = 2 * Math.PI; // http://tauday.com/tau-manifesto
       const outerRadius = this.outerRadius(i);
@@ -242,9 +173,64 @@ export const pieChartD3 = ((): IChartAdaptor => {
         .style('fill', backgroundColor)
         .attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')')
         .attr('d', bgArc);
+
+      if (!this.containers[i]) {
+        this.containers[i] = svg
+          .append('g')
+          .attr('class', 'pie-container');
+      }
+    },
+
+    updateChart(data, i, bins) {
+      console.log('data', data);
+      const { labels, width, height, tip, tipContentFn } = this.props;
+
+      // Stack multiple charts in concentric circles
+      const outerRadius = this.outerRadius(i);
+      const innerRadius = this.innerRadius(i);
+      const colors = d3.scaleOrdinal(this.props.colorScheme);
+
+      const arc = d3.arc()
+        .outerRadius(outerRadius)
+        .innerRadius(innerRadius);
+
+      // Function to calculate pie chart paths from data
+      const pie = d3
+        .pie()
+        .sort(null)
+        .value((d: any) => {
+          return d.count;
+        });
+
+      // DATA JOIN
+      // Join new data with old elements, if any.
+      let text = this.containers[i].selectAll('text')
+        .data(data);
+
+      // UPDATE
+      // Update old elements as needed.
+      text.attr('class', 'update');
+
+      // ENTER
+      // Create new elements as needed.
+      //
+      // ENTER + UPDATE
+      // After merging the entered elements with the update selection,
+      // apply operations to both.
+      text.enter().append('text')
+        .attr('class', 'enter')
+        .attr('x', function (d, i) { return i * 32; })
+        .attr('dy', '.35em')
+        .merge(text)
+        .text(function (d) { return d.count; });
+
+      // EXIT
+      // Remove old elements as needed.
+      text.exit().remove();
     },
 
     drawChart(data, i, bins) {
+      console.log('drawChart', data);
       const { labels, width, height, tip, tipContentFn } = this.props;
       // Stack multiple charts in concentric circles
       const outerRadius = this.outerRadius(i);
@@ -258,8 +244,8 @@ export const pieChartD3 = ((): IChartAdaptor => {
           return d.count;
         });
 
-      // Formated pie chart arcs based on current data
-      const arcs = pie(data);
+      // Formated pie chart arcs based on previous current data
+      const arcs = pie(this.previousData[i]);
 
       const colors = d3.scaleOrdinal(this.props.colorScheme);
 
@@ -267,9 +253,7 @@ export const pieChartD3 = ((): IChartAdaptor => {
         .outerRadius(outerRadius)
         .innerRadius(innerRadius);
 
-      const container = svg
-        .append('g')
-        .attr('class', 'pie-container')
+      const container = this.containers[i]
         .datum(data).selectAll('path')
         .data(pie)
         .enter()
@@ -278,9 +262,10 @@ export const pieChartD3 = ((): IChartAdaptor => {
         .attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')');
 
       const path = container.append('path')
-        .attr('fill', function (d, j) { return colors(j); })
+        .attr('stroke', '#FFF')
+        .attr('fill', (d, j) => colors(j))
         .attr('d', arc)
-        .each(function (d) { this._current = d; }) // store the initial angles
+        .each(function (d, j) { this._current = arcs[j]; }) // store the initial angles
         .on('mouseover', (d: any, ix: number) => {
           tipContent.html(() => tipContentFn(bins, ix, d.data.count));
           tip.fx.in(tipContainer);
@@ -289,18 +274,20 @@ export const pieChartD3 = ((): IChartAdaptor => {
         .on('mousemove', () => tip.fx.move(tipContainer))
         .on('mouseout', () => tip.fx.out(tipContainer));
 
-      if (labels.display) {
-        const label = d3.arc()
-          .outerRadius(outerRadius)
-          .innerRadius(innerRadius);
+      path.merge(path);
+      path.transition()
+        .duration(500)
+        .attrTween('d', arcTween(arc));
 
-        container.append('text')
-          .attr('transform', (d) => 'translate(' + label.centroid(d) + ')')
+      if (labels.display) {
+
+        const texts = container.append('text')
+          .attr('class', 'label')
+          .attr('transform', (d) => 'translate(' + arc.centroid(d) + ')')
           .attr('dy', '0.35em')
           .text((d, ix) => labels.displayFn(d, ix));
       }
-
-      renderedCharts.push({ path, pie, arc });
+      path.exit().remove();
     },
 
     /**
