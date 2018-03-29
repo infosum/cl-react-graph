@@ -17,7 +17,10 @@ export const pieChartD3 = ((): IChartAdaptor => {
     backgroundColor: '#ddd',
     className: 'piechart-d3',
     colorScheme,
-    data: [],
+    data: {
+      bins: [],
+      counts: [],
+    },
     donutWidth: 0,
     height: 200,
     labels: {
@@ -147,7 +150,6 @@ export const pieChartD3 = ((): IChartAdaptor => {
       const colors = d3.scaleOrdinal(this.props.colorScheme);
       const x = this.outerRadius(0);
       const legend = svg.selectAll('.legend')
-        .data(this.props.data.bins)
         .enter()
         .append('g')
         .attr('class', 'legend')

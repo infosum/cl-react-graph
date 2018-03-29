@@ -18,7 +18,10 @@ interface ILabels {
 }
 
 export interface IPieChartProps {
-  data: any;
+  data: {
+    bins: string[],
+    counts: IHistogramDataSet[];
+  };
   backgroundColor?: string;
   className?: string;
   colorScheme?: string[];

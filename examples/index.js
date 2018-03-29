@@ -49841,7 +49841,10 @@ exports.pieChartD3 = function () {
         backgroundColor: '#ddd',
         className: 'piechart-d3',
         colorScheme: colors_1.default,
-        data: [],
+        data: {
+            bins: [],
+            counts: []
+        },
         donutWidth: 0,
         height: 200,
         labels: {
@@ -49973,7 +49976,7 @@ exports.pieChartD3 = function () {
                 fontSize = _e === void 0 ? '12px' : _e;
             var colors = d3.scaleOrdinal(this.props.colorScheme);
             var x = this.outerRadius(0);
-            var legend = svg.selectAll('.legend').data(this.props.data.bins).enter().append('g').attr('class', 'legend').attr('transform', function (d, i) {
+            var legend = svg.selectAll('.legend').enter().append('g').attr('class', 'legend').attr('transform', function (d, i) {
                 var height = rectSize + spacing;
                 var offset = height * colors.domain().length / 2;
                 var vert = i * height - offset;
