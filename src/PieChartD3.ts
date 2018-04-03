@@ -42,7 +42,6 @@ export const pieChartD3 = ((): IChartAdaptor => {
   const PieChartD3 = {
 
     create(el: HTMLElement, props: Partial<IPieChartProps> = {}) {
-      console.log('create', props.data);
       this.props = merge(defaultProps, { ...props });
       this.previousData = props.data.counts.map((set: IHistogramDataSet, setIndex: number) => {
         return set.data
@@ -55,7 +54,6 @@ export const pieChartD3 = ((): IChartAdaptor => {
       this.containers = [];
       this.previousData.forEach((dataSet, i) => {
         this.drawChartBg(this.props.data, i);
-        // this.drawChart(dataSet, i, this.props.data.bins);
       });
 
       this.update(el, props);
@@ -105,7 +103,6 @@ export const pieChartD3 = ((): IChartAdaptor => {
     },
 
     update(el: HTMLElement, props: Partial<IPieChartProps>) {
-      console.log('update', props.data, props.visible);
       if (!props.data) {
         return;
       }
@@ -149,13 +146,11 @@ export const pieChartD3 = ((): IChartAdaptor => {
       });
       this.dataSets.forEach((dataSet, i) => {
         this.drawChart(dataSet, i, data.bins);
-        this.updateChart(dataSet, i, data.bins);
       });
       this.previousData = this.dataSets;
     },
 
     drawChartBg(data, i) {
-      console.log('drawChartBg', data);
       const { backgroundColor, width, height } = this.props;
       const tau = 2 * Math.PI; // http://tauday.com/tau-manifesto
       const outerRadius = this.outerRadius(i);
@@ -181,56 +176,7 @@ export const pieChartD3 = ((): IChartAdaptor => {
       }
     },
 
-    updateChart(data, i, bins) {
-      console.log('data', data);
-      const { labels, width, height, tip, tipContentFn } = this.props;
-
-      // Stack multiple charts in concentric circles
-      const outerRadius = this.outerRadius(i);
-      const innerRadius = this.innerRadius(i);
-      const colors = d3.scaleOrdinal(this.props.colorScheme);
-
-      const arc = d3.arc()
-        .outerRadius(outerRadius)
-        .innerRadius(innerRadius);
-
-      // Function to calculate pie chart paths from data
-      const pie = d3
-        .pie()
-        .sort(null)
-        .value((d: any) => {
-          return d.count;
-        });
-
-      // DATA JOIN
-      // Join new data with old elements, if any.
-      let text = this.containers[i].selectAll('text')
-        .data(data);
-
-      // UPDATE
-      // Update old elements as needed.
-      text.attr('class', 'update');
-
-      // ENTER
-      // Create new elements as needed.
-      //
-      // ENTER + UPDATE
-      // After merging the entered elements with the update selection,
-      // apply operations to both.
-      text.enter().append('text')
-        .attr('class', 'enter')
-        .attr('x', function (d, i) { return i * 32; })
-        .attr('dy', '.35em')
-        .merge(text)
-        .text(function (d) { return d.count; });
-
-      // EXIT
-      // Remove old elements as needed.
-      text.exit().remove();
-    },
-
     drawChart(data, i, bins) {
-      console.log('drawChart', data);
       const { labels, width, height, tip, tipContentFn } = this.props;
       // Stack multiple charts in concentric circles
       const outerRadius = this.outerRadius(i);
@@ -253,15 +199,14 @@ export const pieChartD3 = ((): IChartAdaptor => {
         .outerRadius(outerRadius)
         .innerRadius(innerRadius);
 
-      const container = this.containers[i]
-        .datum(data).selectAll('path')
-        .data(pie)
-        .enter()
-        .append('g')
+      const path = this.containers[i].selectAll('path')
+        .data(pie(data));
+
+      const g = path.enter().append('g')
         .attr('class', 'arc')
         .attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')');
 
-      const path = container.append('path')
+      g.append('path')
         .attr('stroke', '#FFF')
         .attr('fill', (d, j) => colors(j))
         .attr('d', arc)
@@ -270,23 +215,61 @@ export const pieChartD3 = ((): IChartAdaptor => {
           tipContent.html(() => tipContentFn(bins, ix, d.data.count));
           tip.fx.in(tipContainer);
         })
-
         .on('mousemove', () => tip.fx.move(tipContainer))
         .on('mouseout', () => tip.fx.out(tipContainer));
 
-      path.merge(path);
       path.transition()
+        .delay(400)
         .duration(500)
         .attrTween('d', arcTween(arc));
 
       if (labels.display) {
+        const lbls = this.containers[i].selectAll('text')
+          .data(pie(data));
+        lbls.enter()
+          .append('text')
+          .attr('transform', (d) => {
+            const centroid = arc.centroid(d);
+            const x = centroid[0] + (width / 2);
+            const y = centroid[1] + (height / 2);
+            return 'translate(' + x + ',' + y + ')';
+          })
+          .merge(lbls)
+          .each(function (d, j) {
+            // Store current value to work out fx transition opacities
+            this._current = d;
+          })
 
-        const texts = container.append('text')
-          .attr('class', 'label')
-          .attr('transform', (d) => 'translate(' + arc.centroid(d) + ')')
-          .attr('dy', '0.35em')
-          .text((d, ix) => labels.displayFn(d, ix));
+          .text((d, ix) => {
+            if (d.value === 0) {
+              return '';
+            }
+            return labels.displayFn(d, ix);
+          });
+
+        lbls.transition()
+          .duration(500)
+          .style('opacity', 0)
+          .transition()
+          .attr('transform', (d) => {
+            const centroid = arc.centroid(d);
+            const x = centroid[0] + (width / 2);
+            const y = centroid[1] + (height / 2);
+            return 'translate(' + x + ',' + y + ')';
+
+          })
+          .transition()
+          .duration(500)
+          .style('opacity', (d, ix, c) => {
+            // Only show if the new value is not 0
+            return c[ix]._current.value === 0 ? 0 : 1;
+          });
+
+        lbls.merge(lbls);
       }
+
+      path.merge(path);
+
       path.exit().remove();
     },
 

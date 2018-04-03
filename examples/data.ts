@@ -38,11 +38,11 @@ export const data = {
 };
 
 export const data2 = {
-  bins: ['bin 1', 'bin 2', 'bin 3', 'bin 4', 'bin 5', 'bin 9', 'bin 7'],
+  bins: ['bin 1', 'bin 2', 'bin 3', 'bin 4', 'bin 5', 'bin 6', 'bin 7'],
   counts: [
     {
       borderColors: ['red'],
-      data: [999, 9000, 15000, 25000, 15000, 9000, 888],
+      data: [1, 2, 3, 4, 5, 6, 7],
       label: 'Data 1',
     },
   ],
@@ -56,10 +56,41 @@ export const data3 = {
       data: [100, 50, 40],
       label: 'Data 1',
     },
-    // {
-    //   borderColors: ['red'],
-    //   data: [32, 1, 5, 0],
-    //   label: 'Data 2',
-    // },
+    {
+      borderColors: ['red'],
+      data: [32, 1, 5, 0],
+      label: 'Data 2',
+    },
   ],
+};
+
+export const axis = {
+  x: {
+    label: 'X Axis',
+    text: {
+      style: {
+        'dy': '.35em',
+        'text-anchor': 'start',
+        'transform': 'rotate(45)',
+        'x': 4,
+        'y': 0,
+      },
+    },
+    tickSize: 0,
+  },
+  y: {
+    label: 'Y Axis!',
+    style: {
+      fill: 'none',
+      stroke: '#eeAA00',
+    },
+    text: {
+      style: {
+        fill: '#eeAA00',
+      },
+    },
+    tickSize: 20,
+    ticks: 3,
+    width: 50,
+  },
 };

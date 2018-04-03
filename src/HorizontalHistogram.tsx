@@ -3,12 +3,13 @@ import * as d3 from 'd3';
 import * as React from 'react';
 import { Component } from 'react';
 import * as ReactDOM from 'react-dom';
+import { IHistogramProps } from './Histogram';
 import { horizontalHistogramD3 } from './HorizontalHistogramD3';
 
 /**
  * Horizontal Histogram component
  */
-class HorizontalHistogram extends Component<IHistogramProps, IHistogramChartState> {
+class HorizontalHistogram extends Component<IHistogramProps, IChartState> {
 
   private histogram: IChartAdaptor;
   private ref;
@@ -65,16 +66,7 @@ class HorizontalHistogram extends Component<IHistogramProps, IHistogramChartStat
     const counts: IHistogramDataSet[] = [];
     const bins: string[] = [];
     this.state = {
-      bar: {
-        margin: 2,
-        width: 10,
-      },
-      data: {
-        bins,
-        counts,
-      },
       parentWidth: 300,
-      width: props.width,
     };
   }
 
@@ -114,22 +106,15 @@ class HorizontalHistogram extends Component<IHistogramProps, IHistogramChartStat
    * Get the chart state
    * @return {Object} ChartState
    */
-  public getChartState(): IHistogramChartState {
+  public getChartState(): IHistogramProps {
     let { width } = this.props;
-    const { axis, bar, grid, height, data, margin, stroke, tipContentFn } = this.props;
+    const { children, ...rest } = this.props;
     if (width === '100%') {
       width = this.state.parentWidth || 300;
     }
 
     return {
-      axis,
-      bar,
-      data,
-      grid,
-      height,
-      margin,
-      stroke,
-      tipContentFn,
+      ...rest,
       width,
     };
   }

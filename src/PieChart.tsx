@@ -37,13 +37,10 @@ class PieChart extends Component<IPieChartProps, IChartState> {
   private chart: IChartAdaptor;
   private ref;
 
-  public static defaultProps = {
+  public static defaultProps: Partial<IPieChartProps> = {
     backgroundColor: '#ddd',
     donutWidth: 0,
     height: 200,
-    legend: {
-      display: false,
-    },
     margin: {
       left: 5,
       top: 5,
@@ -110,14 +107,6 @@ class PieChart extends Component<IPieChartProps, IChartState> {
       width,
     };
   }
-
-  /**
-   * Props recieved, update the chart
-   * @param {Object} props Props
-   */
-  // public componentWillReceiveProps(props: IHistogramProps) {
-  //   this.chart.update(this.getDOMNode(), this.getChartState());
-  // }
 
   /**
    * Component will un mount, remove the chart and

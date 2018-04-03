@@ -27,7 +27,7 @@ export const histogramD3 = ((): IChartAdaptor => {
       .ticks(ticks);
   }
 
-  const defaultProps = {
+  const defaultProps: IHistogramProps = {
     axis: {
       x: {
         height: 20,
@@ -69,7 +69,10 @@ export const histogramD3 = ((): IChartAdaptor => {
     },
     className: 'histogram-d3',
     colorScheme,
-    data: [],
+    data: {
+      bins: [],
+      counts: [],
+    },
     delay: 0,
     domain: {
       max: null,
@@ -113,6 +116,7 @@ export const histogramD3 = ((): IChartAdaptor => {
     tipContainer: 'body',
     tipContentFn: (bins: string[], i: number, d: number): string =>
       bins[i] + '<br />' + d,
+    visible: {},
     width: 200,
   };
 
@@ -134,6 +138,10 @@ export const histogramD3 = ((): IChartAdaptor => {
       });
       this.makeGrid(props);
       this.makeScales();
+      this.container = svg
+        .append('g')
+        .attr('class', 'histogram-container');
+
       this.update(el, props);
     },
 
@@ -318,9 +326,18 @@ export const histogramD3 = ((): IChartAdaptor => {
      * @param {Object} info Bar data etc
      */
     _drawBars(info: IHistogramData) {
-      const valuesCount = this.valuesCount(info.counts);
-      info.counts.forEach((set: IHistogramDataSet, setIndex: number) => {
-        this.drawDataSet(info.bins, set, setIndex, info.counts.length);
+      // const valuesCount = this.valuesCount(info.counts);
+      const { visible } = this.props;
+      this.dataSets = info.counts.map((set: IHistogramDataSet, setIndex: number) => {
+        return {
+          ...set,
+          data: set.data
+            .map((count, i) => visible[info.bins[i]] !== false ? count : 0),
+        };
+      });
+
+      this.dataSets.forEach((set: IHistogramDataSet, setIndex: number) => {
+        this.updateChart(info.bins, set, setIndex, info.counts.length);
       });
     },
 
@@ -384,13 +401,12 @@ export const histogramD3 = ((): IChartAdaptor => {
      * @param {number} setIndex Data set index
      * @param {number} setCount Total number of data sets
      */
-    drawDataSet(
+    updateChart(
       bins: string[], set: IHistogramDataSet,
       setIndex: number, setCount: number,
     ) {
       const { height, width, margin, bar, delay, duration,
         axis, stroke, tip, tipContentFn } = this.props;
-      let barItem;
       const barWidth = this.barWidth();
       const colors = d3.scaleOrdinal(set.colors || this.props.colorScheme);
       const borderColors = set.borderColors ? d3.scaleOrdinal(set.borderColors) : null;
@@ -399,12 +415,18 @@ export const histogramD3 = ((): IChartAdaptor => {
       const multiLineOffset = (index) => setCount === 1
         ? 0
         : ((index + setIndex) * (barWidth + this.groupedMargin()));
+      const gridHeight = this.gridHeight();
 
-      // svg.selectAll(selector).remove();
-      barItem = svg.selectAll(selector)
-        .data(set.data)
-        .enter()
+      console.log('set.data', set.data, setIndex);
+      const u = this.container
+        .selectAll('rect')
+        .data(set.data);
+
+      u.enter()
         .append('rect')
+        .attr('height', 0)
+        .attr('y', (d: number): number => gridHeight)
+
         .attr('class', 'bar ' + selector)
         .attr('x', (d, index, all) => {
           return this.yAxisWidth()
@@ -421,56 +443,29 @@ export const histogramD3 = ((): IChartAdaptor => {
         })
         .on('mousemove', () => tip.fx.move(tipContainer))
         .on('mouseout', () => tip.fx.out(tipContainer))
-        .attr('y', (d: number): number => this.gridHeight())
-        .attr('height', 0);
-
-      barItem.attr('stroke', (d, i) => {
-        if (borderColors) {
-          return borderColors(i);
-        }
-        return typeof stroke.color === 'function'
-          ? stroke.color(d, i, colors)
-          : stroke.color;
-      })
-        .attr('shape-rendering', 'crispEdges')
-        .attr('stroke-width', stroke.width)
-        .attr('stroke-linecap', stroke.linecap);
-
-      if (stroke.dasharray !== '') {
-        barItem.attr('stroke-dasharray', stroke.dasharray);
-      }
-
-      barItem
+        .merge(u)
         .transition()
         .duration(duration)
         .delay(delay)
-        .attr('y', (d: number): number => {
-          return y(d);
-        })
+        .attr('y', (d: number): number => y(d))
         // Hide bar's bottom border
         .attr('stroke-dasharray',
         (d: number): string => {
-          const currentHeight = this.gridHeight() - (y(d));
+          const currentHeight = gridHeight - (y(d));
           return `${barWidth} 0 ${currentHeight} ${barWidth}`;
         })
-        .attr('height',
-        (d: number): number => {
-          return this.gridHeight() - (y(d));
-        });
+        .attr('height', (d: number): number => gridHeight - (y(d)));
 
-      barItem.exit().remove();
+      u.exit().remove();
+
     },
 
     makeGrid(props: IHistogramProps) {
       const { grid } = props;
-      if (grid.x.visible) {
-        this.gridX = svg.append('g')
-          .attr('class', 'grid gridX');
-      }
-      if (grid.y.visible) {
-        this.gridY = svg.append('g')
-          .attr('class', 'grid gridY');
-      }
+      this.gridX = svg.append('g')
+        .attr('class', 'grid gridX');
+      this.gridY = svg.append('g')
+        .attr('class', 'grid gridY');
     },
 
     /**

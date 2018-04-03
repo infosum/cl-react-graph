@@ -81,6 +81,77 @@ return /******/ (function(modules) { // webpackBootstrap
 /************************************************************************/
 /******/ ({
 
+/***/ "./examples/Histogram.tsx":
+/*!********************************!*\
+  !*** ./examples/Histogram.tsx ***!
+  \********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var __extends = undefined && undefined.__extends || function () {
+    var extendStatics = Object.setPrototypeOf || { __proto__: [] } instanceof Array && function (d, b) {
+        d.__proto__ = b;
+    } || function (d, b) {
+        for (var p in b) {
+            if (b.hasOwnProperty(p)) d[p] = b[p];
+        }
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() {
+            this.constructor = d;
+        }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+}();
+var __assign = undefined && undefined.__assign || Object.assign || function (t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+        s = arguments[i];
+        for (var p in s) {
+            if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+        }
+    }
+    return t;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "react");
+var react_1 = __webpack_require__(/*! react */ "react");
+var src_1 = __webpack_require__(/*! ../src */ "./src/index.ts");
+var data_1 = __webpack_require__(/*! ./data */ "./examples/data.ts");
+var tipContentFn = function tipContentFn(bins, i, d) {
+    return bins[i] + '<br />HI THere ' + d.toFixed(2);
+};
+var HistogramExamples = function (_super) {
+    __extends(HistogramExamples, _super);
+    function HistogramExamples(props) {
+        var _this = _super.call(this, props) || this;
+        _this.state = {
+            visible: {}
+        };
+        return _this;
+    }
+    HistogramExamples.prototype.toggleVisible = function (key) {
+        var v = this.state.visible.hasOwnProperty(key) ? !this.state.visible[key] : false;
+        this.setState({
+            visible: __assign({}, this.state.visible, (_a = {}, _a[key] = v, _a))
+        });
+        var _a;
+    };
+    HistogramExamples.prototype.render = function () {
+        var theme = this.props.theme;
+        var visible = this.state.visible;
+        console.log(visible);
+        return React.createElement("div", null, React.createElement("h3", null, "Histograms"), React.createElement(src_1.Histogram, { data: data_1.data, grid: data_1.grid, width: 700, height: 150, tipContentFn: tipContentFn }));
+    };
+    return HistogramExamples;
+}(react_1.Component);
+exports.default = HistogramExamples;
+
+/***/ }),
+
 /***/ "./examples/Pie.tsx":
 /*!**************************!*\
   !*** ./examples/Pie.tsx ***!
@@ -144,7 +215,7 @@ var PieExamples = function (_super) {
         var labels = {
             display: true
         };
-        return React.createElement("div", null, React.createElement("h3", null, "Pie Chart"), React.createElement("h4", null, "Donut"), React.createElement(src_1.PieChart, { width: 300, colorScheme: theme, backgroundColor: "#eee", height: 300, donutWidth: 10, data: data_1.data3, visible: visible, labels: labels }), React.createElement(src_1.Legend, { theme: theme, data: data_1.data3, onSelect: function onSelect(label) {
+        return React.createElement("div", null, React.createElement("h3", null, "Pie Chart"), React.createElement(src_1.PieChart, { width: 200, height: 200, data: data_1.data }), React.createElement("h4", null, "Donut"), React.createElement(src_1.PieChart, { width: 300, colorScheme: theme, backgroundColor: "#eee", height: 300, donutWidth: 10, data: data_1.data3, visible: visible, labels: labels }), React.createElement(src_1.Legend, { theme: theme, data: data_1.data3, onSelect: function onSelect(label) {
                 return _this.toggleVisible(label);
             }, visible: visible }));
     };
@@ -198,10 +269,10 @@ exports.data = {
     grid: exports.grid
 };
 exports.data2 = {
-    bins: ['bin 1', 'bin 2', 'bin 3', 'bin 4', 'bin 5', 'bin 9', 'bin 7'],
+    bins: ['bin 1', 'bin 2', 'bin 3', 'bin 4', 'bin 5', 'bin 6', 'bin 7'],
     counts: [{
         borderColors: ['red'],
-        data: [999, 9000, 15000, 25000, 15000, 9000, 888],
+        data: [1, 2, 3, 4, 5, 6, 7],
         label: 'Data 1'
     }]
 };
@@ -211,55 +282,13 @@ exports.data3 = {
         borderColors: ['red'],
         data: [100, 50, 40],
         label: 'Data 1'
+    }, {
+        borderColors: ['red'],
+        data: [32, 1, 5, 0],
+        label: 'Data 2'
     }]
 };
-
-/***/ }),
-
-/***/ "./examples/examples.tsx":
-/*!*******************************!*\
-  !*** ./examples/examples.tsx ***!
-  \*******************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var d3 = __webpack_require__(/*! d3 */ "./node_modules/d3/index.js");
-var React = __webpack_require__(/*! react */ "react");
-var ReactDOM = __webpack_require__(/*! react-dom */ "react-dom");
-var src_1 = __webpack_require__(/*! ../src */ "./src/index.ts");
-var filterRange_1 = __webpack_require__(/*! ../src/colors/filterRange */ "./src/colors/filterRange.ts");
-var data_1 = __webpack_require__(/*! ./data */ "./examples/data.ts");
-var Pie_1 = __webpack_require__(/*! ./Pie */ "./examples/Pie.tsx");
-var points = [{
-    data: [{ x: 1, y: 1 }, { x: 2, y: 2 }, { x: 3, y: 3 }, { x: 4, y: 4 }],
-    label: 'test data'
-}, {
-    data: [{ x: 2, y: 1 }, { x: 3, y: 2 }, { x: 4, y: 3 }, { x: 6, y: 4 }],
-    label: 'test data',
-    line: {
-        curveType: d3.curveStepAfter,
-        fill: {
-            fill: 'rgba(10, 10, 10, 0.2)',
-            show: true
-        },
-        show: true,
-        stroke: 'orange',
-        strokeDashArray: '10 5',
-        strokeDashOffset: 3
-    },
-    point: {
-        fill: 'black',
-        radius: 10,
-        show: true,
-        stroke: 'red'
-    }
-}];
-var scatter = [];
-var axis = {
+exports.axis = {
     x: {
         label: 'X Axis',
         text: {
@@ -289,21 +318,54 @@ var axis = {
         width: 50
     }
 };
-var labels = {
-    display: true
-};
+
+/***/ }),
+
+/***/ "./examples/examples.tsx":
+/*!*******************************!*\
+  !*** ./examples/examples.tsx ***!
+  \*******************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var d3 = __webpack_require__(/*! d3 */ "./node_modules/d3/index.js");
+var React = __webpack_require__(/*! react */ "react");
+var ReactDOM = __webpack_require__(/*! react-dom */ "react-dom");
+var filterRange_1 = __webpack_require__(/*! ../src/colors/filterRange */ "./src/colors/filterRange.ts");
+var Histogram_1 = __webpack_require__(/*! ./Histogram */ "./examples/Histogram.tsx");
+var Pie_1 = __webpack_require__(/*! ./Pie */ "./examples/Pie.tsx");
+var points = [{
+    data: [{ x: 1, y: 1 }, { x: 2, y: 2 }, { x: 3, y: 3 }, { x: 4, y: 4 }],
+    label: 'test data'
+}, {
+    data: [{ x: 2, y: 1 }, { x: 3, y: 2 }, { x: 4, y: 3 }, { x: 6, y: 4 }],
+    label: 'test data',
+    line: {
+        curveType: d3.curveStepAfter,
+        fill: {
+            fill: 'rgba(10, 10, 10, 0.2)',
+            show: true
+        },
+        show: true,
+        stroke: 'orange',
+        strokeDashArray: '10 5',
+        strokeDashOffset: 3
+    },
+    point: {
+        fill: 'black',
+        radius: 10,
+        show: true,
+        stroke: 'red'
+    }
+}];
+var scatter = [];
 var theme = filterRange_1.default(['rgba(255, 113, 1, 0.5)', '#fff6ef', 'rgba(0, 169, 123, 0.5)', '#f6fffd', '#D7263D', 'rgba(215, 38, 61, 0.05)', '#0f2629', '#ededed', 'rgba(86, 180, 191, 0.5)', '#f5fbfb', '#000000', '#0f2629', '#D7263D', '#FBD7D9', '#ffebec', '#963540', '#22545a', '#56b4bf', '#56b4bf', '#56b4bf', '#FF7101', '#449098', '#77c3cb', '#d4eef8', '#ff7101', '#FF7101', '#cc5a00', '#ff8d33', '#fef9e5', '#7d5d2e', '#00a97b', '#008762', '#33ba95', '#dbf1d6', '#227839', '#0f5e7b', '#d4eef8', '#0f5e7b', '#F9C80E', ' 63.75rem', '#007656', '#c5e5e9', '#f9c80e', '#a9a9a9', '#dbdbdb', '#cccccc', '#e6e6e6', '#56b4bf', '#449098', '#77c3cb', '#22545a', '#ff7101', '#cdcdcd', '#ffffff', 'd7263d', '#00a97b', '#888888', '#e6e6e6', '#f2f2f2', '#f4f4f4']);
 var App = function App() {
-    return React.createElement("div", { style: { padding: '20px' } }, React.createElement(Pie_1.default, { theme: theme }), React.createElement("div", null, React.createElement(src_1.HorizontalHistogram, { data: data_1.data2, width: 500, height: 400, margin: {
-            left: 30,
-            top: 30
-        } }), React.createElement(src_1.Histogram, { data: data_1.data2, width: 400, height: 400, margin: {
-            left: 30,
-            top: 30
-        }, domain: { min: 0, max: 50000 } })), React.createElement("div", null, React.createElement(src_1.Histogram, { data: data_1.data, grid: data_1.grid, width: 700, height: 150, tipContentFn: tipContentFn }), React.createElement(src_1.Histogram, { data: data_1.data2, bar: { margin: 4 }, width: 700, height: 150, axis: axis })), React.createElement("div", null, React.createElement(src_1.LineChart, { axis: axis, grid: data_1.grid, data: points, width: 300 })));
-};
-var tipContentFn = function tipContentFn(bins, i, d) {
-    return bins[i] + '<br />HI THere ' + d.toFixed(2);
+    return React.createElement("div", { style: { padding: '20px' } }, React.createElement(Pie_1.default, { theme: theme }), React.createElement(Histogram_1.default, { theme: theme }));
 };
 ReactDOM.render(React.createElement(App, null), document.getElementById('root'));
 
@@ -47637,6 +47699,23 @@ var __extends = undefined && undefined.__extends || function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 }();
+var __assign = undefined && undefined.__assign || Object.assign || function (t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+        s = arguments[i];
+        for (var p in s) {
+            if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+        }
+    }
+    return t;
+};
+var __rest = undefined && undefined.__rest || function (s, e) {
+    var t = {};
+    for (var p in s) {
+        if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0) t[p] = s[p];
+    }if (s != null && typeof Object.getOwnPropertySymbols === "function") for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+        if (e.indexOf(p[i]) < 0) t[p[i]] = s[p[i]];
+    }return t;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var d3 = __webpack_require__(/*! d3 */ "./node_modules/d3/index.js");
 var React = __webpack_require__(/*! react */ "react");
@@ -47651,16 +47730,7 @@ var Histogram = function (_super) {
         var counts = [];
         var bins = [];
         _this.state = {
-            bar: {
-                margin: 2,
-                width: 10
-            },
-            data: {
-                bins: bins,
-                counts: counts
-            },
-            parentWidth: 300,
-            width: props.width
+            parentWidth: 300
         };
         return _this;
     }
@@ -47688,33 +47758,12 @@ var Histogram = function (_super) {
     Histogram.prototype.getChartState = function () {
         var width = this.props.width;
         var _a = this.props,
-            axis = _a.axis,
-            bar = _a.bar,
-            domain = _a.domain,
-            grid = _a.grid,
-            height = _a.height,
-            data = _a.data,
-            margin = _a.margin,
-            stroke = _a.stroke,
-            tipContentFn = _a.tipContentFn;
+            children = _a.children,
+            rest = __rest(_a, ["children"]);
         if (width === '100%') {
             width = this.state.parentWidth || 300;
         }
-        return {
-            axis: axis,
-            bar: bar,
-            data: data,
-            domain: domain,
-            grid: grid,
-            height: height,
-            margin: margin,
-            stroke: stroke,
-            tipContentFn: tipContentFn,
-            width: width
-        };
-    };
-    Histogram.prototype.componentWillReceiveProps = function (props) {
-        this.histogram.update(this.getDOMNode(), this.getChartState());
+        return __assign({}, rest, { width: width });
     };
     Histogram.prototype.componentWillUnmount = function () {
         if (this.props.width === '100%') {
@@ -47766,7 +47815,7 @@ var Histogram = function (_super) {
         },
         stroke: {
             color: function color(d, i, colors) {
-                return d3.rgb(colors(i)).darker(1);
+                return d3.rgb(colors(i)).darker(1).toString();
             },
             width: 1
         },
@@ -47791,6 +47840,15 @@ exports.default = Histogram;
 "use strict";
 
 
+var __assign = undefined && undefined.__assign || Object.assign || function (t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+        s = arguments[i];
+        for (var p in s) {
+            if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+        }
+    }
+    return t;
+};
 var __rest = undefined && undefined.__rest || function (s, e) {
     var t = {};
     for (var p in s) {
@@ -47866,7 +47924,10 @@ exports.histogramD3 = function () {
         },
         className: 'histogram-d3',
         colorScheme: colors_1.default,
-        data: [],
+        data: {
+            bins: [],
+            counts: []
+        },
         delay: 0,
         domain: {
             max: null,
@@ -47911,14 +47972,28 @@ exports.histogramD3 = function () {
         tipContentFn: function tipContentFn(bins, i, d) {
             return bins[i] + '<br />' + d;
         },
+        visible: {},
         width: 200
     };
     var HistogramD3 = {
         create: function create(el, props) {
+            var _this = this;
             if (props === void 0) {
                 props = {};
             }
             this.props = deepmerge_1.default(defaultProps, props);
+            this._makeSvg(el);
+            this.previousData = this.props.data.counts.map(function (set, setIndex) {
+                return set.data.map(function (count, i) {
+                    return {
+                        count: 0,
+                        label: _this.props.data.bins[i]
+                    };
+                });
+            });
+            this.makeGrid(props);
+            this.makeScales();
+            this.container = svg.append('g').attr('class', 'histogram-container');
             this.update(el, props);
         },
         _makeSvg: function _makeSvg(el) {
@@ -47964,8 +48039,8 @@ exports.histogramD3 = function () {
             var extent = d3.extent(allCounts, function (d) {
                 return d;
             });
-            yDomain[1] = domain && domain.hasOwnProperty('max') ? domain.max : extent[1];
-            yDomain[0] = domain && domain.hasOwnProperty('min') ? domain.min : extent[0];
+            yDomain[1] = domain && domain.hasOwnProperty('max') && domain.max !== null ? domain.max : extent[1];
+            yDomain[0] = domain && domain.hasOwnProperty('min') && domain.min !== null ? domain.min : 0;
             var yRange = [height - margin.top * 2 - this.xAxisHeight(), 0];
             scale.range(yRange).domain(yDomain);
         },
@@ -47977,6 +48052,21 @@ exports.histogramD3 = function () {
             var axis = this.props.axis;
             return axis.x.label === '' ? axis.x.height : axis.x.height + 30;
         },
+        makeScales: function makeScales() {
+            var _a = this.props,
+                axis = _a.axis,
+                margin = _a.margin,
+                height = _a.height,
+                width = _a.width;
+            this.xAxis = svg.append('g').attr('class', 'x-axis');
+            this.yAxis = svg.append('g').attr('class', 'y-axis');
+            if (axis.x.label !== '') {
+                svg.append('text').attr('class', 'x-axis-label').attr('transform', 'translate(' + width / 2 + ' ,' + (height - this.xAxisHeight() - margin.left * 2 + 25) + ')').style('text-anchor', 'middle').text(axis.x.label);
+            }
+            if (axis.y.label !== '') {
+                svg.append('text').attr('class', 'y-axis-label').attr('transform', 'rotate(-90)').attr('y', 0 - margin.left).attr('x', 0 - (height / 2 - margin.top * 2)).attr('dy', '1em').style('text-anchor', 'middle').text(axis.y.label);
+            }
+        },
         _drawScales: function _drawScales(data) {
             var _a = this.props,
                 domain = _a.domain,
@@ -47985,8 +48075,6 @@ exports.histogramD3 = function () {
                 height = _a.height,
                 axis = _a.axis;
             var valuesCount = this.valuesCount(data.counts);
-            svg.selectAll('.y-axis').remove();
-            svg.selectAll('.x-axis').remove();
             var w = this.gridWidth();
             var xAxis;
             var yAxis;
@@ -48002,20 +48090,14 @@ exports.histogramD3 = function () {
                     }));
                 }
             }
-            svg.append('g').attr('class', 'x-axis').attr('transform', 'translate(' + this.yAxisWidth() + ',' + (height - this.xAxisHeight() - margin.left * 2) + ')').call(xAxis);
-            if (axis.x.label !== '') {
-                svg.append('text').attr('class', 'x-axis-label').attr('transform', 'translate(' + width / 2 + ' ,' + (height - this.xAxisHeight() - margin.left * 2 + 25) + ')').style('text-anchor', 'middle').text(axis.x.label);
-            }
+            this.xAxis.attr('transform', 'translate(' + this.yAxisWidth() + ',' + (height - this.xAxisHeight() - margin.left * 2) + ')').call(xAxis);
             this.appendDomainRange(y, data);
             yAxis = d3.axisLeft(y).ticks(axis.y.ticks);
             var yTickSize = lodash_1.get(axis, 'y.tickSize', undefined);
             if (yTickSize !== undefined) {
                 yAxis.tickSize(yTickSize);
             }
-            svg.append('g').attr('class', 'y-axis').attr('transform', 'translate(' + this.yAxisWidth() + ', 0)').call(yAxis);
-            if (axis.y.label !== '') {
-                svg.append('text').attr('class', 'y-axis-label').attr('transform', 'rotate(-90)').attr('y', 0 - margin.left).attr('x', 0 - (height / 2 - margin.top * 2)).attr('dy', '1em').style('text-anchor', 'middle').text(axis.y.label);
-            }
+            this.yAxis.attr('transform', 'translate(' + this.yAxisWidth() + ', 0)').call(yAxis);
             var _b = axis.x.text.style,
                 transform = _b.transform,
                 xx = _b.x,
@@ -48035,9 +48117,14 @@ exports.histogramD3 = function () {
         },
         _drawBars: function _drawBars(info) {
             var _this = this;
-            var valuesCount = this.valuesCount(info.counts);
-            info.counts.forEach(function (set, setIndex) {
-                _this.drawDataSet(info.bins, set, setIndex, info.counts.length);
+            var visible = this.props.visible;
+            this.dataSets = info.counts.map(function (set, setIndex) {
+                return __assign({}, set, { data: set.data.map(function (count, i) {
+                        return visible[info.bins[i]] !== false ? count : 0;
+                    }) });
+            });
+            this.dataSets.forEach(function (set, setIndex) {
+                _this.updateChart(info.bins, set, setIndex, info.counts.length);
             });
         },
         gridWidth: function gridWidth() {
@@ -48076,7 +48163,7 @@ exports.histogramD3 = function () {
             }
             return barWidth / setCount;
         },
-        drawDataSet: function drawDataSet(bins, set, setIndex, setCount) {
+        updateChart: function updateChart(bins, set, setIndex, setCount) {
             var _this = this;
             var _a = this.props,
                 height = _a.height,
@@ -48089,7 +48176,6 @@ exports.histogramD3 = function () {
                 stroke = _a.stroke,
                 tip = _a.tip,
                 tipContentFn = _a.tipContentFn;
-            var barItem;
             var barWidth = this.barWidth();
             var colors = d3.scaleOrdinal(set.colors || this.props.colorScheme);
             var borderColors = set.borderColors ? d3.scaleOrdinal(set.borderColors) : null;
@@ -48097,8 +48183,12 @@ exports.histogramD3 = function () {
             var multiLineOffset = function multiLineOffset(index) {
                 return setCount === 1 ? 0 : (index + setIndex) * (barWidth + _this.groupedMargin());
             };
-            svg.selectAll(selector).remove();
-            barItem = svg.selectAll(selector).data(set.data).enter().append('rect').attr('class', 'bar ' + selector).attr('x', function (d, index, all) {
+            var gridHeight = this.gridHeight();
+            console.log('set.data', set.data, setIndex);
+            var u = this.container.selectAll('rect').data(set.data);
+            u.enter().append('rect').attr('height', 0).attr('y', function (d) {
+                return gridHeight;
+            }).attr('class', 'bar ' + selector).attr('x', function (d, index, all) {
                 return _this.yAxisWidth() + axis.y.style['stroke-width'] + bar.margin + (barWidth + bar.margin * 2) * index + multiLineOffset(index);
             }).attr('width', function (d) {
                 return barWidth;
@@ -48113,27 +48203,20 @@ exports.histogramD3 = function () {
                 return tip.fx.move(tipContainer);
             }).on('mouseout', function () {
                 return tip.fx.out(tipContainer);
-            }).attr('y', function (d) {
-                return _this.gridHeight();
-            }).attr('height', 0);
-            barItem.attr('stroke', function (d, i) {
-                if (borderColors) {
-                    return borderColors(i);
-                }
-                return typeof stroke.color === 'function' ? stroke.color(d, i, colors) : stroke.color;
-            }).attr('shape-rendering', 'crispEdges').attr('stroke-width', stroke.width).attr('stroke-linecap', stroke.linecap);
-            if (stroke.dasharray !== '') {
-                barItem.attr('stroke-dasharray', stroke.dasharray);
-            }
-            barItem.transition().duration(duration).delay(delay).attr('y', function (d) {
+            }).merge(u).transition().duration(duration).delay(delay).attr('y', function (d) {
                 return y(d);
             }).attr('stroke-dasharray', function (d) {
-                var currentHeight = _this.gridHeight() - y(d);
+                var currentHeight = gridHeight - y(d);
                 return barWidth + " 0 " + currentHeight + " " + barWidth;
             }).attr('height', function (d) {
-                return _this.gridHeight() - y(d);
+                return gridHeight - y(d);
             });
-            barItem.exit().remove();
+            u.exit().remove();
+        },
+        makeGrid: function makeGrid(props) {
+            var grid = props.grid;
+            this.gridX = svg.append('g').attr('class', 'grid gridX');
+            this.gridY = svg.append('g').attr('class', 'grid gridY');
         },
         _drawGrid: function _drawGrid(props) {
             var data = props.data,
@@ -48150,25 +48233,23 @@ exports.histogramD3 = function () {
                 x: this.yAxisWidth() + this.barWidth() * setCount / 2 + bar.margin + this.groupedMargin() / 2,
                 y: this.gridHeight()
             };
-            var g;
-            var gy;
             if (grid.x.visible) {
-                g = svg.append('g').attr('class', 'grid gridX').attr('transform', "translate(" + offset.x + ", " + offset.y + ")");
-                g.call(make_x_gridlines(lodash_1.get(grid, 'x.ticks', ticks)).tickSize(-height + this.xAxisHeight() + margin.top * 2).tickFormat(function () {
+                this.gridX.attr('transform', "translate(" + offset.x + ", " + offset.y + ")");
+                this.gridX.call(make_x_gridlines(lodash_1.get(grid, 'x.ticks', ticks)).tickSize(-height + this.xAxisHeight() + margin.top * 2).tickFormat(function () {
                     return '';
                 }));
-                attrs_1.default(g.selectAll('.tick line'), grid.x.style);
-                attrs_1.default(g.selectAll('.domain'), { stroke: 'transparent' });
+                attrs_1.default(this.gridX.selectAll('.tick line'), grid.x.style);
+                attrs_1.default(this.gridX.selectAll('.domain'), { stroke: 'transparent' });
             }
             if (grid.y.visible) {
-                gy = svg.append('g').attr('class', 'grid gridY').attr('transform', 'translate(' + (this.yAxisWidth() + axisWidth) + ', 0)').call(make_y_gridlines(lodash_1.get(grid, 'y.ticks', ticks)).tickSize(-width + margin.left * 2 + this.yAxisWidth()).tickFormat(function () {
+                this.gridY.attr('transform', 'translate(' + (this.yAxisWidth() + axisWidth) + ', 0)').call(make_y_gridlines(lodash_1.get(grid, 'y.ticks', ticks)).tickSize(-width + margin.left * 2 + this.yAxisWidth()).tickFormat(function () {
                     return '';
                 }));
-                attrs_1.default(gy.selectAll('.tick line'), grid.y.style);
-                gy.selectAll('.gridY .tick line').filter(function (d, i) {
+                attrs_1.default(this.gridY.selectAll('.tick line'), grid.y.style);
+                this.gridY.selectAll('.gridY .tick line').filter(function (d, i) {
                     return i === 0;
                 }).attr('display', 'none');
-                attrs_1.default(gy.selectAll('.domain'), { stroke: 'transparent' });
+                attrs_1.default(this.gridY.selectAll('.domain'), { stroke: 'transparent' });
             }
         },
         update: function update(el, props) {
@@ -48176,7 +48257,6 @@ exports.histogramD3 = function () {
                 return;
             }
             this.props = deepmerge_1.default(defaultProps, props);
-            this._makeSvg(el);
             if (!this.props.data.bins) {
                 return;
             }
@@ -48219,6 +48299,23 @@ var __extends = undefined && undefined.__extends || function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 }();
+var __assign = undefined && undefined.__assign || Object.assign || function (t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+        s = arguments[i];
+        for (var p in s) {
+            if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+        }
+    }
+    return t;
+};
+var __rest = undefined && undefined.__rest || function (s, e) {
+    var t = {};
+    for (var p in s) {
+        if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0) t[p] = s[p];
+    }if (s != null && typeof Object.getOwnPropertySymbols === "function") for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+        if (e.indexOf(p[i]) < 0) t[p[i]] = s[p[i]];
+    }return t;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var d3 = __webpack_require__(/*! d3 */ "./node_modules/d3/index.js");
 var React = __webpack_require__(/*! react */ "react");
@@ -48233,16 +48330,7 @@ var HorizontalHistogram = function (_super) {
         var counts = [];
         var bins = [];
         _this.state = {
-            bar: {
-                margin: 2,
-                width: 10
-            },
-            data: {
-                bins: bins,
-                counts: counts
-            },
-            parentWidth: 300,
-            width: props.width
+            parentWidth: 300
         };
         return _this;
     }
@@ -48270,28 +48358,12 @@ var HorizontalHistogram = function (_super) {
     HorizontalHistogram.prototype.getChartState = function () {
         var width = this.props.width;
         var _a = this.props,
-            axis = _a.axis,
-            bar = _a.bar,
-            grid = _a.grid,
-            height = _a.height,
-            data = _a.data,
-            margin = _a.margin,
-            stroke = _a.stroke,
-            tipContentFn = _a.tipContentFn;
+            children = _a.children,
+            rest = __rest(_a, ["children"]);
         if (width === '100%') {
             width = this.state.parentWidth || 300;
         }
-        return {
-            axis: axis,
-            bar: bar,
-            data: data,
-            grid: grid,
-            height: height,
-            margin: margin,
-            stroke: stroke,
-            tipContentFn: tipContentFn,
-            width: width
-        };
+        return __assign({}, rest, { width: width });
     };
     HorizontalHistogram.prototype.componentWillReceiveProps = function (props) {
         this.histogram.update(this.getDOMNode(), this.getChartState());
@@ -48984,9 +49056,6 @@ var PieChart = function (_super) {
         backgroundColor: '#ddd',
         donutWidth: 0,
         height: 200,
-        legend: {
-            display: false
-        },
         margin: {
             left: 5,
             top: 5
@@ -49060,7 +49129,6 @@ exports.pieChartD3 = function () {
             if (props === void 0) {
                 props = {};
             }
-            console.log('create', props.data);
             this.props = deepmerge_1.default(defaultProps, __assign({}, props));
             this.previousData = props.data.counts.map(function (set, setIndex) {
                 return set.data.map(function (count, i) {
@@ -49103,7 +49171,6 @@ exports.pieChartD3 = function () {
             tipContent = tipContainer.append('div').attr('class', 'tooltip-inner');
         },
         update: function update(el, props) {
-            console.log('update', props.data, props.visible);
             if (!props.data) {
                 return;
             }
@@ -49155,12 +49222,10 @@ exports.pieChartD3 = function () {
             });
             this.dataSets.forEach(function (dataSet, i) {
                 _this.drawChart(dataSet, i, data.bins);
-                _this.updateChart(dataSet, i, data.bins);
             });
             this.previousData = this.dataSets;
         },
         drawChartBg: function drawChartBg(data, i) {
-            console.log('drawChartBg', data);
             var _a = this.props,
                 backgroundColor = _a.backgroundColor,
                 width = _a.width,
@@ -49175,32 +49240,7 @@ exports.pieChartD3 = function () {
                 this.containers[i] = svg.append('g').attr('class', 'pie-container');
             }
         },
-        updateChart: function updateChart(data, i, bins) {
-            console.log('data', data);
-            var _a = this.props,
-                labels = _a.labels,
-                width = _a.width,
-                height = _a.height,
-                tip = _a.tip,
-                tipContentFn = _a.tipContentFn;
-            var outerRadius = this.outerRadius(i);
-            var innerRadius = this.innerRadius(i);
-            var colors = d3.scaleOrdinal(this.props.colorScheme);
-            var arc = d3.arc().outerRadius(outerRadius).innerRadius(innerRadius);
-            var pie = d3.pie().sort(null).value(function (d) {
-                return d.count;
-            });
-            var text = this.containers[i].selectAll('text').data(data);
-            text.attr('class', 'update');
-            text.enter().append('text').attr('class', 'enter').attr('x', function (d, i) {
-                return i * 32;
-            }).attr('dy', '.35em').merge(text).text(function (d) {
-                return d.count;
-            });
-            text.exit().remove();
-        },
         drawChart: function drawChart(data, i, bins) {
-            console.log('drawChart', data);
             var _a = this.props,
                 labels = _a.labels,
                 width = _a.width,
@@ -49215,8 +49255,9 @@ exports.pieChartD3 = function () {
             var arcs = pie(this.previousData[i]);
             var colors = d3.scaleOrdinal(this.props.colorScheme);
             var arc = d3.arc().outerRadius(outerRadius).innerRadius(innerRadius);
-            var container = this.containers[i].datum(data).selectAll('path').data(pie).enter().append('g').attr('class', 'arc').attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')');
-            var path = container.append('path').attr('stroke', '#FFF').attr('fill', function (d, j) {
+            var path = this.containers[i].selectAll('path').data(pie(data));
+            var g = path.enter().append('g').attr('class', 'arc').attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')');
+            g.append('path').attr('stroke', '#FFF').attr('fill', function (d, j) {
                 return colors(j);
             }).attr('d', arc).each(function (d, j) {
                 this._current = arcs[j];
@@ -49230,15 +49271,33 @@ exports.pieChartD3 = function () {
             }).on('mouseout', function () {
                 return tip.fx.out(tipContainer);
             });
-            path.merge(path);
-            path.transition().duration(500).attrTween('d', arcTween(arc));
+            path.transition().delay(400).duration(500).attrTween('d', arcTween(arc));
             if (labels.display) {
-                var texts = container.append('text').attr('class', 'label').attr('transform', function (d) {
-                    return 'translate(' + arc.centroid(d) + ')';
-                }).attr('dy', '0.35em').text(function (d, ix) {
+                var lbls = this.containers[i].selectAll('text').data(pie(data));
+                lbls.enter().append('text').attr('transform', function (d) {
+                    var centroid = arc.centroid(d);
+                    var x = centroid[0] + width / 2;
+                    var y = centroid[1] + height / 2;
+                    return 'translate(' + x + ',' + y + ')';
+                }).merge(lbls).each(function (d, j) {
+                    this._current = d;
+                }).text(function (d, ix) {
+                    if (d.value === 0) {
+                        return '';
+                    }
                     return labels.displayFn(d, ix);
                 });
+                lbls.transition().duration(500).style('opacity', 0).transition().attr('transform', function (d) {
+                    var centroid = arc.centroid(d);
+                    var x = centroid[0] + width / 2;
+                    var y = centroid[1] + height / 2;
+                    return 'translate(' + x + ',' + y + ')';
+                }).transition().duration(500).style('opacity', function (d, ix, c) {
+                    return c[ix]._current.value === 0 ? 0 : 1;
+                });
+                lbls.merge(lbls);
             }
+            path.merge(path);
             path.exit().remove();
         },
         destroy: function destroy(el) {

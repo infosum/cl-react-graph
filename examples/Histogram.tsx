@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Component } from 'react';
-import { Legend, PieChart } from '../src';
-import { data, data3 } from './data';
+import { Legend, Histogram } from '../src';
+import { axis, data, data2, data3, grid } from './data';
 
 interface IProps {
   theme: string[];
@@ -12,8 +12,10 @@ interface IState {
     [key: string]: boolean;
   };
 }
+const tipContentFn = (bins: string[], i, d) =>
+  bins[i] + '<br />HI THere ' + d.toFixed(2);
 
-class PieExamples extends Component<IProps, IState> {
+class HistogramExamples extends Component<IProps, IState> {
   constructor(props) {
     super(props);
     this.state = {
@@ -33,35 +35,36 @@ class PieExamples extends Component<IProps, IState> {
   public render() {
     const { theme } = this.props;
     const { visible } = this.state;
-    const labels = {
-      display: true,
-    };
+    console.log(visible);
     return (
       <div>
-        <h3>Pie Chart</h3>
-        <PieChart
-          width={200}
-          height={200}
-          data={data} />
-
-        <h4>Donut</h4>
-        <PieChart width={300}
+        <h3>Histograms</h3>
+        {/* <Histogram data={data2} width={400} height={400} margin={{
+          left: 30,
+          top: 30,
+        }}
+          domain={{ min: 0, max: 50000 }} /> */}
+        <Histogram data={data}
+          grid={grid}
+          width={700}
+          height={150}
+          tipContentFn={tipContentFn} />
+        {/* <Histogram data={data2} bar={{ margin: 4 }}
           colorScheme={theme}
-          backgroundColor="#eee"
-          height={300}
-          donutWidth={10}
-          data={data3}
           visible={visible}
-          labels={labels} />
+          width={700}
+          height={350}
+          axis={axis} />
+
         <Legend
           theme={theme}
-          data={data3}
+          data={data2}
           onSelect={(label) => this.toggleVisible(label)}
           visible={visible}
-        />
+        /> */}
       </div>
     );
   }
 }
 
-export default PieExamples;
+export default HistogramExamples;

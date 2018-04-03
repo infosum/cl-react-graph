@@ -1,9 +1,10 @@
 import * as d3 from 'd3';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { Histogram, HorizontalHistogram, Legend, LineChart, PieChart, ScatterPlot } from '../src';
+import { HorizontalHistogram, Legend, LineChart, PieChart, ScatterPlot } from '../src';
 import filterRange from '../src/colors/filterRange';
-import { data, data2, data3, grid } from './data';
+import { axis, data, data2, data3, grid } from './data';
+import Histogram from './Histogram';
 import Pie from './Pie';
 
 const points = [
@@ -46,40 +47,6 @@ const points = [
 const scatter = [
 
 ];
-const axis = {
-  x: {
-    label: 'X Axis',
-    text: {
-      style: {
-        'dy': '.35em',
-        'text-anchor': 'start',
-        'transform': 'rotate(45)',
-        'x': 4,
-        'y': 0,
-      },
-    },
-    tickSize: 0,
-  },
-  y: {
-    label: 'Y Axis!',
-    style: {
-      fill: 'none',
-      stroke: '#eeAA00',
-    },
-    text: {
-      style: {
-        fill: '#eeAA00',
-      },
-    },
-    tickSize: 20,
-    ticks: 3,
-    width: 50,
-  },
-};
-
-const labels = {
-  display: true,
-};
 
 const theme = filterRange(['rgba(255, 113, 1, 0.5)', '#fff6ef', 'rgba(0, 169, 123, 0.5)', '#f6fffd',
   '#D7263D', 'rgba(215, 38, 61, 0.05)',
@@ -92,31 +59,21 @@ const theme = filterRange(['rgba(255, 113, 1, 0.5)', '#fff6ef', 'rgba(0, 169, 12
 
 const App: React.SFC<{}> = (): JSX.Element => <div style={{ padding: '20px' }}>
   <Pie theme={theme} />
-
-  <div>
+  <Histogram theme={theme} />
+  {/* <div>
     <HorizontalHistogram data={data2} width={500} height={400} margin={{
       left: 30,
       top: 30,
     }} />
-    <Histogram data={data2} width={400} height={400} margin={{
-      left: 30,
-      top: 30,
-    }}
-      domain={{ min: 0, max: 50000 }} />
-  </div>
-  <div>
-    <Histogram data={data} grid={grid} width={700} height={150} tipContentFn={tipContentFn} />
-    <Histogram data={data2} bar={{ margin: 4 }} width={700} height={150} axis={axis} />
-  </div>
-  <div>
+  </div> */}
+
+  {/* <div>
     <LineChart axis={axis} grid={grid} data={points} width={300} />
-  </div>
+  </div> */}
   {/* <div>
     <ScatterPlot data={scatter} width={300} height={300} />
   </div> */}
 </div>;
-const tipContentFn = (bins: string[], i, d) =>
-  bins[i] + '<br />HI THere ' + d.toFixed(2);
 
 ReactDOM.render(
   <App />,

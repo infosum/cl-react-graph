@@ -3,6 +3,7 @@ import * as d3 from 'd3';
 import merge from 'deepmerge';
 import colorScheme from './colors';
 import attrs from './d3/attrs';
+import { IHistogramProps } from './Histogram';
 import tips from './tip';
 
 export const horizontalHistogramD3 = ((): IChartAdaptor => {
@@ -376,7 +377,7 @@ export const horizontalHistogramD3 = ((): IChartAdaptor => {
      * Draw a grid onto the chart background
      * @param {Object} props Props
      */
-    _drawGrid(props: IHistogramChartState) {
+    _drawGrid(props: IHistogramProps) {
       const { data, height, width, axis, grid, margin, bar } = props;
       const ticks = this.valuesCount(data.counts);
       const setCount = data.counts.length;
@@ -425,7 +426,7 @@ export const horizontalHistogramD3 = ((): IChartAdaptor => {
      * @param {HTMLElement} el Chart element
      * @param {Object} props Chart props
      */
-    update(el: HTMLElement, props: IHistogramChartState) {
+    update(el: HTMLElement, props: IHistogramProps) {
       if (!props.data) {
         return;
       }

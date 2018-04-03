@@ -16,7 +16,7 @@ Platform:
 npm manifest: 
   {
     "name": "cl-react-graph",
-    "version": "1.4.3",
+    "version": "1.5.0",
     "description": "React D3 Charts",
     "main": "dist/index.js",
     "scripts": {

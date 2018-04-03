@@ -27,11 +27,12 @@ interface ISVGTextStyle {
 interface IAxis {
     ticks?: number;
     height?: number;
-    width?: number;
+    label?: string;
     style?: ISVGLineStyle;
     text?: {
         style: ISVGTextStyle
     },
+    width?: number;
 }
 
 interface IMargin {
@@ -134,7 +135,9 @@ interface IHistogramBar {
 }
 
 interface IStroke {
-    color: (d, i: number, colors: (i: number) => string) => string,
+    color: ((d, i: number, colors: (i: number) => string) => string) | string;
+    dasharray?: string;
+    linecap?: string;
     width: number;
 }
 
@@ -159,32 +162,3 @@ interface IDomain {
     max: number;
     min: number;
 }
-
-interface IHistogramProps {
-    axis?: IAxes;
-    bar?: IHistogramBar,
-    domain?: IDomain;
-    grid?: IGrid;
-    width: number | string;
-    height: number;
-    margin?: IMargin;
-    data: IHistogramData;
-    stroke?: IStroke;
-    tipContentFn?
-}
-
-interface IHistogramChartState {
-    axis?: IAxes;
-    bar?: IHistogramBar;
-    data: IHistogramData;
-    domain?: IDomain;
-    grid?: IGrid,
-    height?: number;
-    margin?: IMargin;
-    stroke?: IStroke
-    parentWidth?: number;
-    tipContainer?: string;
-    tipContentFn?: TipContentFn;
-    width: number | string;
-}
-

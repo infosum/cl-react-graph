@@ -5,15 +5,35 @@ import { Component } from 'react';
 import * as ReactDOM from 'react-dom';
 import { histogramD3 } from './HistogramD3';
 
+export interface IHistogramProps {
+  axis?: IAxes;
+  bar?: IHistogramBar;
+  className?: string;
+  data: IHistogramData;
+  delay?: number;
+  duration?: number;
+  colorScheme?: string[];
+  domain?: IDomain;
+  grid?: IGrid;
+  height: number;
+  margin?: IMargin;
+  stroke?: IStroke;
+  tip?: any;
+  tipContainer?: string;
+  tipContentFn?: TipContentFn;
+  visible?: { [key: string]: boolean };
+  width: number | string;
+}
+
 /**
  * Histogram component
  */
-class Histogram extends Component<IHistogramProps, IHistogramChartState> {
+class Histogram extends Component<IHistogramProps, IChartState> {
 
   private histogram: IChartAdaptor;
   private ref;
 
-  public static defaultProps = {
+  public static defaultProps: Partial<IHistogramProps> = {
     axis: {},
     bar: {
       margin: 2,
@@ -47,7 +67,7 @@ class Histogram extends Component<IHistogramProps, IHistogramChartState> {
       top: 5,
     },
     stroke: {
-      color: (d, i, colors) => d3.rgb(colors(i)).darker(1),
+      color: (d, i, colors) => d3.rgb(colors(i)).darker(1).toString(),
       width: 1,
     },
     tipContentFn: (bins: string[], i, d) =>
@@ -65,16 +85,7 @@ class Histogram extends Component<IHistogramProps, IHistogramChartState> {
     const counts: IHistogramDataSet[] = [];
     const bins: string[] = [];
     this.state = {
-      bar: {
-        margin: 2,
-        width: 10,
-      },
-      data: {
-        bins,
-        counts,
-      },
       parentWidth: 300,
-      width: props.width,
     };
   }
 
@@ -114,33 +125,17 @@ class Histogram extends Component<IHistogramProps, IHistogramChartState> {
    * Get the chart state
    * @return {Object} ChartState
    */
-  public getChartState(): IHistogramChartState {
+  public getChartState(): IHistogramProps {
     let { width } = this.props;
-    const { axis, bar, domain, grid, height, data, margin, stroke, tipContentFn } = this.props;
+    const { children, ...rest } = this.props;
     if (width === '100%') {
       width = this.state.parentWidth || 300;
     }
 
     return {
-      axis,
-      bar,
-      data,
-      domain,
-      grid,
-      height,
-      margin,
-      stroke,
-      tipContentFn,
+      ...rest,
       width,
     };
-  }
-
-  /**
-   * Props recieved, update the chart
-   * @param {Object} props Props
-   */
-  public componentWillReceiveProps(props: IHistogramProps) {
-    this.histogram.update(this.getDOMNode(), this.getChartState());
   }
 
   /**
