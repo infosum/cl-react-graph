@@ -47919,6 +47919,7 @@ exports.histogramD3 = function () {
             }
         },
         bar: {
+            groupMargin: 10,
             margin: 10,
             width: 50
         },
@@ -48123,9 +48124,20 @@ exports.histogramD3 = function () {
                         return visible[info.bins[i]] !== false ? count : 0;
                     }) });
             });
-            this.dataSets.forEach(function (set, setIndex) {
-                _this.updateChart(info.bins, set, setIndex, info.counts.length);
+            debugger;
+            this.dataSets = [];
+            info.counts.forEach(function (count) {
+                count.data.forEach(function (value, i) {
+                    if (!_this.dataSets[i]) {
+                        _this.dataSets[i] = {
+                            data: [],
+                            label: info.bins[i]
+                        };
+                    }
+                    _this.dataSets[i].data.push(value);
+                });
             });
+            this.updateChart(info.bins, this.dataSets);
         },
         gridWidth: function gridWidth() {
             var _a = this.props,
@@ -48163,8 +48175,7 @@ exports.histogramD3 = function () {
             }
             return barWidth / setCount;
         },
-        updateChart: function updateChart(bins, set, setIndex, setCount) {
-            var _this = this;
+        updateChart: function updateChart(bins, groupData) {
             var _a = this.props,
                 height = _a.height,
                 width = _a.width,
@@ -48177,19 +48188,25 @@ exports.histogramD3 = function () {
                 tip = _a.tip,
                 tipContentFn = _a.tipContentFn;
             var barWidth = this.barWidth();
-            var colors = d3.scaleOrdinal(set.colors || this.props.colorScheme);
-            var borderColors = set.borderColors ? d3.scaleOrdinal(set.borderColors) : null;
-            var selector = '.bar-' + setIndex;
-            var multiLineOffset = function multiLineOffset(index) {
-                return setCount === 1 ? 0 : (index + setIndex) * (barWidth + _this.groupedMargin());
-            };
+            var colors = d3.scaleOrdinal(this.props.colorScheme);
+            var borderColors = null;
+            var selector = '.bar';
             var gridHeight = this.gridHeight();
-            console.log('set.data', set.data, setIndex);
-            var u = this.container.selectAll('rect').data(set.data);
-            u.enter().append('rect').attr('height', 0).attr('y', function (d) {
+            var yAxisWidth = this.yAxisWidth();
+            var maxItems = groupData.reduce(function (prev, next) {
+                return next.data.length > prev ? next.data.length : prev;
+            }, 0);
+            var g = this.container.selectAll('g').data(groupData);
+            var bars = g.enter().append('g').merge(g).attr('transform', function (d, i, all) {
+                var xdelta = yAxisWidth + axis.y.style['stroke-width'] + (maxItems * barWidth + (maxItems - 1) * (2 * bar.margin) + 2 * bar.margin + 2 * bar.groupMargin) * i;
+                return "translate(" + xdelta + ", 0)";
+            }).selectAll('rect').data(function (d) {
+                return d.data;
+            });
+            bars.enter().append('rect').attr('height', 0).attr('y', function (d) {
                 return gridHeight;
             }).attr('class', 'bar ' + selector).attr('x', function (d, index, all) {
-                return _this.yAxisWidth() + axis.y.style['stroke-width'] + bar.margin + (barWidth + bar.margin * 2) * index + multiLineOffset(index);
+                return bar.margin + bar.groupMargin + (barWidth + bar.margin) * index;
             }).attr('width', function (d) {
                 return barWidth;
             }).attr('fill', function (d, i) {
@@ -48203,7 +48220,7 @@ exports.histogramD3 = function () {
                 return tip.fx.move(tipContainer);
             }).on('mouseout', function () {
                 return tip.fx.out(tipContainer);
-            }).merge(u).transition().duration(duration).delay(delay).attr('y', function (d) {
+            }).merge(bars).transition().duration(duration).delay(delay).attr('y', function (d) {
                 return y(d);
             }).attr('stroke-dasharray', function (d) {
                 var currentHeight = gridHeight - y(d);
@@ -48211,7 +48228,7 @@ exports.histogramD3 = function () {
             }).attr('height', function (d) {
                 return gridHeight - y(d);
             });
-            u.exit().remove();
+            g.exit().remove();
         },
         makeGrid: function makeGrid(props) {
             var grid = props.grid;

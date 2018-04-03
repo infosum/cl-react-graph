@@ -130,6 +130,7 @@ interface ILineChartProps {
  * Histogram
  */
 interface IHistogramBar {
+    groupMargin?: number;
     margin?: number;
     width?: number;
 }

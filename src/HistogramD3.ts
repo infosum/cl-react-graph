@@ -8,6 +8,14 @@ import attrs from './d3/attrs';
 import { IHistogramProps } from './Histogram';
 import tips from './tip';
 
+interface IGroupDataItem {
+  data: number[];
+  label: string;
+}
+
+type IGroupData = IGroupDataItem[];
+
+
 export const histogramD3 = ((): IChartAdaptor => {
   let svg;
   let tipContainer;
@@ -64,6 +72,7 @@ export const histogramD3 = ((): IChartAdaptor => {
       },
     },
     bar: {
+      groupMargin: 10,
       margin: 10,
       width: 50,
     },
@@ -336,9 +345,26 @@ export const histogramD3 = ((): IChartAdaptor => {
         };
       });
 
-      this.dataSets.forEach((set: IHistogramDataSet, setIndex: number) => {
-        this.updateChart(info.bins, set, setIndex, info.counts.length);
+      // this.dataSets.forEach((set: IHistogramDataSet, setIndex: number) => {
+      //   console.log('this.dataSets', this.dataSets);
+      //   this.updateChart(info.bins, this.dataSets);
+      // });
+      debugger;
+      this.dataSets = [] as IGroupData;
+
+      info.counts.forEach((count) => {
+        count.data.forEach((value, i) => {
+          if (!this.dataSets[i]) {
+            this.dataSets[i] = {
+              data: [],
+              label: info.bins[i],
+            };
+          }
+          this.dataSets[i].data.push(value);
+        });
       });
+
+      this.updateChart(info.bins, this.dataSets);
     },
 
     /**
@@ -396,44 +422,62 @@ export const histogramD3 = ((): IChartAdaptor => {
 
     /**
      * Draw a single data set into the chart
-     * @param {Array} bins Data set labels
-     * @param {Object} set HistogramDataSet
-     * @param {number} setIndex Data set index
-     * @param {number} setCount Total number of data sets
      */
     updateChart(
-      bins: string[], set: IHistogramDataSet,
-      setIndex: number, setCount: number,
+      bins: string[],
+      groupData: IGroupData,
     ) {
       const { height, width, margin, bar, delay, duration,
         axis, stroke, tip, tipContentFn } = this.props;
       const barWidth = this.barWidth();
-      const colors = d3.scaleOrdinal(set.colors || this.props.colorScheme);
-      const borderColors = set.borderColors ? d3.scaleOrdinal(set.borderColors) : null;
+      // const colors = d3.scaleOrdinal(set.colors || this.props.colorScheme);
+      // const borderColors = set.borderColors ? d3.scaleOrdinal(set.borderColors) : null;
 
-      const selector = '.bar-' + setIndex;
-      const multiLineOffset = (index) => setCount === 1
-        ? 0
-        : ((index + setIndex) * (barWidth + this.groupedMargin()));
+      const colors = d3.scaleOrdinal(this.props.colorScheme);
+      const borderColors = null;
+
+      const selector = '.bar';
       const gridHeight = this.gridHeight();
+      const yAxisWidth = this.yAxisWidth();
+      const maxItems = groupData.reduce((prev, next) => next.data.length > prev
+        ? next.data.length
+        : prev, 0);
 
-      console.log('set.data', set.data, setIndex);
-      const u = this.container
+      const g = this.container
+        .selectAll('g')
+        .data(groupData);
+
+      const bars = g.enter()
+        .append('g')
+        .merge(g)
+        .attr('transform', function (d, i, all) {
+          const xdelta = yAxisWidth
+            + axis.y.style['stroke-width'] // start next to y axis
+            + (
+              (
+                maxItems * barWidth
+                + ((maxItems - 1) * (2 * bar.margin))
+                + (2 * bar.margin)
+                + (2 * bar.groupMargin)
+              ) * i
+            );
+          return `translate(${xdelta}, 0)`;
+        })
         .selectAll('rect')
-        .data(set.data);
+        .data((d) => d.data);
 
-      u.enter()
+      bars
+        .enter()
         .append('rect')
         .attr('height', 0)
         .attr('y', (d: number): number => gridHeight)
 
         .attr('class', 'bar ' + selector)
         .attr('x', (d, index, all) => {
-          return this.yAxisWidth()
-            + axis.y.style['stroke-width']
-            + bar.margin
-            + (barWidth + (bar.margin * 2)) * (index)
-            + multiLineOffset(index);
+
+          return bar.margin +
+            bar.groupMargin +
+            (barWidth + bar.margin) * (index);
         })
         .attr('width', (d) => barWidth)
         .attr('fill', (d, i) => colors(i))
@@ -443,7 +487,7 @@ export const histogramD3 = ((): IChartAdaptor => {
         })
         .on('mousemove', () => tip.fx.move(tipContainer))
         .on('mouseout', () => tip.fx.out(tipContainer))
-        .merge(u)
+        .merge(bars)
         .transition()
         .duration(duration)
         .delay(delay)
@@ -456,7 +500,48 @@ export const histogramD3 = ((): IChartAdaptor => {
         })
         .attr('height', (d: number): number => gridHeight - (y(d)));
 
-      u.exit().remove();
+      g.exit().remove();
+
+      // const u = g.selectAll('rect')
+      //   .data((d) => {
+      //     console.log('group d', d);
+      //     return d.data;
+      //   });
+
+      // u.enter()
+      //   .append('rect')
+      //   .attr('height', 0)
+      //   .attr('y', (d: number): number => gridHeight)
+
+      //   .attr('class', 'bar ' + selector)
+      //   .attr('x', (d, index, all) => {
+
+      //     return bar.margin +
+      //       bar.groupMargin +
+      //       (barWidth + bar.margin) * (index);
+      //   })
+      //   .attr('width', (d) => barWidth)
+      //   .attr('fill', (d, i) => colors(i))
+      //   .on('mouseover', (d: number, i: number) => {
+      //     tipContent.html(() => tipContentFn(bins, i, d));
+      //     tip.fx.in(tipContainer);
+      //   })
+      //   .on('mousemove', () => tip.fx.move(tipContainer))
+      //   .on('mouseout', () => tip.fx.out(tipContainer))
+      //   .merge(u)
+      //   .transition()
+      //   .duration(duration)
+      //   .delay(delay)
+      //   .attr('y', (d: number): number => y(d))
+      //   // Hide bar's bottom border
+      //   .attr('stroke-dasharray',
+      //   (d: number): string => {
+      //     const currentHeight = gridHeight - (y(d));
+      //     return `${barWidth} 0 ${currentHeight} ${barWidth}`;
+      //   })
+      //   .attr('height', (d: number): number => gridHeight - (y(d)));
+
+      // u.exit().remove();
 
     },
 
