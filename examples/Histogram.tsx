@@ -49,7 +49,7 @@ class HistogramExamples extends Component<IProps, IState> {
           width={700}
           height={150}
           tipContentFn={tipContentFn} />
-        {/* <Histogram data={data2} bar={{ margin: 4 }}
+        <Histogram data={data2} bar={{ margin: 4 }}
           colorScheme={theme}
           visible={visible}
           width={700}
@@ -61,7 +61,7 @@ class HistogramExamples extends Component<IProps, IState> {
           data={data2}
           onSelect={(label) => this.toggleVisible(label)}
           visible={visible}
-        /> */}
+        />
       </div>
     );
   }
