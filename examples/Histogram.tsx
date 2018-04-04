@@ -36,6 +36,14 @@ class HistogramExamples extends Component<IProps, IState> {
     const { theme } = this.props;
     const { visible } = this.state;
     console.log(visible);
+    const dataLegendData = {
+      bins: data.counts.map((c) => c.label),
+      counts: [{
+        data: data.counts.map((c) => c.data.reduce((p, n) => p + n, 0)),
+        label: '',
+      }],
+    };
+
     return (
       <div>
         <h3>Histograms</h3>
@@ -48,8 +56,16 @@ class HistogramExamples extends Component<IProps, IState> {
           grid={grid}
           width={700}
           height={150}
+          visible={visible}
           tipContentFn={tipContentFn} />
-        {/* <Histogram data={data2} bar={{ margin: 4 }}
+        <Legend
+          theme={theme}
+          data={dataLegendData}
+          onSelect={(label) => this.toggleVisible(label)}
+          visible={visible}
+        />
+
+        <Histogram data={data2} bar={{ margin: 0 }}
           colorScheme={theme}
           visible={visible}
           width={700}
@@ -61,8 +77,8 @@ class HistogramExamples extends Component<IProps, IState> {
           data={data2}
           onSelect={(label) => this.toggleVisible(label)}
           visible={visible}
-        /> */}
-      </div>
+        />
+      </div >
     );
   }
 }
