@@ -141,10 +141,26 @@ var HistogramExamples = function (_super) {
         var _a;
     };
     HistogramExamples.prototype.render = function () {
+        var _this = this;
         var theme = this.props.theme;
         var visible = this.state.visible;
         console.log(visible);
-        return React.createElement("div", null, React.createElement("h3", null, "Histograms"), React.createElement(src_1.Histogram, { data: data_1.data, grid: data_1.grid, width: 700, height: 150, tipContentFn: tipContentFn }));
+        var dataLegendData = {
+            bins: data_1.data.counts.map(function (c) {
+                return c.label;
+            }),
+            counts: [{
+                data: data_1.data.counts.map(function (c) {
+                    return c.data.reduce(function (p, n) {
+                        return p + n;
+                    }, 0);
+                }),
+                label: ''
+            }]
+        };
+        return React.createElement("div", null, React.createElement("h3", null, "Histograms"), React.createElement(src_1.Histogram, { data: data_1.data, grid: data_1.grid, width: 700, height: 150, visible: visible, tipContentFn: tipContentFn }), React.createElement(src_1.Legend, { theme: theme, data: dataLegendData, onSelect: function onSelect(label) {
+                return _this.toggleVisible(label);
+            }, visible: visible }));
     };
     return HistogramExamples;
 }(react_1.Component);
@@ -48026,8 +48042,10 @@ exports.histogramD3 = function () {
                 domain = _a.domain,
                 margin = _a.margin,
                 height = _a.height;
-            var allCounts = data.counts.reduce(function (a, b) {
-                return a.concat(b.data);
+            var allCounts = data.reduce(function (prev, next) {
+                return prev.concat(next.map(function (n) {
+                    return n.value;
+                }));
             }, []);
             var extent = d3.extent(allCounts, function (d) {
                 return d;
@@ -48035,6 +48053,7 @@ exports.histogramD3 = function () {
             yDomain[1] = domain && domain.hasOwnProperty('max') && domain.max !== null ? domain.max : extent[1];
             yDomain[0] = domain && domain.hasOwnProperty('min') && domain.min !== null ? domain.min : 0;
             var yRange = [height - margin.top * 2 - this.xAxisHeight(), 0];
+            console.log('set scale range', yRange, 'domain', yDomain);
             scale.range(yRange).domain(yDomain);
         },
         yAxisWidth: function yAxisWidth() {
@@ -48071,14 +48090,11 @@ exports.histogramD3 = function () {
             var valuesCount = this.valuesCount(data.counts);
             var w = this.gridWidth();
             var xAxis;
-            var yAxis;
             var dataLabels = data.counts.map(function (c) {
                 return c.label;
             });
             x.domain(data.bins).rangeRound([0, w]).paddingInner(this.groupedMargin());
-            console.log('bar.margin', this.barMargin());
-            innerScaleBand.domain(dataLabels).rangeRound([0, x.bandwidth()]);
-            console.log('innerScaleBand width', innerScaleBand.bandwidth());
+            innerScaleBand.domain(dataLabels).rangeRound([0, x.bandwidth()]).paddingInner(this.barMargin());
             xAxis = d3.axisBottom(x);
             var tickSize = lodash_1.get(axis, 'x.tickSize', undefined);
             if (tickSize !== undefined) {
@@ -48091,13 +48107,13 @@ exports.histogramD3 = function () {
                 }
             }
             this.xAxis.attr('transform', 'translate(' + this.yAxisWidth() + ',' + (height - this.xAxisHeight() - margin.left * 2) + ')').call(xAxis);
-            this.appendDomainRange(y, data);
-            yAxis = d3.axisLeft(y).ticks(axis.y.ticks);
+            this.appendDomainRange(y, this.dataSets);
+            var yAxis = d3.axisLeft(y).ticks(axis.y.ticks);
             var yTickSize = lodash_1.get(axis, 'y.tickSize', undefined);
             if (yTickSize !== undefined) {
                 yAxis.tickSize(yTickSize);
             }
-            this.yAxis.attr('transform', 'translate(' + this.yAxisWidth() + ', 0)').call(yAxis);
+            this.yAxis.attr('transform', 'translate(' + this.yAxisWidth() + ', 0)').transition().call(yAxis);
             var _b = axis.x.text.style,
                 transform = _b.transform,
                 xx = _b.x,
@@ -48115,23 +48131,6 @@ exports.histogramD3 = function () {
             attrs_1.default(svg.selectAll('.x-axis .tick text'), axis.x.text.style);
             attrs_1.default(svg.selectAll('.x-axis-label'), xLabelStyle);
         },
-        _drawBars: function _drawBars(info) {
-            var _this = this;
-            var visible = this.props.visible;
-            this.dataSets = [];
-            info.counts.forEach(function (count) {
-                count.data.forEach(function (value, i) {
-                    if (!_this.dataSets[i]) {
-                        _this.dataSets[i] = [];
-                    }
-                    _this.dataSets[i].push({
-                        label: info.bins[i],
-                        value: visible[info.bins[i]] !== false ? value : 0
-                    });
-                });
-            });
-            this.updateChart(info.bins, this.dataSets);
-        },
         gridWidth: function gridWidth() {
             var _a = this.props,
                 axis = _a.axis,
@@ -48147,9 +48146,7 @@ exports.histogramD3 = function () {
             return height - margin.top * 2 - this.xAxisHeight();
         },
         groupedMargin: function groupedMargin() {
-            console.log('this.props.bar.groupMargin', this.props.bar.groupMargin);
             var m = lodash_1.get(this.props.bar, 'groupMargin', 0.1);
-            console.log('m', m);
             return m >= 0 && m <= 1 ? m : 0.1;
         },
         barMargin: function barMargin() {
@@ -48174,25 +48171,23 @@ exports.histogramD3 = function () {
             var barWidth = this.barWidth();
             var colors = d3.scaleOrdinal(this.props.colorScheme);
             var borderColors = null;
-            var selector = '.bar';
             var gridHeight = this.gridHeight();
             var yAxisWidth = this.yAxisWidth();
             var groupedMargin = this.groupedMargin();
             var maxItems = groupData.reduce(function (prev, next) {
                 return next.length > prev ? next.length : prev;
             }, 0);
-            console.log('groupData', groupData);
             var g = this.container.selectAll('g').data(groupData);
             var bars = g.enter().append('g').merge(g).attr('transform', function (d, i, all) {
-                var xdelta = yAxisWidth / +axis.y.style['stroke-width'] + x(d[0].label);
+                var xdelta = yAxisWidth + axis.y.style['stroke-width'] + x(d[0].label);
                 return "translate(" + xdelta + ", 0)";
             }).selectAll('rect').data(function (d) {
                 return d;
             });
             bars.enter().append('rect').attr('height', 0).attr('y', function (d) {
                 return gridHeight;
-            }).attr('class', 'bar ' + selector).attr('x', function (d, index, all) {
-                return barWidth * index;
+            }).attr('class', 'bar').attr('x', function (d) {
+                return innerScaleBand(d.groupLabel);
             }).attr('width', function (d) {
                 return barWidth;
             }).attr('fill', function (d, i) {
@@ -48260,6 +48255,7 @@ exports.histogramD3 = function () {
             }
         },
         update: function update(el, props) {
+            var _this = this;
             if (!props.data) {
                 return;
             }
@@ -48267,9 +48263,25 @@ exports.histogramD3 = function () {
             if (!this.props.data.bins) {
                 return;
             }
+            var _a = this.props,
+                data = _a.data,
+                visible = _a.visible;
+            this.dataSets = [];
+            data.counts.forEach(function (count) {
+                count.data.forEach(function (value, i) {
+                    if (!_this.dataSets[i]) {
+                        _this.dataSets[i] = [];
+                    }
+                    _this.dataSets[i].push({
+                        groupLabel: count.label,
+                        label: data.bins[i],
+                        value: visible[data.bins[i]] !== false && visible[count.label] !== false ? value : 0
+                    });
+                });
+            });
             this._drawScales(this.props.data);
             this._drawGrid(this.props);
-            this._drawBars(this.props.data);
+            this.updateChart(data.bins, this.dataSets);
         },
         destroy: function destroy(el) {
             svg.selectAll('svg > *').remove();

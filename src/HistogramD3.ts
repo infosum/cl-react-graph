@@ -212,15 +212,16 @@ export const histogramD3 = ((): IChartAdaptor => {
     },
 
     /**
-     * Update a linear scale with range and domain values taken either from the data set
-     * or from props.
+     * Update a linear scale with range and domain values taken either from the compiled
+     * group data
      */
-    appendDomainRange(scale: ScaleLinear<number, number>, data: IHistogramData): void {
+    appendDomainRange(scale: ScaleLinear<number, number>, data: IGroupData): void {
       const yDomain: number[] = [];
       const { axis, domain, margin, height } = this.props;
-      const allCounts = data.counts.reduce((a: number[], b: IHistogramDataSet): number[] => {
-        return [...a, ...b.data];
+      const allCounts: number[] = data.reduce((prev: number[], next): number[] => {
+        return [...prev, ...next.map((n) => n.value)];
       }, []);
+
       const extent = d3.extent(allCounts, (d) => d);
       yDomain[1] = domain && domain.hasOwnProperty('max') && domain.max !== null
         ? domain.max
@@ -284,20 +285,18 @@ export const histogramD3 = ((): IChartAdaptor => {
       const w = this.gridWidth();
 
       let xAxis;
-      let yAxis;
       const dataLabels = data.counts.map((c) => c.label);
 
-      x.domain(data.bins)
+      x
+        .domain(data.bins)
         .rangeRound([0, w])
         .paddingInner(this.groupedMargin());
 
-      console.log('bar.margin', this.barMargin());
       innerScaleBand
-        // .paddingInner(this.barMargin())
         .domain(dataLabels)
-        .rangeRound([0, x.bandwidth()]);
+        .rangeRound([0, x.bandwidth()])
+        .paddingInner(this.barMargin());
 
-      console.log('innerScaleBand width', innerScaleBand.bandwidth());
       xAxis = d3.axisBottom(x);
 
       const tickSize = get(axis, 'x.tickSize', undefined);
@@ -315,9 +314,9 @@ export const histogramD3 = ((): IChartAdaptor => {
         (height - this.xAxisHeight() - (margin.left * 2)) + ')')
         .call(xAxis);
 
-      this.appendDomainRange(y, data);
+      this.appendDomainRange(y, this.dataSets);
 
-      yAxis = d3.axisLeft(y).ticks(axis.y.ticks);
+      const yAxis = d3.axisLeft(y).ticks(axis.y.ticks);
 
       const yTickSize = get(axis, 'y.tickSize', undefined);
       if (yTickSize !== undefined) {
@@ -326,6 +325,7 @@ export const histogramD3 = ((): IChartAdaptor => {
 
       this.yAxis
         .attr('transform', 'translate(' + this.yAxisWidth() + ', 0)')
+        .transition()
         .call(yAxis);
 
       const { transform, x: xx, y: yy, ...xLabelStyle } = axis.x.text.style;
@@ -337,29 +337,6 @@ export const histogramD3 = ((): IChartAdaptor => {
       attrs(svg.selectAll('.x-axis .domain, .x-axis .tick line'), axis.x.style);
       attrs(svg.selectAll('.x-axis .tick text'), axis.x.text.style);
       attrs(svg.selectAll('.x-axis-label'), xLabelStyle);
-    },
-
-    /**
-     * Draw the bars
-     * @param {Object} info Bar data etc
-     */
-    _drawBars(info: IHistogramData) {
-      const { visible } = this.props;
-      this.dataSets = [] as IGroupData;
-
-      info.counts.forEach((count) => {
-        count.data.forEach((value, i) => {
-          if (!this.dataSets[i]) {
-            this.dataSets[i] = [];
-          }
-          this.dataSets[i].push({
-            label: info.bins[i],
-            value: visible[info.bins[i]] !== false ? value : 0,
-          } as IGroupDataItem);
-        });
-      });
-
-      this.updateChart(info.bins, this.dataSets);
     },
 
     /**
@@ -389,9 +366,7 @@ export const histogramD3 = ((): IChartAdaptor => {
      * @return {Number} Margin
      */
     groupedMargin(): number {
-      console.log('this.props.bar.groupMargin', this.props.bar.groupMargin);
       const m = get(this.props.bar, 'groupMargin', 0.1);
-      console.log('m', m);
       return m >= 0 && m <= 1
         ? m
         : 0.1;
@@ -429,7 +404,6 @@ export const histogramD3 = ((): IChartAdaptor => {
       const colors = d3.scaleOrdinal(this.props.colorScheme);
       const borderColors = null;
 
-      const selector = '.bar';
       const gridHeight = this.gridHeight();
       const yAxisWidth = this.yAxisWidth();
       const groupedMargin = this.groupedMargin();
@@ -437,7 +411,6 @@ export const histogramD3 = ((): IChartAdaptor => {
         ? next.length
         : prev, 0);
 
-      console.log('groupData', groupData);
       const g = this.container
         .selectAll('g')
         .data(groupData);
@@ -447,7 +420,7 @@ export const histogramD3 = ((): IChartAdaptor => {
         .merge(g)
         .attr('transform', function (d, i, all) {
           const xdelta = yAxisWidth
-            / + axis.y.style['stroke-width']
+            + axis.y.style['stroke-width']
             + x(d[0].label);
           return `translate(${xdelta}, 0)`;
         })
@@ -460,10 +433,8 @@ export const histogramD3 = ((): IChartAdaptor => {
         .attr('height', 0)
         .attr('y', (d: IGroupDataItem): number => gridHeight)
 
-        .attr('class', 'bar ' + selector)
-        .attr('x', (d, index, all) => {
-          return barWidth * index;
-        })
+        .attr('class', 'bar')
+        .attr('x', (d) => innerScaleBand(d.groupLabel))
         .attr('width', (d) => barWidth)
         .attr('fill', (d, i) => colors(i))
         .on('mouseover', (d: IGroupDataItem, i: number) => {
@@ -558,9 +529,25 @@ export const histogramD3 = ((): IChartAdaptor => {
         return;
       }
 
+      const { data, visible } = this.props;
+      this.dataSets = [] as IGroupData;
+
+      data.counts.forEach((count) => {
+        count.data.forEach((value, i) => {
+          if (!this.dataSets[i]) {
+            this.dataSets[i] = [];
+          }
+          this.dataSets[i].push({
+            groupLabel: count.label,
+            label: data.bins[i],
+            value: visible[data.bins[i]] !== false && visible[count.label] !== false ? value : 0,
+          } as IGroupDataItem);
+        });
+      });
+
       this._drawScales(this.props.data);
       this._drawGrid(this.props);
-      this._drawBars(this.props.data);
+      this.updateChart(data.bins, this.dataSets);
     },
 
     /**
