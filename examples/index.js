@@ -259,12 +259,12 @@ exports.data = {
         borderColors: d3.schemeCategory20,
         colors: d3.schemeCategory20,
         data: [1, 2, 3, 4],
-        label: 'Data 1'
+        label: 'DataSet 1'
     }, {
         borderColors: d3.schemeCategory20,
         colors: d3.schemeCategory20b,
-        data: [13, 2, 1, 5],
-        label: 'Data 2'
+        data: [13, 14, 15, 16],
+        label: 'DataSet 2'
     }],
     grid: exports.grid
 };
@@ -47840,15 +47840,6 @@ exports.default = Histogram;
 "use strict";
 
 
-var __assign = undefined && undefined.__assign || Object.assign || function (t) {
-    for (var s, i = 1, n = arguments.length; i < n; i++) {
-        s = arguments[i];
-        for (var p in s) {
-            if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
-        }
-    }
-    return t;
-};
 var __rest = undefined && undefined.__rest || function (s, e) {
     var t = {};
     for (var p in s) {
@@ -47870,6 +47861,7 @@ exports.histogramD3 = function () {
     var tipContent;
     var y = d3.scaleLinear();
     var x = d3.scaleBand();
+    var innerScaleBand = d3.scaleBand();
     function make_x_gridlines(ticks) {
         if (ticks === void 0) {
             ticks = 5;
@@ -47919,8 +47911,8 @@ exports.histogramD3 = function () {
             }
         },
         bar: {
-            groupMargin: 10,
-            margin: 10,
+            groupMargin: 0.1,
+            margin: 0,
             width: 50
         },
         className: 'histogram-d3',
@@ -48070,6 +48062,7 @@ exports.histogramD3 = function () {
         },
         _drawScales: function _drawScales(data) {
             var _a = this.props,
+                bar = _a.bar,
                 domain = _a.domain,
                 margin = _a.margin,
                 width = _a.width,
@@ -48079,7 +48072,13 @@ exports.histogramD3 = function () {
             var w = this.gridWidth();
             var xAxis;
             var yAxis;
-            x.domain(data.bins).rangeRound([0, w]);
+            var dataLabels = data.counts.map(function (c) {
+                return c.label;
+            });
+            x.domain(data.bins).rangeRound([0, w]).paddingInner(this.groupedMargin());
+            console.log('bar.margin', this.barMargin());
+            innerScaleBand.domain(dataLabels).rangeRound([0, x.bandwidth()]);
+            console.log('innerScaleBand width', innerScaleBand.bandwidth());
             xAxis = d3.axisBottom(x);
             var tickSize = lodash_1.get(axis, 'x.tickSize', undefined);
             if (tickSize !== undefined) {
@@ -48119,22 +48118,16 @@ exports.histogramD3 = function () {
         _drawBars: function _drawBars(info) {
             var _this = this;
             var visible = this.props.visible;
-            this.dataSets = info.counts.map(function (set, setIndex) {
-                return __assign({}, set, { data: set.data.map(function (count, i) {
-                        return visible[info.bins[i]] !== false ? count : 0;
-                    }) });
-            });
-            debugger;
             this.dataSets = [];
             info.counts.forEach(function (count) {
                 count.data.forEach(function (value, i) {
                     if (!_this.dataSets[i]) {
-                        _this.dataSets[i] = {
-                            data: [],
-                            label: info.bins[i]
-                        };
+                        _this.dataSets[i] = [];
                     }
-                    _this.dataSets[i].data.push(value);
+                    _this.dataSets[i].push({
+                        label: info.bins[i],
+                        value: visible[info.bins[i]] !== false ? value : 0
+                    });
                 });
             });
             this.updateChart(info.bins, this.dataSets);
@@ -48154,26 +48147,17 @@ exports.histogramD3 = function () {
             return height - margin.top * 2 - this.xAxisHeight();
         },
         groupedMargin: function groupedMargin() {
-            var data = this.props.data;
-            return (data.counts.length - 1) * 3;
+            console.log('this.props.bar.groupMargin', this.props.bar.groupMargin);
+            var m = lodash_1.get(this.props.bar, 'groupMargin', 0.1);
+            console.log('m', m);
+            return m >= 0 && m <= 1 ? m : 0.1;
+        },
+        barMargin: function barMargin() {
+            var m = lodash_1.get(this.props.bar, 'margin', 0);
+            return m >= 0 && m <= 1 ? m : 0.1;
         },
         barWidth: function barWidth() {
-            var _a = this.props,
-                axis = _a.axis,
-                width = _a.width,
-                margin = _a.margin,
-                data = _a.data,
-                bar = _a.bar,
-                stroke = _a.stroke;
-            var w = this.gridWidth();
-            var valuesCount = this.valuesCount(data.counts);
-            var setCount = data.counts.length;
-            var barWidth = w / valuesCount - bar.margin * 2 - this.groupedMargin();
-            if (barWidth < 5) {
-                bar.margin = 1;
-                barWidth = Math.max(1, (w - (valuesCount + 1) * bar.margin) / valuesCount);
-            }
-            return barWidth / setCount;
+            return innerScaleBand.bandwidth();
         },
         updateChart: function updateChart(bins, groupData) {
             var _a = this.props,
@@ -48193,27 +48177,32 @@ exports.histogramD3 = function () {
             var selector = '.bar';
             var gridHeight = this.gridHeight();
             var yAxisWidth = this.yAxisWidth();
+            var groupedMargin = this.groupedMargin();
             var maxItems = groupData.reduce(function (prev, next) {
-                return next.data.length > prev ? next.data.length : prev;
+                return next.length > prev ? next.length : prev;
             }, 0);
+            console.log('groupData', groupData);
             var g = this.container.selectAll('g').data(groupData);
             var bars = g.enter().append('g').merge(g).attr('transform', function (d, i, all) {
-                var xdelta = yAxisWidth + axis.y.style['stroke-width'] + (maxItems * barWidth + (maxItems - 1) * (2 * bar.margin) + 2 * bar.margin + 2 * bar.groupMargin) * i;
+                var xdelta = yAxisWidth / +axis.y.style['stroke-width'] + x(d[0].label);
                 return "translate(" + xdelta + ", 0)";
             }).selectAll('rect').data(function (d) {
-                return d.data;
+                return d;
             });
             bars.enter().append('rect').attr('height', 0).attr('y', function (d) {
                 return gridHeight;
             }).attr('class', 'bar ' + selector).attr('x', function (d, index, all) {
-                return bar.margin + bar.groupMargin + (barWidth + bar.margin) * index;
+                return barWidth * index;
             }).attr('width', function (d) {
                 return barWidth;
             }).attr('fill', function (d, i) {
                 return colors(i);
             }).on('mouseover', function (d, i) {
+                var ix = bins.findIndex(function (b) {
+                    return b === d.label;
+                });
                 tipContent.html(function () {
-                    return tipContentFn(bins, i, d);
+                    return tipContentFn(bins, ix, d.value);
                 });
                 tip.fx.in(tipContainer);
             }).on('mousemove', function () {
@@ -48221,12 +48210,12 @@ exports.histogramD3 = function () {
             }).on('mouseout', function () {
                 return tip.fx.out(tipContainer);
             }).merge(bars).transition().duration(duration).delay(delay).attr('y', function (d) {
-                return y(d);
+                return y(d.value);
             }).attr('stroke-dasharray', function (d) {
-                var currentHeight = gridHeight - y(d);
+                var currentHeight = gridHeight - y(d.value);
                 return barWidth + " 0 " + currentHeight + " " + barWidth;
             }).attr('height', function (d) {
-                return gridHeight - y(d);
+                return gridHeight - y(d.value);
             });
             g.exit().remove();
         },
@@ -48246,8 +48235,9 @@ exports.histogramD3 = function () {
             var ticks = this.valuesCount(data.counts);
             var setCount = data.counts.length;
             var axisWidth = axis.y.style['stroke-width'];
+            var xOffset = this.yAxisWidth();
             var offset = {
-                x: this.yAxisWidth() + this.barWidth() * setCount / 2 + bar.margin + this.groupedMargin() / 2,
+                x: xOffset,
                 y: this.gridHeight()
             };
             if (grid.x.visible) {

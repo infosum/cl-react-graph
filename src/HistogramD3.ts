@@ -9,12 +9,11 @@ import { IHistogramProps } from './Histogram';
 import tips from './tip';
 
 interface IGroupDataItem {
-  data: number[];
   label: string;
+  value: number;
 }
 
-type IGroupData = IGroupDataItem[];
-
+type IGroupData = IGroupDataItem[][];
 
 export const histogramD3 = ((): IChartAdaptor => {
   let svg;
@@ -22,6 +21,7 @@ export const histogramD3 = ((): IChartAdaptor => {
   let tipContent;
   const y = d3.scaleLinear();
   const x = d3.scaleBand();
+  const innerScaleBand = d3.scaleBand();
 
   // Gridlines in x axis function
   function make_x_gridlines(ticks: number = 5) {
@@ -72,8 +72,8 @@ export const histogramD3 = ((): IChartAdaptor => {
       },
     },
     bar: {
-      groupMargin: 10,
-      margin: 10,
+      groupMargin: 0.1,
+      margin: 0,
       width: 50,
     },
     className: 'histogram-d3',
@@ -135,8 +135,8 @@ export const histogramD3 = ((): IChartAdaptor => {
      * @param {Node} el Target DOM node
      * @param {Object} props Chart properties
      */
-    create(el: HTMLElement, props = {}) {
-      this.props = merge(defaultProps, props);
+    create(el: HTMLElement, props: Partial<IHistogramProps> = {}) {
+      this.props = merge<IHistogramProps>(defaultProps, props);
       this._makeSvg(el);
       this.previousData = this.props.data.counts.map((set: IHistogramDataSet, setIndex: number) => {
         return set.data
@@ -279,16 +279,25 @@ export const histogramD3 = ((): IChartAdaptor => {
      * @param {Object} data Chart data
      */
     _drawScales(data: IHistogramData) {
-      const { domain, margin, width, height, axis } = this.props;
+      const { bar, domain, margin, width, height, axis } = this.props;
       const valuesCount = this.valuesCount(data.counts);
       const w = this.gridWidth();
 
       let xAxis;
       let yAxis;
+      const dataLabels = data.counts.map((c) => c.label);
 
       x.domain(data.bins)
-        .rangeRound([0, w]);
+        .rangeRound([0, w])
+        .paddingInner(this.groupedMargin());
 
+      console.log('bar.margin', this.barMargin());
+      innerScaleBand
+        // .paddingInner(this.barMargin())
+        .domain(dataLabels)
+        .rangeRound([0, x.bandwidth()]);
+
+      console.log('innerScaleBand width', innerScaleBand.bandwidth());
       xAxis = d3.axisBottom(x);
 
       const tickSize = get(axis, 'x.tickSize', undefined);
@@ -335,32 +344,18 @@ export const histogramD3 = ((): IChartAdaptor => {
      * @param {Object} info Bar data etc
      */
     _drawBars(info: IHistogramData) {
-      // const valuesCount = this.valuesCount(info.counts);
       const { visible } = this.props;
-      this.dataSets = info.counts.map((set: IHistogramDataSet, setIndex: number) => {
-        return {
-          ...set,
-          data: set.data
-            .map((count, i) => visible[info.bins[i]] !== false ? count : 0),
-        };
-      });
-
-      // this.dataSets.forEach((set: IHistogramDataSet, setIndex: number) => {
-      //   console.log('this.dataSets', this.dataSets);
-      //   this.updateChart(info.bins, this.dataSets);
-      // });
-      debugger;
       this.dataSets = [] as IGroupData;
 
       info.counts.forEach((count) => {
         count.data.forEach((value, i) => {
           if (!this.dataSets[i]) {
-            this.dataSets[i] = {
-              data: [],
-              label: info.bins[i],
-            };
+            this.dataSets[i] = [];
           }
-          this.dataSets[i].data.push(value);
+          this.dataSets[i].push({
+            label: info.bins[i],
+            value: visible[info.bins[i]] !== false ? value : 0,
+          } as IGroupDataItem);
         });
       });
 
@@ -394,8 +389,19 @@ export const histogramD3 = ((): IChartAdaptor => {
      * @return {Number} Margin
      */
     groupedMargin(): number {
-      const { data } = this.props;
-      return ((data.counts.length - 1) * 3);
+      console.log('this.props.bar.groupMargin', this.props.bar.groupMargin);
+      const m = get(this.props.bar, 'groupMargin', 0.1);
+      console.log('m', m);
+      return m >= 0 && m <= 1
+        ? m
+        : 0.1;
+    },
+
+    barMargin(): number {
+      const m = get(this.props.bar, 'margin', 0);
+      return m >= 0 && m <= 1
+        ? m
+        : 0.1;
     },
 
     /**
@@ -403,21 +409,7 @@ export const histogramD3 = ((): IChartAdaptor => {
      * @return {number} bar width
      */
     barWidth() {
-      const { axis, width, margin, data, bar, stroke } = this.props;
-      const w = this.gridWidth();
-      const valuesCount = this.valuesCount(data.counts);
-      const setCount = data.counts.length;
-      let barWidth = (w / valuesCount) - (bar.margin * 2) - this.groupedMargin();
-
-      // Small bars - reduce margin and re-calcualate bar width
-      if (barWidth < 5) {
-        bar.margin = 1;
-        barWidth = Math.max(1, (w - (valuesCount + 1) * bar.margin) /
-          valuesCount);
-      }
-
-      // show data sets next to each other...
-      return barWidth / setCount;
+      return innerScaleBand.bandwidth();
     },
 
     /**
@@ -430,6 +422,7 @@ export const histogramD3 = ((): IChartAdaptor => {
       const { height, width, margin, bar, delay, duration,
         axis, stroke, tip, tipContentFn } = this.props;
       const barWidth = this.barWidth();
+
       // const colors = d3.scaleOrdinal(set.colors || this.props.colorScheme);
       // const borderColors = set.borderColors ? d3.scaleOrdinal(set.borderColors) : null;
 
@@ -439,10 +432,12 @@ export const histogramD3 = ((): IChartAdaptor => {
       const selector = '.bar';
       const gridHeight = this.gridHeight();
       const yAxisWidth = this.yAxisWidth();
-      const maxItems = groupData.reduce((prev, next) => next.data.length > prev
-        ? next.data.length
+      const groupedMargin = this.groupedMargin();
+      const maxItems = groupData.reduce((prev, next: IGroupDataItem[]) => next.length > prev
+        ? next.length
         : prev, 0);
 
+      console.log('groupData', groupData);
       const g = this.container
         .selectAll('g')
         .data(groupData);
@@ -452,37 +447,28 @@ export const histogramD3 = ((): IChartAdaptor => {
         .merge(g)
         .attr('transform', function (d, i, all) {
           const xdelta = yAxisWidth
-            + axis.y.style['stroke-width'] // start next to y axis
-            + (
-              (
-                maxItems * barWidth
-                + ((maxItems - 1) * (2 * bar.margin))
-                + (2 * bar.margin)
-                + (2 * bar.groupMargin)
-              ) * i
-            );
+            / + axis.y.style['stroke-width']
+            + x(d[0].label);
           return `translate(${xdelta}, 0)`;
         })
         .selectAll('rect')
-        .data((d) => d.data);
+        .data((d) => d);
 
       bars
         .enter()
         .append('rect')
         .attr('height', 0)
-        .attr('y', (d: number): number => gridHeight)
+        .attr('y', (d: IGroupDataItem): number => gridHeight)
 
         .attr('class', 'bar ' + selector)
         .attr('x', (d, index, all) => {
-
-          return bar.margin +
-            bar.groupMargin +
-            (barWidth + bar.margin) * (index);
+          return barWidth * index;
         })
         .attr('width', (d) => barWidth)
         .attr('fill', (d, i) => colors(i))
-        .on('mouseover', (d: number, i: number) => {
-          tipContent.html(() => tipContentFn(bins, i, d));
+        .on('mouseover', (d: IGroupDataItem, i: number) => {
+          const ix = bins.findIndex((b) => b === d.label);
+          tipContent.html(() => tipContentFn(bins, ix, d.value));
           tip.fx.in(tipContainer);
         })
         .on('mousemove', () => tip.fx.move(tipContainer))
@@ -491,58 +477,16 @@ export const histogramD3 = ((): IChartAdaptor => {
         .transition()
         .duration(duration)
         .delay(delay)
-        .attr('y', (d: number): number => y(d))
+        .attr('y', (d: IGroupDataItem): number => y(d.value))
         // Hide bar's bottom border
         .attr('stroke-dasharray',
-        (d: number): string => {
-          const currentHeight = gridHeight - (y(d));
+        (d: IGroupDataItem): string => {
+          const currentHeight = gridHeight - (y(d.value));
           return `${barWidth} 0 ${currentHeight} ${barWidth}`;
         })
-        .attr('height', (d: number): number => gridHeight - (y(d)));
+        .attr('height', (d: IGroupDataItem): number => gridHeight - (y(d.value)));
 
       g.exit().remove();
-
-      // const u = g.selectAll('rect')
-      //   .data((d) => {
-      //     console.log('group d', d);
-      //     return d.data;
-      //   });
-
-      // u.enter()
-      //   .append('rect')
-      //   .attr('height', 0)
-      //   .attr('y', (d: number): number => gridHeight)
-
-      //   .attr('class', 'bar ' + selector)
-      //   .attr('x', (d, index, all) => {
-
-      //     return bar.margin +
-      //       bar.groupMargin +
-      //       (barWidth + bar.margin) * (index);
-      //   })
-      //   .attr('width', (d) => barWidth)
-      //   .attr('fill', (d, i) => colors(i))
-      //   .on('mouseover', (d: number, i: number) => {
-      //     tipContent.html(() => tipContentFn(bins, i, d));
-      //     tip.fx.in(tipContainer);
-      //   })
-      //   .on('mousemove', () => tip.fx.move(tipContainer))
-      //   .on('mouseout', () => tip.fx.out(tipContainer))
-      //   .merge(u)
-      //   .transition()
-      //   .duration(duration)
-      //   .delay(delay)
-      //   .attr('y', (d: number): number => y(d))
-      //   // Hide bar's bottom border
-      //   .attr('stroke-dasharray',
-      //   (d: number): string => {
-      //     const currentHeight = gridHeight - (y(d));
-      //     return `${barWidth} 0 ${currentHeight} ${barWidth}`;
-      //   })
-      //   .attr('height', (d: number): number => gridHeight - (y(d)));
-
-      // u.exit().remove();
-
     },
 
     makeGrid(props: IHistogramProps) {
@@ -563,8 +507,11 @@ export const histogramD3 = ((): IChartAdaptor => {
       const setCount = data.counts.length;
       const axisWidth = axis.y.style['stroke-width'];
 
+      // const xOffset = this.yAxisWidth() + ((this.barWidth() * setCount) / 2) + bar.margin + this.groupedMargin() / 2;
+      const xOffset = this.yAxisWidth();
+
       const offset = {
-        x: this.yAxisWidth() + ((this.barWidth() * setCount) / 2) + bar.margin + this.groupedMargin() / 2,
+        x: xOffset,
         y: this.gridHeight(),
       };
 
