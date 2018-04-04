@@ -68,7 +68,7 @@ class HistogramExamples extends Component<IProps, IState> {
         />
 
         <Histogram data={data2}
-          bar={{ margin: 0 }}
+          bar={{ margin: 0.1 }}
           colorScheme={theme}
           visible={visible}
           width={700}

@@ -292,6 +292,7 @@ export const histogramD3 = ((): IChartAdaptor => {
         .rangeRound([0, w])
         .paddingInner(this.groupedMargin());
 
+      console.log('this.barMargin()', this.barMargin());
       innerScaleBand
         .domain(dataLabels)
         .rangeRound([0, x.bandwidth()])
@@ -374,6 +375,7 @@ export const histogramD3 = ((): IChartAdaptor => {
 
     barMargin(): number {
       const m = get(this.props.bar, 'margin', 0);
+      console.log('m', m);
       return m >= 0 && m <= 1
         ? m
         : 0.1;
@@ -524,6 +526,7 @@ export const histogramD3 = ((): IChartAdaptor => {
       if (!this.props.data.bins) {
         return;
       }
+      console.log('update', props.bar, this.props.bar);
       if (props.colorScheme) {
         this.props.colorScheme = props.colorScheme;
       }

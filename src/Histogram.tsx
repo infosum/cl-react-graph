@@ -36,7 +36,7 @@ class Histogram extends Component<IHistogramProps, IChartState> {
   public static defaultProps: Partial<IHistogramProps> = {
     axis: {},
     bar: {
-      margin: 2,
+      margin: 0,
       width: 10,
     },
     grid: {

@@ -160,7 +160,7 @@ var HistogramExamples = function (_super) {
         var theme2 = [theme[0]];
         return React.createElement("div", null, React.createElement("h3", null, "Histograms"), React.createElement(src_1.Histogram, { data: data_1.data, grid: data_1.grid, width: 700, height: 150, visible: visible, colorScheme: theme, tipContentFn: tipContentFn }), React.createElement(src_1.Legend, { theme: theme, data: dataLegendData, onSelect: function onSelect(label) {
                 return _this.toggleVisible(label);
-            }, visible: visible }), React.createElement(src_1.Histogram, { data: data_1.data2, bar: { margin: 0 }, colorScheme: theme, visible: visible, width: 700, height: 350, axis: data_1.axis }), React.createElement(src_1.Legend, { theme: theme2, data: data_1.data2, onSelect: function onSelect(label) {
+            }, visible: visible }), React.createElement(src_1.Histogram, { data: data_1.data2, bar: { margin: 0.1 }, colorScheme: theme, visible: visible, width: 700, height: 350, axis: data_1.axis }), React.createElement(src_1.Legend, { theme: theme2, data: data_1.data2, onSelect: function onSelect(label) {
                 return _this.toggleVisible(label);
             }, visible: visible }));
     };
@@ -47801,7 +47801,7 @@ var Histogram = function (_super) {
     Histogram.defaultProps = {
         axis: {},
         bar: {
-            margin: 2,
+            margin: 0,
             width: 10
         },
         grid: {
@@ -48095,6 +48095,7 @@ exports.histogramD3 = function () {
                 return c.label;
             });
             x.domain(data.bins).rangeRound([0, w]).paddingInner(this.groupedMargin());
+            console.log('this.barMargin()', this.barMargin());
             innerScaleBand.domain(dataLabels).rangeRound([0, x.bandwidth()]).paddingInner(this.barMargin());
             xAxis = d3.axisBottom(x);
             var tickSize = lodash_1.get(axis, 'x.tickSize', undefined);
@@ -48144,6 +48145,7 @@ exports.histogramD3 = function () {
         },
         barMargin: function barMargin() {
             var m = lodash_1.get(this.props.bar, 'margin', 0);
+            console.log('m', m);
             return m >= 0 && m <= 1 ? m : 0.1;
         },
         barWidth: function barWidth() {
@@ -48255,6 +48257,7 @@ exports.histogramD3 = function () {
             if (!this.props.data.bins) {
                 return;
             }
+            console.log('update', props.bar, this.props.bar);
             if (props.colorScheme) {
                 this.props.colorScheme = props.colorScheme;
             }
