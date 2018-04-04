@@ -144,7 +144,6 @@ var HistogramExamples = function (_super) {
         var _this = this;
         var theme = this.props.theme;
         var visible = this.state.visible;
-        console.log(visible);
         var dataLegendData = {
             bins: data_1.data.counts.map(function (c) {
                 return c.label;
@@ -158,9 +157,10 @@ var HistogramExamples = function (_super) {
                 label: ''
             }]
         };
-        return React.createElement("div", null, React.createElement("h3", null, "Histograms"), React.createElement(src_1.Histogram, { data: data_1.data, grid: data_1.grid, width: 700, height: 150, visible: visible, tipContentFn: tipContentFn }), React.createElement(src_1.Legend, { theme: theme, data: dataLegendData, onSelect: function onSelect(label) {
+        var theme2 = [theme[0]];
+        return React.createElement("div", null, React.createElement("h3", null, "Histograms"), React.createElement(src_1.Histogram, { data: data_1.data, grid: data_1.grid, width: 700, height: 150, visible: visible, colorScheme: theme, tipContentFn: tipContentFn }), React.createElement(src_1.Legend, { theme: theme, data: dataLegendData, onSelect: function onSelect(label) {
                 return _this.toggleVisible(label);
-            }, visible: visible }), React.createElement(src_1.Histogram, { data: data_1.data2, bar: { margin: 0 }, colorScheme: theme, visible: visible, width: 700, height: 350, axis: data_1.axis }), React.createElement(src_1.Legend, { theme: theme, data: data_1.data2, onSelect: function onSelect(label) {
+            }, visible: visible }), React.createElement(src_1.Histogram, { data: data_1.data2, bar: { margin: 0 }, colorScheme: theme, visible: visible, width: 700, height: 350, axis: data_1.axis }), React.createElement(src_1.Legend, { theme: theme2, data: data_1.data2, onSelect: function onSelect(label) {
                 return _this.toggleVisible(label);
             }, visible: visible }));
     };
@@ -48231,9 +48231,8 @@ exports.histogramD3 = function () {
             var ticks = this.valuesCount(data.counts);
             var setCount = data.counts.length;
             var axisWidth = axis.y.style['stroke-width'];
-            var xOffset = this.yAxisWidth();
             var offset = {
-                x: xOffset,
+                x: this.yAxisWidth(),
                 y: this.gridHeight()
             };
             if (grid.x.visible) {
@@ -48263,6 +48262,9 @@ exports.histogramD3 = function () {
             this.props = deepmerge_1.default(defaultProps, props);
             if (!this.props.data.bins) {
                 return;
+            }
+            if (props.colorScheme) {
+                this.props.colorScheme = props.colorScheme;
             }
             var _a = this.props,
                 data = _a.data,

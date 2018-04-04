@@ -398,9 +398,7 @@ export const histogramD3 = ((): IChartAdaptor => {
         axis, stroke, tip, tipContentFn } = this.props;
       const barWidth = this.barWidth();
 
-      // const colors = d3.scaleOrdinal(set.colors || this.props.colorScheme);
       // const borderColors = set.borderColors ? d3.scaleOrdinal(set.borderColors) : null;
-
       const colors = d3.scaleOrdinal(this.props.colorScheme);
       const borderColors = null;
 
@@ -478,11 +476,8 @@ export const histogramD3 = ((): IChartAdaptor => {
       const setCount = data.counts.length;
       const axisWidth = axis.y.style['stroke-width'];
 
-      // const xOffset = this.yAxisWidth() + ((this.barWidth() * setCount) / 2) + bar.margin + this.groupedMargin() / 2;
-      const xOffset = this.yAxisWidth();
-
       const offset = {
-        x: xOffset,
+        x: this.yAxisWidth(),
         y: this.gridHeight(),
       };
 
@@ -528,6 +523,9 @@ export const histogramD3 = ((): IChartAdaptor => {
       this.props = merge(defaultProps, props);
       if (!this.props.data.bins) {
         return;
+      }
+      if (props.colorScheme) {
+        this.props.colorScheme = props.colorScheme;
       }
 
       const { data, visible } = this.props;

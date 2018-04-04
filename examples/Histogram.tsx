@@ -35,7 +35,7 @@ class HistogramExamples extends Component<IProps, IState> {
   public render() {
     const { theme } = this.props;
     const { visible } = this.state;
-    console.log(visible);
+
     const dataLegendData = {
       bins: data.counts.map((c) => c.label),
       counts: [{
@@ -44,6 +44,7 @@ class HistogramExamples extends Component<IProps, IState> {
       }],
     };
 
+    const theme2 = [theme[0]];
     return (
       <div>
         <h3>Histograms</h3>
@@ -57,6 +58,7 @@ class HistogramExamples extends Component<IProps, IState> {
           width={700}
           height={150}
           visible={visible}
+          colorScheme={theme}
           tipContentFn={tipContentFn} />
         <Legend
           theme={theme}
@@ -65,7 +67,8 @@ class HistogramExamples extends Component<IProps, IState> {
           visible={visible}
         />
 
-        <Histogram data={data2} bar={{ margin: 0 }}
+        <Histogram data={data2}
+          bar={{ margin: 0 }}
           colorScheme={theme}
           visible={visible}
           width={700}
@@ -73,7 +76,7 @@ class HistogramExamples extends Component<IProps, IState> {
           axis={axis} />
 
         <Legend
-          theme={theme}
+          theme={theme2}
           data={data2}
           onSelect={(label) => this.toggleVisible(label)}
           visible={visible}
