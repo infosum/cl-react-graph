@@ -48107,7 +48107,7 @@ exports.histogramD3 = function () {
                     }));
                 }
             }
-            this.xAxis.attr('transform', 'translate(' + this.yAxisWidth() + ',' + (height - this.xAxisHeight() - margin.left * 2) + ')').call(xAxis);
+            this.xAxis.attr('transform', 'translate(' + (this.yAxisWidth() + axis.y.style['stroke-width']) + ',' + (height - this.xAxisHeight() - margin.left * 2) + ')').call(xAxis);
             this.appendDomainRange(y, this.dataSets);
             var yAxis = d3.axisLeft(y).ticks(axis.y.ticks);
             var yTickSize = lodash_1.get(axis, 'y.tickSize', undefined);
@@ -48115,16 +48115,8 @@ exports.histogramD3 = function () {
                 yAxis.tickSize(yTickSize);
             }
             this.yAxis.attr('transform', 'translate(' + this.yAxisWidth() + ', 0)').transition().call(yAxis);
-            var _b = axis.x.text.style,
-                transform = _b.transform,
-                xx = _b.x,
-                yy = _b.y,
-                xLabelStyle = __rest(_b, ["transform", "x", "y"]);
-            var _c = axis.y.text.style,
-                yt = _c.transform,
-                xxx = _c.x,
-                yyy = _c.y,
-                yLabelStyle = __rest(_c, ["transform", "x", "y"]);
+            var xLabelStyle = __rest(axis.x.text.style, []);
+            var yLabelStyle = __rest(axis.y.text.style, []);
             attrs_1.default(svg.selectAll('.y-axis .domain, .y-axis .tick line'), axis.y.style);
             attrs_1.default(svg.selectAll('.y-axis .tick text'), axis.y.text.style);
             attrs_1.default(svg.selectAll('.y-axis-label'), yLabelStyle);
@@ -48232,7 +48224,7 @@ exports.histogramD3 = function () {
             var setCount = data.counts.length;
             var axisWidth = axis.y.style['stroke-width'];
             var offset = {
-                x: this.yAxisWidth(),
+                x: this.yAxisWidth() + axisWidth,
                 y: this.gridHeight()
             };
             if (grid.x.visible) {

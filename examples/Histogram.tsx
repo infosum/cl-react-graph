@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Component } from 'react';
-import { Legend, Histogram } from '../src';
+import { Histogram, Legend } from '../src';
 import { axis, data, data2, data3, grid } from './data';
 
 interface IProps {

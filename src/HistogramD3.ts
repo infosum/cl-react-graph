@@ -310,7 +310,7 @@ export const histogramD3 = ((): IChartAdaptor => {
       }
 
       this.xAxis
-        .attr('transform', 'translate(' + this.yAxisWidth() + ',' +
+        .attr('transform', 'translate(' + (this.yAxisWidth() + axis.y.style['stroke-width']) + ',' +
         (height - this.xAxisHeight() - (margin.left * 2)) + ')')
         .call(xAxis);
 
@@ -328,8 +328,8 @@ export const histogramD3 = ((): IChartAdaptor => {
         .transition()
         .call(yAxis);
 
-      const { transform, x: xx, y: yy, ...xLabelStyle } = axis.x.text.style;
-      const { transform: yt, x: xxx, y: yyy, ...yLabelStyle } = axis.y.text.style;
+      const { ...xLabelStyle } = axis.x.text.style;
+      const { ...yLabelStyle } = axis.y.text.style;
       attrs(svg.selectAll('.y-axis .domain, .y-axis .tick line'), axis.y.style);
       attrs(svg.selectAll('.y-axis .tick text'), axis.y.text.style);
       attrs(svg.selectAll('.y-axis-label'), yLabelStyle);
@@ -477,7 +477,7 @@ export const histogramD3 = ((): IChartAdaptor => {
       const axisWidth = axis.y.style['stroke-width'];
 
       const offset = {
-        x: this.yAxisWidth(),
+        x: this.yAxisWidth() + axisWidth,
         y: this.gridHeight(),
       };
 
