@@ -501,6 +501,7 @@ export const histogramD3 = ((): IChartAdaptor => {
       if (grid.y.visible) {
         // add the Y gridlines
         this.gridY.attr('transform', 'translate(' + (this.yAxisWidth() + axisWidth) + ', 0)')
+          .transition()
           .call(make_y_gridlines(get(grid, 'y.ticks', ticks))
             .tickSize(-width + (margin.left * 2) + this.yAxisWidth())
             .tickFormat(() => ''),

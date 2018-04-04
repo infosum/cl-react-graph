@@ -160,6 +160,8 @@ var HistogramExamples = function (_super) {
         };
         return React.createElement("div", null, React.createElement("h3", null, "Histograms"), React.createElement(src_1.Histogram, { data: data_1.data, grid: data_1.grid, width: 700, height: 150, visible: visible, tipContentFn: tipContentFn }), React.createElement(src_1.Legend, { theme: theme, data: dataLegendData, onSelect: function onSelect(label) {
                 return _this.toggleVisible(label);
+            }, visible: visible }), React.createElement(src_1.Histogram, { data: data_1.data2, bar: { margin: 0 }, colorScheme: theme, visible: visible, width: 700, height: 350, axis: data_1.axis }), React.createElement(src_1.Legend, { theme: theme, data: data_1.data2, onSelect: function onSelect(label) {
+                return _this.toggleVisible(label);
             }, visible: visible }));
     };
     return HistogramExamples;
@@ -48053,7 +48055,6 @@ exports.histogramD3 = function () {
             yDomain[1] = domain && domain.hasOwnProperty('max') && domain.max !== null ? domain.max : extent[1];
             yDomain[0] = domain && domain.hasOwnProperty('min') && domain.min !== null ? domain.min : 0;
             var yRange = [height - margin.top * 2 - this.xAxisHeight(), 0];
-            console.log('set scale range', yRange, 'domain', yDomain);
             scale.range(yRange).domain(yDomain);
         },
         yAxisWidth: function yAxisWidth() {
@@ -48244,7 +48245,7 @@ exports.histogramD3 = function () {
                 attrs_1.default(this.gridX.selectAll('.domain'), { stroke: 'transparent' });
             }
             if (grid.y.visible) {
-                this.gridY.attr('transform', 'translate(' + (this.yAxisWidth() + axisWidth) + ', 0)').call(make_y_gridlines(lodash_1.get(grid, 'y.ticks', ticks)).tickSize(-width + margin.left * 2 + this.yAxisWidth()).tickFormat(function () {
+                this.gridY.attr('transform', 'translate(' + (this.yAxisWidth() + axisWidth) + ', 0)').transition().call(make_y_gridlines(lodash_1.get(grid, 'y.ticks', ticks)).tickSize(-width + margin.left * 2 + this.yAxisWidth()).tickFormat(function () {
                     return '';
                 }));
                 attrs_1.default(this.gridY.selectAll('.tick line'), grid.y.style);
