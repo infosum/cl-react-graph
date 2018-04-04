@@ -48095,7 +48095,6 @@ exports.histogramD3 = function () {
                 return c.label;
             });
             x.domain(data.bins).rangeRound([0, w]).paddingInner(this.groupedMargin());
-            console.log('this.barMargin()', this.barMargin());
             innerScaleBand.domain(dataLabels).rangeRound([0, x.bandwidth()]).paddingInner(this.barMargin());
             xAxis = d3.axisBottom(x);
             var tickSize = lodash_1.get(axis, 'x.tickSize', undefined);
@@ -48145,7 +48144,6 @@ exports.histogramD3 = function () {
         },
         barMargin: function barMargin() {
             var m = lodash_1.get(this.props.bar, 'margin', 0);
-            console.log('m', m);
             return m >= 0 && m <= 1 ? m : 0.1;
         },
         barWidth: function barWidth() {
@@ -48257,7 +48255,6 @@ exports.histogramD3 = function () {
             if (!this.props.data.bins) {
                 return;
             }
-            console.log('update', props.bar, this.props.bar);
             if (props.colorScheme) {
                 this.props.colorScheme = props.colorScheme;
             }
