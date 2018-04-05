@@ -1,5 +1,5 @@
 
-import * as d3 from 'd3';
+import { schemeCategory10, schemeDark2 } from 'd3-scale-chromatic';
 
 export const grid = {
   x: {
@@ -22,14 +22,10 @@ export const data = {
   bins: ['Data 1', 'Data 6', 'Data 3', 'Dat 4'],
   counts: [
     {
-      borderColors: d3.schemeCategory20,
-      colors: d3.schemeCategory20,
       data: [1, 2, 3, 4],
       label: 'DataSet 1',
     },
     {
-      borderColors: d3.schemeCategory20,
-      colors: d3.schemeCategory20b,
       data: [13, 14, 15, 16],
       label: 'DataSet 2',
     },

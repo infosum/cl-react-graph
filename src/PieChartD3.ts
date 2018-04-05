@@ -1,8 +1,9 @@
 /// <reference path="./interfaces.d.ts" />
 import { interpolate } from 'd3-interpolate';
 import { scaleOrdinal } from 'd3-scale';
-import { select } from 'd3-selection';
+import { select, Selection } from 'd3-selection';
 import { arc, pie } from 'd3-shape';
+import 'd3-transition';
 import merge from 'deepmerge';
 import * as textWidth from 'text-width';
 import colorScheme from './colors';
@@ -211,7 +212,7 @@ export const pieChartD3 = ((): IChartAdaptor => {
       g.append('path')
         .attr('stroke', '#FFF')
         .attr('fill', (d, j) => colors(j))
-        .attr('d', arc)
+        .attr('d', thisArc)
         .each(function (d, j) { this._current = arcs[j]; }) // store the initial angles
         .on('mouseover', (d: any, ix: number) => {
           tipContent.html(() => tipContentFn(bins, ix, d.data.count));
@@ -223,7 +224,7 @@ export const pieChartD3 = ((): IChartAdaptor => {
       path.transition()
         .delay(400)
         .duration(500)
-        .attrTween('d', arcTween(arc));
+        .attrTween('d', arcTween(thisArc));
 
       if (labels.display) {
         const lbls = this.containers[i].selectAll('text')
