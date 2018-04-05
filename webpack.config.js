@@ -10,7 +10,7 @@ var webpack = require('webpack'),
   rules = [
     {
       test: /\.ts(x?)$/,
-      exclude: /(node_modules)/,
+      exclude: [/node_modules/, /examples/, /dist/],
       use: [
         {
           loader: 'babel-loader'
@@ -22,7 +22,7 @@ var webpack = require('webpack'),
     },
     {
       test: /\.js$/,
-      exclude: /node_modules/,
+      exclude: [/node_modules/, /examples/, /dist/],
       use: [
         {
           loader: 'babel-loader'
