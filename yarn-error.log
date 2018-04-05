@@ -1,5 +1,5 @@
 Arguments: 
-  /home/rob/.nvm/versions/node/v9.5.0/bin/node /usr/bin/yarn build
+  /home/rob/.nvm/versions/node/v9.5.0/bin/node /usr/bin/yarn build-examples
 
 PATH: 
   /home/rob/.nvm/versions/node/v9.5.0/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl
@@ -16,7 +16,7 @@ Platform:
 npm manifest: 
   {
     "name": "cl-react-graph",
-    "version": "1.5.3",
+    "version": "1.5.5",
     "description": "React D3 Charts",
     "main": "dist/index.js",
     "scripts": {
@@ -5975,9 +5975,9 @@ Lockfile:
 
 Trace: 
   Error: Command failed.
-  Exit code: 1
+  Exit code: 2
   Command: sh
-  Arguments: -c webpack --config ./webpack.config.js
+  Arguments: -c webpack --config ./webpack.config.examples.js
   Directory: /home/rob/cl-react-graph
   Output:
   

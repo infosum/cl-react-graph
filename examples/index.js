@@ -33324,7 +33324,7 @@ var Histogram = function (_super) {
         this.setState({
             parentWidth: width
         }, function () {
-            return _this.chart.update(elem, _this.getChartState());
+            return _this.chart.create(elem, _this.getChartState());
         });
     };
     Histogram.prototype.componentDidMount = function () {
