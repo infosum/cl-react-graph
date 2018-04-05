@@ -28,6 +28,7 @@ interface IAxis {
     ticks?: number;
     height?: number;
     label?: string;
+    margin?: number;
     style?: ISVGLineStyle;
     text?: {
         style: ISVGTextStyle

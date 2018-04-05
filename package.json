@@ -1,6 +1,6 @@
 {
   "name": "cl-react-graph",
-  "version": "1.5.2",
+  "version": "1.5.3",
   "description": "React D3 Charts",
   "main": "dist/index.js",
   "scripts": {
@@ -25,6 +25,7 @@
   "homepage": "https://github.com/cognitivelogic/cl-react-graph#readme",
   "devDependencies": {
     "@types/d3": "^5.0.0",
+    "@types/deepmerge": "^2.1.0",
     "@types/react": "^16.0.40",
     "@types/react-dom": "^16.0.4",
     "babel-core": "^6.26.0",
@@ -51,15 +52,15 @@
       "react"
     ]
   },
+  "peerDependencies": {
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0"
+  },
   "dependencies": {
-    "@types/deepmerge": "^2.1.0",
     "color": "^3.0.0",
     "d3": "^5.0.0",
-    "d3-selection-multi": "^1.0.1",
     "deepmerge": "^2.1.0",
     "lodash.get": "^4.4.2",
-    "react": "^16.2.0",
-    "react-dom": "^16.2.0",
     "text-width": "^1.2.0"
   }
 }

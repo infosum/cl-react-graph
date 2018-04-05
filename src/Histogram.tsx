@@ -30,7 +30,7 @@ export interface IHistogramProps {
  */
 class Histogram extends Component<IHistogramProps, IChartState> {
 
-  private histogram: IChartAdaptor;
+  private chart: IChartAdaptor;
   private ref;
 
   public static defaultProps: Partial<IHistogramProps> = {
@@ -81,7 +81,7 @@ class Histogram extends Component<IHistogramProps, IChartState> {
    */
   constructor(props: IHistogramProps) {
     super(props);
-    this.histogram = histogramD3();
+    this.chart = histogramD3();
     const counts: IHistogramDataSet[] = [];
     const bins: string[] = [];
     this.state = {
@@ -98,16 +98,14 @@ class Histogram extends Component<IHistogramProps, IChartState> {
 
     this.setState({
       parentWidth: width,
-    });
-
-    this.histogram.create(elem, this.getChartState());
+    }, () => this.chart.create(elem, this.getChartState()));
   }
 
   /**
    * Component mounted
    */
   public componentDidMount() {
-    this.histogram.create(this.getDOMNode(), this.getChartState());
+    this.chart.create(this.getDOMNode(), this.getChartState());
     if (this.props.width === '100%') {
       window.addEventListener('resize', (e) => this.handleResize());
       this.handleResize();
@@ -118,7 +116,7 @@ class Histogram extends Component<IHistogramProps, IChartState> {
    * Component updated
    */
   public componentDidUpdate() {
-    this.histogram.update(this.getDOMNode(), this.getChartState());
+    this.chart.update(this.getDOMNode(), this.getChartState());
   }
 
   /**
@@ -146,7 +144,7 @@ class Histogram extends Component<IHistogramProps, IChartState> {
     if (this.props.width === '100%') {
       window.removeEventListener('resize', this.handleResize);
     }
-    this.histogram.destroy(this.getDOMNode());
+    this.chart.destroy(this.getDOMNode());
   }
 
   /**

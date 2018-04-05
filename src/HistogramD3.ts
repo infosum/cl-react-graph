@@ -40,6 +40,7 @@ export const histogramD3 = ((): IChartAdaptor => {
       x: {
         height: 20,
         label: '',
+        margin: 10,
         style: {
           'fill': 'none',
           'shape-rendering': 'crispEdges',
@@ -258,7 +259,7 @@ export const histogramD3 = ((): IChartAdaptor => {
           .attr('class', 'x-axis-label')
           .attr('transform',
           'translate(' + (width / 2) + ' ,' +
-          ((height - this.xAxisHeight() - (margin.left * 2)) + 25) + ')')
+          ((height - this.xAxisHeight() - (margin.left * 2)) + 10 + axis.x.margin) + ')')
           .style('text-anchor', 'middle')
           .text(axis.x.label);
       }
@@ -266,7 +267,7 @@ export const histogramD3 = ((): IChartAdaptor => {
       if (axis.y.label !== '') {
         svg.append('text')
           .attr('class', 'y-axis-label')
-          .attr('transform', 'rotate(-90)')
+          .attr('transform', 'translate(0, -' + this.gridHeight() + ')rotate(-90)')
           .attr('y', 0 - margin.left)
           .attr('x', 0 - (height / 2 - (margin.top * 2)))
           .attr('dy', '1em')
@@ -332,11 +333,9 @@ export const histogramD3 = ((): IChartAdaptor => {
       const { ...yLabelStyle } = axis.y.text.style;
       attrs(svg.selectAll('.y-axis .domain, .y-axis .tick line'), axis.y.style);
       attrs(svg.selectAll('.y-axis .tick text'), axis.y.text.style);
-      attrs(svg.selectAll('.y-axis-label'), yLabelStyle);
 
       attrs(svg.selectAll('.x-axis .domain, .x-axis .tick line'), axis.x.style);
       attrs(svg.selectAll('.x-axis .tick text'), axis.x.text.style);
-      attrs(svg.selectAll('.x-axis-label'), xLabelStyle);
     },
 
     /**
@@ -416,7 +415,7 @@ export const histogramD3 = ((): IChartAdaptor => {
       const bars = g.enter()
         .append('g')
         .merge(g)
-        .attr('transform', function (d, i, all) {
+        .attr('transform', (d) => {
           const xdelta = yAxisWidth
             + axis.y.style['stroke-width']
             + x(d[0].label);

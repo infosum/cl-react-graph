@@ -69,9 +69,7 @@ class PieChart extends Component<IPieChartProps, IChartState> {
 
     this.setState({
       parentWidth: width,
-    });
-
-    this.chart.create(elem, this.getChartState());
+    }, () => this.chart.create(this.getDOMNode(), this.getChartState()));
   }
 
   /**

@@ -158,7 +158,10 @@ var HistogramExamples = function (_super) {
             }]
         };
         var theme2 = [theme[0]];
-        return React.createElement("div", null, React.createElement("h3", null, "Histograms"), React.createElement(src_1.Histogram, { data: data_1.data, grid: data_1.grid, width: 700, height: 150, visible: visible, colorScheme: theme, tipContentFn: tipContentFn }), React.createElement(src_1.Legend, { theme: theme, data: dataLegendData, onSelect: function onSelect(label) {
+        return React.createElement("div", null, React.createElement("h3", null, "Histograms"), React.createElement(src_1.Histogram, { data: data_1.data2, width: 400, height: 400, margin: {
+                left: 30,
+                top: 30
+            }, domain: { min: 0, max: 10 } }), React.createElement(src_1.Histogram, { data: data_1.data, grid: data_1.grid, width: '100%', height: 720, visible: visible, colorScheme: theme, tipContentFn: tipContentFn }), React.createElement(src_1.Legend, { theme: theme, data: dataLegendData, onSelect: function onSelect(label) {
                 return _this.toggleVisible(label);
             }, visible: visible }), React.createElement(src_1.Histogram, { data: data_1.data2, bar: { margin: 0.1 }, colorScheme: theme, visible: visible, width: 700, height: 350, axis: data_1.axis }), React.createElement(src_1.Legend, { theme: theme2, data: data_1.data2, onSelect: function onSelect(label) {
                 return _this.toggleVisible(label);
@@ -233,7 +236,7 @@ var PieExamples = function (_super) {
         var labels = {
             display: true
         };
-        return React.createElement("div", null, React.createElement("h3", null, "Pie Chart"), React.createElement(src_1.PieChart, { width: 200, height: 200, data: data_1.data }), React.createElement("h4", null, "Donut"), React.createElement(src_1.PieChart, { width: 300, colorScheme: theme, backgroundColor: "#eee", height: 300, donutWidth: 10, data: data_1.data3, visible: visible, labels: labels }), React.createElement(src_1.Legend, { theme: theme, data: data_1.data3, onSelect: function onSelect(label) {
+        return React.createElement("div", null, React.createElement("h3", null, "Pie Chart"), React.createElement(src_1.PieChart, { width: "100%", height: 200, data: data_1.data }), React.createElement("h4", null, "Donut"), React.createElement(src_1.PieChart, { width: 300, colorScheme: theme, backgroundColor: "#eee", height: 300, donutWidth: 10, data: data_1.data3, visible: visible, labels: labels }), React.createElement(src_1.Legend, { theme: theme, data: data_1.data3, onSelect: function onSelect(label) {
                 return _this.toggleVisible(label);
             }, visible: visible }));
     };
@@ -287,7 +290,7 @@ exports.data = {
     grid: exports.grid
 };
 exports.data2 = {
-    bins: ['bin 1', 'bin 2', 'bin 3', 'bin 4', 'bin 5', 'bin 6', 'bin 7'],
+    bins: ['bin 1', 'bin 2', 'bin 3 with a long name', 'bin 4', 'bin 5', 'bin 6', 'bin 7'],
     counts: [{
         borderColors: ['red'],
         data: [1, 2, 3, 4, 5, 6, 7],
@@ -308,13 +311,15 @@ exports.data3 = {
 };
 exports.axis = {
     x: {
+        height: 200,
         label: 'X Axis',
+        margin: 200,
         text: {
             style: {
                 'dy': '.35em',
                 'text-anchor': 'start',
-                'transform': 'rotate(45)',
-                'x': 4,
+                'transform': 'rotate(90)',
+                'x': 0,
                 'y': 0
             }
         },
@@ -47744,7 +47749,7 @@ var Histogram = function (_super) {
     __extends(Histogram, _super);
     function Histogram(props) {
         var _this = _super.call(this, props) || this;
-        _this.histogram = HistogramD3_1.histogramD3();
+        _this.chart = HistogramD3_1.histogramD3();
         var counts = [];
         var bins = [];
         _this.state = {
@@ -47753,16 +47758,18 @@ var Histogram = function (_super) {
         return _this;
     }
     Histogram.prototype.handleResize = function () {
+        var _this = this;
         var elem = this.getDOMNode();
         var width = this.ref.offsetWidth ? this.ref.offsetWidth : 0;
         this.setState({
             parentWidth: width
+        }, function () {
+            return _this.chart.create(elem, _this.getChartState());
         });
-        this.histogram.create(elem, this.getChartState());
     };
     Histogram.prototype.componentDidMount = function () {
         var _this = this;
-        this.histogram.create(this.getDOMNode(), this.getChartState());
+        this.chart.create(this.getDOMNode(), this.getChartState());
         if (this.props.width === '100%') {
             window.addEventListener('resize', function (e) {
                 return _this.handleResize();
@@ -47771,7 +47778,7 @@ var Histogram = function (_super) {
         }
     };
     Histogram.prototype.componentDidUpdate = function () {
-        this.histogram.update(this.getDOMNode(), this.getChartState());
+        this.chart.update(this.getDOMNode(), this.getChartState());
     };
     Histogram.prototype.getChartState = function () {
         var width = this.props.width;
@@ -47787,7 +47794,7 @@ var Histogram = function (_super) {
         if (this.props.width === '100%') {
             window.removeEventListener('resize', this.handleResize);
         }
-        this.histogram.destroy(this.getDOMNode());
+        this.chart.destroy(this.getDOMNode());
     };
     Histogram.prototype.getDOMNode = function () {
         return ReactDOM.findDOMNode(this.ref);
@@ -47897,6 +47904,7 @@ exports.histogramD3 = function () {
             x: {
                 height: 20,
                 label: '',
+                margin: 10,
                 style: {
                     'fill': 'none',
                     'shape-rendering': 'crispEdges',
@@ -48074,10 +48082,10 @@ exports.histogramD3 = function () {
             this.xAxis = svg.append('g').attr('class', 'x-axis');
             this.yAxis = svg.append('g').attr('class', 'y-axis');
             if (axis.x.label !== '') {
-                svg.append('text').attr('class', 'x-axis-label').attr('transform', 'translate(' + width / 2 + ' ,' + (height - this.xAxisHeight() - margin.left * 2 + 25) + ')').style('text-anchor', 'middle').text(axis.x.label);
+                svg.append('text').attr('class', 'x-axis-label').attr('transform', 'translate(' + width / 2 + ' ,' + (height - this.xAxisHeight() - margin.left * 2 + 10 + axis.x.margin) + ')').style('text-anchor', 'middle').text(axis.x.label);
             }
             if (axis.y.label !== '') {
-                svg.append('text').attr('class', 'y-axis-label').attr('transform', 'rotate(-90)').attr('y', 0 - margin.left).attr('x', 0 - (height / 2 - margin.top * 2)).attr('dy', '1em').style('text-anchor', 'middle').text(axis.y.label);
+                svg.append('text').attr('class', 'y-axis-label').attr('transform', 'translate(0, -' + this.gridHeight() + ')rotate(-90)').attr('y', 0 - margin.left).attr('x', 0 - (height / 2 - margin.top * 2)).attr('dy', '1em').style('text-anchor', 'middle').text(axis.y.label);
             }
         },
         _drawScales: function _drawScales(data) {
@@ -48119,10 +48127,8 @@ exports.histogramD3 = function () {
             var yLabelStyle = __rest(axis.y.text.style, []);
             attrs_1.default(svg.selectAll('.y-axis .domain, .y-axis .tick line'), axis.y.style);
             attrs_1.default(svg.selectAll('.y-axis .tick text'), axis.y.text.style);
-            attrs_1.default(svg.selectAll('.y-axis-label'), yLabelStyle);
             attrs_1.default(svg.selectAll('.x-axis .domain, .x-axis .tick line'), axis.x.style);
             attrs_1.default(svg.selectAll('.x-axis .tick text'), axis.x.text.style);
-            attrs_1.default(svg.selectAll('.x-axis-label'), xLabelStyle);
         },
         gridWidth: function gridWidth() {
             var _a = this.props,
@@ -48171,7 +48177,7 @@ exports.histogramD3 = function () {
                 return next.length > prev ? next.length : prev;
             }, 0);
             var g = this.container.selectAll('g').data(groupData);
-            var bars = g.enter().append('g').merge(g).attr('transform', function (d, i, all) {
+            var bars = g.enter().append('g').merge(g).attr('transform', function (d) {
                 var xdelta = yAxisWidth + axis.y.style['stroke-width'] + x(d[0].label);
                 return "translate(" + xdelta + ", 0)";
             }).selectAll('rect').data(function (d) {
@@ -48349,12 +48355,14 @@ var HorizontalHistogram = function (_super) {
         return _this;
     }
     HorizontalHistogram.prototype.handleResize = function () {
+        var _this = this;
         var elem = this.getDOMNode();
         var width = this.ref.offsetWidth ? this.ref.offsetWidth : 0;
         this.setState({
             parentWidth: width
+        }, function () {
+            return _this.histogram.create(elem, _this.getChartState());
         });
-        this.histogram.create(elem, this.getChartState());
     };
     HorizontalHistogram.prototype.componentDidMount = function () {
         var _this = this;
@@ -48889,20 +48897,22 @@ var LineChart = function (_super) {
             parentWidth: 0,
             width: 400
         };
-        _this.lineChart = lineChartD3_1.lineChartD3();
+        _this.chart = lineChartD3_1.lineChartD3();
         return _this;
     }
     LineChart.prototype.handleResize = function () {
+        var _this = this;
         var elem = this.ref;
         var width = elem.offsetWidth;
         this.setState({
             parentWidth: width
+        }, function () {
+            return _this.chart.create(_this.getDOMNode(), _this.getChartState());
         });
-        this.lineChart.create(this.getDOMNode(), this.getChartState());
     };
     LineChart.prototype.componentDidMount = function () {
         var _this = this;
-        this.lineChart.create(this.getDOMNode(), this.getChartState());
+        this.chart.create(this.getDOMNode(), this.getChartState());
         if (this.props.width === '100%') {
             window.addEventListener('resize', function (e) {
                 return _this.handleResize();
@@ -48911,7 +48921,7 @@ var LineChart = function (_super) {
         }
     };
     LineChart.prototype.componentDidUpdate = function () {
-        this.lineChart.update(this.getDOMNode(), this.getChartState());
+        this.chart.update(this.getDOMNode(), this.getChartState());
     };
     LineChart.prototype.getChartState = function () {
         var _a = this.props,
@@ -48942,13 +48952,13 @@ var LineChart = function (_super) {
         if (this.props.width === '100%') {
             window.removeEventListener('resize', this.handleResize);
         }
-        this.lineChart.destroy(this.getDOMNode());
+        this.chart.destroy(this.getDOMNode());
     };
     LineChart.prototype.getDOMNode = function () {
         return ReactDOM.findDOMNode(this.ref);
     };
     LineChart.prototype.componentWillReceiveProps = function (props) {
-        this.lineChart.update(this.getDOMNode(), this.getChartState());
+        this.chart.update(this.getDOMNode(), this.getChartState());
     };
     LineChart.prototype.render = function () {
         var _this = this;
@@ -49021,12 +49031,14 @@ var PieChart = function (_super) {
         return _this;
     }
     PieChart.prototype.handleResize = function () {
+        var _this = this;
         var elem = this.getDOMNode();
         var width = this.ref.offsetWidth ? this.ref.offsetWidth : 0;
         this.setState({
             parentWidth: width
+        }, function () {
+            return _this.chart.create(_this.getDOMNode(), _this.getChartState());
         });
-        this.chart.create(elem, this.getChartState());
     };
     PieChart.prototype.componentDidMount = function () {
         var _this = this;
@@ -49380,16 +49392,18 @@ var ScatterPlot = function (_super) {
         return _this;
     }
     ScatterPlot.prototype.handleResize = function () {
+        var _this = this;
         var _a = this.props,
             legendWidth = _a.legendWidth,
             padding = _a.padding;
         var chartWidth = Math.max(200, this.ref.offsetWidth - padding - legendWidth);
         var chartHeight = Math.max(200, window.innerHeight - padding - this.ref.getBoundingClientRect().top);
-        var chartSize = Math.min(chartHeight, chartWidth);
+        var width = Math.min(chartHeight, chartWidth);
         this.setState({
-            parentWidth: chartSize
+            parentWidth: width
+        }, function () {
+            return _this.chart.create(_this.getDOMNode(), _this.getChartState());
         });
-        this.chart.create(this.getDOMNode(), this.getChartState());
     };
     ScatterPlot.prototype.componentDidMount = function () {
         var _this = this;

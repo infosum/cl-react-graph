@@ -48,15 +48,15 @@ class HistogramExamples extends Component<IProps, IState> {
     return (
       <div>
         <h3>Histograms</h3>
-        {/* <Histogram data={data2} width={400} height={400} margin={{
+        <Histogram data={data2} width={400} height={400} margin={{
           left: 30,
           top: 30,
         }}
-          domain={{ min: 0, max: 50000 }} /> */}
+          domain={{ min: 0, max: 10 }} />
         <Histogram data={data}
           grid={grid}
-          width={700}
-          height={150}
+          width={'100%'}
+          height={720}
           visible={visible}
           colorScheme={theme}
           tipContentFn={tipContentFn} />

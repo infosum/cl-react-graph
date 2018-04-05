@@ -15,7 +15,7 @@ interface IState {
 
 class LineChart extends Component<ILineChartProps, IState> {
 
-  private lineChart;
+  private chart;
   private ref;
 
   constructor(props: ILineChartProps) {
@@ -26,7 +26,7 @@ class LineChart extends Component<ILineChartProps, IState> {
       parentWidth: 0,
       width: 400,
     };
-    this.lineChart = lineChartD3();
+    this.chart = lineChartD3();
   }
 
   private handleResize() {
@@ -35,12 +35,12 @@ class LineChart extends Component<ILineChartProps, IState> {
 
     this.setState({
       parentWidth: width,
-    });
-    this.lineChart.create(this.getDOMNode(), this.getChartState());
+    }, () => this.chart.create(this.getDOMNode(), this.getChartState()));
+
   }
 
   public componentDidMount() {
-    this.lineChart.create(this.getDOMNode(), this.getChartState());
+    this.chart.create(this.getDOMNode(), this.getChartState());
     if (this.props.width === '100%') {
       window.addEventListener('resize', (e) => this.handleResize());
       this.handleResize();
@@ -48,7 +48,7 @@ class LineChart extends Component<ILineChartProps, IState> {
   }
 
   public componentDidUpdate() {
-    this.lineChart.update(this.getDOMNode(), this.getChartState());
+    this.chart.update(this.getDOMNode(), this.getChartState());
   }
 
   /**
@@ -86,7 +86,7 @@ class LineChart extends Component<ILineChartProps, IState> {
     if (this.props.width === '100%') {
       window.removeEventListener('resize', this.handleResize);
     }
-    this.lineChart.destroy(this.getDOMNode());
+    this.chart.destroy(this.getDOMNode());
   }
 
   public getDOMNode() {
@@ -94,7 +94,7 @@ class LineChart extends Component<ILineChartProps, IState> {
   }
 
   public componentWillReceiveProps(props: ILineChartProps) {
-    this.lineChart.update(this.getDOMNode(), this.getChartState());
+    this.chart.update(this.getDOMNode(), this.getChartState());
   }
 
   public render(): JSX.Element {

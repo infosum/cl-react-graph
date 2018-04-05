@@ -79,9 +79,7 @@ class HorizontalHistogram extends Component<IHistogramProps, IChartState> {
 
     this.setState({
       parentWidth: width,
-    });
-
-    this.histogram.create(elem, this.getChartState());
+    }, () => this.histogram.create(elem, this.getChartState()));
   }
 
   /**

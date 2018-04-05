@@ -38,7 +38,7 @@ export const data = {
 };
 
 export const data2 = {
-  bins: ['bin 1', 'bin 2', 'bin 3', 'bin 4', 'bin 5', 'bin 6', 'bin 7'],
+  bins: ['bin 1', 'bin 2', 'bin 3 with a long name', 'bin 4', 'bin 5', 'bin 6', 'bin 7'],
   counts: [
     {
       borderColors: ['red'],
@@ -66,13 +66,15 @@ export const data3 = {
 
 export const axis = {
   x: {
+    height: 200,
     label: 'X Axis',
+    margin: 200,
     text: {
       style: {
         'dy': '.35em',
         'text-anchor': 'start',
-        'transform': 'rotate(45)',
-        'x': 4,
+        'transform': 'rotate(90)',
+        'x': 0,
         'y': 0,
       },
     },

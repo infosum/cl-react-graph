@@ -43,13 +43,11 @@ class ScatterPlot extends Component<IScatterPlotProps, IChartState> {
     const chartWidth = Math.max(200, this.ref.offsetWidth - padding - legendWidth);
     const chartHeight = Math.max(200, window.innerHeight - padding -
       this.ref.getBoundingClientRect().top);
-    const chartSize = Math.min(chartHeight, chartWidth);
+    const width = Math.min(chartHeight, chartWidth);
 
     this.setState({
-      parentWidth: chartSize,
-    });
-
-    this.chart.create(this.getDOMNode(), this.getChartState());
+      parentWidth: width,
+    }, () => this.chart.create(this.getDOMNode(), this.getChartState()));
   }
 
   public componentDidMount() {
