@@ -7,11 +7,11 @@ import PieChart from './PieChart';
 import ScatterPlot from './ScatterPlot';
 
 export {
+  filterRange,
   Histogram,
   HorizontalHistogram,
   Legend,
   LineChart,
   PieChart,
   ScatterPlot,
-  filterRange,
 };

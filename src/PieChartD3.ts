@@ -1,5 +1,8 @@
 /// <reference path="./interfaces.d.ts" />
-import * as d3 from 'd3';
+import { interpolate } from 'd3-interpolate';
+import { scaleOrdinal } from 'd3-scale';
+import { select } from 'd3-selection';
+import { arc, pie } from 'd3-shape';
 import merge from 'deepmerge';
 import * as textWidth from 'text-width';
 import colorScheme from './colors';
@@ -71,7 +74,7 @@ export const pieChartD3 = ((): IChartAdaptor => {
       const { margin, width, height, className } = this.props;
 
       // Reference to svg element containing chart
-      svg = d3.select(el).append('svg')
+      svg = select(el).append('svg')
         .attr('class', className)
         .attr('width', width)
         .attr('height', height)
@@ -91,7 +94,7 @@ export const pieChartD3 = ((): IChartAdaptor => {
         // Chart could be rebuilt - remove old tip
         tipContainer.remove();
       }
-      tipContainer = d3.select(this.props.tipContainer)
+      tipContainer = select(this.props.tipContainer)
         .append('div')
         .attr('class', 'tooltip top pietip')
         .style('opacity', 0);
@@ -155,7 +158,7 @@ export const pieChartD3 = ((): IChartAdaptor => {
       const tau = 2 * Math.PI; // http://tauday.com/tau-manifesto
       const outerRadius = this.outerRadius(i);
       const innerRadius = this.innerRadius(i);
-      const bgArc = d3.arc()
+      const bgArc = arc()
         .innerRadius(innerRadius)
         .outerRadius(outerRadius)
         .startAngle(0)
@@ -183,24 +186,23 @@ export const pieChartD3 = ((): IChartAdaptor => {
       const innerRadius = this.innerRadius(i);
 
       // Function to calculate pie chart paths from data
-      const pie = d3
-        .pie()
+      const thisPie = pie()
         .sort(null)
         .value((d: any) => {
           return d.count;
         });
 
       // Formated pie chart arcs based on previous current data
-      const arcs = pie(this.previousData[i]);
+      const arcs = thisPie(this.previousData[i]);
 
-      const colors = d3.scaleOrdinal(this.props.colorScheme);
+      const colors = scaleOrdinal(this.props.colorScheme);
 
-      const arc = d3.arc()
+      const thisArc = arc()
         .outerRadius(outerRadius)
         .innerRadius(innerRadius);
 
       const path = this.containers[i].selectAll('path')
-        .data(pie(data));
+        .data(thisPie(data));
 
       const g = path.enter().append('g')
         .attr('class', 'arc')
@@ -225,11 +227,11 @@ export const pieChartD3 = ((): IChartAdaptor => {
 
       if (labels.display) {
         const lbls = this.containers[i].selectAll('text')
-          .data(pie(data));
+          .data(thisPie(data));
         lbls.enter()
           .append('text')
           .attr('transform', (d) => {
-            const centroid = arc.centroid(d);
+            const centroid = thisArc.centroid(d);
             const x = centroid[0] + (width / 2);
             const y = centroid[1] + (height / 2);
             return 'translate(' + x + ',' + y + ')';
@@ -252,7 +254,7 @@ export const pieChartD3 = ((): IChartAdaptor => {
           .style('opacity', 0)
           .transition()
           .attr('transform', (d) => {
-            const centroid = arc.centroid(d);
+            const centroid = thisArc.centroid(d);
             const x = centroid[0] + (width / 2);
             const y = centroid[1] + (height / 2);
             return 'translate(' + x + ',' + y + ')';
@@ -287,12 +289,12 @@ export const pieChartD3 = ((): IChartAdaptor => {
 
 // Returns a tween for a transition’s "d" attribute, transitioning any selected
 // arcs from their current angle to the specified new angle.
-function arcTween(arc) {
+function arcTween(thisArc) {
   return function (d) {
-    const i = d3.interpolate(this._current, d);
+    const i = interpolate(this._current, d);
     this._current = i(0);
     return function (t) {
-      return arc(i(t));
+      return thisArc(i(t));
     };
   };
 }

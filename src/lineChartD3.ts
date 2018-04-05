@@ -1,5 +1,11 @@
 /// <reference path="./interfaces.d.ts" />
-import * as d3 from 'd3';
+import { extent } from 'd3-array';
+import { axisBottom, axisLeft } from 'd3-axis';
+import { easeCubic } from 'd3-ease';
+import { scaleLinear } from 'd3-scale';
+import { select } from 'd3-selection';
+import { curveCatmullRom } from 'd3-shape';
+import { area, line } from 'd3-shape';
 import merge from 'deepmerge';
 import attrs from './d3/attrs';
 import tips from './tip';
@@ -8,12 +14,12 @@ export const lineChartD3 = ((): IChartAdaptor => {
   let svg;
   let tipContainer;
   let tipContent;
-  const y = d3.scaleLinear();
-  const x = d3.scaleLinear();
+  const y = scaleLinear();
+  const x = scaleLinear();
 
   const
     lineProps = {
-      curveType: d3.curveCatmullRom,
+      curveType: curveCatmullRom,
       fill: false,
       show: true,
       stroke: '#005870',
@@ -62,7 +68,7 @@ export const lineChartD3 = ((): IChartAdaptor => {
       },
     },
     className: 'line-chart-d3',
-    fx: d3.easeCubic,
+    fx: easeCubic,
     grid: {
       x: {
         style: {
@@ -105,13 +111,13 @@ export const lineChartD3 = ((): IChartAdaptor => {
 
   // Gridlines in x axis function
   function make_x_gridlines(ticks: number = 5) {
-    return d3.axisBottom(x)
+    return axisBottom(x)
       .ticks(ticks);
   }
 
   // Gridlines in y axis function
   function make_y_gridlines(ticks: number = 5) {
-    return d3.axisLeft(y)
+    return axisLeft(y)
       .ticks(ticks);
   }
 
@@ -143,7 +149,7 @@ export const lineChartD3 = ((): IChartAdaptor => {
       const { margin, width, height, className } = this.props;
 
       // Reference to svg element containing chart
-      svg = d3.select(el).append('svg')
+      svg = select(el).append('svg')
         .attr('class', className)
         .attr('width', width)
         .attr('height', height)
@@ -163,7 +169,7 @@ export const lineChartD3 = ((): IChartAdaptor => {
         // Chart could be rebuilt - remove old tip
         tipContainer.remove();
       }
-      tipContainer = d3.select(this.props.tipContainer || el).append('div')
+      tipContainer = select(this.props.tipContainer || el).append('div')
         .attr('class', 'tooltip top')
         .style('opacity', 0);
 
@@ -233,8 +239,8 @@ export const lineChartD3 = ((): IChartAdaptor => {
       let xDomain;
       const ys = [];
       const xs = [];
-      const yAxis = d3.axisLeft(y).ticks(axis.y.ticks);
-      const xAxis = d3.axisBottom(x).ticks(axis.x.ticks);
+      const yAxis = axisLeft(y).ticks(axis.y.ticks);
+      const xAxis = axisBottom(x).ticks(axis.x.ticks);
 
       data.forEach((datum: ILineChartDataSet) => {
         datum.data.forEach((d: IChartPoint) => {
@@ -242,8 +248,8 @@ export const lineChartD3 = ((): IChartAdaptor => {
           xs.push(d.x);
         });
       });
-      yDomain = d3.extent(ys);
-      xDomain = d3.extent(xs);
+      yDomain = extent(ys);
+      xDomain = extent(xs);
       x.domain(xDomain);
       x.range([0, width - (margin.left * 2)]);
       y.domain(yDomain);
@@ -288,14 +294,14 @@ export const lineChartD3 = ((): IChartAdaptor => {
       const { axis, fx, height, margin } = this.props;
       const { curveType, stroke, strokeDashOffset, strokeDashArray } = datum.line;
       const path = svg.selectAll(selector).data([datum.data]);
-      let area;
-      const curve = d3.line()
+      let thisArea;
+      const curve = line()
         .curve(curveType)
         .x((d: any) => x(d.x) + axis.y.width)
         .y((d: any) => y(d.y));
 
       if (datum.line.fill.show === true) {
-        area = d3.area()
+        thisArea = area()
           .curve(curveType)
           .x((d: any) => x(d.x) + axis.y.width + 1)
           .y0((d) => height - (margin.top * 2) - axis.x.height)
@@ -305,7 +311,7 @@ export const lineChartD3 = ((): IChartAdaptor => {
           .datum(datum.data)
           .attr('class', 'curve-area')
           .attr('fill', datum.line.fill.fill)
-          .attr('d', area);
+          .attr('d', thisArea);
       }
 
       path

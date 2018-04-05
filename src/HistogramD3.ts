@@ -1,6 +1,8 @@
 /// <reference path="./interfaces.d.ts" />
-import * as d3 from 'd3';
-import { ScaleLinear } from 'd3';
+import { extent } from 'd3-array';
+import { axisBottom, axisLeft } from 'd3-axis';
+import { scaleBand, scaleLinear, ScaleLinear, scaleOrdinal } from 'd3-scale';
+import { select } from 'd3-selection';
 import merge from 'deepmerge';
 import { get } from 'lodash';
 import colorScheme from './colors';
@@ -19,19 +21,19 @@ export const histogramD3 = ((): IChartAdaptor => {
   let svg;
   let tipContainer;
   let tipContent;
-  const y = d3.scaleLinear();
-  const x = d3.scaleBand();
-  const innerScaleBand = d3.scaleBand();
+  const y = scaleLinear();
+  const x = scaleBand();
+  const innerScaleBand = scaleBand();
 
   // Gridlines in x axis function
   function make_x_gridlines(ticks: number = 5) {
-    return d3.axisBottom(x)
+    return axisBottom(x)
       .ticks(ticks);
   }
 
   // Gridlines in y axis function
   function make_y_gridlines(ticks: number = 5) {
-    return d3.axisLeft(y)
+    return axisLeft(y)
       .ticks(ticks);
   }
 
@@ -172,7 +174,7 @@ export const histogramD3 = ((): IChartAdaptor => {
       const { margin, width, height, className } = this.props;
 
       // Reference to svg element containing chart
-      svg = d3.select(el).append('svg')
+      svg = select(el).append('svg')
         .attr('class', className)
         .attr('width', width)
         .attr('height', height)
@@ -191,7 +193,7 @@ export const histogramD3 = ((): IChartAdaptor => {
         // Chart could be rebuilt - remove old tip
         tipContainer.remove();
       }
-      tipContainer = d3.select(this.props.tipContainer).append('div')
+      tipContainer = select(this.props.tipContainer).append('div')
         .attr('class', 'tooltip top')
         .style('opacity', 0);
 
@@ -221,15 +223,15 @@ export const histogramD3 = ((): IChartAdaptor => {
       const { axis, domain, margin, height } = this.props;
       const allCounts: number[] = data.reduce((prev: number[], next): number[] => {
         return [...prev, ...next.map((n) => n.value)];
-      }, []);
+      }, [0]);
 
-      const extent = d3.extent(allCounts, (d) => d);
+      const thisExtent = extent(allCounts, (d) => d);
       yDomain[1] = domain && domain.hasOwnProperty('max') && domain.max !== null
         ? domain.max
-        : extent[1];
+        : thisExtent[1];
       yDomain[0] = domain && domain.hasOwnProperty('min') && domain.min !== null
         ? domain.min
-        : 0;
+        : thisExtent[0];
       const yRange = [height - (margin.top * 2) - this.xAxisHeight(), 0];
       scale.range(yRange)
         .domain(yDomain);
@@ -298,7 +300,7 @@ export const histogramD3 = ((): IChartAdaptor => {
         .rangeRound([0, x.bandwidth()])
         .paddingInner(this.barMargin());
 
-      xAxis = d3.axisBottom(x);
+      xAxis = axisBottom(x);
 
       const tickSize = get(axis, 'x.tickSize', undefined);
       if (tickSize !== undefined) {
@@ -317,7 +319,7 @@ export const histogramD3 = ((): IChartAdaptor => {
 
       this.appendDomainRange(y, this.dataSets);
 
-      const yAxis = d3.axisLeft(y).ticks(axis.y.ticks);
+      const yAxis = axisLeft(y).ticks(axis.y.ticks);
 
       const yTickSize = get(axis, 'y.tickSize', undefined);
       if (yTickSize !== undefined) {
@@ -398,7 +400,7 @@ export const histogramD3 = ((): IChartAdaptor => {
       const barWidth = this.barWidth();
 
       // const borderColors = set.borderColors ? d3.scaleOrdinal(set.borderColors) : null;
-      const colors = d3.scaleOrdinal(this.props.colorScheme);
+      const colors = scaleOrdinal(this.props.colorScheme);
       const borderColors = null;
 
       const gridHeight = this.gridHeight();

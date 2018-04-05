@@ -1,12 +1,16 @@
 /// <reference path="./interfaces.d.ts" />
-import * as d3 from 'd3';
 import merge from 'deepmerge';
 import colorScheme from './colors';
 
+import { extent } from 'd3-array';
+import { axisBottom, axisLeft } from 'd3-axis';
+import { scaleLinear, scaleOrdinal } from 'd3-scale';
+import { select } from 'd3-selection';
+
 export const scatterPlotD3 = (() => {
   let svg;
-  const yScale = d3.scaleLinear();
-  const xScale = d3.scaleLinear();
+  const yScale = scaleLinear();
+  const xScale = scaleLinear();
   const domainByTrait = {};
   let xAxis;
   let color;
@@ -54,17 +58,17 @@ export const scatterPlotD3 = (() => {
         }
       }
       const { width, className, height,
-        colorScheme, legendWidth, padding } = this.props;
+        legendWidth, padding } = this.props;
 
       // Reference to svg element containing chart
-      svg = d3.select(el).append('svg')
+      svg = select(el).append('svg')
         .attr('class', className)
         .attr('width', width + padding + legendWidth)
         .attr('height', height + padding)
         .append('g')
         .attr('transform', 'translate(' + padding + ',' + padding / 2 + ')');
 
-      color = d3.scaleOrdinal(colorScheme);
+      color = scaleOrdinal(this.props.colorScheme);
     },
 
     /**
@@ -86,7 +90,7 @@ export const scatterPlotD3 = (() => {
           'translate(' + (data.length - i - 1) * xSize + ',0)')
         .each(function (d) {
           xScale.domain(domainByTrait[d]);
-          d3.select(this).call(xAxis);
+          select(this).call(xAxis);
         });
 
       svg.selectAll('.y.axis')
@@ -96,7 +100,7 @@ export const scatterPlotD3 = (() => {
         .attr('transform', (d, i) => 'translate(0,' + i * ySize + ')')
         .each(function (d) {
           yScale.domain(domainByTrait[d]);
-          d3.select(this).call(yAxis);
+          select(this).call(yAxis);
         });
     },
 
@@ -121,7 +125,7 @@ export const scatterPlotD3 = (() => {
         .data(choices)
         .enter().append('g')
         .each(function (c, i: number) {
-          const cell = d3.select(this);
+          const cell = select(this);
           cell.append('rect')
             .attr('class', 'legendItem')
             .attr('x', 0)
@@ -169,7 +173,7 @@ export const scatterPlotD3 = (() => {
        * @param {Object} p Point
        */
       function plot(p: IChartPoint) {
-        const plotCell = d3.select(this);
+        const plotCell = select(this);
         let circle;
         xScale.domain(domainByTrait[p.x]);
         yScale.domain(domainByTrait[p.y]);
@@ -243,12 +247,12 @@ export const scatterPlotD3 = (() => {
       const n = traits.length;
 
       traits.forEach((trait) => {
-        domainByTrait[trait] = d3.extent(data.values, (d) => d[trait]);
+        domainByTrait[trait] = extent(data.values, (d) => d[trait]);
       });
-      xAxis = d3.axisBottom(xScale)
+      xAxis = axisBottom(xScale)
         .ticks(6)
         .tickSize(xSize * n);
-      yAxis = d3.axisLeft(yScale)
+      yAxis = axisLeft(yScale)
         .ticks(6)
         .tickSize(-ySize * n);
 

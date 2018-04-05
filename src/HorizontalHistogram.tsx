@@ -1,5 +1,5 @@
 /// <reference path="./interfaces.d.ts" />
-import * as d3 from 'd3';
+import { rgb } from 'd3-color';
 import * as React from 'react';
 import { Component } from 'react';
 import * as ReactDOM from 'react-dom';
@@ -48,7 +48,7 @@ class HorizontalHistogram extends Component<IHistogramProps, IChartState> {
       top: 5,
     },
     stroke: {
-      color: (d, i, colors) => d3.rgb(colors(i)).darker(1),
+      color: (d, i, colors) => rgb(colors(i)).darker(1),
       width: 1,
     },
     tipContentFn: (bins: string[], i, d) =>

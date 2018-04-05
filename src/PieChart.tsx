@@ -1,5 +1,4 @@
 /// <reference path="./interfaces.d.ts" />
-import * as d3 from 'd3';
 import * as React from 'react';
 import { Component } from 'react';
 import * as ReactDOM from 'react-dom';

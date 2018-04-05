@@ -1,5 +1,8 @@
 /// <reference path="./interfaces.d.ts" />
-import * as d3 from 'd3';
+import { extent } from 'd3-array';
+import { axisBottom, axisLeft } from 'd3-axis';
+import { scaleBand, scaleLinear, ScaleLinear, scaleOrdinal } from 'd3-scale';
+import { select } from 'd3-selection';
 import merge from 'deepmerge';
 import colorScheme from './colors';
 import attrs from './d3/attrs';
@@ -10,18 +13,18 @@ export const horizontalHistogramD3 = ((): IChartAdaptor => {
   let svg;
   let tipContainer;
   let tipContent;
-  const x = d3.scaleLinear();
-  const y = d3.scaleBand();
+  const x = scaleLinear();
+  const y = scaleBand();
 
   // Gridlines in y axis function
   function make_y_gridlines(ticks: number = 5) {
-    return d3.axisBottom(x)
+    return axisBottom(x)
       .ticks(ticks);
   }
 
   // Gridlines in x axis function
   function make_x_gridlines(ticks: number = 5) {
-    return d3.axisLeft(y)
+    return axisLeft(y)
       .ticks(ticks);
   }
 
@@ -136,7 +139,7 @@ export const horizontalHistogramD3 = ((): IChartAdaptor => {
       const { margin, width, height, className } = this.props;
 
       // Reference to svg element containing chart
-      svg = d3.select(el).append('svg')
+      svg = select(el).append('svg')
         .attr('class', className)
         .attr('width', width)
         .attr('height', height)
@@ -155,7 +158,7 @@ export const horizontalHistogramD3 = ((): IChartAdaptor => {
         // Chart could be rebuilt - remove old tip
         tipContainer.remove();
       }
-      tipContainer = d3.select(this.props.tipContainer).append('div')
+      tipContainer = select(this.props.tipContainer).append('div')
         .attr('class', 'tooltip top')
         .style('opacity', 0);
 
@@ -199,15 +202,15 @@ export const horizontalHistogramD3 = ((): IChartAdaptor => {
       y.domain(data.bins)
         .rangeRound([0, h]);
 
-      xAxis = d3.axisBottom(x).ticks(axis.x.ticks);
-      yAxis = d3.axisLeft(y).ticks(axis.y.ticks);
+      xAxis = axisBottom(x).ticks(axis.x.ticks);
+      yAxis = axisLeft(y).ticks(axis.y.ticks);
 
       if (h / valuesCount < 10) {
         // Show one in 10 x axis labels
         xAxis.tickValues(x.domain().filter((d, i) => !(i % 10)));
       }
 
-      xDomain = d3.extent(allCounts, (d) => d);
+      xDomain = extent(allCounts, (d) => d);
       xDomain[0] = 0;
       xRange = [0, width - (margin.top * 2) - axis.y.width];
       x.range(xRange)
@@ -308,8 +311,8 @@ export const horizontalHistogramD3 = ((): IChartAdaptor => {
         axis, stroke, tip, tipContentFn } = this.props;
       let barItem;
       const barHeight = this.barHeight();
-      const colors = d3.scaleOrdinal(set.colors || this.props.colorScheme);
-      const borderColors = set.borderColors ? d3.scaleOrdinal(set.borderColors) : null;
+      const colors = scaleOrdinal(set.colors || this.props.colorScheme);
+      const borderColors = set.borderColors ? scaleOrdinal(set.borderColors) : null;
 
       const selector = '.bar-' + setIndex;
       const multiLineOffset = (index) => setCount === 1

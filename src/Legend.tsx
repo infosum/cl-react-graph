@@ -1,4 +1,4 @@
-import * as d3 from 'd3';
+import { scaleOrdinal } from 'd3-scale';
 import * as React from 'react';
 import colorScheme from './colors';
 
@@ -26,7 +26,7 @@ const listStyle = {
 };
 
 const Legend: React.SFC<IProps> = ({ className, theme = colorScheme, data, onSelect, visible }) => {
-  const scheme = d3.scaleOrdinal(theme);
+  const scheme = scaleOrdinal(theme);
   const labels = data.bins;
   return (
     <div className={className}>
