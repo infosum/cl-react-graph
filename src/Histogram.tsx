@@ -98,7 +98,7 @@ class Histogram extends Component<IHistogramProps, IChartState> {
 
     this.setState({
       parentWidth: width,
-    }, () => this.chart.create(elem, this.getChartState()));
+    }, () => this.chart.update(elem, this.getChartState()));
   }
 
   /**

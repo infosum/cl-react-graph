@@ -30,12 +30,12 @@ class LineChart extends Component<ILineChartProps, IState> {
   }
 
   private handleResize() {
-    const elem = this.ref;
-    const width = elem.offsetWidth;
+    const elem = this.getDOMNode();
+    const width = this.ref.offsetWidth ? this.ref.offsetWidth : 0;
 
     this.setState({
       parentWidth: width,
-    }, () => this.chart.create(this.getDOMNode(), this.getChartState()));
+    }, () => this.chart.update(elem, this.getChartState()));
 
   }
 
