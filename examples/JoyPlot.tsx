@@ -28,11 +28,13 @@ class JoypLotExamples extends Component<IProps, IState> {
 
     }
 
-    console.log('demo data', [data2, data3]);
+    const { theme } = this.props;
     return (
       <div>
         <h3>JoyPlot</h3>
-        <JoyPlot data={[data2, data3]} width={400} height={400} />
+        <JoyPlot data={[data2, data3]}
+          colorScheme={['rgba(0, 0, 0, 0.5)', '#666']}
+          width={400} height={400} />
 
       </div>
     );

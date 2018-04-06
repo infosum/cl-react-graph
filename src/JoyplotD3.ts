@@ -36,7 +36,7 @@ export const joyPlotD3 = ((): IChartAdaptor => {
 
   // Gridlines in y axis function
   function make_y_gridlines(ticks: number = 5) {
-    return axisLeft(y)
+    return axisLeft(yOuterScaleBand)
       .ticks(ticks);
   }
 
@@ -129,7 +129,8 @@ export const joyPlotD3 = ((): IChartAdaptor => {
     },
     tip: tips,
     tipContainer: 'body',
-    tipContentFn: (bins: string[], i: number, d: number): string =>
+    tipContentFn: (bins, i, d, joyTitle): string =>
+      joyTitle + ': ' +
       bins[i] + '<br />' + d,
     visible: {},
     width: 200,
@@ -142,16 +143,24 @@ export const joyPlotD3 = ((): IChartAdaptor => {
      * @param {Object} props Chart properties
      */
     create(el: HTMLElement, newProps: Partial<IJoyPlotProps> = {}) {
-      props = merge<IJoyPlotProps>(defaultProps, newProps);
-      props.data = newProps.data;
+      this.mergeProps(newProps);
       this._makeSvg(el);
       this.makeGrid(props);
       this.makeScales();
-      this.container = svg
+      this.containers = props.data.map((d, i) => svg
         .append('g')
-        .attr('class', 'histogram-container');
+        .attr('class', `histogram-container-${i}`)
+      );
 
       this.update(el, props);
+    },
+
+    mergeProps(newProps: Partial<IJoyPlotProps>) {
+      props = merge<IJoyPlotProps>(defaultProps, newProps);
+      props.data = newProps.data;
+      if (newProps.colorScheme) {
+        props.colorScheme = newProps.colorScheme;
+      }
     },
 
     /**
@@ -235,7 +244,6 @@ export const joyPlotD3 = ((): IChartAdaptor => {
         ? domain.min
         : thisExtent[0];
       const yRange = [yOuterScaleBand.bandwidth(), 0];
-      console.log('scale yRange, yDomain', yRange, yDomain);
       scale.range(yRange)
         .domain(yDomain);
     },
@@ -331,9 +339,7 @@ export const joyPlotD3 = ((): IChartAdaptor => {
         .call(xAxis);
 
       const yLabels = data.map((d) => d.title);
-      console.log('yLabels,', yLabels);
       const yOuterBounds: [number, number] = [height - (margin.top * 2) - this.xAxisHeight(), 0];
-      console.log('yOuterBounds', yOuterBounds);
       yOuterScaleBand.domain(yLabels)
         .rangeRound(yOuterBounds)
 
@@ -421,11 +427,9 @@ export const joyPlotD3 = ((): IChartAdaptor => {
         axis, stroke, tip, tipContentFn } = props;
       const barWidth = this.barWidth();
 
-      // const borderColors = set.borderColors ? d3.scaleOrdinal(set.borderColors) : null;
       const colors = scaleOrdinal(props.colorScheme);
-      const borderColors = null;
+      const borderColors = scaleOrdinal(['#FFF']);
 
-      const gridHeight = this.gridHeight();
       const yAxisWidth = this.yAxisWidth();
       const groupedMargin = this.groupedMargin();
 
@@ -433,64 +437,74 @@ export const joyPlotD3 = ((): IChartAdaptor => {
         const thisMax = next.reduce((p, n) => n.length > p ? n.length : p, 0)
         return thisMax > prev ? thisMax : prev;
       }, 0)
+      groupData.forEach((data, i) => {
+        const joyTitle = props.data[i].title;
+        const g = this.containers[i]
+          .selectAll('g')
+          .data(data);
 
-      const g = this.container
-        .selectAll('g')
-        .data(groupData[0]);
+        const bars = g.enter()
+          .append('g')
+          .merge(g)
+          .attr('transform', (d) => {
+            const xdelta = yAxisWidth
+              + axis.y.style['stroke-width']
+              + x(d[0].label);
 
-      const bars = g.enter()
-        .append('g')
-        .merge(g)
-        .attr('transform', (d) => {
-          const xdelta = yAxisWidth
-            + axis.y.style['stroke-width']
-            + x(d[0].label);
+            const ydelta = yOuterScaleBand(d[0].joyLabel);
+            return `translate(${xdelta}, ${ydelta})`;
+          })
+          .selectAll('rect')
+          .data((d) => d);
 
-          const ydelta = yOuterScaleBand(d[0].joyLabel);
-          return `translate(${xdelta}, ${ydelta})`;
-        })
-        .selectAll('rect')
-        .data((d) => d);
+        bars
+          .enter()
+          .append('rect')
+          .attr('height', 0)
+          .attr('y', (d: IGroupDataItem): number => yOuterScaleBand.bandwidth())
 
-      bars
-        .enter()
-        .append('rect')
-        .attr('height', 0)
-        .attr('y', (d: IGroupDataItem): number => gridHeight)
+          .attr('class', 'bar')
+          .attr('x', (d) => innerScaleBand(d.groupLabel))
+          .attr('width', (d) => barWidth)
+          .attr('fill', (d, i) => colors(i))
 
-        .attr('class', 'bar')
-        .attr('x', (d) => innerScaleBand(d.groupLabel))
-        .attr('width', (d) => barWidth)
-        .attr('fill', (d, i) => colors(i))
-        .on('mouseover', (d: IGroupDataItem, i: number) => {
-          const ix = bins.findIndex((b) => b === d.label);
-          tipContent.html(() => tipContentFn(bins, ix, d.value));
-          tip.fx.in(tipContainer);
-        })
-        .on('mousemove', () => tip.fx.move(tipContainer))
-        .on('mouseout', () => tip.fx.out(tipContainer))
-        .merge(bars)
-        .transition()
-        .duration(duration)
-        .delay(delay)
-        .attr('y', (d: IGroupDataItem): number => {
-          console.log('y ', d, y(d.value));
-          return y(d.value);
-        })
-        // Hide bar's bottom border
-        .attr('stroke-dasharray',
-        (d: IGroupDataItem): string => {
-          const currentHeight = gridHeight - (y(d.value));
-          return `${barWidth} 0 ${currentHeight} ${barWidth}`;
-        })
-        .attr('height', (d: IGroupDataItem): number => {
-          console.log('d.value', d.value);
-          console.log('height', yOuterScaleBand.bandwidth(), ' - ', y(d.value))
-          return yOuterScaleBand.bandwidth() - (y(d.value));
-        });
+          .on('mouseover', (d: IGroupDataItem, i: number) => {
+            const ix = bins.findIndex((b) => b === d.label);
+            tipContent.html(() => tipContentFn(bins, ix, d.value, joyTitle));
+            tip.fx.in(tipContainer);
+          })
+          .on('mousemove', () => tip.fx.move(tipContainer))
+          .on('mouseout', () => tip.fx.out(tipContainer))
+          .merge(bars)
+          .transition()
+          .duration(duration)
+          .delay(delay)
+          .attr('y', (d: IGroupDataItem): number => y(d.value))
+          .attr('stroke', (d, i) => {
+            if (borderColors) {
+              return borderColors(i);
+            }
+          })
+          .attr('shape-rendering', 'crispEdges')
+          .attr('stroke-width', stroke.width)
+          .attr('stroke-linecap', stroke.linecap)
 
-      g.exit().remove();
+
+          // Hide bar's bottom border
+          .attr('stroke-dasharray',
+          (d: IGroupDataItem): string => {
+            const currentHeight = yOuterScaleBand.bandwidth() - y(d.value);
+            return `${barWidth} 0 ${currentHeight} ${barWidth}`;
+          })
+          .attr('height', (d: IGroupDataItem): number =>
+            yOuterScaleBand.bandwidth() - y(d.value)
+          );
+
+        g.exit().remove();
+      })
+
     },
+
 
     makeGrid(props: IJoyPlotProps) {
       const { grid } = props;
@@ -504,7 +518,7 @@ export const joyPlotD3 = ((): IChartAdaptor => {
      * Draw a grid onto the chart background
      * @param {Object} props Props
      */
-    _drawGrid(props: IJoyPlotProps) {
+    _drawGrid() {
       const { data, height, width, axis, grid, margin, bar } = props;
       const ticks = data.reduce((prev, next) => {
         const c = this.valuesCount(next.counts);
@@ -556,14 +570,7 @@ export const joyPlotD3 = ((): IChartAdaptor => {
       if (!props.data) {
         return;
       }
-      props = merge<IJoyPlotProps>(defaultProps, newProps);
-      props.data = newProps.data;
-      console.log(props.data);
-      debugger;
-      if (props.colorScheme) {
-        props.colorScheme = props.colorScheme;
-      }
-
+      this.mergeProps(newProps);
       const { data, visible } = props;
 
       dataSets = data.map((d) => {
@@ -583,11 +590,10 @@ export const joyPlotD3 = ((): IChartAdaptor => {
         });
         return lineData;
       });
-      console.log('dataSets', dataSets);
 
 
       this._drawScales(props.data);
-      // this._drawGrid(props);
+      this._drawGrid();
       this.updateChart(dataSets);
     },
 

@@ -139,7 +139,7 @@ export const histogramD3 = ((): IChartAdaptor => {
      * @param {Object} props Chart properties
      */
     create(el: HTMLElement, props: Partial<IHistogramProps> = {}) {
-      this.props = merge<IHistogramProps>(defaultProps, props);
+      this.mergeProps(props);
       this._makeSvg(el);
       this.makeGrid(props);
       this.makeScales();
@@ -148,6 +148,14 @@ export const histogramD3 = ((): IChartAdaptor => {
         .attr('class', 'histogram-container');
 
       this.update(el, props);
+    },
+
+    mergeProps(newProps: Partial<IHistogramProps>) {
+      this.props = merge<IHistogramProps>(defaultProps, newProps);
+      this.props.data = newProps.data;
+      if (newProps.colorScheme) {
+        this.props.colorScheme = newProps.colorScheme;
+      }
     },
 
     /**
@@ -513,13 +521,11 @@ export const histogramD3 = ((): IChartAdaptor => {
       if (!props.data) {
         return;
       }
-      this.props = merge(defaultProps, props);
+      this.mergeProps(props);
       if (!this.props.data.bins) {
         return;
       }
-      if (props.colorScheme) {
-        this.props.colorScheme = props.colorScheme;
-      }
+
 
       const { data, visible } = this.props;
       this.dataSets = [] as IGroupData;

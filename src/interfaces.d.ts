@@ -2,7 +2,7 @@
  * General
  */
 
-type TipContentFn = (bins: string[], i: number, d: number) => string;
+type TipContentFn = (bins: string[], i: number, d: number, groupTitle?: string) => string;
 
 interface IChartState {
     parentWidth?: number;

@@ -220,8 +220,8 @@ var JoypLotExamples = function (_super) {
     }
     JoypLotExamples.prototype.render = function () {
         var data3 = __assign({}, data_1.data2, { counts: [__assign({}, data_1.data2.counts[0], { data: [7, 6, 5, 4, 3, 2, 1], label: 'Data 2' })], title: 'Plot 2' });
-        console.log('demo data', [data_1.data2, data3]);
-        return React.createElement("div", null, React.createElement("h3", null, "JoyPlot"), React.createElement(src_1.JoyPlot, { data: [data_1.data2, data3], width: 400, height: 400 }));
+        var theme = this.props.theme;
+        return React.createElement("div", null, React.createElement("h3", null, "JoyPlot"), React.createElement(src_1.JoyPlot, { data: [data_1.data2, data3], colorScheme: ['rgba(0, 0, 0, 0.5)', '#666'], width: 400, height: 400 }));
     };
     return JoypLotExamples;
 }(react_1.Component);
@@ -33618,12 +33618,19 @@ exports.histogramD3 = function () {
             if (props === void 0) {
                 props = {};
             }
-            this.props = deepmerge_1.default(defaultProps, props);
+            this.mergeProps(props);
             this._makeSvg(el);
             this.makeGrid(props);
             this.makeScales();
             this.container = svg.append('g').attr('class', 'histogram-container');
             this.update(el, props);
+        },
+        mergeProps: function mergeProps(newProps) {
+            this.props = deepmerge_1.default(defaultProps, newProps);
+            this.props.data = newProps.data;
+            if (newProps.colorScheme) {
+                this.props.colorScheme = newProps.colorScheme;
+            }
         },
         _makeSvg: function _makeSvg(el) {
             if (svg) {
@@ -33866,12 +33873,9 @@ exports.histogramD3 = function () {
             if (!props.data) {
                 return;
             }
-            this.props = deepmerge_1.default(defaultProps, props);
+            this.mergeProps(props);
             if (!this.props.data.bins) {
                 return;
-            }
-            if (props.colorScheme) {
-                this.props.colorScheme = props.colorScheme;
             }
             var _a = this.props,
                 data = _a.data,
@@ -34505,6 +34509,7 @@ var Histogram = function (_super) {
         if (width === '100%') {
             width = this.state.parentWidth || 300;
         }
+        console.log('rest', rest);
         return __assign({}, rest, { width: width });
     };
     Histogram.prototype.componentWillUnmount = function () {
@@ -34560,9 +34565,6 @@ var Histogram = function (_super) {
                 return d3_color_1.rgb(colors(i)).darker(1).toString();
             },
             width: 1
-        },
-        tipContentFn: function tipContentFn(bins, i, d) {
-            return bins[i] + '<br />' + d.toFixed(2);
         },
         width: '100%'
     };
@@ -34620,7 +34622,7 @@ exports.joyPlotD3 = function () {
         if (ticks === void 0) {
             ticks = 5;
         }
-        return d3_axis_1.axisLeft(y).ticks(ticks);
+        return d3_axis_1.axisLeft(yOuterScaleBand).ticks(ticks);
     }
     var defaultProps = {
         axis: {
@@ -34711,8 +34713,8 @@ exports.joyPlotD3 = function () {
         },
         tip: tip_1.default,
         tipContainer: 'body',
-        tipContentFn: function tipContentFn(bins, i, d) {
-            return bins[i] + '<br />' + d;
+        tipContentFn: function tipContentFn(bins, i, d, joyTitle) {
+            return joyTitle + ': ' + bins[i] + '<br />' + d;
         },
         visible: {},
         width: 200
@@ -34722,13 +34724,21 @@ exports.joyPlotD3 = function () {
             if (newProps === void 0) {
                 newProps = {};
             }
-            props = deepmerge_1.default(defaultProps, newProps);
-            props.data = newProps.data;
+            this.mergeProps(newProps);
             this._makeSvg(el);
             this.makeGrid(props);
             this.makeScales();
-            this.container = svg.append('g').attr('class', 'histogram-container');
+            this.containers = props.data.map(function (d, i) {
+                return svg.append('g').attr('class', "histogram-container-" + i);
+            });
             this.update(el, props);
+        },
+        mergeProps: function mergeProps(newProps) {
+            props = deepmerge_1.default(defaultProps, newProps);
+            props.data = newProps.data;
+            if (newProps.colorScheme) {
+                props.colorScheme = newProps.colorScheme;
+            }
         },
         _makeSvg: function _makeSvg(el) {
             if (svg) {
@@ -34779,7 +34789,6 @@ exports.joyPlotD3 = function () {
             yDomain[1] = domain && domain.hasOwnProperty('max') && domain.max !== null ? domain.max : thisExtent[1];
             yDomain[0] = domain && domain.hasOwnProperty('min') && domain.min !== null ? domain.min : thisExtent[0];
             var yRange = [yOuterScaleBand.bandwidth(), 0];
-            console.log('scale yRange, yDomain', yRange, yDomain);
             scale.range(yRange).domain(yDomain);
         },
         yAxisWidth: function yAxisWidth() {
@@ -34844,9 +34853,7 @@ exports.joyPlotD3 = function () {
             var yLabels = data.map(function (d) {
                 return d.title;
             });
-            console.log('yLabels,', yLabels);
             var yOuterBounds = [height - margin.top * 2 - this.xAxisHeight(), 0];
-            console.log('yOuterBounds', yOuterBounds);
             yOuterScaleBand.domain(yLabels).rangeRound(yOuterBounds);
             this.appendDomainRange(y, dataSets);
             var yAxis = d3_axis_1.axisLeft(yOuterScaleBand).ticks(axis.y.ticks);
@@ -34886,6 +34893,7 @@ exports.joyPlotD3 = function () {
             return innerScaleBand.bandwidth();
         },
         updateChart: function updateChart(groupData) {
+            var _this = this;
             var bins = this.getBins();
             var height = props.height,
                 width = props.width,
@@ -34899,8 +34907,7 @@ exports.joyPlotD3 = function () {
                 tipContentFn = props.tipContentFn;
             var barWidth = this.barWidth();
             var colors = d3_scale_1.scaleOrdinal(props.colorScheme);
-            var borderColors = null;
-            var gridHeight = this.gridHeight();
+            var borderColors = d3_scale_1.scaleOrdinal(['#FFF']);
             var yAxisWidth = this.yAxisWidth();
             var groupedMargin = this.groupedMargin();
             var maxItems = groupData.reduce(function (prev, next) {
@@ -34909,53 +34916,57 @@ exports.joyPlotD3 = function () {
                 }, 0);
                 return thisMax > prev ? thisMax : prev;
             }, 0);
-            var g = this.container.selectAll('g').data(groupData[0]);
-            var bars = g.enter().append('g').merge(g).attr('transform', function (d) {
-                var xdelta = yAxisWidth + axis.y.style['stroke-width'] + x(d[0].label);
-                var ydelta = yOuterScaleBand(d[0].joyLabel);
-                return "translate(" + xdelta + ", " + ydelta + ")";
-            }).selectAll('rect').data(function (d) {
-                return d;
-            });
-            bars.enter().append('rect').attr('height', 0).attr('y', function (d) {
-                return gridHeight;
-            }).attr('class', 'bar').attr('x', function (d) {
-                return innerScaleBand(d.groupLabel);
-            }).attr('width', function (d) {
-                return barWidth;
-            }).attr('fill', function (d, i) {
-                return colors(i);
-            }).on('mouseover', function (d, i) {
-                var ix = bins.findIndex(function (b) {
-                    return b === d.label;
+            groupData.forEach(function (data, i) {
+                var joyTitle = props.data[i].title;
+                var g = _this.containers[i].selectAll('g').data(data);
+                var bars = g.enter().append('g').merge(g).attr('transform', function (d) {
+                    var xdelta = yAxisWidth + axis.y.style['stroke-width'] + x(d[0].label);
+                    var ydelta = yOuterScaleBand(d[0].joyLabel);
+                    return "translate(" + xdelta + ", " + ydelta + ")";
+                }).selectAll('rect').data(function (d) {
+                    return d;
                 });
-                tipContent.html(function () {
-                    return tipContentFn(bins, ix, d.value);
+                bars.enter().append('rect').attr('height', 0).attr('y', function (d) {
+                    return yOuterScaleBand.bandwidth();
+                }).attr('class', 'bar').attr('x', function (d) {
+                    return innerScaleBand(d.groupLabel);
+                }).attr('width', function (d) {
+                    return barWidth;
+                }).attr('fill', function (d, i) {
+                    return colors(i);
+                }).on('mouseover', function (d, i) {
+                    var ix = bins.findIndex(function (b) {
+                        return b === d.label;
+                    });
+                    tipContent.html(function () {
+                        return tipContentFn(bins, ix, d.value, joyTitle);
+                    });
+                    tip.fx.in(tipContainer);
+                }).on('mousemove', function () {
+                    return tip.fx.move(tipContainer);
+                }).on('mouseout', function () {
+                    return tip.fx.out(tipContainer);
+                }).merge(bars).transition().duration(duration).delay(delay).attr('y', function (d) {
+                    return y(d.value);
+                }).attr('stroke', function (d, i) {
+                    if (borderColors) {
+                        return borderColors(i);
+                    }
+                }).attr('shape-rendering', 'crispEdges').attr('stroke-width', stroke.width).attr('stroke-linecap', stroke.linecap).attr('stroke-dasharray', function (d) {
+                    var currentHeight = yOuterScaleBand.bandwidth() - y(d.value);
+                    return barWidth + " 0 " + currentHeight + " " + barWidth;
+                }).attr('height', function (d) {
+                    return yOuterScaleBand.bandwidth() - y(d.value);
                 });
-                tip.fx.in(tipContainer);
-            }).on('mousemove', function () {
-                return tip.fx.move(tipContainer);
-            }).on('mouseout', function () {
-                return tip.fx.out(tipContainer);
-            }).merge(bars).transition().duration(duration).delay(delay).attr('y', function (d) {
-                console.log('y ', d, y(d.value));
-                return y(d.value);
-            }).attr('stroke-dasharray', function (d) {
-                var currentHeight = gridHeight - y(d.value);
-                return barWidth + " 0 " + currentHeight + " " + barWidth;
-            }).attr('height', function (d) {
-                console.log('d.value', d.value);
-                console.log('height', yOuterScaleBand.bandwidth(), ' - ', y(d.value));
-                return yOuterScaleBand.bandwidth() - y(d.value);
+                g.exit().remove();
             });
-            g.exit().remove();
         },
         makeGrid: function makeGrid(props) {
             var grid = props.grid;
             this.gridX = svg.append('g').attr('class', 'grid gridX');
             this.gridY = svg.append('g').attr('class', 'grid gridY');
         },
-        _drawGrid: function _drawGrid(props) {
+        _drawGrid: function _drawGrid() {
             var _this = this;
             var data = props.data,
                 height = props.height,
@@ -34996,13 +35007,7 @@ exports.joyPlotD3 = function () {
             if (!props.data) {
                 return;
             }
-            props = deepmerge_1.default(defaultProps, newProps);
-            props.data = newProps.data;
-            console.log(props.data);
-            debugger;
-            if (props.colorScheme) {
-                props.colorScheme = props.colorScheme;
-            }
+            this.mergeProps(newProps);
             var data = props.data,
                 visible = props.visible;
             dataSets = data.map(function (d) {
@@ -35022,8 +35027,8 @@ exports.joyPlotD3 = function () {
                 });
                 return lineData;
             });
-            console.log('dataSets', dataSets);
             this._drawScales(props.data);
+            this._drawGrid();
             this.updateChart(dataSets);
         },
         destroy: function destroy(el) {

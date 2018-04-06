@@ -70,8 +70,6 @@ class Histogram extends Component<IJoyPlotProps, IChartState> {
       color: (d, i, colors) => rgb(colors(i)).darker(1).toString(),
       width: 1,
     },
-    tipContentFn: (bins: string[], i, d) =>
-      bins[i] + '<br />' + d.toFixed(2),
     width: '100%',
   };
 
@@ -127,7 +125,7 @@ class Histogram extends Component<IJoyPlotProps, IChartState> {
     if (width === '100%') {
       width = this.state.parentWidth || 300;
     }
-
+    console.log('rest', rest);
     return {
       ...rest,
       width,
