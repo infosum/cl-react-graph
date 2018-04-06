@@ -158,6 +158,7 @@ interface IHistogramData {
     bins: string[];
     counts: IHistogramDataSet[];
     colorScheme?: string[];
+    title?: string;
 }
 
 interface IDomain {

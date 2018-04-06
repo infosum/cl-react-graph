@@ -5,9 +5,11 @@ import Legend from './Legend';
 import LineChart from './LineChart';
 import PieChart from './PieChart';
 import ScatterPlot from './ScatterPlot';
+import JoyPlot from './JoyPlot';
 
 export {
   filterRange,
+  JoyPlot,
   Histogram,
   HorizontalHistogram,
   Legend,

@@ -42,6 +42,7 @@ export const data2 = {
       label: 'Data 1',
     },
   ],
+  title: 'Plot 1',
 };
 
 export const data3 = {

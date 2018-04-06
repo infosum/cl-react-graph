@@ -173,6 +173,62 @@ exports.default = HistogramExamples;
 
 /***/ }),
 
+/***/ "./examples/JoyPlot.tsx":
+/*!******************************!*\
+  !*** ./examples/JoyPlot.tsx ***!
+  \******************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var __extends = undefined && undefined.__extends || function () {
+    var extendStatics = Object.setPrototypeOf || { __proto__: [] } instanceof Array && function (d, b) {
+        d.__proto__ = b;
+    } || function (d, b) {
+        for (var p in b) {
+            if (b.hasOwnProperty(p)) d[p] = b[p];
+        }
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() {
+            this.constructor = d;
+        }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+}();
+var __assign = undefined && undefined.__assign || Object.assign || function (t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+        s = arguments[i];
+        for (var p in s) {
+            if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+        }
+    }
+    return t;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "react");
+var react_1 = __webpack_require__(/*! react */ "react");
+var src_1 = __webpack_require__(/*! ../src */ "./src/index.ts");
+var data_1 = __webpack_require__(/*! ./data */ "./examples/data.ts");
+var JoypLotExamples = function (_super) {
+    __extends(JoypLotExamples, _super);
+    function JoypLotExamples() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    JoypLotExamples.prototype.render = function () {
+        var data3 = __assign({}, data_1.data2, { counts: [__assign({}, data_1.data2.counts[0], { data: [7, 6, 5, 4, 3, 2, 1], label: 'Data 2' })], title: 'Plot 2' });
+        console.log('demo data', [data_1.data2, data3]);
+        return React.createElement("div", null, React.createElement("h3", null, "JoyPlot"), React.createElement(src_1.JoyPlot, { data: [data_1.data2, data3], width: 400, height: 400 }));
+    };
+    return JoypLotExamples;
+}(react_1.Component);
+exports.default = JoypLotExamples;
+
+/***/ }),
+
 /***/ "./examples/Pie.tsx":
 /*!**************************!*\
   !*** ./examples/Pie.tsx ***!
@@ -290,7 +346,8 @@ exports.data2 = {
         borderColors: ['red'],
         data: [1, 2, 3, 4, 5, 6, 7],
         label: 'Data 1'
-    }]
+    }],
+    title: 'Plot 1'
 };
 exports.data3 = {
     bins: ['bin 1', 'bin 2', 'bin 3'],
@@ -357,6 +414,7 @@ var src_1 = __webpack_require__(/*! ../src */ "./src/index.ts");
 var filterRange_1 = __webpack_require__(/*! ../src/colors/filterRange */ "./src/colors/filterRange.ts");
 var data_1 = __webpack_require__(/*! ./data */ "./examples/data.ts");
 var Histogram_1 = __webpack_require__(/*! ./Histogram */ "./examples/Histogram.tsx");
+var JoyPlot_1 = __webpack_require__(/*! ./JoyPlot */ "./examples/JoyPlot.tsx");
 var Pie_1 = __webpack_require__(/*! ./Pie */ "./examples/Pie.tsx");
 var points = [{
     data: [{ x: 1, y: 1 }, { x: 2, y: 2 }, { x: 3, y: 3 }, { x: 4, y: 4 }],
@@ -385,7 +443,7 @@ var points = [{
 var scatter = [];
 var theme = filterRange_1.default(['rgba(255, 113, 1, 0.5)', '#fff6ef', 'rgba(0, 169, 123, 0.5)', '#f6fffd', '#D7263D', 'rgba(215, 38, 61, 0.05)', '#0f2629', '#ededed', 'rgba(86, 180, 191, 0.5)', '#f5fbfb', '#000000', '#0f2629', '#D7263D', '#FBD7D9', '#ffebec', '#963540', '#22545a', '#56b4bf', '#56b4bf', '#56b4bf', '#FF7101', '#449098', '#77c3cb', '#d4eef8', '#ff7101', '#FF7101', '#cc5a00', '#ff8d33', '#fef9e5', '#7d5d2e', '#00a97b', '#008762', '#33ba95', '#dbf1d6', '#227839', '#0f5e7b', '#d4eef8', '#0f5e7b', '#F9C80E', '#007656', '#c5e5e9', '#f9c80e', '#a9a9a9', '#dbdbdb', '#cccccc', '#e6e6e6', '#56b4bf', '#449098', '#77c3cb', '#22545a', '#ff7101', '#cdcdcd', '#ffffff', '#d7263d', '#00a97b', '#888888', '#e6e6e6', '#f2f2f2', '#f4f4f4']);
 var App = function App() {
-    return React.createElement("div", { style: { padding: '20px' } }, React.createElement(Pie_1.default, { theme: theme }), React.createElement("div", null, React.createElement("h3", null, "Line Chart"), React.createElement(src_1.LineChart, { axis: data_1.axis, grid: data_1.grid, data: points, width: 300 })), React.createElement(Histogram_1.default, { theme: theme }));
+    return React.createElement("div", { style: { padding: '20px' } }, React.createElement(JoyPlot_1.default, { theme: theme }), React.createElement(Pie_1.default, { theme: theme }), React.createElement("div", null, React.createElement("h3", null, "Line Chart"), React.createElement(src_1.LineChart, { axis: data_1.axis, grid: data_1.grid, data: points, width: 300 })), React.createElement(Histogram_1.default, { theme: theme }));
 };
 ReactDOM.render(React.createElement(App, null), document.getElementById('root'));
 
@@ -33310,8 +33368,6 @@ var Histogram = function (_super) {
     function Histogram(props) {
         var _this = _super.call(this, props) || this;
         _this.chart = HistogramD3_1.histogramD3();
-        var counts = [];
-        var bins = [];
         _this.state = {
             parentWidth: 300
         };
@@ -33559,20 +33615,11 @@ exports.histogramD3 = function () {
     };
     var HistogramD3 = {
         create: function create(el, props) {
-            var _this = this;
             if (props === void 0) {
                 props = {};
             }
             this.props = deepmerge_1.default(defaultProps, props);
             this._makeSvg(el);
-            this.previousData = this.props.data.counts.map(function (set, setIndex) {
-                return set.data.map(function (count, i) {
-                    return {
-                        count: 0,
-                        label: _this.props.data.bins[i]
-                    };
-                });
-            });
             this.makeGrid(props);
             this.makeScales();
             this.container = svg.append('g').attr('class', 'histogram-container');
@@ -33790,7 +33837,6 @@ exports.histogramD3 = function () {
                 margin = props.margin,
                 bar = props.bar;
             var ticks = this.valuesCount(data.counts);
-            var setCount = data.counts.length;
             var axisWidth = axis.y.style['stroke-width'];
             var offset = {
                 x: this.yAxisWidth() + axisWidth,
@@ -34365,6 +34411,626 @@ exports.horizontalHistogramD3 = function () {
         }
     };
     return HorizontalHistogramD3;
+};
+
+/***/ }),
+
+/***/ "./src/JoyPlot.tsx":
+/*!*************************!*\
+  !*** ./src/JoyPlot.tsx ***!
+  \*************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var __extends = undefined && undefined.__extends || function () {
+    var extendStatics = Object.setPrototypeOf || { __proto__: [] } instanceof Array && function (d, b) {
+        d.__proto__ = b;
+    } || function (d, b) {
+        for (var p in b) {
+            if (b.hasOwnProperty(p)) d[p] = b[p];
+        }
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() {
+            this.constructor = d;
+        }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+}();
+var __assign = undefined && undefined.__assign || Object.assign || function (t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+        s = arguments[i];
+        for (var p in s) {
+            if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+        }
+    }
+    return t;
+};
+var __rest = undefined && undefined.__rest || function (s, e) {
+    var t = {};
+    for (var p in s) {
+        if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0) t[p] = s[p];
+    }if (s != null && typeof Object.getOwnPropertySymbols === "function") for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+        if (e.indexOf(p[i]) < 0) t[p[i]] = s[p[i]];
+    }return t;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var d3_color_1 = __webpack_require__(/*! d3-color */ "./node_modules/d3-color/index.js");
+var React = __webpack_require__(/*! react */ "react");
+var react_1 = __webpack_require__(/*! react */ "react");
+var ReactDOM = __webpack_require__(/*! react-dom */ "react-dom");
+var JoyplotD3_1 = __webpack_require__(/*! ./JoyplotD3 */ "./src/JoyplotD3.ts");
+var Histogram = function (_super) {
+    __extends(Histogram, _super);
+    function Histogram(props) {
+        var _this = _super.call(this, props) || this;
+        _this.chart = JoyplotD3_1.joyPlotD3();
+        _this.state = {
+            parentWidth: 300
+        };
+        return _this;
+    }
+    Histogram.prototype.handleResize = function () {
+        var _this = this;
+        var elem = this.getDOMNode();
+        var width = this.ref.offsetWidth ? this.ref.offsetWidth : 0;
+        this.setState({
+            parentWidth: width
+        }, function () {
+            return _this.chart.create(elem, _this.getChartState());
+        });
+    };
+    Histogram.prototype.componentDidMount = function () {
+        var _this = this;
+        this.chart.create(this.getDOMNode(), this.getChartState());
+        if (this.props.width === '100%') {
+            window.addEventListener('resize', function (e) {
+                return _this.handleResize();
+            });
+            this.handleResize();
+        }
+    };
+    Histogram.prototype.componentDidUpdate = function () {
+        this.chart.update(this.getDOMNode(), this.getChartState());
+    };
+    Histogram.prototype.getChartState = function () {
+        var width = this.props.width;
+        var _a = this.props,
+            children = _a.children,
+            rest = __rest(_a, ["children"]);
+        if (width === '100%') {
+            width = this.state.parentWidth || 300;
+        }
+        return __assign({}, rest, { width: width });
+    };
+    Histogram.prototype.componentWillUnmount = function () {
+        if (this.props.width === '100%') {
+            window.removeEventListener('resize', this.handleResize);
+        }
+        this.chart.destroy(this.getDOMNode());
+    };
+    Histogram.prototype.getDOMNode = function () {
+        return ReactDOM.findDOMNode(this.ref);
+    };
+    Histogram.prototype.render = function () {
+        var _this = this;
+        return React.createElement("div", { ref: function ref(_ref) {
+                return _this.ref = _ref;
+            }, className: "histogram-chart-container" });
+    };
+    Histogram.defaultProps = {
+        axis: {},
+        bar: {
+            margin: 0,
+            width: 10
+        },
+        grid: {
+            x: {
+                style: {
+                    'fill': 'none',
+                    'stroke': '#bbb',
+                    'stroke-opacity': 0.7,
+                    'stroke-width': 1
+                },
+                ticks: 5,
+                visible: true
+            },
+            y: {
+                style: {
+                    'fill': 'none',
+                    'stroke': '#bbb',
+                    'stroke-opacity': 0.7,
+                    'stroke-width': 1
+                },
+                ticks: 5,
+                visible: true
+            }
+        },
+        height: 200,
+        margin: {
+            left: 5,
+            top: 5
+        },
+        stroke: {
+            color: function color(d, i, colors) {
+                return d3_color_1.rgb(colors(i)).darker(1).toString();
+            },
+            width: 1
+        },
+        tipContentFn: function tipContentFn(bins, i, d) {
+            return bins[i] + '<br />' + d.toFixed(2);
+        },
+        width: '100%'
+    };
+    return Histogram;
+}(react_1.Component);
+exports.default = Histogram;
+
+/***/ }),
+
+/***/ "./src/JoyplotD3.ts":
+/*!**************************!*\
+  !*** ./src/JoyplotD3.ts ***!
+  \**************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var __rest = undefined && undefined.__rest || function (s, e) {
+    var t = {};
+    for (var p in s) {
+        if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0) t[p] = s[p];
+    }if (s != null && typeof Object.getOwnPropertySymbols === "function") for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+        if (e.indexOf(p[i]) < 0) t[p[i]] = s[p[i]];
+    }return t;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var d3_array_1 = __webpack_require__(/*! d3-array */ "./node_modules/d3-array/index.js");
+var d3_axis_1 = __webpack_require__(/*! d3-axis */ "./node_modules/d3-axis/index.js");
+var d3_scale_1 = __webpack_require__(/*! d3-scale */ "./node_modules/d3-scale/index.js");
+var d3_selection_1 = __webpack_require__(/*! d3-selection */ "./node_modules/d3-selection/index.js");
+var deepmerge_1 = __webpack_require__(/*! deepmerge */ "./node_modules/deepmerge/dist/es.js");
+var lodash_1 = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+var colors_1 = __webpack_require__(/*! ./colors */ "./src/colors/index.js");
+var attrs_1 = __webpack_require__(/*! ./d3/attrs */ "./src/d3/attrs.ts");
+var tip_1 = __webpack_require__(/*! ./tip */ "./src/tip.ts");
+exports.joyPlotD3 = function () {
+    var svg;
+    var tipContainer;
+    var tipContent;
+    var props;
+    var dataSets;
+    var yOuterScaleBand = d3_scale_1.scaleBand();
+    var y = d3_scale_1.scaleLinear();
+    var x = d3_scale_1.scaleBand();
+    var innerScaleBand = d3_scale_1.scaleBand();
+    function make_x_gridlines(ticks) {
+        if (ticks === void 0) {
+            ticks = 5;
+        }
+        return d3_axis_1.axisBottom(x).ticks(ticks);
+    }
+    function make_y_gridlines(ticks) {
+        if (ticks === void 0) {
+            ticks = 5;
+        }
+        return d3_axis_1.axisLeft(y).ticks(ticks);
+    }
+    var defaultProps = {
+        axis: {
+            x: {
+                height: 20,
+                label: '',
+                margin: 10,
+                style: {
+                    'fill': 'none',
+                    'shape-rendering': 'crispEdges',
+                    'stroke': '#666',
+                    'stroke-opacity': 1,
+                    'stroke-width': 1
+                },
+                text: {
+                    style: {
+                        fill: '#666'
+                    }
+                }
+            },
+            y: {
+                label: '',
+                style: {
+                    'fill': 'none',
+                    'shape-rendering': 'crispEdges',
+                    'stroke': '#666',
+                    'stroke-opacity': 1,
+                    'stroke-width': 1
+                },
+                text: {
+                    style: {
+                        fill: '#666'
+                    }
+                },
+                ticks: 10,
+                width: 25
+            }
+        },
+        bar: {
+            groupMargin: 0.1,
+            margin: 0,
+            width: 50
+        },
+        className: 'histogram-d3',
+        colorScheme: colors_1.default,
+        data: [{
+            bins: [],
+            counts: []
+        }],
+        delay: 0,
+        domain: {
+            max: null,
+            min: null
+        },
+        duration: 400,
+        grid: {
+            x: {
+                style: {
+                    'fill': 'none',
+                    'stroke': '#bbb',
+                    'stroke-opacity': 0.7,
+                    'stroke-width': 1
+                },
+                ticks: 5,
+                visible: true
+            },
+            y: {
+                style: {
+                    'fill': 'none',
+                    'stroke': '#bbb',
+                    'stroke-opacity': 0.7,
+                    'stroke-width': 1
+                },
+                ticks: 5,
+                visible: true
+            }
+        },
+        height: 200,
+        margin: {
+            left: 5,
+            top: 5
+        },
+        stroke: {
+            color: '#005870',
+            dasharray: '',
+            linecap: 'butt',
+            width: 0
+        },
+        tip: tip_1.default,
+        tipContainer: 'body',
+        tipContentFn: function tipContentFn(bins, i, d) {
+            return bins[i] + '<br />' + d;
+        },
+        visible: {},
+        width: 200
+    };
+    var HistogramD3 = {
+        create: function create(el, newProps) {
+            if (newProps === void 0) {
+                newProps = {};
+            }
+            props = deepmerge_1.default(defaultProps, newProps);
+            props.data = newProps.data;
+            this._makeSvg(el);
+            this.makeGrid(props);
+            this.makeScales();
+            this.container = svg.append('g').attr('class', 'histogram-container');
+            this.update(el, props);
+        },
+        _makeSvg: function _makeSvg(el) {
+            if (svg) {
+                svg.selectAll('svg > *').remove();
+                svg.remove();
+                var childNodes = el.getElementsByTagName('svg');
+                if (childNodes.length > 0) {
+                    el.removeChild(childNodes[0]);
+                }
+            }
+            var margin = props.margin,
+                width = props.width,
+                height = props.height,
+                className = props.className;
+            svg = d3_selection_1.select(el).append('svg').attr('class', className).attr('width', width).attr('height', height).attr('viewBox', "0 0 " + width + " " + height).append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+            this._makeTip();
+        },
+        _makeTip: function _makeTip() {
+            if (tipContainer) {
+                tipContainer.remove();
+            }
+            tipContainer = d3_selection_1.select(props.tipContainer).append('div').attr('class', 'tooltip top').style('opacity', 0);
+            tipContainer.append('div').attr('class', 'tooltip-arrow');
+            tipContent = tipContainer.append('div').attr('class', 'tooltip-inner');
+        },
+        valuesCount: function valuesCount(counts) {
+            return counts.reduce(function (a, b) {
+                return b.data.length > a ? b.data.length : a;
+            }, 0);
+        },
+        appendDomainRange: function appendDomainRange(scale, data) {
+            var yDomain = [];
+            var axis = props.axis,
+                domain = props.domain,
+                margin = props.margin,
+                height = props.height;
+            var allCounts = data.reduce(function (prev, next) {
+                var thisCounts = next.reduce(function (p, n) {
+                    return p.concat(n.map(function (n) {
+                        return n.value;
+                    }));
+                }, []);
+                return prev.concat(thisCounts);
+            }, [0]);
+            var thisExtent = d3_array_1.extent(allCounts, function (d) {
+                return d;
+            });
+            yDomain[1] = domain && domain.hasOwnProperty('max') && domain.max !== null ? domain.max : thisExtent[1];
+            yDomain[0] = domain && domain.hasOwnProperty('min') && domain.min !== null ? domain.min : thisExtent[0];
+            var yRange = [yOuterScaleBand.bandwidth(), 0];
+            console.log('scale yRange, yDomain', yRange, yDomain);
+            scale.range(yRange).domain(yDomain);
+        },
+        yAxisWidth: function yAxisWidth() {
+            var axis = props.axis;
+            return axis.y.label === '' ? axis.y.width : axis.y.width + 30;
+        },
+        xAxisHeight: function xAxisHeight() {
+            var axis = props.axis;
+            return axis.x.label === '' ? axis.x.height : axis.x.height + 30;
+        },
+        makeScales: function makeScales() {
+            var axis = props.axis,
+                margin = props.margin,
+                height = props.height,
+                width = props.width;
+            this.xAxis = svg.append('g').attr('class', 'x-axis');
+            this.yAxis = svg.append('g').attr('class', 'y-axis');
+            if (axis.x.label !== '') {
+                svg.append('text').attr('class', 'x-axis-label').attr('transform', 'translate(' + Number(width) / 2 + ' ,' + (height - this.xAxisHeight() - margin.left * 2 + 10 + axis.x.margin) + ')').style('text-anchor', 'middle').text(axis.x.label);
+            }
+            if (axis.y.label !== '') {
+                svg.append('text').attr('class', 'y-axis-label').attr('transform', 'translate(0, -' + this.gridHeight() + ')rotate(-90)').attr('y', 0 - margin.left).attr('x', 0 - (height / 2 - margin.top * 2)).attr('dy', '1em').style('text-anchor', 'middle').text(axis.y.label);
+            }
+        },
+        getBins: function getBins() {
+            return props.data.reduce(function (prev, next) {
+                return Array.from(new Set(prev.concat(next.bins)));
+            }, []);
+        },
+        _drawScales: function _drawScales(data) {
+            var _this = this;
+            var bar = props.bar,
+                domain = props.domain,
+                margin = props.margin,
+                width = props.width,
+                height = props.height,
+                axis = props.axis;
+            var valuesCount = data.reduce(function (prev, next) {
+                var c = _this.valuesCount(next.counts);
+                return c > prev ? c : prev;
+            }, 0);
+            var w = this.gridWidth();
+            var xAxis;
+            var dataLabels = data[0].counts.map(function (c) {
+                return c.label;
+            });
+            var bins = this.getBins();
+            x.domain(bins).rangeRound([0, w]).paddingInner(this.groupedMargin());
+            innerScaleBand.domain(dataLabels).rangeRound([0, x.bandwidth()]).paddingInner(this.barMargin());
+            xAxis = d3_axis_1.axisBottom(x);
+            var tickSize = lodash_1.get(axis, 'x.tickSize', undefined);
+            if (tickSize !== undefined) {
+                xAxis.tickSize(tickSize);
+            } else {
+                if (w / valuesCount < 10) {
+                    xAxis.tickValues(x.domain().filter(function (d, i) {
+                        return !(i % 10);
+                    }));
+                }
+            }
+            this.xAxis.attr('transform', 'translate(' + (this.yAxisWidth() + axis.y.style['stroke-width']) + ',' + (height - this.xAxisHeight() - margin.left * 2) + ')').call(xAxis);
+            var yLabels = data.map(function (d) {
+                return d.title;
+            });
+            console.log('yLabels,', yLabels);
+            var yOuterBounds = [height - margin.top * 2 - this.xAxisHeight(), 0];
+            console.log('yOuterBounds', yOuterBounds);
+            yOuterScaleBand.domain(yLabels).rangeRound(yOuterBounds);
+            this.appendDomainRange(y, dataSets);
+            var yAxis = d3_axis_1.axisLeft(yOuterScaleBand).ticks(axis.y.ticks);
+            var yTickSize = lodash_1.get(axis, 'y.tickSize', undefined);
+            if (yTickSize !== undefined) {
+                yAxis.tickSize(yTickSize);
+            }
+            this.yAxis.attr('transform', 'translate(' + this.yAxisWidth() + ', 0)').transition().call(yAxis);
+            var xLabelStyle = __rest(axis.x.text.style, []);
+            var yLabelStyle = __rest(axis.y.text.style, []);
+            attrs_1.default(svg.selectAll('.y-axis .domain, .y-axis .tick line'), axis.y.style);
+            attrs_1.default(svg.selectAll('.y-axis .tick text'), axis.y.text.style);
+            attrs_1.default(svg.selectAll('.x-axis .domain, .x-axis .tick line'), axis.x.style);
+            attrs_1.default(svg.selectAll('.x-axis .tick text'), axis.x.text.style);
+        },
+        gridWidth: function gridWidth() {
+            var axis = props.axis,
+                width = props.width,
+                margin = props.margin;
+            return Number(width) - margin.left * 2 - this.yAxisWidth();
+        },
+        gridHeight: function gridHeight() {
+            var height = props.height,
+                margin = props.margin,
+                axis = props.axis;
+            return height - margin.top * 2 - this.xAxisHeight();
+        },
+        groupedMargin: function groupedMargin() {
+            var m = lodash_1.get(props.bar, 'groupMargin', 0.1);
+            return m >= 0 && m <= 1 ? m : 0.1;
+        },
+        barMargin: function barMargin() {
+            var m = lodash_1.get(props.bar, 'margin', 0);
+            return m >= 0 && m <= 1 ? m : 0.1;
+        },
+        barWidth: function barWidth() {
+            return innerScaleBand.bandwidth();
+        },
+        updateChart: function updateChart(groupData) {
+            var bins = this.getBins();
+            var height = props.height,
+                width = props.width,
+                margin = props.margin,
+                bar = props.bar,
+                delay = props.delay,
+                duration = props.duration,
+                axis = props.axis,
+                stroke = props.stroke,
+                tip = props.tip,
+                tipContentFn = props.tipContentFn;
+            var barWidth = this.barWidth();
+            var colors = d3_scale_1.scaleOrdinal(props.colorScheme);
+            var borderColors = null;
+            var gridHeight = this.gridHeight();
+            var yAxisWidth = this.yAxisWidth();
+            var groupedMargin = this.groupedMargin();
+            var maxItems = groupData.reduce(function (prev, next) {
+                var thisMax = next.reduce(function (p, n) {
+                    return n.length > p ? n.length : p;
+                }, 0);
+                return thisMax > prev ? thisMax : prev;
+            }, 0);
+            var g = this.container.selectAll('g').data(groupData[0]);
+            var bars = g.enter().append('g').merge(g).attr('transform', function (d) {
+                var xdelta = yAxisWidth + axis.y.style['stroke-width'] + x(d[0].label);
+                var ydelta = yOuterScaleBand(d[0].joyLabel);
+                return "translate(" + xdelta + ", " + ydelta + ")";
+            }).selectAll('rect').data(function (d) {
+                return d;
+            });
+            bars.enter().append('rect').attr('height', 0).attr('y', function (d) {
+                return gridHeight;
+            }).attr('class', 'bar').attr('x', function (d) {
+                return innerScaleBand(d.groupLabel);
+            }).attr('width', function (d) {
+                return barWidth;
+            }).attr('fill', function (d, i) {
+                return colors(i);
+            }).on('mouseover', function (d, i) {
+                var ix = bins.findIndex(function (b) {
+                    return b === d.label;
+                });
+                tipContent.html(function () {
+                    return tipContentFn(bins, ix, d.value);
+                });
+                tip.fx.in(tipContainer);
+            }).on('mousemove', function () {
+                return tip.fx.move(tipContainer);
+            }).on('mouseout', function () {
+                return tip.fx.out(tipContainer);
+            }).merge(bars).transition().duration(duration).delay(delay).attr('y', function (d) {
+                console.log('y ', d, y(d.value));
+                return y(d.value);
+            }).attr('stroke-dasharray', function (d) {
+                var currentHeight = gridHeight - y(d.value);
+                return barWidth + " 0 " + currentHeight + " " + barWidth;
+            }).attr('height', function (d) {
+                console.log('d.value', d.value);
+                console.log('height', yOuterScaleBand.bandwidth(), ' - ', y(d.value));
+                return yOuterScaleBand.bandwidth() - y(d.value);
+            });
+            g.exit().remove();
+        },
+        makeGrid: function makeGrid(props) {
+            var grid = props.grid;
+            this.gridX = svg.append('g').attr('class', 'grid gridX');
+            this.gridY = svg.append('g').attr('class', 'grid gridY');
+        },
+        _drawGrid: function _drawGrid(props) {
+            var _this = this;
+            var data = props.data,
+                height = props.height,
+                width = props.width,
+                axis = props.axis,
+                grid = props.grid,
+                margin = props.margin,
+                bar = props.bar;
+            var ticks = data.reduce(function (prev, next) {
+                var c = _this.valuesCount(next.counts);
+                return c > prev ? prev : c;
+            }, 0);
+            var axisWidth = axis.y.style['stroke-width'];
+            var offset = {
+                x: this.yAxisWidth() + axisWidth,
+                y: this.gridHeight()
+            };
+            if (grid.x.visible) {
+                this.gridX.attr('transform', "translate(" + offset.x + ", " + offset.y + ")");
+                this.gridX.call(make_x_gridlines(lodash_1.get(grid, 'x.ticks', ticks)).tickSize(-height + this.xAxisHeight() + margin.top * 2).tickFormat(function () {
+                    return '';
+                }));
+                attrs_1.default(this.gridX.selectAll('.tick line'), grid.x.style);
+                attrs_1.default(this.gridX.selectAll('.domain'), { stroke: 'transparent' });
+            }
+            if (grid.y.visible) {
+                this.gridY.attr('transform', 'translate(' + (this.yAxisWidth() + axisWidth) + ', 0)').transition().call(make_y_gridlines(lodash_1.get(grid, 'y.ticks', ticks)).tickSize(-width + margin.left * 2 + this.yAxisWidth()).tickFormat(function () {
+                    return '';
+                }));
+                attrs_1.default(this.gridY.selectAll('.tick line'), grid.y.style);
+                this.gridY.selectAll('.gridY .tick line').filter(function (d, i) {
+                    return i === 0;
+                }).attr('display', 'none');
+                attrs_1.default(this.gridY.selectAll('.domain'), { stroke: 'transparent' });
+            }
+        },
+        update: function update(el, newProps) {
+            if (!props.data) {
+                return;
+            }
+            props = deepmerge_1.default(defaultProps, newProps);
+            props.data = newProps.data;
+            console.log(props.data);
+            debugger;
+            if (props.colorScheme) {
+                props.colorScheme = props.colorScheme;
+            }
+            var data = props.data,
+                visible = props.visible;
+            dataSets = data.map(function (d) {
+                var lineData = [];
+                d.counts.forEach(function (count) {
+                    count.data.forEach(function (value, i) {
+                        if (!lineData[i]) {
+                            lineData[i] = [];
+                        }
+                        lineData[i].push({
+                            groupLabel: count.label,
+                            joyLabel: d.title,
+                            label: d.bins[i],
+                            value: visible[d.bins[i]] !== false && visible[count.label] !== false ? value : 0
+                        });
+                    });
+                });
+                return lineData;
+            });
+            console.log('dataSets', dataSets);
+            this._drawScales(props.data);
+            this.updateChart(dataSets);
+        },
+        destroy: function destroy(el) {
+            svg.selectAll('svg > *').remove();
+        }
+    };
+    return HistogramD3;
 };
 
 /***/ }),
@@ -35346,6 +36012,8 @@ var PieChart_1 = __webpack_require__(/*! ./PieChart */ "./src/PieChart.tsx");
 exports.PieChart = PieChart_1.default;
 var ScatterPlot_1 = __webpack_require__(/*! ./ScatterPlot */ "./src/ScatterPlot.tsx");
 exports.ScatterPlot = ScatterPlot_1.default;
+var JoyPlot_1 = __webpack_require__(/*! ./JoyPlot */ "./src/JoyPlot.tsx");
+exports.JoyPlot = JoyPlot_1.default;
 
 /***/ }),
 
