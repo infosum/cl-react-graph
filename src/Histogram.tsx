@@ -82,8 +82,6 @@ class Histogram extends Component<IHistogramProps, IChartState> {
   constructor(props: IHistogramProps) {
     super(props);
     this.chart = histogramD3();
-    const counts: IHistogramDataSet[] = [];
-    const bins: string[] = [];
     this.state = {
       parentWidth: 300,
     };

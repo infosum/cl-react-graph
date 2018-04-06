@@ -141,13 +141,6 @@ export const histogramD3 = ((): IChartAdaptor => {
     create(el: HTMLElement, props: Partial<IHistogramProps> = {}) {
       this.props = merge<IHistogramProps>(defaultProps, props);
       this._makeSvg(el);
-      this.previousData = this.props.data.counts.map((set: IHistogramDataSet, setIndex: number) => {
-        return set.data
-          .map((count, i) => ({
-            count: 0,
-            label: this.props.data.bins[i],
-          }));
-      });
       this.makeGrid(props);
       this.makeScales();
       this.container = svg
@@ -474,7 +467,6 @@ export const histogramD3 = ((): IChartAdaptor => {
     _drawGrid(props: IHistogramProps) {
       const { data, height, width, axis, grid, margin, bar } = props;
       const ticks = this.valuesCount(data.counts);
-      const setCount = data.counts.length;
       const axisWidth = axis.y.style['stroke-width'];
 
       const offset = {
