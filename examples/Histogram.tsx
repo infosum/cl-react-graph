@@ -59,6 +59,7 @@ class HistogramExamples extends Component<IProps, IState> {
           height={720}
           visible={visible}
           colorScheme={theme}
+          axis={axis}
           tipContentFn={tipContentFn} />
         <Legend
           theme={theme}
