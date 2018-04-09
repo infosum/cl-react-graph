@@ -271,7 +271,7 @@ export const histogramD3 = ((): IChartAdaptor => {
         svg.append('text')
           .attr('class', 'y-axis-label')
           .attr('transform', 'rotate(-90)')
-          .attr('y', 0 - margin.left)
+          .attr('y', 0)
           .attr('x', 0 - (this.gridHeight() / 2 - (margin.top * 2)))
           .attr('dy', '1em')
           .style('text-anchor', 'middle')

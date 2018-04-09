@@ -33715,7 +33715,7 @@ exports.histogramD3 = function () {
                 svg.append('text').attr('class', 'x-axis-label').attr('transform', 'translate(' + width / 2 + ' ,' + (height - this.xAxisHeight() - margin.left * 2 + 10 + axis.x.margin) + ')').style('text-anchor', 'middle').text(axis.x.label);
             }
             if (axis.y.label !== '') {
-                svg.append('text').attr('class', 'y-axis-label').attr('transform', 'rotate(-90)').attr('y', 0 - margin.left).attr('x', 0 - (this.gridHeight() / 2 - margin.top * 2)).attr('dy', '1em').style('text-anchor', 'middle').text(axis.y.label);
+                svg.append('text').attr('class', 'y-axis-label').attr('transform', 'rotate(-90)').attr('y', 0).attr('x', 0 - (this.gridHeight() / 2 - margin.top * 2)).attr('dy', '1em').style('text-anchor', 'middle').text(axis.y.label);
             }
         },
         _drawScales: function _drawScales(data) {
