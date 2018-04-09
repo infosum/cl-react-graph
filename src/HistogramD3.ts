@@ -270,9 +270,9 @@ export const histogramD3 = ((): IChartAdaptor => {
       if (axis.y.label !== '') {
         svg.append('text')
           .attr('class', 'y-axis-label')
-          .attr('transform', 'translate(0, -' + this.gridHeight() + ')rotate(-90)')
+          .attr('transform', 'rotate(-90)')
           .attr('y', 0 - margin.left)
-          .attr('x', 0 - (height / 2 - (margin.top * 2)))
+          .attr('x', 0 - (this.gridHeight() / 2 - (margin.top * 2)))
           .attr('dy', '1em')
           .style('text-anchor', 'middle')
           .text(axis.y.label);
