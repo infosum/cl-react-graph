@@ -23,7 +23,7 @@ var webpack = require('webpack'),
     },
     {
       test: /\.js$/,
-      exclude: /node_modules/,
+      exclude: [/node_modules/, /dist/],
       use: [
         {
           loader: 'babel-loader'
