@@ -161,7 +161,7 @@ var HistogramExamples = function (_super) {
         return React.createElement("div", null, React.createElement("h3", null, "Histograms"), React.createElement(src_1.Histogram, { data: data_1.data2, width: 400, height: 400, margin: {
                 left: 30,
                 top: 30
-            }, domain: { min: 0, max: 10 } }), React.createElement(src_1.Histogram, { data: data_1.data, grid: data_1.grid, width: '100%', height: 720, visible: visible, colorScheme: theme, tipContentFn: tipContentFn }), React.createElement(src_1.Legend, { theme: theme, data: dataLegendData, onSelect: function onSelect(label) {
+            }, domain: { min: 0, max: 10 } }), React.createElement(src_1.Histogram, { data: data_1.data, grid: data_1.grid, width: '100%', height: 720, visible: visible, colorScheme: theme, axis: data_1.axis, tipContentFn: tipContentFn }), React.createElement(src_1.Legend, { theme: theme, data: dataLegendData, onSelect: function onSelect(label) {
                 return _this.toggleVisible(label);
             }, visible: visible }), React.createElement(src_1.Histogram, { data: data_1.data2, bar: { margin: 0.1 }, colorScheme: theme, visible: visible, width: 700, height: 350, axis: data_1.axis }), React.createElement(src_1.Legend, { theme: theme2, data: data_1.data2, onSelect: function onSelect(label) {
                 return _this.toggleVisible(label);
@@ -33702,7 +33702,7 @@ exports.histogramD3 = function () {
                 svg.append('text').attr('class', 'x-axis-label').attr('transform', 'translate(' + width / 2 + ' ,' + (height - this.xAxisHeight() - margin.left * 2 + 10 + axis.x.margin) + ')').style('text-anchor', 'middle').text(axis.x.label);
             }
             if (axis.y.label !== '') {
-                svg.append('text').attr('class', 'y-axis-label').attr('transform', 'translate(0, -' + this.gridHeight() + ')rotate(-90)').attr('y', 0 - margin.left).attr('x', 0 - (height / 2 - margin.top * 2)).attr('dy', '1em').style('text-anchor', 'middle').text(axis.y.label);
+                svg.append('text').attr('class', 'y-axis-label').attr('transform', 'rotate(-90)').attr('y', 0 - margin.left).attr('x', 0 - (this.gridHeight() / 2 - margin.top * 2)).attr('dy', '1em').style('text-anchor', 'middle').text(axis.y.label);
             }
         },
         _drawScales: function _drawScales(data) {
@@ -34662,7 +34662,7 @@ exports.joyPlotD3 = function () {
             }
         },
         bar: {
-            groupMargin: 0.1,
+            groupMargin: 0,
             margin: 0,
             width: 50
         },
@@ -34719,7 +34719,7 @@ exports.joyPlotD3 = function () {
         visible: {},
         width: 200
     };
-    var HistogramD3 = {
+    var JoyPlotD3 = {
         create: function create(el, newProps) {
             if (newProps === void 0) {
                 newProps = {};
@@ -34883,7 +34883,7 @@ exports.joyPlotD3 = function () {
         },
         groupedMargin: function groupedMargin() {
             var m = lodash_1.get(props.bar, 'groupMargin', 0.1);
-            return m >= 0 && m <= 1 ? m : 0.1;
+            return m >= 0 && m <= 1 ? m : 0;
         },
         barMargin: function barMargin() {
             var m = lodash_1.get(props.bar, 'margin', 0);
@@ -35035,7 +35035,7 @@ exports.joyPlotD3 = function () {
             svg.selectAll('svg > *').remove();
         }
     };
-    return HistogramD3;
+    return JoyPlotD3;
 };
 
 /***/ }),

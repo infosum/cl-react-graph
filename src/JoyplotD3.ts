@@ -78,7 +78,7 @@ export const joyPlotD3 = ((): IChartAdaptor => {
       },
     },
     bar: {
-      groupMargin: 0.1,
+      groupMargin: 0,
       margin: 0,
       width: 50,
     },
@@ -136,7 +136,7 @@ export const joyPlotD3 = ((): IChartAdaptor => {
     width: 200,
   };
 
-  const HistogramD3 = {
+  const JoyPlotD3 = {
     /**
      * Initialization
      * @param {Node} el Target DOM node
@@ -398,7 +398,7 @@ export const joyPlotD3 = ((): IChartAdaptor => {
       const m = get(props.bar, 'groupMargin', 0.1);
       return m >= 0 && m <= 1
         ? m
-        : 0.1;
+        : 0;
     },
 
     barMargin(): number {
@@ -605,5 +605,5 @@ export const joyPlotD3 = ((): IChartAdaptor => {
       svg.selectAll('svg > *').remove();
     },
   };
-  return HistogramD3;
+  return JoyPlotD3;
 });

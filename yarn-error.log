@@ -1,5 +1,5 @@
 Arguments: 
-  /home/rob/.nvm/versions/node/v9.5.0/bin/node /usr/bin/yarn build-examples
+  /home/rob/.nvm/versions/node/v9.5.0/bin/node /usr/bin/yarn build
 
 PATH: 
   /home/rob/.nvm/versions/node/v9.5.0/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl
@@ -5975,9 +5975,9 @@ Lockfile:
 
 Trace: 
   Error: Command failed.
-  Exit code: 2
+  Exit code: 1
   Command: sh
-  Arguments: -c webpack --config ./webpack.config.examples.js
+  Arguments: -c webpack --config ./webpack.config.js
   Directory: /home/rob/cl-react-graph
   Output:
   
