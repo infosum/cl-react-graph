@@ -33837,7 +33837,7 @@ exports.histogramD3 = function () {
                 });
                 tip.fx.in(tipContainer);
             };
-            bars.enter().merge(bars).append('rect').attr('height', 0).attr('y', function (d) {
+            bars.enter().append('rect').attr('height', 0).attr('y', function (d) {
                 return gridHeight;
             }).attr('class', 'bar').attr('x', function (d) {
                 return innerScaleBand(d.groupLabel);
@@ -33849,7 +33849,7 @@ exports.histogramD3 = function () {
                 return tip.fx.move(tipContainer);
             }).on('mouseout', function () {
                 return tip.fx.out(tipContainer);
-            }).transition().duration(duration).delay(delay).attr('y', function (d) {
+            }).merge(bars).transition().duration(duration).delay(delay).attr('y', function (d) {
                 return y(d.value);
             }).attr('stroke-dasharray', function (d) {
                 var currentHeight = gridHeight - y(d.value);

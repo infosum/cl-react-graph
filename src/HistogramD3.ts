@@ -419,11 +419,9 @@ export const histogramD3 = ((): IChartAdaptor => {
 
       bars
         .enter()
-        .merge(bars)
         .append('rect')
         .attr('height', 0)
         .attr('y', (d: IGroupDataItem): number => gridHeight)
-
         .attr('class', 'bar')
         .attr('x', (d) => innerScaleBand(d.groupLabel))
         .attr('width', (d) => barWidth)
@@ -431,6 +429,7 @@ export const histogramD3 = ((): IChartAdaptor => {
         .on('mouseover', onMouseOver)
         .on('mousemove', () => tip.fx.move(tipContainer))
         .on('mouseout', () => tip.fx.out(tipContainer))
+        .merge(bars)
         .transition()
         .duration(duration)
         .delay(delay)
