@@ -117,6 +117,7 @@ var __assign = undefined && undefined.__assign || Object.assign || function (t) 
     return t;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var deepmerge_1 = __webpack_require__(/*! deepmerge */ "./node_modules/deepmerge/dist/es.js");
 var React = __webpack_require__(/*! react */ "react");
 var react_1 = __webpack_require__(/*! react */ "react");
 var src_1 = __webpack_require__(/*! ../src */ "./src/index.ts");
@@ -129,10 +130,22 @@ var HistogramExamples = function (_super) {
     function HistogramExamples(props) {
         var _this = _super.call(this, props) || this;
         _this.state = {
+            axis: deepmerge_1.default({}, data_1.axis),
             visible: {}
         };
         return _this;
     }
+    HistogramExamples.prototype.toggleAxisLabel = function () {
+        var a = deepmerge_1.default(this.state.axis, {
+            x: {
+                label: this.state.axis.x.label === 'boyaka' ? 'fred' : 'boyaka'
+            },
+            y: {
+                label: this.state.axis.y.label === 'boyaka' ? 'fred' : 'boyaka'
+            }
+        });
+        this.setState({ axis: a });
+    };
     HistogramExamples.prototype.toggleVisible = function (key) {
         var v = this.state.visible.hasOwnProperty(key) ? !this.state.visible[key] : false;
         this.setState({
@@ -157,15 +170,18 @@ var HistogramExamples = function (_super) {
                 label: ''
             }]
         };
+        console.log(this.state.axis);
         var theme2 = [theme[0]];
         return React.createElement("div", null, React.createElement("h3", null, "Histograms"), React.createElement(src_1.Histogram, { data: data_1.data2, width: 400, height: 400, margin: {
                 left: 30,
                 top: 30
-            }, domain: { min: 0, max: 10 } }), React.createElement(src_1.Histogram, { data: data_1.data, grid: data_1.grid, width: '100%', height: 720, visible: visible, colorScheme: theme, axis: data_1.axis, tipContentFn: tipContentFn }), React.createElement(src_1.Legend, { theme: theme, data: dataLegendData, onSelect: function onSelect(label) {
+            }, domain: { min: 0, max: 10 } }), React.createElement(src_1.Histogram, { data: data_1.data, grid: data_1.grid, width: '100%', height: 720, visible: visible, colorScheme: theme, axis: this.state.axis, tipContentFn: tipContentFn }), React.createElement(src_1.Legend, { theme: theme, data: dataLegendData, onSelect: function onSelect(label) {
                 return _this.toggleVisible(label);
-            }, visible: visible }), React.createElement(src_1.Histogram, { data: data_1.data2, bar: { margin: 0.1 }, colorScheme: theme, visible: visible, width: 700, height: 350, axis: data_1.axis }), React.createElement(src_1.Legend, { theme: theme2, data: data_1.data2, onSelect: function onSelect(label) {
+            }, visible: visible }), React.createElement(src_1.Histogram, { data: data_1.data2, bar: { margin: 0.1 }, colorScheme: theme, visible: visible, width: 700, height: 350, axis: this.state.axis }), React.createElement(src_1.Legend, { theme: theme2, data: data_1.data2, onSelect: function onSelect(label) {
                 return _this.toggleVisible(label);
-            }, visible: visible }));
+            }, visible: visible }), React.createElement("button", { onClick: function onClick() {
+                return _this.toggleAxisLabel();
+            } }, "toggleAxisLabel"));
     };
     return HistogramExamples;
 }(react_1.Component);
@@ -33711,12 +33727,8 @@ exports.histogramD3 = function () {
                 width = _a.width;
             this.xAxis = svg.append('g').attr('class', 'x-axis');
             this.yAxis = svg.append('g').attr('class', 'y-axis');
-            if (axis.x.label !== '') {
-                svg.append('text').attr('class', 'x-axis-label').attr('transform', 'translate(' + width / 2 + ' ,' + (height - this.xAxisHeight() - margin.left * 2 + 10 + axis.x.margin) + ')').style('text-anchor', 'middle').text(axis.x.label);
-            }
-            if (axis.y.label !== '') {
-                svg.append('text').attr('class', 'y-axis-label').attr('transform', 'rotate(-90)').attr('y', 0).attr('x', 0 - (this.gridHeight() / 2 - margin.top * 2)).attr('dy', '1em').style('text-anchor', 'middle').text(axis.y.label);
-            }
+            this.xAxisLabel = svg.append('g');
+            this.yAxisLabel = svg.append('g');
         },
         _drawScales: function _drawScales(data) {
             var _a = this.props,
@@ -33842,6 +33854,14 @@ exports.histogramD3 = function () {
                 return gridHeight - y(d.value);
             });
             g.exit().remove();
+            var xText = this.xAxisLabel.selectAll('text').data([axis.x.label]);
+            xText.enter().append('text').attr('class', 'x-axis-label').merge(xText).attr('transform', 'translate(' + width / 2 + ' ,' + (height - this.xAxisHeight() - margin.left * 2 + 10 + axis.x.margin) + ')').style('text-anchor', 'middle').text(function (d) {
+                return d;
+            });
+            var yText = this.yAxisLabel.selectAll('text').data([axis.y.label]);
+            yText.enter().append('text').attr('class', 'y-axis-label').merge(yText).attr('transform', 'rotate(-90)').attr('y', 0).attr('x', 0 - (this.gridHeight() / 2 - margin.top * 2)).attr('dy', '1em').style('text-anchor', 'middle').text(function (d) {
+                return d;
+            });
         },
         makeGrid: function makeGrid(props) {
             var grid = props.grid;

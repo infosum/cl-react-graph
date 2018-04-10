@@ -61,7 +61,7 @@ export const data3 = {
   ],
 };
 
-export const axis = {
+export const axis: IAxes = {
   x: {
     height: 200,
     label: 'X Axis',

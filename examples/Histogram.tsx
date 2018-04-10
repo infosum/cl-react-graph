@@ -1,3 +1,4 @@
+import merge from 'deepmerge';
 import * as React from 'react';
 import { Component } from 'react';
 import { Histogram, Legend } from '../src';
@@ -8,6 +9,7 @@ interface IProps {
 }
 
 interface IState {
+  axis: IAxes;
   visible: {
     [key: string]: boolean;
   };
@@ -19,8 +21,21 @@ class HistogramExamples extends Component<IProps, IState> {
   constructor(props) {
     super(props);
     this.state = {
+      axis: merge<IAxes>({}, axis),
       visible: {},
     };
+  }
+
+  private toggleAxisLabel() {
+    const a = merge(this.state.axis, {
+      x: {
+        label: this.state.axis.x.label === 'boyaka' ? 'fred' : 'boyaka',
+      },
+      y: {
+        label: this.state.axis.y.label === 'boyaka' ? 'fred' : 'boyaka',
+      },
+    });
+    this.setState({ axis: a });
   }
 
   private toggleVisible(key: string) {
@@ -43,7 +58,7 @@ class HistogramExamples extends Component<IProps, IState> {
         label: '',
       }],
     };
-
+    console.log(this.state.axis);
     const theme2 = [theme[0]];
     return (
       <div>
@@ -59,7 +74,7 @@ class HistogramExamples extends Component<IProps, IState> {
           height={720}
           visible={visible}
           colorScheme={theme}
-          axis={axis}
+          axis={this.state.axis}
           tipContentFn={tipContentFn} />
         <Legend
           theme={theme}
@@ -74,7 +89,7 @@ class HistogramExamples extends Component<IProps, IState> {
           visible={visible}
           width={700}
           height={350}
-          axis={axis} />
+          axis={this.state.axis} />
 
         <Legend
           theme={theme2}
@@ -82,6 +97,8 @@ class HistogramExamples extends Component<IProps, IState> {
           onSelect={(label) => this.toggleVisible(label)}
           visible={visible}
         />
+        <button onClick={() => this.toggleAxisLabel()}>
+          toggleAxisLabel</button>
       </div>
     );
   }

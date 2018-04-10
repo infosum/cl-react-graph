@@ -257,26 +257,8 @@ export const histogramD3 = ((): IChartAdaptor => {
       this.xAxis = svg.append('g').attr('class', 'x-axis');
       this.yAxis = svg.append('g').attr('class', 'y-axis');
 
-      if (axis.x.label !== '') {
-        svg.append('text')
-          .attr('class', 'x-axis-label')
-          .attr('transform',
-          'translate(' + (width / 2) + ' ,' +
-          ((height - this.xAxisHeight() - (margin.left * 2)) + 10 + axis.x.margin) + ')')
-          .style('text-anchor', 'middle')
-          .text(axis.x.label);
-      }
-
-      if (axis.y.label !== '') {
-        svg.append('text')
-          .attr('class', 'y-axis-label')
-          .attr('transform', 'rotate(-90)')
-          .attr('y', 0)
-          .attr('x', 0 - (this.gridHeight() / 2 - (margin.top * 2)))
-          .attr('dy', '1em')
-          .style('text-anchor', 'middle')
-          .text(axis.y.label);
-      }
+      this.xAxisLabel = svg.append('g');
+      this.yAxisLabel = svg.append('g');
     },
 
     /**
@@ -458,6 +440,33 @@ export const histogramD3 = ((): IChartAdaptor => {
         .attr('height', (d: IGroupDataItem): number => gridHeight - (y(d.value)));
 
       g.exit().remove();
+
+      const xText = this.xAxisLabel
+        .selectAll('text')
+        .data([axis.x.label]);
+
+      xText.enter().append('text')
+        .attr('class', 'x-axis-label')
+        .merge(xText)
+        .attr('transform',
+        'translate(' + (width / 2) + ' ,' +
+        ((height - this.xAxisHeight() - (margin.left * 2)) + 10 + axis.x.margin) + ')')
+        .style('text-anchor', 'middle')
+        .text((d) => d);
+
+      const yText = this.yAxisLabel
+        .selectAll('text')
+        .data([axis.y.label]);
+
+      yText.enter().append('text')
+        .attr('class', 'y-axis-label')
+        .merge(yText)
+        .attr('transform', 'rotate(-90)')
+        .attr('y', 0)
+        .attr('x', 0 - (this.gridHeight() / 2 - (margin.top * 2)))
+        .attr('dy', '1em')
+        .style('text-anchor', 'middle')
+        .text((d) => d);
     },
 
     makeGrid(props: IHistogramProps) {
@@ -525,7 +534,6 @@ export const histogramD3 = ((): IChartAdaptor => {
       if (!this.props.data.bins) {
         return;
       }
-
 
       const { data, visible } = this.props;
       this.dataSets = [] as IGroupData;

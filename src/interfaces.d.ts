@@ -34,6 +34,7 @@ interface IAxis {
         style: ISVGTextStyle
     },
     width?: number;
+    tickSize?: number;
 }
 
 interface IMargin {
