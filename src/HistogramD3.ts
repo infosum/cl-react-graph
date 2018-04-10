@@ -379,7 +379,7 @@ export const histogramD3 = ((): IChartAdaptor => {
       groupData: IGroupData,
     ) {
       const { height, width, margin, bar, delay, duration,
-        axis, stroke, tip, tipContentFn } = this.props;
+        axis, stroke, tip } = this.props;
       const barWidth = this.barWidth();
 
       // const borderColors = set.borderColors ? d3.scaleOrdinal(set.borderColors) : null;
@@ -409,8 +409,17 @@ export const histogramD3 = ((): IChartAdaptor => {
         .selectAll('rect')
         .data((d) => d);
 
+      // Don't ask why but we must reference tipContentFn as this.props.tipContentFn otherwise
+      // it doesn't update with props changes
+      const onMouseOver = (d: IGroupDataItem, i: number) => {
+        const ix = bins.findIndex((b) => b === d.label);
+        tipContent.html(() => this.props.tipContentFn(bins, ix, d.value));
+        tip.fx.in(tipContainer);
+      };
+
       bars
         .enter()
+        .merge(bars)
         .append('rect')
         .attr('height', 0)
         .attr('y', (d: IGroupDataItem): number => gridHeight)
@@ -419,14 +428,9 @@ export const histogramD3 = ((): IChartAdaptor => {
         .attr('x', (d) => innerScaleBand(d.groupLabel))
         .attr('width', (d) => barWidth)
         .attr('fill', (d, i) => colors(i))
-        .on('mouseover', (d: IGroupDataItem, i: number) => {
-          const ix = bins.findIndex((b) => b === d.label);
-          tipContent.html(() => tipContentFn(bins, ix, d.value));
-          tip.fx.in(tipContainer);
-        })
+        .on('mouseover', onMouseOver)
         .on('mousemove', () => tip.fx.move(tipContainer))
         .on('mouseout', () => tip.fx.out(tipContainer))
-        .merge(bars)
         .transition()
         .duration(duration)
         .delay(delay)

@@ -10,18 +10,24 @@ interface IProps {
 
 interface IState {
   axis: IAxes;
+  tipContentFnIndex: number;
   visible: {
     [key: string]: boolean;
   };
 }
-const tipContentFn = (bins: string[], i, d) =>
-  bins[i] + '<br />HI THere ' + d.toFixed(2);
+const tipContentFns = [
+  (bins: string[], i, d) =>
+    bins[i] + '<br />HI THere ' + d.toFixed(2),
+  (bins: string[], i, d) =>
+    bins[i] + '<br />Bookay ' + d.toFixed(2),
+];
 
 class HistogramExamples extends Component<IProps, IState> {
   constructor(props) {
     super(props);
     this.state = {
       axis: merge<IAxes>({}, axis),
+      tipContentFnIndex: 0,
       visible: {},
     };
   }
@@ -35,7 +41,8 @@ class HistogramExamples extends Component<IProps, IState> {
         label: this.state.axis.y.label === 'boyaka' ? 'fred' : 'boyaka',
       },
     });
-    this.setState({ axis: a });
+    const tipContentFnIndex = this.state.tipContentFnIndex === 0 ? 1 : 0;
+    this.setState({ axis: a, tipContentFnIndex });
   }
 
   private toggleVisible(key: string) {
@@ -58,7 +65,7 @@ class HistogramExamples extends Component<IProps, IState> {
         label: '',
       }],
     };
-    console.log(this.state.axis);
+
     const theme2 = [theme[0]];
     return (
       <div>
@@ -75,7 +82,7 @@ class HistogramExamples extends Component<IProps, IState> {
           visible={visible}
           colorScheme={theme}
           axis={this.state.axis}
-          tipContentFn={tipContentFn} />
+          tipContentFn={tipContentFns[this.state.tipContentFnIndex]} />
         <Legend
           theme={theme}
           data={dataLegendData}
@@ -89,7 +96,9 @@ class HistogramExamples extends Component<IProps, IState> {
           visible={visible}
           width={700}
           height={350}
-          axis={this.state.axis} />
+          axis={this.state.axis}
+          tipContentFn={tipContentFns[this.state.tipContentFnIndex]}
+        />
 
         <Legend
           theme={theme2}
@@ -98,7 +107,7 @@ class HistogramExamples extends Component<IProps, IState> {
           visible={visible}
         />
         <button onClick={() => this.toggleAxisLabel()}>
-          toggleAxisLabel</button>
+          toggleAxisLabel &amp; tips</button>
       </div>
     );
   }

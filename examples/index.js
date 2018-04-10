@@ -122,15 +122,18 @@ var React = __webpack_require__(/*! react */ "react");
 var react_1 = __webpack_require__(/*! react */ "react");
 var src_1 = __webpack_require__(/*! ../src */ "./src/index.ts");
 var data_1 = __webpack_require__(/*! ./data */ "./examples/data.ts");
-var tipContentFn = function tipContentFn(bins, i, d) {
+var tipContentFns = [function (bins, i, d) {
     return bins[i] + '<br />HI THere ' + d.toFixed(2);
-};
+}, function (bins, i, d) {
+    return bins[i] + '<br />Bookay ' + d.toFixed(2);
+}];
 var HistogramExamples = function (_super) {
     __extends(HistogramExamples, _super);
     function HistogramExamples(props) {
         var _this = _super.call(this, props) || this;
         _this.state = {
             axis: deepmerge_1.default({}, data_1.axis),
+            tipContentFnIndex: 0,
             visible: {}
         };
         return _this;
@@ -144,7 +147,8 @@ var HistogramExamples = function (_super) {
                 label: this.state.axis.y.label === 'boyaka' ? 'fred' : 'boyaka'
             }
         });
-        this.setState({ axis: a });
+        var tipContentFnIndex = this.state.tipContentFnIndex === 0 ? 1 : 0;
+        this.setState({ axis: a, tipContentFnIndex: tipContentFnIndex });
     };
     HistogramExamples.prototype.toggleVisible = function (key) {
         var v = this.state.visible.hasOwnProperty(key) ? !this.state.visible[key] : false;
@@ -170,18 +174,17 @@ var HistogramExamples = function (_super) {
                 label: ''
             }]
         };
-        console.log(this.state.axis);
         var theme2 = [theme[0]];
         return React.createElement("div", null, React.createElement("h3", null, "Histograms"), React.createElement(src_1.Histogram, { data: data_1.data2, width: 400, height: 400, margin: {
                 left: 30,
                 top: 30
-            }, domain: { min: 0, max: 10 } }), React.createElement(src_1.Histogram, { data: data_1.data, grid: data_1.grid, width: '100%', height: 720, visible: visible, colorScheme: theme, axis: this.state.axis, tipContentFn: tipContentFn }), React.createElement(src_1.Legend, { theme: theme, data: dataLegendData, onSelect: function onSelect(label) {
+            }, domain: { min: 0, max: 10 } }), React.createElement(src_1.Histogram, { data: data_1.data, grid: data_1.grid, width: '100%', height: 720, visible: visible, colorScheme: theme, axis: this.state.axis, tipContentFn: tipContentFns[this.state.tipContentFnIndex] }), React.createElement(src_1.Legend, { theme: theme, data: dataLegendData, onSelect: function onSelect(label) {
                 return _this.toggleVisible(label);
-            }, visible: visible }), React.createElement(src_1.Histogram, { data: data_1.data2, bar: { margin: 0.1 }, colorScheme: theme, visible: visible, width: 700, height: 350, axis: this.state.axis }), React.createElement(src_1.Legend, { theme: theme2, data: data_1.data2, onSelect: function onSelect(label) {
+            }, visible: visible }), React.createElement(src_1.Histogram, { data: data_1.data2, bar: { margin: 0.1 }, colorScheme: theme, visible: visible, width: 700, height: 350, axis: this.state.axis, tipContentFn: tipContentFns[this.state.tipContentFnIndex] }), React.createElement(src_1.Legend, { theme: theme2, data: data_1.data2, onSelect: function onSelect(label) {
                 return _this.toggleVisible(label);
             }, visible: visible }), React.createElement("button", { onClick: function onClick() {
                 return _this.toggleAxisLabel();
-            } }, "toggleAxisLabel"));
+            } }, "toggleAxisLabel & tips"));
     };
     return HistogramExamples;
 }(react_1.Component);
@@ -33798,6 +33801,7 @@ exports.histogramD3 = function () {
             return innerScaleBand.bandwidth();
         },
         updateChart: function updateChart(bins, groupData) {
+            var _this = this;
             var _a = this.props,
                 height = _a.height,
                 width = _a.width,
@@ -33807,8 +33811,7 @@ exports.histogramD3 = function () {
                 duration = _a.duration,
                 axis = _a.axis,
                 stroke = _a.stroke,
-                tip = _a.tip,
-                tipContentFn = _a.tipContentFn;
+                tip = _a.tip;
             var barWidth = this.barWidth();
             var colors = d3_scale_1.scaleOrdinal(this.props.colorScheme);
             var borderColors = null;
@@ -33825,7 +33828,16 @@ exports.histogramD3 = function () {
             }).selectAll('rect').data(function (d) {
                 return d;
             });
-            bars.enter().append('rect').attr('height', 0).attr('y', function (d) {
+            var onMouseOver = function onMouseOver(d, i) {
+                var ix = bins.findIndex(function (b) {
+                    return b === d.label;
+                });
+                tipContent.html(function () {
+                    return _this.props.tipContentFn(bins, ix, d.value);
+                });
+                tip.fx.in(tipContainer);
+            };
+            bars.enter().merge(bars).append('rect').attr('height', 0).attr('y', function (d) {
                 return gridHeight;
             }).attr('class', 'bar').attr('x', function (d) {
                 return innerScaleBand(d.groupLabel);
@@ -33833,19 +33845,11 @@ exports.histogramD3 = function () {
                 return barWidth;
             }).attr('fill', function (d, i) {
                 return colors(i);
-            }).on('mouseover', function (d, i) {
-                var ix = bins.findIndex(function (b) {
-                    return b === d.label;
-                });
-                tipContent.html(function () {
-                    return tipContentFn(bins, ix, d.value);
-                });
-                tip.fx.in(tipContainer);
-            }).on('mousemove', function () {
+            }).on('mouseover', onMouseOver).on('mousemove', function () {
                 return tip.fx.move(tipContainer);
             }).on('mouseout', function () {
                 return tip.fx.out(tipContainer);
-            }).merge(bars).transition().duration(duration).delay(delay).attr('y', function (d) {
+            }).transition().duration(duration).delay(delay).attr('y', function (d) {
                 return y(d.value);
             }).attr('stroke-dasharray', function (d) {
                 var currentHeight = gridHeight - y(d.value);
