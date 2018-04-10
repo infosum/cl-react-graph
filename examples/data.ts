@@ -29,7 +29,7 @@ export const data = {
       data: [13, 14, 15, 16],
       label: 'DataSet 2',
     },
-  ],
+  ] as IHistogramDataSet[],
   grid,
 };
 
@@ -50,11 +50,13 @@ export const data3 = {
   counts: [
     {
       borderColors: ['red'],
+      colors: ['red'],
       data: [100, 50, 40],
       label: 'Data 1',
     },
     {
       borderColors: ['red'],
+      colors: ['blue'],
       data: [32, 1, 5, 0],
       label: 'Data 2',
     },

@@ -372,10 +372,12 @@ exports.data3 = {
     bins: ['bin 1', 'bin 2', 'bin 3'],
     counts: [{
         borderColors: ['red'],
+        colors: ['red'],
         data: [100, 50, 40],
         label: 'Data 1'
     }, {
         borderColors: ['red'],
+        colors: ['blue'],
         data: [32, 1, 5, 0],
         label: 'Data 2'
     }]
@@ -35393,6 +35395,7 @@ var d3_selection_1 = __webpack_require__(/*! d3-selection */ "./node_modules/d3-
 var d3_shape_1 = __webpack_require__(/*! d3-shape */ "./node_modules/d3-shape/index.js");
 __webpack_require__(/*! d3-transition */ "./node_modules/d3-transition/index.js");
 var deepmerge_1 = __webpack_require__(/*! deepmerge */ "./node_modules/deepmerge/dist/es.js");
+var lodash_1 = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
 var colors_1 = __webpack_require__(/*! ./colors */ "./src/colors/index.js");
 var tip_1 = __webpack_require__(/*! ./tip */ "./src/tip.ts");
 exports.pieChartD3 = function () {
@@ -35525,7 +35528,8 @@ exports.pieChartD3 = function () {
                 });
             });
             this.dataSets.forEach(function (dataSet, i) {
-                _this.drawChart(dataSet, i, data.bins);
+                var theme = lodash_1.get(data.counts[i], 'colors', _this.props.colorScheme);
+                _this.drawChart(dataSet, i, data.bins, theme);
             });
             this.previousData = this.dataSets;
         },
@@ -35544,7 +35548,7 @@ exports.pieChartD3 = function () {
                 this.containers[i] = svg.append('g').attr('class', 'pie-container');
             }
         },
-        drawChart: function drawChart(data, i, bins) {
+        drawChart: function drawChart(data, i, bins, theme) {
             var _a = this.props,
                 labels = _a.labels,
                 width = _a.width,
@@ -35557,7 +35561,7 @@ exports.pieChartD3 = function () {
                 return d.count;
             });
             var arcs = thisPie(this.previousData[i]);
-            var colors = d3_scale_1.scaleOrdinal(this.props.colorScheme);
+            var colors = d3_scale_1.scaleOrdinal(theme);
             var thisArc = d3_shape_1.arc().outerRadius(outerRadius).innerRadius(innerRadius);
             var path = this.containers[i].selectAll('path').data(thisPie(data));
             var g = path.enter().append('g').attr('class', 'arc').attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')');

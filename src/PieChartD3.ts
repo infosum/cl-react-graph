@@ -5,6 +5,7 @@ import { select, Selection } from 'd3-selection';
 import { arc, pie } from 'd3-shape';
 import 'd3-transition';
 import merge from 'deepmerge';
+import { get } from 'lodash';
 import * as textWidth from 'text-width';
 import colorScheme from './colors';
 import { IPieChartProps } from './PieChart';
@@ -148,8 +149,10 @@ export const pieChartD3 = ((): IChartAdaptor => {
             label: data.bins[i],
           }));
       });
+
       this.dataSets.forEach((dataSet, i) => {
-        this.drawChart(dataSet, i, data.bins);
+        const theme = get(data.counts[i], 'colors', this.props.colorScheme);
+        this.drawChart(dataSet, i, data.bins, theme);
       });
       this.previousData = this.dataSets;
     },
@@ -180,7 +183,7 @@ export const pieChartD3 = ((): IChartAdaptor => {
       }
     },
 
-    drawChart(data, i, bins) {
+    drawChart(data, i: number, bins: string[], theme: string[]) {
       const { labels, width, height, tip, tipContentFn } = this.props;
       // Stack multiple charts in concentric circles
       const outerRadius = this.outerRadius(i);
@@ -196,7 +199,7 @@ export const pieChartD3 = ((): IChartAdaptor => {
       // Formated pie chart arcs based on previous current data
       const arcs = thisPie(this.previousData[i]);
 
-      const colors = scaleOrdinal(this.props.colorScheme);
+      const colors = scaleOrdinal(theme);
 
       const thisArc = arc()
         .outerRadius(outerRadius)
