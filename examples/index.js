@@ -35424,8 +35424,8 @@ exports.pieChartD3 = function () {
         },
         tip: tip_1.default,
         tipContainer: 'body',
-        tipContentFn: function tipContentFn(bins, i, d) {
-            return bins[i] + '<br />' + d;
+        tipContentFn: function tipContentFn(bins, i, d, groupLabel) {
+            return groupLabel + ': ' + bins[i] + '<br />' + d;
         },
         visible: {},
         width: 200
@@ -35441,6 +35441,7 @@ exports.pieChartD3 = function () {
                 return set.data.map(function (count, i) {
                     return {
                         count: count,
+                        groupLabel: set.label,
                         label: props.data.bins[i]
                     };
                 });
@@ -35523,6 +35524,7 @@ exports.pieChartD3 = function () {
                 return set.data.map(function (count, i) {
                     return {
                         count: visible[data.bins[i]] !== false ? count : 0,
+                        groupLabel: set.label,
                         label: data.bins[i]
                     };
                 });
@@ -35571,7 +35573,7 @@ exports.pieChartD3 = function () {
                 this._current = arcs[j];
             }).on('mouseover', function (d, ix) {
                 tipContent.html(function () {
-                    return tipContentFn(bins, ix, d.data.count);
+                    return tipContentFn(bins, ix, d.data.count, d.data.groupLabel);
                 });
                 tip.fx.in(tipContainer);
             }).on('mousemove', function () {

@@ -9,6 +9,12 @@ interface ILabels {
   displayFn?: (d: any, ix: number) => string | number;
 }
 
+export interface IPieDataItem {
+  count: number;
+  groupLabel: string;
+  label: string;
+}
+
 export interface IPieChartProps {
   data: {
     bins: string[],

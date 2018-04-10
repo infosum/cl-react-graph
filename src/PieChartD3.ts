@@ -2,13 +2,13 @@
 import { interpolate } from 'd3-interpolate';
 import { scaleOrdinal } from 'd3-scale';
 import { select, Selection } from 'd3-selection';
-import { arc, pie } from 'd3-shape';
+import { arc, pie, PieArcDatum } from 'd3-shape';
 import 'd3-transition';
 import merge from 'deepmerge';
 import { get } from 'lodash';
 import * as textWidth from 'text-width';
 import colorScheme from './colors';
-import { IPieChartProps } from './PieChart';
+import { IPieChartProps, IPieDataItem } from './PieChart';
 import tips from './tip';
 
 export const pieChartD3 = ((): IChartAdaptor => {
@@ -37,8 +37,8 @@ export const pieChartD3 = ((): IChartAdaptor => {
     },
     tip: tips,
     tipContainer: 'body',
-    tipContentFn: (bins: string[], i: number, d: number): string => {
-      return bins[i] + '<br />' + d;
+    tipContentFn: (bins: string[], i: number, d: number, groupLabel): string => {
+      return groupLabel + ': ' + bins[i] + '<br />' + d;
     },
     visible: {},
     width: 200,
@@ -52,6 +52,7 @@ export const pieChartD3 = ((): IChartAdaptor => {
         return set.data
           .map((count, i) => ({
             count,
+            groupLabel: set.label,
             label: props.data.bins[i],
           }));
       });
@@ -146,6 +147,7 @@ export const pieChartD3 = ((): IChartAdaptor => {
         return set.data
           .map((count, i) => ({
             count: visible[data.bins[i]] !== false ? count : 0,
+            groupLabel: set.label,
             label: data.bins[i],
           }));
       });
@@ -217,8 +219,8 @@ export const pieChartD3 = ((): IChartAdaptor => {
         .attr('fill', (d, j) => colors(j))
         .attr('d', thisArc)
         .each(function (d, j) { this._current = arcs[j]; }) // store the initial angles
-        .on('mouseover', (d: any, ix: number) => {
-          tipContent.html(() => tipContentFn(bins, ix, d.data.count));
+        .on('mouseover', (d: PieArcDatum<IPieDataItem>, ix: number) => {
+          tipContent.html(() => tipContentFn(bins, ix, d.data.count, d.data.groupLabel));
           tip.fx.in(tipContainer);
         })
         .on('mousemove', () => tip.fx.move(tipContainer))
