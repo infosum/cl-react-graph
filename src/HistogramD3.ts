@@ -249,7 +249,7 @@ export const histogramD3 = ((): IChartAdaptor => {
       const { axis } = this.props;
       return axis.x.label === ''
         ? axis.x.height
-        : axis.x.height + 30;
+        : axis.x.height + 30 + axis.x.margin;
     },
 
     makeScales() {
@@ -341,7 +341,7 @@ export const histogramD3 = ((): IChartAdaptor => {
      * @return {number} width
      */
     gridHeight(): number {
-      const { height, margin, axis } = this.props;
+      const { height, margin } = this.props;
       return height - (margin.top * 2) - this.xAxisHeight();
     },
 
@@ -453,7 +453,7 @@ export const histogramD3 = ((): IChartAdaptor => {
         .merge(xText)
         .attr('transform',
         'translate(' + (width / 2) + ' ,' +
-        ((height - this.xAxisHeight() - (margin.left * 2)) + 10 + axis.x.margin) + ')')
+        ((height - this.xAxisHeight() - (margin.left * 2)) + axis.x.margin) + ')')
         .style('text-anchor', 'middle')
         .text((d) => d);
 

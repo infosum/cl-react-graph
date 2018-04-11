@@ -384,7 +384,7 @@ exports.data3 = {
 };
 exports.axis = {
     x: {
-        height: 200,
+        height: 20,
         label: 'X Axis',
         margin: 200,
         text: {
@@ -33722,7 +33722,7 @@ exports.histogramD3 = function () {
         },
         xAxisHeight: function xAxisHeight() {
             var axis = this.props.axis;
-            return axis.x.label === '' ? axis.x.height : axis.x.height + 30;
+            return axis.x.label === '' ? axis.x.height : axis.x.height + 30 + axis.x.margin;
         },
         makeScales: function makeScales() {
             var _a = this.props,
@@ -33787,8 +33787,7 @@ exports.histogramD3 = function () {
         gridHeight: function gridHeight() {
             var _a = this.props,
                 height = _a.height,
-                margin = _a.margin,
-                axis = _a.axis;
+                margin = _a.margin;
             return height - margin.top * 2 - this.xAxisHeight();
         },
         groupedMargin: function groupedMargin() {
@@ -33861,7 +33860,7 @@ exports.histogramD3 = function () {
             });
             g.exit().remove();
             var xText = this.xAxisLabel.selectAll('text').data([axis.x.label]);
-            xText.enter().append('text').attr('class', 'x-axis-label').merge(xText).attr('transform', 'translate(' + width / 2 + ' ,' + (height - this.xAxisHeight() - margin.left * 2 + 10 + axis.x.margin) + ')').style('text-anchor', 'middle').text(function (d) {
+            xText.enter().append('text').attr('class', 'x-axis-label').merge(xText).attr('transform', 'translate(' + width / 2 + ' ,' + (height - this.xAxisHeight() - margin.left * 2 + axis.x.margin) + ')').style('text-anchor', 'middle').text(function (d) {
                 return d;
             });
             var yText = this.yAxisLabel.selectAll('text').data([axis.y.label]);
