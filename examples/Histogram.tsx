@@ -10,6 +10,7 @@ interface IProps {
 
 interface IState {
   axis: IAxes;
+  dataIndex: number;
   tipContentFnIndex: number;
   visible: {
     [key: string]: boolean;
@@ -22,11 +23,14 @@ const tipContentFns = [
     bins[i] + '<br />Bookay ' + d.toFixed(2),
 ];
 
+const toggleData = [data2, data3];
+
 class HistogramExamples extends Component<IProps, IState> {
   constructor(props) {
     super(props);
     this.state = {
       axis: merge<IAxes>({}, axis),
+      dataIndex: 0,
       tipContentFnIndex: 0,
       visible: {},
     };
@@ -51,6 +55,12 @@ class HistogramExamples extends Component<IProps, IState> {
       : false;
     this.setState({
       visible: { ...this.state.visible, [key]: v },
+    });
+  }
+
+  private toggleData() {
+    this.setState({
+      dataIndex: this.state.dataIndex === 0 ? 1 : 0,
     });
   }
 
@@ -90,7 +100,7 @@ class HistogramExamples extends Component<IProps, IState> {
           visible={visible}
         />
 
-        <Histogram data={data2}
+        <Histogram data={toggleData[this.state.dataIndex]}
           bar={{ margin: 0.1 }}
           colorScheme={theme}
           visible={visible}
@@ -102,12 +112,16 @@ class HistogramExamples extends Component<IProps, IState> {
 
         <Legend
           theme={theme2}
-          data={data2}
+          data={toggleData[this.state.dataIndex]}
           onSelect={(label) => this.toggleVisible(label)}
           visible={visible}
         />
         <button onClick={() => this.toggleAxisLabel()}>
           toggleAxisLabel &amp; tips</button>
+
+        <button onClick={() => this.toggleData()}>
+          toggle data
+          </button>
       </div>
     );
   }

@@ -127,12 +127,14 @@ var tipContentFns = [function (bins, i, d) {
 }, function (bins, i, d) {
     return bins[i] + '<br />Bookay ' + d.toFixed(2);
 }];
+var toggleData = [data_1.data2, data_1.data3];
 var HistogramExamples = function (_super) {
     __extends(HistogramExamples, _super);
     function HistogramExamples(props) {
         var _this = _super.call(this, props) || this;
         _this.state = {
             axis: deepmerge_1.default({}, data_1.axis),
+            dataIndex: 0,
             tipContentFnIndex: 0,
             visible: {}
         };
@@ -157,6 +159,11 @@ var HistogramExamples = function (_super) {
         });
         var _a;
     };
+    HistogramExamples.prototype.toggleData = function () {
+        this.setState({
+            dataIndex: this.state.dataIndex === 0 ? 1 : 0
+        });
+    };
     HistogramExamples.prototype.render = function () {
         var _this = this;
         var theme = this.props.theme;
@@ -180,11 +187,13 @@ var HistogramExamples = function (_super) {
                 top: 30
             }, domain: { min: 0, max: 10 } }), React.createElement(src_1.Histogram, { data: data_1.data, grid: data_1.grid, width: '100%', height: 720, visible: visible, colorScheme: theme, axis: this.state.axis, tipContentFn: tipContentFns[this.state.tipContentFnIndex] }), React.createElement(src_1.Legend, { theme: theme, data: dataLegendData, onSelect: function onSelect(label) {
                 return _this.toggleVisible(label);
-            }, visible: visible }), React.createElement(src_1.Histogram, { data: data_1.data2, bar: { margin: 0.1 }, colorScheme: theme, visible: visible, width: 700, height: 350, axis: this.state.axis, tipContentFn: tipContentFns[this.state.tipContentFnIndex] }), React.createElement(src_1.Legend, { theme: theme2, data: data_1.data2, onSelect: function onSelect(label) {
+            }, visible: visible }), React.createElement(src_1.Histogram, { data: toggleData[this.state.dataIndex], bar: { margin: 0.1 }, colorScheme: theme, visible: visible, width: 700, height: 350, axis: this.state.axis, tipContentFn: tipContentFns[this.state.tipContentFnIndex] }), React.createElement(src_1.Legend, { theme: theme2, data: toggleData[this.state.dataIndex], onSelect: function onSelect(label) {
                 return _this.toggleVisible(label);
             }, visible: visible }), React.createElement("button", { onClick: function onClick() {
                 return _this.toggleAxisLabel();
-            } }, "toggleAxisLabel & tips"));
+            } }, "toggleAxisLabel & tips"), React.createElement("button", { onClick: function onClick() {
+                return _this.toggleData();
+            } }, "toggle data"));
     };
     return HistogramExamples;
 }(react_1.Component);
@@ -33840,17 +33849,17 @@ exports.histogramD3 = function () {
             };
             bars.enter().append('rect').attr('height', 0).attr('y', function (d) {
                 return gridHeight;
-            }).attr('class', 'bar').attr('x', function (d) {
+            }).attr('class', 'bar').on('mouseover', onMouseOver).on('mousemove', function () {
+                return tip.fx.move(tipContainer);
+            }).on('mouseout', function () {
+                return tip.fx.out(tipContainer);
+            }).merge(bars).attr('x', function (d) {
                 return innerScaleBand(d.groupLabel);
             }).attr('width', function (d) {
                 return barWidth;
             }).attr('fill', function (d, i) {
                 return colors(i);
-            }).on('mouseover', onMouseOver).on('mousemove', function () {
-                return tip.fx.move(tipContainer);
-            }).on('mouseout', function () {
-                return tip.fx.out(tipContainer);
-            }).merge(bars).transition().duration(duration).delay(delay).attr('y', function (d) {
+            }).transition().duration(duration).delay(delay).attr('y', function (d) {
                 return y(d.value);
             }).attr('stroke-dasharray', function (d) {
                 var currentHeight = gridHeight - y(d.value);

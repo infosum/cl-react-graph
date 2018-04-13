@@ -1,5 +1,5 @@
 Arguments: 
-  /home/rob/.nvm/versions/node/v9.5.0/bin/node /usr/bin/yarn build-examples
+  /home/rob/.nvm/versions/node/v9.5.0/bin/node /usr/bin/yarn publish
 
 PATH: 
   /home/rob/.nvm/versions/node/v9.5.0/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl
@@ -16,7 +16,7 @@ Platform:
 npm manifest: 
   {
     "name": "cl-react-graph",
-    "version": "1.5.11",
+    "version": "1.5.14",
     "description": "React D3 Charts",
     "main": "dist/index.js",
     "scripts": {
@@ -5902,16 +5902,14 @@ Lockfile:
       yeoman-environment "^2.0.5"
 
 Trace: 
-  Error: Command failed.
-  Exit code: 2
-  Command: sh
-  Arguments: -c webpack --config ./webpack.config.examples.js
-  Directory: /home/rob/cl-react-graph
-  Output:
-  
-      at ProcessTermError.MessageError (/usr/lib/node_modules/yarn/lib/cli.js:186:110)
-      at new ProcessTermError (/usr/lib/node_modules/yarn/lib/cli.js:226:113)
-      at ChildProcess.<anonymous> (/usr/lib/node_modules/yarn/lib/cli.js:30281:17)
-      at ChildProcess.emit (events.js:160:13)
-      at maybeClose (internal/child_process.js:943:16)
-      at Process.ChildProcess._handle.onexit (internal/child_process.js:220:5)
+  Error: canceled
+      at Interface.<anonymous> (/usr/lib/node_modules/yarn/lib/cli.js:128791:13)
+      at Interface.emit (events.js:160:13)
+      at Interface._ttyWrite (readline.js:785:16)
+      at ReadStream.onkeypress (readline.js:165:10)
+      at ReadStream.emit (events.js:160:13)
+      at emitKeys (internal/readline.js:420:14)
+      at emitKeys.next (<anonymous>)
+      at ReadStream.onData (readline.js:1021:36)
+      at ReadStream.emit (events.js:160:13)
+      at addChunk (_stream_readable.js:269:12)
