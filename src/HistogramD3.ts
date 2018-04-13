@@ -442,6 +442,7 @@ export const histogramD3 = ((): IChartAdaptor => {
         })
         .attr('height', (d: IGroupDataItem): number => gridHeight - (y(d.value)));
 
+      bars.exit().remove();
       g.exit().remove();
 
       const xText = this.xAxisLabel

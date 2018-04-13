@@ -33858,6 +33858,7 @@ exports.histogramD3 = function () {
             }).attr('height', function (d) {
                 return gridHeight - y(d.value);
             });
+            bars.exit().remove();
             g.exit().remove();
             var xText = this.xAxisLabel.selectAll('text').data([axis.x.label]);
             xText.enter().append('text').attr('class', 'x-axis-label').merge(xText).attr('transform', 'translate(' + width / 2 + ' ,' + (height - this.xAxisHeight() - margin.left * 2 + axis.x.margin) + ')').style('text-anchor', 'middle').text(function (d) {
