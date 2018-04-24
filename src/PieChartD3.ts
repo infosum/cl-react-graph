@@ -236,13 +236,13 @@ export const pieChartD3 = ((): IChartAdaptor => {
           .data(thisPie(data));
         lbls.enter()
           .append('text')
+          .merge(lbls)
           .attr('transform', (d) => {
             const centroid = thisArc.centroid(d);
             const x = centroid[0] + (width / 2);
             const y = centroid[1] + (height / 2);
             return 'translate(' + x + ',' + y + ')';
           })
-          .merge(lbls)
           .each(function (d, j) {
             // Store current value to work out fx transition opacities
             this._current = d;

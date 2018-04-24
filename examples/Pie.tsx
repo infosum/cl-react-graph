@@ -8,15 +8,19 @@ interface IProps {
 }
 
 interface IState {
+  dataIndex: number;
   visible: {
     [key: string]: boolean;
   };
 }
 
+const toggleData = [data, data3];
+
 class PieExamples extends Component<IProps, IState> {
   constructor(props) {
     super(props);
     this.state = {
+      dataIndex: 0,
       visible: {},
     };
   }
@@ -30,9 +34,15 @@ class PieExamples extends Component<IProps, IState> {
     });
   }
 
+  private toggleData() {
+    this.setState({
+      dataIndex: this.state.dataIndex === 0 ? 1 : 0,
+    });
+  }
+
   public render() {
     const { theme } = this.props;
-    const { visible } = this.state;
+    const { dataIndex, visible } = this.state;
     const labels = {
       display: true,
     };
@@ -42,7 +52,11 @@ class PieExamples extends Component<IProps, IState> {
         <PieChart
           width="100%"
           height={200}
-          data={data} />
+          data={toggleData[dataIndex]} />
+
+        <button onClick={() => this.toggleData()}>
+          toggle data
+          </button>
 
         <h4>Donut</h4>
         <PieChart width={300}
