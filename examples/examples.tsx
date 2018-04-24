@@ -7,6 +7,7 @@ import { axis, data, data2, data3, grid } from './data';
 import Histogram from './Histogram';
 import JoyPlot from './JoyPlot';
 import Pie from './Pie';
+import Map from './Map';
 
 const points = [
   {
@@ -59,6 +60,7 @@ const theme = filterRange(['rgba(255, 113, 1, 0.5)', '#fff6ef', 'rgba(0, 169, 12
   '#d7263d', '#00a97b', '#888888', '#e6e6e6', '#f2f2f2', '#f4f4f4']);
 
 const App: React.SFC<{}> = (): JSX.Element => <div style={{ padding: '20px' }}>
+  <Map />
   <JoyPlot theme={theme} />
   <Pie theme={theme} />
   <div>
@@ -77,6 +79,7 @@ const App: React.SFC<{}> = (): JSX.Element => <div style={{ padding: '20px' }}>
   {/* <div>
     <ScatterPlot data={scatter} width={300} height={300} />
   </div> */}
+
 </div>;
 
 ReactDOM.render(
