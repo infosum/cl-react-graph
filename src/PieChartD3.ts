@@ -174,9 +174,12 @@ export const pieChartD3 = ((): IChartAdaptor => {
         .attr('class', 'pie-bg');
       const background = container.append('path')
         .attr('class', 'pie-background')
-        .style('fill', backgroundColor)
+        .style('fill', backgroundColor);
+      background.enter()
         .attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')')
         .attr('d', bgArc);
+
+      background.merge(background);
 
       if (!this.containers[i]) {
         this.containers[i] = svg
@@ -207,47 +210,80 @@ export const pieChartD3 = ((): IChartAdaptor => {
         .outerRadius(outerRadius)
         .innerRadius(innerRadius);
 
+      // const g = this.containers[i]
+      //   .selectAll('g')
+      //   .data(thisPie(data));
+
+      // const paths = g.enter()
+      //   .append('g')
+      //   .merge(g)
+      //   .attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')')
+      //   .selectAll('path')
+      //   .data((d) => {
+      //     console.log('d', d);
+      //     return d;
+      //   });
+
+      // paths.enter()
+      //   .append('path')
+      //   .attr('stroke', '#FFF')
+      //   .attr('fill', (d, j) => colors(j))
+      //   .attr('d', () => {
+      //     console.log('arc');
+      //     return thisArc;
+      //   });
       const path = this.containers[i].selectAll('path')
         .data(thisPie(data));
 
       const g = path.enter().append('g')
-        .attr('class', 'arc')
-        .attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')');
+        .attr('class', 'arc');
 
       g.append('path')
+        .attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')')
         .attr('stroke', '#FFF')
         .attr('fill', (d, j) => colors(j))
-        .attr('d', thisArc)
+
         .each(function (d, j) { this._current = arcs[j]; }) // store the initial angles
+        .attr('d', thisArc)
         .on('mouseover', (d: PieArcDatum<IPieDataItem>, ix: number) => {
           tipContent.html(() => tipContentFn(bins, ix, d.data.count, d.data.groupLabel));
           tip.fx.in(tipContainer);
         })
         .on('mousemove', () => tip.fx.move(tipContainer))
-        .on('mouseout', () => tip.fx.out(tipContainer));
+        .on('mouseout', () => tip.fx.out(tipContainer))
+        .style('opacity', 0)
+        .transition()
+        .duration(500)
+        .style('opacity', 1);
 
-      path.transition()
+      path
+        .merge(path)
+        .transition()
         .delay(400)
         .duration(500)
         .attrTween('d', arcTween(thisArc));
 
       if (labels.display) {
-        const lbls = this.containers[i].selectAll('text')
+
+        const path2 = this.containers[i].selectAll('text.label')
           .data(thisPie(data));
-        lbls.enter()
-          .append('text')
-          .merge(lbls)
-          .attr('transform', (d) => {
+        const gLabel = path2.enter().append('text')
+          .attr('class', 'label')
+          .each(function (d, j) {
+            // Store initial offset incase we change chart heights.
+            this._height = height;
+            this._width = width;
+          })
+          .attr('transform', function (d) {
             const centroid = thisArc.centroid(d);
-            const x = centroid[0] + (width / 2);
-            const y = centroid[1] + (height / 2);
+            const x = centroid[0] + (this._width / 2);
+            const y = centroid[1] + (this._height / 2);
             return 'translate(' + x + ',' + y + ')';
           })
           .each(function (d, j) {
             // Store current value to work out fx transition opacities
             this._current = d;
           })
-
           .text((d, ix) => {
             if (d.value === 0) {
               return '';
@@ -255,16 +291,19 @@ export const pieChartD3 = ((): IChartAdaptor => {
             return labels.displayFn(d, ix);
           });
 
-        lbls.transition()
+        path2.merge(path2);
+        path2.exit().remove();
+
+
+        path2.transition()
           .duration(500)
           .style('opacity', 0)
           .transition()
-          .attr('transform', (d) => {
+          .attr('transform', function (d) {
             const centroid = thisArc.centroid(d);
-            const x = centroid[0] + (width / 2);
-            const y = centroid[1] + (height / 2);
+            const x = centroid[0] + (this._width / 2);
+            const y = centroid[1] + (this._height / 2);
             return 'translate(' + x + ',' + y + ')';
-
           })
           .transition()
           .duration(500)
@@ -272,13 +311,11 @@ export const pieChartD3 = ((): IChartAdaptor => {
             // Only show if the new value is not 0
             return c[ix]._current.value === 0 ? 0 : 1;
           });
-
-        lbls.merge(lbls);
       }
 
-      path.merge(path);
-
-      path.exit().remove();
+      path.exit().transition()
+        .duration(500)
+        .style('opacity', 0).remove();
     },
 
     /**

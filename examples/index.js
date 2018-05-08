@@ -81,182 +81,6 @@ return /******/ (function(modules) { // webpackBootstrap
 /************************************************************************/
 /******/ ({
 
-/***/ "./examples/Histogram.tsx":
-/*!********************************!*\
-  !*** ./examples/Histogram.tsx ***!
-  \********************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var __extends = undefined && undefined.__extends || function () {
-    var extendStatics = Object.setPrototypeOf || { __proto__: [] } instanceof Array && function (d, b) {
-        d.__proto__ = b;
-    } || function (d, b) {
-        for (var p in b) {
-            if (b.hasOwnProperty(p)) d[p] = b[p];
-        }
-    };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() {
-            this.constructor = d;
-        }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-}();
-var __assign = undefined && undefined.__assign || Object.assign || function (t) {
-    for (var s, i = 1, n = arguments.length; i < n; i++) {
-        s = arguments[i];
-        for (var p in s) {
-            if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
-        }
-    }
-    return t;
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-var deepmerge_1 = __webpack_require__(/*! deepmerge */ "./node_modules/deepmerge/dist/es.js");
-var React = __webpack_require__(/*! react */ "react");
-var react_1 = __webpack_require__(/*! react */ "react");
-var src_1 = __webpack_require__(/*! ../src */ "./src/index.ts");
-var data_1 = __webpack_require__(/*! ./data */ "./examples/data.ts");
-var tipContentFns = [function (bins, i, d) {
-    return bins[i] + '<br />HI THere ' + d.toFixed(2);
-}, function (bins, i, d) {
-    return bins[i] + '<br />Bookay ' + d.toFixed(2);
-}];
-var toggleData = [data_1.data2, data_1.data3];
-var HistogramExamples = function (_super) {
-    __extends(HistogramExamples, _super);
-    function HistogramExamples(props) {
-        var _this = _super.call(this, props) || this;
-        _this.state = {
-            axis: deepmerge_1.default({}, data_1.axis),
-            dataIndex: 0,
-            tipContentFnIndex: 0,
-            visible: {}
-        };
-        return _this;
-    }
-    HistogramExamples.prototype.toggleAxisLabel = function () {
-        var a = deepmerge_1.default(this.state.axis, {
-            x: {
-                label: this.state.axis.x.label === 'boyaka' ? 'fred' : 'boyaka'
-            },
-            y: {
-                label: this.state.axis.y.label === 'boyaka' ? 'fred' : 'boyaka'
-            }
-        });
-        var tipContentFnIndex = this.state.tipContentFnIndex === 0 ? 1 : 0;
-        this.setState({ axis: a, tipContentFnIndex: tipContentFnIndex });
-    };
-    HistogramExamples.prototype.toggleVisible = function (key) {
-        var v = this.state.visible.hasOwnProperty(key) ? !this.state.visible[key] : false;
-        this.setState({
-            visible: __assign({}, this.state.visible, (_a = {}, _a[key] = v, _a))
-        });
-        var _a;
-    };
-    HistogramExamples.prototype.toggleData = function () {
-        this.setState({
-            dataIndex: this.state.dataIndex === 0 ? 1 : 0
-        });
-    };
-    HistogramExamples.prototype.render = function () {
-        var _this = this;
-        var theme = this.props.theme;
-        var visible = this.state.visible;
-        var dataLegendData = {
-            bins: data_1.data.counts.map(function (c) {
-                return c.label;
-            }),
-            counts: [{
-                data: data_1.data.counts.map(function (c) {
-                    return c.data.reduce(function (p, n) {
-                        return p + n;
-                    }, 0);
-                }),
-                label: ''
-            }]
-        };
-        var theme2 = [theme[0]];
-        return React.createElement("div", null, React.createElement("h3", null, "Histograms"), React.createElement(src_1.Histogram, { data: data_1.data2, width: 400, height: 400, margin: {
-                left: 30,
-                top: 30
-            }, domain: { min: 0, max: 10 } }), React.createElement(src_1.Histogram, { data: data_1.data, grid: data_1.grid, width: '100%', height: 720, visible: visible, colorScheme: theme, axis: this.state.axis, tipContentFn: tipContentFns[this.state.tipContentFnIndex] }), React.createElement(src_1.Legend, { theme: theme, data: dataLegendData, onSelect: function onSelect(label) {
-                return _this.toggleVisible(label);
-            }, visible: visible }), React.createElement(src_1.Histogram, { data: toggleData[this.state.dataIndex], bar: { margin: 0.1 }, colorScheme: theme, visible: visible, width: 700, height: 350, axis: this.state.axis, tipContentFn: tipContentFns[this.state.tipContentFnIndex] }), React.createElement(src_1.Legend, { theme: theme2, data: toggleData[this.state.dataIndex], onSelect: function onSelect(label) {
-                return _this.toggleVisible(label);
-            }, visible: visible }), React.createElement("button", { onClick: function onClick() {
-                return _this.toggleAxisLabel();
-            } }, "toggleAxisLabel & tips"), React.createElement("button", { onClick: function onClick() {
-                return _this.toggleData();
-            } }, "toggle data"));
-    };
-    return HistogramExamples;
-}(react_1.Component);
-exports.default = HistogramExamples;
-
-/***/ }),
-
-/***/ "./examples/JoyPlot.tsx":
-/*!******************************!*\
-  !*** ./examples/JoyPlot.tsx ***!
-  \******************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var __extends = undefined && undefined.__extends || function () {
-    var extendStatics = Object.setPrototypeOf || { __proto__: [] } instanceof Array && function (d, b) {
-        d.__proto__ = b;
-    } || function (d, b) {
-        for (var p in b) {
-            if (b.hasOwnProperty(p)) d[p] = b[p];
-        }
-    };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() {
-            this.constructor = d;
-        }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-}();
-var __assign = undefined && undefined.__assign || Object.assign || function (t) {
-    for (var s, i = 1, n = arguments.length; i < n; i++) {
-        s = arguments[i];
-        for (var p in s) {
-            if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
-        }
-    }
-    return t;
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-var React = __webpack_require__(/*! react */ "react");
-var react_1 = __webpack_require__(/*! react */ "react");
-var src_1 = __webpack_require__(/*! ../src */ "./src/index.ts");
-var data_1 = __webpack_require__(/*! ./data */ "./examples/data.ts");
-var JoypLotExamples = function (_super) {
-    __extends(JoypLotExamples, _super);
-    function JoypLotExamples() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    JoypLotExamples.prototype.render = function () {
-        var data3 = __assign({}, data_1.data2, { counts: [__assign({}, data_1.data2.counts[0], { data: [7, 6, 5, 4, 3, 2, 1], label: 'Data 2' })], title: 'Plot 2' });
-        var theme = this.props.theme;
-        return React.createElement("div", null, React.createElement("h3", null, "JoyPlot"), React.createElement(src_1.JoyPlot, { data: [data_1.data2, data3], colorScheme: ['rgba(0, 0, 0, 0.5)', '#666'], width: 400, height: 400 }));
-    };
-    return JoypLotExamples;
-}(react_1.Component);
-exports.default = JoypLotExamples;
-
-/***/ }),
-
 /***/ "./examples/Map.tsx":
 /*!**************************!*\
   !*** ./examples/Map.tsx ***!
@@ -365,6 +189,7 @@ var react_1 = __webpack_require__(/*! react */ "react");
 var src_1 = __webpack_require__(/*! ../src */ "./src/index.ts");
 var data_1 = __webpack_require__(/*! ./data */ "./examples/data.ts");
 var toggleData = [data_1.data, data_1.data3];
+console.log('toggleData', toggleData);
 var PieExamples = function (_super) {
     __extends(PieExamples, _super);
     function PieExamples(props) {
@@ -396,9 +221,11 @@ var PieExamples = function (_super) {
         var labels = {
             display: true
         };
-        return React.createElement("div", null, React.createElement("h3", null, "Pie Chart"), React.createElement(src_1.PieChart, { width: "100%", height: 200, data: toggleData[dataIndex] }), React.createElement("button", { onClick: function onClick() {
+        var widths = ['100%', '100%'];
+        var heights = [200, 100];
+        return React.createElement("div", null, React.createElement("h3", null, "Pie Chart"), React.createElement("button", { onClick: function onClick() {
                 return _this.toggleData();
-            } }, "toggle data"), React.createElement("h4", null, "Donut"), React.createElement(src_1.PieChart, { width: 300, colorScheme: theme, backgroundColor: "#eee", height: 300, donutWidth: 10, data: data_1.data3, visible: visible, labels: labels }), React.createElement(src_1.Legend, { theme: theme, data: data_1.data3, onSelect: function onSelect(label) {
+            } }, "toggle data"), React.createElement("h4", null, "Donut"), React.createElement(src_1.PieChart, { width: 400, colorScheme: theme, backgroundColor: "#eee", height: heights[dataIndex], donutWidth: 10, data: toggleData[dataIndex], visible: visible, labels: labels }), React.createElement(src_1.Legend, { theme: theme, data: data_1.data3, onSelect: function onSelect(label) {
                 return _this.toggleVisible(label);
             }, visible: visible }));
     };
@@ -518,11 +345,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var d3_shape_1 = __webpack_require__(/*! d3-shape */ "./node_modules/d3-shape/index.js");
 var React = __webpack_require__(/*! react */ "react");
 var ReactDOM = __webpack_require__(/*! react-dom */ "react-dom");
-var src_1 = __webpack_require__(/*! ../src */ "./src/index.ts");
 var filterRange_1 = __webpack_require__(/*! ../src/colors/filterRange */ "./src/colors/filterRange.ts");
-var data_1 = __webpack_require__(/*! ./data */ "./examples/data.ts");
-var Histogram_1 = __webpack_require__(/*! ./Histogram */ "./examples/Histogram.tsx");
-var JoyPlot_1 = __webpack_require__(/*! ./JoyPlot */ "./examples/JoyPlot.tsx");
 var Pie_1 = __webpack_require__(/*! ./Pie */ "./examples/Pie.tsx");
 var Map_1 = __webpack_require__(/*! ./Map */ "./examples/Map.tsx");
 var points = [{
@@ -552,7 +375,7 @@ var points = [{
 var scatter = [];
 var theme = filterRange_1.default(['rgba(255, 113, 1, 0.5)', '#fff6ef', 'rgba(0, 169, 123, 0.5)', '#f6fffd', '#D7263D', 'rgba(215, 38, 61, 0.05)', '#0f2629', '#ededed', 'rgba(86, 180, 191, 0.5)', '#f5fbfb', '#000000', '#0f2629', '#D7263D', '#FBD7D9', '#ffebec', '#963540', '#22545a', '#56b4bf', '#56b4bf', '#56b4bf', '#FF7101', '#449098', '#77c3cb', '#d4eef8', '#ff7101', '#FF7101', '#cc5a00', '#ff8d33', '#fef9e5', '#7d5d2e', '#00a97b', '#008762', '#33ba95', '#dbf1d6', '#227839', '#0f5e7b', '#d4eef8', '#0f5e7b', '#F9C80E', '#007656', '#c5e5e9', '#f9c80e', '#a9a9a9', '#dbdbdb', '#cccccc', '#e6e6e6', '#56b4bf', '#449098', '#77c3cb', '#22545a', '#ff7101', '#cdcdcd', '#ffffff', '#d7263d', '#00a97b', '#888888', '#e6e6e6', '#f2f2f2', '#f4f4f4']);
 var App = function App() {
-    return React.createElement("div", { style: { padding: '20px' } }, React.createElement(Map_1.default, null), React.createElement(JoyPlot_1.default, { theme: theme }), React.createElement(Pie_1.default, { theme: theme }), React.createElement("div", null, React.createElement("h3", null, "Line Chart"), React.createElement(src_1.LineChart, { axis: data_1.axis, grid: data_1.grid, data: points, width: 300 })), React.createElement(Histogram_1.default, { theme: theme }));
+    return React.createElement("div", { style: { padding: '20px' } }, React.createElement(Map_1.default, null), React.createElement(Pie_1.default, { theme: theme }));
 };
 ReactDOM.render(React.createElement(App, null), document.getElementById('root'));
 
@@ -40698,7 +40521,9 @@ exports.pieChartD3 = function () {
             var innerRadius = this.innerRadius(i);
             var bgArc = d3_shape_1.arc().innerRadius(innerRadius).outerRadius(outerRadius).startAngle(0).endAngle(tau);
             var container = svg.append('g').attr('class', 'pie-bg');
-            var background = container.append('path').attr('class', 'pie-background').style('fill', backgroundColor).attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')').attr('d', bgArc);
+            var background = container.append('path').attr('class', 'pie-background').style('fill', backgroundColor);
+            background.enter().attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')').attr('d', bgArc);
+            background.merge(background);
             if (!this.containers[i]) {
                 this.containers[i] = svg.append('g').attr('class', 'pie-container');
             }
@@ -40719,12 +40544,12 @@ exports.pieChartD3 = function () {
             var colors = d3_scale_1.scaleOrdinal(theme);
             var thisArc = d3_shape_1.arc().outerRadius(outerRadius).innerRadius(innerRadius);
             var path = this.containers[i].selectAll('path').data(thisPie(data));
-            var g = path.enter().append('g').attr('class', 'arc').attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')');
-            g.append('path').attr('stroke', '#FFF').attr('fill', function (d, j) {
+            var g = path.enter().append('g').attr('class', 'arc');
+            g.append('path').attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')').attr('stroke', '#FFF').attr('fill', function (d, j) {
                 return colors(j);
-            }).attr('d', thisArc).each(function (d, j) {
+            }).each(function (d, j) {
                 this._current = arcs[j];
-            }).on('mouseover', function (d, ix) {
+            }).attr('d', thisArc).on('mouseover', function (d, ix) {
                 tipContent.html(function () {
                     return tipContentFn(bins, ix, d.data.count, d.data.groupLabel);
                 });
@@ -40733,14 +40558,17 @@ exports.pieChartD3 = function () {
                 return tip.fx.move(tipContainer);
             }).on('mouseout', function () {
                 return tip.fx.out(tipContainer);
-            });
-            path.transition().delay(400).duration(500).attrTween('d', arcTween(thisArc));
+            }).style('opacity', 0).transition().duration(500).style('opacity', 1);
+            path.merge(path).transition().delay(400).duration(500).attrTween('d', arcTween(thisArc));
             if (labels.display) {
-                var lbls = this.containers[i].selectAll('text').data(thisPie(data));
-                lbls.enter().append('text').merge(lbls).attr('transform', function (d) {
+                var path2 = this.containers[i].selectAll('text.label').data(thisPie(data));
+                var gLabel = path2.enter().append('text').attr('class', 'label').each(function (d, j) {
+                    this._height = height;
+                    this._width = width;
+                }).attr('transform', function (d) {
                     var centroid = thisArc.centroid(d);
-                    var x = centroid[0] + width / 2;
-                    var y = centroid[1] + height / 2;
+                    var x = centroid[0] + this._width / 2;
+                    var y = centroid[1] + this._height / 2;
                     return 'translate(' + x + ',' + y + ')';
                 }).each(function (d, j) {
                     this._current = d;
@@ -40750,18 +40578,18 @@ exports.pieChartD3 = function () {
                     }
                     return labels.displayFn(d, ix);
                 });
-                lbls.transition().duration(500).style('opacity', 0).transition().attr('transform', function (d) {
+                path2.merge(path2);
+                path2.exit().remove();
+                path2.transition().duration(500).style('opacity', 0).transition().attr('transform', function (d) {
                     var centroid = thisArc.centroid(d);
-                    var x = centroid[0] + width / 2;
-                    var y = centroid[1] + height / 2;
+                    var x = centroid[0] + this._width / 2;
+                    var y = centroid[1] + this._height / 2;
                     return 'translate(' + x + ',' + y + ')';
                 }).transition().duration(500).style('opacity', function (d, ix, c) {
                     return c[ix]._current.value === 0 ? 0 : 1;
                 });
-                lbls.merge(lbls);
             }
-            path.merge(path);
-            path.exit().remove();
+            path.exit().transition().duration(500).style('opacity', 0).remove();
         },
         destroy: function destroy(el) {
             svg.selectAll('svg > *').remove();

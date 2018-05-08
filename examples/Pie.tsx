@@ -15,7 +15,7 @@ interface IState {
 }
 
 const toggleData = [data, data3];
-
+console.log('toggleData', toggleData);
 class PieExamples extends Component<IProps, IState> {
   constructor(props) {
     super(props);
@@ -46,25 +46,34 @@ class PieExamples extends Component<IProps, IState> {
     const labels = {
       display: true,
     };
+    // const widths = [200, 300];
+    const widths = ['100%', '100%'];
+    const heights = [200, 100];
     return (
       <div>
         <h3>Pie Chart</h3>
-        <PieChart
-          width="100%"
-          height={200}
-          data={toggleData[dataIndex]} />
+        {/* <PieChart
+          width={'100%'}
+          height={heights[dataIndex]}
+          donutWidth={0}
+          labels={{
+            display: false,
+            displayFn: () => null,
+          }}
+          data={toggleData[dataIndex]} /> */}
 
         <button onClick={() => this.toggleData()}>
           toggle data
           </button>
 
         <h4>Donut</h4>
-        <PieChart width={300}
+        <PieChart width={400}
           colorScheme={theme}
           backgroundColor="#eee"
-          height={300}
+          height={heights[dataIndex]}
           donutWidth={10}
-          data={data3}
+          data={toggleData[dataIndex]}
+
           visible={visible}
           labels={labels} />
         <Legend
