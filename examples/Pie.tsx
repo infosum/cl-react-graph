@@ -78,7 +78,7 @@ class PieExamples extends Component<IProps, IState> {
           labels={labels} />
         <Legend
           theme={theme}
-          data={data3}
+          data={toggleData[dataIndex]}
           onSelect={(label) => this.toggleVisible(label)}
           visible={visible}
         />

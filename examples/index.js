@@ -225,7 +225,7 @@ var PieExamples = function (_super) {
         var heights = [200, 100];
         return React.createElement("div", null, React.createElement("h3", null, "Pie Chart"), React.createElement("button", { onClick: function onClick() {
                 return _this.toggleData();
-            } }, "toggle data"), React.createElement("h4", null, "Donut"), React.createElement(src_1.PieChart, { width: 400, colorScheme: theme, backgroundColor: "#eee", height: heights[dataIndex], donutWidth: 10, data: toggleData[dataIndex], visible: visible, labels: labels }), React.createElement(src_1.Legend, { theme: theme, data: data_1.data3, onSelect: function onSelect(label) {
+            } }, "toggle data"), React.createElement("h4", null, "Donut"), React.createElement(src_1.PieChart, { width: 400, colorScheme: theme, backgroundColor: "#eee", height: heights[dataIndex], donutWidth: 10, data: toggleData[dataIndex], visible: visible, labels: labels }), React.createElement(src_1.Legend, { theme: theme, data: toggleData[dataIndex], onSelect: function onSelect(label) {
                 return _this.toggleVisible(label);
             }, visible: visible }));
     };
@@ -40566,6 +40566,7 @@ exports.pieChartD3 = function () {
                     this._height = height;
                     this._width = width;
                 }).attr('transform', function (d) {
+                    console.log('transform text', d);
                     var centroid = thisArc.centroid(d);
                     var x = centroid[0] + this._width / 2;
                     var y = centroid[1] + this._height / 2;
@@ -40578,15 +40579,15 @@ exports.pieChartD3 = function () {
                     }
                     return labels.displayFn(d, ix);
                 });
-                path2.merge(path2);
                 path2.exit().remove();
-                path2.transition().duration(500).style('opacity', 0).transition().attr('transform', function (d) {
+                path2.merge(path2).transition().duration(500).style('opacity', 0).transition().attr('transform', function (d) {
                     var centroid = thisArc.centroid(d);
                     var x = centroid[0] + this._width / 2;
                     var y = centroid[1] + this._height / 2;
                     return 'translate(' + x + ',' + y + ')';
                 }).transition().duration(500).style('opacity', function (d, ix, c) {
-                    return c[ix]._current.value === 0 ? 0 : 1;
+                    console.log('transform merge', d);
+                    return d.data.count === 0 || c[ix]._current.value === 0 ? 0 : 1;
                 });
             }
             path.exit().transition().duration(500).style('opacity', 0).remove();

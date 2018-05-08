@@ -256,6 +256,7 @@ export const pieChartD3 = ((): IChartAdaptor => {
         .duration(500)
         .style('opacity', 1);
 
+      // Fade in when adding (merge)
       path
         .merge(path)
         .transition()
@@ -291,11 +292,9 @@ export const pieChartD3 = ((): IChartAdaptor => {
             return labels.displayFn(d, ix);
           });
 
-        path2.merge(path2);
-        path2.exit().remove();
-
-
-        path2.transition()
+        path2
+          .merge(path2)
+          .transition()
           .duration(500)
           .style('opacity', 0)
           .transition()
@@ -309,8 +308,10 @@ export const pieChartD3 = ((): IChartAdaptor => {
           .duration(500)
           .style('opacity', (d, ix, c) => {
             // Only show if the new value is not 0
-            return c[ix]._current.value === 0 ? 0 : 1;
+            return d.data.count === 0 || c[ix]._current.value === 0 ? 0 : 1;
           });
+
+        path2.exit().remove();
       }
 
       path.exit().transition()
