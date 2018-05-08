@@ -40566,7 +40566,6 @@ exports.pieChartD3 = function () {
                     this._height = height;
                     this._width = width;
                 }).attr('transform', function (d) {
-                    console.log('transform text', d);
                     var centroid = thisArc.centroid(d);
                     var x = centroid[0] + this._width / 2;
                     var y = centroid[1] + this._height / 2;
@@ -40579,16 +40578,15 @@ exports.pieChartD3 = function () {
                     }
                     return labels.displayFn(d, ix);
                 });
-                path2.exit().remove();
                 path2.merge(path2).transition().duration(500).style('opacity', 0).transition().attr('transform', function (d) {
                     var centroid = thisArc.centroid(d);
                     var x = centroid[0] + this._width / 2;
                     var y = centroid[1] + this._height / 2;
                     return 'translate(' + x + ',' + y + ')';
                 }).transition().duration(500).style('opacity', function (d, ix, c) {
-                    console.log('transform merge', d);
                     return d.data.count === 0 || c[ix]._current.value === 0 ? 0 : 1;
                 });
+                path2.exit().remove();
             }
             path.exit().transition().duration(500).style('opacity', 0).remove();
         },
