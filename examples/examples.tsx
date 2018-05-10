@@ -61,24 +61,23 @@ const theme = filterRange(['rgba(255, 113, 1, 0.5)', '#fff6ef', 'rgba(0, 169, 12
 
 const App: React.SFC<{}> = (): JSX.Element => <div style={{ padding: '20px' }}>
   <Map />
-  {/* <JoyPlot theme={theme} /> */}
+  <JoyPlot theme={theme} />
   <Pie theme={theme} />
-  {/* <div>
+  <div>
     <h3>Line Chart</h3>
     <LineChart axis={axis} grid={grid} data={points} width={300} />
   </div>
   <Histogram theme={theme} /> */}
-  {/* <div>
+  <div>
     <HorizontalHistogram data={data2} width={500} height={400} margin={{
       left: 30,
       top: 30,
     }} />
-  </div> */}
+  </div>
 
-
-  {/* <div>
+  <div>
     <ScatterPlot data={scatter} width={300} height={300} />
-  </div> */}
+  </div>
 
 </div>;
 

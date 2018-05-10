@@ -210,28 +210,6 @@ export const pieChartD3 = ((): IChartAdaptor => {
         .outerRadius(outerRadius)
         .innerRadius(innerRadius);
 
-      // const g = this.containers[i]
-      //   .selectAll('g')
-      //   .data(thisPie(data));
-
-      // const paths = g.enter()
-      //   .append('g')
-      //   .merge(g)
-      //   .attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')')
-      //   .selectAll('path')
-      //   .data((d) => {
-      //     console.log('d', d);
-      //     return d;
-      //   });
-
-      // paths.enter()
-      //   .append('path')
-      //   .attr('stroke', '#FFF')
-      //   .attr('fill', (d, j) => colors(j))
-      //   .attr('d', () => {
-      //     console.log('arc');
-      //     return thisArc;
-      //   });
       const path = this.containers[i].selectAll('path')
         .data(thisPie(data));
 
@@ -259,9 +237,17 @@ export const pieChartD3 = ((): IChartAdaptor => {
       // Fade in when adding (merge)
       path
         .merge(path)
+
+        .on('mouseover', (d: PieArcDatum<IPieDataItem>, ix: number) => {
+          tipContent.html(() => tipContentFn(bins, ix, d.data.count, d.data.groupLabel));
+          tip.fx.in(tipContainer);
+        })
+        .on('mousemove', () => tip.fx.move(tipContainer))
+        .on('mouseout', () => tip.fx.out(tipContainer))
         .transition()
         .delay(400)
         .duration(500)
+        .attr('fill', (d, j) => colors(j))
         .attrTween('d', arcTween(thisArc));
 
       if (labels.display) {

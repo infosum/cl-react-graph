@@ -15,7 +15,6 @@ interface IState {
 }
 
 const toggleData = [data, data3];
-console.log('toggleData', toggleData);
 class PieExamples extends Component<IProps, IState> {
   constructor(props) {
     super(props);
@@ -52,7 +51,7 @@ class PieExamples extends Component<IProps, IState> {
     return (
       <div>
         <h3>Pie Chart</h3>
-        {/* <PieChart
+        <PieChart
           width={'100%'}
           height={heights[dataIndex]}
           donutWidth={0}
@@ -60,7 +59,7 @@ class PieExamples extends Component<IProps, IState> {
             display: false,
             displayFn: () => null,
           }}
-          data={toggleData[dataIndex]} /> */}
+          data={toggleData[dataIndex]} />
 
         <button onClick={() => this.toggleData()}>
           toggle data
