@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
+    "jsx": "react",
+    "keyofStringsOnly": true,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "noImplicitAny": false,
+    "noUnusedLocals": true,
+    "removeComments": true,
+    "sourceMap": true,
+    "strictNullChecks": true,
+    "lib": [
+      "es2015",
+      "es2016",
+      "es2017",
+      "dom"
+    ],
+    "target": "es5"
+  },
+  "include": [
+    "node_modules/@types/**/*.d.ts",
+    "src/**/*.ts"
+  ]
+}

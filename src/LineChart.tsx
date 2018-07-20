@@ -13,6 +13,22 @@ interface IState {
   parentWidth?: number;
 }
 
+export interface ILineChartProps {
+  axis?: IAxes;
+  className?: string;
+  data?: ILineChartDataSet[];
+  fx?: (n: number) => number;
+  grid?: IGrid;
+  height?: number | string;
+  line?: any;
+  margin?: IMargin;
+  point?: ISVGPoint;
+  tip?: any;
+  tipContainer?: string;
+  tipContentFn?: TipContentFn<{ x: string | number, y: string | number }>;
+  width?: number | string;
+}
+
 class LineChart extends Component<ILineChartProps, IState> {
 
   private chart;
@@ -68,8 +84,6 @@ class LineChart extends Component<ILineChartProps, IState> {
     const r: ILineChartProps = {
       data,
       height: 200,
-      tipContentFn: (info, i, d) =>
-        info[i].x.toFixed(1),
       width,
     };
 

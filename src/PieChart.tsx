@@ -29,7 +29,7 @@ export interface IPieChartProps {
   margin?: IMargin;
   tip?: any;
   tipContainer?: string;
-  tipContentFn?: TipContentFn;
+  tipContentFn?: TipContentFn<string>;
   visible?: { [key: string]: boolean };
   width: number | string;
 }

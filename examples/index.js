@@ -257,6 +257,66 @@ exports.default = JoypLotExamples;
 
 /***/ }),
 
+/***/ "./examples/LineChartExample.tsx":
+/*!***************************************!*\
+  !*** ./examples/LineChartExample.tsx ***!
+  \***************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var d3_shape_1 = __webpack_require__(/*! d3-shape */ "./node_modules/d3-shape/index.js");
+var React = __webpack_require__(/*! react */ "react");
+var src_1 = __webpack_require__(/*! ../src */ "./src/index.ts");
+var data_1 = __webpack_require__(/*! ./data */ "./examples/data.ts");
+var points = [{
+    data: [{ x: 1, y: 1 }, { x: 2, y: 2 }, { x: 3, y: 3 }, { x: 4, y: 4 }],
+    label: 'test data'
+}, {
+    data: [{ x: 2, y: 1 }, { x: 3, y: 2 }, { x: 4, y: 3 }, { x: 6, y: 4 }],
+    label: 'test data',
+    line: {
+        curveType: d3_shape_1.curveStepAfter,
+        fill: {
+            fill: 'rgba(10, 10, 10, 0.2)',
+            show: true
+        },
+        show: true,
+        stroke: 'orange',
+        strokeDashArray: '10 5',
+        strokeDashOffset: 3
+    },
+    point: {
+        fill: 'black',
+        radius: 10,
+        show: true,
+        stroke: 'red'
+    }
+}];
+var timeData = [{
+    data: [{ x: '1-May-12', y: 1 }, { x: '30-Apr-12', y: 2 }, { x: '27-Apr-12', y: 3 }, { x: '26-Apr-12', y: 4 }],
+    label: 'test data'
+}, {
+    data: [{ x: '1-May-12', y: 1 }, { x: '30-Apr-12', y: 2 }, { x: '27-Apr-12', y: 3 }, { x: '26-Apr-12', y: 4 }],
+    label: 'test data 2'
+}];
+var axisWithTime = {
+    x: {
+        dateFormat: '%d-%b-%y',
+        scale: 'TIME'
+    },
+    y: {}
+};
+var LineChartExample = function LineChartExample() {
+    return React.createElement("div", null, React.createElement("h3", null, "Line Chart"), React.createElement(src_1.LineChart, { axis: data_1.axis, grid: data_1.grid, data: points, width: 300 }), React.createElement(src_1.LineChart, { data: timeData, axis: axisWithTime, width: 300 }));
+};
+exports.default = LineChartExample;
+
+/***/ }),
+
 /***/ "./examples/Map.tsx":
 /*!**************************!*\
   !*** ./examples/Map.tsx ***!
@@ -522,7 +582,6 @@ exports.axis = {
 
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var d3_shape_1 = __webpack_require__(/*! d3-shape */ "./node_modules/d3-shape/index.js");
 var React = __webpack_require__(/*! react */ "react");
 var ReactDOM = __webpack_require__(/*! react-dom */ "react-dom");
 var src_1 = __webpack_require__(/*! ../src */ "./src/index.ts");
@@ -530,36 +589,13 @@ var filterRange_1 = __webpack_require__(/*! ../src/colors/filterRange */ "./src/
 var data_1 = __webpack_require__(/*! ./data */ "./examples/data.ts");
 var Histogram_1 = __webpack_require__(/*! ./Histogram */ "./examples/Histogram.tsx");
 var JoyPlot_1 = __webpack_require__(/*! ./JoyPlot */ "./examples/JoyPlot.tsx");
-var Pie_1 = __webpack_require__(/*! ./Pie */ "./examples/Pie.tsx");
+var LineChartExample_1 = __webpack_require__(/*! ./LineChartExample */ "./examples/LineChartExample.tsx");
 var Map_1 = __webpack_require__(/*! ./Map */ "./examples/Map.tsx");
-var points = [{
-    data: [{ x: 1, y: 1 }, { x: 2, y: 2 }, { x: 3, y: 3 }, { x: 4, y: 4 }],
-    label: 'test data'
-}, {
-    data: [{ x: 2, y: 1 }, { x: 3, y: 2 }, { x: 4, y: 3 }, { x: 6, y: 4 }],
-    label: 'test data',
-    line: {
-        curveType: d3_shape_1.curveStepAfter,
-        fill: {
-            fill: 'rgba(10, 10, 10, 0.2)',
-            show: true
-        },
-        show: true,
-        stroke: 'orange',
-        strokeDashArray: '10 5',
-        strokeDashOffset: 3
-    },
-    point: {
-        fill: 'black',
-        radius: 10,
-        show: true,
-        stroke: 'red'
-    }
-}];
+var Pie_1 = __webpack_require__(/*! ./Pie */ "./examples/Pie.tsx");
 var scatter = [];
 var theme = filterRange_1.default(['rgba(255, 113, 1, 0.5)', '#fff6ef', 'rgba(0, 169, 123, 0.5)', '#f6fffd', '#D7263D', 'rgba(215, 38, 61, 0.05)', '#0f2629', '#ededed', 'rgba(86, 180, 191, 0.5)', '#f5fbfb', '#000000', '#0f2629', '#D7263D', '#FBD7D9', '#ffebec', '#963540', '#22545a', '#56b4bf', '#56b4bf', '#56b4bf', '#FF7101', '#449098', '#77c3cb', '#d4eef8', '#ff7101', '#FF7101', '#cc5a00', '#ff8d33', '#fef9e5', '#7d5d2e', '#00a97b', '#008762', '#33ba95', '#dbf1d6', '#227839', '#0f5e7b', '#d4eef8', '#0f5e7b', '#F9C80E', '#007656', '#c5e5e9', '#f9c80e', '#a9a9a9', '#dbdbdb', '#cccccc', '#e6e6e6', '#56b4bf', '#449098', '#77c3cb', '#22545a', '#ff7101', '#cdcdcd', '#ffffff', '#d7263d', '#00a97b', '#888888', '#e6e6e6', '#f2f2f2', '#f4f4f4']);
 var App = function App() {
-    return React.createElement("div", { style: { padding: '20px' } }, React.createElement(Map_1.default, null), React.createElement(JoyPlot_1.default, { theme: theme }), React.createElement(Pie_1.default, { theme: theme }), React.createElement("div", null, React.createElement("h3", null, "Line Chart"), React.createElement(src_1.LineChart, { axis: data_1.axis, grid: data_1.grid, data: points, width: 300 })), React.createElement(Histogram_1.default, { theme: theme }), " */}", React.createElement("div", null, React.createElement(src_1.HorizontalHistogram, { data: data_1.data2, width: 500, height: 400, margin: {
+    return React.createElement("div", { style: { padding: '20px' } }, React.createElement(Map_1.default, null), React.createElement(JoyPlot_1.default, { theme: theme }), React.createElement(Pie_1.default, { theme: theme }), React.createElement("div", null, React.createElement(LineChartExample_1.default, null)), React.createElement(Histogram_1.default, { theme: theme }), " */}", React.createElement("div", null, React.createElement(src_1.HorizontalHistogram, { data: data_1.data2, width: 500, height: 400, margin: {
             left: 30,
             top: 30
         } })), React.createElement("div", null, React.createElement(src_1.ScatterPlot, { data: scatter, width: 300, height: 300 })));
@@ -40169,9 +40205,6 @@ var LineChart = function (_super) {
         var r = {
             data: data,
             height: 200,
-            tipContentFn: function tipContentFn(info, i, d) {
-                return info[i].x.toFixed(1);
-            },
             width: width
         };
         if (axis) {
@@ -40385,7 +40418,7 @@ exports.mapD3 = function () {
             var _a = this.props,
                 width = _a.width,
                 height = _a.height;
-            var zoom = 4;
+            var zoom = 3;
             console.log('scale', width / 2 / Math.PI);
             var projection = d3_geo_1.geoMercator().scale(width / 2 / Math.PI * zoom).translate([width / 2, height / 2]);
             var geoGenerator = d3_geo_1.geoPath().projection(projection);
@@ -41069,15 +41102,15 @@ exports.scatterPlotD3 = function () {
             function plot(p) {
                 var plotCell = d3_selection_1.select(this);
                 var circle;
-                xScale.domain(domainByTrait[p.x]);
-                yScale.domain(domainByTrait[p.y]);
+                xScale.domain(domainByTrait[Number(p.x)]);
+                yScale.domain(domainByTrait[Number(p.y)]);
                 plotCell.append('rect').attr('class', 'frame').attr('x', padding / 2).attr('y', padding / 2).attr('width', width - padding).attr('height', height - padding);
                 circle = plotCell.selectAll('circle').data(data.values).enter().append('circle').attr('r', function (d) {
                     return radius;
                 }).attr('cx', function (d) {
-                    return xScale(d[p.x]);
+                    return xScale(d[Number(p.x)]);
                 }).attr('cy', function (d) {
-                    return yScale(d[p.y]);
+                    return yScale(d[Number(p.y)]);
                 }).style('fill', function (d) {
                     if (d[split]) {
                         var i = choices.findIndex(function (c) {
@@ -41255,6 +41288,17 @@ exports.ScatterPlot = ScatterPlot_1.default;
 "use strict";
 
 
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var __assign = undefined && undefined.__assign || Object.assign || function (t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+        s = arguments[i];
+        for (var p in s) {
+            if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+        }
+    }
+    return t;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var d3_array_1 = __webpack_require__(/*! d3-array */ "./node_modules/d3-array/index.js");
 var d3_axis_1 = __webpack_require__(/*! d3-axis */ "./node_modules/d3-axis/index.js");
@@ -41263,17 +41307,20 @@ var d3_scale_1 = __webpack_require__(/*! d3-scale */ "./node_modules/d3-scale/in
 var d3_selection_1 = __webpack_require__(/*! d3-selection */ "./node_modules/d3-selection/index.js");
 var d3_shape_1 = __webpack_require__(/*! d3-shape */ "./node_modules/d3-shape/index.js");
 var d3_shape_2 = __webpack_require__(/*! d3-shape */ "./node_modules/d3-shape/index.js");
+var d3_time_format_1 = __webpack_require__(/*! d3-time-format */ "./node_modules/d3-time-format/index.js");
 var deepmerge_1 = __webpack_require__(/*! deepmerge */ "./node_modules/deepmerge/dist/es.js");
 var attrs_1 = __webpack_require__(/*! ./d3/attrs */ "./src/d3/attrs.ts");
 var tip_1 = __webpack_require__(/*! ./tip */ "./src/tip.ts");
 exports.lineChartD3 = function () {
     var svg;
     var tipContainer;
+    var xParseTime;
+    var xFormatTime;
     var tipContent;
     var y = d3_scale_1.scaleLinear();
     var x = d3_scale_1.scaleLinear();
     var lineProps = {
-        curveType: d3_shape_1.curveCatmullRom,
+        curveType: d3_shape_2.curveCatmullRom,
         fill: false,
         show: true,
         stroke: '#005870',
@@ -41289,6 +41336,7 @@ exports.lineChartD3 = function () {
         axis: {
             x: {
                 height: 20,
+                scale: 'LINEAR',
                 style: {
                     'fill': 'none',
                     'shape-rendering': 'crispEdges',
@@ -41303,6 +41351,7 @@ exports.lineChartD3 = function () {
                 }
             },
             y: {
+                scale: 'LINEAR',
                 style: {
                     'fill': 'none',
                     'shape-rendering': 'crispEdges',
@@ -41353,7 +41402,12 @@ exports.lineChartD3 = function () {
         tip: tip_1.default,
         tipContainer: null,
         tipContentFn: function tipContentFn(info, i, d) {
-            return info[i].x.toFixed(3) + ',' + info[i].y;
+            switch (_typeof(info[i].x)) {
+                case 'object':
+                    return xFormatTime(info[i].x) + ', ' + info[i].y;
+                default:
+                    return Number(info[i].x).toFixed(3) + ', ' + info[i].y;
+            }
         },
         width: 200
     };
@@ -41500,13 +41554,13 @@ exports.lineChartD3 = function () {
                 strokeDashArray = _b.strokeDashArray;
             var path = svg.selectAll(selector).data([datum.data]);
             var thisArea;
-            var curve = d3_shape_2.line().curve(curveType).x(function (d) {
+            var curve = d3_shape_1.line().curve(curveType).x(function (d) {
                 return x(d.x) + axis.y.width;
             }).y(function (d) {
                 return y(d.y);
             });
             if (datum.line.fill.show === true) {
-                thisArea = d3_shape_2.area().curve(curveType).x(function (d) {
+                thisArea = d3_shape_1.area().curve(curveType).x(function (d) {
                     return x(d.x) + axis.y.width + 1;
                 }).y0(function (d) {
                     return height - margin.top * 2 - axis.x.height;
@@ -41542,7 +41596,6 @@ exports.lineChartD3 = function () {
                 grid = props.grid,
                 margin = props.margin;
             var ticks = this.valuesCount(data);
-            var setCount = data.length;
             var axisWidth = axis.y.style['stroke-width'];
             var offset = {
                 x: axis.y.width,
@@ -41574,9 +41627,24 @@ exports.lineChartD3 = function () {
                 return;
             }
             this.props = deepmerge_1.default(defaultProps, props);
+            switch (props.axis.x.scale) {
+                case 'TIME':
+                    x = d3_scale_1.scaleTime();
+                    break;
+                default:
+                    x = d3_scale_1.scaleLinear();
+                    break;
+            }
             this._makeSvg(el);
             var data = props.data;
+            xParseTime = d3_time_format_1.timeParse(props.axis.x.dateFormat);
+            xFormatTime = d3_time_format_1.timeFormat(props.axis.x.dateFormat);
             data = data.map(function (datum) {
+                if (props.axis.x.scale === 'TIME') {
+                    datum.data = datum.data.map(function (d) {
+                        return __assign({}, d, { x: xParseTime(d.x.toString()) });
+                    });
+                }
                 return Object.assign({}, datumProps, datum);
             });
             this._drawScales(data);

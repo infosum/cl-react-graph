@@ -114,7 +114,7 @@ export const scatterPlotD3 = (() => {
       }
       const legend = svg.append('g')
         .attr('transform', 'translate(' + (width + padding / 2) +
-        ', ' + (padding + 50) + ')');
+          ', ' + (padding + 50) + ')');
 
       legend.append('g').append('text')
         .attr('x', 0)
@@ -175,8 +175,8 @@ export const scatterPlotD3 = (() => {
       function plot(p: IChartPoint) {
         const plotCell = select(this);
         let circle;
-        xScale.domain(domainByTrait[p.x]);
-        yScale.domain(domainByTrait[p.y]);
+        xScale.domain(domainByTrait[Number(p.x)]);
+        yScale.domain(domainByTrait[Number(p.y)]);
 
         plotCell.append('rect')
           .attr('class', 'frame')
@@ -189,8 +189,8 @@ export const scatterPlotD3 = (() => {
           .data(data.values)
           .enter().append('circle')
           .attr('r', (d) => radius)
-          .attr('cx', (d) => xScale(d[p.x]))
-          .attr('cy', (d) => yScale(d[p.y]))
+          .attr('cx', (d) => xScale(d[Number(p.x)]))
+          .attr('cy', (d) => yScale(d[Number(p.y)]))
           .style('fill', (d) => {
             if (d[split]) {
               const i = choices.findIndex((c) => c === d[split]);

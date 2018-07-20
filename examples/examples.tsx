@@ -1,50 +1,13 @@
-import { curveStepAfter } from 'd3-shape';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { HorizontalHistogram, Legend, LineChart, PieChart, ScatterPlot } from '../src';
+import { HorizontalHistogram, ScatterPlot } from '../src';
 import filterRange from '../src/colors/filterRange';
-import { axis, data, data2, data3, grid } from './data';
+import { data2 } from './data';
 import Histogram from './Histogram';
 import JoyPlot from './JoyPlot';
-import Pie from './Pie';
+import LineChartExample from './LineChartExample';
 import Map from './Map';
-
-const points = [
-  {
-    data: [
-      { x: 1, y: 1 },
-      { x: 2, y: 2 },
-      { x: 3, y: 3 },
-      { x: 4, y: 4 },
-    ],
-    label: 'test data',
-  },
-  {
-    data: [
-      { x: 2, y: 1 },
-      { x: 3, y: 2 },
-      { x: 4, y: 3 },
-      { x: 6, y: 4 },
-    ],
-    label: 'test data',
-    line: {
-      curveType: curveStepAfter,
-      fill: {
-        fill: 'rgba(10, 10, 10, 0.2)',
-        show: true,
-      },
-      show: true,
-      stroke: 'orange',
-      strokeDashArray: '10 5',
-      strokeDashOffset: 3,
-    },
-    point: {
-      fill: 'black',
-      radius: 10,
-      show: true,
-      stroke: 'red',
-    },
-  }];
+import Pie from './Pie';
 
 const scatter = [
 
@@ -64,8 +27,7 @@ const App: React.SFC<{}> = (): JSX.Element => <div style={{ padding: '20px' }}>
   <JoyPlot theme={theme} />
   <Pie theme={theme} />
   <div>
-    <h3>Line Chart</h3>
-    <LineChart axis={axis} grid={grid} data={points} width={300} />
+    <LineChartExample />
   </div>
   <Histogram theme={theme} /> */}
   <div>

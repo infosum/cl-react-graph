@@ -5,7 +5,7 @@ import { select, Selection } from 'd3-selection';
 import { arc, pie, PieArcDatum } from 'd3-shape';
 import 'd3-transition';
 import merge from 'deepmerge';
-import { get } from 'lodash';
+import * as get from 'lodash.get';
 import * as textWidth from 'text-width';
 import colorScheme from './colors';
 import { IPieChartProps, IPieDataItem } from './PieChart';
@@ -84,7 +84,7 @@ export const pieChartD3 = ((): IChartAdaptor => {
         .attr('viewBox', `0 0 ${width} ${height}`)
         .append('g')
         .attr('transform',
-        'translate(' + margin.left + ',' + margin.top + ')');
+          'translate(' + margin.left + ',' + margin.top + ')');
 
       this._makeTip();
     },

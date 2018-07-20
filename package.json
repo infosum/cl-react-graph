@@ -1,10 +1,10 @@
 {
   "name": "cl-react-graph",
-  "version": "1.5.18",
+  "version": "1.6.0",
   "description": "React D3 Charts",
   "main": "dist/index.js",
   "scripts": {
-    "build": "webpack --config ./webpack.config.js",
+    "build": "export NODE_ENV=production|| set NODE_ENV=production && TS_NODE_PROJECT=\"tsconfig-for-webpack.json\" webpack",
     "build-examples": "webpack --config ./webpack.config.examples.js",
     "test": "istanbul cover _mocha --recursive -x '**/*.spec.js' -x '**/config/**' -x '**/node_modules/**' -g './{,!(node_modules)/**/}*.spec.js'"
   },
@@ -26,24 +26,28 @@
   "devDependencies": {
     "@types/d3": "^5.0.0",
     "@types/deepmerge": "^2.1.0",
-    "@types/react": "^16.0.40",
-    "@types/react-dom": "^16.0.4",
-    "babel-core": "^6.26.0",
-    "babel-eslint": "^8.2.2",
-    "babel-loader": "^7.1.4",
-    "babel-preset-env": "^1.6.1",
+    "@types/geojson": "^7946.0.4",
+    "@types/node": "^10.5.2",
+    "@types/react": "*",
+    "@types/react-dom": "*",
+    "babel-core": "^6.26.3",
+    "babel-eslint": "^8.2.6",
+    "babel-loader": "^7.1.5",
+    "babel-preset-env": "^1.7.0",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
     "chai": "^4.1.2",
     "eslint": "^4.19.1",
     "istanbul": "^0.4.5",
-    "mocha": "^5.0.5",
-    "ts-loader": "^4.1.0",
-    "tslint": "^5.9.1",
-    "tslint-eslint-rules": "^5.1.0",
-    "typescript": "^2.7.2",
-    "webpack": "^4.2.0",
-    "webpack-cli": "^2.0.13"
+    "mocha": "^5.2.0",
+    "ts-loader": "^4.4.2",
+    "ts-node": "^7.0.0",
+    "tslint": "^5.11.0",
+    "tslint-eslint-rules": "^5.3.1",
+    "typescript": "^2.9.2",
+    "webpack": "^4.16.1",
+    "webpack-bundle-analyzer": "^2.13.1",
+    "webpack-cli": "^3.1.0"
   },
   "babel": {
     "presets": [
@@ -53,25 +57,25 @@
     ]
   },
   "peerDependencies": {
-    "react": "^16.2.0",
-    "react-dom": "^16.2.0"
+    "react": "*",
+    "react-dom": "*"
   },
   "dependencies": {
-    "@types/geojson": "^7946.0.2",
     "color": "^3.0.0",
     "d3-array": "^1.2.1",
     "d3-axis": "^1.0.8",
-    "d3-color": "^1.0.3",
+    "d3-color": "^1.2.0",
     "d3-ease": "^1.0.3",
     "d3-geo": "^1.10.0",
     "d3-path": "^1.0.5",
     "d3-request": "^1.0.6",
-    "d3-scale": "^2.0.0",
-    "d3-scale-chromatic": "^1.2.0",
+    "d3-scale": "^2.1.0",
+    "d3-scale-chromatic": "^1.3.0",
     "d3-selection": "^1.3.0",
     "d3-shape": "^1.2.0",
+    "d3-time-format": "^2.1.1",
     "d3-transition": "^1.1.1",
-    "deepmerge": "^2.1.0",
+    "deepmerge": "^2.1.1",
     "lodash.get": "^4.4.2",
     "text-width": "^1.2.0"
   }

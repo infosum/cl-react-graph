@@ -63,8 +63,6 @@ class HorizontalHistogram extends Component<IHistogramProps, IChartState> {
   constructor(props: IHistogramProps) {
     super(props);
     this.histogram = horizontalHistogramD3();
-    const counts: IHistogramDataSet[] = [];
-    const bins: string[] = [];
     this.state = {
       parentWidth: 300,
     };

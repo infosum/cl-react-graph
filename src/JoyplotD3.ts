@@ -4,7 +4,7 @@ import { axisBottom, axisLeft } from 'd3-axis';
 import { scaleBand, scaleLinear, ScaleLinear, scaleOrdinal } from 'd3-scale';
 import { select } from 'd3-selection';
 import merge from 'deepmerge';
-import { get } from 'lodash';
+import * as get from 'lodash.get';
 import colorScheme from './colors';
 import attrs from './d3/attrs';
 import { IJoyPlotProps } from './JoyPlot';
@@ -187,7 +187,7 @@ export const joyPlotD3 = ((): IChartAdaptor => {
         .attr('viewBox', `0 0 ${width} ${height}`)
         .append('g')
         .attr('transform',
-        'translate(' + margin.left + ',' + margin.top + ')');
+          'translate(' + margin.left + ',' + margin.top + ')');
       this._makeTip();
     },
 
@@ -271,8 +271,8 @@ export const joyPlotD3 = ((): IChartAdaptor => {
         svg.append('text')
           .attr('class', 'x-axis-label')
           .attr('transform',
-          'translate(' + (Number(width) / 2) + ' ,' +
-          ((height - this.xAxisHeight() - (margin.left * 2)) + 10 + axis.x.margin) + ')')
+            'translate(' + (Number(width) / 2) + ' ,' +
+            ((height - this.xAxisHeight() - (margin.left * 2)) + 10 + axis.x.margin) + ')')
           .style('text-anchor', 'middle')
           .text(axis.x.label);
       }
@@ -335,7 +335,7 @@ export const joyPlotD3 = ((): IChartAdaptor => {
 
       this.xAxis
         .attr('transform', 'translate(' + (this.yAxisWidth() + axis.y.style['stroke-width']) + ',' +
-        (height - this.xAxisHeight() - (margin.left * 2)) + ')')
+          (height - this.xAxisHeight() - (margin.left * 2)) + ')')
         .call(xAxis);
 
       const yLabels = data.map((d) => d.title);
@@ -492,10 +492,10 @@ export const joyPlotD3 = ((): IChartAdaptor => {
 
           // Hide bar's bottom border
           .attr('stroke-dasharray',
-          (d: IGroupDataItem): string => {
-            const currentHeight = yOuterScaleBand.bandwidth() - y(d.value);
-            return `${barWidth} 0 ${currentHeight} ${barWidth}`;
-          })
+            (d: IGroupDataItem): string => {
+              const currentHeight = yOuterScaleBand.bandwidth() - y(d.value);
+              return `${barWidth} 0 ${currentHeight} ${barWidth}`;
+            })
           .attr('height', (d: IGroupDataItem): number =>
             yOuterScaleBand.bandwidth() - y(d.value)
           );

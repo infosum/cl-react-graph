@@ -2,20 +2,24 @@
 import { extent } from 'd3-array';
 import { axisBottom, axisLeft } from 'd3-axis';
 import { easeCubic } from 'd3-ease';
-import { scaleLinear } from 'd3-scale';
+import { scaleLinear, scaleTime } from 'd3-scale';
 import { select } from 'd3-selection';
-import { curveCatmullRom } from 'd3-shape';
 import { area, line } from 'd3-shape';
+import { curveCatmullRom } from 'd3-shape';
+import { timeFormat, timeParse } from 'd3-time-format';
 import merge from 'deepmerge';
 import attrs from './d3/attrs';
+import { ILineChartProps } from './LineChart';
 import tips from './tip';
 
 export const lineChartD3 = ((): IChartAdaptor => {
   let svg;
   let tipContainer;
+  let xParseTime;
+  let xFormatTime;
   let tipContent;
   const y = scaleLinear();
-  const x = scaleLinear();
+  let x: any = scaleLinear();
 
   const
     lineProps = {
@@ -27,16 +31,17 @@ export const lineChartD3 = ((): IChartAdaptor => {
       strokeDashOffset: 0,
     };
 
-  const pointProps = {
+  const pointProps: ISVGPoint = {
     fill: 'rgba(255, 255, 255, 0)',
     radius: 4,
     stroke: '#005870',
   };
 
-  const defaultProps = {
+  const defaultProps: ILineChartProps = {
     axis: {
       x: {
         height: 20,
+        scale: 'LINEAR',
         style: {
           'fill': 'none',
           'shape-rendering': 'crispEdges',
@@ -51,6 +56,7 @@ export const lineChartD3 = ((): IChartAdaptor => {
         },
       },
       y: {
+        scale: 'LINEAR',
         style: {
           'fill': 'none',
           'shape-rendering': 'crispEdges',
@@ -100,7 +106,14 @@ export const lineChartD3 = ((): IChartAdaptor => {
     point: pointProps,
     tip: tips,
     tipContainer: null,
-    tipContentFn: (info, i, d) => info[i].x.toFixed(3) + ',' + info[i].y,
+    tipContentFn: (info, i, d) => {
+      switch (typeof info[i].x) {
+        case 'object': // date
+          return xFormatTime(info[i].x) + ', ' + info[i].y;
+        default:
+          return Number(info[i].x).toFixed(3) + ', ' + info[i].y;
+      }
+    },
     width: 200,
   };
 
@@ -155,7 +168,7 @@ export const lineChartD3 = ((): IChartAdaptor => {
         .attr('height', height)
         .append('g')
         .attr('transform',
-        'translate(' + margin.left + ',' + margin.top + ')');
+          'translate(' + margin.left + ',' + margin.top + ')');
 
       this._makeTip(el);
     },
@@ -261,7 +274,7 @@ export const lineChartD3 = ((): IChartAdaptor => {
 
       svg.append('g').attr('class', 'x-axis')
         .attr('transform', 'translate(' + axis.y.width + ',' +
-        (height - axis.x.height - (margin.left * 2)) + ')')
+          (height - axis.x.height - (margin.left * 2)) + ')')
         .call(xAxis);
 
       attrs(svg.selectAll('.y-axis .domain, .y-axis .tick line'), axis.y.style);
@@ -365,7 +378,6 @@ export const lineChartD3 = ((): IChartAdaptor => {
     _drawGrid(props: ILineChartProps) {
       const { data, height, width, axis, grid, margin } = props;
       const ticks = this.valuesCount(data);
-      const setCount = data.length;
       const axisWidth = axis.y.style['stroke-width'];
       const offset = {
         x: axis.y.width,
@@ -417,10 +429,31 @@ export const lineChartD3 = ((): IChartAdaptor => {
         return;
       }
       this.props = merge(defaultProps, props);
+      switch (props.axis.x.scale) {
+        case 'TIME':
+          x = scaleTime();
+          break;
+        default:
+          x = scaleLinear();
+          break;
+      }
+
       this._makeSvg(el);
       let data = props.data;
-      data = data.map((datum: ILineChartDataSet) =>
-        Object.assign({}, datumProps, datum));
+
+      xParseTime = timeParse(props.axis.x.dateFormat);
+      xFormatTime = timeFormat(props.axis.x.dateFormat);
+      data = data.map((datum: ILineChartDataSet) => {
+        if (props.axis.x.scale === 'TIME') {
+          datum.data = datum.data.map((d) => {
+            return {
+              ...d,
+              x: xParseTime(d.x.toString()),
+            };
+          });
+        }
+        return Object.assign({}, datumProps, datum);
+      });
       this._drawScales(data);
       this._drawLines(data);
       this._drawGrid(this.props);

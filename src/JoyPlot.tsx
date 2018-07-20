@@ -20,7 +20,7 @@ export interface IJoyPlotProps {
   stroke?: IStroke;
   tip?: any;
   tipContainer?: string;
-  tipContentFn?: TipContentFn;
+  tipContentFn?: TipContentFn<string>;
   visible?: { [key: string]: boolean };
   width: number | string;
 }

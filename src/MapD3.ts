@@ -5,7 +5,7 @@ import { json } from 'd3-request';
 import { select } from 'd3-selection';
 import merge from 'deepmerge';
 import { FeatureCollection } from 'geojson';
-import { get } from 'lodash';
+import * as get from 'lodash.get';
 import colorScheme from './colors';
 import attrs from './d3/attrs';
 import { IMapProps } from './Map';
@@ -80,7 +80,7 @@ export const mapD3 = ((): IChartAdaptor => {
     ) {
 
       const { width, height } = this.props;
-      const zoom = 4;
+      const zoom = 3;
       console.log('scale', width / 2 / Math.PI);
       const projection = geoMercator()
         .scale((width / 2 / Math.PI) * zoom)
