@@ -448,7 +448,9 @@ export const lineChartD3 = ((): IChartAdaptor => {
           datum.data = datum.data.map((d) => {
             return {
               ...d,
-              x: xParseTime(d.x.toString()),
+              x: typeof d.x === 'object'
+                ? d.x
+                : xParseTime(d.x.toString()),
             };
           });
         }
