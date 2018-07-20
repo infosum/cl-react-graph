@@ -23311,7 +23311,7 @@ exports.horizontalHistogramD3 = function () {
                 props = {};
             }
             this.props = deepmerge_1.default(defaultProps, props);
-            this.update(el, props);
+            this.update(el, this.props);
         },
         _makeSvg: function _makeSvg(el) {
             if (svg) {
@@ -25517,7 +25517,7 @@ exports.lineChartD3 = function () {
                 props = {};
             }
             this.props = deepmerge_1.default(defaultProps, props);
-            this.update(el, props);
+            this.update(el, this.props);
         },
         _makeSvg: function _makeSvg(el) {
             if (svg) {

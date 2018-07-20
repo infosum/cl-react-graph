@@ -119,7 +119,7 @@ export const horizontalHistogramD3 = ((): IChartAdaptor => {
      */
     create(el: HTMLElement, props = {}) {
       this.props = merge(defaultProps, props);
-      this.update(el, props);
+      this.update(el, this.props);
     },
 
     /**
@@ -146,7 +146,7 @@ export const horizontalHistogramD3 = ((): IChartAdaptor => {
         .attr('viewBox', `0 0 ${width} ${height}`)
         .append('g')
         .attr('transform',
-        'translate(' + margin.left + ',' + margin.top + ')');
+          'translate(' + margin.left + ',' + margin.top + ')');
       this._makeTip();
     },
 
@@ -222,7 +222,7 @@ export const horizontalHistogramD3 = ((): IChartAdaptor => {
 
       svg.append('g').attr('class', 'x-axis')
         .attr('transform', 'translate(' + axis.y.width + ',' +
-        (height - axis.x.height - (margin.left * 2)) + ')')
+          (height - axis.x.height - (margin.left * 2)) + ')')
         .call(xAxis);
 
       attrs(svg.selectAll('.y-axis .domain, .y-axis .tick line'), axis.y.style);
@@ -366,12 +366,12 @@ export const horizontalHistogramD3 = ((): IChartAdaptor => {
         .delay(delay)
         // Hide bar's left border
         .attr('stroke-dasharray',
-        (d: number): string => {
-          const currentWidth = x(d);
-          return `${currentWidth + barHeight + currentWidth} ${barHeight}`;
-        })
+          (d: number): string => {
+            const currentWidth = x(d);
+            return `${currentWidth + barHeight + currentWidth} ${barHeight}`;
+          })
         .attr('width',
-        (d: number): number => x(d));
+          (d: number): number => x(d));
 
       barItem.exit().remove();
     },
@@ -413,7 +413,7 @@ export const horizontalHistogramD3 = ((): IChartAdaptor => {
         gy = svg.append('g')
           .attr('class', 'grid gridY')
           .attr('transform', 'translate(' + (axis.y.width + axisWidth) + ', '
-          + (height - axis.x.height - (margin.top * 2)) + ')')
+            + (height - axis.x.height - (margin.top * 2)) + ')')
           .call(make_y_gridlines(grid.y.ticks || ticks)
             .tickSize(-height + (margin.left * 2) + axis.x.height) // Line Length
             .tickFormat(() => ''),

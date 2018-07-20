@@ -142,7 +142,7 @@ export const lineChartD3 = ((): IChartAdaptor => {
      */
     create(el: Node, props: Object = {}) {
       this.props = merge(defaultProps, props);
-      this.update(el, props);
+      this.update(el, this.props);
     },
 
     /**
