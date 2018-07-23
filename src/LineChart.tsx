@@ -13,9 +13,10 @@ interface IState {
   parentWidth?: number;
 }
 
+export type IChartPointValue = number | string | Date;
 export interface IChartPoint {
-  x: number | string | Date;
-  y: number | string | Date;
+  x: IChartPointValue;
+  y: IChartPointValue;
 }
 export interface ILineChartDataSet {
   label: string;
@@ -31,7 +32,7 @@ export interface ILineChartDataSet {
       show: boolean;
       fill: string;
     };
-    curveType?: d3.CurveFactory;
+    curveType?: any;
     stroke?: string;
     strokeDashOffset?: number;
     strokeDashArray?: string;
