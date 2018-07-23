@@ -15,7 +15,6 @@ interface IState {
 
 class JoypLotExamples extends Component<IProps, IState> {
 
-
   public render() {
     const data3 = {
       ...data2,
@@ -24,9 +23,8 @@ class JoypLotExamples extends Component<IProps, IState> {
         data: [7, 6, 5, 4, 3, 2, 1],
         label: 'Data 2',
       }],
-      title: 'Plot 2'
-
-    }
+      title: 'Plot 2',
+    };
 
     const { theme } = this.props;
     return (

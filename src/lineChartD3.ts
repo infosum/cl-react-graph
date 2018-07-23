@@ -1,4 +1,3 @@
-/// <reference path="./interfaces.d.ts" />
 import { extent } from 'd3-array';
 import { axisBottom, axisLeft } from 'd3-axis';
 import { easeCubic } from 'd3-ease';
@@ -9,7 +8,8 @@ import { curveCatmullRom } from 'd3-shape';
 import { timeFormat, timeParse } from 'd3-time-format';
 import merge from 'deepmerge';
 import attrs from './d3/attrs';
-import { ILineChartProps } from './LineChart';
+import { IChartAdaptor, IHistogramDataSet } from './Histogram';
+import { IChartPoint, ILineChartDataSet, ILineChartProps, ISVGPoint } from './LineChart';
 import tips from './tip';
 
 export const lineChartD3 = ((): IChartAdaptor => {
@@ -444,14 +444,18 @@ export const lineChartD3 = ((): IChartAdaptor => {
       xParseTime = timeParse(props.axis.x.dateFormat);
       xFormatTime = timeFormat(props.axis.x.dateFormat);
       data = data.map((datum: ILineChartDataSet) => {
+        console.log('datum', datum);
         if (props.axis.x.scale === 'TIME') {
           datum.data = datum.data.map((d) => {
-            return {
+            console.log(d);
+            const newd = {
               ...d,
               x: typeof d.x === 'object'
                 ? d.x
                 : xParseTime(d.x.toString()),
             };
+            console.log('newd', newd);
+            return newd;
           });
         }
         return Object.assign({}, datumProps, datum);

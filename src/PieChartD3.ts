@@ -1,13 +1,12 @@
-/// <reference path="./interfaces.d.ts" />
 import { interpolate } from 'd3-interpolate';
 import { scaleOrdinal } from 'd3-scale';
-import { select, Selection } from 'd3-selection';
+import { select } from 'd3-selection';
 import { arc, pie, PieArcDatum } from 'd3-shape';
 import 'd3-transition';
 import merge from 'deepmerge';
 import * as get from 'lodash.get';
-import * as textWidth from 'text-width';
 import colorScheme from './colors';
+import { IChartAdaptor, IHistogramDataSet } from './Histogram';
 import { IPieChartProps, IPieDataItem } from './PieChart';
 import tips from './tip';
 
@@ -143,7 +142,7 @@ export const pieChartD3 = ((): IChartAdaptor => {
 
     drawCharts() {
       const { data, visible } = this.props;
-      this.dataSets = data.counts.map((set: IHistogramDataSet, setIndex: number) => {
+      this.dataSets = data.counts.map((set: IHistogramDataSet) => {
         return set.data
           .map((count, i) => ({
             count: visible[data.bins[i]] !== false ? count : 0,
@@ -256,7 +255,7 @@ export const pieChartD3 = ((): IChartAdaptor => {
           .data(thisPie(data));
         const gLabel = path2.enter().append('text')
           .attr('class', 'label')
-          .each(function (d, j) {
+          .each(function () {
             // Store initial offset incase we change chart heights.
             this._height = height;
             this._width = width;

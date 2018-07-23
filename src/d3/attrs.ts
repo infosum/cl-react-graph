@@ -1,4 +1,5 @@
-/// <reference path="../interfaces.d.ts" />
+import { ISVGLineStyle } from '../Histogram';
+
 /**
  * Apply style object to a d3 selection
  * @param {Object} selection D3 selection

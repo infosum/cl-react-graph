@@ -1,6 +1,7 @@
 import { scaleOrdinal } from 'd3-scale';
 import * as React from 'react';
 import colorScheme from './colors';
+import { IHistogramDataSet } from './Histogram';
 
 interface IProps {
   className?: string;

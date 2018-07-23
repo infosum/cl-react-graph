@@ -1,5 +1,6 @@
 
 import { schemeCategory10, schemeDark2 } from 'd3-scale-chromatic';
+import { IAxes, IHistogramDataSet } from '../src/index';
 
 export const grid = {
   x: {

@@ -1,4 +1,3 @@
-/// <reference path="./interfaces.d.ts" />
 import { extent } from 'd3-array';
 import { axisBottom, axisLeft } from 'd3-axis';
 import { scaleBand, scaleLinear, ScaleLinear, scaleOrdinal } from 'd3-scale';
@@ -7,6 +6,7 @@ import merge from 'deepmerge';
 import * as get from 'lodash.get';
 import colorScheme from './colors';
 import attrs from './d3/attrs';
+import { IChartAdaptor, IHistogramData, IHistogramDataSet } from './Histogram';
 import { IJoyPlotProps } from './JoyPlot';
 import tips from './tip';
 
@@ -149,7 +149,7 @@ export const joyPlotD3 = ((): IChartAdaptor => {
       this.makeScales();
       this.containers = props.data.map((d, i) => svg
         .append('g')
-        .attr('class', `histogram-container-${i}`)
+        .attr('class', `histogram-container-${i}`),
       );
 
       this.update(el, props);
@@ -226,12 +226,11 @@ export const joyPlotD3 = ((): IChartAdaptor => {
      */
     appendDomainRange(scale: ScaleLinear<number, number>, data: IGroupData[]): void {
       const yDomain: number[] = [];
-      const { axis, domain, margin, height } = props;
-
+      const { domain } = props;
 
       const allCounts: number[] = data.reduce((prev, next) => {
         const thisCounts: number[] = next.reduce((p, n) => {
-          return [...p, ...n.map((n) => n.value)];
+          return [...p, ...n.map((item) => item.value)];
         }, [] as number[]);
         return [...prev, ...thisCounts];
       }, [0]);
@@ -341,11 +340,9 @@ export const joyPlotD3 = ((): IChartAdaptor => {
       const yLabels = data.map((d) => d.title);
       const yOuterBounds: [number, number] = [height - (margin.top * 2) - this.xAxisHeight(), 0];
       yOuterScaleBand.domain(yLabels)
-        .rangeRound(yOuterBounds)
+        .rangeRound(yOuterBounds);
 
       this.appendDomainRange(y, dataSets);
-
-
 
       const yAxis = axisLeft(yOuterScaleBand).ticks(axis.y.ticks);
 
@@ -434,9 +431,9 @@ export const joyPlotD3 = ((): IChartAdaptor => {
       const groupedMargin = this.groupedMargin();
 
       const maxItems = groupData.reduce((prev, next) => {
-        const thisMax = next.reduce((p, n) => n.length > p ? n.length : p, 0)
+        const thisMax = next.reduce((p, n) => n.length > p ? n.length : p, 0);
         return thisMax > prev ? thisMax : prev;
-      }, 0)
+      }, 0);
       groupData.forEach((data, i) => {
         const joyTitle = props.data[i].title;
         const g = this.containers[i]
@@ -466,9 +463,9 @@ export const joyPlotD3 = ((): IChartAdaptor => {
           .attr('class', 'bar')
           .attr('x', (d) => innerScaleBand(d.groupLabel))
           .attr('width', (d) => barWidth)
-          .attr('fill', (d, i) => colors(i))
+          .attr('fill', (d, ix) => colors(ix))
 
-          .on('mouseover', (d: IGroupDataItem, i: number) => {
+          .on('mouseover', (d: IGroupDataItem) => {
             const ix = bins.findIndex((b) => b === d.label);
             tipContent.html(() => tipContentFn(bins, ix, d.value, joyTitle));
             tip.fx.in(tipContainer);
@@ -480,15 +477,14 @@ export const joyPlotD3 = ((): IChartAdaptor => {
           .duration(duration)
           .delay(delay)
           .attr('y', (d: IGroupDataItem): number => y(d.value))
-          .attr('stroke', (d, i) => {
+          .attr('stroke', (d, ix) => {
             if (borderColors) {
-              return borderColors(i);
+              return borderColors(ix);
             }
           })
           .attr('shape-rendering', 'crispEdges')
           .attr('stroke-width', stroke.width)
           .attr('stroke-linecap', stroke.linecap)
-
 
           // Hide bar's bottom border
           .attr('stroke-dasharray',
@@ -497,14 +493,12 @@ export const joyPlotD3 = ((): IChartAdaptor => {
               return `${barWidth} 0 ${currentHeight} ${barWidth}`;
             })
           .attr('height', (d: IGroupDataItem): number =>
-            yOuterScaleBand.bandwidth() - y(d.value)
-          );
+            yOuterScaleBand.bandwidth() - y(d.value),
+        );
 
         g.exit().remove();
-      })
-
+      });
     },
-
 
     makeGrid(props: IJoyPlotProps) {
       const { grid } = props;
@@ -590,7 +584,6 @@ export const joyPlotD3 = ((): IChartAdaptor => {
         });
         return lineData;
       });
-
 
       this._drawScales(props.data);
       this._drawGrid();

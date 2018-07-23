@@ -1,4 +1,3 @@
-/// <reference path="./interfaces.d.ts" />
 import { extent } from 'd3-array';
 import { axisBottom, axisLeft } from 'd3-axis';
 import { scaleBand, scaleLinear, ScaleLinear, scaleOrdinal } from 'd3-scale';
@@ -7,7 +6,7 @@ import merge from 'deepmerge';
 import * as get from 'lodash.get';
 import colorScheme from './colors';
 import attrs from './d3/attrs';
-import { IHistogramProps } from './Histogram';
+import { IChartAdaptor, IHistogramData, IHistogramDataSet, IHistogramProps } from './Histogram';
 import tips from './tip';
 
 interface IGroupDataItem {

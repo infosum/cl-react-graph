@@ -1,7 +1,7 @@
-/// <reference path="./interfaces.d.ts" />
 import * as React from 'react';
 import { Component } from 'react';
 import * as ReactDOM from 'react-dom';
+import { IAxes, IGrid, IHistogramData, IMargin, ISVGLineStyle, TipContentFn } from './Histogram';
 import { lineChartD3 } from './lineChartD3';
 
 interface IState {
@@ -11,6 +11,36 @@ interface IState {
   tipContainer?: string;
   tipContentFn?: (info: IHistogramData, i: number, d: number) => string;
   parentWidth?: number;
+}
+
+export interface IChartPoint {
+  x: number | string | Date;
+  y: number | string | Date;
+}
+export interface ILineChartDataSet {
+  label: string;
+  point?: {
+    radius: number;
+    stroke: string;
+    fill: string;
+    show: boolean;
+  };
+  line?: {
+    show: boolean;
+    fill?: {
+      show: boolean;
+      fill: string;
+    };
+    curveType?: d3.CurveFactory;
+    stroke?: string;
+    strokeDashOffset?: number;
+    strokeDashArray?: string;
+  };
+  data: IChartPoint[];
+}
+
+export interface ISVGPoint extends ISVGLineStyle {
+  radius?: 4;
 }
 
 export interface ILineChartProps {

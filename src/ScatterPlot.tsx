@@ -1,4 +1,3 @@
-/// <reference path="./interfaces.d.ts" />
 import * as React from 'react';
 import { Component } from 'react';
 import * as ReactDOM from 'react-dom';
@@ -14,6 +13,24 @@ interface IChartState {
   width: number | string;
 }
 
+export type ScatterPlotData = any[];
+
+export interface IScatterPlotProps {
+  choices?: any[];
+  className?: string;
+  chartSize?: number;
+  data: ScatterPlotData;
+  delay?: number;
+  distModels?: string[];
+  duration?: number;
+  height: number;
+  legendWidth?: number;
+  colorScheme?: string[];
+  padding?: number;
+  radius?: number;
+  split?: string;
+  width: string | number;
+}
 class ScatterPlot extends Component<IScatterPlotProps, IChartState> {
 
   private chart;

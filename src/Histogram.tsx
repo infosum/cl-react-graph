@@ -1,10 +1,72 @@
-/// <reference path="./interfaces.d.ts" />
 import { rgb } from 'd3-color';
 import * as React from 'react';
 import { Component } from 'react';
 import * as ReactDOM from 'react-dom';
 import { histogramD3 } from './HistogramD3';
 
+export interface IChartAdaptor {
+  create: (el: Element | Text, props: { [key: string]: any }) => void;
+  update: (el: Element | Text, props: { [key: string]: any }) => void;
+  destroy: (el: Element | Text) => void;
+}
+
+export interface IHistogramBar {
+  groupMargin?: number;
+  margin?: number;
+  width?: number;
+}
+
+export interface IGrid {
+  x?: {
+    height?: number;
+    ticks?: number;
+    visible?: boolean;
+    style?: ISVGLineStyle;
+  };
+  y?: {
+    style?: ISVGLineStyle;
+    ticks?: number;
+    visible?: boolean;
+  };
+}
+
+
+export interface IStroke {
+  color: ((d, i: number, colors: (i: number) => string) => string) | string;
+  dasharray?: string;
+  linecap?: string;
+  width: number;
+}
+
+export interface IAxes {
+  y?: IAxis;
+  x?: IAxis;
+}
+export interface IHistogramDataSet {
+  borderColors?: string[];
+  colors?: string[];
+  label: string;
+  data: number[];
+}
+
+export interface IHistogramData {
+  bins: string[];
+  counts: IHistogramDataSet[];
+  colorScheme?: string[];
+  title?: string;
+}
+
+export interface IDomain {
+  max: number;
+  min: number;
+}
+
+export interface IMargin {
+  top?: number;
+  left?: number;
+  right?: number;
+  bottom?: number;
+}
 export interface IHistogramProps {
   axis?: IAxes;
   bar?: IHistogramBar;
@@ -24,6 +86,46 @@ export interface IHistogramProps {
   visible?: { [key: string]: boolean };
   width: number | string;
 }
+
+type Scale = 'LINEAR' | 'TIME';
+
+export interface ISVGLineStyle {
+  'stroke'?: string;
+  'fill'?: string;
+  'stroke-width'?: number;
+  'stroke-opacity'?: number;
+  'shape-rendering'?: string;
+}
+
+interface ISVGTextStyle {
+  fill?: string;
+  dy?: string | number;
+  'text-anchor'?: string;
+  transform?: string;
+  x?: string | number;
+  y?: string | number;
+}
+
+export interface IChartState {
+  parentWidth?: number;
+}
+
+export interface IAxis {
+  dateFormat?: string;
+  ticks?: number;
+  height?: number;
+  label?: string;
+  margin?: number;
+  scale?: Scale;
+  style?: ISVGLineStyle;
+  text?: {
+    style: ISVGTextStyle;
+  };
+  width?: number;
+  tickSize?: number;
+}
+
+export type TipContentFn<T> = (bins: T[], i: number, d: number, groupTitle?: string) => string;
 
 /**
  * Histogram component

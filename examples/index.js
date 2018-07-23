@@ -282,6 +282,22 @@ exports.default = JoypLotExamples;
 "use strict";
 
 
+var __extends = undefined && undefined.__extends || function () {
+    var extendStatics = Object.setPrototypeOf || { __proto__: [] } instanceof Array && function (d, b) {
+        d.__proto__ = b;
+    } || function (d, b) {
+        for (var p in b) {
+            if (b.hasOwnProperty(p)) d[p] = b[p];
+        }
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() {
+            this.constructor = d;
+        }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+}();
 Object.defineProperty(exports, "__esModule", { value: true });
 var d3_shape_1 = __webpack_require__(/*! d3-shape */ "./node_modules/d3-shape/index.js");
 var React = __webpack_require__(/*! react */ "react");
@@ -311,13 +327,6 @@ var points = [{
         stroke: 'red'
     }
 }];
-var timeData = [{
-    data: [{ x: '1-May-12', y: 1 }, { x: '30-Apr-15', y: 2 }, { x: '27-Apr-17', y: 3 }, { x: new Date(), y: 4 }],
-    label: 'test data'
-}, {
-    data: [{ x: '1-May-12', y: 10 }, { x: '30-Apr-15', y: 12 }, { x: '27-Apr-17', y: 23 }, { x: '26-Apr-19', y: 14 }],
-    label: 'test data 2'
-}];
 var axisWithTime = {
     x: {
         dateFormat: '%d-%b-%y',
@@ -325,9 +334,39 @@ var axisWithTime = {
     },
     y: {}
 };
-var LineChartExample = function LineChartExample() {
-    return React.createElement("div", null, React.createElement("h3", null, "Line Chart"), React.createElement(src_1.LineChart, { axis: data_1.axis, grid: data_1.grid, data: points, width: 300 }), React.createElement(src_1.LineChart, { data: timeData, axis: axisWithTime, width: 300 }));
-};
+var LineChartExample = function (_super) {
+    __extends(LineChartExample, _super);
+    function LineChartExample(props) {
+        var _this = _super.call(this, props) || this;
+        _this.setTimeData = _this.setTimeData.bind(_this);
+        _this.state = {
+            timeData: [{
+                data: [{ x: '1-May-12', y: 1 }, { x: '30-Apr-15', y: 12 }, { x: '27-Apr-17', y: 3 }, { x: new Date(), y: 4 }],
+                label: 'test data'
+            }, {
+                data: [{ x: '1-May-12', y: 10 }, { x: '30-Apr-15', y: 12 }, { x: '27-Apr-17', y: 23 }, { x: '26-Apr-19', y: 14 }],
+                label: 'test data 2'
+            }]
+        };
+        return _this;
+    }
+    LineChartExample.prototype.setTimeData = function (v, i) {
+        var s = this.state.timeData.slice();
+        s[0].data[i].x = v;
+        this.setState({
+            timeData: s
+        });
+    };
+    LineChartExample.prototype.render = function () {
+        var _this = this;
+        console.log('render line chart example');
+        return React.createElement("div", null, React.createElement("h3", null, "Line Chart"), React.createElement(src_1.LineChart, { axis: data_1.axis, grid: data_1.grid, data: points, width: 300 }), React.createElement(src_1.LineChart, { data: this.state.timeData, axis: axisWithTime, width: 300 }), React.createElement("input", { onBlur: function onBlur(e) {
+                e.preventDefault();
+                _this.setTimeData(e.target.value, 0);
+            }, defaultValue: this.state.timeData[0].data[0].x.toString() }));
+    };
+    return LineChartExample;
+}(React.Component);
 exports.default = LineChartExample;
 
 /***/ }),
@@ -23888,14 +23927,11 @@ exports.joyPlotD3 = function () {
         },
         appendDomainRange: function appendDomainRange(scale, data) {
             var yDomain = [];
-            var axis = props.axis,
-                domain = props.domain,
-                margin = props.margin,
-                height = props.height;
+            var domain = props.domain;
             var allCounts = data.reduce(function (prev, next) {
                 var thisCounts = next.reduce(function (p, n) {
-                    return p.concat(n.map(function (n) {
-                        return n.value;
+                    return p.concat(n.map(function (item) {
+                        return item.value;
                     }));
                 }, []);
                 return prev.concat(thisCounts);
@@ -24049,9 +24085,9 @@ exports.joyPlotD3 = function () {
                     return innerScaleBand(d.groupLabel);
                 }).attr('width', function (d) {
                     return barWidth;
-                }).attr('fill', function (d, i) {
-                    return colors(i);
-                }).on('mouseover', function (d, i) {
+                }).attr('fill', function (d, ix) {
+                    return colors(ix);
+                }).on('mouseover', function (d) {
                     var ix = bins.findIndex(function (b) {
                         return b === d.label;
                     });
@@ -24065,9 +24101,9 @@ exports.joyPlotD3 = function () {
                     return tip.fx.out(tipContainer);
                 }).merge(bars).transition().duration(duration).delay(delay).attr('y', function (d) {
                     return y(d.value);
-                }).attr('stroke', function (d, i) {
+                }).attr('stroke', function (d, ix) {
                     if (borderColors) {
-                        return borderColors(i);
+                        return borderColors(ix);
                     }
                 }).attr('shape-rendering', 'crispEdges').attr('stroke-width', stroke.width).attr('stroke-linecap', stroke.linecap).attr('stroke-dasharray', function (d) {
                     var currentHeight = yOuterScaleBand.bandwidth() - y(d.value);
@@ -24800,7 +24836,7 @@ exports.pieChartD3 = function () {
             var _a = this.props,
                 data = _a.data,
                 visible = _a.visible;
-            this.dataSets = data.counts.map(function (set, setIndex) {
+            this.dataSets = data.counts.map(function (set) {
                 return set.data.map(function (count, i) {
                     return {
                         count: visible[data.bins[i]] !== false ? count : 0,
@@ -24877,7 +24913,7 @@ exports.pieChartD3 = function () {
             }).attrTween('d', arcTween(thisArc));
             if (labels.display) {
                 var path2 = this.containers[i].selectAll('text.label').data(thisPie(data));
-                var gLabel = path2.enter().append('text').attr('class', 'label').each(function (d, j) {
+                var gLabel = path2.enter().append('text').attr('class', 'label').each(function () {
                     this._height = height;
                     this._width = width;
                 }).attr('transform', function (d) {

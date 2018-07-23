@@ -1,7 +1,7 @@
-/// <reference path="./interfaces.d.ts" />
 import * as React from 'react';
 import { Component } from 'react';
 import * as ReactDOM from 'react-dom';
+import { IChartAdaptor, IChartState, IHistogramDataSet, IMargin, TipContentFn } from './Histogram';
 import { pieChartD3 } from './PieChartD3';
 
 interface ILabels {

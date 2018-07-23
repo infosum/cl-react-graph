@@ -1,8 +1,8 @@
-/// <reference path="./interfaces.d.ts" />
 import { FeatureCollection } from 'geojson';
 import * as React from 'react';
 import { Component } from 'react';
 import * as ReactDOM from 'react-dom';
+import { IChartAdaptor, IChartState } from './Histogram';
 import { mapD3 } from './MapD3';
 
 export interface IMapProps {

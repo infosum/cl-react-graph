@@ -2,6 +2,7 @@ import merge from 'deepmerge';
 import * as React from 'react';
 import { Component } from 'react';
 import { Histogram, Legend } from '../src';
+import { IAxes } from '../src/index';
 import { axis, data, data2, data3, grid } from './data';
 
 interface IProps {

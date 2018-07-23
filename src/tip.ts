@@ -1,5 +1,5 @@
-/// <reference path="./interfaces.d.ts" />
 import { event } from 'd3-selection';
+
 export default {
   fx: {
     in: (container) => {

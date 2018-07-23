@@ -1,8 +1,11 @@
-/// <reference path="./interfaces.d.ts" />
 import { rgb } from 'd3-color';
 import * as React from 'react';
 import { Component } from 'react';
 import * as ReactDOM from 'react-dom';
+import {
+  IAxes, IChartAdaptor, IChartState, IDomain, IGrid, IHistogramBar,
+  IHistogramData, IMargin, IStroke, TipContentFn,
+} from './Histogram';
 import { joyPlotD3 } from './JoyplotD3';
 
 export interface IJoyPlotProps {

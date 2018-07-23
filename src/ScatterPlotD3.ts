@@ -1,4 +1,3 @@
-/// <reference path="./interfaces.d.ts" />
 import merge from 'deepmerge';
 import colorScheme from './colors';
 
@@ -6,6 +5,8 @@ import { extent } from 'd3-array';
 import { axisBottom, axisLeft } from 'd3-axis';
 import { scaleLinear, scaleOrdinal } from 'd3-scale';
 import { select } from 'd3-selection';
+import { IChartPoint } from './LineChart';
+import { IScatterPlotProps, ScatterPlotData } from './ScatterPlot';
 
 export const scatterPlotD3 = (() => {
   let svg;

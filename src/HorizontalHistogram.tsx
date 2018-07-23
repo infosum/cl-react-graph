@@ -1,9 +1,9 @@
-/// <reference path="./interfaces.d.ts" />
 import { rgb } from 'd3-color';
 import * as React from 'react';
 import { Component } from 'react';
 import * as ReactDOM from 'react-dom';
 import { IHistogramProps } from './Histogram';
+import { IChartAdaptor, IChartState } from './Histogram';
 import { horizontalHistogramD3 } from './HorizontalHistogramD3';
 
 /**
