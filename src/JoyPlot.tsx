@@ -128,7 +128,6 @@ class Histogram extends Component<IJoyPlotProps, IChartState> {
     if (width === '100%') {
       width = this.state.parentWidth || 300;
     }
-    console.log('rest', rest);
     return {
       ...rest,
       width,

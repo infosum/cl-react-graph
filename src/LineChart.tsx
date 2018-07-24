@@ -5,11 +5,6 @@ import { IAxes, IGrid, IHistogramData, IMargin, ISVGLineStyle, TipContentFn } fr
 import { lineChartD3 } from './lineChartD3';
 
 interface IState {
-  data: IChartPoint[];
-  width: number | string;
-  height: number;
-  tipContainer?: string;
-  tipContentFn?: (info: IHistogramData, i: number, d: number) => string;
   parentWidth?: number;
 }
 
@@ -67,13 +62,10 @@ class LineChart extends Component<ILineChartProps, IState> {
 
   constructor(props: ILineChartProps) {
     super(props);
-    this.state = {
-      data: [],
-      height: 400,
-      parentWidth: 0,
-      width: 400,
-    };
     this.chart = lineChartD3();
+    this.state = {
+      parentWidth: 300,
+    };
   }
 
   private handleResize() {
@@ -82,7 +74,7 @@ class LineChart extends Component<ILineChartProps, IState> {
 
     this.setState({
       parentWidth: width,
-    }, () => this.chart.update(elem, this.getChartState()));
+    }, () => this.chart.create(elem, this.getChartState()));
 
   }
 
@@ -105,26 +97,17 @@ class LineChart extends Component<ILineChartProps, IState> {
    * @return {Object} data and chart props
    */
   public getChartState(): ILineChartProps {
-    const { axis, data, grid } = this.props;
     let { width } = this.props;
+    const { children, ...rest } = this.props;
 
     if (width === '100%') {
       width = this.state.parentWidth || 300;
     }
 
-    const r: ILineChartProps = {
-      data,
-      height: 200,
+    return {
+      ...rest,
       width,
     };
-
-    if (axis) {
-      r.axis = axis;
-    }
-    if (grid) {
-      r.grid = grid;
-    }
-    return r;
   }
 
   public componentWillUnmount() {
@@ -136,10 +119,6 @@ class LineChart extends Component<ILineChartProps, IState> {
 
   public getDOMNode() {
     return ReactDOM.findDOMNode(this.ref);
-  }
-
-  public componentWillReceiveProps(props: ILineChartProps) {
-    this.chart.update(this.getDOMNode(), this.getChartState());
   }
 
   public render(): JSX.Element {

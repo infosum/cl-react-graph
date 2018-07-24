@@ -7,19 +7,19 @@ import { axis, grid } from './data';
 const points: ILineChartDataSet[] = [
   {
     data: [
-      { x: 1, y: 1 },
-      { x: 2, y: 2 },
-      { x: 3, y: 3 },
-      { x: 4, y: 4 },
+      { x: '1-May-12', y: 1 },
+      { x: '30-Apr-15', y: 12 },
+      { x: '27-Apr-17', y: 3 },
+      { x: new Date(), y: 4 },
     ],
     label: 'test data',
   },
   {
     data: [
-      { x: 2, y: 1 },
-      { x: 3, y: 2 },
-      { x: 4, y: 3 },
-      { x: 6, y: 4 },
+      { x: '1-May-12', y: 10 },
+      { x: '30-Apr-15', y: 12 },
+      { x: '27-Apr-17', y: 23 },
+      { x: '26-Apr-19', y: 14 },
     ],
     label: 'test data',
     line: {
@@ -111,7 +111,7 @@ class LineChartExample extends React.Component<{}, IState> {
         <LineChart
           data={this.state.timeData}
           axis={axisWithTime}
-          width={300} />
+          width="100%" />
         <input onBlur={(e) => {
           e.preventDefault();
           this.setTimeData(e.target.value, 0);

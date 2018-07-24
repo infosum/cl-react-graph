@@ -285,14 +285,13 @@ export const lineChartD3 = ((): IChartAdaptor => {
      * @param {Array} data Chart data objects
      */
     _drawLines(data: ILineChartDataSet[]) {
-      const { axis, fx, height, margin } = this.props;
+      const { axis } = this.props;
       const yAxisWidth = getYAxisWidth(axis);
       const xAxisHeight = getXAxisHeight(axis);
       const curve = (curveType) => line()
         .curve(curveType)
         .x((d: any) => x(d.x) + yAxisWidth)
         .y((d: any) => {
-          console.log(xAxisHeight, 'xAxisHeight');
           return y(d.y);
         });
 
@@ -380,17 +379,14 @@ export const lineChartD3 = ((): IChartAdaptor => {
       xParseTime = timeParse(props.axis.x.dateFormat);
       xFormatTime = timeFormat(props.axis.x.dateFormat);
       data = data.map((datum: ILineChartDataSet) => {
-        console.log('datum', datum);
         if (props.axis.x.scale === 'TIME') {
           datum.data = datum.data.map((d) => {
-            console.log(d);
             const newd = {
               ...d,
               x: typeof d.x === 'object'
                 ? d.x
                 : xParseTime(d.x.toString()),
             };
-            console.log('newd', newd);
             return newd;
           });
         }

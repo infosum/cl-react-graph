@@ -81,7 +81,6 @@ export const mapD3 = ((): IChartAdaptor => {
 
       const { width, height } = this.props;
       const zoom = 3;
-      console.log('scale', width / 2 / Math.PI);
       const projection = geoMercator()
         .scale((width / 2 / Math.PI) * zoom)
         .translate([(width / 2), (height / 2)]);

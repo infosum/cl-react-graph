@@ -38,7 +38,7 @@ const App: React.SFC<{}> = (): JSX.Element => <div style={{ padding: '20px' }}>
   </div>
 
   <div>
-    <ScatterPlot data={scatter} width={300} height={300} />
+    {/* <ScatterPlot data={scatter} width={300} height={300} /> */}
   </div>
 
 </div>;

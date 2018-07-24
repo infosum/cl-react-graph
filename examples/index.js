@@ -142,7 +142,6 @@ var tipContentFns = [function (bins, i, d) {
 }, function (bins, i, d) {
     return bins[i] + '<br />Bookay ' + d.toFixed(2);
 }];
-var toggleData = [data_1.data2, data_1.data3];
 var HistogramExamples = function (_super) {
     __extends(HistogramExamples, _super);
     function HistogramExamples(props) {
@@ -174,11 +173,6 @@ var HistogramExamples = function (_super) {
             visible: __assign({}, this.state.visible, (_a = {}, _a[key] = v, _a))
         });
     };
-    HistogramExamples.prototype.toggleData = function () {
-        this.setState({
-            dataIndex: this.state.dataIndex === 0 ? 1 : 0
-        });
-    };
     HistogramExamples.prototype.render = function () {
         var _this = this;
         var theme = this.props.theme;
@@ -196,19 +190,9 @@ var HistogramExamples = function (_super) {
                 label: ''
             }]
         };
-        var theme2 = [theme[0]];
-        return React.createElement("div", null, React.createElement("h3", null, "Histograms"), React.createElement(src_1.Histogram, { data: data_1.data2, width: 400, height: 400, margin: {
-                left: 30,
-                top: 30
-            }, domain: { min: 0, max: 10 } }), React.createElement(src_1.Histogram, { data: data_1.data, grid: data_1.grid, width: '100%', height: 720, visible: visible, colorScheme: theme, axis: this.state.axis, tipContentFn: tipContentFns[this.state.tipContentFnIndex] }), React.createElement(src_1.Legend, { theme: theme, data: dataLegendData, onSelect: function onSelect(label) {
+        return React.createElement("div", null, React.createElement(src_1.Histogram, { data: data_1.data, grid: data_1.grid, width: '100%', height: 720, visible: visible, colorScheme: theme, axis: this.state.axis, tipContentFn: tipContentFns[this.state.tipContentFnIndex] }), React.createElement(src_1.Legend, { theme: theme, data: dataLegendData, onSelect: function onSelect(label) {
                 return _this.toggleVisible(label);
-            }, visible: visible }), React.createElement(src_1.Histogram, { data: toggleData[this.state.dataIndex], bar: { margin: 0.1 }, colorScheme: theme, visible: visible, width: 700, height: 350, axis: this.state.axis, tipContentFn: tipContentFns[this.state.tipContentFnIndex] }), React.createElement(src_1.Legend, { theme: theme2, data: toggleData[this.state.dataIndex], onSelect: function onSelect(label) {
-                return _this.toggleVisible(label);
-            }, visible: visible }), React.createElement("button", { onClick: function onClick() {
-                return _this.toggleAxisLabel();
-            } }, "toggleAxisLabel & tips"), React.createElement("button", { onClick: function onClick() {
-                return _this.toggleData();
-            } }, "toggle data"));
+            }, visible: visible }));
     };
     return HistogramExamples;
 }(react_1.Component);
@@ -304,10 +288,10 @@ var React = __webpack_require__(/*! react */ "react");
 var src_1 = __webpack_require__(/*! ../src */ "./src/index.ts");
 var data_1 = __webpack_require__(/*! ./data */ "./examples/data.ts");
 var points = [{
-    data: [{ x: 1, y: 1 }, { x: 2, y: 2 }, { x: 3, y: 3 }, { x: 4, y: 4 }],
+    data: [{ x: '1-May-12', y: 1 }, { x: '30-Apr-15', y: 12 }, { x: '27-Apr-17', y: 3 }, { x: new Date(), y: 4 }],
     label: 'test data'
 }, {
-    data: [{ x: 2, y: 1 }, { x: 3, y: 2 }, { x: 4, y: 3 }, { x: 6, y: 4 }],
+    data: [{ x: '1-May-12', y: 10 }, { x: '30-Apr-15', y: 12 }, { x: '27-Apr-17', y: 23 }, { x: '26-Apr-19', y: 14 }],
     label: 'test data',
     line: {
         curveType: d3_shape_1.curveStepAfter,
@@ -371,7 +355,7 @@ var LineChartExample = function (_super) {
     LineChartExample.prototype.render = function () {
         var _this = this;
         console.log('render line chart example');
-        return React.createElement("div", null, React.createElement("h3", null, "Line Chart"), React.createElement(src_1.LineChart, { axis: data_1.axis, grid: data_1.grid, data: points, width: 300 }), React.createElement(src_1.LineChart, { data: this.state.timeData, axis: axisWithTime, width: 300 }), React.createElement("input", { onBlur: function onBlur(e) {
+        return React.createElement("div", null, React.createElement("h3", null, "Line Chart"), React.createElement(src_1.LineChart, { axis: data_1.axis, grid: data_1.grid, data: points, width: 300 }), React.createElement(src_1.LineChart, { data: this.state.timeData, axis: axisWithTime, width: "100%" }), React.createElement("input", { onBlur: function onBlur(e) {
                 e.preventDefault();
                 _this.setTimeData(e.target.value, 0);
             }, defaultValue: this.state.timeData[0].data[0].x.toString() }));
@@ -663,7 +647,7 @@ var App = function App() {
     return React.createElement("div", { style: { padding: '20px' } }, React.createElement(Map_1.default, null), React.createElement(JoyPlot_1.default, { theme: theme }), React.createElement(Pie_1.default, { theme: theme }), React.createElement("div", null, React.createElement(LineChartExample_1.default, null)), React.createElement(Histogram_1.default, { theme: theme }), React.createElement("div", null, React.createElement(src_1.HorizontalHistogram, { data: data_1.data2, width: 500, height: 400, margin: {
             left: 30,
             top: 30
-        } })), React.createElement("div", null, React.createElement(src_1.ScatterPlot, { data: scatter, width: 300, height: 300 })));
+        } })), React.createElement("div", null));
 };
 ReactDOM.render(React.createElement(App, null), document.getElementById('root'));
 
@@ -23569,7 +23553,6 @@ var Histogram = function (_super) {
         if (width === '100%') {
             width = this.state.parentWidth || 300;
         }
-        console.log('rest', rest);
         return __assign({}, rest, { width: width });
     };
     Histogram.prototype.componentWillUnmount = function () {
@@ -24170,6 +24153,23 @@ var __extends = undefined && undefined.__extends || function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 }();
+var __assign = undefined && undefined.__assign || Object.assign || function (t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+        s = arguments[i];
+        for (var p in s) {
+            if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+        }
+    }
+    return t;
+};
+var __rest = undefined && undefined.__rest || function (s, e) {
+    var t = {};
+    for (var p in s) {
+        if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0) t[p] = s[p];
+    }if (s != null && typeof Object.getOwnPropertySymbols === "function") for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+        if (e.indexOf(p[i]) < 0) t[p[i]] = s[p[i]];
+    }return t;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "react");
 var react_1 = __webpack_require__(/*! react */ "react");
@@ -24179,13 +24179,10 @@ var LineChart = function (_super) {
     __extends(LineChart, _super);
     function LineChart(props) {
         var _this = _super.call(this, props) || this;
-        _this.state = {
-            data: [],
-            height: 400,
-            parentWidth: 0,
-            width: 400
-        };
         _this.chart = lineChartD3_1.lineChartD3();
+        _this.state = {
+            parentWidth: 300
+        };
         return _this;
     }
     LineChart.prototype.handleResize = function () {
@@ -24195,7 +24192,7 @@ var LineChart = function (_super) {
         this.setState({
             parentWidth: width
         }, function () {
-            return _this.chart.update(elem, _this.getChartState());
+            return _this.chart.create(elem, _this.getChartState());
         });
     };
     LineChart.prototype.componentDidMount = function () {
@@ -24212,26 +24209,14 @@ var LineChart = function (_super) {
         this.chart.update(this.getDOMNode(), this.getChartState());
     };
     LineChart.prototype.getChartState = function () {
-        var _a = this.props,
-            axis = _a.axis,
-            data = _a.data,
-            grid = _a.grid;
         var width = this.props.width;
+        var _a = this.props,
+            children = _a.children,
+            rest = __rest(_a, ["children"]);
         if (width === '100%') {
             width = this.state.parentWidth || 300;
         }
-        var r = {
-            data: data,
-            height: 200,
-            width: width
-        };
-        if (axis) {
-            r.axis = axis;
-        }
-        if (grid) {
-            r.grid = grid;
-        }
-        return r;
+        return __assign({}, rest, { width: width });
     };
     LineChart.prototype.componentWillUnmount = function () {
         if (this.props.width === '100%') {
@@ -24241,9 +24226,6 @@ var LineChart = function (_super) {
     };
     LineChart.prototype.getDOMNode = function () {
         return ReactDOM.findDOMNode(this.ref);
-    };
-    LineChart.prototype.componentWillReceiveProps = function (props) {
-        this.chart.update(this.getDOMNode(), this.getChartState());
     };
     LineChart.prototype.render = function () {
         var _this = this;
@@ -24437,7 +24419,6 @@ exports.mapD3 = function () {
                 width = _a.width,
                 height = _a.height;
             var zoom = 3;
-            console.log('scale', width / 2 / Math.PI);
             var projection = d3_geo_1.geoMercator().scale(width / 2 / Math.PI * zoom).translate([width / 2, height / 2]);
             var geoGenerator = d3_geo_1.geoPath().projection(projection);
             var u = this.container.selectAll('path').data(geojson.features);
@@ -25603,18 +25584,13 @@ exports.lineChartD3 = function () {
             attrs_1.default(svg.selectAll('.x-axis .tick text'), axis.x.text.style);
         },
         _drawLines: function _drawLines(data) {
-            var _a = this.props,
-                axis = _a.axis,
-                fx = _a.fx,
-                height = _a.height,
-                margin = _a.margin;
+            var axis = this.props.axis;
             var yAxisWidth = grid_1.yAxisWidth(axis);
             var xAxisHeight = grid_1.xAxisHeight(axis);
             var curve = function curve(curveType) {
                 return d3_shape_1.line().curve(curveType).x(function (d) {
                     return x(d.x) + yAxisWidth;
                 }).y(function (d) {
-                    console.log(xAxisHeight, 'xAxisHeight');
                     return y(d.y);
                 });
             };
@@ -25693,12 +25669,9 @@ exports.lineChartD3 = function () {
             xParseTime = d3_time_format_1.timeParse(props.axis.x.dateFormat);
             xFormatTime = d3_time_format_1.timeFormat(props.axis.x.dateFormat);
             data = data.map(function (datum) {
-                console.log('datum', datum);
                 if (props.axis.x.scale === 'TIME') {
                     datum.data = datum.data.map(function (d) {
-                        console.log(d);
                         var newd = __assign({}, d, { x: _typeof(d.x) === 'object' ? d.x : xParseTime(d.x.toString()) });
-                        console.log('newd', newd);
                         return newd;
                     });
                 }

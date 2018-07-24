@@ -30,7 +30,6 @@ export interface IGrid {
   };
 }
 
-
 export interface IStroke {
   color: ((d, i: number, colors: (i: number) => string) => string) | string;
   dasharray?: string;
