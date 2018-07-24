@@ -138,6 +138,7 @@ export const lineChartD3 = ((): IChartAdaptor => {
         .append('g')
         .attr('class', 'linechart-container');
       this.makeGrid();
+      this.lineContainer = svg.append('g').attr('class', 'line-container');
       this.makeScales();
       this.update(el, this.props);
     },
@@ -179,30 +180,31 @@ export const lineChartD3 = ((): IChartAdaptor => {
     _drawDataPointSet(data: ILineChartDataSet[]) {
       const { axis } = this.props;
       const yAxisWidth = getYAxisWidth(axis);
-      console.log('data 0', data[0]);
-      const dataset = data[0].data.map((d) => {
-        return {
-          ...d,
-          point: data[0].point,
-        };
-      });
-      console.log('dataset', dataset);
-      const point = this.container.selectAll('circle').data(dataset);
 
-      // UPDATE
-      // Update old elements as needed.
+      const pointContainer = this.container.selectAll('g').data(data);
+
+      const point = pointContainer.enter()
+        .append('g')
+        .attr('class', (d, i) => 'point-container' + i)
+        .merge(pointContainer)
+        .selectAll('circle')
+        .data((d) => {
+          return d.data.map((dx) => {
+            return {
+              ...dx,
+              point: d.point,
+            };
+          });
+        });
+
+      // UPDATE - Update old elements as needed.
       point.attr('class', 'update');
 
-      // ENTER
-      // Create new elements as needed.
-      //
       // ENTER + UPDATE
       // After merging the entered elements with the update selection,
       // apply operations to both.
       point.enter().append('circle')
         .attr('class', 'enter')
-        .attr('x', function (d, i) { return i * 32; })
-        .attr('dy', '.35em')
         .merge(point)
         .attr('class', 'point')
         .attr('cy', (d) => y(d.y))
@@ -217,75 +219,8 @@ export const lineChartD3 = ((): IChartAdaptor => {
         .attr('r', (d) => d.point.radius)
         .delay(50);
 
-      // EXIT
-      // Remove old elements as needed.
-      point.exit().remove();
-      // groups.exit().remove();
-      // g.exit().remove();
-      // data.forEach((datum: ILineChartDataSet, i: number) => {
-      //   if (!datum.point) {
-      //     return;
-      //   }
-      //   if (datum.point.show !== false) {
-      //     this._drawDataPoints(datum, '.points-' + i);
-      //   }
-      // });
-    },
-
-    /**
-     * Draw data points
-     */
-    _drawDataPoints(datum: ILineChartDataSet, selector: string) {
-      if (!datum.point) {
-        return;
-      }
-      const { axis, tip, tipContentFn } = this.props;
-      const { radius, stroke, fill } = datum.point;
-      const yAxisWidth = getYAxisWidth(axis);
-      svg.selectAll(selector).remove();
-
-      const g = this.container
-        .selectAll(selector)
-        .attr('class', selector)
-        .data(datum.data);
-
-      const point = g.enter()
-        .merge(g)
-        .append('circle')
-        .attr('class', 'point')
-        .attr('cy', (d) => y(d.y))
-        .attr('r', (d, i) => 0)
-        .attr('fill', fill)
-        .attr('stroke', stroke)
-        .attr('cx', (d) => {
-          return x(d.x) + yAxisWidth;
-        });
-
-      // const point = svg.selectAll(selector)
-      //   .data(datum.data)
-      //   .enter()
-      //   .append('circle')
-      //   .attr('class', 'point')
-      //   .attr('cx', (d) => {
-      //     return x(d.x) + yAxisWidth;
-      //   })
-      //   .attr('cy', (d) => y(d.y))
-      //   .attr('r', (d, i) => 0)
-      //   .attr('fill', fill)
-      //   .attr('stroke', stroke)
-      //   .on('mouseover', (d: number, i: number) => {
-      //     tipContent.html(() => tipContentFn(datum.data, i, d));
-      //     tip.fx.in(tipContainer);
-      //   })
-      //   .on('mousemove', () => tip.fx.move(tipContainer))
-      //   .on('mouseout', () => tip.fx.out(tipContainer));
-
-      point.transition()
-        .duration(400)
-        .attr('r', () => radius)
-        .delay(50);
-
-      g.exit().remove();
+      // EXIT - Remove old elements as needed.
+      pointContainer.exit().remove();
       point.exit().remove();
     },
 
@@ -349,11 +284,41 @@ export const lineChartD3 = ((): IChartAdaptor => {
      * @param {Array} data Chart data objects
      */
     _drawLines(data: ILineChartDataSet[]) {
-      data.forEach((datum: ILineChartDataSet, i: number) => {
-        if (datum.line && datum.line.show !== false) {
-          this._drawLine(datum, '.line-' + i);
-        }
-      });
+      const selector = 'g';
+      const dx = [data[0], data[1]];
+      const { axis, fx, height, margin } = this.props;
+      const { curveType, stroke, strokeDashOffset, strokeDashArray } = data[0].line;
+
+      const yAxisWidth = getYAxisWidth(axis);
+      const xAxisHeight = getXAxisHeight(axis);
+      const curve = line()
+        .curve(curveType)
+        .x((d: any) => x(d.x) + yAxisWidth)
+        .y((d: any) => {
+          console.log(xAxisHeight, 'xAxisHeight');
+          return y(d.y);
+        });
+
+      const path = this.lineContainer.selectAll('g').data(dx);
+
+      path.enter().append('path')
+        .merge(path)
+        .attr('d', (d) => curve(d.data))
+        .attr('class', 'path')
+        .attr('fill', 'none')
+        .attr('stroke-dashoffset', strokeDashOffset)
+        .attr('stroke-dasharray', strokeDashArray)
+        .attr('stroke', stroke);
+
+      this.lineContainer.exit().remove();
+      path.exit().remove();
+
+
+      // data.forEach((datum: ILineChartDataSet, i: number) => {
+      //   if (datum.line && datum.line.show !== false) {
+      //     this._drawLine(datum, '.line-' + i);
+      //   }
+      // });
     },
 
     /**
