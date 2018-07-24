@@ -342,7 +342,18 @@ var LineChartExample = function (_super) {
         _this.state = {
             timeData: [{
                 data: [{ x: '1-May-12', y: 1 }, { x: '30-Apr-15', y: 12 }, { x: '27-Apr-17', y: 3 }, { x: new Date(), y: 4 }],
-                label: 'test data'
+                label: 'test data',
+                line: {
+                    curveType: d3_shape_1.curveStepAfter,
+                    fill: {
+                        fill: 'rgba(10, 10, 10, 0.2)',
+                        show: true
+                    },
+                    show: true,
+                    stroke: 'orange',
+                    strokeDashArray: '10 5',
+                    strokeDashOffset: 3
+                }
             }, {
                 data: [{ x: '1-May-12', y: 10 }, { x: '30-Apr-15', y: 12 }, { x: '27-Apr-17', y: 23 }, { x: '26-Apr-19', y: 14 }],
                 label: 'test data 2'
@@ -594,7 +605,7 @@ exports.axis = {
     x: {
         height: 20,
         label: 'X Axis',
-        margin: 200,
+        margin: 20,
         text: {
             style: {
                 'dy': '.35em',
@@ -649,7 +660,7 @@ var Pie_1 = __webpack_require__(/*! ./Pie */ "./examples/Pie.tsx");
 var scatter = [];
 var theme = filterRange_1.default(['rgba(255, 113, 1, 0.5)', '#fff6ef', 'rgba(0, 169, 123, 0.5)', '#f6fffd', '#D7263D', 'rgba(215, 38, 61, 0.05)', '#0f2629', '#ededed', 'rgba(86, 180, 191, 0.5)', '#f5fbfb', '#000000', '#0f2629', '#D7263D', '#FBD7D9', '#ffebec', '#963540', '#22545a', '#56b4bf', '#56b4bf', '#56b4bf', '#FF7101', '#449098', '#77c3cb', '#d4eef8', '#ff7101', '#FF7101', '#cc5a00', '#ff8d33', '#fef9e5', '#7d5d2e', '#00a97b', '#008762', '#33ba95', '#dbf1d6', '#227839', '#0f5e7b', '#d4eef8', '#0f5e7b', '#F9C80E', '#007656', '#c5e5e9', '#f9c80e', '#a9a9a9', '#dbdbdb', '#cccccc', '#e6e6e6', '#56b4bf', '#449098', '#77c3cb', '#22545a', '#ff7101', '#cdcdcd', '#ffffff', '#d7263d', '#00a97b', '#888888', '#e6e6e6', '#f2f2f2', '#f4f4f4']);
 var App = function App() {
-    return React.createElement("div", { style: { padding: '20px' } }, React.createElement(Map_1.default, null), React.createElement(JoyPlot_1.default, { theme: theme }), React.createElement(Pie_1.default, { theme: theme }), React.createElement("div", null, React.createElement(LineChartExample_1.default, null)), React.createElement(Histogram_1.default, { theme: theme }), " */}", React.createElement("div", null, React.createElement(src_1.HorizontalHistogram, { data: data_1.data2, width: 500, height: 400, margin: {
+    return React.createElement("div", { style: { padding: '20px' } }, React.createElement(Map_1.default, null), React.createElement(JoyPlot_1.default, { theme: theme }), React.createElement(Pie_1.default, { theme: theme }), React.createElement("div", null, React.createElement(LineChartExample_1.default, null)), React.createElement(Histogram_1.default, { theme: theme }), React.createElement("div", null, React.createElement(src_1.HorizontalHistogram, { data: data_1.data2, width: 500, height: 400, margin: {
             left: 30,
             top: 30
         } })), React.createElement("div", null, React.createElement(src_1.ScatterPlot, { data: scatter, width: 300, height: 300 })));
@@ -22634,14 +22645,6 @@ exports.default = Histogram;
 "use strict";
 
 
-var __rest = undefined && undefined.__rest || function (s, e) {
-    var t = {};
-    for (var p in s) {
-        if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0) t[p] = s[p];
-    }if (s != null && typeof Object.getOwnPropertySymbols === "function") for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
-        if (e.indexOf(p[i]) < 0) t[p[i]] = s[p[i]];
-    }return t;
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 var d3_array_1 = __webpack_require__(/*! d3-array */ "./node_modules/d3-array/index.js");
 var d3_axis_1 = __webpack_require__(/*! d3-axis */ "./node_modules/d3-axis/index.js");
@@ -22651,6 +22654,7 @@ var deepmerge_1 = __webpack_require__(/*! deepmerge */ "./node_modules/deepmerge
 var get = __webpack_require__(/*! lodash.get */ "./node_modules/lodash.get/index.js");
 var colors_1 = __webpack_require__(/*! ./colors */ "./src/colors/index.js");
 var attrs_1 = __webpack_require__(/*! ./d3/attrs */ "./src/d3/attrs.ts");
+var grid_1 = __webpack_require__(/*! ./grid */ "./src/grid.ts");
 var tip_1 = __webpack_require__(/*! ./tip */ "./src/tip.ts");
 exports.histogramD3 = function () {
     var svg;
@@ -22659,18 +22663,6 @@ exports.histogramD3 = function () {
     var y = d3_scale_1.scaleLinear();
     var x = d3_scale_1.scaleBand();
     var innerScaleBand = d3_scale_1.scaleBand();
-    function make_x_gridlines(ticks) {
-        if (ticks === void 0) {
-            ticks = 5;
-        }
-        return d3_axis_1.axisBottom(x).ticks(ticks);
-    }
-    function make_y_gridlines(ticks) {
-        if (ticks === void 0) {
-            ticks = 5;
-        }
-        return d3_axis_1.axisLeft(y).ticks(ticks);
-    }
     var defaultProps = {
         axis: {
             x: {
@@ -22773,7 +22765,7 @@ exports.histogramD3 = function () {
             }
             this.mergeProps(props);
             this._makeSvg(el);
-            this.makeGrid(props);
+            this.makeGrid();
             this.makeScales();
             this.container = svg.append('g').attr('class', 'histogram-container');
             this.update(el, props);
@@ -22800,15 +22792,9 @@ exports.histogramD3 = function () {
                 height = _a.height,
                 className = _a.className;
             svg = d3_selection_1.select(el).append('svg').attr('class', className).attr('width', width).attr('height', height).attr('viewBox', "0 0 " + width + " " + height).append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
-            this._makeTip();
-        },
-        _makeTip: function _makeTip() {
-            if (tipContainer) {
-                tipContainer.remove();
-            }
-            tipContainer = d3_selection_1.select(this.props.tipContainer).append('div').attr('class', 'tooltip top').style('opacity', 0);
-            tipContainer.append('div').attr('class', 'tooltip-arrow');
-            tipContent = tipContainer.append('div').attr('class', 'tooltip-inner');
+            var r = tip_1.makeTip(this.props.tipContainer, tipContainer);
+            tipContent = r.tipContent;
+            tipContainer = r.tipContainer;
         },
         valuesCount: function valuesCount(counts) {
             return counts.reduce(function (a, b) {
@@ -22818,7 +22804,6 @@ exports.histogramD3 = function () {
         appendDomainRange: function appendDomainRange(scale, data) {
             var yDomain = [];
             var _a = this.props,
-                axis = _a.axis,
                 domain = _a.domain,
                 margin = _a.margin,
                 height = _a.height;
@@ -22832,23 +22817,10 @@ exports.histogramD3 = function () {
             });
             yDomain[1] = domain && domain.hasOwnProperty('max') && domain.max !== null ? domain.max : thisExtent[1];
             yDomain[0] = domain && domain.hasOwnProperty('min') && domain.min !== null ? domain.min : thisExtent[0];
-            var yRange = [height - margin.top * 2 - this.xAxisHeight(), 0];
+            var yRange = [height - margin.top * 2 - grid_1.xAxisHeight(this.props.axis), 0];
             scale.range(yRange).domain(yDomain);
         },
-        yAxisWidth: function yAxisWidth() {
-            var axis = this.props.axis;
-            return axis.y.label === '' ? axis.y.width : axis.y.width + 30;
-        },
-        xAxisHeight: function xAxisHeight() {
-            var axis = this.props.axis;
-            return axis.x.label === '' ? axis.x.height : axis.x.height + 30 + axis.x.margin;
-        },
         makeScales: function makeScales() {
-            var _a = this.props,
-                axis = _a.axis,
-                margin = _a.margin,
-                height = _a.height,
-                width = _a.width;
             this.xAxis = svg.append('g').attr('class', 'x-axis');
             this.yAxis = svg.append('g').attr('class', 'y-axis');
             this.xAxisLabel = svg.append('g');
@@ -22856,14 +22828,11 @@ exports.histogramD3 = function () {
         },
         _drawScales: function _drawScales(data) {
             var _a = this.props,
-                bar = _a.bar,
-                domain = _a.domain,
+                axis = _a.axis,
                 margin = _a.margin,
-                width = _a.width,
-                height = _a.height,
-                axis = _a.axis;
+                height = _a.height;
             var valuesCount = this.valuesCount(data.counts);
-            var w = this.gridWidth();
+            var w = grid_1.gridWidth(this.props);
             var xAxis;
             var dataLabels = data.counts.map(function (c) {
                 return c.label;
@@ -22881,33 +22850,18 @@ exports.histogramD3 = function () {
                     }));
                 }
             }
-            this.xAxis.attr('transform', 'translate(' + (this.yAxisWidth() + axis.y.style['stroke-width']) + ',' + (height - this.xAxisHeight() - margin.left * 2) + ')').call(xAxis);
+            this.xAxis.attr('transform', 'translate(' + (grid_1.yAxisWidth(axis) + axis.y.style['stroke-width']) + ',' + (height - grid_1.xAxisHeight(this.props.axis) - margin.left * 2) + ')').call(xAxis);
             this.appendDomainRange(y, this.dataSets);
             var yAxis = d3_axis_1.axisLeft(y).ticks(axis.y.ticks);
             var yTickSize = get(axis, 'y.tickSize', undefined);
             if (yTickSize !== undefined) {
                 yAxis.tickSize(yTickSize);
             }
-            this.yAxis.attr('transform', 'translate(' + this.yAxisWidth() + ', 0)').transition().call(yAxis);
-            var xLabelStyle = __rest(axis.x.text.style, []);
-            var yLabelStyle = __rest(axis.y.text.style, []);
+            this.yAxis.attr('transform', 'translate(' + grid_1.yAxisWidth(axis) + ', 0)').transition().call(yAxis);
             attrs_1.default(svg.selectAll('.y-axis .domain, .y-axis .tick line'), axis.y.style);
             attrs_1.default(svg.selectAll('.y-axis .tick text'), axis.y.text.style);
             attrs_1.default(svg.selectAll('.x-axis .domain, .x-axis .tick line'), axis.x.style);
             attrs_1.default(svg.selectAll('.x-axis .tick text'), axis.x.text.style);
-        },
-        gridWidth: function gridWidth() {
-            var _a = this.props,
-                axis = _a.axis,
-                width = _a.width,
-                margin = _a.margin;
-            return width - margin.left * 2 - this.yAxisWidth();
-        },
-        gridHeight: function gridHeight() {
-            var _a = this.props,
-                height = _a.height,
-                margin = _a.margin;
-            return height - margin.top * 2 - this.xAxisHeight();
         },
         groupedMargin: function groupedMargin() {
             var m = get(this.props.bar, 'groupMargin', 0.1);
@@ -22923,27 +22877,19 @@ exports.histogramD3 = function () {
         updateChart: function updateChart(bins, groupData) {
             var _this = this;
             var _a = this.props,
+                axis = _a.axis,
                 height = _a.height,
                 width = _a.width,
                 margin = _a.margin,
-                bar = _a.bar,
                 delay = _a.delay,
                 duration = _a.duration,
-                axis = _a.axis,
-                stroke = _a.stroke,
                 tip = _a.tip;
             var barWidth = this.barWidth();
             var colors = d3_scale_1.scaleOrdinal(this.props.colorScheme);
-            var borderColors = null;
-            var gridHeight = this.gridHeight();
-            var yAxisWidth = this.yAxisWidth();
-            var groupedMargin = this.groupedMargin();
-            var maxItems = groupData.reduce(function (prev, next) {
-                return next.length > prev ? next.length : prev;
-            }, 0);
+            var gHeight = grid_1.gridHeight(this.props);
             var g = this.container.selectAll('g').data(groupData);
             var bars = g.enter().append('g').merge(g).attr('transform', function (d) {
-                var xdelta = yAxisWidth + axis.y.style['stroke-width'] + x(d[0].label);
+                var xdelta = grid_1.yAxisWidth(axis) + axis.y.style['stroke-width'] + x(d[0].label);
                 return "translate(" + xdelta + ", 0)";
             }).selectAll('rect').data(function (d) {
                 return d;
@@ -22958,7 +22904,7 @@ exports.histogramD3 = function () {
                 tip.fx.in(tipContainer);
             };
             bars.enter().append('rect').attr('height', 0).attr('y', function (d) {
-                return gridHeight;
+                return gHeight;
             }).attr('class', 'bar').on('mouseover', onMouseOver).on('mousemove', function () {
                 return tip.fx.move(tipContainer);
             }).on('mouseout', function () {
@@ -22972,59 +22918,25 @@ exports.histogramD3 = function () {
             }).transition().duration(duration).delay(delay).attr('y', function (d) {
                 return y(d.value);
             }).attr('stroke-dasharray', function (d) {
-                var currentHeight = gridHeight - y(d.value);
+                var currentHeight = gHeight - y(d.value);
                 return barWidth + " 0 " + currentHeight + " " + barWidth;
             }).attr('height', function (d) {
-                return gridHeight - y(d.value);
+                return gHeight - y(d.value);
             });
             bars.exit().remove();
             g.exit().remove();
             var xText = this.xAxisLabel.selectAll('text').data([axis.x.label]);
-            xText.enter().append('text').attr('class', 'x-axis-label').merge(xText).attr('transform', 'translate(' + width / 2 + ' ,' + (height - this.xAxisHeight() - margin.left * 2 + axis.x.margin) + ')').style('text-anchor', 'middle').text(function (d) {
+            xText.enter().append('text').attr('class', 'x-axis-label').merge(xText).attr('transform', 'translate(' + width / 2 + ' ,' + (height - grid_1.xAxisHeight(this.props.axis) - margin.left * 2 + axis.x.margin) + ')').style('text-anchor', 'middle').text(function (d) {
                 return d;
             });
             var yText = this.yAxisLabel.selectAll('text').data([axis.y.label]);
-            yText.enter().append('text').attr('class', 'y-axis-label').merge(yText).attr('transform', 'rotate(-90)').attr('y', 0).attr('x', 0 - (this.gridHeight() / 2 - margin.top * 2)).attr('dy', '1em').style('text-anchor', 'middle').text(function (d) {
+            yText.enter().append('text').attr('class', 'y-axis-label').merge(yText).attr('transform', 'rotate(-90)').attr('y', 0).attr('x', 0 - (gHeight / 2 - margin.top * 2)).attr('dy', '1em').style('text-anchor', 'middle').text(function (d) {
                 return d;
             });
         },
-        makeGrid: function makeGrid(props) {
-            var grid = props.grid;
+        makeGrid: function makeGrid() {
             this.gridX = svg.append('g').attr('class', 'grid gridX');
             this.gridY = svg.append('g').attr('class', 'grid gridY');
-        },
-        _drawGrid: function _drawGrid(props) {
-            var data = props.data,
-                height = props.height,
-                width = props.width,
-                axis = props.axis,
-                grid = props.grid,
-                margin = props.margin,
-                bar = props.bar;
-            var ticks = this.valuesCount(data.counts);
-            var axisWidth = axis.y.style['stroke-width'];
-            var offset = {
-                x: this.yAxisWidth() + axisWidth,
-                y: this.gridHeight()
-            };
-            if (grid.x.visible) {
-                this.gridX.attr('transform', "translate(" + offset.x + ", " + offset.y + ")");
-                this.gridX.call(make_x_gridlines(get(grid, 'x.ticks', ticks)).tickSize(-height + this.xAxisHeight() + margin.top * 2).tickFormat(function () {
-                    return '';
-                }));
-                attrs_1.default(this.gridX.selectAll('.tick line'), grid.x.style);
-                attrs_1.default(this.gridX.selectAll('.domain'), { stroke: 'transparent' });
-            }
-            if (grid.y.visible) {
-                this.gridY.attr('transform', 'translate(' + (this.yAxisWidth() + axisWidth) + ', 0)').transition().call(make_y_gridlines(get(grid, 'y.ticks', ticks)).tickSize(-width + margin.left * 2 + this.yAxisWidth()).tickFormat(function () {
-                    return '';
-                }));
-                attrs_1.default(this.gridY.selectAll('.tick line'), grid.y.style);
-                this.gridY.selectAll('.gridY .tick line').filter(function (d, i) {
-                    return i === 0;
-                }).attr('display', 'none');
-                attrs_1.default(this.gridY.selectAll('.domain'), { stroke: 'transparent' });
-            }
         },
         update: function update(el, props) {
             var _this = this;
@@ -23052,7 +22964,7 @@ exports.histogramD3 = function () {
                 });
             });
             this._drawScales(this.props.data);
-            this._drawGrid(this.props);
+            grid_1.drawGrid(x, y, this.gridX, this.gridY, this.props, this.valuesCount(data.counts));
             this.updateChart(data.bins, this.dataSets);
         },
         destroy: function destroy(el) {
@@ -23367,15 +23279,9 @@ exports.horizontalHistogramD3 = function () {
                 height = _a.height,
                 className = _a.className;
             svg = d3_selection_1.select(el).append('svg').attr('class', className).attr('width', width).attr('height', height).attr('viewBox', "0 0 " + width + " " + height).append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
-            this._makeTip();
-        },
-        _makeTip: function _makeTip() {
-            if (tipContainer) {
-                tipContainer.remove();
-            }
-            tipContainer = d3_selection_1.select(this.props.tipContainer).append('div').attr('class', 'tooltip top').style('opacity', 0);
-            tipContainer.append('div').attr('class', 'tooltip-arrow');
-            tipContent = tipContainer.append('div').attr('class', 'tooltip-inner');
+            var r = tip_1.makeTip(this.props.tipContainer, tipContainer);
+            tipContent = r.tipContent;
+            tipContainer = r.tipContainer;
         },
         valuesCount: function valuesCount(counts) {
             return counts.reduce(function (a, b) {
@@ -23526,10 +23432,8 @@ exports.horizontalHistogramD3 = function () {
                 width = props.width,
                 axis = props.axis,
                 grid = props.grid,
-                margin = props.margin,
-                bar = props.bar;
+                margin = props.margin;
             var ticks = this.valuesCount(data.counts);
-            var setCount = data.counts.length;
             var axisWidth = axis.y.style['stroke-width'];
             var offset = {
                 x: axis.y.width + this.groupedMargin() / 2,
@@ -23910,15 +23814,9 @@ exports.joyPlotD3 = function () {
                 height = props.height,
                 className = props.className;
             svg = d3_selection_1.select(el).append('svg').attr('class', className).attr('width', width).attr('height', height).attr('viewBox', "0 0 " + width + " " + height).append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
-            this._makeTip();
-        },
-        _makeTip: function _makeTip() {
-            if (tipContainer) {
-                tipContainer.remove();
-            }
-            tipContainer = d3_selection_1.select(props.tipContainer).append('div').attr('class', 'tooltip top').style('opacity', 0);
-            tipContainer.append('div').attr('class', 'tooltip-arrow');
-            tipContent = tipContainer.append('div').attr('class', 'tooltip-inner');
+            var r = tip_1.makeTip(props.tipContainer, tipContainer);
+            tipContent = r.tipContent;
+            tipContainer = r.tipContainer;
         },
         valuesCount: function valuesCount(counts) {
             return counts.reduce(function (a, b) {
@@ -24784,15 +24682,9 @@ exports.pieChartD3 = function () {
                 height = _a.height,
                 className = _a.className;
             svg = d3_selection_1.select(el).append('svg').attr('class', className).attr('width', width).attr('height', height).attr('viewBox', "0 0 " + width + " " + height).append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
-            this._makeTip();
-        },
-        _makeTip: function _makeTip() {
-            if (tipContainer) {
-                tipContainer.remove();
-            }
-            tipContainer = d3_selection_1.select(this.props.tipContainer).append('div').attr('class', 'tooltip top pietip').style('opacity', 0);
-            tipContainer.append('div').attr('class', 'tooltip-arrow');
-            tipContent = tipContainer.append('div').attr('class', 'tooltip-inner');
+            var r = tip_1.makeTip(this.props.tipContainer, tipContainer);
+            tipContent = r.tipContent;
+            tipContainer = r.tipContainer;
         },
         update: function update(el, props) {
             if (!props.data) {
@@ -25366,6 +25258,83 @@ exports.default = function (selection, style) {
 
 /***/ }),
 
+/***/ "./src/grid.ts":
+/*!*********************!*\
+  !*** ./src/grid.ts ***!
+  \*********************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var d3_axis_1 = __webpack_require__(/*! d3-axis */ "./node_modules/d3-axis/index.js");
+var get = __webpack_require__(/*! lodash.get */ "./node_modules/lodash.get/index.js");
+var attrs_1 = __webpack_require__(/*! ./d3/attrs */ "./src/d3/attrs.ts");
+exports.makeYGridlines = function (y, ticks) {
+    if (ticks === void 0) {
+        ticks = 5;
+    }
+    return d3_axis_1.axisLeft(y).ticks(ticks);
+};
+exports.makeXGridlines = function (x, ticks) {
+    if (ticks === void 0) {
+        ticks = 5;
+    }
+    return d3_axis_1.axisBottom(x).ticks(ticks);
+};
+exports.drawGrid = function (x, y, gridX, gridY, props, ticks) {
+    var height = props.height,
+        width = props.width,
+        axis = props.axis,
+        grid = props.grid,
+        margin = props.margin;
+    var axisWidth = axis.y.style['stroke-width'];
+    var offset = {
+        x: exports.yAxisWidth(axis) + axisWidth,
+        y: exports.gridHeight(props)
+    };
+    if (grid.x.visible) {
+        gridX.attr('transform', "translate(" + offset.x + ", " + offset.y + ")");
+        gridX.call(exports.makeXGridlines(x, get(grid, 'x.ticks', ticks)).tickSize(-height + exports.xAxisHeight(props.axis) + margin.top * 2).tickFormat(function () {
+            return '';
+        }));
+        attrs_1.default(gridX.selectAll('.tick line'), grid.x.style);
+        attrs_1.default(gridX.selectAll('.domain'), { stroke: 'transparent' });
+    }
+    if (grid.y.visible) {
+        gridY.attr('transform', 'translate(' + (exports.yAxisWidth(axis) + axisWidth) + ', 0)').transition().call(exports.makeYGridlines(y, get(grid, 'y.ticks', ticks)).tickSize(-width + margin.left * 2 + exports.yAxisWidth(axis)).tickFormat(function () {
+            return '';
+        }));
+        attrs_1.default(gridY.selectAll('.tick line'), grid.y.style);
+        gridY.selectAll('.gridY .tick line').filter(function (d, i) {
+            return i === 0;
+        }).attr('display', 'none');
+        attrs_1.default(gridY.selectAll('.domain'), { stroke: 'transparent' });
+    }
+};
+exports.gridHeight = function (props) {
+    var height = props.height,
+        margin = props.margin,
+        axis = props.axis;
+    return height - margin.top * 2 - exports.xAxisHeight(axis);
+};
+exports.yAxisWidth = function (axis) {
+    return axis.y.label === '' ? axis.y.width : axis.y.width + 30;
+};
+exports.xAxisHeight = function (axis) {
+    return axis.x.label === '' ? axis.x.height : axis.x.height + 30 + get(axis, 'x.margin', 0);
+};
+exports.gridWidth = function (props) {
+    var axis = props.axis,
+        width = props.width,
+        margin = props.margin;
+    return width - margin.left * 2 - exports.yAxisWidth(axis);
+};
+
+/***/ }),
+
 /***/ "./src/index.ts":
 /*!**********************!*\
   !*** ./src/index.ts ***!
@@ -25426,10 +25395,11 @@ var d3_ease_1 = __webpack_require__(/*! d3-ease */ "./node_modules/d3-ease/index
 var d3_scale_1 = __webpack_require__(/*! d3-scale */ "./node_modules/d3-scale/index.js");
 var d3_selection_1 = __webpack_require__(/*! d3-selection */ "./node_modules/d3-selection/index.js");
 var d3_shape_1 = __webpack_require__(/*! d3-shape */ "./node_modules/d3-shape/index.js");
-var d3_shape_2 = __webpack_require__(/*! d3-shape */ "./node_modules/d3-shape/index.js");
 var d3_time_format_1 = __webpack_require__(/*! d3-time-format */ "./node_modules/d3-time-format/index.js");
 var deepmerge_1 = __webpack_require__(/*! deepmerge */ "./node_modules/deepmerge/dist/es.js");
+var get = __webpack_require__(/*! lodash.get */ "./node_modules/lodash.get/index.js");
 var attrs_1 = __webpack_require__(/*! ./d3/attrs */ "./src/d3/attrs.ts");
+var grid_1 = __webpack_require__(/*! ./grid */ "./src/grid.ts");
 var tip_1 = __webpack_require__(/*! ./tip */ "./src/tip.ts");
 exports.lineChartD3 = function () {
     var svg;
@@ -25440,7 +25410,7 @@ exports.lineChartD3 = function () {
     var y = d3_scale_1.scaleLinear();
     var x = d3_scale_1.scaleLinear();
     var lineProps = {
-        curveType: d3_shape_2.curveCatmullRom,
+        curveType: d3_shape_1.curveCatmullRom,
         fill: false,
         show: true,
         stroke: '#005870',
@@ -25520,7 +25490,7 @@ exports.lineChartD3 = function () {
         },
         point: pointProps,
         tip: tip_1.default,
-        tipContainer: null,
+        tipContainer: 'body',
         tipContentFn: function tipContentFn(info, i, d) {
             switch (_typeof(info[i].x)) {
                 case 'object':
@@ -25535,24 +25505,17 @@ exports.lineChartD3 = function () {
         line: lineProps,
         point: pointProps
     };
-    function make_x_gridlines(ticks) {
-        if (ticks === void 0) {
-            ticks = 5;
-        }
-        return d3_axis_1.axisBottom(x).ticks(ticks);
-    }
-    function make_y_gridlines(ticks) {
-        if (ticks === void 0) {
-            ticks = 5;
-        }
-        return d3_axis_1.axisLeft(y).ticks(ticks);
-    }
     var LineChartD3 = {
         create: function create(el, props) {
             if (props === void 0) {
                 props = {};
             }
             this.props = deepmerge_1.default(defaultProps, props);
+            this._makeSvg(el);
+            this.container = svg.append('g').attr('class', 'linechart-container');
+            this.makeGrid();
+            this.lineContainer = svg.append('g').attr('class', 'line-container');
+            this.makeScales();
             this.update(el, this.props);
         },
         _makeSvg: function _makeSvg(el) {
@@ -25569,70 +25532,59 @@ exports.lineChartD3 = function () {
                 width = _a.width,
                 height = _a.height,
                 className = _a.className;
-            svg = d3_selection_1.select(el).append('svg').attr('class', className).attr('width', width).attr('height', height).append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
-            this._makeTip(el);
-        },
-        _makeTip: function _makeTip(el) {
-            if (tipContainer) {
-                tipContainer.remove();
-            }
-            tipContainer = d3_selection_1.select(this.props.tipContainer || el).append('div').attr('class', 'tooltip top').style('opacity', 0);
-            tipContainer.append('div').attr('class', 'tooltip-arrow');
-            tipContent = tipContainer.append('div').attr('class', 'tooltip-inner');
+            svg = d3_selection_1.select(el).append('svg').attr('class', className).attr('width', width).attr('height', height).append('g').attr('transform', "translate(" + margin.left + "," + margin.top + ")");
+            var r = tip_1.makeTip(this.props.tipContainer, tipContainer);
+            tipContent = r.tipContent;
+            tipContainer = r.tipContainer;
         },
         _drawDataPointSet: function _drawDataPointSet(data) {
-            var _this = this;
-            data.forEach(function (datum, i) {
-                if (datum.point.show !== false) {
-                    _this._drawDataPoints(datum, '.points-' + i);
-                }
+            var axis = this.props.axis;
+            var yAxisWidth = grid_1.yAxisWidth(axis);
+            var pointContainer = this.container.selectAll('g').data(data);
+            var point = pointContainer.enter().append('g').attr('class', function (d, i) {
+                return 'point-container' + i;
+            }).merge(pointContainer).selectAll('circle').data(function (d) {
+                return d.data.map(function (dx) {
+                    return __assign({}, dx, { point: d.point });
+                });
             });
-        },
-        _drawDataPoints: function _drawDataPoints(datum, selector) {
-            var _a = this.props,
-                axis = _a.axis,
-                tip = _a.tip,
-                tipContentFn = _a.tipContentFn;
-            var _b = datum.point,
-                radius = _b.radius,
-                stroke = _b.stroke,
-                fill = _b.fill;
-            svg.selectAll(selector).remove();
-            var point = svg.selectAll(selector).data(datum.data).enter().append('circle').attr('class', 'point').attr('cx', function (d) {
-                return x(d.x) + axis.y.width;
-            }).attr('cy', function (d) {
+            point.attr('class', 'update');
+            point.enter().append('circle').attr('class', 'enter').merge(point).attr('class', 'point').attr('cy', function (d) {
                 return y(d.y);
             }).attr('r', function (d, i) {
                 return 0;
-            }).attr('fill', fill).attr('stroke', stroke).on('mouseover', function (d, i) {
-                tipContent.html(function () {
-                    return tipContentFn(datum.data, i, d);
-                });
-                tip.fx.in(tipContainer);
-            }).on('mousemove', function () {
-                return tip.fx.move(tipContainer);
-            }).on('mouseout', function () {
-                return tip.fx.out(tipContainer);
-            });
-            point.transition().duration(400).attr('r', function () {
-                return radius;
+            }).attr('fill', function (d) {
+                return d.point.fill;
+            }).attr('stroke', function (d) {
+                return d.point.stroke;
+            }).attr('cx', function (d) {
+                return x(d.x) + yAxisWidth;
+            }).transition().duration(400).attr('r', function (d) {
+                return d.point.radius;
             }).delay(50);
+            pointContainer.exit().remove();
             point.exit().remove();
         },
+        makeScales: function makeScales() {
+            this.xAxis = svg.append('g').attr('class', 'x-axis');
+            this.yAxis = svg.append('g').attr('class', 'y-axis');
+            this.xAxisLabel = svg.append('g');
+            this.yAxisLabel = svg.append('g');
+        },
         _drawScales: function _drawScales(data) {
-            svg.selectAll('.y-axis').remove();
-            svg.selectAll('.x-axis').remove();
             var _a = this.props,
                 axis = _a.axis,
                 margin = _a.margin,
-                width = _a.width,
                 height = _a.height;
+            var w = grid_1.gridWidth(this.props);
             var yDomain;
             var xDomain;
             var ys = [];
             var xs = [];
             var yAxis = d3_axis_1.axisLeft(y).ticks(axis.y.ticks);
-            var xAxis = d3_axis_1.axisBottom(x).ticks(axis.x.ticks);
+            var xAxis = d3_axis_1.axisBottom(x);
+            var xAxisHeight = grid_1.xAxisHeight(axis);
+            var yAxisWidth = grid_1.yAxisWidth(axis);
             data.forEach(function (datum) {
                 datum.data.forEach(function (d) {
                     ys.push(d.y);
@@ -25641,59 +25593,78 @@ exports.lineChartD3 = function () {
             });
             yDomain = d3_array_1.extent(ys);
             xDomain = d3_array_1.extent(xs);
-            x.domain(xDomain);
-            x.range([0, width - margin.left * 2]);
-            y.domain(yDomain);
-            y.range([height - margin.top * 2 - axis.x.height, 0]);
-            svg.append('g').attr('class', 'y-axis').attr('transform', 'translate(' + axis.y.width + ', 0)').call(yAxis);
-            svg.append('g').attr('class', 'x-axis').attr('transform', 'translate(' + axis.y.width + ',' + (height - axis.x.height - margin.left * 2) + ')').call(xAxis);
+            x.domain(xDomain).rangeRound([0, w]);
+            y.domain(yDomain).range([height - xAxisHeight, 0]);
+            this.yAxis.attr('transform', "translate(" + yAxisWidth + ", 0)").transition().call(yAxis);
+            this.xAxis.attr('transform', "translate(" + yAxisWidth + "," + (height - xAxisHeight) + ")").call(xAxis);
             attrs_1.default(svg.selectAll('.y-axis .domain, .y-axis .tick line'), axis.y.style);
             attrs_1.default(svg.selectAll('.y-axis .tick text'), axis.y.text.style);
             attrs_1.default(svg.selectAll('.x-axis .domain, .x-axis .tick line'), axis.x.style);
             attrs_1.default(svg.selectAll('.x-axis .tick text'), axis.x.text.style);
         },
         _drawLines: function _drawLines(data) {
-            var _this = this;
-            data.forEach(function (datum, i) {
-                if (datum.line.show !== false) {
-                    _this._drawLine(datum, '.line-' + i);
-                }
-            });
-        },
-        _drawLine: function _drawLine(datum, selector) {
-            svg.selectAll(selector).remove();
             var _a = this.props,
                 axis = _a.axis,
                 fx = _a.fx,
                 height = _a.height,
                 margin = _a.margin;
-            var _b = datum.line,
-                curveType = _b.curveType,
-                stroke = _b.stroke,
-                strokeDashOffset = _b.strokeDashOffset,
-                strokeDashArray = _b.strokeDashArray;
-            var path = svg.selectAll(selector).data([datum.data]);
-            var thisArea;
-            var curve = d3_shape_1.line().curve(curveType).x(function (d) {
-                return x(d.x) + axis.y.width;
-            }).y(function (d) {
-                return y(d.y);
+            var yAxisWidth = grid_1.yAxisWidth(axis);
+            var xAxisHeight = grid_1.xAxisHeight(axis);
+            var curve = function curve(curveType) {
+                return d3_shape_1.line().curve(curveType).x(function (d) {
+                    return x(d.x) + yAxisWidth;
+                }).y(function (d) {
+                    console.log(xAxisHeight, 'xAxisHeight');
+                    return y(d.y);
+                });
+            };
+            var path = this.lineContainer.selectAll('g').data(data);
+            path.enter().append('path').attr('d', function (d) {
+                return curve(d.line.curveType)(d.data);
+            }).attr('class', function (d, i) {
+                return 'path' + i;
+            }).attr('fill', 'none').attr('stroke-dashoffset', function (d, i) {
+                return d.line.strokeDashOffset;
+            }).attr('stroke-dasharray', function (d) {
+                return d.line.strokeDashArray;
+            }).attr('stroke', function (d) {
+                return d.line.stroke;
             });
-            if (datum.line.fill.show === true) {
-                thisArea = d3_shape_1.area().curve(curveType).x(function (d) {
-                    return x(d.x) + axis.y.width + 1;
+            path.transition().duration(500).attr('d', function (d) {
+                return curve(d.data);
+            }).delay(50);
+            this.lineContainer.exit().remove();
+            path.exit().remove();
+        },
+        drawAreas: function drawAreas(data) {
+            var _a = this.props,
+                axis = _a.axis,
+                height = _a.height;
+            var yAxisWidth = grid_1.yAxisWidth(axis);
+            var xAxisHeight = grid_1.xAxisHeight(axis);
+            var thisArea = function thisArea(curveType) {
+                return d3_shape_1.area().curve(curveType).x(function (d) {
+                    return x(d.x) + yAxisWidth;
                 }).y0(function (d) {
-                    return height - margin.top * 2 - axis.x.height;
+                    return height - xAxisHeight;
                 }).y1(function (d) {
                     return y(d.y);
                 });
-                svg.append('path').datum(datum.data).attr('class', 'curve-area').attr('fill', datum.line.fill.fill).attr('d', thisArea);
-            }
-            path.attr('d', function (d) {
-                return curve(d);
-            }).attr('class', 'path').attr('fill', 'none').attr('stroke-dashoffset', strokeDashOffset).attr('stroke-dasharray', strokeDashArray).attr('stroke', stroke);
-            path.transition().duration(1000).ease(fx);
-            path.enter().append('path').attr('d', curve).attr('class', 'path').attr('fill', 'none').attr('stroke', stroke);
+            };
+            var dx = data.filter(function (d) {
+                return get(d, 'line.show') === true && get(d, 'line.fill.show') === true;
+            });
+            var path = this.lineContainer.selectAll('g.areas').data(dx);
+            path.enter().append('path').attr('d', function (d) {
+                return thisArea(d.line.curveType)(d.data);
+            }).attr('class', function (d, i) {
+                return 'curve-area path' + i;
+            }).attr('fill', function (d) {
+                return d.line.fill.fill;
+            });
+            path.transition().duration(500).attr('d', function (d) {
+                return thisArea(d.data);
+            }).delay(50);
             path.exit().remove();
         },
         valuesCount: function valuesCount(data) {
@@ -25701,46 +25672,9 @@ exports.lineChartD3 = function () {
                 return b.data.length > a ? b.data.length : a;
             }, 0);
         },
-        gridHeight: function gridHeight() {
-            var _a = this.props,
-                height = _a.height,
-                margin = _a.margin,
-                axis = _a.axis;
-            return height - margin.top * 2 - axis.x.height;
-        },
-        _drawGrid: function _drawGrid(props) {
-            var data = props.data,
-                height = props.height,
-                width = props.width,
-                axis = props.axis,
-                grid = props.grid,
-                margin = props.margin;
-            var ticks = this.valuesCount(data);
-            var axisWidth = axis.y.style['stroke-width'];
-            var offset = {
-                x: axis.y.width,
-                y: this.gridHeight()
-            };
-            var g;
-            var gy;
-            if (grid.x.visible) {
-                g = svg.append('g').attr('class', 'grid gridX').attr('transform', "translate(" + offset.x + ", " + offset.y + ")");
-                g.call(make_x_gridlines(grid.x.ticks || ticks).tickSize(-height + axis.x.height + margin.top * 2).tickFormat(function () {
-                    return '';
-                }));
-                attrs_1.default(g.selectAll('.tick line'), grid.x.style);
-                attrs_1.default(g.selectAll('.domain'), { stroke: 'transparent' });
-            }
-            if (grid.y.visible) {
-                gy = svg.append('g').attr('class', 'grid gridY').attr('transform', 'translate(' + (axis.y.width + axisWidth) + ', 0)').call(make_y_gridlines(grid.y.ticks || ticks).tickSize(-width + margin.left * 2 + axis.y.width).tickFormat(function () {
-                    return '';
-                }));
-                attrs_1.default(gy.selectAll('.tick line'), grid.y.style);
-                gy.selectAll('.gridY .tick line').filter(function (d, i) {
-                    return i === 0;
-                }).attr('display', 'none');
-                attrs_1.default(gy.selectAll('.domain'), { stroke: 'transparent' });
-            }
+        makeGrid: function makeGrid() {
+            this.gridX = svg.append('g').attr('class', 'grid gridX');
+            this.gridY = svg.append('g').attr('class', 'grid gridY');
         },
         update: function update(el, props) {
             if (!props.data) {
@@ -25755,21 +25689,25 @@ exports.lineChartD3 = function () {
                     x = d3_scale_1.scaleLinear();
                     break;
             }
-            this._makeSvg(el);
             var data = props.data;
             xParseTime = d3_time_format_1.timeParse(props.axis.x.dateFormat);
             xFormatTime = d3_time_format_1.timeFormat(props.axis.x.dateFormat);
             data = data.map(function (datum) {
+                console.log('datum', datum);
                 if (props.axis.x.scale === 'TIME') {
                     datum.data = datum.data.map(function (d) {
-                        return __assign({}, d, { x: _typeof(d.x) === 'object' ? d.x : xParseTime(d.x.toString()) });
+                        console.log(d);
+                        var newd = __assign({}, d, { x: _typeof(d.x) === 'object' ? d.x : xParseTime(d.x.toString()) });
+                        console.log('newd', newd);
+                        return newd;
                     });
                 }
                 return Object.assign({}, datumProps, datum);
             });
             this._drawScales(data);
             this._drawLines(data);
-            this._drawGrid(this.props);
+            this.drawAreas(data);
+            grid_1.drawGrid(x, y, this.gridX, this.gridY, this.props, this.valuesCount(data));
             this._drawDataPointSet(data);
         },
         destroy: function destroy(el) {
@@ -25793,6 +25731,7 @@ exports.lineChartD3 = function () {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var d3_selection_1 = __webpack_require__(/*! d3-selection */ "./node_modules/d3-selection/index.js");
+var d3_selection_2 = __webpack_require__(/*! d3-selection */ "./node_modules/d3-selection/index.js");
 exports.default = {
     fx: {
         in: function _in(container) {
@@ -25806,6 +25745,17 @@ exports.default = {
             container.transition().duration(100).style('opacity', 0);
         }
     }
+};
+exports.makeTip = function (selector, tipContainer) {
+    if (tipContainer) {
+        tipContainer.remove();
+    }
+    tipContainer = d3_selection_2.select(selector).append('div').attr('class', 'tooltip top').style('opacity', 0);
+    tipContainer.append('div').attr('class', 'tooltip-arrow');
+    return {
+        tipContainer: tipContainer,
+        tipContent: tipContainer.append('div').attr('class', 'tooltip-inner')
+    };
 };
 
 /***/ }),
