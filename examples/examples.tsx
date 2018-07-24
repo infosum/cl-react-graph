@@ -29,7 +29,7 @@ const App: React.SFC<{}> = (): JSX.Element => <div style={{ padding: '20px' }}>
   <div>
     <LineChartExample />
   </div>
-  <Histogram theme={theme} /> */}
+  <Histogram theme={theme} />
   <div>
     <HorizontalHistogram data={data2} width={500} height={400} margin={{
       left: 30,

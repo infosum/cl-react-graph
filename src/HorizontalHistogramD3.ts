@@ -6,7 +6,7 @@ import merge from 'deepmerge';
 import colorScheme from './colors';
 import attrs from './d3/attrs';
 import { IChartAdaptor, IHistogramData, IHistogramDataSet, IHistogramProps } from './Histogram';
-import tips from './tip';
+import tips, { makeTip } from './tip';
 
 export const horizontalHistogramD3 = ((): IChartAdaptor => {
   let svg;
@@ -146,25 +146,9 @@ export const horizontalHistogramD3 = ((): IChartAdaptor => {
         .append('g')
         .attr('transform',
           'translate(' + margin.left + ',' + margin.top + ')');
-      this._makeTip();
-    },
-
-    /**
-     * Create a bootstrap tip
-     */
-    _makeTip() {
-      if (tipContainer) {
-        // Chart could be rebuilt - remove old tip
-        tipContainer.remove();
-      }
-      tipContainer = select(this.props.tipContainer).append('div')
-        .attr('class', 'tooltip top')
-        .style('opacity', 0);
-
-      tipContainer.append('div')
-        .attr('class', 'tooltip-arrow');
-      tipContent = tipContainer.append('div')
-        .attr('class', 'tooltip-inner');
+      const r = makeTip(this.props.tipContainer, tipContainer);
+      tipContent = r.tipContent;
+      tipContainer = r.tipContainer;
     },
 
     /**
@@ -380,9 +364,8 @@ export const horizontalHistogramD3 = ((): IChartAdaptor => {
      * @param {Object} props Props
      */
     _drawGrid(props: IHistogramProps) {
-      const { data, height, width, axis, grid, margin, bar } = props;
+      const { data, height, width, axis, grid, margin } = props;
       const ticks = this.valuesCount(data.counts);
-      const setCount = data.counts.length;
       const axisWidth = axis.y.style['stroke-width'];
       const offset = {
         x: axis.y.width + this.groupedMargin() / 2,

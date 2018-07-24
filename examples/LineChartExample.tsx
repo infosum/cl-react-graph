@@ -67,6 +67,17 @@ class LineChartExample extends React.Component<{}, IState> {
             { x: new Date(), y: 4 },
           ],
           label: 'test data',
+          line: {
+            curveType: curveStepAfter,
+            fill: {
+              fill: 'rgba(10, 10, 10, 0.2)',
+              show: true,
+            },
+            show: true,
+            stroke: 'orange',
+            strokeDashArray: '10 5',
+            strokeDashOffset: 3,
+          },
         },
         {
           data: [

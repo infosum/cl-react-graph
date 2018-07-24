@@ -1,11 +1,33 @@
 {
     "extends": "tslint:recommended",
     "rules": {
-        "quotemark": [true, "single", "jsx-double"],
+        "quotemark": [
+            true,
+            "single",
+            "jsx-double"
+        ],
         "no-reference": false,
+        "no-unused-variable": [
+            true,
+            {
+                "vars": "all",
+                "args": "after-used",
+                "ignoreRestSiblings": false
+            }
+        ],
         "ban-types": false,
-        "member-ordering": [true, {"order": "private-instance-method"}],
-        "no-console": [false],
+        "member-ordering": [
+            true,
+            {
+                "order": [
+                    "static-field",
+                    "private-static-method"
+                ]
+            }
+        ],
+        "no-console": [
+            false
+        ],
         "no-debugger": false
     }
 }

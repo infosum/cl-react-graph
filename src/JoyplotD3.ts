@@ -8,7 +8,7 @@ import colorScheme from './colors';
 import attrs from './d3/attrs';
 import { IChartAdaptor, IHistogramData, IHistogramDataSet } from './Histogram';
 import { IJoyPlotProps } from './JoyPlot';
-import tips from './tip';
+import tips, { makeTip } from './tip';
 
 interface IGroupDataItem {
   label: string;
@@ -188,25 +188,9 @@ export const joyPlotD3 = ((): IChartAdaptor => {
         .append('g')
         .attr('transform',
           'translate(' + margin.left + ',' + margin.top + ')');
-      this._makeTip();
-    },
-
-    /**
-     * Create a bootstrap tip
-     */
-    _makeTip() {
-      if (tipContainer) {
-        // Chart could be rebuilt - remove old tip
-        tipContainer.remove();
-      }
-      tipContainer = select(props.tipContainer).append('div')
-        .attr('class', 'tooltip top')
-        .style('opacity', 0);
-
-      tipContainer.append('div')
-        .attr('class', 'tooltip-arrow');
-      tipContent = tipContainer.append('div')
-        .attr('class', 'tooltip-inner');
+      const r = makeTip(props.tipContainer, tipContainer);
+      tipContent = r.tipContent;
+      tipContainer = r.tipContainer;
     },
 
     /**

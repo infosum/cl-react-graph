@@ -68,7 +68,7 @@ export const axis: IAxes = {
   x: {
     height: 20,
     label: 'X Axis',
-    margin: 200,
+    margin: 20,
     text: {
       style: {
         'dy': '.35em',

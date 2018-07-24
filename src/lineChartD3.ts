@@ -6,6 +6,7 @@ import { select } from 'd3-selection';
 import { area, curveCatmullRom, line } from 'd3-shape';
 import { timeFormat, timeParse } from 'd3-time-format';
 import merge from 'deepmerge';
+import * as get from 'lodash.get';
 import attrs from './d3/attrs';
 import {
   drawGrid, gridHeight, gridWidth, makeXGridlines, makeYGridlines,
@@ -269,7 +270,7 @@ export const lineChartD3 = ((): IChartAdaptor => {
         .call(yAxis);
 
       this.xAxis
-        .attr('transform', `translate(${yAxisWidth},${(height - xAxisHeight - (margin.left * 2))})`)
+        .attr('transform', `translate(${yAxisWidth},${(height - xAxisHeight)})`)
         .call(xAxis);
 
       attrs(svg.selectAll('.y-axis .domain, .y-axis .tick line'), axis.y.style);
@@ -284,14 +285,10 @@ export const lineChartD3 = ((): IChartAdaptor => {
      * @param {Array} data Chart data objects
      */
     _drawLines(data: ILineChartDataSet[]) {
-      const selector = 'g';
-      const dx = [data[0], data[1]];
       const { axis, fx, height, margin } = this.props;
-      const { curveType, stroke, strokeDashOffset, strokeDashArray } = data[0].line;
-
       const yAxisWidth = getYAxisWidth(axis);
       const xAxisHeight = getXAxisHeight(axis);
-      const curve = line()
+      const curve = (curveType) => line()
         .curve(curveType)
         .x((d: any) => x(d.x) + yAxisWidth)
         .y((d: any) => {
@@ -299,80 +296,46 @@ export const lineChartD3 = ((): IChartAdaptor => {
           return y(d.y);
         });
 
-      const path = this.lineContainer.selectAll('g').data(dx);
+      const path = this.lineContainer.selectAll('g').data(data);
 
+      // TODO update data is adding in new lines - was hoping the transition would simply update the 'd' attr.
       path.enter().append('path')
-        .merge(path)
-        .attr('d', (d) => curve(d.data))
-        .attr('class', 'path')
+        .attr('d', (d) => curve(d.line.curveType)(d.data))
+        .attr('class', (d, i) => 'path' + i)
         .attr('fill', 'none')
-        .attr('stroke-dashoffset', strokeDashOffset)
-        .attr('stroke-dasharray', strokeDashArray)
-        .attr('stroke', stroke);
+        .attr('stroke-dashoffset', (d, i) => d.line.strokeDashOffset)
+        .attr('stroke-dasharray', (d) => d.line.strokeDashArray)
+        .attr('stroke', (d) => d.line.stroke);
+      path.transition()
+        .duration(500)
+        .attr('d', (d) => curve(d.data))
+        .delay(50);
 
       this.lineContainer.exit().remove();
       path.exit().remove();
-
-
-      // data.forEach((datum: ILineChartDataSet, i: number) => {
-      //   if (datum.line && datum.line.show !== false) {
-      //     this._drawLine(datum, '.line-' + i);
-      //   }
-      // });
     },
 
-    /**
-     * Draw the chart's line
-     * @param {Object} datum LineChartDataSet
-     * @param {String} selector Line selector
-     */
-    _drawLine(datum: ILineChartDataSet, selector: string) {
-      // @Todo fx transition not working.
-      svg.selectAll(selector).remove();
-      if (!datum.line) {
-        return;
-      }
-      const { axis, fx, height, margin } = this.props;
-      const { curveType, stroke, strokeDashOffset, strokeDashArray } = datum.line;
-      const path = svg.selectAll(selector).data([datum.data]);
+    drawAreas(data: ILineChartDataSet[]) {
+      const { axis, height } = this.props;
       const yAxisWidth = getYAxisWidth(axis);
       const xAxisHeight = getXAxisHeight(axis);
-      let thisArea;
-      const curve = line()
+      const thisArea = (curveType) => area()
         .curve(curveType)
         .x((d: any) => x(d.x) + yAxisWidth)
-        .y((d: any) => {
-          console.log(xAxisHeight, 'xAxisHeight');
-          return y(d.y);
-        });
+        .y0((d) => height - xAxisHeight)
+        .y1((d: any) => y(d.y));
 
-      if (datum.line.fill && datum.line.show === true) {
-        thisArea = area()
-          .curve(curveType)
-          .x((d: any) => x(d.x) + yAxisWidth + 1)
-          .y0((d) => xAxisHeight)
-          .y1((d: any) => y(d.y) - xAxisHeight);
-
-        svg.append('path')
-          .datum(datum.data)
-          .attr('class', 'curve-area')
-          .attr('fill', datum.line.fill.fill)
-          .attr('d', thisArea);
-      }
-
-      path
-        .attr('d', (d) => curve(d))
-        .attr('class', 'path')
-        .attr('fill', 'none')
-        .attr('stroke-dashoffset', strokeDashOffset)
-        .attr('stroke-dasharray', strokeDashArray)
-        .attr('stroke', stroke);
-
+      const dx = data.filter((d) => get(d, 'line.show') === true && get(d, 'line.fill.show') === true);
+      const path = this.lineContainer.selectAll('g.areas').data(dx);
+      // TODO update data is adding in new lines - was hoping the transition would simply update the 'd' attr.
       path.enter().append('path')
-        .attr('d', curve)
-        .attr('class', 'path')
-        .attr('fill', 'none')
-        .attr('stroke', stroke);
+        .attr('d', (d) => thisArea(d.line.curveType)(d.data))
+        .attr('class', (d, i) => 'curve-area path' + i)
+        .attr('fill', (d) => d.line.fill.fill);
+      path.transition()
+        .duration(500)
+        .attr('d', (d) => thisArea(d.data))
+        .delay(50);
 
       path.exit().remove();
     },
@@ -435,6 +398,7 @@ export const lineChartD3 = ((): IChartAdaptor => {
       });
       this._drawScales(data);
       this._drawLines(data);
+      this.drawAreas(data);
       drawGrid(x, y, this.gridX, this.gridY, this.props, this.valuesCount(data));
       this._drawDataPointSet(data);
     },

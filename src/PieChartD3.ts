@@ -8,7 +8,7 @@ import * as get from 'lodash.get';
 import colorScheme from './colors';
 import { IChartAdaptor, IHistogramDataSet } from './Histogram';
 import { IPieChartProps, IPieDataItem } from './PieChart';
-import tips from './tip';
+import tips, { makeTip } from './tip';
 
 export const pieChartD3 = ((): IChartAdaptor => {
 
@@ -85,26 +85,9 @@ export const pieChartD3 = ((): IChartAdaptor => {
         .attr('transform',
           'translate(' + margin.left + ',' + margin.top + ')');
 
-      this._makeTip();
-    },
-
-    /**
-     * Create a bootstrap tip
-     */
-    _makeTip() {
-      if (tipContainer) {
-        // Chart could be rebuilt - remove old tip
-        tipContainer.remove();
-      }
-      tipContainer = select(this.props.tipContainer)
-        .append('div')
-        .attr('class', 'tooltip top pietip')
-        .style('opacity', 0);
-
-      tipContainer.append('div')
-        .attr('class', 'tooltip-arrow');
-      tipContent = tipContainer.append('div')
-        .attr('class', 'tooltip-inner');
+      const r = makeTip(this.props.tipContainer, tipContainer);
+      tipContent = r.tipContent;
+      tipContainer = r.tipContainer;
     },
 
     update(el: HTMLElement, props: Partial<IPieChartProps>) {
