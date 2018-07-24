@@ -142,6 +142,7 @@ var tipContentFns = [function (bins, i, d) {
 }, function (bins, i, d) {
     return bins[i] + '<br />Bookay ' + d.toFixed(2);
 }];
+var toggleData = [data_1.data2, data_1.data3];
 var HistogramExamples = function (_super) {
     __extends(HistogramExamples, _super);
     function HistogramExamples(props) {
@@ -173,6 +174,11 @@ var HistogramExamples = function (_super) {
             visible: __assign({}, this.state.visible, (_a = {}, _a[key] = v, _a))
         });
     };
+    HistogramExamples.prototype.toggleData = function () {
+        this.setState({
+            dataIndex: this.state.dataIndex === 0 ? 1 : 0
+        });
+    };
     HistogramExamples.prototype.render = function () {
         var _this = this;
         var theme = this.props.theme;
@@ -190,9 +196,19 @@ var HistogramExamples = function (_super) {
                 label: ''
             }]
         };
-        return React.createElement("div", null, React.createElement(src_1.Histogram, { data: data_1.data, grid: data_1.grid, width: '100%', height: 720, visible: visible, colorScheme: theme, axis: this.state.axis, tipContentFn: tipContentFns[this.state.tipContentFnIndex] }), React.createElement(src_1.Legend, { theme: theme, data: dataLegendData, onSelect: function onSelect(label) {
+        var theme2 = [theme[0]];
+        return React.createElement("div", null, React.createElement("h3", null, "Histograms"), React.createElement(src_1.Histogram, { data: data_1.data2, width: 400, height: 400, margin: {
+                left: 30,
+                top: 30
+            }, domain: { min: 0, max: 10 } }), React.createElement(src_1.Histogram, { data: data_1.data, grid: data_1.grid, width: '100%', height: 720, visible: visible, colorScheme: theme, axis: this.state.axis, tipContentFn: tipContentFns[this.state.tipContentFnIndex] }), React.createElement(src_1.Legend, { theme: theme, data: dataLegendData, onSelect: function onSelect(label) {
                 return _this.toggleVisible(label);
-            }, visible: visible }));
+            }, visible: visible }), React.createElement(src_1.Histogram, { data: toggleData[this.state.dataIndex], bar: { margin: 0.1 }, colorScheme: theme, visible: visible, width: 700, height: 350, axis: this.state.axis, tipContentFn: tipContentFns[this.state.tipContentFnIndex] }), React.createElement(src_1.Legend, { theme: theme2, data: toggleData[this.state.dataIndex], onSelect: function onSelect(label) {
+                return _this.toggleVisible(label);
+            }, visible: visible }), React.createElement("button", { onClick: function onClick() {
+                return _this.toggleAxisLabel();
+            } }, "toggleAxisLabel & tips"), React.createElement("button", { onClick: function onClick() {
+                return _this.toggleData();
+            } }, "toggle data"));
     };
     return HistogramExamples;
 }(react_1.Component);
@@ -288,10 +304,10 @@ var React = __webpack_require__(/*! react */ "react");
 var src_1 = __webpack_require__(/*! ../src */ "./src/index.ts");
 var data_1 = __webpack_require__(/*! ./data */ "./examples/data.ts");
 var points = [{
-    data: [{ x: '1-May-12', y: 1 }, { x: '30-Apr-15', y: 12 }, { x: '27-Apr-17', y: 3 }, { x: new Date(), y: 4 }],
+    data: [{ x: 1, y: 1 }, { x: 2, y: 12 }, { x: 3, y: 3 }, { x: 4, y: 4 }],
     label: 'test data'
 }, {
-    data: [{ x: '1-May-12', y: 10 }, { x: '30-Apr-15', y: 12 }, { x: '27-Apr-17', y: 23 }, { x: '26-Apr-19', y: 14 }],
+    data: [{ x: 1, y: 10 }, { x: 3, y: 12 }, { x: 5, y: 23 }, { x: 9, y: 14 }],
     label: 'test data',
     line: {
         curveType: d3_shape_1.curveStepAfter,
@@ -25519,9 +25535,19 @@ exports.lineChartD3 = function () {
             tipContainer = r.tipContainer;
         },
         _drawDataPointSet: function _drawDataPointSet(data) {
-            var axis = this.props.axis;
+            var _this = this;
+            var _a = this.props,
+                axis = _a.axis,
+                tip = _a.tip;
             var yAxisWidth = grid_1.yAxisWidth(axis);
             var pointContainer = this.container.selectAll('g').data(data);
+            var onMouseOver = function onMouseOver(d, i) {
+                debugger;
+                tipContent.html(function () {
+                    return _this.props.tipContentFn([d], 0);
+                });
+                tip.fx.in(tipContainer);
+            };
             var point = pointContainer.enter().append('g').attr('class', function (d, i) {
                 return 'point-container' + i;
             }).merge(pointContainer).selectAll('circle').data(function (d) {
@@ -25530,7 +25556,11 @@ exports.lineChartD3 = function () {
                 });
             });
             point.attr('class', 'update');
-            point.enter().append('circle').attr('class', 'enter').merge(point).attr('class', 'point').attr('cy', function (d) {
+            point.enter().append('circle').attr('class', 'enter').on('mouseover', onMouseOver).on('mousemove', function () {
+                return tip.fx.move(tipContainer);
+            }).on('mouseout', function () {
+                return tip.fx.out(tipContainer);
+            }).merge(point).attr('class', 'point').attr('cy', function (d) {
                 return y(d.y);
             }).attr('r', function (d, i) {
                 return 0;
@@ -25555,7 +25585,6 @@ exports.lineChartD3 = function () {
         _drawScales: function _drawScales(data) {
             var _a = this.props,
                 axis = _a.axis,
-                margin = _a.margin,
                 height = _a.height;
             var w = grid_1.gridWidth(this.props);
             var yDomain;

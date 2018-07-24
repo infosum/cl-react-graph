@@ -7,19 +7,19 @@ import { axis, grid } from './data';
 const points: ILineChartDataSet[] = [
   {
     data: [
-      { x: '1-May-12', y: 1 },
-      { x: '30-Apr-15', y: 12 },
-      { x: '27-Apr-17', y: 3 },
-      { x: new Date(), y: 4 },
+      { x: 1, y: 1 },
+      { x: 2, y: 12 },
+      { x: 3, y: 3 },
+      { x: 4, y: 4 },
     ],
     label: 'test data',
   },
   {
     data: [
-      { x: '1-May-12', y: 10 },
-      { x: '30-Apr-15', y: 12 },
-      { x: '27-Apr-17', y: 23 },
-      { x: '26-Apr-19', y: 14 },
+      { x: 1, y: 10 },
+      { x: 3, y: 12 },
+      { x: 5, y: 23 },
+      { x: 9, y: 14 },
     ],
     label: 'test data',
     line: {

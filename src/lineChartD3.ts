@@ -179,10 +179,17 @@ export const lineChartD3 = ((): IChartAdaptor => {
      * @param {Array} data LineChartDataSet
      */
     _drawDataPointSet(data: ILineChartDataSet[]) {
-      const { axis } = this.props;
+      const { axis, tip } = this.props;
       const yAxisWidth = getYAxisWidth(axis);
 
       const pointContainer = this.container.selectAll('g').data(data);
+
+      // Don't ask why but we must reference tipContentFn as this.props.tipContentFn otherwise
+      // it doesn't update with props changes
+      const onMouseOver = (d: ILineChartDataSet, i: number) => {
+        tipContent.html(() => this.props.tipContentFn([d], 0));
+        tip.fx.in(tipContainer);
+      };
 
       const point = pointContainer.enter()
         .append('g')
@@ -206,6 +213,9 @@ export const lineChartD3 = ((): IChartAdaptor => {
       // apply operations to both.
       point.enter().append('circle')
         .attr('class', 'enter')
+        .on('mouseover', onMouseOver)
+        .on('mousemove', () => tip.fx.move(tipContainer))
+        .on('mouseout', () => tip.fx.out(tipContainer))
         .merge(point)
         .attr('class', 'point')
         .attr('cy', (d) => y(d.y))
@@ -238,7 +248,8 @@ export const lineChartD3 = ((): IChartAdaptor => {
      * @param {Array} data LineChartDataSet
      */
     _drawScales(data: ILineChartDataSet[]) {
-      const { axis, margin, height } = this.props;
+      // @TODO Grid not rendering down to x axis
+      const { axis, height } = this.props;
       const w = gridWidth(this.props);
       let yDomain;
       let xDomain;
