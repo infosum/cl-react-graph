@@ -1,4 +1,4 @@
-import { curveStepAfter } from 'd3-shape';
+import { curveCatmullRom, curveStepAfter } from 'd3-shape';
 import * as React from 'react';
 import { LineChart } from '../src';
 import { IAxes, ILineChartDataSet } from '../src/index';
@@ -13,17 +13,37 @@ const points: ILineChartDataSet[] = [
       { x: 4, y: 4 },
     ],
     label: 'test data',
+    line: {
+      curveType: curveCatmullRom,
+      fill: {
+        fill: 'rgba(10, 10, 10, 0.2)',
+        show: true,
+      },
+      show: true,
+      stroke: 'orange',
+      strokeDashArray: '10 5',
+      strokeDashOffset: 3,
+    },
+    point: {
+      fill: 'black',
+      radius: 10,
+      show: true,
+      stroke: 'red',
+    },
   },
+];
+
+const points2: ILineChartDataSet[] = [
   {
     data: [
       { x: 1, y: 10 },
-      { x: 3, y: 12 },
-      { x: 5, y: 23 },
-      { x: 9, y: 14 },
+      { x: 2, y: 15 },
+      { x: 3, y: 4 },
+      { x: 4, y: 7 },
     ],
     label: 'test data',
     line: {
-      curveType: curveStepAfter,
+      curveType: curveCatmullRom,
       fill: {
         fill: 'rgba(10, 10, 10, 0.2)',
         show: true,
@@ -41,6 +61,8 @@ const points: ILineChartDataSet[] = [
     },
   }];
 
+const toggleData = [points, points2];
+
 const axisWithTime: IAxes = {
   x: {
     dateFormat: '%d-%b-%y',
@@ -50,6 +72,7 @@ const axisWithTime: IAxes = {
 };
 
 interface IState {
+  dataIndex: number;
   timeData: ILineChartDataSet[];
 }
 
@@ -58,6 +81,7 @@ class LineChartExample extends React.Component<{}, IState> {
     super(props);
     this.setTimeData = this.setTimeData.bind(this);
     this.state = {
+      dataIndex: 0,
       timeData: [
         {
           data: [
@@ -91,6 +115,12 @@ class LineChartExample extends React.Component<{}, IState> {
     };
   }
 
+  private toggleData = () => {
+    this.setState({
+      dataIndex: this.state.dataIndex === 0 ? 1 : 0,
+    });
+  }
+
   private setTimeData(v, i) {
     const s = [...this.state.timeData];
     s[0].data[i].x = v;
@@ -106,8 +136,11 @@ class LineChartExample extends React.Component<{}, IState> {
         <LineChart
           axis={axis}
           grid={grid}
-          data={points}
+          data={toggleData[this.state.dataIndex]}
           width={300} />
+        <button onClick={this.toggleData}>
+          Toggle Data
+        </button>
         <LineChart
           data={this.state.timeData}
           axis={axisWithTime}

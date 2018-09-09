@@ -94,7 +94,6 @@ class LineChart extends Component<ILineChartProps, IState> {
    * Get the chart state. If a histogram has been assigned
    * to the props, then render this data. Otherwise generate
    * a random normal dist
-   * @return {Object} data and chart props
    */
   public getChartState(): ILineChartProps {
     let { width } = this.props;

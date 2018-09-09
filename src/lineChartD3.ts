@@ -126,11 +126,18 @@ export const lineChartD3 = ((): IChartAdaptor => {
     point: pointProps,
   };
 
+  const hasArea = (d) => get(d, 'line.show') === true && get(d, 'line.fill.show') === true;
+
+  const curve = (curveType, yAxisWidth) => line()
+    .curve(curveType)
+    .x((d: any) => x(d.x) + yAxisWidth)
+    .y((d: any) => {
+      return y(d.y);
+    });
+
   const LineChartD3 = {
     /**
      * Initialization
-     * @param {Node} el Target DOM node
-     * @param {Object} props Chart properties
      */
     create(el: Node, props: Object = {}) {
       this.props = merge(defaultProps, props);
@@ -139,15 +146,18 @@ export const lineChartD3 = ((): IChartAdaptor => {
         .append('g')
         .attr('class', 'linechart-container');
       this.makeGrid();
-      this.lineContainer = svg.append('g').attr('class', 'line-container');
+      this.lineContainer = svg
+        .append('g')
+        .attr('class', 'line-container');
       this.makeScales();
+      this.buildScales(this.props);
+      this._createLines(this.props.data);
       this.update(el, this.props);
     },
 
     /**
      * Make the SVG container element
      * Recreate if it previously existed
-     * @param {Dom} el Dom container node
      */
     _makeSvg(el) {
       if (svg) {
@@ -176,7 +186,6 @@ export const lineChartD3 = ((): IChartAdaptor => {
     /**
      * Iterate over the dataset drawing points for sets marked as
      * requiring points.
-     * @param {Array} data LineChartDataSet
      */
     _drawDataPointSet(data: ILineChartDataSet[]) {
       const { axis, tip } = this.props;
@@ -228,7 +237,7 @@ export const lineChartD3 = ((): IChartAdaptor => {
         .transition()
         .duration(400)
         .attr('r', (d) => d.point.radius)
-        .delay(50);
+        .delay(650);
 
       // EXIT - Remove old elements as needed.
       pointContainer.exit().remove();
@@ -245,7 +254,6 @@ export const lineChartD3 = ((): IChartAdaptor => {
 
     /**
      * Draw the chart scales
-     * @param {Array} data LineChartDataSet
      */
     _drawScales(data: ILineChartDataSet[]) {
       // @TODO Grid not rendering down to x axis
@@ -291,40 +299,47 @@ export const lineChartD3 = ((): IChartAdaptor => {
       attrs(svg.selectAll('.x-axis .tick text'), axis.x.text.style);
     },
 
+    _createLines(data: ILineChartDataSet[]) {
+      data.forEach((d, i) => {
+        this.lineContainer.append('path')
+          .attr('class', `line-${i}`);
+      });
+
+      // change the line
+      data
+        .filter(hasArea)
+        .forEach((d, i) => {
+          this.lineContainer.append('path')
+            .attr('class', `fill-${i}`);
+
+        });
+
+    },
+
     /**
-     * Iterate over data and draw lines
-     * @param {Array} data Chart data objects
+     * Iterate over data and update lines
      */
     _drawLines(data: ILineChartDataSet[]) {
       const { axis } = this.props;
       const yAxisWidth = getYAxisWidth(axis);
-      const xAxisHeight = getXAxisHeight(axis);
-      const curve = (curveType) => line()
-        .curve(curveType)
-        .x((d: any) => x(d.x) + yAxisWidth)
-        .y((d: any) => {
-          return y(d.y);
-        });
 
-      const path = this.lineContainer.selectAll('g').data(data);
-
-      // TODO update data is adding in new lines - was hoping the transition would simply update the 'd' attr.
-      path.enter().append('path')
-        .attr('d', (d) => curve(d.line.curveType)(d.data))
-        .attr('class', (d, i) => 'path' + i)
-        .attr('fill', 'none')
-        .attr('stroke-dashoffset', (d, i) => d.line.strokeDashOffset)
-        .attr('stroke-dasharray', (d) => d.line.strokeDashArray)
-        .attr('stroke', (d) => d.line.stroke);
-      path.transition()
-        .duration(500)
-        .attr('d', (d) => curve(d.data))
-        .delay(50);
-
-      this.lineContainer.exit().remove();
-      path.exit().remove();
+      // change the line
+      data.forEach((d, i) => {
+        this.lineContainer.select(`.line-${i}`)
+          .attr('fill', 'none')
+          .attr('stroke-dashoffset', d.line.strokeDashOffset)
+          .attr('stroke-dasharray', d.line.strokeDashOffset)
+          .attr('stroke', d.line.stroke)
+          .transition()
+          .duration(500)
+          .attr('d', curve(d.line.curveType, yAxisWidth)(d.data as any))
+          .delay(50);
+      });
     },
 
+    /**
+     * Iterates ove data and updates area fills
+     */
     drawAreas(data: ILineChartDataSet[]) {
       const { axis, height } = this.props;
       const yAxisWidth = getYAxisWidth(axis);
@@ -335,25 +350,23 @@ export const lineChartD3 = ((): IChartAdaptor => {
         .y0((d) => height - xAxisHeight)
         .y1((d: any) => y(d.y));
 
-      const dx = data.filter((d) => get(d, 'line.show') === true && get(d, 'line.fill.show') === true);
-      const path = this.lineContainer.selectAll('g.areas').data(dx);
-      // TODO update data is adding in new lines - was hoping the transition would simply update the 'd' attr.
-      path.enter().append('path')
-        .attr('d', (d) => thisArea(d.line.curveType)(d.data))
-        .attr('class', (d, i) => 'curve-area path' + i)
-        .attr('fill', (d) => d.line.fill.fill);
-      path.transition()
-        .duration(500)
-        .attr('d', (d) => thisArea(d.data))
-        .delay(50);
 
-      path.exit().remove();
+      // change the line
+      data
+        .filter(hasArea)
+        .forEach((d, i) => {
+          this.lineContainer.select(`.fill-${i}`)
+            .attr('fill', d.line.fill.fill)
+            .transition()
+            .duration(500)
+            .delay(50)
+            .attr('d', thisArea(d.line.curveType)(d.data as any))
+            ;
+        });
     },
 
     /**
      * Get a max count of values in each data set
-     * @param {Object} counts Histogram data set values
-     * @return {Number} count
      */
     valuesCount(data: IHistogramDataSet[]): number {
       return data.reduce((a: number, b: IHistogramDataSet): number => {
@@ -368,14 +381,7 @@ export const lineChartD3 = ((): IChartAdaptor => {
         .attr('class', 'grid gridY');
     },
 
-    /**
-     * Update chart
-     */
-    update(el: Element, props) {
-      if (!props.data) {
-        return;
-      }
-      this.props = merge(defaultProps, props);
+    buildScales(props) {
       switch (props.axis.x.scale) {
         case 'TIME':
           x = scaleTime();
@@ -385,6 +391,17 @@ export const lineChartD3 = ((): IChartAdaptor => {
           break;
       }
 
+    },
+
+    /**
+     * Update chart
+     */
+    update(el: Element, props) {
+      if (!props.data) {
+        return;
+      }
+      this.props = merge(defaultProps, props);
+      this.buildScales(this.props);
       let data = props.data;
 
       xParseTime = timeParse(props.axis.x.dateFormat);

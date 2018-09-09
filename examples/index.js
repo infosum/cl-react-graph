@@ -305,12 +305,9 @@ var src_1 = __webpack_require__(/*! ../src */ "./src/index.ts");
 var data_1 = __webpack_require__(/*! ./data */ "./examples/data.ts");
 var points = [{
     data: [{ x: 1, y: 1 }, { x: 2, y: 12 }, { x: 3, y: 3 }, { x: 4, y: 4 }],
-    label: 'test data'
-}, {
-    data: [{ x: 1, y: 10 }, { x: 3, y: 12 }, { x: 5, y: 23 }, { x: 9, y: 14 }],
     label: 'test data',
     line: {
-        curveType: d3_shape_1.curveStepAfter,
+        curveType: d3_shape_1.curveCatmullRom,
         fill: {
             fill: 'rgba(10, 10, 10, 0.2)',
             show: true
@@ -327,6 +324,28 @@ var points = [{
         stroke: 'red'
     }
 }];
+var points2 = [{
+    data: [{ x: 1, y: 10 }, { x: 2, y: 15 }, { x: 3, y: 4 }, { x: 4, y: 7 }],
+    label: 'test data',
+    line: {
+        curveType: d3_shape_1.curveCatmullRom,
+        fill: {
+            fill: 'rgba(10, 10, 10, 0.2)',
+            show: true
+        },
+        show: true,
+        stroke: 'orange',
+        strokeDashArray: '10 5',
+        strokeDashOffset: 3
+    },
+    point: {
+        fill: 'black',
+        radius: 10,
+        show: true,
+        stroke: 'red'
+    }
+}];
+var toggleData = [points, points2];
 var axisWithTime = {
     x: {
         dateFormat: '%d-%b-%y',
@@ -338,8 +357,14 @@ var LineChartExample = function (_super) {
     __extends(LineChartExample, _super);
     function LineChartExample(props) {
         var _this = _super.call(this, props) || this;
+        _this.toggleData = function () {
+            _this.setState({
+                dataIndex: _this.state.dataIndex === 0 ? 1 : 0
+            });
+        };
         _this.setTimeData = _this.setTimeData.bind(_this);
         _this.state = {
+            dataIndex: 0,
             timeData: [{
                 data: [{ x: '1-May-12', y: 1 }, { x: '30-Apr-15', y: 12 }, { x: '27-Apr-17', y: 3 }, { x: new Date(), y: 4 }],
                 label: 'test data',
@@ -371,7 +396,7 @@ var LineChartExample = function (_super) {
     LineChartExample.prototype.render = function () {
         var _this = this;
         console.log('render line chart example');
-        return React.createElement("div", null, React.createElement("h3", null, "Line Chart"), React.createElement(src_1.LineChart, { axis: data_1.axis, grid: data_1.grid, data: points, width: 300 }), React.createElement(src_1.LineChart, { data: this.state.timeData, axis: axisWithTime, width: "100%" }), React.createElement("input", { onBlur: function onBlur(e) {
+        return React.createElement("div", null, React.createElement("h3", null, "Line Chart"), React.createElement(src_1.LineChart, { axis: data_1.axis, grid: data_1.grid, data: toggleData[this.state.dataIndex], width: 300 }), React.createElement("button", { onClick: this.toggleData }, "Toggle Data"), React.createElement(src_1.LineChart, { data: this.state.timeData, axis: axisWithTime, width: "100%" }), React.createElement("input", { onBlur: function onBlur(e) {
                 e.preventDefault();
                 _this.setTimeData(e.target.value, 0);
             }, defaultValue: this.state.timeData[0].data[0].x.toString() }));
@@ -25502,6 +25527,16 @@ exports.lineChartD3 = function () {
         line: lineProps,
         point: pointProps
     };
+    var hasArea = function hasArea(d) {
+        return get(d, 'line.show') === true && get(d, 'line.fill.show') === true;
+    };
+    var curve = function curve(curveType, yAxisWidth) {
+        return d3_shape_1.line().curve(curveType).x(function (d) {
+            return x(d.x) + yAxisWidth;
+        }).y(function (d) {
+            return y(d.y);
+        });
+    };
     var LineChartD3 = {
         create: function create(el, props) {
             if (props === void 0) {
@@ -25513,6 +25548,8 @@ exports.lineChartD3 = function () {
             this.makeGrid();
             this.lineContainer = svg.append('g').attr('class', 'line-container');
             this.makeScales();
+            this.buildScales(this.props);
+            this._createLines(this.props.data);
             this.update(el, this.props);
         },
         _makeSvg: function _makeSvg(el) {
@@ -25542,7 +25579,6 @@ exports.lineChartD3 = function () {
             var yAxisWidth = grid_1.yAxisWidth(axis);
             var pointContainer = this.container.selectAll('g').data(data);
             var onMouseOver = function onMouseOver(d, i) {
-                debugger;
                 tipContent.html(function () {
                     return _this.props.tipContentFn([d], 0);
                 });
@@ -25572,7 +25608,7 @@ exports.lineChartD3 = function () {
                 return x(d.x) + yAxisWidth;
             }).transition().duration(400).attr('r', function (d) {
                 return d.point.radius;
-            }).delay(50);
+            }).delay(650);
             pointContainer.exit().remove();
             point.exit().remove();
         },
@@ -25612,36 +25648,25 @@ exports.lineChartD3 = function () {
             attrs_1.default(svg.selectAll('.x-axis .domain, .x-axis .tick line'), axis.x.style);
             attrs_1.default(svg.selectAll('.x-axis .tick text'), axis.x.text.style);
         },
+        _createLines: function _createLines(data) {
+            var _this = this;
+            data.forEach(function (d, i) {
+                _this.lineContainer.append('path').attr('class', "line-" + i);
+            });
+            data.filter(hasArea).forEach(function (d, i) {
+                _this.lineContainer.append('path').attr('class', "fill-" + i);
+            });
+        },
         _drawLines: function _drawLines(data) {
+            var _this = this;
             var axis = this.props.axis;
             var yAxisWidth = grid_1.yAxisWidth(axis);
-            var xAxisHeight = grid_1.xAxisHeight(axis);
-            var curve = function curve(curveType) {
-                return d3_shape_1.line().curve(curveType).x(function (d) {
-                    return x(d.x) + yAxisWidth;
-                }).y(function (d) {
-                    return y(d.y);
-                });
-            };
-            var path = this.lineContainer.selectAll('g').data(data);
-            path.enter().append('path').attr('d', function (d) {
-                return curve(d.line.curveType)(d.data);
-            }).attr('class', function (d, i) {
-                return 'path' + i;
-            }).attr('fill', 'none').attr('stroke-dashoffset', function (d, i) {
-                return d.line.strokeDashOffset;
-            }).attr('stroke-dasharray', function (d) {
-                return d.line.strokeDashArray;
-            }).attr('stroke', function (d) {
-                return d.line.stroke;
+            data.forEach(function (d, i) {
+                _this.lineContainer.select(".line-" + i).attr('fill', 'none').attr('stroke-dashoffset', d.line.strokeDashOffset).attr('stroke-dasharray', d.line.strokeDashOffset).attr('stroke', d.line.stroke).transition().duration(500).attr('d', curve(d.line.curveType, yAxisWidth)(d.data)).delay(50);
             });
-            path.transition().duration(500).attr('d', function (d) {
-                return curve(d.data);
-            }).delay(50);
-            this.lineContainer.exit().remove();
-            path.exit().remove();
         },
         drawAreas: function drawAreas(data) {
+            var _this = this;
             var _a = this.props,
                 axis = _a.axis,
                 height = _a.height;
@@ -25656,21 +25681,9 @@ exports.lineChartD3 = function () {
                     return y(d.y);
                 });
             };
-            var dx = data.filter(function (d) {
-                return get(d, 'line.show') === true && get(d, 'line.fill.show') === true;
+            data.filter(hasArea).forEach(function (d, i) {
+                _this.lineContainer.select(".fill-" + i).attr('fill', d.line.fill.fill).transition().duration(500).delay(50).attr('d', thisArea(d.line.curveType)(d.data));
             });
-            var path = this.lineContainer.selectAll('g.areas').data(dx);
-            path.enter().append('path').attr('d', function (d) {
-                return thisArea(d.line.curveType)(d.data);
-            }).attr('class', function (d, i) {
-                return 'curve-area path' + i;
-            }).attr('fill', function (d) {
-                return d.line.fill.fill;
-            });
-            path.transition().duration(500).attr('d', function (d) {
-                return thisArea(d.data);
-            }).delay(50);
-            path.exit().remove();
         },
         valuesCount: function valuesCount(data) {
             return data.reduce(function (a, b) {
@@ -25681,11 +25694,7 @@ exports.lineChartD3 = function () {
             this.gridX = svg.append('g').attr('class', 'grid gridX');
             this.gridY = svg.append('g').attr('class', 'grid gridY');
         },
-        update: function update(el, props) {
-            if (!props.data) {
-                return;
-            }
-            this.props = deepmerge_1.default(defaultProps, props);
+        buildScales: function buildScales(props) {
             switch (props.axis.x.scale) {
                 case 'TIME':
                     x = d3_scale_1.scaleTime();
@@ -25694,6 +25703,13 @@ exports.lineChartD3 = function () {
                     x = d3_scale_1.scaleLinear();
                     break;
             }
+        },
+        update: function update(el, props) {
+            if (!props.data) {
+                return;
+            }
+            this.props = deepmerge_1.default(defaultProps, props);
+            this.buildScales(this.props);
             var data = props.data;
             xParseTime = d3_time_format_1.timeParse(props.axis.x.dateFormat);
             xFormatTime = d3_time_format_1.timeFormat(props.axis.x.dateFormat);

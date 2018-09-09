@@ -123,8 +123,6 @@ export const histogramD3 = ((): IChartAdaptor => {
   const HistogramD3 = {
     /**
      * Initialization
-     * @param {Node} el Target DOM node
-     * @param {Object} props Chart properties
      */
     create(el: HTMLElement, props: Partial<IHistogramProps> = {}) {
       this.mergeProps(props);
@@ -149,7 +147,6 @@ export const histogramD3 = ((): IChartAdaptor => {
     /**
      * Make the SVG container element
      * Recreate if it previously existed
-     * @param {Dom} el Dom container node
      */
     _makeSvg(el) {
       if (svg) {
@@ -215,7 +212,6 @@ export const histogramD3 = ((): IChartAdaptor => {
 
     /**
      * Draw scales
-     * @param {Object} data Chart data
      */
     _drawScales(data: IHistogramData) {
       const { axis, margin, height } = this.props;
@@ -275,7 +271,6 @@ export const histogramD3 = ((): IChartAdaptor => {
 
     /**
      * Returns the margin between similar bars in different data sets
-     * @return {Number} Margin
      */
     groupedMargin(): number {
       const m = get(this.props.bar, 'groupMargin', 0.1);
@@ -398,8 +393,6 @@ export const histogramD3 = ((): IChartAdaptor => {
     },
     /**
      * Update chart
-     * @param {HTMLElement} el Chart element
-     * @param {Object} props Chart props
      */
     update(el: HTMLElement, props: IHistogramProps) {
       if (!props.data) {
@@ -433,7 +426,6 @@ export const histogramD3 = ((): IChartAdaptor => {
 
     /**
      * Any necessary clean up
-     * @param {Element} el To remove
      */
     destroy(el: HTMLElement) {
       svg.selectAll('svg > *').remove();

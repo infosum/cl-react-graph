@@ -23,3 +23,12 @@ Docs coming as and when ....
  # Line
 
  # Scatter Plot
+
+ # Building Examples
+
+ from root:
+ 
+ ``` 
+ yarn build-examples
+ google-chrome-stable examples/index.html
+ ```
