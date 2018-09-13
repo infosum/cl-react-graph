@@ -132,7 +132,7 @@ class LineChartExample extends React.Component<{}, IState> {
     });
   }
   public render() {
-    console.log('render line chart exampleaaaaaaaaaaaaaaaaaaa');
+    console.log('render line chart example');
     return (
       <div>
         <h3>Line Chart</h3>

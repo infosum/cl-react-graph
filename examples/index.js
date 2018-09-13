@@ -398,7 +398,7 @@ var LineChartExample = function (_super) {
     };
     LineChartExample.prototype.render = function () {
         var _this = this;
-        console.log('render line chart exampleaaaaaaaaaaaaaaaaaaa');
+        console.log('render line chart example');
         return React.createElement("div", null, React.createElement("h3", null, "Line Chart"), React.createElement(src_1.LineChart, { axis: data_1.axis, grid: data_1.grid, data: toggleData[this.state.dataIndex], width: 300 }), React.createElement("button", { onClick: this.toggleData }, "Toggle Data"), React.createElement(src_1.LineChart, { data: this.state.timeData, axis: axisWithTime, width: "100%" }), React.createElement("input", { onBlur: function onBlur(e) {
                 e.preventDefault();
                 _this.setTimeData(e.target.value, 0);
