@@ -68,7 +68,10 @@ const axisWithTime: IAxes = {
     dateFormat: '%d-%b-%y',
     scale: 'TIME',
   },
-  y: {},
+  y: {
+    numberFormat: '.2',
+    scale: 'LOG'
+  },
 };
 
 interface IState {
@@ -129,7 +132,7 @@ class LineChartExample extends React.Component<{}, IState> {
     });
   }
   public render() {
-    console.log('render line chart example');
+    console.log('render line chart exampleaaaaaaaaaaaaaaaaaaa');
     return (
       <div>
         <h3>Line Chart</h3>

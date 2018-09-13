@@ -351,7 +351,10 @@ var axisWithTime = {
         dateFormat: '%d-%b-%y',
         scale: 'TIME'
     },
-    y: {}
+    y: {
+        numberFormat: '.2',
+        scale: 'LOG'
+    }
 };
 var LineChartExample = function (_super) {
     __extends(LineChartExample, _super);
@@ -395,7 +398,7 @@ var LineChartExample = function (_super) {
     };
     LineChartExample.prototype.render = function () {
         var _this = this;
-        console.log('render line chart example');
+        console.log('render line chart exampleaaaaaaaaaaaaaaaaaaa');
         return React.createElement("div", null, React.createElement("h3", null, "Line Chart"), React.createElement(src_1.LineChart, { axis: data_1.axis, grid: data_1.grid, data: toggleData[this.state.dataIndex], width: 300 }), React.createElement("button", { onClick: this.toggleData }, "Toggle Data"), React.createElement(src_1.LineChart, { data: this.state.timeData, axis: axisWithTime, width: "100%" }), React.createElement("input", { onBlur: function onBlur(e) {
                 e.preventDefault();
                 _this.setTimeData(e.target.value, 0);
@@ -25418,6 +25421,7 @@ var d3_scale_1 = __webpack_require__(/*! d3-scale */ "./node_modules/d3-scale/in
 var d3_selection_1 = __webpack_require__(/*! d3-selection */ "./node_modules/d3-selection/index.js");
 var d3_shape_1 = __webpack_require__(/*! d3-shape */ "./node_modules/d3-shape/index.js");
 var d3_time_format_1 = __webpack_require__(/*! d3-time-format */ "./node_modules/d3-time-format/index.js");
+var d3_format_1 = __webpack_require__(/*! d3-format */ "./node_modules/d3-format/index.js");
 var deepmerge_1 = __webpack_require__(/*! deepmerge */ "./node_modules/deepmerge/dist/es.js");
 var get = __webpack_require__(/*! lodash.get */ "./node_modules/lodash.get/index.js");
 var attrs_1 = __webpack_require__(/*! ./d3/attrs */ "./src/d3/attrs.ts");
@@ -25628,6 +25632,9 @@ exports.lineChartD3 = function () {
             var ys = [];
             var xs = [];
             var yAxis = d3_axis_1.axisLeft(y).ticks(axis.y.ticks);
+            if (axis.y.numberFormat) {
+                yAxis.tickFormat(d3_format_1.format(axis.y.numberFormat));
+            }
             var xAxis = d3_axis_1.axisBottom(x);
             var xAxisHeight = grid_1.xAxisHeight(axis);
             var yAxisWidth = grid_1.yAxisWidth(axis);
@@ -25701,6 +25708,14 @@ exports.lineChartD3 = function () {
                     break;
                 default:
                     x = d3_scale_1.scaleLinear();
+                    break;
+            }
+            switch (props.axis.y.scale) {
+                case 'LOG':
+                    y = d3_scale_1.scaleLog();
+                    break;
+                default:
+                    y = d3_scale_1.scaleLinear();
                     break;
             }
         },

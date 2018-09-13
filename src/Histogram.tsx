@@ -86,7 +86,7 @@ export interface IHistogramProps {
   width: number | string;
 }
 
-type Scale = 'LINEAR' | 'TIME';
+type Scale = 'LINEAR' | 'TIME' | 'LOG';
 
 export interface ISVGLineStyle {
   'stroke'?: string;
@@ -111,6 +111,7 @@ export interface IChartState {
 
 export interface IAxis {
   dateFormat?: string;
+  numberFormat?: string;
   ticks?: number;
   height?: number;
   label?: string;
