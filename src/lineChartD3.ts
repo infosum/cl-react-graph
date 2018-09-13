@@ -1,10 +1,11 @@
 import { extent } from 'd3-array';
 import { axisBottom, axisLeft } from 'd3-axis';
 import { easeCubic } from 'd3-ease';
-import { scaleLinear, scaleTime } from 'd3-scale';
+import { scaleLinear, scaleTime, scaleLog } from 'd3-scale';
 import { select } from 'd3-selection';
 import { area, curveCatmullRom, line } from 'd3-shape';
 import { timeFormat, timeParse } from 'd3-time-format';
+import { format } from "d3-format";
 import merge from 'deepmerge';
 import * as get from 'lodash.get';
 import attrs from './d3/attrs';
@@ -22,7 +23,7 @@ export const lineChartD3 = ((): IChartAdaptor => {
   let xParseTime;
   let xFormatTime;
   let tipContent;
-  const y = scaleLinear();
+  let y = scaleLinear();
   let x: any = scaleLinear();
 
   const
@@ -263,7 +264,10 @@ export const lineChartD3 = ((): IChartAdaptor => {
       let xDomain;
       const ys: any[] = [];
       const xs: any[] = [];
-      const yAxis = axisLeft(y).ticks(axis.y.ticks);
+      let yAxis = axisLeft(y).ticks(axis.y.ticks);
+      if (axis.y.numberFormat) {
+        yAxis.tickFormat(format(axis.y.numberFormat));
+      }
       const xAxis = axisBottom(x); // .ticks(axis.x.ticks);
       const xAxisHeight = getXAxisHeight(axis);
       const yAxisWidth = getYAxisWidth(axis);
@@ -391,6 +395,14 @@ export const lineChartD3 = ((): IChartAdaptor => {
           break;
       }
 
+      switch (props.axis.y.scale) {
+        case 'LOG':
+          y = scaleLog();
+          break;
+        default:
+          y = scaleLinear();
+          break;
+      }
     },
 
     /**

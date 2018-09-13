@@ -68,7 +68,10 @@ const axisWithTime: IAxes = {
     dateFormat: '%d-%b-%y',
     scale: 'TIME',
   },
-  y: {},
+  y: {
+    numberFormat: '.2',
+    scale: 'LOG'
+  },
 };
 
 interface IState {
