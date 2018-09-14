@@ -266,11 +266,19 @@ export const lineChartD3 = ((): IChartAdaptor => {
       let xDomain;
       const ys: any[] = [];
       const xs: any[] = [];
-      const yAxis = axisLeft(y).ticks(axis.y.ticks);
+      const yAxis = axisLeft(y);
+      if (axis.y.tickValues) {
+        yAxis.tickValues(axis.y.tickValues);
+      } else {
+        yAxis.ticks(axis.y.ticks);
+      }
       if (axis.y.numberFormat) {
         yAxis.tickFormat(format(axis.y.numberFormat));
       }
       const xAxis = axisBottom(x); // .ticks(axis.x.ticks);
+      if (axis.x.tickValues) {
+        xAxis.tickValues(axis.x.tickValues);
+      }
       const xAxisHeight = getXAxisHeight(axis);
       const yAxisWidth = getYAxisWidth(axis);
 
