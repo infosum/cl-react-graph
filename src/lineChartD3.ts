@@ -1,11 +1,11 @@
 import { extent } from 'd3-array';
 import { axisBottom, axisLeft } from 'd3-axis';
 import { easeCubic } from 'd3-ease';
-import { scaleLinear, scaleTime, scaleLog } from 'd3-scale';
+import { format } from 'd3-format';
+import { scaleLinear, scaleLog, scaleTime } from 'd3-scale';
 import { select } from 'd3-selection';
 import { area, curveCatmullRom, line } from 'd3-shape';
 import { timeFormat, timeParse } from 'd3-time-format';
-import { format } from "d3-format";
 import merge from 'deepmerge';
 import * as get from 'lodash.get';
 import attrs from './d3/attrs';
@@ -16,6 +16,8 @@ import {
 import { IChartAdaptor, IHistogramDataSet } from './Histogram';
 import { IChartPoint, ILineChartDataSet, ILineChartProps, ISVGPoint } from './LineChart';
 import tips, { makeTip } from './tip';
+
+const ZERO_SUBSITUTE: number = 1e-6;
 
 export const lineChartD3 = ((): IChartAdaptor => {
   let svg;
@@ -264,22 +266,45 @@ export const lineChartD3 = ((): IChartAdaptor => {
       let xDomain;
       const ys: any[] = [];
       const xs: any[] = [];
-      let yAxis = axisLeft(y).ticks(axis.y.ticks);
+      const yAxis = axisLeft(y);
+      if (axis.y.tickValues) {
+        yAxis.tickValues(axis.y.tickValues);
+      } else {
+        yAxis.ticks(axis.y.ticks);
+      }
       if (axis.y.numberFormat) {
         yAxis.tickFormat(format(axis.y.numberFormat));
       }
       const xAxis = axisBottom(x); // .ticks(axis.x.ticks);
+      if (axis.x.tickValues) {
+        xAxis.tickValues(axis.x.tickValues);
+      }
       const xAxisHeight = getXAxisHeight(axis);
       const yAxisWidth = getYAxisWidth(axis);
 
       data.forEach((datum: ILineChartDataSet) => {
         datum.data.forEach((d: IChartPoint) => {
-          ys.push((d.y));
-          xs.push((d.x));
+          let parsedY = d.y;
+          let parsedX = d.x;
+          if (axis.y.scale === 'LOG' && d.y === 0) {
+             parsedY = ZERO_SUBSITUTE;
+          }
+          if (axis.x.scale === 'LOG' && d.x === 0) {
+            parsedX = ZERO_SUBSITUTE;
+          }
+          ys.push((parsedY));
+          xs.push((parsedX));
         });
       });
       yDomain = extent(ys);
       xDomain = extent(xs);
+      // domain mustn't be 0 as log(0) gives Infinity. 1 lower domain gives better looking graphs
+      if (axis.y.scale === 'LOG' && yDomain[0] === ZERO_SUBSITUTE) {
+        yDomain[0] = 1;
+      }
+      if (axis.x.scale === 'LOG' && xDomain[0] === ZERO_SUBSITUTE) {
+        xDomain[0] = 1;
+      }
       x
         .domain(xDomain)
         .rangeRound([0, w]);
@@ -354,7 +379,6 @@ export const lineChartD3 = ((): IChartAdaptor => {
         .y0((d) => height - xAxisHeight)
         .y1((d: any) => y(d.y));
 
-
       // change the line
       data
         .filter(hasArea)
@@ -397,7 +421,7 @@ export const lineChartD3 = ((): IChartAdaptor => {
 
       switch (props.axis.y.scale) {
         case 'LOG':
-          y = scaleLog();
+          y = scaleLog().clamp(true); // clamp values below 1 to be equal to 0
           break;
         default:
           y = scaleLinear();

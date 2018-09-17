@@ -25417,16 +25417,17 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var d3_array_1 = __webpack_require__(/*! d3-array */ "./node_modules/d3-array/index.js");
 var d3_axis_1 = __webpack_require__(/*! d3-axis */ "./node_modules/d3-axis/index.js");
 var d3_ease_1 = __webpack_require__(/*! d3-ease */ "./node_modules/d3-ease/index.js");
+var d3_format_1 = __webpack_require__(/*! d3-format */ "./node_modules/d3-format/index.js");
 var d3_scale_1 = __webpack_require__(/*! d3-scale */ "./node_modules/d3-scale/index.js");
 var d3_selection_1 = __webpack_require__(/*! d3-selection */ "./node_modules/d3-selection/index.js");
 var d3_shape_1 = __webpack_require__(/*! d3-shape */ "./node_modules/d3-shape/index.js");
 var d3_time_format_1 = __webpack_require__(/*! d3-time-format */ "./node_modules/d3-time-format/index.js");
-var d3_format_1 = __webpack_require__(/*! d3-format */ "./node_modules/d3-format/index.js");
 var deepmerge_1 = __webpack_require__(/*! deepmerge */ "./node_modules/deepmerge/dist/es.js");
 var get = __webpack_require__(/*! lodash.get */ "./node_modules/lodash.get/index.js");
 var attrs_1 = __webpack_require__(/*! ./d3/attrs */ "./src/d3/attrs.ts");
 var grid_1 = __webpack_require__(/*! ./grid */ "./src/grid.ts");
 var tip_1 = __webpack_require__(/*! ./tip */ "./src/tip.ts");
+var ZERO_SUBSITUTE = 1e-6;
 exports.lineChartD3 = function () {
     var svg;
     var tipContainer;
@@ -25640,12 +25641,26 @@ exports.lineChartD3 = function () {
             var yAxisWidth = grid_1.yAxisWidth(axis);
             data.forEach(function (datum) {
                 datum.data.forEach(function (d) {
-                    ys.push(d.y);
-                    xs.push(d.x);
+                    var parsedY = d.y;
+                    var parsedX = d.x;
+                    if (axis.y.scale === 'LOG' && d.y === 0) {
+                        parsedY = ZERO_SUBSITUTE;
+                    }
+                    if (axis.x.scale === 'LOG' && d.x === 0) {
+                        parsedX = ZERO_SUBSITUTE;
+                    }
+                    ys.push(parsedY);
+                    xs.push(parsedX);
                 });
             });
             yDomain = d3_array_1.extent(ys);
             xDomain = d3_array_1.extent(xs);
+            if (axis.y.scale === 'LOG' && yDomain[0] === ZERO_SUBSITUTE) {
+                yDomain[0] = 1;
+            }
+            if (axis.x.scale === 'LOG' && xDomain[0] === ZERO_SUBSITUTE) {
+                xDomain[0] = 1;
+            }
             x.domain(xDomain).rangeRound([0, w]);
             y.domain(yDomain).range([height - xAxisHeight, 0]);
             this.yAxis.attr('transform', "translate(" + yAxisWidth + ", 0)").transition().call(yAxis);
@@ -25712,7 +25727,7 @@ exports.lineChartD3 = function () {
             }
             switch (props.axis.y.scale) {
                 case 'LOG':
-                    y = d3_scale_1.scaleLog();
+                    y = d3_scale_1.scaleLog().clamp(true);
                     break;
                 default:
                     y = d3_scale_1.scaleLinear();
