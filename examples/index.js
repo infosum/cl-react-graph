@@ -25632,11 +25632,19 @@ exports.lineChartD3 = function () {
             var xDomain;
             var ys = [];
             var xs = [];
-            var yAxis = d3_axis_1.axisLeft(y).ticks(axis.y.ticks);
+            var yAxis = d3_axis_1.axisLeft(y);
+            if (axis.y.tickValues) {
+                yAxis.tickValues(axis.y.tickValues);
+            } else {
+                yAxis.ticks(axis.y.ticks);
+            }
             if (axis.y.numberFormat) {
                 yAxis.tickFormat(d3_format_1.format(axis.y.numberFormat));
             }
             var xAxis = d3_axis_1.axisBottom(x);
+            if (axis.x.tickValues) {
+                xAxis.tickValues(axis.x.tickValues);
+            }
             var xAxisHeight = grid_1.xAxisHeight(axis);
             var yAxisWidth = grid_1.yAxisWidth(axis);
             data.forEach(function (datum) {
