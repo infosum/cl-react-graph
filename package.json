@@ -1,6 +1,6 @@
 {
   "name": "cl-react-graph",
-  "version": "1.6.11",
+  "version": "1.6.12",
   "description": "React D3 Charts",
   "main": "./dist/index.js",
   "types": "./dist/types/index.d.ts",
@@ -27,7 +27,6 @@
   "devDependencies": {
     "@types/d3": "^5.0.0",
     "@types/deepmerge": "^2.1.0",
-    "@types/geojson": "^7946.0.4",
     "@types/node": "^10.5.2",
     "@types/react": "*",
     "@types/react-dom": "*",
@@ -63,6 +62,7 @@
   },
   "dependencies": {
     "@types/webpack": "^4.4.21",
+    "@types/geojson": "^7946.0.4",
     "color": "^3.0.0",
     "d3-array": "^1.2.1",
     "d3-axis": "^1.0.8",
