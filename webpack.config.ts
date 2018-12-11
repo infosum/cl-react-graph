@@ -1,8 +1,8 @@
 import path from 'path';
 import webpack from 'webpack';
-const libraryName = 'cl-react-graph';
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 
+const libraryName = 'cl-react-graph';
 const entry = [
   './src/index.ts',
 ];

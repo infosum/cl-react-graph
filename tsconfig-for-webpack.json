@@ -2,6 +2,7 @@
   "compilerOptions": {
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
+    "declaration": true,
     "jsx": "react",
     "keyofStringsOnly": true,
     "module": "commonjs",
@@ -22,6 +23,7 @@
   },
   "include": [
     "node_modules/@types/**/*.d.ts",
-    "src/**/*.ts"
+    "src/**/*.ts",
+    "src/**/*.tsx"
   ]
 }
