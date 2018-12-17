@@ -8,12 +8,12 @@ interface IState {
   parentWidth?: number;
 }
 
-export type IChartPointValue = number | string | Date;
-export interface IChartPoint {
-  x: IChartPointValue;
-  y: IChartPointValue;
+export type IChartPointValue = number | string | Date | object;
+export interface IChartPoint<X extends IChartPointValue = Date, Y extends IChartPointValue = number> {
+  x: X;
+  y: Y;
 }
-export interface ILineChartDataSet {
+export interface ILineChartDataSet<T extends IChartPoint<IChartPointValue, IChartPointValue> = IChartPoint> {
   label: string;
   point?: {
     radius: number;
@@ -32,7 +32,7 @@ export interface ILineChartDataSet {
     strokeDashOffset?: number;
     strokeDashArray?: string;
   };
-  data: IChartPoint[];
+  data: T[];
 }
 
 export interface ISVGPoint extends ISVGLineStyle {

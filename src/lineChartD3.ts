@@ -172,6 +172,10 @@ export const lineChartD3 = ((): IChartAdaptor => {
         }
       }
       const { margin, width, height, className } = this.props;
+      const scale = {
+        x: 1 - (margin.left / width),
+        y: 1 - (margin.top / height),
+      };
 
       // Reference to svg element containing chart
       svg = select(el).append('svg')
@@ -179,7 +183,7 @@ export const lineChartD3 = ((): IChartAdaptor => {
         .attr('width', width)
         .attr('height', height)
         .append('g')
-        .attr('transform', `translate(${margin.left},${margin.top})`);
+        .attr('transform', `translate(${margin.left},${margin.top}) scale(${scale.x},${scale.y})`);
 
       const r = makeTip(this.props.tipContainer, tipContainer);
       tipContent = r.tipContent;
@@ -258,7 +262,7 @@ export const lineChartD3 = ((): IChartAdaptor => {
     /**
      * Draw the chart scales
      */
-    _drawScales(data: ILineChartDataSet[]) {
+    _drawScales(data: Array<ILineChartDataSet<IChartPoint<number, number>>>) {
       // @TODO Grid not rendering down to x axis
       const { axis, height } = this.props;
       const w = gridWidth(this.props);
@@ -282,8 +286,8 @@ export const lineChartD3 = ((): IChartAdaptor => {
       const xAxisHeight = getXAxisHeight(axis);
       const yAxisWidth = getYAxisWidth(axis);
 
-      data.forEach((datum: ILineChartDataSet) => {
-        datum.data.forEach((d: IChartPoint) => {
+      data.forEach((datum: ILineChartDataSet<IChartPoint<number, number>>) => {
+        datum.data.forEach((d: IChartPoint<number, number>) => {
           let parsedY = d.y;
           let parsedX = d.x;
           if (axis.y.scale === 'LOG' && d.y === 0) {
@@ -442,7 +446,7 @@ export const lineChartD3 = ((): IChartAdaptor => {
 
       xParseTime = timeParse(props.axis.x.dateFormat);
       xFormatTime = timeFormat(props.axis.x.dateFormat);
-      data = data.map((datum: ILineChartDataSet) => {
+      data = data.map((datum: ILineChartDataSet<IChartPoint<number, number>>) => {
         if (props.axis.x.scale === 'TIME') {
           datum.data = datum.data.map((d) => {
             const newd = {

@@ -158,6 +158,11 @@ export const histogramD3 = ((): IChartAdaptor => {
         }
       }
       const { margin, width, height, className } = this.props;
+      const scale = {
+        x: 1 - (margin.left / width),
+        y: 1 - (margin.top / height),
+      };
+
 
       // Reference to svg element containing chart
       svg = select(el).append('svg')
@@ -166,8 +171,8 @@ export const histogramD3 = ((): IChartAdaptor => {
         .attr('height', height)
         .attr('viewBox', `0 0 ${width} ${height}`)
         .append('g')
-        .attr('transform',
-          'translate(' + margin.left + ',' + margin.top + ')');
+        .attr('transform', `translate(${margin.left},${margin.top}) scale(${scale.x},${scale.y})`);
+
       const r = makeTip(this.props.tipContainer, tipContainer);
       tipContent = r.tipContent;
       tipContainer = r.tipContainer;

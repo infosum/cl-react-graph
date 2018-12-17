@@ -91,14 +91,18 @@ type Scale = 'LINEAR' | 'TIME' | 'LOG';
 export interface ISVGLineStyle {
   'stroke'?: string;
   'fill'?: string;
+  'opacity'?: number;
   'stroke-width'?: number;
   'stroke-opacity'?: number;
   'shape-rendering'?: string;
+  'visible'?: boolean;
 }
 
 interface ISVGTextStyle {
   fill?: string;
+  'font-size'?: string;
   dy?: string | number;
+  'stroke-opacity'?: number;
   'text-anchor'?: string;
   transform?: string;
   x?: string | number;
@@ -124,6 +128,7 @@ export interface IAxis {
   };
   width?: number;
   tickSize?: number;
+  visible?: boolean;
 }
 
 export type TipContentFn<T> = (bins: T[], i: number, d: number, groupTitle?: string) => string;
