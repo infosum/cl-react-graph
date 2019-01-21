@@ -1,8 +1,18 @@
-import { curveCatmullRom, curveStepAfter } from 'd3-shape';
+import {
+  curveCatmullRom,
+  curveStepAfter,
+} from 'd3-shape';
 import * as React from 'react';
+
 import { LineChart } from '../src';
-import { IAxes, ILineChartDataSet } from '../src/index';
-import { axis, grid } from './data';
+import {
+  IAxes,
+  ILineChartDataSet,
+} from '../src/index';
+import {
+  axis,
+  grid,
+} from './data';
 
 const points: ILineChartDataSet[] = [
   {
@@ -70,7 +80,7 @@ const axisWithTime: IAxes = {
   },
   y: {
     numberFormat: '.2',
-    scale: 'LOG'
+    scale: 'LOG',
   },
 };
 
@@ -88,9 +98,9 @@ class LineChartExample extends React.Component<{}, IState> {
       timeData: [
         {
           data: [
-            { x: '1-May-12', y: 1 },
-            { x: '30-Apr-15', y: 12 },
-            { x: '27-Apr-17', y: 3 },
+            { x: new Date('1-May-12'), y: 1 },
+            { x: new Date('30-Apr-15'), y: 12 },
+            { x: new Date('27-Apr-17'), y: 3 },
             { x: new Date(), y: 4 },
           ],
           label: 'test data',
@@ -108,10 +118,10 @@ class LineChartExample extends React.Component<{}, IState> {
         },
         {
           data: [
-            { x: '1-May-12', y: 10 },
-            { x: '30-Apr-15', y: 12 },
-            { x: '27-Apr-17', y: 23 },
-            { x: '26-Apr-19', y: 14 },
+            { x: new Date('1-May-12'), y: 10 },
+            { x: new Date('30-Apr-15'), y: 12 },
+            { x: new Date('27-Apr-17'), y: 23 },
+            { x: new Date('26-Apr-19'), y: 14 },
           ],
           label: 'test data 2',
         }],

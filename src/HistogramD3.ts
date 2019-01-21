@@ -1,13 +1,35 @@
 import { extent } from 'd3-array';
-import { axisBottom, axisLeft } from 'd3-axis';
-import { scaleBand, scaleLinear, ScaleLinear, scaleOrdinal } from 'd3-scale';
+import {
+  axisBottom,
+  axisLeft,
+} from 'd3-axis';
+import {
+  scaleBand,
+  scaleLinear,
+  ScaleLinear,
+  scaleOrdinal,
+} from 'd3-scale';
 import { select } from 'd3-selection';
 import merge from 'deepmerge';
 import * as get from 'lodash.get';
+
 import colorScheme from './colors';
 import attrs from './d3/attrs';
-import { drawGrid, gridHeight, gridWidth, makeXGridlines, makeYGridlines, xAxisHeight, yAxisWidth } from './grid';
-import { IChartAdaptor, IHistogramData, IHistogramDataSet, IHistogramProps } from './Histogram';
+import {
+  drawGrid,
+  gridHeight,
+  gridWidth,
+  makeXGridlines,
+  makeYGridlines,
+  xAxisHeight,
+  yAxisWidth,
+} from './grid';
+import {
+  IChartAdaptor,
+  IHistogramData,
+  IHistogramDataSet,
+  IHistogramProps,
+} from './Histogram';
 import tips, { makeTip } from './tip';
 
 interface IGroupDataItem {
@@ -24,6 +46,7 @@ export const histogramD3 = ((): IChartAdaptor => {
   const y = scaleLinear();
   const x = scaleBand();
   const innerScaleBand = scaleBand();
+  const stacked = true;
 
   const defaultProps: IHistogramProps = {
     axis: {
@@ -225,17 +248,23 @@ export const histogramD3 = ((): IChartAdaptor => {
 
       let xAxis;
       const dataLabels = data.counts.map((c) => c.label);
-
+      console.log('dataLabels', dataLabels);
       x
         .domain(data.bins)
         .rangeRound([0, w])
         .paddingInner(this.groupedMargin());
 
-      innerScaleBand
-        .domain(dataLabels)
-        .rangeRound([0, x.bandwidth()])
-        .paddingInner(this.barMargin());
-
+      if (stacked) {
+        innerScaleBand
+          .domain(['main'])
+          .rangeRound([0, x.bandwidth()])
+          .paddingInner(this.barMargin());
+      } else {
+        innerScaleBand
+          .domain(dataLabels)
+          .rangeRound([0, x.bandwidth()])
+          .paddingInner(this.barMargin());
+      }
       xAxis = axisBottom(x);
 
       const tickSize = get(axis, 'x.tickSize', undefined);
@@ -302,8 +331,7 @@ export const histogramD3 = ((): IChartAdaptor => {
       bins: string[],
       groupData: IGroupData,
     ) {
-      const { axis, height, width, margin, delay, duration,
-        tip } = this.props;
+      const { axis, height, width, margin, delay, duration, tip } = this.props;
       const barWidth = this.barWidth();
 
       // const borderColors = set.borderColors ? d3.scaleOrdinal(set.borderColors) : null;
@@ -334,23 +362,47 @@ export const histogramD3 = ((): IChartAdaptor => {
         tip.fx.in(tipContainer);
       };
 
+      console.log('bins', bins, 'group data', groupData);
+
       bars
         .enter()
         .append('rect')
         .attr('height', 0)
-        .attr('y', (d: IGroupDataItem): number => gHeight)
+        .attr('y', (d: IGroupDataItem, stackIndex: number): number => {
+          const setIndex = bins.findIndex((b) => b === d.label);
+          const thisSetData = groupData[setIndex];
+          console.log('------------------');
+          console.log('default y:', d);
+          console.log('setIndex,', setIndex);
+          console.log('stackIndex', stackIndex);
+          console.log('thisSetData', thisSetData);
+          const offset = stackIndex > 0
+            ? y(10)
+            : 0;
+          return gHeight - offset;
+        })
         .attr('class', 'bar')
         .on('mouseover', onMouseOver)
         .on('mousemove', () => tip.fx.move(tipContainer))
         .on('mouseout', () => tip.fx.out(tipContainer))
         .merge(bars)
-        .attr('x', (d) => innerScaleBand(d.groupLabel))
+        .attr('x', (d) => {
+          // console.log('group label', d.groupLabel);
+          return innerScaleBand(d.groupLabel);
+        })
         .attr('width', (d) => barWidth)
         .attr('fill', (d, i) => colors(i))
         .transition()
         .duration(duration)
         .delay(delay)
-        .attr('y', (d: IGroupDataItem): number => y(d.value))
+        .attr('y', (d: IGroupDataItem, stackIndex: number): number => {
+          // const setIndex = bins.findIndex((b) => b === d.label);
+          // const thisSetData = groupData[setIndex];
+          const offset = stackIndex > 0
+            ? 5
+            : 0;
+          return y(d.value + offset);
+        })
         // Hide bar's bottom border
         .attr('stroke-dasharray',
           (d: IGroupDataItem): string => {

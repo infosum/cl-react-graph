@@ -1,9 +1,18 @@
 import merge from 'deepmerge';
 import * as React from 'react';
-import { Component } from 'react';
-import { Histogram, Legend } from '../src';
+
+import {
+  Histogram,
+  Legend,
+} from '../src';
 import { IAxes } from '../src/index';
-import { axis, data, data2, data3, grid } from './data';
+import {
+  axis,
+  data,
+  data2,
+  data3,
+  grid,
+} from './data';
 
 interface IProps {
   theme: string[];
@@ -26,7 +35,7 @@ const tipContentFns = [
 
 const toggleData = [data2, data3];
 
-class HistogramExamples extends Component<IProps, IState> {
+class HistogramExamples extends React.Component<IProps, IState> {
   constructor(props) {
     super(props);
     this.state = {
@@ -78,14 +87,15 @@ class HistogramExamples extends Component<IProps, IState> {
     };
 
     const theme2 = [theme[0]];
+    console.log('data', data);
     return (
       <div>
         <h3>Histograms</h3>
-        <Histogram data={data2} width={400} height={400} margin={{
+        {/* <Histogram data={data2} width={400} height={400} margin={{
           left: 30,
           top: 30,
         }}
-          domain={{ min: 0, max: 10 }} />
+          domain={{ min: 0, max: 10 }} /> */}
         <Histogram data={data}
           grid={grid}
           width={'100%'}
@@ -101,7 +111,7 @@ class HistogramExamples extends Component<IProps, IState> {
           visible={visible}
         />
 
-        <Histogram data={toggleData[this.state.dataIndex]}
+        {/* <Histogram data={toggleData[this.state.dataIndex]}
           bar={{ margin: 0.1 }}
           colorScheme={theme}
           visible={visible}
@@ -122,7 +132,7 @@ class HistogramExamples extends Component<IProps, IState> {
 
         <button onClick={() => this.toggleData()}>
           toggle data
-          </button>
+          </button> */}
       </div>
     );
   }

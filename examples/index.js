@@ -134,7 +134,6 @@ var __assign = undefined && undefined.__assign || Object.assign || function (t) 
 Object.defineProperty(exports, "__esModule", { value: true });
 var deepmerge_1 = __webpack_require__(/*! deepmerge */ "./node_modules/deepmerge/dist/es.js");
 var React = __webpack_require__(/*! react */ "react");
-var react_1 = __webpack_require__(/*! react */ "react");
 var src_1 = __webpack_require__(/*! ../src */ "./src/index.ts");
 var data_1 = __webpack_require__(/*! ./data */ "./examples/data.ts");
 var tipContentFns = [function (bins, i, d) {
@@ -197,21 +196,13 @@ var HistogramExamples = function (_super) {
             }]
         };
         var theme2 = [theme[0]];
-        return React.createElement("div", null, React.createElement("h3", null, "Histograms"), React.createElement(src_1.Histogram, { data: data_1.data2, width: 400, height: 400, margin: {
-                left: 30,
-                top: 30
-            }, domain: { min: 0, max: 10 } }), React.createElement(src_1.Histogram, { data: data_1.data, grid: data_1.grid, width: '100%', height: 720, visible: visible, colorScheme: theme, axis: this.state.axis, tipContentFn: tipContentFns[this.state.tipContentFnIndex] }), React.createElement(src_1.Legend, { theme: theme, data: dataLegendData, onSelect: function onSelect(label) {
+        console.log('data', data_1.data);
+        return React.createElement("div", null, React.createElement("h3", null, "Histograms"), React.createElement(src_1.Histogram, { data: data_1.data, grid: data_1.grid, width: '100%', height: 720, visible: visible, colorScheme: theme, axis: this.state.axis, tipContentFn: tipContentFns[this.state.tipContentFnIndex] }), React.createElement(src_1.Legend, { theme: theme, data: dataLegendData, onSelect: function onSelect(label) {
                 return _this.toggleVisible(label);
-            }, visible: visible }), React.createElement(src_1.Histogram, { data: toggleData[this.state.dataIndex], bar: { margin: 0.1 }, colorScheme: theme, visible: visible, width: 700, height: 350, axis: this.state.axis, tipContentFn: tipContentFns[this.state.tipContentFnIndex] }), React.createElement(src_1.Legend, { theme: theme2, data: toggleData[this.state.dataIndex], onSelect: function onSelect(label) {
-                return _this.toggleVisible(label);
-            }, visible: visible }), React.createElement("button", { onClick: function onClick() {
-                return _this.toggleAxisLabel();
-            } }, "toggleAxisLabel & tips"), React.createElement("button", { onClick: function onClick() {
-                return _this.toggleData();
-            } }, "toggle data"));
+            }, visible: visible }));
     };
     return HistogramExamples;
-}(react_1.Component);
+}(React.Component);
 exports.default = HistogramExamples;
 
 /***/ }),
@@ -369,7 +360,7 @@ var LineChartExample = function (_super) {
         _this.state = {
             dataIndex: 0,
             timeData: [{
-                data: [{ x: '1-May-12', y: 1 }, { x: '30-Apr-15', y: 12 }, { x: '27-Apr-17', y: 3 }, { x: new Date(), y: 4 }],
+                data: [{ x: new Date('1-May-12'), y: 1 }, { x: new Date('30-Apr-15'), y: 12 }, { x: new Date('27-Apr-17'), y: 3 }, { x: new Date(), y: 4 }],
                 label: 'test data',
                 line: {
                     curveType: d3_shape_1.curveStepAfter,
@@ -383,7 +374,7 @@ var LineChartExample = function (_super) {
                     strokeDashOffset: 3
                 }
             }, {
-                data: [{ x: '1-May-12', y: 10 }, { x: '30-Apr-15', y: 12 }, { x: '27-Apr-17', y: 23 }, { x: '26-Apr-19', y: 14 }],
+                data: [{ x: new Date('1-May-12'), y: 10 }, { x: new Date('30-Apr-15'), y: 12 }, { x: new Date('27-Apr-17'), y: 23 }, { x: new Date('26-Apr-19'), y: 14 }],
                 label: 'test data 2'
             }]
         };
@@ -22691,6 +22682,7 @@ exports.histogramD3 = function () {
     var y = d3_scale_1.scaleLinear();
     var x = d3_scale_1.scaleBand();
     var innerScaleBand = d3_scale_1.scaleBand();
+    var stacked = true;
     var defaultProps = {
         axis: {
             x: {
@@ -22819,7 +22811,11 @@ exports.histogramD3 = function () {
                 width = _a.width,
                 height = _a.height,
                 className = _a.className;
-            svg = d3_selection_1.select(el).append('svg').attr('class', className).attr('width', width).attr('height', height).attr('viewBox', "0 0 " + width + " " + height).append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+            var scale = {
+                x: 1 - margin.left / width,
+                y: 1 - margin.top / height
+            };
+            svg = d3_selection_1.select(el).append('svg').attr('class', className).attr('width', width).attr('height', height).attr('viewBox', "0 0 " + width + " " + height).append('g').attr('transform', "translate(" + margin.left + "," + margin.top + ") scale(" + scale.x + "," + scale.y + ")");
             var r = tip_1.makeTip(this.props.tipContainer, tipContainer);
             tipContent = r.tipContent;
             tipContainer = r.tipContainer;
@@ -22865,8 +22861,13 @@ exports.histogramD3 = function () {
             var dataLabels = data.counts.map(function (c) {
                 return c.label;
             });
+            console.log('dataLabels', dataLabels);
             x.domain(data.bins).rangeRound([0, w]).paddingInner(this.groupedMargin());
-            innerScaleBand.domain(dataLabels).rangeRound([0, x.bandwidth()]).paddingInner(this.barMargin());
+            if (stacked) {
+                innerScaleBand.domain(['main']).rangeRound([0, x.bandwidth()]).paddingInner(this.barMargin());
+            } else {
+                innerScaleBand.domain(dataLabels).rangeRound([0, x.bandwidth()]).paddingInner(this.barMargin());
+            }
             xAxis = d3_axis_1.axisBottom(x);
             var tickSize = get(axis, 'x.tickSize', undefined);
             if (tickSize !== undefined) {
@@ -22931,8 +22932,19 @@ exports.histogramD3 = function () {
                 });
                 tip.fx.in(tipContainer);
             };
-            bars.enter().append('rect').attr('height', 0).attr('y', function (d) {
-                return gHeight;
+            console.log('bins', bins, 'group data', groupData);
+            bars.enter().append('rect').attr('height', 0).attr('y', function (d, stackIndex) {
+                var setIndex = bins.findIndex(function (b) {
+                    return b === d.label;
+                });
+                var thisSetData = groupData[setIndex];
+                console.log('------------------');
+                console.log('default y:', d);
+                console.log('setIndex,', setIndex);
+                console.log('stackIndex', stackIndex);
+                console.log('thisSetData', thisSetData);
+                var offset = stackIndex > 0 ? y(10) : 0;
+                return gHeight - offset;
             }).attr('class', 'bar').on('mouseover', onMouseOver).on('mousemove', function () {
                 return tip.fx.move(tipContainer);
             }).on('mouseout', function () {
@@ -22943,8 +22955,9 @@ exports.histogramD3 = function () {
                 return barWidth;
             }).attr('fill', function (d, i) {
                 return colors(i);
-            }).transition().duration(duration).delay(delay).attr('y', function (d) {
-                return y(d.value);
+            }).transition().duration(duration).delay(delay).attr('y', function (d, stackIndex) {
+                var offset = stackIndex > 0 ? 5 : 0;
+                return y(d.value + offset);
             }).attr('stroke-dasharray', function (d) {
                 var currentHeight = gHeight - y(d.value);
                 return barWidth + " 0 " + currentHeight + " " + barWidth;
@@ -24216,7 +24229,6 @@ var __rest = undefined && undefined.__rest || function (s, e) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "react");
-var react_1 = __webpack_require__(/*! react */ "react");
 var ReactDOM = __webpack_require__(/*! react-dom */ "react-dom");
 var lineChartD3_1 = __webpack_require__(/*! ./lineChartD3 */ "./src/lineChartD3.ts");
 var LineChart = function (_super) {
@@ -24278,7 +24290,7 @@ var LineChart = function (_super) {
             }, className: "chart-container" });
     };
     return LineChart;
-}(react_1.Component);
+}(React.Component);
 exports.default = LineChart;
 
 /***/ }),
@@ -25571,7 +25583,11 @@ exports.lineChartD3 = function () {
                 width = _a.width,
                 height = _a.height,
                 className = _a.className;
-            svg = d3_selection_1.select(el).append('svg').attr('class', className).attr('width', width).attr('height', height).append('g').attr('transform', "translate(" + margin.left + "," + margin.top + ")");
+            var scale = {
+                x: 1 - margin.left / width,
+                y: 1 - margin.top / height
+            };
+            svg = d3_selection_1.select(el).append('svg').attr('class', className).attr('width', width).attr('height', height).append('g').attr('transform', "translate(" + margin.left + "," + margin.top + ") scale(" + scale.x + "," + scale.y + ")");
             var r = tip_1.makeTip(this.props.tipContainer, tipContainer);
             tipContent = r.tipContent;
             tipContainer = r.tipContainer;

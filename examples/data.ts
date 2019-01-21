@@ -1,6 +1,13 @@
+import {
+  schemeCategory10,
+  schemeDark2,
+} from 'd3-scale-chromatic';
 
-import { schemeCategory10, schemeDark2 } from 'd3-scale-chromatic';
-import { IAxes, IHistogramDataSet } from '../src/index';
+import {
+  IAxes,
+  IHistogramData,
+  IHistogramDataSet,
+} from '../src/index';
 
 export const grid = {
   x: {
@@ -19,7 +26,7 @@ export const grid = {
   },
 };
 
-export const data = {
+export const data: IHistogramData = {
   bins: ['Data 1', 'Data 6', 'Data 3', 'Dat 4'],
   counts: [
     {
