@@ -1,8 +1,11 @@
 import { FeatureCollection } from 'geojson';
 import * as React from 'react';
-import { Component } from 'react';
 import * as ReactDOM from 'react-dom';
-import { IChartAdaptor, IChartState } from './Histogram';
+
+import {
+  IChartAdaptor,
+  IChartState,
+} from './Histogram';
 import { mapD3 } from './MapD3';
 
 export interface IMapProps {
@@ -16,7 +19,7 @@ export interface IMapProps {
 /**
  * Map component
  */
-class Map extends Component<IMapProps, IChartState> {
+class Map extends React.Component<IMapProps, IChartState> {
 
   private chart: IChartAdaptor;
   private ref;
@@ -47,7 +50,7 @@ class Map extends Component<IMapProps, IChartState> {
    */
   private handleResize() {
     const elem = this.getDOMNode();
-    const width = this.ref.offsetWidth ? this.ref.offsetWidth : 0;
+    const width = (this.ref && this.ref.offsetWidth) ? this.ref.offsetWidth : 0;
 
     this.setState({
       parentWidth: width,

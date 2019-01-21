@@ -1,7 +1,13 @@
 import * as React from 'react';
-import { Component } from 'react';
 import * as ReactDOM from 'react-dom';
-import { IChartAdaptor, IChartState, IHistogramDataSet, IMargin, TipContentFn } from './Histogram';
+
+import {
+  IChartAdaptor,
+  IChartState,
+  IHistogramDataSet,
+  IMargin,
+  TipContentFn,
+} from './Histogram';
 import { pieChartD3 } from './PieChartD3';
 
 interface ILabels {
@@ -37,7 +43,7 @@ export interface IPieChartProps {
 /**
  * PieChart component
  */
-class PieChart extends Component<IPieChartProps, IChartState> {
+class PieChart extends React.Component<IPieChartProps, IChartState> {
 
   private chart: IChartAdaptor;
   private ref;
@@ -70,7 +76,7 @@ class PieChart extends Component<IPieChartProps, IChartState> {
    */
   private handleResize() {
     const elem = this.getDOMNode();
-    const width = this.ref.offsetWidth ? this.ref.offsetWidth : 0;
+    const width = (this.ref && this.ref.offsetWidth) ? this.ref.offsetWidth : 0;
 
     this.setState({
       parentWidth: width,

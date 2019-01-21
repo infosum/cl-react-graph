@@ -1,7 +1,14 @@
 import * as React from 'react';
-import { Component } from 'react';
 import * as ReactDOM from 'react-dom';
-import { IAxes, IGrid, IHistogramData, IMargin, ISVGLineStyle, TipContentFn } from './Histogram';
+
+import {
+  IAxes,
+  IGrid,
+  IHistogramData,
+  IMargin,
+  ISVGLineStyle,
+  TipContentFn,
+} from './Histogram';
 import { lineChartD3 } from './lineChartD3';
 
 interface IState {
@@ -9,7 +16,7 @@ interface IState {
 }
 
 export type IChartPointValue = number | string | Date | object;
-export interface IChartPoint<X extends IChartPointValue = Date, Y extends IChartPointValue = number> {
+export interface IChartPoint<X extends IChartPointValue = Date | number, Y extends IChartPointValue = number> {
   x: X;
   y: Y;
 }
@@ -55,7 +62,7 @@ export interface ILineChartProps {
   width?: number | string;
 }
 
-class LineChart extends Component<ILineChartProps, IState> {
+class LineChart extends React.Component<ILineChartProps, IState> {
 
   private chart;
   private ref;
@@ -70,7 +77,7 @@ class LineChart extends Component<ILineChartProps, IState> {
 
   private handleResize() {
     const elem = this.getDOMNode();
-    const width = this.ref.offsetWidth ? this.ref.offsetWidth : 0;
+    const width = (this.ref && this.ref.offsetWidth) ? this.ref.offsetWidth : 0;
 
     this.setState({
       parentWidth: width,

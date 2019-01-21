@@ -1,7 +1,7 @@
 import { rgb } from 'd3-color';
 import * as React from 'react';
-import { Component } from 'react';
 import * as ReactDOM from 'react-dom';
+
 import { histogramD3 } from './HistogramD3';
 
 export interface IChartAdaptor {
@@ -53,6 +53,7 @@ export interface IHistogramData {
   counts: IHistogramDataSet[];
   colorScheme?: string[];
   title?: string;
+  grid?: IGrid;
 }
 
 export interface IDomain {
@@ -136,7 +137,7 @@ export type TipContentFn<T> = (bins: T[], i: number, d: number, groupTitle?: str
 /**
  * Histogram component
  */
-class Histogram extends Component<IHistogramProps, IChartState> {
+class Histogram extends React.Component<IHistogramProps, IChartState> {
 
   private chart: IChartAdaptor;
   private ref;
@@ -200,7 +201,7 @@ class Histogram extends Component<IHistogramProps, IChartState> {
    */
   private handleResize() {
     const elem = this.getDOMNode();
-    const width = this.ref.offsetWidth ? this.ref.offsetWidth : 0;
+    const width = (this.ref && this.ref.offsetWidth) ? this.ref.offsetWidth : 0;
 
     this.setState({
       parentWidth: width,
