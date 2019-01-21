@@ -1,10 +1,18 @@
 import { rgb } from 'd3-color';
 import * as React from 'react';
-import { Component } from 'react';
 import * as ReactDOM from 'react-dom';
+
 import {
-  IAxes, IChartAdaptor, IChartState, IDomain, IGrid, IHistogramBar,
-  IHistogramData, IMargin, IStroke, TipContentFn,
+  IAxes,
+  IChartAdaptor,
+  IChartState,
+  IDomain,
+  IGrid,
+  IHistogramBar,
+  IHistogramData,
+  IMargin,
+  IStroke,
+  TipContentFn,
 } from './Histogram';
 import { joyPlotD3 } from './JoyplotD3';
 
@@ -31,7 +39,7 @@ export interface IJoyPlotProps {
 /**
  * Histogram component
  */
-class Histogram extends Component<IJoyPlotProps, IChartState> {
+class Histogram extends React.Component<IJoyPlotProps, IChartState> {
 
   private chart: IChartAdaptor;
   private ref;
@@ -93,7 +101,7 @@ class Histogram extends Component<IJoyPlotProps, IChartState> {
    */
   private handleResize() {
     const elem = this.getDOMNode();
-    const width = this.ref.offsetWidth ? this.ref.offsetWidth : 0;
+    const width = (this.ref && this.ref.offsetWidth) ? this.ref.offsetWidth : 0;
 
     this.setState({
       parentWidth: width,

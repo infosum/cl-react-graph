@@ -1,15 +1,18 @@
 import { rgb } from 'd3-color';
 import * as React from 'react';
-import { Component } from 'react';
 import * as ReactDOM from 'react-dom';
-import { IHistogramProps } from './Histogram';
-import { IChartAdaptor, IChartState } from './Histogram';
+
+import {
+  IChartAdaptor,
+  IChartState,
+  IHistogramProps,
+} from './Histogram';
 import { horizontalHistogramD3 } from './HorizontalHistogramD3';
 
 /**
  * Horizontal Histogram component
  */
-class HorizontalHistogram extends Component<IHistogramProps, IChartState> {
+class HorizontalHistogram extends React.Component<IHistogramProps, IChartState> {
 
   private histogram: IChartAdaptor;
   private ref;
@@ -73,7 +76,7 @@ class HorizontalHistogram extends Component<IHistogramProps, IChartState> {
    */
   private handleResize() {
     const elem = this.getDOMNode();
-    const width = this.ref.offsetWidth ? this.ref.offsetWidth : 0;
+    const width = (this.ref && this.ref.offsetWidth) ? this.ref.offsetWidth : 0;
 
     this.setState({
       parentWidth: width,
