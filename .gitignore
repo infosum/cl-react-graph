@@ -1,3 +1,4 @@
 node_modules
 .npmrc
-examples/types
+docs/node_modules
+docs/.cache
