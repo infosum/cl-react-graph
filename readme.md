@@ -24,11 +24,10 @@ Docs coming as and when ....
 
  # Scatter Plot
 
- # Building Examples
+ ## Running docs
 
- from root:
- 
- ``` 
- yarn build-examples
- google-chrome-stable examples/index.html
- ```
+`bash
+cd docs
+gatsby develop
+`
+the site will be available on `http://localhost:8000`

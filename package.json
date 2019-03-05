@@ -1,12 +1,11 @@
 {
   "name": "cl-react-graph",
-  "version": "1.6.15",
+  "version": "1.6.16",
   "description": "React D3 Charts",
   "main": "./dist/index.js",
   "types": "./dist/types/index.d.ts",
   "scripts": {
     "build": "export NODE_ENV=production|| set NODE_ENV=production && TS_NODE_PROJECT=\"tsconfig-for-webpack.json\" webpack",
-    "build-examples": "webpack --config ./webpack.config.examples.js",
     "test": "istanbul cover _mocha --recursive -x '**/*.spec.js' -x '**/config/**' -x '**/node_modules/**' -g './{,!(node_modules)/**/}*.spec.js'"
   },
   "repository": {
@@ -25,35 +24,37 @@
   },
   "homepage": "https://github.com/cognitivelogic/cl-react-graph#readme",
   "devDependencies": {
+    "@babel/core": "^7.3.4",
+    "@types/geojson": "^7946.0.4",
+    "@babel/preset-env": "^7.3.4",
+    "@babel/preset-react": "^7.0.0",
+    "@babel/preset-stage-0": "^7.0.0",
     "@types/d3": "^5.0.0",
     "@types/deepmerge": "^2.1.0",
-    "@types/node": "^10.5.2",
+    "@types/node": "^11.10.4",
     "@types/react": "*",
     "@types/react-dom": "*",
+    "@types/webpack": "^4.4.21",
     "babel-core": "^6.26.3",
-    "babel-eslint": "^8.2.6",
-    "babel-loader": "^7.1.5",
-    "babel-preset-env": "^1.7.0",
-    "babel-preset-react": "^6.24.1",
-    "babel-preset-stage-0": "^6.24.1",
+    "babel-eslint": "^10.0.1",
+    "babel-loader": "^8.0.5",
     "chai": "^4.1.2",
-    "eslint": "^4.19.1",
+    "eslint": "^5.15.1",
     "istanbul": "^0.4.5",
-    "mocha": "^5.2.0",
-    "ts-loader": "^4.4.2",
-    "ts-node": "^7.0.0",
+    "mocha": "^6.0.2",
+    "ts-loader": "^5.3.3",
+    "ts-node": "^8.0.2",
     "tslint": "^5.11.0",
     "tslint-eslint-rules": "^5.3.1",
-    "typescript": "^2.9.2",
+    "typescript": "^3.3.3333",
     "webpack": "^4.16.1",
-    "webpack-bundle-analyzer": "^2.13.1",
+    "webpack-bundle-analyzer": "^3.1.0",
     "webpack-cli": "^3.1.0"
   },
   "babel": {
     "presets": [
-      "env",
-      "stage-0",
-      "react"
+      "@babel/preset-env",
+      "@babel/preset-react"
     ]
   },
   "peerDependencies": {
@@ -61,10 +62,8 @@
     "react-dom": "*"
   },
   "dependencies": {
-    "@types/webpack": "^4.4.21",
-    "@types/geojson": "^7946.0.4",
     "color": "^3.0.0",
-    "d3-array": "^1.2.1",
+    "d3-array": "^2.0.3",
     "d3-axis": "^1.0.8",
     "d3-color": "^1.2.0",
     "d3-ease": "^1.0.3",
@@ -77,7 +76,7 @@
     "d3-shape": "^1.2.0",
     "d3-time-format": "^2.1.1",
     "d3-transition": "^1.1.1",
-    "deepmerge": "^2.1.1",
+    "deepmerge": "^3.2.0",
     "lodash.get": "^4.4.2",
     "text-width": "^1.2.0"
   }

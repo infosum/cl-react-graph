@@ -1,20 +1,48 @@
 import { extent } from 'd3-array';
-import { axisBottom, axisLeft } from 'd3-axis';
+import {
+  axisBottom,
+  axisLeft,
+} from 'd3-axis';
 import { easeCubic } from 'd3-ease';
 import { format } from 'd3-format';
-import { scaleLinear, scaleLog, scaleTime } from 'd3-scale';
+import {
+  scaleLinear,
+  scaleLog,
+  scaleTime,
+} from 'd3-scale';
 import { select } from 'd3-selection';
-import { area, curveCatmullRom, line } from 'd3-shape';
-import { timeFormat, timeParse } from 'd3-time-format';
+import {
+  area,
+  curveCatmullRom,
+  line,
+} from 'd3-shape';
+import {
+  timeFormat,
+  timeParse,
+} from 'd3-time-format';
 import merge from 'deepmerge';
 import * as get from 'lodash.get';
+
 import attrs from './d3/attrs';
 import {
-  drawGrid, gridHeight, gridWidth, makeXGridlines, makeYGridlines,
-  xAxisHeight as getXAxisHeight, yAxisWidth as getYAxisWidth,
+  drawGrid,
+  gridHeight,
+  gridWidth,
+  makeXGridlines,
+  makeYGridlines,
+  xAxisHeight as getXAxisHeight,
+  yAxisWidth as getYAxisWidth,
 } from './grid';
-import { IChartAdaptor, IHistogramDataSet } from './Histogram';
-import { IChartPoint, ILineChartDataSet, ILineChartProps, ISVGPoint } from './LineChart';
+import {
+  IChartAdaptor,
+  IHistogramDataSet,
+} from './Histogram';
+import {
+  IChartPoint,
+  ILineChartDataSet,
+  ILineChartProps,
+  ISVGPoint,
+} from './LineChart';
 import tips, { makeTip } from './tip';
 
 const ZERO_SUBSITUTE: number = 1e-6;
@@ -279,9 +307,13 @@ export const lineChartD3 = ((): IChartAdaptor => {
       if (axis.y.numberFormat) {
         yAxis.tickFormat(format(axis.y.numberFormat));
       }
+
       const xAxis = axisBottom(x); // .ticks(axis.x.ticks);
       if (axis.x.tickValues) {
         xAxis.tickValues(axis.x.tickValues);
+      }
+      if (axis.x.scale === 'TIME' && axis.x.dateFormat) {
+        xAxis.tickFormat(timeFormat(axis.x.dateFormat));
       }
       const xAxisHeight = getXAxisHeight(axis);
       const yAxisWidth = getYAxisWidth(axis);
@@ -291,7 +323,7 @@ export const lineChartD3 = ((): IChartAdaptor => {
           let parsedY = d.y;
           let parsedX = d.x;
           if (axis.y.scale === 'LOG' && d.y === 0) {
-             parsedY = ZERO_SUBSITUTE;
+            parsedY = ZERO_SUBSITUTE;
           }
           if (axis.x.scale === 'LOG' && d.x === 0) {
             parsedX = ZERO_SUBSITUTE;
