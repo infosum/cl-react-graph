@@ -10,6 +10,7 @@ import {
   scaleOrdinal,
 } from 'd3-scale';
 import { select } from 'd3-selection';
+import { timeFormat } from 'd3-time-format';
 import * as merge from 'deepmerge';
 import * as get from 'lodash.get';
 
@@ -246,7 +247,7 @@ export const histogramD3 = ((): IChartAdaptor => {
 
       let xAxis;
       const dataLabels = data.counts.map((c) => c.label);
-      console.log('dataLabels', dataLabels);
+      // console.log('dataLabels', dataLabels);
       x
         .domain(data.bins)
         .rangeRound([0, w])
@@ -274,6 +275,9 @@ export const histogramD3 = ((): IChartAdaptor => {
           xAxis.tickValues(x.domain().filter((d, i) => !(i % 10)));
         }
       }
+      if (axis.x.scale === 'TIME' && axis.x.dateFormat) {
+        xAxis.tickFormat(timeFormat(axis.x.dateFormat));
+      }
 
       this.xAxis
         .attr('transform', 'translate(' + (yAxisWidth(axis) + axis.y.style['stroke-width']) + ',' +
@@ -288,7 +292,9 @@ export const histogramD3 = ((): IChartAdaptor => {
       if (yTickSize !== undefined) {
         yAxis.tickSize(yTickSize);
       }
-
+      if (axis.y.scale === 'TIME' && axis.y.dateFormat) {
+        yAxis.tickFormat(timeFormat(axis.y.dateFormat));
+      }
       this.yAxis
         .attr('transform', 'translate(' + yAxisWidth(axis) + ', 0)')
         .transition()
@@ -360,7 +366,7 @@ export const histogramD3 = ((): IChartAdaptor => {
         tip.fx.in(tipContainer);
       };
 
-      console.log('bins', bins, 'group data', groupData);
+      // console.log('bins', bins, 'group data', groupData);
 
       bars
         .enter()
@@ -369,11 +375,6 @@ export const histogramD3 = ((): IChartAdaptor => {
         .attr('y', (d: IGroupDataItem, stackIndex: number): number => {
           const setIndex = bins.findIndex((b) => b === d.label);
           const thisSetData = groupData[setIndex];
-          console.log('------------------');
-          console.log('default y:', d);
-          console.log('setIndex,', setIndex);
-          console.log('stackIndex', stackIndex);
-          console.log('thisSetData', thisSetData);
           // @TODO stack charts
           // const offset = stackIndex > 0
           //   ? y(10)

@@ -26,10 +26,7 @@ import * as get from 'lodash.get';
 import attrs from './d3/attrs';
 import {
   drawGrid,
-  gridHeight,
   gridWidth,
-  makeXGridlines,
-  makeYGridlines,
   xAxisHeight as getXAxisHeight,
   yAxisWidth as getYAxisWidth,
 } from './grid';
