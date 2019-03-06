@@ -1,6 +1,6 @@
 {
   "name": "cl-react-graph",
-  "version": "1.6.17",
+  "version": "1.6.18",
   "description": "React D3 Charts",
   "main": "./dist/index.js",
   "types": "./dist/types/index.d.ts",
@@ -25,7 +25,6 @@
   "homepage": "https://github.com/cognitivelogic/cl-react-graph#readme",
   "devDependencies": {
     "@babel/core": "^7.3.4",
-    "@types/geojson": "^7946.0.4",
     "@babel/preset-env": "^7.3.4",
     "@babel/preset-react": "^7.0.0",
     "@babel/preset-stage-0": "^7.0.0",
@@ -62,6 +61,7 @@
     "react-dom": "*"
   },
   "dependencies": {
+    "@types/geojson": "^7946.0.6",
     "color": "^3.0.0",
     "d3-array": "^2.0.3",
     "d3-axis": "^1.0.8",
