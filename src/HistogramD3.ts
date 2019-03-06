@@ -44,7 +44,8 @@ export const histogramD3 = ((): IChartAdaptor => {
   const y = scaleLinear();
   const x = scaleBand();
   const innerScaleBand = scaleBand();
-  const stacked = true;
+  // @TODO make this a prop
+  const stacked = false;
 
   const defaultProps: IHistogramProps = {
     axis: {
@@ -183,7 +184,6 @@ export const histogramD3 = ((): IChartAdaptor => {
         x: 1 - (margin.left / width),
         y: 1 - (margin.top / height),
       };
-
 
       // Reference to svg element containing chart
       svg = select(el).append('svg')
@@ -374,9 +374,11 @@ export const histogramD3 = ((): IChartAdaptor => {
           console.log('setIndex,', setIndex);
           console.log('stackIndex', stackIndex);
           console.log('thisSetData', thisSetData);
-          const offset = stackIndex > 0
-            ? y(10)
-            : 0;
+          // @TODO stack charts
+          // const offset = stackIndex > 0
+          //   ? y(10)
+          //   : 0;
+          const offset = 0;
           return gHeight - offset;
         })
         .attr('class', 'bar')
@@ -396,9 +398,11 @@ export const histogramD3 = ((): IChartAdaptor => {
         .attr('y', (d: IGroupDataItem, stackIndex: number): number => {
           // const setIndex = bins.findIndex((b) => b === d.label);
           // const thisSetData = groupData[setIndex];
-          const offset = stackIndex > 0
-            ? 5
-            : 0;
+          // @TODO stack charts
+          // const offset = stackIndex > 0
+          //   ? 5
+          //   : 0;
+          const offset = 0;
           return y(d.value + offset);
         })
         // Hide bar's bottom border
