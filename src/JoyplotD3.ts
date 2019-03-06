@@ -2,7 +2,7 @@ import { extent } from 'd3-array';
 import { axisBottom, axisLeft } from 'd3-axis';
 import { scaleBand, scaleLinear, ScaleLinear, scaleOrdinal } from 'd3-scale';
 import { select } from 'd3-selection';
-import merge from 'deepmerge';
+import * as merge from 'deepmerge';
 import * as get from 'lodash.get';
 import colorScheme from './colors';
 import attrs from './d3/attrs';

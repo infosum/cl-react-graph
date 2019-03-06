@@ -1,11 +1,24 @@
 import { extent } from 'd3-array';
-import { axisBottom, axisLeft } from 'd3-axis';
-import { scaleBand, scaleLinear, scaleOrdinal } from 'd3-scale';
+import {
+  axisBottom,
+  axisLeft,
+} from 'd3-axis';
+import {
+  scaleBand,
+  scaleLinear,
+  scaleOrdinal,
+} from 'd3-scale';
 import { select } from 'd3-selection';
-import merge from 'deepmerge';
+import * as merge from 'deepmerge';
+
 import colorScheme from './colors';
 import attrs from './d3/attrs';
-import { IChartAdaptor, IHistogramData, IHistogramDataSet, IHistogramProps } from './Histogram';
+import {
+  IChartAdaptor,
+  IHistogramData,
+  IHistogramDataSet,
+  IHistogramProps,
+} from './Histogram';
 import tips, { makeTip } from './tip';
 
 export const horizontalHistogramD3 = ((): IChartAdaptor => {
@@ -399,7 +412,7 @@ export const horizontalHistogramD3 = ((): IChartAdaptor => {
           .call(make_y_gridlines(grid.y.ticks || ticks)
             .tickSize(-height + (margin.left * 2) + axis.x.height) // Line Length
             .tickFormat(() => ''),
-        );
+          );
         attrs(gy.selectAll('.tick line'), grid.y.style);
 
         attrs(gy.selectAll('.domain'), { stroke: 'transparent' });

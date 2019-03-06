@@ -10,7 +10,7 @@ import {
   scaleOrdinal,
 } from 'd3-scale';
 import { select } from 'd3-selection';
-import merge from 'deepmerge';
+import * as merge from 'deepmerge';
 import * as get from 'lodash.get';
 
 import colorScheme from './colors';
@@ -19,8 +19,6 @@ import {
   drawGrid,
   gridHeight,
   gridWidth,
-  makeXGridlines,
-  makeYGridlines,
   xAxisHeight,
   yAxisWidth,
 } from './grid';

@@ -20,7 +20,7 @@ import {
   timeFormat,
   timeParse,
 } from 'd3-time-format';
-import merge from 'deepmerge';
+import * as merge from 'deepmerge';
 import * as get from 'lodash.get';
 
 import attrs from './d3/attrs';

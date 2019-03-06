@@ -1,12 +1,21 @@
-import merge from 'deepmerge';
-import colorScheme from './colors';
-
 import { extent } from 'd3-array';
-import { axisBottom, axisLeft } from 'd3-axis';
-import { scaleLinear, scaleOrdinal } from 'd3-scale';
+import {
+  axisBottom,
+  axisLeft,
+} from 'd3-axis';
+import {
+  scaleLinear,
+  scaleOrdinal,
+} from 'd3-scale';
 import { select } from 'd3-selection';
+import * as merge from 'deepmerge';
+
+import colorScheme from './colors';
 import { IChartPoint } from './LineChart';
-import { IScatterPlotProps, ScatterPlotData } from './ScatterPlot';
+import {
+  IScatterPlotProps,
+  ScatterPlotData,
+} from './ScatterPlot';
 
 export const scatterPlotD3 = (() => {
   let svg;
@@ -98,8 +107,8 @@ export const scatterPlotD3 = (() => {
         .data(data)
         .enter().append('g')
         .attr('class', 'y axis')
-        .attr('transform', (d, i) => 'translate(0,' + i * ySize + ')')
-        .each(function (d) {
+        .attr('transform', (d: any, i: number) => 'translate(0,' + i * ySize + ')')
+        .each(function (d: any) {
           yScale.domain(domainByTrait[d]);
           select(this).call(yAxis);
         });
@@ -218,8 +227,8 @@ export const scatterPlotD3 = (() => {
         const c = [];
         const nx = a.length;
         const m = b.length;
-        let i;
-        let j;
+        let i: number;
+        let j: number;
         for (i = -1; ++i < nx;) {
           for (j = -1; ++j < m;) {
             c.push({ x: a[i], i, y: b[j], j });

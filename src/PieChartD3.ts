@@ -1,13 +1,25 @@
+import 'd3-transition';
+
 import { interpolate } from 'd3-interpolate';
 import { scaleOrdinal } from 'd3-scale';
 import { select } from 'd3-selection';
-import { arc, pie, PieArcDatum } from 'd3-shape';
-import 'd3-transition';
-import merge from 'deepmerge';
+import {
+  arc,
+  pie,
+  PieArcDatum,
+} from 'd3-shape';
+import * as merge from 'deepmerge';
 import * as get from 'lodash.get';
+
 import colorScheme from './colors';
-import { IChartAdaptor, IHistogramDataSet } from './Histogram';
-import { IPieChartProps, IPieDataItem } from './PieChart';
+import {
+  IChartAdaptor,
+  IHistogramDataSet,
+} from './Histogram';
+import {
+  IPieChartProps,
+  IPieDataItem,
+} from './PieChart';
 import tips, { makeTip } from './tip';
 
 export const pieChartD3 = ((): IChartAdaptor => {

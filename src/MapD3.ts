@@ -1,15 +1,13 @@
-import { extent } from 'd3-array';
-import { geoMercator, geoPath } from 'd3-geo';
-import { json } from 'd3-request';
+import {
+  geoMercator,
+  geoPath,
+} from 'd3-geo';
 import { select } from 'd3-selection';
-import merge from 'deepmerge';
+import * as merge from 'deepmerge';
 import { FeatureCollection } from 'geojson';
-import * as get from 'lodash.get';
-import colorScheme from './colors';
-import attrs from './d3/attrs';
+
 import { IChartAdaptor } from './Histogram';
 import { IMapProps } from './Map';
-import tips from './tip';
 
 export const mapD3 = ((): IChartAdaptor => {
   let svg;
