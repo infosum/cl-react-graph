@@ -244,55 +244,52 @@ export const pieChartD3 = ((): IChartAdaptor => {
         .attr('fill', (d, j) => colors(j))
         .attrTween('d', arcTween(thisArc));
 
-      if (labels.display) {
+      const path2 = this.containers[i].selectAll('text.label')
+        .data(thisPie(data));
+      const gLabel = path2.enter().append('text')
+        .attr('class', 'label')
+        .each(function () {
+          // Store initial offset incase we change chart heights.
+          this._height = height;
+          this._width = width;
+        })
+        .attr('transform', function (d) {
+          const centroid = thisArc.centroid(d);
+          const x = centroid[0] + (this._width / 2);
+          const y = centroid[1] + (this._height / 2);
+          return 'translate(' + x + ',' + y + ')';
+        })
+        .each(function (d, j) {
+          // Store current value to work out fx transition opacities
+          this._current = d;
+        })
+        .text((d, ix) => {
+          if (d.value === 0) {
+            return '';
+          }
+          return labels.displayFn(d, ix);
+        });
 
-        const path2 = this.containers[i].selectAll('text.label')
-          .data(thisPie(data));
-        const gLabel = path2.enter().append('text')
-          .attr('class', 'label')
-          .each(function () {
-            // Store initial offset incase we change chart heights.
-            this._height = height;
-            this._width = width;
-          })
-          .attr('transform', function (d) {
-            const centroid = thisArc.centroid(d);
-            const x = centroid[0] + (this._width / 2);
-            const y = centroid[1] + (this._height / 2);
-            return 'translate(' + x + ',' + y + ')';
-          })
-          .each(function (d, j) {
-            // Store current value to work out fx transition opacities
-            this._current = d;
-          })
-          .text((d, ix) => {
-            if (d.value === 0) {
-              return '';
-            }
-            return labels.displayFn(d, ix);
-          });
+      path2
+        .merge(path2)
+        .transition()
+        .duration(500)
+        .style('opacity', 0)
+        .transition()
+        .attr('transform', function (d) {
+          const centroid = thisArc.centroid(d);
+          const x = centroid[0] + (this._width / 2);
+          const y = centroid[1] + (this._height / 2);
+          return 'translate(' + x + ',' + y + ')';
+        })
+        .transition()
+        .duration(500)
+        .style('opacity', (d, ix, c) => {
+          // Only show if the new value is not 0 and labels are set to be displayed
+          return labels.display === false || d.data.count === 0 || c[ix]._current.value === 0 ? 0 : 1;
+        });
 
-        path2
-          .merge(path2)
-          .transition()
-          .duration(500)
-          .style('opacity', 0)
-          .transition()
-          .attr('transform', function (d) {
-            const centroid = thisArc.centroid(d);
-            const x = centroid[0] + (this._width / 2);
-            const y = centroid[1] + (this._height / 2);
-            return 'translate(' + x + ',' + y + ')';
-          })
-          .transition()
-          .duration(500)
-          .style('opacity', (d, ix, c) => {
-            // Only show if the new value is not 0
-            return d.data.count === 0 || c[ix]._current.value === 0 ? 0 : 1;
-          });
-
-        path2.exit().remove();
-      }
+      path2.exit().remove();
 
       path.exit().transition()
         .duration(500)
