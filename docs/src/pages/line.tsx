@@ -13,7 +13,6 @@ import React, {
   useState,
 } from 'react';
 import ReactDataSheet, { Cell } from 'react-datasheet';
-import ReactJson from 'react-json-view';
 
 import {
   Card,
@@ -217,7 +216,9 @@ const LineExample: FC<{}> = () => {
             <br />
             <Card>
               <CardContent>
-                <ReactJson src={state} />
+                <pre>
+                  {JSON.stringify(state)}
+                </pre>
               </CardContent>
             </Card>
           </Grid>

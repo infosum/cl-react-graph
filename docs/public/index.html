@@ -1,1 +1,593 @@
-<!DOCTYPE html><html><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="ie=edge"/><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/><title data-react-helmet="true"></title><link rel="shortcut icon" href="/icons/icon-48x48.png"/><link rel="manifest" href="/manifest.webmanifest"/><meta name="theme-color" content="#56b4bf"/><link rel="apple-touch-icon" sizes="48x48" href="/icons/icon-48x48.png"/><link rel="apple-touch-icon" sizes="72x72" href="/icons/icon-72x72.png"/><link rel="apple-touch-icon" sizes="96x96" href="/icons/icon-96x96.png"/><link rel="apple-touch-icon" sizes="144x144" href="/icons/icon-144x144.png"/><link rel="apple-touch-icon" sizes="192x192" href="/icons/icon-192x192.png"/><link rel="apple-touch-icon" sizes="256x256" href="/icons/icon-256x256.png"/><link rel="apple-touch-icon" sizes="384x384" href="/icons/icon-384x384.png"/><link rel="apple-touch-icon" sizes="512x512" href="/icons/icon-512x512.png"/><script src="/socket.io/socket.io.js"></script></head><body><noscript id="gatsby-noscript">This app works best with JavaScript enabled.</noscript><div id="___gatsby"></div><script src="/commons.js"></script></body></html>
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="ie=edge"/><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/><style data-href="/styles.08b8994f08430b0ac02c.css">span.data-grid-container,span.data-grid-container:focus{outline:none}.data-grid-container .data-grid{table-layout:fixed;border-collapse:collapse}.data-grid-container .data-grid .cell.updated{background-color:rgba(0,145,253,.16);transition:background-color 0ms ease}.data-grid-container .data-grid .cell{height:17px;user-select:none;-moz-user-select:none;-webkit-user-select:none;-ms-user-select:none;cursor:cell;background-color:unset;transition:background-color .5s ease;vertical-align:middle;text-align:right;border:1px solid #ddd;padding:0}.data-grid-container .data-grid .cell.selected{border:1px double #2185d0;transition:none;box-shadow:inset 0 -100px 0 rgba(33,133,208,.15)}.data-grid-container .data-grid .cell.read-only{background:#f5f5f5;color:#999;text-align:center}.data-grid-container .data-grid .cell>.text{padding:2px 5px;text-overflow:ellipsis;overflow:hidden}.data-grid-container .data-grid .cell>input{outline:none!important;border:2px solid #2185d0;text-align:right;width:calc(100% - 6px);height:11px;background:none;display:block}.data-grid-container .data-grid .cell{vertical-align:bottom}.data-grid-container .data-grid .cell,.data-grid-container .data-grid .cell.wrap,.data-grid-container .data-grid.clip .cell.wrap,.data-grid-container .data-grid.nowrap .cell.wrap,.data-grid-container .data-grid.wrap .cell,.data-grid-container .data-grid.wrap .cell.wrap{white-space:normal}.data-grid-container .data-grid .cell.nowrap,.data-grid-container .data-grid.clip .cell.nowrap,.data-grid-container .data-grid.nowrap .cell,.data-grid-container .data-grid.nowrap .cell.nowrap,.data-grid-container .data-grid.wrap .cell.nowrap{white-space:nowrap;overflow-x:visible}.data-grid-container .data-grid .cell.clip,.data-grid-container .data-grid.clip .cell,.data-grid-container .data-grid.clip .cell.clip,.data-grid-container .data-grid.nowrap .cell.clip,.data-grid-container .data-grid.wrap .cell.clip{white-space:nowrap;overflow-x:hidden}.data-grid-container .data-grid .cell .data-editor,.data-grid-container .data-grid .cell .value-viewer{display:block}body,html{height:100vh}body{background-color:#f2f2f2;font-family:Roboto,Helvetica,Arial,sans-serif;font-size:.9rem}#___gatsby,#___gatsby>div{display:-webkit-flex;display:flex;-webkit-flex-direction:column;flex-direction:column;height:100vh;-webkit-justify-content:space-between;justify-content:space-between}main{margin-top:1rem}.tooltip{position:absolute;background:#fff;color:#27626a;font-size:.8rem;border:1px solid rgba(39,98,106,.48);padding:.25rem}footer{background:#27626a;text-align:center;padding:.5rem}footer,footer a{color:hsla(0,0%,100%,.9)}table.data-grid{width:100%}th.action-cell{background:#f2f2f2;border:1px solid #d2d2d2}.MuiTypography-h2{font-size:1.3rem;line-height:1.3rem;margin-bottom:.75rem}.MuiToolbar-root a{text-decoration:none;color:#fff}.data-grid-container .data-grid .cell>input{height:21px!important}</style><meta name="generator" content="Gatsby 2.1.20"/><title data-react-helmet="true">Home | Infosum Charts</title><meta data-react-helmet="true" content="Kick off your next, great Gatsby project with this default starter. This barebones starter ships with the main Gatsby configuration files you might need." name="description"/><meta data-react-helmet="true" content="Home" property="og:title"/><meta data-react-helmet="true" content="Kick off your next, great Gatsby project with this default starter. This barebones starter ships with the main Gatsby configuration files you might need." property="og:description"/><meta data-react-helmet="true" content="website" property="og:type"/><meta data-react-helmet="true" content="summary" name="twitter:card"/><meta data-react-helmet="true" content="@gatsbyjs" name="twitter:creator"/><meta data-react-helmet="true" content="Home" name="twitter:title"/><meta data-react-helmet="true" content="Kick off your next, great Gatsby project with this default starter. This barebones starter ships with the main Gatsby configuration files you might need." name="twitter:description"/><meta data-react-helmet="true" content="infoSum, charts, react" name="keywords"/><link rel="shortcut icon" href="/icons/icon-48x48.png"/><link rel="manifest" href="/manifest.webmanifest"/><meta name="theme-color" content="#56b4bf"/><link rel="apple-touch-icon" sizes="48x48" href="/icons/icon-48x48.png"/><link rel="apple-touch-icon" sizes="72x72" href="/icons/icon-72x72.png"/><link rel="apple-touch-icon" sizes="96x96" href="/icons/icon-96x96.png"/><link rel="apple-touch-icon" sizes="144x144" href="/icons/icon-144x144.png"/><link rel="apple-touch-icon" sizes="192x192" href="/icons/icon-192x192.png"/><link rel="apple-touch-icon" sizes="256x256" href="/icons/icon-256x256.png"/><link rel="apple-touch-icon" sizes="384x384" href="/icons/icon-384x384.png"/><link rel="apple-touch-icon" sizes="512x512" href="/icons/icon-512x512.png"/><style type="text/css" id="server-side-jss">html {
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+*, *::before, *::after {
+  box-sizing: inherit;
+}
+body {
+  margin: 0;
+  background-color: #fafafa;
+}
+@media print {
+  body {
+    background-color: #fff;
+  }
+}
+.MuiPaper-root {
+  background-color: #fff;
+}
+.MuiPaper-rounded {
+  border-radius: 4px;
+}
+.MuiPaper-elevation0 {
+  box-shadow: none;
+}
+.MuiPaper-elevation1 {
+  box-shadow: 0px 1px 3px 0px rgba(0,0,0,0.2),0px 1px 1px 0px rgba(0,0,0,0.14),0px 2px 1px -1px rgba(0,0,0,0.12);
+}
+.MuiPaper-elevation2 {
+  box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.2),0px 2px 2px 0px rgba(0,0,0,0.14),0px 3px 1px -2px rgba(0,0,0,0.12);
+}
+.MuiPaper-elevation3 {
+  box-shadow: 0px 1px 8px 0px rgba(0,0,0,0.2),0px 3px 4px 0px rgba(0,0,0,0.14),0px 3px 3px -2px rgba(0,0,0,0.12);
+}
+.MuiPaper-elevation4 {
+  box-shadow: 0px 2px 4px -1px rgba(0,0,0,0.2),0px 4px 5px 0px rgba(0,0,0,0.14),0px 1px 10px 0px rgba(0,0,0,0.12);
+}
+.MuiPaper-elevation5 {
+  box-shadow: 0px 3px 5px -1px rgba(0,0,0,0.2),0px 5px 8px 0px rgba(0,0,0,0.14),0px 1px 14px 0px rgba(0,0,0,0.12);
+}
+.MuiPaper-elevation6 {
+  box-shadow: 0px 3px 5px -1px rgba(0,0,0,0.2),0px 6px 10px 0px rgba(0,0,0,0.14),0px 1px 18px 0px rgba(0,0,0,0.12);
+}
+.MuiPaper-elevation7 {
+  box-shadow: 0px 4px 5px -2px rgba(0,0,0,0.2),0px 7px 10px 1px rgba(0,0,0,0.14),0px 2px 16px 1px rgba(0,0,0,0.12);
+}
+.MuiPaper-elevation8 {
+  box-shadow: 0px 5px 5px -3px rgba(0,0,0,0.2),0px 8px 10px 1px rgba(0,0,0,0.14),0px 3px 14px 2px rgba(0,0,0,0.12);
+}
+.MuiPaper-elevation9 {
+  box-shadow: 0px 5px 6px -3px rgba(0,0,0,0.2),0px 9px 12px 1px rgba(0,0,0,0.14),0px 3px 16px 2px rgba(0,0,0,0.12);
+}
+.MuiPaper-elevation10 {
+  box-shadow: 0px 6px 6px -3px rgba(0,0,0,0.2),0px 10px 14px 1px rgba(0,0,0,0.14),0px 4px 18px 3px rgba(0,0,0,0.12);
+}
+.MuiPaper-elevation11 {
+  box-shadow: 0px 6px 7px -4px rgba(0,0,0,0.2),0px 11px 15px 1px rgba(0,0,0,0.14),0px 4px 20px 3px rgba(0,0,0,0.12);
+}
+.MuiPaper-elevation12 {
+  box-shadow: 0px 7px 8px -4px rgba(0,0,0,0.2),0px 12px 17px 2px rgba(0,0,0,0.14),0px 5px 22px 4px rgba(0,0,0,0.12);
+}
+.MuiPaper-elevation13 {
+  box-shadow: 0px 7px 8px -4px rgba(0,0,0,0.2),0px 13px 19px 2px rgba(0,0,0,0.14),0px 5px 24px 4px rgba(0,0,0,0.12);
+}
+.MuiPaper-elevation14 {
+  box-shadow: 0px 7px 9px -4px rgba(0,0,0,0.2),0px 14px 21px 2px rgba(0,0,0,0.14),0px 5px 26px 4px rgba(0,0,0,0.12);
+}
+.MuiPaper-elevation15 {
+  box-shadow: 0px 8px 9px -5px rgba(0,0,0,0.2),0px 15px 22px 2px rgba(0,0,0,0.14),0px 6px 28px 5px rgba(0,0,0,0.12);
+}
+.MuiPaper-elevation16 {
+  box-shadow: 0px 8px 10px -5px rgba(0,0,0,0.2),0px 16px 24px 2px rgba(0,0,0,0.14),0px 6px 30px 5px rgba(0,0,0,0.12);
+}
+.MuiPaper-elevation17 {
+  box-shadow: 0px 8px 11px -5px rgba(0,0,0,0.2),0px 17px 26px 2px rgba(0,0,0,0.14),0px 6px 32px 5px rgba(0,0,0,0.12);
+}
+.MuiPaper-elevation18 {
+  box-shadow: 0px 9px 11px -5px rgba(0,0,0,0.2),0px 18px 28px 2px rgba(0,0,0,0.14),0px 7px 34px 6px rgba(0,0,0,0.12);
+}
+.MuiPaper-elevation19 {
+  box-shadow: 0px 9px 12px -6px rgba(0,0,0,0.2),0px 19px 29px 2px rgba(0,0,0,0.14),0px 7px 36px 6px rgba(0,0,0,0.12);
+}
+.MuiPaper-elevation20 {
+  box-shadow: 0px 10px 13px -6px rgba(0,0,0,0.2),0px 20px 31px 3px rgba(0,0,0,0.14),0px 8px 38px 7px rgba(0,0,0,0.12);
+}
+.MuiPaper-elevation21 {
+  box-shadow: 0px 10px 13px -6px rgba(0,0,0,0.2),0px 21px 33px 3px rgba(0,0,0,0.14),0px 8px 40px 7px rgba(0,0,0,0.12);
+}
+.MuiPaper-elevation22 {
+  box-shadow: 0px 10px 14px -6px rgba(0,0,0,0.2),0px 22px 35px 3px rgba(0,0,0,0.14),0px 8px 42px 7px rgba(0,0,0,0.12);
+}
+.MuiPaper-elevation23 {
+  box-shadow: 0px 11px 14px -7px rgba(0,0,0,0.2),0px 23px 36px 3px rgba(0,0,0,0.14),0px 9px 44px 8px rgba(0,0,0,0.12);
+}
+.MuiPaper-elevation24 {
+  box-shadow: 0px 11px 15px -7px rgba(0,0,0,0.2),0px 24px 38px 3px rgba(0,0,0,0.14),0px 9px 46px 8px rgba(0,0,0,0.12);
+}
+.MuiAppBar-root {
+  width: 100%;
+  display: flex;
+  z-index: 1100;
+  box-sizing: border-box;
+  flex-shrink: 0;
+  flex-direction: column;
+}
+.MuiAppBar-positionFixed {
+  top: 0;
+  left: auto;
+  right: 0;
+  position: fixed;
+}
+.MuiAppBar-positionAbsolute {
+  top: 0;
+  left: auto;
+  right: 0;
+  position: absolute;
+}
+.MuiAppBar-positionSticky {
+  top: 0;
+  left: auto;
+  right: 0;
+  position: sticky;
+}
+.MuiAppBar-positionStatic {
+  position: static;
+}
+.MuiAppBar-positionRelative {
+  position: relative;
+}
+.MuiAppBar-colorDefault {
+  color: rgba(0, 0, 0, 0.87);
+  background-color: #f5f5f5;
+}
+.MuiAppBar-colorPrimary {
+  color: #fff;
+  background-color: #00a97b;
+}
+.MuiAppBar-colorSecondary {
+  color: #fff;
+  background-color: #27626a;
+}
+.MuiButtonBase-root {
+  color: inherit;
+  cursor: pointer;
+  margin: 0;
+  border: 0;
+  display: inline-flex;
+  padding: 0;
+  outline: none;
+  position: relative;
+  user-select: none;
+  align-items: center;
+  border-radius: 0;
+  vertical-align: middle;
+  justify-content: center;
+  -moz-appearance: none;
+  text-decoration: none;
+  background-color: transparent;
+  -webkit-appearance: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.MuiButtonBase-root::-moz-focus-inner {
+  border-style: none;
+}
+.MuiButtonBase-root.MuiButtonBase-disabled {
+  cursor: default;
+  pointer-events: none;
+}
+.MuiButton-root {
+  color: rgba(0, 0, 0, 0.87);
+  padding: 6px 16px;
+  min-width: 64px;
+  font-size: 0.875rem;
+  box-sizing: border-box;
+  transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,border 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-weight: 500;
+  line-height: 1.75;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+.MuiButton-root:hover {
+  text-decoration: none;
+  background-color: rgba(0, 0, 0, 0.08);
+}
+.MuiButton-root.MuiButton-disabled {
+  color: rgba(0, 0, 0, 0.26);
+}
+@media (hover: none) {
+  .MuiButton-root:hover {
+    background-color: transparent;
+  }
+}
+.MuiButton-root:hover.MuiButton-disabled {
+  background-color: transparent;
+}
+.MuiButton-label {
+  width: 100%;
+  display: inherit;
+  align-items: inherit;
+  justify-content: inherit;
+}
+.MuiButton-text {
+  padding: 6px 8px;
+}
+.MuiButton-textPrimary {
+  color: #00a97b;
+}
+.MuiButton-textPrimary:hover {
+  background-color: rgba(0, 169, 123, 0.08);
+}
+@media (hover: none) {
+  .MuiButton-textPrimary:hover {
+    background-color: transparent;
+  }
+}
+.MuiButton-textSecondary {
+  color: #27626a;
+}
+.MuiButton-textSecondary:hover {
+  background-color: rgba(39, 98, 106, 0.08);
+}
+@media (hover: none) {
+  .MuiButton-textSecondary:hover {
+    background-color: transparent;
+  }
+}
+.MuiButton-outlined {
+  border: 1px solid rgba(0, 0, 0, 0.23);
+  padding: 5px 16px;
+}
+.MuiButton-outlined.MuiButton-disabled {
+  border: 1px solid rgba(0, 0, 0, 0.26);
+}
+.MuiButton-outlinedPrimary {
+  color: #00a97b;
+  border: 1px solid rgba(0, 169, 123, 0.5);
+}
+.MuiButton-outlinedPrimary:hover {
+  border: 1px solid #00a97b;
+  background-color: rgba(0, 169, 123, 0.08);
+}
+@media (hover: none) {
+  .MuiButton-outlinedPrimary:hover {
+    background-color: transparent;
+  }
+}
+.MuiButton-outlinedSecondary {
+  color: #27626a;
+  border: 1px solid rgba(39, 98, 106, 0.5);
+}
+.MuiButton-outlinedSecondary:hover {
+  border: 1px solid #27626a;
+  background-color: rgba(39, 98, 106, 0.08);
+}
+.MuiButton-outlinedSecondary.MuiButton-disabled {
+  border: 1px solid rgba(0, 0, 0, 0.26);
+}
+@media (hover: none) {
+  .MuiButton-outlinedSecondary:hover {
+    background-color: transparent;
+  }
+}
+.MuiButton-contained {
+  color: rgba(0, 0, 0, 0.87);
+  box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.2),0px 2px 2px 0px rgba(0,0,0,0.14),0px 3px 1px -2px rgba(0,0,0,0.12);
+  background-color: #e0e0e0;
+}
+.MuiButton-contained.MuiButton-focusVisible {
+  box-shadow: 0px 3px 5px -1px rgba(0,0,0,0.2),0px 6px 10px 0px rgba(0,0,0,0.14),0px 1px 18px 0px rgba(0,0,0,0.12);
+}
+.MuiButton-contained:active {
+  box-shadow: 0px 5px 5px -3px rgba(0,0,0,0.2),0px 8px 10px 1px rgba(0,0,0,0.14),0px 3px 14px 2px rgba(0,0,0,0.12);
+}
+.MuiButton-contained.MuiButton-disabled {
+  color: rgba(0, 0, 0, 0.26);
+  box-shadow: none;
+  background-color: rgba(0, 0, 0, 0.12);
+}
+.MuiButton-contained:hover {
+  background-color: #d5d5d5;
+}
+@media (hover: none) {
+  .MuiButton-contained:hover {
+    background-color: #e0e0e0;
+  }
+}
+.MuiButton-contained:hover.MuiButton-disabled {
+  background-color: rgba(0, 0, 0, 0.12);
+}
+.MuiButton-containedPrimary {
+  color: #fff;
+  background-color: #00a97b;
+}
+.MuiButton-containedPrimary:hover {
+  background-color: rgb(0, 118, 86);
+}
+@media (hover: none) {
+  .MuiButton-containedPrimary:hover {
+    background-color: #00a97b;
+  }
+}
+.MuiButton-containedSecondary {
+  color: #fff;
+  background-color: #27626a;
+}
+.MuiButton-containedSecondary:hover {
+  background-color: rgb(27, 68, 74);
+}
+@media (hover: none) {
+  .MuiButton-containedSecondary:hover {
+    background-color: #27626a;
+  }
+}
+.MuiButton-fab {
+  width: 56px;
+  height: 56px;
+  padding: 0;
+  min-width: 0;
+  box-shadow: 0px 3px 5px -1px rgba(0,0,0,0.2),0px 6px 10px 0px rgba(0,0,0,0.14),0px 1px 18px 0px rgba(0,0,0,0.12);
+  border-radius: 50%;
+}
+.MuiButton-fab:active {
+  box-shadow: 0px 7px 8px -4px rgba(0,0,0,0.2),0px 12px 17px 2px rgba(0,0,0,0.14),0px 5px 22px 4px rgba(0,0,0,0.12);
+}
+.MuiButton-extendedFab {
+  width: auto;
+  height: 48px;
+  padding: 0 16px;
+  min-width: 48px;
+  border-radius: 24px;
+}
+.MuiButton-colorInherit {
+  color: inherit;
+  border-color: currentColor;
+}
+.MuiButton-mini {
+  width: 40px;
+  height: 40px;
+}
+.MuiButton-sizeSmall {
+  padding: 4px 8px;
+  min-width: 64px;
+  font-size: 0.8125rem;
+}
+.MuiButton-sizeLarge {
+  padding: 8px 24px;
+  font-size: 0.9375rem;
+}
+.MuiButton-fullWidth {
+  width: 100%;
+}
+.MuiTypography-root {
+  margin: 0;
+  display: block;
+}
+.MuiTypography-display4 {
+  color: rgba(0, 0, 0, 0.54);
+  font-size: 7rem;
+  font-weight: 300;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  line-height: 1.14286em;
+  margin-left: -.04em;
+  letter-spacing: -.04em;
+}
+.MuiTypography-display3 {
+  color: rgba(0, 0, 0, 0.54);
+  font-size: 3.5rem;
+  font-weight: 400;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  line-height: 1.30357em;
+  margin-left: -.02em;
+  letter-spacing: -.02em;
+}
+.MuiTypography-display2 {
+  color: rgba(0, 0, 0, 0.54);
+  font-size: 2.8125rem;
+  font-weight: 400;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  line-height: 1.13333em;
+  margin-left: -.02em;
+}
+.MuiTypography-display1 {
+  color: rgba(0, 0, 0, 0.54);
+  font-size: 2.125rem;
+  font-weight: 400;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  line-height: 1.20588em;
+}
+.MuiTypography-headline {
+  color: rgba(0, 0, 0, 0.87);
+  font-size: 1.5rem;
+  font-weight: 400;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  line-height: 1.35417em;
+}
+.MuiTypography-title {
+  color: rgba(0, 0, 0, 0.87);
+  font-size: 1.3125rem;
+  font-weight: 500;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  line-height: 1.16667em;
+}
+.MuiTypography-subheading {
+  color: rgba(0, 0, 0, 0.87);
+  font-size: 1rem;
+  font-weight: 400;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  line-height: 1.5em;
+}
+.MuiTypography-body2 {
+  color: rgba(0, 0, 0, 0.87);
+  font-size: 0.875rem;
+  font-weight: 500;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  line-height: 1.71429em;
+}
+.MuiTypography-body1 {
+  color: rgba(0, 0, 0, 0.87);
+  font-size: 0.875rem;
+  font-weight: 400;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  line-height: 1.46429em;
+}
+.MuiTypography-caption {
+  color: rgba(0, 0, 0, 0.54);
+  font-size: 0.75rem;
+  font-weight: 400;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  line-height: 1.375em;
+}
+.MuiTypography-button {
+  color: rgba(0, 0, 0, 0.87);
+  font-size: 0.875rem;
+  font-weight: 500;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  text-transform: uppercase;
+}
+.MuiTypography-h1 {
+  color: rgba(0, 0, 0, 0.87);
+  font-size: 6rem;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: -0.01562em;
+}
+.MuiTypography-h2 {
+  color: rgba(0, 0, 0, 0.87);
+  font-size: 3.75rem;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: -0.00833em;
+}
+.MuiTypography-h3 {
+  color: rgba(0, 0, 0, 0.87);
+  font-size: 3rem;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-weight: 400;
+  line-height: 1.04;
+  letter-spacing: 0em;
+}
+.MuiTypography-h4 {
+  color: rgba(0, 0, 0, 0.87);
+  font-size: 2.125rem;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-weight: 400;
+  line-height: 1.17;
+  letter-spacing: 0.00735em;
+}
+.MuiTypography-h5 {
+  color: rgba(0, 0, 0, 0.87);
+  font-size: 1.5rem;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-weight: 400;
+  line-height: 1.33;
+  letter-spacing: 0em;
+}
+.MuiTypography-h6 {
+  color: rgba(0, 0, 0, 0.87);
+  font-size: 1.25rem;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-weight: 500;
+  line-height: 1.6;
+  letter-spacing: 0.0075em;
+}
+.MuiTypography-subtitle1 {
+  color: rgba(0, 0, 0, 0.87);
+  font-size: 1rem;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-weight: 400;
+  line-height: 1.75;
+  letter-spacing: 0.00938em;
+}
+.MuiTypography-subtitle2 {
+  color: rgba(0, 0, 0, 0.87);
+  font-size: 0.875rem;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-weight: 500;
+  line-height: 1.57;
+  letter-spacing: 0.00714em;
+}
+.MuiTypography-overline {
+  color: rgba(0, 0, 0, 0.87);
+  font-size: 0.75rem;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-weight: 400;
+  line-height: 2.66;
+  letter-spacing: 0.08333em;
+  text-transform: uppercase;
+}
+.MuiTypography-srOnly {
+  width: 1px;
+  height: 1px;
+  position: absolute;
+  overflow: hidden;
+}
+.MuiTypography-alignLeft {
+  text-align: left;
+}
+.MuiTypography-alignCenter {
+  text-align: center;
+}
+.MuiTypography-alignRight {
+  text-align: right;
+}
+.MuiTypography-alignJustify {
+  text-align: justify;
+}
+.MuiTypography-noWrap {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.MuiTypography-gutterBottom {
+  margin-bottom: 0.35em;
+}
+.MuiTypography-paragraph {
+  margin-bottom: 16px;
+}
+.MuiTypography-colorInherit {
+  color: inherit;
+}
+.MuiTypography-colorPrimary {
+  color: #00a97b;
+}
+.MuiTypography-colorSecondary {
+  color: #27626a;
+}
+.MuiTypography-colorTextPrimary {
+  color: rgba(0, 0, 0, 0.87);
+}
+.MuiTypography-colorTextSecondary {
+  color: rgba(0, 0, 0, 0.54);
+}
+.MuiTypography-colorError {
+  color: #f44336;
+}
+.MuiTypography-inline {
+  display: inline;
+}
+.MuiToolbar-root {
+  display: flex;
+  position: relative;
+  align-items: center;
+}
+.MuiToolbar-gutters {
+  padding-left: 16px;
+  padding-right: 16px;
+}
+@media (min-width:600px) {
+  .MuiToolbar-gutters {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+}
+.MuiToolbar-regular {
+  min-height: 56px;
+}
+@media (min-width:0px) and (orientation: landscape) {
+  .MuiToolbar-regular {
+    min-height: 48px;
+  }
+}
+@media (min-width:600px) {
+  .MuiToolbar-regular {
+    min-height: 64px;
+  }
+}
+.MuiToolbar-dense {
+  min-height: 48px;
+}</style><link as="script" rel="preload" href="/1-94967ceb3d63a94651fe.js"/><link as="script" rel="preload" href="/component---src-pages-index-tsx-5a85eade820512493219.js"/><link as="script" rel="preload" href="/app-e2520c168e06cb2aa411.js"/><link as="script" rel="preload" href="/styles-3e67297d205aade453a3.js"/><link as="script" rel="preload" href="/webpack-runtime-cf4bf11f5e42e101a446.js"/><link as="fetch" rel="preload" href="/static/d/173/path---index-6a9-NZuapzHg3X9TaN1iIixfv1W23E.json" crossorigin="use-credentials"/></head><body><noscript id="gatsby-noscript">This app works best with JavaScript enabled.</noscript><div id="___gatsby"><div style="outline:none" tabindex="-1" role="group"><header class="MuiPaper-root MuiPaper-elevation4 MuiAppBar-root MuiAppBar-positionStatic MuiAppBar-colorPrimary"><div class="MuiToolbar-root MuiToolbar-regular MuiToolbar-gutters"><h6 class="MuiTypography-root MuiTypography-h6 MuiTypography-colorInherit"><a aria-current="page" class="" href="/">Infosum Charts</a></h6><button class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-flat" tabindex="0" type="button"><span class="MuiButton-label"><a href="/histogram">Histogram</a></span></button><button class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-flat" tabindex="0" type="button"><span class="MuiButton-label"><a href="/line">Line Chart</a></span></button><button class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-flat" tabindex="0" type="button"><span class="MuiButton-label"><a href="/pie">Pie Chart</a></span></button><button class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-flat" tabindex="0" type="button"><span class="MuiButton-label"><a href="/joyplot">Joy Plot</a></span></button></div></header><div style="flex-grow:2;margin:0 auto;padding:0px 1.0875rem 1.45rem;padding-top:0;width:100%"><main><ul><li><a href="/histogram">Histogram</a></li><li><a href="/line">Line Chart</a></li><li><a href="/pie">Pie Chart</a></li><li><a href="/joyplot">Joy Plot</a></li><li><a href="/map">Map</a></li></ul></main></div><footer>© <!-- -->2019<!-- -->, Built by<!-- --> <a href="https://www.infosum.com">InfoSum</a></footer></div></div><script id="gatsby-script-loader">/*<![CDATA[*/window.page={"componentChunkName":"component---src-pages-index-tsx","jsonName":"index","path":"/"};window.dataPath="173/path---index-6a9-NZuapzHg3X9TaN1iIixfv1W23E";/*]]>*/</script><script id="gatsby-chunk-mapping">/*<![CDATA[*/window.___chunkMapping={"app":["/app-e2520c168e06cb2aa411.js"],"component---src-pages-404-js":["/component---src-pages-404-js-bab6c1bad7485383f802.js"],"component---src-pages-histogram-tsx":["/component---src-pages-histogram-tsx-21352590ddc7f3812402.js"],"component---src-pages-index-tsx":["/component---src-pages-index-tsx-5a85eade820512493219.js"],"component---src-pages-joyplot-tsx":["/component---src-pages-joyplot-tsx-02f667d2844ef9806eae.js"],"component---src-pages-line-tsx":["/component---src-pages-line-tsx-078f14673b848c82aef5.js"],"component---src-pages-map-tsx":["/component---src-pages-map-tsx-791e97b85006a8e1930d.js"],"component---src-pages-pie-tsx":["/component---src-pages-pie-tsx-3433c56795267ec3ed91.js"],"pages-manifest":["/pages-manifest-7a0fcc4ddfefa33d9874.js"]};/*]]>*/</script><script src="/webpack-runtime-cf4bf11f5e42e101a446.js" async=""></script><script src="/styles-3e67297d205aade453a3.js" async=""></script><script src="/app-e2520c168e06cb2aa411.js" async=""></script><script src="/component---src-pages-index-tsx-5a85eade820512493219.js" async=""></script><script src="/1-94967ceb3d63a94651fe.js" async=""></script></body></html>

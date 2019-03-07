@@ -1,0 +1,2 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[6],{264:function(n,e,t){"use strict";t.r(e);var u=t(0),a=t.n(u);e.default=function(){return a.a.createElement("div",null,"test")}}}]);
+//# sourceMappingURL=component---src-pages-joyplot-tsx-f777fb9eb0208919c73d.js.map

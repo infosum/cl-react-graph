@@ -7,10 +7,18 @@
 // You can delete this file if you're not using it
 
 exports.onCreateWebpackConfig = ({
-  actions
+  actions,
+  loaders,
 }) => {
-  console.log('+++++++++ yeah');
   actions.setWebpackConfig({
+    module: {
+      rules: [
+        {
+          test: /react-json-view/,
+          use: loaders.null(),
+        },
+      ],
+    },
     resolve: {
       alias: {
         'react': require.resolve('react'),

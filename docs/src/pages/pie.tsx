@@ -1,10 +1,10 @@
-import merge from 'deepmerge';
+import * as merge from 'deepmerge';
+// import merge from 'deepmerge';
 import React, {
   useReducer,
   useState,
 } from 'react';
 import ReactDataSheet, { Cell } from 'react-datasheet';
-import ReactJson from 'react-json-view';
 
 import {
   Card,
@@ -73,7 +73,6 @@ const PieExample = () => {
   const [state, dispatch] = useReducer(reducer, initialSate);
 
   const speadSheetData = dataToSpreadSheet(state.data);
-  console.log('state', state);
   return (
     <Layout>
       <SEO title="Histogram" description="" />
@@ -102,7 +101,9 @@ const PieExample = () => {
             <br />
             <Card>
               <CardContent>
-                <ReactJson src={state} />
+                <pre>
+                  {JSON.stringify(state)}
+                </pre>
               </CardContent>
             </Card>
           </Grid>
@@ -188,3 +189,4 @@ const PieExample = () => {
 };
 
 export default PieExample;
+

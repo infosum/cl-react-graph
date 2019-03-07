@@ -2,8 +2,7 @@ import React, {
   useReducer,
   useState,
 } from 'react';
-import ReactDataSheet, { Cell } from 'react-datasheet';
-import ReactJson from 'react-json-view';
+import ReactDataSheet from 'react-datasheet';
 
 import {
   Card,
@@ -66,8 +65,9 @@ function reducer(state: IInitialState, action: Actions) {
       throw new Error();
   }
 }
-export const dataToSpreadSheet = (datum: IHistogramData): Cell[][] => {
-  const speadSheetData: Cell[][] = [];
+
+export const dataToSpreadSheet = (datum: IHistogramData): any => {
+  const speadSheetData: any = [];
 
   datum.bins.forEach((b, i) => {
     if (!speadSheetData[i]) {
@@ -110,7 +110,8 @@ const HistogramExample = () => {
                   height={300}
                   visible={visible}
                   colorScheme={theme}
-                  tipContentFn={tipContentFns[0]} />
+                  tipContentFn={tipContentFns[0]}
+                />
                 <Legend
                   theme={theme}
                   data={dataLegendData}
@@ -124,7 +125,9 @@ const HistogramExample = () => {
             <br />
             <Card>
               <CardContent>
-                <ReactJson src={state} />
+                <pre>
+                  {JSON.stringify(state)}
+                </pre>
               </CardContent>
             </Card>
           </Grid>
@@ -137,7 +140,7 @@ const HistogramExample = () => {
                 </Tabs>
                 {
                   tab === 0 && <TabContainer>
-                    <ReactDataSheet data={speadSheetData}
+                    <ReactDataSheet<any, any> data={speadSheetData}
                       valueRenderer={(cell) => cell.value}
                       sheetRenderer={(props) => (
                         <table className={props.className + ' my-awesome-extra-class'}>
