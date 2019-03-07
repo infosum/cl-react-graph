@@ -27,7 +27,7 @@ import { TabContainer } from '../components/TabContainer';
 import {
   data2,
   theme,
-} from './data';
+} from '../data';
 import { dataToSpreadSheet } from './histogram';
 
 const initialSate: IPieChartProps = {

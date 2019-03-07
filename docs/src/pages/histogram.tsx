@@ -27,7 +27,7 @@ import {
   data,
   grid,
   theme,
-} from './data';
+} from '../data';
 
 const tipContentFns = [
   (bins, i, d) =>

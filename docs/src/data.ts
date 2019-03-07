@@ -1,8 +1,8 @@
 import {
   IAxes,
   IHistogramData,
-} from '../../../src';
-import filterRange from '../../../src/colors/filterRange';
+} from '../../src';
+import filterRange from '../../src/colors/filterRange';
 
 export const grid = {
   x: {

@@ -1,4 +1,3 @@
-import { Link } from 'gatsby';
 import React from 'react';
 
 import {
@@ -11,7 +10,7 @@ import {
 import JoyPlot from '../../../src/JoyPlot';
 import Layout from '../components/layout';
 import SEO from '../components/seo';
-import { data2 } from './data';
+import { data2 } from '../data';
 
 const data3 = {
   ...data2,

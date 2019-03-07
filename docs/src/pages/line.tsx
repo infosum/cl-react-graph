@@ -42,7 +42,7 @@ import { TabContainer } from '../components/TabContainer';
 import {
   axis,
   grid,
-} from './data';
+} from '../data';
 
 const initialState: ILineChartDataSet = {
   data: [

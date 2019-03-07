@@ -9,7 +9,7 @@ import React, {
 import { Map } from '../../../src';
 import Layout from '../components/layout';
 import SEO from '../components/seo';
-import { data } from './data';
+import { data } from '../data';
 
 const MapExample = () => {
   const [loading, setLoading] = useState(true);
