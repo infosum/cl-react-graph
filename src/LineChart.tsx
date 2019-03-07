@@ -44,6 +44,7 @@ export interface ILineChartDataSet<T extends IChartPoint<IChartPointValue, IChar
 
 export interface ISVGPoint extends ISVGLineStyle {
   radius?: 4;
+  show: boolean;
 }
 
 export interface ILineChartProps {

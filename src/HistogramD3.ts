@@ -245,9 +245,8 @@ export const histogramD3 = ((): IChartAdaptor => {
       const valuesCount = this.valuesCount(data.counts);
       const w = gridWidth(this.props);
 
-      let xAxis;
       const dataLabels = data.counts.map((c) => c.label);
-      // console.log('dataLabels', dataLabels);
+
       x
         .domain(data.bins)
         .rangeRound([0, w])
@@ -264,7 +263,7 @@ export const histogramD3 = ((): IChartAdaptor => {
           .rangeRound([0, x.bandwidth()])
           .paddingInner(this.barMargin());
       }
-      xAxis = axisBottom(x);
+      const xAxis = axisBottom(x);
 
       const tickSize = get(axis, 'x.tickSize', undefined);
       if (tickSize !== undefined) {
@@ -366,8 +365,6 @@ export const histogramD3 = ((): IChartAdaptor => {
         tip.fx.in(tipContainer);
       };
 
-      // console.log('bins', bins, 'group data', groupData);
-
       bars
         .enter()
         .append('rect')
@@ -388,7 +385,6 @@ export const histogramD3 = ((): IChartAdaptor => {
         .on('mouseout', () => tip.fx.out(tipContainer))
         .merge(bars)
         .attr('x', (d) => {
-          // console.log('group label', d.groupLabel);
           return innerScaleBand(d.groupLabel);
         })
         .attr('width', (d) => barWidth)
