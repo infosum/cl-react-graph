@@ -4,11 +4,13 @@
  *
  * See: https://www.gatsbyjs.org/docs/use-static-query/
  */
-
-import React from "react"
-import PropTypes from "prop-types"
-import Helmet from "react-helmet"
-import { useStaticQuery, graphql } from "gatsby"
+import {
+  graphql,
+  useStaticQuery,
+} from 'gatsby';
+import PropTypes from 'prop-types';
+import React from 'react';
+import Helmet from 'react-helmet';
 
 function SEO({ description, lang, meta, keywords, title }) {
   const { site } = useStaticQuery(
@@ -22,10 +24,10 @@ function SEO({ description, lang, meta, keywords, title }) {
           }
         }
       }
-    `
-  )
+    `,
+  );
 
-  const metaDescription = description || site.siteMetadata.description
+  const metaDescription = description || site.siteMetadata.description;
 
   return (
     <Helmet
@@ -36,63 +38,63 @@ function SEO({ description, lang, meta, keywords, title }) {
       titleTemplate={`%s | ${site.siteMetadata.title}`}
       meta={[
         {
+          content: metaDescription,
           name: `description`,
-          content: metaDescription,
         },
         {
+          content: title,
           property: `og:title`,
-          content: title,
         },
         {
+          content: metaDescription,
           property: `og:description`,
-          content: metaDescription,
         },
         {
-          property: `og:type`,
           content: `website`,
+          property: `og:type`,
         },
         {
-          name: `twitter:card`,
           content: `summary`,
+          name: `twitter:card`,
         },
         {
-          name: `twitter:creator`,
           content: site.siteMetadata.author,
+          name: `twitter:creator`,
         },
         {
-          name: `twitter:title`,
           content: title,
+          name: `twitter:title`,
         },
         {
-          name: `twitter:description`,
           content: metaDescription,
+          name: `twitter:description`,
         },
       ]
         .concat(
           keywords.length > 0
             ? {
-                name: `keywords`,
-                content: keywords.join(`, `),
-              }
-            : []
+              content: keywords.join(`, `),
+              name: `keywords`,
+            }
+            : [],
         )
         .concat(meta)}
     />
-  )
+  );
 }
 
 SEO.defaultProps = {
+  keywords: [],
   lang: `en`,
   meta: [],
-  keywords: [],
-}
+};
 
 SEO.propTypes = {
   description: PropTypes.string,
+  keywords: PropTypes.arrayOf(PropTypes.string),
   lang: PropTypes.string,
   meta: PropTypes.array,
-  keywords: PropTypes.arrayOf(PropTypes.string),
   title: PropTypes.string.isRequired,
-}
+};
 
-export default SEO
+export default SEO;

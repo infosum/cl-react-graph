@@ -36,10 +36,7 @@ import {
   ISVGPoint,
 } from './LineChart';
 import tips, { makeTip } from './tip';
-import {
-  AnyScale,
-  buildScales,
-} from './utils/scales';
+import { buildScales } from './utils/scales';
 
 const ZERO_SUBSITUTE: number = 1e-6;
 

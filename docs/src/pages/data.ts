@@ -1,14 +1,8 @@
 import {
-  schemeCategory10,
-  schemeDark2,
-} from 'd3-scale-chromatic';
-
-import filterRange from '../../../src/colors/filterRange';
-import {
   IAxes,
   IHistogramData,
-  IHistogramDataSet,
-} from '../src/index';
+} from '../../../src';
+import filterRange from '../../../src/colors/filterRange';
 
 export const grid = {
   x: {
@@ -38,7 +32,7 @@ export const data: IHistogramData = {
       data: [13, 14, 15, 16],
       label: 'DataSet 2',
     },
-  ] as IHistogramDataSet[],
+  ],
   grid,
 };
 
