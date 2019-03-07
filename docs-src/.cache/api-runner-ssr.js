@@ -1,11 +1,11 @@
 var plugins = [{
-      plugin: require('/home/rob/cl-react-graph/docs/node_modules/gatsby-plugin-react-helmet/gatsby-ssr'),
+      plugin: require('/home/rob/cl-react-graph/docs-src/node_modules/gatsby-plugin-react-helmet/gatsby-ssr'),
       options: {"plugins":[]},
     },{
-      plugin: require('/home/rob/cl-react-graph/docs/node_modules/gatsby-plugin-manifest/gatsby-ssr'),
+      plugin: require('/home/rob/cl-react-graph/docs-src/node_modules/gatsby-plugin-manifest/gatsby-ssr'),
       options: {"plugins":[],"name":"gatsby-starter-default","short_name":"starter","start_url":"/","background_color":"#56b4bf","theme_color":"#56b4bf","display":"minimal-ui","icon":"src/images/gatsby-icon.png"},
     },{
-      plugin: require('/home/rob/cl-react-graph/docs/node_modules/gatsby-plugin-material-ui/gatsby-ssr'),
+      plugin: require('/home/rob/cl-react-graph/docs-src/node_modules/gatsby-plugin-material-ui/gatsby-ssr'),
       options: {"plugins":[],"dangerouslyUseGlobalCSS":true,"theme":{"palette":{"primary":{"main":"#00a97b"},"secondary":{"main":"#27626a"}}}},
     }]
 // During bootstrap, we write requires at top of this file which looks like:
