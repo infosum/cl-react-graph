@@ -60,3 +60,10 @@ th.action-cell {
 .data-grid-container .data-grid .cell > input  {
   height: 21px !important;
 }
+
+pre code {
+  background-color: #eee;
+  border: 1px solid #999;
+  display: block;
+  padding: 20px;
+}

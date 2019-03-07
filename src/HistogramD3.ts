@@ -263,7 +263,7 @@ export const histogramD3 = ((): IChartAdaptor => {
           .rangeRound([0, x.bandwidth()])
           .paddingInner(this.barMargin());
       }
-      const xAxis = axisBottom(x);
+      const xAxis = axisBottom<Date | string>(x);
 
       const tickSize = get(axis, 'x.tickSize', undefined);
       if (tickSize !== undefined) {

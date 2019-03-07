@@ -1,10 +1,10 @@
-import * as merge from 'deepmerge';
-// import merge from 'deepmerge';
+import merge from 'deepmerge';
 import React, {
   useReducer,
   useState,
 } from 'react';
 import ReactDataSheet, { Cell } from 'react-datasheet';
+import JSONPretty from 'react-json-pretty';
 
 import {
   Card,
@@ -101,9 +101,7 @@ const PieExample = () => {
             <br />
             <Card>
               <CardContent>
-                <pre>
-                  {JSON.stringify(state)}
-                </pre>
+                <JSONPretty data={state} />
               </CardContent>
             </Card>
           </Grid>

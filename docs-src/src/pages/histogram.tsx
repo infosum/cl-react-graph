@@ -3,6 +3,7 @@ import React, {
   useState,
 } from 'react';
 import ReactDataSheet from 'react-datasheet';
+import JSONPretty from 'react-json-pretty';
 
 import {
   Card,
@@ -14,7 +15,7 @@ import {
   TextField,
   Typography,
 } from '@material-ui/core';
-
+import 'react-json-pretty/themes/monikai.css';
 import { HorizontalHistogram } from '../../../src';
 import Histogram, { IHistogramData } from '../../../src/Histogram';
 import Legend from '../../../src/Legend';
@@ -125,9 +126,7 @@ const HistogramExample = () => {
             <br />
             <Card>
               <CardContent>
-                <pre>
-                  {JSON.stringify(state)}
-                </pre>
+                <JSONPretty data={state} />
               </CardContent>
             </Card>
           </Grid>

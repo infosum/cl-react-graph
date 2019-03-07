@@ -1,5 +1,6 @@
 // Be sure to include styles at some point, probably during your bootstrapping
 import 'react-datasheet/lib/react-datasheet.css';
+import 'react-json-pretty/themes/monikai.css';
 
 import {
   curveCatmullRom,
@@ -13,6 +14,7 @@ import React, {
   useState,
 } from 'react';
 import ReactDataSheet, { Cell } from 'react-datasheet';
+import JSONPretty from 'react-json-pretty';
 
 import {
   Card,
@@ -54,19 +56,19 @@ const initialState: ILineChartDataSet = {
   line: {
     curveType: curveCatmullRom,
     fill: {
-      fill: 'rgba(10, 10, 10, 0.2)',
+      fill: 'rgba(54, 174, 141, 0.28)',
       show: true,
     },
     show: true,
     stroke: '#00a97b',
     strokeDashArray: '10 5',
-    strokeDashOffset: 3,
+    strokeDashOffset: 0,
   },
   point: {
-    fill: 'black',
+    fill: '#08697F',
     radius: 10,
     show: true,
-    stroke: 'red',
+    stroke: '#483A3A',
   },
 };
 
@@ -180,7 +182,7 @@ function reducer(state: ILineChartDataSet, action: Actions) {
     case 'lineFillShow':
       return merge(state, { line: { fill: { show: action.show } } });
     case 'lineFillColor':
-      return merge(state, { line: { fill: { color: action.fill } } });
+      return merge(state, { line: { fill: { fill: action.fill } } });
     default:
       throw new Error();
   }
@@ -216,9 +218,7 @@ const LineExample: FC<{}> = () => {
             <br />
             <Card>
               <CardContent>
-                <pre>
-                  {JSON.stringify(state)}
-                </pre>
+                <JSONPretty data={state} />
               </CardContent>
             </Card>
           </Grid>
