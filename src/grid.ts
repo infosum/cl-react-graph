@@ -1,5 +1,9 @@
-import { axisBottom, axisLeft } from 'd3-axis';
+import {
+  axisBottom,
+  axisLeft,
+} from 'd3-axis';
 import * as get from 'lodash.get';
+
 import attrs from './d3/attrs';
 import { IAxes } from './Histogram';
 
@@ -26,11 +30,11 @@ export const drawGrid = (x, y, gridX, gridY, props, ticks) => {
 
   if (grid.x.visible) {
     // Add the X gridlines
-    gridX.attr('transform', `translate(${offset.x}, ${offset.y})`);
-
-    gridX.call(makeXGridlines(x, get(grid, 'x.ticks', ticks))
-      .tickSize(-height + xAxisHeight(props.axis) + (margin.top * 2))
-      .tickFormat(() => ''));
+    gridX.attr('transform', `translate(${offset.x}, ${offset.y})`)
+      .transition()
+      .call(makeXGridlines(x, get(grid, 'x.ticks', ticks))
+        .tickSize(-height + xAxisHeight(props.axis) + (margin.top * 2))
+        .tickFormat(() => ''));
 
     attrs(gridX.selectAll('.tick line'), grid.x.style);
     attrs(gridX.selectAll('.domain'), { stroke: 'transparent' });
@@ -43,7 +47,7 @@ export const drawGrid = (x, y, gridX, gridY, props, ticks) => {
       .call(makeYGridlines(y, get(grid, 'y.ticks', ticks))
         .tickSize(-width + (margin.left * 2) + yAxisWidth(axis))
         .tickFormat(() => ''),
-    );
+      );
 
     attrs(gridY.selectAll('.tick line'), grid.y.style);
 

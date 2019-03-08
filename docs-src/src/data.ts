@@ -7,7 +7,7 @@ import filterRange from '../../src/colors/filterRange';
 export const grid = {
   x: {
     style: {
-      'stroke': '#eeAA00',
+      'stroke': '#ccc',
       'stroke-opacity': 0.4,
     },
     ticks: 5,
@@ -15,6 +15,7 @@ export const grid = {
   y: {
     height: 20,
     style: {
+      'stroke': '#ccc',
       'stroke-opacity': 0.4,
     },
     ticks: 5,
@@ -33,7 +34,6 @@ export const data: IHistogramData = {
       label: 'DataSet 2',
     },
   ],
-  grid,
 };
 
 export const data2 = {
@@ -86,11 +86,11 @@ export const axis: IAxes = {
     label: 'Y Axis!',
     style: {
       fill: 'none',
-      stroke: '#eeAA00',
+      stroke: '#666',
     },
     text: {
       style: {
-        fill: '#eeAA00',
+        fill: '#666',
       },
     },
     tickSize: 20,

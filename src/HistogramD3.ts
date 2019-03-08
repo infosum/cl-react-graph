@@ -275,7 +275,7 @@ export const histogramD3 = ((): IChartAdaptor => {
         }
       }
       if (axis.x.scale === 'TIME' && axis.x.dateFormat) {
-        xAxis.tickFormat(timeFormat(axis.x.dateFormat));
+        xAxis.tickFormat((v: string) => timeFormat(axis.x.dateFormat)(new Date(v)));
       }
 
       this.xAxis

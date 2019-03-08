@@ -8,6 +8,17 @@ export interface IChartPoint<X extends IChartPointValue = Date | number, Y exten
     x: X;
     y: Y;
 }
+export interface ILineProps {
+    show: boolean;
+    fill?: {
+        show: boolean;
+        fill: string;
+    };
+    curveType?: any;
+    stroke?: string;
+    strokeDashOffset?: number;
+    strokeDashArray?: string;
+}
 export interface ILineChartDataSet<T extends IChartPoint<IChartPointValue, IChartPointValue> = IChartPoint> {
     label: string;
     point?: {
@@ -16,17 +27,7 @@ export interface ILineChartDataSet<T extends IChartPoint<IChartPointValue, IChar
         fill: string;
         show: boolean;
     };
-    line?: {
-        show: boolean;
-        fill?: {
-            show: boolean;
-            fill: string;
-        };
-        curveType?: any;
-        stroke?: string;
-        strokeDashOffset?: number;
-        strokeDashArray?: string;
-    };
+    line?: ILineProps;
     data: T[];
 }
 export interface ISVGPoint extends ISVGLineStyle {
@@ -36,13 +37,11 @@ export interface ISVGPoint extends ISVGLineStyle {
 export interface ILineChartProps {
     axis?: IAxes;
     className?: string;
-    data?: ILineChartDataSet[];
+    data: ILineChartDataSet[];
     fx?: (n: number) => number;
     grid?: IGrid;
     height?: number | string;
-    line?: any;
     margin?: IMargin;
-    point?: ISVGPoint;
     tip?: any;
     tipContainer?: string;
     tipContentFn?: TipContentFn<{

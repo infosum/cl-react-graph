@@ -4,7 +4,6 @@ import React, {
   useState,
 } from 'react';
 import ReactDataSheet, { Cell } from 'react-datasheet';
-import JSONPretty from 'react-json-pretty';
 
 import {
   Card,
@@ -21,6 +20,7 @@ import Slider from '@material-ui/lab/Slider';
 
 import Legend from '../../../src/Legend';
 import PieChart, { IPieChartProps } from '../../../src/PieChart';
+import JSXToString from '../components/JSXToString';
 import Layout from '../components/layout';
 import SEO from '../components/seo';
 import { TabContainer } from '../components/TabContainer';
@@ -73,6 +73,14 @@ const PieExample = () => {
   const [state, dispatch] = useReducer(reducer, initialSate);
 
   const speadSheetData = dataToSpreadSheet(state.data);
+  const chart = <PieChart
+    width={state.width}
+    height={state.height}
+    donutWidth={state.donutWidth}
+    labels={state.labels}
+    data={state.data}
+    colorScheme={theme}
+    visible={state.visible} />;
   return (
     <Layout>
       <SEO title="Histogram" description="" />
@@ -82,14 +90,7 @@ const PieExample = () => {
           <Grid item xs={6}>
             <Card>
               <CardContent>
-                <PieChart
-                  width={state.width}
-                  height={state.height}
-                  donutWidth={state.donutWidth}
-                  labels={state.labels}
-                  data={state.data}
-                  colorScheme={theme}
-                  visible={state.visible} />
+                {chart}
                 <Legend
                   data={state.data}
                   theme={theme}
@@ -101,7 +102,7 @@ const PieExample = () => {
             <br />
             <Card>
               <CardContent>
-                <JSONPretty data={state} />
+                <JSXToString component={chart} />
               </CardContent>
             </Card>
           </Grid>

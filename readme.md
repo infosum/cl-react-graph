@@ -1,33 +1,51 @@
+# CL React Graphs
 A ReactJS wrapper around some standard D3 charts
 
-Please checkout the examples folder to see this package in use
-
-Docs coming as and when ....
-# Histogram
-
- ## Grids
+## Setup
 
 ```
- {
-     x: {
-        visible: boolean,
-        style: 'string - line style'
-        ticks: number
-     },
-     y: {
+npm i -S cl-react-graph
+```
 
-     }
- }
+## Documentation
+
+The interactive docs can be found at: https://cognitivelogic.github.io/cl-react-graph/
+
+ ## Developers
+
+ ### Building the code
+
+ ```
+ npm run build
  ```
 
- # Line
+ ### Publishing to NPM
 
- # Scatter Plot
+ Ensure that the version number is bumped & publish
+ 
+ ```
+ npm version patch -m "Upgrade to %s for reasons"
+ npm publish
+ ```
 
- ## Running docs
+Note you will need to authenticate to NPM to publish.
 
-`bash
-cd docs
+### Running docs in development mode
+
+To run the docs in development mode
+
+```
+cd docs-src
 gatsby develop
-`
+```
+
 the site will be available on `http://localhost:8000`
+
+### Building the docs
+
+```
+cd docs-src
+npm run build
+```
+
+The docs will be build in `/docs`

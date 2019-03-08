@@ -16,7 +16,6 @@ import {
   timeParse,
 } from 'd3-time-format';
 import * as merge from 'deepmerge';
-import * as get from 'lodash.get';
 
 import attrs from './d3/attrs';
 import {
@@ -33,6 +32,7 @@ import {
   IChartPoint,
   ILineChartDataSet,
   ILineChartProps,
+  ILineProps,
   ISVGPoint,
 } from './LineChart';
 import tips, { makeTip } from './tip';
@@ -47,15 +47,17 @@ export const lineChartD3 = ((): IChartAdaptor => {
   let xFormatTime;
   let tipContent;
 
-  const
-    lineProps = {
-      curveType: curveCatmullRom,
-      fill: false,
-      show: true,
-      stroke: '#005870',
-      strokeDashArray: '5 5',
-      strokeDashOffset: 0,
-    };
+  const lineProps: ILineProps = {
+    curveType: curveCatmullRom,
+    fill: {
+      fill: '#eee',
+      show: false,
+    },
+    show: true,
+    stroke: '#005870',
+    strokeDashArray: '5 5',
+    strokeDashOffset: 0,
+  };
 
   const pointProps: ISVGPoint = {
     fill: 'rgba(255, 255, 255, 0)',
@@ -101,6 +103,7 @@ export const lineChartD3 = ((): IChartAdaptor => {
       },
     },
     className: 'line-chart-d3',
+    data: [],
     fx: easeCubic,
     grid: {
       x: {
@@ -125,12 +128,10 @@ export const lineChartD3 = ((): IChartAdaptor => {
       },
     },
     height: 250,
-    line: lineProps,
     margin: {
       left: 5,
       top: 5,
     },
-    point: pointProps,
     tip: tips,
     tipContainer: 'body',
     tipContentFn: (info, i, d) => {
@@ -438,9 +439,7 @@ export const lineChartD3 = ((): IChartAdaptor => {
       if (!props.data) {
         return;
       }
-      console.log('receive update', props);
       this.props = merge(defaultProps, props);
-      console.log('update', this.props.point);
       [this.x, this.y] = buildScales(this.props.axis);
       let data = props.data;
 
@@ -458,6 +457,7 @@ export const lineChartD3 = ((): IChartAdaptor => {
             return newd;
           });
         }
+        // Assign in default line & point styles
         return Object.assign({}, datumProps, datum);
       });
       this._drawScales(data);

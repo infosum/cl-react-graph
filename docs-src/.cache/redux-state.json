@@ -1059,12 +1059,12 @@
             "version": "^16.8.3"
           },
           {
-            "name": "react-helmet",
-            "version": "^5.2.0"
+            "name": "react-element-to-jsx-string",
+            "version": "^14.0.2"
           },
           {
-            "name": "react-json-pretty",
-            "version": "^2.0.0"
+            "name": "react-helmet",
+            "version": "^5.2.0"
           }
         ],
         "devDependencies": [
@@ -1196,12 +1196,12 @@
       },
       "pathPrefix": "/cl-react-graph",
       "polyfill": true,
-      "buildTime": "2019-03-07T16:58:24.037Z",
+      "buildTime": "2019-03-08T12:33:57.298Z",
       "id": "Site",
       "parent": null,
       "children": [],
       "internal": {
-        "contentDigest": "5ad979259eda7bb862b066ade9f37bb5",
+        "contentDigest": "8b31d472100472f0abaf9229fb901a43",
         "type": "Site",
         "owner": "internal-data-bridge"
       }
@@ -1527,7 +1527,7 @@
   },
   "status": {
     "plugins": {},
-    "PLUGINS_HASH": "836b310bfaf760208a4f3b9422e11899"
+    "PLUGINS_HASH": "8105678bb91230271b34d070201ddd0e"
   },
   "componentDataDependencies": {
     "nodes": {
