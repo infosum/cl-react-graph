@@ -33,8 +33,6 @@ import {
 import tips, { makeTip } from './tip';
 
 const formatTickTime = (axis: IAxis) => (v: string) => {
-  // Format time
-  console.log('format axis', axis, v);
   return timeFormat(axis.dateFormat)(new Date(v));
 };
 
