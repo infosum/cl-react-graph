@@ -212,7 +212,7 @@ export const lineChartD3 = ((): IChartAdaptor => {
      * Iterate over the dataset drawing points for sets marked as
      * requiring points.
      */
-    _drawDataPointSet(data: ILineChartDataSet[]) {
+    _drawDataPointSet(data: Array<ILineChartDataSet<any>>) {
       const { axis, tip } = this.props;
       const yAxisWidth = getYAxisWidth(axis);
 
@@ -220,7 +220,7 @@ export const lineChartD3 = ((): IChartAdaptor => {
 
       // Don't ask why but we must reference tipContentFn as this.props.tipContentFn otherwise
       // it doesn't update with props changes
-      const onMouseOver = (d: ILineChartDataSet, i: number) => {
+      const onMouseOver = (d: ILineChartDataSet<any>, i: number) => {
         tipContent.html(() => this.props.tipContentFn([d], 0));
         tip.fx.in(tipContainer);
       };
@@ -351,7 +351,7 @@ export const lineChartD3 = ((): IChartAdaptor => {
       attrs(svg.selectAll('.x-axis .tick text'), axis.x.text.style);
     },
 
-    _createLines(data: ILineChartDataSet[]) {
+    _createLines(data: Array<ILineChartDataSet<any>>) {
       data.forEach((d, i) => {
         this.lineContainer.append('path')
           .attr('class', `line-${i}`);
@@ -370,7 +370,7 @@ export const lineChartD3 = ((): IChartAdaptor => {
     /**
      * Iterate over data and update lines
      */
-    _drawLines(data: ILineChartDataSet[]) {
+    _drawLines(data: Array<ILineChartDataSet<any>>) {
       const { axis } = this.props;
       const yAxisWidth = getYAxisWidth(axis);
 
@@ -391,7 +391,7 @@ export const lineChartD3 = ((): IChartAdaptor => {
     /**
      * Iterates ove data and updates area fills
      */
-    drawAreas(data: ILineChartDataSet[]) {
+    drawAreas(data: Array<ILineChartDataSet<any>>) {
       const { axis, height } = this.props;
       const yAxisWidth = getYAxisWidth(axis);
       const xAxisHeight = getXAxisHeight(axis);

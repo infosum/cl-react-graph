@@ -19,7 +19,7 @@ export interface ILineProps {
     strokeDashOffset?: number;
     strokeDashArray?: string;
 }
-export interface ILineChartDataSet<T extends IChartPoint<IChartPointValue, IChartPointValue> = IChartPoint> {
+export interface ILineChartDataSet<T> {
     label: string;
     point?: {
         radius: number;
@@ -34,10 +34,10 @@ export interface ISVGPoint extends ISVGLineStyle {
     radius?: 4;
     show: boolean;
 }
-export interface ILineChartProps {
+export interface ILineChartProps<T extends IChartPoint<IChartPointValue, IChartPointValue> = IChartPoint> {
     axis?: IAxes;
     className?: string;
-    data: ILineChartDataSet[];
+    data: Array<ILineChartDataSet<T>>;
     fx?: (n: number) => number;
     grid?: IGrid;
     height?: number | string;

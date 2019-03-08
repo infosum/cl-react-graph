@@ -47,7 +47,6 @@ export interface IHistogramData {
     counts: IHistogramDataSet[];
     colorScheme?: string[];
     title?: string;
-    grid?: IGrid;
 }
 export interface IDomain {
     max: number;
