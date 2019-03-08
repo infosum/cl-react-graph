@@ -11,15 +11,15 @@ npm i -S cl-react-graph
 
 The interactive docs can be found at: https://cognitivelogic.github.io/cl-react-graph/
 
- ## Developers
+## Developers
 
- ### Building the code
+### Building the code
 
  ```
  npm run build
  ```
 
- ### Publishing to NPM
+### Publishing to NPM
 
  Ensure that the version number is bumped & publish
  
