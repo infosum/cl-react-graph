@@ -24,12 +24,19 @@ import {
   yAxisWidth,
 } from './grid';
 import {
+  IAxis,
   IChartAdaptor,
   IHistogramData,
   IHistogramDataSet,
   IHistogramProps,
 } from './Histogram';
 import tips, { makeTip } from './tip';
+
+const formatTickTime = (axis: IAxis) => (v: string) => {
+  // Format time
+  console.log('format axis', axis, v);
+  return timeFormat(axis.dateFormat)(new Date(v));
+};
 
 interface IGroupDataItem {
   label: string;
@@ -263,7 +270,7 @@ export const histogramD3 = ((): IChartAdaptor => {
           .rangeRound([0, x.bandwidth()])
           .paddingInner(this.barMargin());
       }
-      const xAxis = axisBottom<Date | string>(x);
+      const xAxis = axisBottom<string>(x);
 
       const tickSize = get(axis, 'x.tickSize', undefined);
       if (tickSize !== undefined) {
@@ -275,7 +282,7 @@ export const histogramD3 = ((): IChartAdaptor => {
         }
       }
       if (axis.x.scale === 'TIME' && axis.x.dateFormat) {
-        xAxis.tickFormat((v: string) => timeFormat(axis.x.dateFormat)(new Date(v)));
+        xAxis.tickFormat(formatTickTime(axis.x));
       }
 
       this.xAxis
