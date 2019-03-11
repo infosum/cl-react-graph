@@ -16,6 +16,7 @@ import {
 } from './Histogram';
 import { joyPlotD3 } from './JoyplotD3';
 import {
+  axis as defaultAxis,
   lineStyle,
   stroke,
 } from './utils/defaults';
@@ -49,7 +50,7 @@ class Histogram extends React.Component<IJoyPlotProps, IChartState> {
   private ref;
 
   public static defaultProps: Partial<IJoyPlotProps> = {
-    axis: {},
+    axis: defaultAxis,
     bar: {
       margin: 0,
       width: 10,

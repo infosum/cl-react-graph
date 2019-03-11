@@ -4,7 +4,6 @@ import * as ReactDOM from 'react-dom';
 import {
   IAxes,
   IGrid,
-  IHistogramData,
   IMargin,
   ISVGLineStyle,
   TipContentFn,

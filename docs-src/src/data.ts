@@ -1,20 +1,20 @@
-import {
-  IAxes,
-  IHistogramData,
-} from '../../src';
+import { IHistogramData } from '../../src';
 import filterRange from '../../src/colors/filterRange';
+import { IGrid } from '../../src/Histogram';
+import { lineStyle } from '../../src/utils/defaults';
 
-export const grid = {
+export const grid: IGrid = {
   x: {
     style: {
+      ...lineStyle,
       'stroke': '#ccc',
       'stroke-opacity': 0.4,
     },
     ticks: 5,
   },
   y: {
-    height: 20,
     style: {
+      ...lineStyle,
       'stroke': '#ccc',
       'stroke-opacity': 0.4,
     },
@@ -64,39 +64,6 @@ export const data3 = {
       label: 'Data 2',
     },
   ],
-};
-
-export const axis: IAxes = {
-  x: {
-    height: 20,
-    label: 'X Axis',
-    margin: 20,
-    text: {
-      style: {
-        'dy': '.35em',
-        'text-anchor': 'start',
-        'transform': 'rotate(90)',
-        'x': 0,
-        'y': 0,
-      },
-    },
-    tickSize: 0,
-  },
-  y: {
-    label: 'Y Axis!',
-    style: {
-      fill: 'none',
-      stroke: '#666',
-    },
-    text: {
-      style: {
-        fill: '#666',
-      },
-    },
-    tickSize: 20,
-    ticks: 3,
-    width: 50,
-  },
 };
 
 export const theme = filterRange(['rgba(255, 113, 1, 0.5)', '#fff6ef', 'rgba(0, 169, 123, 0.5)', '#f6fffd',

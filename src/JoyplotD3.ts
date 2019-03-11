@@ -22,7 +22,10 @@ import {
 } from './Histogram';
 import { IJoyPlotProps } from './JoyPlot';
 import tips, { makeTip } from './tip';
-import { lineStyle } from './utils/defaults';
+import {
+  axis as defaultAxis,
+  lineStyle,
+} from './utils/defaults';
 
 interface IGroupDataItem {
   label: string;
@@ -55,44 +58,7 @@ export const joyPlotD3 = ((): IChartAdaptor => {
   }
 
   const defaultProps: IJoyPlotProps = {
-    axis: {
-      x: {
-        height: 20,
-        label: '',
-        margin: 10,
-        style: {
-          ...lineStyle,
-          'fill': 'none',
-          'shape-rendering': 'crispEdges',
-          'stroke': '#666',
-          'stroke-opacity': 1,
-          'stroke-width': 1,
-        },
-        text: {
-          style: {
-            fill: '#666',
-          },
-        },
-      },
-      y: {
-        label: '',
-        style: {
-          ...lineStyle,
-          'fill': 'none',
-          'shape-rendering': 'crispEdges',
-          'stroke': '#666',
-          'stroke-opacity': 1,
-          'stroke-width': 1,
-        },
-        text: {
-          style: {
-            fill: '#666',
-          },
-        },
-        ticks: 10,
-        width: 25,
-      },
-    },
+    axis: defaultAxis,
     bar: {
       groupMargin: 0,
       margin: 0,

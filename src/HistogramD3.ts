@@ -31,7 +31,10 @@ import {
   IHistogramProps,
 } from './Histogram';
 import tips, { makeTip } from './tip';
-import { lineStyle } from './utils/defaults';
+import {
+  axis as defaultAxis,
+  lineStyle,
+} from './utils/defaults';
 
 const formatTickTime = (axis: IAxis) => (v: string) => {
   return timeFormat(axis.dateFormat)(new Date(v));
@@ -55,44 +58,7 @@ export const histogramD3 = ((): IChartAdaptor => {
   const stacked = false;
 
   const defaultProps: IHistogramProps = {
-    axis: {
-      x: {
-        height: 20,
-        label: '',
-        margin: 10,
-        style: {
-          ...lineStyle,
-          'fill': 'none',
-          'shape-rendering': 'crispEdges',
-          'stroke': '#666',
-          'stroke-opacity': 1,
-          'stroke-width': 1,
-        },
-        text: {
-          style: {
-            fill: '#666',
-          },
-        },
-      },
-      y: {
-        label: '',
-        style: {
-          ...lineStyle,
-          'fill': 'none',
-          'shape-rendering': 'crispEdges',
-          'stroke': '#666',
-          'stroke-opacity': 1,
-          'stroke-width': 1,
-        },
-        text: {
-          style: {
-            fill: '#666',
-          },
-        },
-        ticks: 10,
-        width: 25,
-      },
-    },
+    axis: defaultAxis,
     bar: {
       groupMargin: 0.1,
       margin: 0,
@@ -153,12 +119,14 @@ export const histogramD3 = ((): IChartAdaptor => {
     width: 200,
   };
 
+  let props: IHistogramProps;
+
   const HistogramD3 = {
     /**
      * Initialization
      */
-    create(el: HTMLElement, props: Partial<IHistogramProps> = {}) {
-      this.mergeProps(props);
+    create(el: HTMLElement, newProps: Partial<IHistogramProps> = {}) {
+      this.mergeProps(newProps);
       this._makeSvg(el);
       this.makeGrid();
       this.makeScales();
@@ -166,14 +134,14 @@ export const histogramD3 = ((): IChartAdaptor => {
         .append('g')
         .attr('class', 'histogram-container');
 
-      this.update(el, props);
+      this.update(el, newProps);
     },
 
     mergeProps(newProps: Partial<IHistogramProps>) {
-      this.props = merge<IHistogramProps>(defaultProps, newProps);
-      this.props.data = newProps.data;
+      props = merge<IHistogramProps>(defaultProps, newProps);
+      props.data = newProps.data;
       if (newProps.colorScheme) {
-        this.props.colorScheme = newProps.colorScheme;
+        props.colorScheme = newProps.colorScheme;
       }
     },
 
@@ -181,7 +149,7 @@ export const histogramD3 = ((): IChartAdaptor => {
      * Make the SVG container element
      * Recreate if it previously existed
      */
-    _makeSvg(el) {
+    _makeSvg(el: HTMLElement) {
       if (svg) {
         svg.selectAll('svg > *').remove();
         svg.remove();
@@ -190,9 +158,9 @@ export const histogramD3 = ((): IChartAdaptor => {
           el.removeChild(childNodes[0]);
         }
       }
-      const { margin, width, height, className } = this.props;
+      const { margin, width, height, className } = props;
       const scale = {
-        x: 1 - (margin.left / width),
+        x: 1 - (margin.left / Number(width)),
         y: 1 - (margin.top / height),
       };
 
@@ -205,7 +173,7 @@ export const histogramD3 = ((): IChartAdaptor => {
         .append('g')
         .attr('transform', `translate(${margin.left},${margin.top}) scale(${scale.x},${scale.y})`);
 
-      const r = makeTip(this.props.tipContainer, tipContainer);
+      const r = makeTip(props.tipContainer, tipContainer);
       tipContent = r.tipContent;
       tipContainer = r.tipContainer;
     },
@@ -222,7 +190,7 @@ export const histogramD3 = ((): IChartAdaptor => {
      */
     appendDomainRange(scale: ScaleLinear<number, number>, data: IGroupData): void {
       const yDomain: number[] = [];
-      const { domain, margin, height } = this.props;
+      const { domain, margin, height } = props;
       const allCounts: number[] = data.reduce((prev: number[], next): number[] => {
         return [...prev, ...next.map((n) => n.value)];
       }, [0]);
@@ -234,7 +202,7 @@ export const histogramD3 = ((): IChartAdaptor => {
       yDomain[0] = domain && domain.hasOwnProperty('min') && domain.min !== null
         ? domain.min
         : thisExtent[0];
-      const yRange = [height - (margin.top * 2) - xAxisHeight(this.props.axis), 0];
+      const yRange = [height - (margin.top * 2) - xAxisHeight(props.axis), 0];
       scale.range(yRange)
         .domain(yDomain);
     },
@@ -251,9 +219,9 @@ export const histogramD3 = ((): IChartAdaptor => {
      * Draw scales
      */
     _drawScales(data: IHistogramData) {
-      const { axis, margin, height } = this.props;
+      const { axis, margin, height } = props;
       const valuesCount = this.valuesCount(data.counts);
-      const w = gridWidth(this.props);
+      const w = gridWidth(props);
 
       const dataLabels = data.counts.map((c) => c.label);
 
@@ -290,7 +258,7 @@ export const histogramD3 = ((): IChartAdaptor => {
 
       this.xAxis
         .attr('transform', 'translate(' + (yAxisWidth(axis) + axis.y.style['stroke-width']) + ',' +
-          (height - xAxisHeight(this.props.axis) - (margin.left * 2)) + ')')
+          (height - xAxisHeight(props.axis) - (margin.left * 2)) + ')')
         .call(xAxis);
 
       this.appendDomainRange(y, this.dataSets);
@@ -310,24 +278,24 @@ export const histogramD3 = ((): IChartAdaptor => {
         .call(yAxis);
 
       attrs(svg.selectAll('.y-axis .domain, .y-axis .tick line'), axis.y.style);
-      attrs(svg.selectAll('.y-axis .tick text'), axis.y.text.style);
+      attrs(svg.selectAll('.y-axis .tick text'), axis.y.text.style as any);
 
       attrs(svg.selectAll('.x-axis .domain, .x-axis .tick line'), axis.x.style);
-      attrs(svg.selectAll('.x-axis .tick text'), axis.x.text.style);
+      attrs(svg.selectAll('.x-axis .tick text'), axis.x.text.style as any);
     },
 
     /**
      * Returns the margin between similar bars in different data sets
      */
     groupedMargin(): number {
-      const m = get(this.props.bar, 'groupMargin', 0.1);
+      const m = get(props.bar, 'groupMargin', 0.1);
       return m >= 0 && m <= 1
         ? m
         : 0.1;
     },
 
     barMargin(): number {
-      const m = get(this.props.bar, 'margin', 0);
+      const m = get(props.bar, 'margin', 0);
       return m >= 0 && m <= 1
         ? m
         : 0.1;
@@ -344,12 +312,12 @@ export const histogramD3 = ((): IChartAdaptor => {
       bins: string[],
       groupData: IGroupData,
     ) {
-      const { axis, height, width, margin, delay, duration, tip } = this.props;
+      const { axis, height, width, margin, delay, duration, tip } = props;
       const barWidth = this.barWidth();
 
       // const borderColors = set.borderColors ? d3.scaleOrdinal(set.borderColors) : null;
-      const colors = scaleOrdinal(this.props.colorScheme);
-      const gHeight = gridHeight(this.props);
+      const colors = scaleOrdinal(props.colorScheme);
+      const gHeight = gridHeight(props);
 
       const g = this.container
         .selectAll('g')
@@ -367,11 +335,11 @@ export const histogramD3 = ((): IChartAdaptor => {
         .selectAll('rect')
         .data((d) => d);
 
-      // Don't ask why but we must reference tipContentFn as this.props.tipContentFn otherwise
+      // Don't ask why but we must reference tipContentFn as props.tipContentFn otherwise
       // it doesn't update with props changes
       const onMouseOver = (d: IGroupDataItem, i: number) => {
         const ix = bins.findIndex((b) => b === d.label);
-        tipContent.html(() => this.props.tipContentFn(bins, ix, d.value));
+        tipContent.html(() => props.tipContentFn(bins, ix, d.value));
         tip.fx.in(tipContainer);
       };
 
@@ -431,8 +399,8 @@ export const histogramD3 = ((): IChartAdaptor => {
         .attr('class', 'x-axis-label')
         .merge(xText)
         .attr('transform',
-          'translate(' + (width / 2) + ' ,' +
-          ((height - xAxisHeight(this.props.axis) - (margin.left * 2)) + axis.x.margin) + ')')
+          'translate(' + (Number(width) / 2) + ' ,' +
+          ((height - xAxisHeight(props.axis) - (margin.left * 2)) + axis.x.margin) + ')')
         .style('text-anchor', 'middle')
         .text((d) => d);
 
@@ -460,16 +428,16 @@ export const histogramD3 = ((): IChartAdaptor => {
     /**
      * Update chart
      */
-    update(el: HTMLElement, props: IHistogramProps) {
+    update(el: HTMLElement, newProps: IHistogramProps) {
       if (!props.data) {
         return;
       }
-      this.mergeProps(props);
-      if (!this.props.data.bins) {
+      this.mergeProps(newProps);
+      if (!props.data.bins) {
         return;
       }
 
-      const { data, visible } = this.props;
+      const { data, visible } = props;
       this.dataSets = [] as IGroupData;
 
       data.counts.forEach((count) => {
@@ -485,8 +453,8 @@ export const histogramD3 = ((): IChartAdaptor => {
         });
       });
 
-      this._drawScales(this.props.data);
-      drawGrid(x, y, this.gridX, this.gridY, this.props, this.valuesCount(data.counts));
+      this._drawScales(props.data);
+      drawGrid(x, y, this.gridX, this.gridY, props, this.valuesCount(data.counts));
       this.updateChart(data.bins, this.dataSets);
     },
 

@@ -4,6 +4,7 @@ import * as ReactDOM from 'react-dom';
 
 import { histogramD3 } from './HistogramD3';
 import {
+  axis as defaultAxis,
   lineStyle,
   stroke,
 } from './utils/defaults';
@@ -43,8 +44,8 @@ export interface IStroke {
 }
 
 export interface IAxes {
-  y?: IAxis;
-  x?: IAxis;
+  y: IAxis;
+  x: IAxis;
 }
 export interface IHistogramDataSet {
   borderColors?: string[];
@@ -72,7 +73,7 @@ export interface IMargin {
   bottom?: number;
 }
 export interface IHistogramProps {
-  axis?: IAxes;
+  axis: IAxes;
   bar?: IHistogramBar;
   className?: string;
   data: IHistogramData;
@@ -119,21 +120,21 @@ export interface IChartState {
 }
 
 export interface IAxis {
-  dateFormat?: string;
-  numberFormat?: string;
-  ticks?: number;
-  tickValues?: number[];
-  height?: number;
-  label?: string;
-  margin?: number;
-  scale?: Scale;
+  dateFormat: string;
+  numberFormat: string;
+  ticks: number;
+  tickValues: number[];
+  height: number;
+  label: string;
+  margin: number;
+  scale: Scale;
   style: ISVGLineStyle;
-  text?: {
+  text: {
     style: ISVGTextStyle;
   };
-  width?: number;
-  tickSize?: number;
-  visible?: boolean;
+  width: number;
+  tickSize: number;
+  visible: boolean;
 }
 
 export type TipContentFn<T> = (bins: T[], i: number, d: number, groupTitle?: string) => string;
@@ -147,7 +148,7 @@ class Histogram extends React.Component<IHistogramProps, IChartState> {
   private ref;
 
   public static defaultProps: Omit<IHistogramProps, 'data'> = {
-    axis: {},
+    axis: defaultAxis,
     bar: {
       margin: 0,
       width: 10,

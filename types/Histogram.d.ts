@@ -34,8 +34,8 @@ export interface IStroke {
     width: number;
 }
 export interface IAxes {
-    y?: IAxis;
-    x?: IAxis;
+    y: IAxis;
+    x: IAxis;
 }
 export interface IHistogramDataSet {
     borderColors?: string[];
@@ -60,7 +60,7 @@ export interface IMargin {
     bottom?: number;
 }
 export interface IHistogramProps {
-    axis?: IAxes;
+    axis: IAxes;
     bar?: IHistogramBar;
     className?: string;
     data: IHistogramData;
@@ -104,21 +104,21 @@ export interface IChartState {
     parentWidth?: number;
 }
 export interface IAxis {
-    dateFormat?: string;
-    numberFormat?: string;
-    ticks?: number;
-    tickValues?: number[];
-    height?: number;
-    label?: string;
-    margin?: number;
-    scale?: Scale;
+    dateFormat: string;
+    numberFormat: string;
+    ticks: number;
+    tickValues: number[];
+    height: number;
+    label: string;
+    margin: number;
+    scale: Scale;
     style: ISVGLineStyle;
-    text?: {
+    text: {
         style: ISVGTextStyle;
     };
-    width?: number;
-    tickSize?: number;
-    visible?: boolean;
+    width: number;
+    tickSize: number;
+    visible: boolean;
 }
 export declare type TipContentFn<T> = (bins: T[], i: number, d: number, groupTitle?: string) => string;
 declare class Histogram extends React.Component<IHistogramProps, IChartState> {

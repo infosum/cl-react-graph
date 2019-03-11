@@ -30,6 +30,7 @@ import {
   ILineChartProps,
   LineChart,
 } from '../../../src';
+import { axis as defaultAxis } from '../../../src/utils/defaults';
 import { CurveSelector } from '../components/CurveSelector';
 import { GridOptionsFactory } from '../components/GridOptions';
 import JSXToString from '../components/JSXToString';
@@ -37,7 +38,6 @@ import Layout from '../components/layout';
 import SEO from '../components/seo';
 import { TabContainer } from '../components/TabContainer';
 import {
-  axis,
   grid,
 } from '../data';
 import {
@@ -46,7 +46,7 @@ import {
 } from './histogram';
 
 const initialState: ILineChartProps<{ x: number, y: number }> = {
-  axis,
+  axis: defaultAxis,
   data: [
     {
       data: [

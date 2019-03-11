@@ -36,7 +36,10 @@ import {
   ISVGPoint,
 } from './LineChart';
 import tips, { makeTip } from './tip';
-import { lineStyle } from './utils/defaults';
+import {
+  axis as defaultAxis,
+  lineStyle,
+} from './utils/defaults';
 import { buildScales } from './utils/scales';
 
 const ZERO_SUBSITUTE: number = 1e-6;
@@ -69,43 +72,7 @@ export const lineChartD3 = ((): IChartAdaptor => {
   };
 
   const defaultProps: ILineChartProps = {
-    axis: {
-      x: {
-        height: 20,
-        scale: 'LINEAR',
-        style: {
-          ...lineStyle,
-          'fill': 'none',
-          'shape-rendering': 'crispEdges',
-          'stroke': '#666',
-          'stroke-opacity': 1,
-          'stroke-width': 1,
-        },
-        text: {
-          style: {
-            fill: '#666',
-          },
-        },
-      },
-      y: {
-        scale: 'LINEAR',
-        style: {
-          ...lineStyle,
-          'fill': 'none',
-          'shape-rendering': 'crispEdges',
-          'stroke': '#666',
-          'stroke-opacity': 1,
-          'stroke-width': 1,
-        },
-        text: {
-          style: {
-            fill: '#666',
-          },
-        },
-        ticks: 10,
-        width: 25,
-      },
-    },
+    axis: defaultAxis,
     className: 'line-chart-d3',
     data: [],
     fx: easeCubic,

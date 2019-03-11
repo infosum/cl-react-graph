@@ -23,6 +23,7 @@ import Histogram, {
   IHistogramData,
 } from '../../../src/Histogram';
 import Legend from '../../../src/Legend';
+import { axis as defaultAxis } from '../../../src/utils/defaults';
 import { GridOptionsFactory } from '../components/GridOptions';
 import JSXToString from '../components/JSXToString';
 import Layout from '../components/layout';
@@ -36,13 +37,16 @@ import {
 
 export const axis: IAxes = {
   x: {
+    ...defaultAxis.x,
     dateFormat: '%d-%b-%y',
     scale: 'TIME',
   },
   y: {
+    ...defaultAxis.y,
     ticks: 3,
   },
 };
+
 const tipContentFns = [
   (bins, i, d) =>
     bins[i] + '<br />HI THere ' + d.toFixed(2),
