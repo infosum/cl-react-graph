@@ -3,6 +3,11 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 
 import { histogramD3 } from './HistogramD3';
+import {
+  lineStyle,
+  stroke,
+} from './utils/defaults';
+import Omit from './utils/types';
 
 export interface IChartAdaptor {
   create: (el: Element | Text, props: { [key: string]: any }) => void;
@@ -32,8 +37,8 @@ export interface IGrid {
 
 export interface IStroke {
   color: ((d, i: number, colors: (i: number) => string) => string) | string;
-  dasharray?: string;
-  linecap?: string;
+  dasharray: string;
+  linecap: 'butt' | 'round' | 'square';
   width: number;
 }
 
@@ -89,13 +94,13 @@ export interface IHistogramProps {
 type Scale = 'LINEAR' | 'TIME' | 'LOG';
 
 export interface ISVGLineStyle {
-  'stroke'?: string;
-  'fill'?: string;
-  'opacity'?: number;
-  'stroke-width'?: number;
-  'stroke-opacity'?: number;
-  'shape-rendering'?: string;
-  'visible'?: boolean;
+  'stroke': string;
+  'fill': string;
+  'opacity': number;
+  'stroke-width': number;
+  'stroke-opacity': number;
+  'shape-rendering': string;
+  'visible': boolean;
 }
 
 interface ISVGTextStyle {
@@ -122,7 +127,7 @@ export interface IAxis {
   label?: string;
   margin?: number;
   scale?: Scale;
-  style?: ISVGLineStyle;
+  style: ISVGLineStyle;
   text?: {
     style: ISVGTextStyle;
   };
@@ -141,7 +146,7 @@ class Histogram extends React.Component<IHistogramProps, IChartState> {
   private chart: IChartAdaptor;
   private ref;
 
-  public static defaultProps: Partial<IHistogramProps> = {
+  public static defaultProps: Omit<IHistogramProps, 'data'> = {
     axis: {},
     bar: {
       margin: 0,
@@ -150,6 +155,7 @@ class Histogram extends React.Component<IHistogramProps, IChartState> {
     grid: {
       x: {
         style: {
+          ...lineStyle,
           'fill': 'none',
           'stroke': '#bbb',
           'stroke-opacity': 0.7,
@@ -160,6 +166,7 @@ class Histogram extends React.Component<IHistogramProps, IChartState> {
       },
       y: {
         style: {
+          ...lineStyle,
           'fill': 'none',
           'stroke': '#bbb',
           'stroke-opacity': 0.7,
@@ -175,11 +182,12 @@ class Histogram extends React.Component<IHistogramProps, IChartState> {
       top: 5,
     },
     stroke: {
+      ...stroke,
       color: (d, i, colors) => rgb(colors(i)).darker(1).toString(),
-      width: 1,
     },
     tipContentFn: (bins: string[], i, d) =>
       bins[i] + '<br />' + d.toFixed(2),
+    visible: {},
     width: '100%',
   };
 

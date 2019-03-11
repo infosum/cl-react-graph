@@ -1,4 +1,5 @@
 import * as React from 'react';
+import Omit from './utils/types';
 export interface IChartAdaptor {
     create: (el: Element | Text, props: {
         [key: string]: any;
@@ -28,8 +29,8 @@ export interface IGrid {
 }
 export interface IStroke {
     color: ((d: any, i: number, colors: (i: number) => string) => string) | string;
-    dasharray?: string;
-    linecap?: string;
+    dasharray: string;
+    linecap: 'butt' | 'round' | 'square';
     width: number;
 }
 export interface IAxes {
@@ -81,13 +82,13 @@ export interface IHistogramProps {
 }
 declare type Scale = 'LINEAR' | 'TIME' | 'LOG';
 export interface ISVGLineStyle {
-    'stroke'?: string;
-    'fill'?: string;
-    'opacity'?: number;
-    'stroke-width'?: number;
-    'stroke-opacity'?: number;
-    'shape-rendering'?: string;
-    'visible'?: boolean;
+    'stroke': string;
+    'fill': string;
+    'opacity': number;
+    'stroke-width': number;
+    'stroke-opacity': number;
+    'shape-rendering': string;
+    'visible': boolean;
 }
 interface ISVGTextStyle {
     fill?: string;
@@ -111,7 +112,7 @@ export interface IAxis {
     label?: string;
     margin?: number;
     scale?: Scale;
-    style?: ISVGLineStyle;
+    style: ISVGLineStyle;
     text?: {
         style: ISVGTextStyle;
     };
@@ -123,7 +124,7 @@ export declare type TipContentFn<T> = (bins: T[], i: number, d: number, groupTit
 declare class Histogram extends React.Component<IHistogramProps, IChartState> {
     private chart;
     private ref;
-    static defaultProps: Partial<IHistogramProps>;
+    static defaultProps: Omit<IHistogramProps, 'data'>;
     constructor(props: IHistogramProps);
     private handleResize;
     componentDidMount(): void;

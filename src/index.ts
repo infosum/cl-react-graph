@@ -1,14 +1,21 @@
 import filterRange from './colors/filterRange';
 import Histogram, {
-  IAxes, IHistogramBar, IHistogramData, IHistogramDataSet,
-  IHistogramProps, IStroke,
+  IAxes,
+  IHistogramBar,
+  IHistogramData,
+  IHistogramDataSet,
+  IHistogramProps,
+  IStroke,
 } from './Histogram';
-
 import HorizontalHistogram from './HorizontalHistogram';
 import JoyPlot from './JoyPlot';
 import Legend from './Legend';
-import LineChart, { IChartPoint, ILineChartDataSet, ILineChartProps } from './LineChart';
-import Map from './Map';
+import LineChart, {
+  IChartPoint,
+  ILineChartDataSet,
+  ILineChartProps,
+} from './LineChart';
+// import Map from './Map';
 import PieChart from './PieChart';
 import ScatterPlot from './ScatterPlot';
 
@@ -19,7 +26,7 @@ export {
   HorizontalHistogram,
   Legend,
   LineChart,
-  Map,
+  // Map,
   PieChart,
   ScatterPlot,
   ILineChartDataSet,

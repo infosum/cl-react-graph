@@ -351,9 +351,7 @@ export const horizontalHistogramD3 = ((): IChartAdaptor => {
         .attr('stroke-width', stroke.width)
         .attr('stroke-linecap', stroke.linecap);
 
-      if (stroke.dasharray !== '') {
-        barItem.attr('stroke-dasharray', stroke.dasharray);
-      }
+      barItem.attr('stroke-dasharray', stroke.dasharray);
 
       // Animate in bar
       barItem
@@ -399,7 +397,7 @@ export const horizontalHistogramD3 = ((): IChartAdaptor => {
           .tickFormat(() => ''));
 
         attrs(g.selectAll('.tick line'), grid.x.style);
-        attrs(g.selectAll('.domain'), { stroke: 'transparent' });
+        attrs(g.selectAll('.domain'), { ...axis.y.style, stroke: 'transparent' });
       }
 
       // Vertical lines.....
@@ -415,7 +413,7 @@ export const horizontalHistogramD3 = ((): IChartAdaptor => {
           );
         attrs(gy.selectAll('.tick line'), grid.y.style);
 
-        attrs(gy.selectAll('.domain'), { stroke: 'transparent' });
+        attrs(gy.selectAll('.domain'), { ...axis.x.style, stroke: 'transparent' });
       }
     },
 

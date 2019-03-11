@@ -22,14 +22,14 @@ export interface IChartPoint<X extends IChartPointValue = Date | number, Y exten
 }
 export interface ILineProps {
   show: boolean;
-  fill?: {
+  fill: {
     show: boolean;
     fill: string;
   };
-  curveType?: any;
-  stroke?: string;
-  strokeDashOffset?: number;
-  strokeDashArray?: string;
+  curveType: any;
+  stroke: string;
+  strokeDashOffset: number;
+  strokeDashArray: string;
 }
 
 export interface ILineChartDataSet<T> {
@@ -60,6 +60,7 @@ export interface ILineChartProps<T extends IChartPoint<IChartPointValue, IChartP
   tip?: any;
   tipContainer?: string;
   tipContentFn?: TipContentFn<{ x: string | number, y: string | number }>;
+  visible?: { [key: string]: boolean };
   width?: number | string;
 }
 

@@ -37,7 +37,7 @@ export const drawGrid = (x, y, gridX, gridY, props, ticks) => {
         .tickFormat(() => ''));
 
     attrs(gridX.selectAll('.tick line'), grid.x.style);
-    attrs(gridX.selectAll('.domain'), { stroke: 'transparent' });
+    attrs(gridX.selectAll('.domain'), { ...axis.y.style, stroke: 'transparent' });
   }
 
   if (grid.y.visible) {
@@ -54,7 +54,7 @@ export const drawGrid = (x, y, gridX, gridY, props, ticks) => {
     // Hide the first horizontal grid line to show axis
     gridY.selectAll('.gridY .tick line').filter((d, i) => i === 0)
       .attr('display', 'none');
-    attrs(gridY.selectAll('.domain'), { stroke: 'transparent' });
+    attrs(gridY.selectAll('.domain'), { ...axis.x.style, stroke: 'transparent' });
   }
 };
 

@@ -1,14 +1,28 @@
 import { extent } from 'd3-array';
-import { axisBottom, axisLeft } from 'd3-axis';
-import { scaleBand, scaleLinear, ScaleLinear, scaleOrdinal } from 'd3-scale';
+import {
+  axisBottom,
+  axisLeft,
+} from 'd3-axis';
+import {
+  scaleBand,
+  scaleLinear,
+  ScaleLinear,
+  scaleOrdinal,
+} from 'd3-scale';
 import { select } from 'd3-selection';
 import * as merge from 'deepmerge';
 import * as get from 'lodash.get';
+
 import colorScheme from './colors';
 import attrs from './d3/attrs';
-import { IChartAdaptor, IHistogramData, IHistogramDataSet } from './Histogram';
+import {
+  IChartAdaptor,
+  IHistogramData,
+  IHistogramDataSet,
+} from './Histogram';
 import { IJoyPlotProps } from './JoyPlot';
 import tips, { makeTip } from './tip';
+import { lineStyle } from './utils/defaults';
 
 interface IGroupDataItem {
   label: string;
@@ -47,6 +61,7 @@ export const joyPlotD3 = ((): IChartAdaptor => {
         label: '',
         margin: 10,
         style: {
+          ...lineStyle,
           'fill': 'none',
           'shape-rendering': 'crispEdges',
           'stroke': '#666',
@@ -62,6 +77,7 @@ export const joyPlotD3 = ((): IChartAdaptor => {
       y: {
         label: '',
         style: {
+          ...lineStyle,
           'fill': 'none',
           'shape-rendering': 'crispEdges',
           'stroke': '#666',
@@ -97,6 +113,7 @@ export const joyPlotD3 = ((): IChartAdaptor => {
     grid: {
       x: {
         style: {
+          ...lineStyle,
           'fill': 'none',
           'stroke': '#bbb',
           'stroke-opacity': 0.7,
@@ -107,6 +124,7 @@ export const joyPlotD3 = ((): IChartAdaptor => {
       },
       y: {
         style: {
+          ...lineStyle,
           'fill': 'none',
           'stroke': '#bbb',
           'stroke-opacity': 0.7,
@@ -145,7 +163,7 @@ export const joyPlotD3 = ((): IChartAdaptor => {
     create(el: HTMLElement, newProps: Partial<IJoyPlotProps> = {}) {
       this.mergeProps(newProps);
       this._makeSvg(el);
-      this.makeGrid(props);
+      this.makeGrid();
       this.makeScales();
       this.containers = props.data.map((d, i) => svg
         .append('g')
@@ -343,10 +361,10 @@ export const joyPlotD3 = ((): IChartAdaptor => {
       const { ...xLabelStyle } = axis.x.text.style;
       const { ...yLabelStyle } = axis.y.text.style;
       attrs(svg.selectAll('.y-axis .domain, .y-axis .tick line'), axis.y.style);
-      attrs(svg.selectAll('.y-axis .tick text'), axis.y.text.style);
+      attrs(svg.selectAll('.y-axis .tick text'), axis.y.text.style as any);
 
       attrs(svg.selectAll('.x-axis .domain, .x-axis .tick line'), axis.x.style);
-      attrs(svg.selectAll('.x-axis .tick text'), axis.x.text.style);
+      attrs(svg.selectAll('.x-axis .tick text'), axis.x.text.style as any);
     },
 
     /**
@@ -478,14 +496,13 @@ export const joyPlotD3 = ((): IChartAdaptor => {
             })
           .attr('height', (d: IGroupDataItem): number =>
             yOuterScaleBand.bandwidth() - y(d.value),
-        );
+          );
 
         g.exit().remove();
       });
     },
 
-    makeGrid(props: IJoyPlotProps) {
-      const { grid } = props;
+    makeGrid() {
       this.gridX = svg.append('g')
         .attr('class', 'grid gridX');
       this.gridY = svg.append('g')
@@ -518,7 +535,7 @@ export const joyPlotD3 = ((): IChartAdaptor => {
           .tickFormat(() => ''));
 
         attrs(this.gridX.selectAll('.tick line'), grid.x.style);
-        attrs(this.gridX.selectAll('.domain'), { stroke: 'transparent' });
+        attrs(this.gridX.selectAll('.domain'), { ...axis.y.style, stroke: 'transparent' });
       }
 
       if (grid.y.visible) {
@@ -528,14 +545,14 @@ export const joyPlotD3 = ((): IChartAdaptor => {
           .call(make_y_gridlines(get(grid, 'y.ticks', ticks))
             .tickSize(-width + (margin.left * 2) + this.yAxisWidth())
             .tickFormat(() => ''),
-        );
+          );
 
         attrs(this.gridY.selectAll('.tick line'), grid.y.style);
 
         // Hide the first horizontal grid line to show axis
         this.gridY.selectAll('.gridY .tick line').filter((d, i) => i === 0)
           .attr('display', 'none');
-        attrs(this.gridY.selectAll('.domain'), { stroke: 'transparent' });
+        attrs(this.gridY.selectAll('.domain'), { ...axis.x.style, stroke: 'transparent' });
       }
     },
 

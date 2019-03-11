@@ -31,6 +31,7 @@ import {
   IHistogramProps,
 } from './Histogram';
 import tips, { makeTip } from './tip';
+import { lineStyle } from './utils/defaults';
 
 const formatTickTime = (axis: IAxis) => (v: string) => {
   return timeFormat(axis.dateFormat)(new Date(v));
@@ -60,6 +61,7 @@ export const histogramD3 = ((): IChartAdaptor => {
         label: '',
         margin: 10,
         style: {
+          ...lineStyle,
           'fill': 'none',
           'shape-rendering': 'crispEdges',
           'stroke': '#666',
@@ -75,6 +77,7 @@ export const histogramD3 = ((): IChartAdaptor => {
       y: {
         label: '',
         style: {
+          ...lineStyle,
           'fill': 'none',
           'shape-rendering': 'crispEdges',
           'stroke': '#666',
@@ -110,6 +113,7 @@ export const histogramD3 = ((): IChartAdaptor => {
     grid: {
       x: {
         style: {
+          ...lineStyle,
           'fill': 'none',
           'stroke': '#bbb',
           'stroke-opacity': 0.7,
@@ -120,6 +124,7 @@ export const histogramD3 = ((): IChartAdaptor => {
       },
       y: {
         style: {
+          ...lineStyle,
           'fill': 'none',
           'stroke': '#bbb',
           'stroke-opacity': 0.7,

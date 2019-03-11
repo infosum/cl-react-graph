@@ -15,6 +15,10 @@ import {
   TipContentFn,
 } from './Histogram';
 import { joyPlotD3 } from './JoyplotD3';
+import {
+  lineStyle,
+  stroke,
+} from './utils/defaults';
 
 export interface IJoyPlotProps {
   axis?: IAxes;
@@ -53,6 +57,7 @@ class Histogram extends React.Component<IJoyPlotProps, IChartState> {
     grid: {
       x: {
         style: {
+          ...lineStyle,
           'fill': 'none',
           'stroke': '#bbb',
           'stroke-opacity': 0.7,
@@ -63,6 +68,7 @@ class Histogram extends React.Component<IJoyPlotProps, IChartState> {
       },
       y: {
         style: {
+          ...lineStyle,
           'fill': 'none',
           'stroke': '#bbb',
           'stroke-opacity': 0.7,
@@ -78,6 +84,7 @@ class Histogram extends React.Component<IJoyPlotProps, IChartState> {
       top: 5,
     },
     stroke: {
+      ...stroke,
       color: (d, i, colors) => rgb(colors(i)).darker(1).toString(),
       width: 1,
     },
