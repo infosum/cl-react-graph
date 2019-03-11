@@ -194,7 +194,6 @@ class Histogram extends React.Component<IHistogramProps, IChartState> {
 
   /**
    * Constructor
-   * @param {Object} props
    */
   constructor(props: IHistogramProps) {
     super(props);
@@ -236,7 +235,6 @@ class Histogram extends React.Component<IHistogramProps, IChartState> {
 
   /**
    * Get the chart state
-   * @return {Object} ChartState
    */
   public getChartState(): IHistogramProps {
     let { width } = this.props;
@@ -264,7 +262,6 @@ class Histogram extends React.Component<IHistogramProps, IChartState> {
 
   /**
    * Get the chart's dom node
-   * @return {Element} dom noe
    */
   private getDOMNode() {
     return ReactDOM.findDOMNode(this.ref);
@@ -272,7 +269,6 @@ class Histogram extends React.Component<IHistogramProps, IChartState> {
 
   /**
    * Render
-   * @return {Dom} node
    */
   public render(): JSX.Element {
     return (<div ref={(ref) => this.ref = ref} className="histogram-chart-container"></div>);

@@ -218,8 +218,8 @@ export const histogramD3 = ((): IChartAdaptor => {
     /**
      * Draw scales
      */
-    _drawScales(data: IHistogramData) {
-      const { axis, margin, height } = props;
+    _drawScales() {
+      const { axis, data, margin, height } = props;
       const valuesCount = this.valuesCount(data.counts);
       const w = gridWidth(props);
 
@@ -429,7 +429,7 @@ export const histogramD3 = ((): IChartAdaptor => {
      * Update chart
      */
     update(el: HTMLElement, newProps: IHistogramProps) {
-      if (!props.data) {
+      if (!newProps.data) {
         return;
       }
       this.mergeProps(newProps);
@@ -453,7 +453,7 @@ export const histogramD3 = ((): IChartAdaptor => {
         });
       });
 
-      this._drawScales(props.data);
+      this._drawScales();
       drawGrid(x, y, this.gridX, this.gridY, props, this.valuesCount(data.counts));
       this.updateChart(data.bins, this.dataSets);
     },
