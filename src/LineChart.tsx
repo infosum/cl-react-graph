@@ -1,14 +1,20 @@
-import * as React from 'react';
-import * as ReactDOM from 'react-dom';
+import {
+  CurveFactory,
+  CurveFactoryLineOnly,
+} from 'd3-shape';
+import React from 'react';
+import ReactDOM from 'react-dom';
 
 import {
   IAxes,
+  IChartAdaptor,
   IGrid,
   IMargin,
   ISVGLineStyle,
   TipContentFn,
 } from './Histogram';
 import { lineChartD3 } from './lineChartD3';
+import { DeepPartial } from './utils/types';
 
 interface IState {
   parentWidth?: number;
@@ -25,7 +31,7 @@ export interface ILineProps {
     show: boolean;
     fill: string;
   };
-  curveType: any;
+  curveType: CurveFactory | CurveFactoryLineOnly;
   stroke: string;
   strokeDashOffset: number;
   strokeDashArray: string;
@@ -33,13 +39,13 @@ export interface ILineProps {
 
 export interface ILineChartDataSet<T> {
   label: string;
-  point?: {
+  point: {
     radius: number;
     stroke: string;
     fill: string;
     show: boolean;
   };
-  line?: ILineProps;
+  line: ILineProps;
   data: T[];
 }
 
@@ -49,26 +55,25 @@ export interface ISVGPoint extends ISVGLineStyle {
 }
 
 export interface ILineChartProps<T extends IChartPoint<IChartPointValue, IChartPointValue> = IChartPoint> {
-  axis?: IAxes;
-  className?: string;
+  axis: IAxes;
+  className: string;
   data: Array<ILineChartDataSet<T>>;
-  fx?: (n: number) => number;
-  grid?: IGrid;
-  height?: number | string;
-  margin?: IMargin;
-  tip?: any;
+  grid: IGrid;
+  height: number | string;
+  margin: IMargin;
+  tip: any;
   tipContainer?: string;
-  tipContentFn?: TipContentFn<{ x: string | number, y: string | number }>;
-  visible?: { [key: string]: boolean };
-  width?: number | string;
+  tipContentFn: TipContentFn<{ x: string | number, y: string | number }>;
+  visible: { [key: string]: boolean };
+  width: number | string;
 }
 
-class LineChart extends React.Component<ILineChartProps, IState> {
+class LineChart extends React.Component<DeepPartial<ILineChartProps>, IState> {
 
-  private chart;
-  private ref;
+  private chart: IChartAdaptor<ILineChartProps>;
+  private ref: HTMLDivElement | null = null;
 
-  constructor(props: ILineChartProps) {
+  constructor(props: DeepPartial<ILineChartProps>) {
     super(props);
     this.chart = lineChartD3();
     this.state = {
@@ -77,17 +82,24 @@ class LineChart extends React.Component<ILineChartProps, IState> {
   }
 
   private handleResize() {
-    const elem = this.getDOMNode();
+    const el = this.getDOMNode();
+    if (!el) {
+      return;
+    }
     const width = (this.ref && this.ref.offsetWidth) ? this.ref.offsetWidth : 0;
 
     this.setState({
       parentWidth: width,
-    }, () => this.chart.create(elem, this.getChartState()));
+    }, () => this.chart.create(el, this.getChartState()));
 
   }
 
   public componentDidMount() {
-    this.chart.create(this.getDOMNode(), this.getChartState());
+    const el = this.getDOMNode();
+    if (!el) {
+      return;
+    }
+    this.chart.create(el, this.getChartState());
     if (this.props.width === '100%') {
       window.addEventListener('resize', (e) => this.handleResize());
       this.handleResize();
@@ -95,7 +107,11 @@ class LineChart extends React.Component<ILineChartProps, IState> {
   }
 
   public componentDidUpdate() {
-    this.chart.update(this.getDOMNode(), this.getChartState());
+    const el = this.getDOMNode();
+    if (!el) {
+      return;
+    }
+    this.chart.update(el, this.getChartState());
   }
 
   /**
@@ -103,14 +119,14 @@ class LineChart extends React.Component<ILineChartProps, IState> {
    * to the props, then render this data. Otherwise generate
    * a random normal dist
    */
-  public getChartState(): ILineChartProps {
+  public getChartState(): DeepPartial<ILineChartProps> {
     let { width } = this.props;
     const { children, ...rest } = this.props;
 
     if (width === '100%') {
       width = this.state.parentWidth || 300;
     }
-
+    console.log('get chart state, width', width, this.state.parentWidth);
     return {
       ...rest,
       width,
@@ -121,11 +137,19 @@ class LineChart extends React.Component<ILineChartProps, IState> {
     if (this.props.width === '100%') {
       window.removeEventListener('resize', this.handleResize);
     }
-    this.chart.destroy(this.getDOMNode());
+    const el = this.getDOMNode();
+    if (!el) {
+      return;
+    }
+    this.chart.destroy(el);
   }
 
-  public getDOMNode() {
-    return ReactDOM.findDOMNode(this.ref);
+  private getDOMNode(): Element | undefined {
+    const node = ReactDOM.findDOMNode(this.ref);
+    if (node instanceof HTMLElement) {
+      return node;
+    }
+    return undefined;
   }
 
   public render(): JSX.Element {

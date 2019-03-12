@@ -62,12 +62,12 @@ export default {
     rules,
   },
   output: {
+    path: path.join(__dirname, 'dist'),
+    publicPath: '/',
     filename: 'index.js',
     library: libraryName,
     libraryTarget: 'umd',
-    path: path.join(__dirname, 'dist'),
-    publicPath: '/',
-    umdNamedDefine: true,
+    umdNamedDefine: true
   },
   plugins,
   resolve: {

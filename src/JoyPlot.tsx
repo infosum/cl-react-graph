@@ -1,6 +1,5 @@
-import { rgb } from 'd3-color';
-import * as React from 'react';
-import * as ReactDOM from 'react-dom';
+import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 
 import {
   IAxes,
@@ -15,88 +14,40 @@ import {
   TipContentFn,
 } from './Histogram';
 import { joyPlotD3 } from './JoyplotD3';
-import {
-  axis as defaultAxis,
-  lineStyle,
-  stroke,
-} from './utils/defaults';
+import { DeepPartial } from './utils/types';
 
 export interface IJoyPlotProps {
-  axis?: IAxes;
-  bar?: IHistogramBar;
-  className?: string;
+  axis: IAxes;
+  bar: IHistogramBar;
+  className: string;
   data: IHistogramData[];
-  delay?: number;
-  duration?: number;
-  colorScheme?: string[];
-  domain?: IDomain;
-  grid?: IGrid;
+  delay: number;
+  duration: number;
+  colorScheme: string[];
+  domain: IDomain;
+  grid: IGrid;
   height: number;
-  margin?: IMargin;
-  stroke?: IStroke;
-  tip?: any;
-  tipContainer?: string;
-  tipContentFn?: TipContentFn<string>;
-  visible?: { [key: string]: boolean };
+  margin: IMargin;
+  stroke: IStroke;
+  tip: any;
+  tipContainer: string;
+  tipContentFn: TipContentFn<string>;
+  visible: { [key: string]: boolean };
   width: number | string;
 }
 
 /**
- * Histogram component
+ * JoyPlot component
  */
-class Histogram extends React.Component<IJoyPlotProps, IChartState> {
+class JoyPlot extends Component<DeepPartial<IJoyPlotProps>, IChartState> {
 
-  private chart: IChartAdaptor;
-  private ref;
-
-  public static defaultProps: Partial<IJoyPlotProps> = {
-    axis: defaultAxis,
-    bar: {
-      margin: 0,
-      width: 10,
-    },
-    grid: {
-      x: {
-        style: {
-          ...lineStyle,
-          'fill': 'none',
-          'stroke': '#bbb',
-          'stroke-opacity': 0.7,
-          'stroke-width': 1,
-        },
-        ticks: 5,
-        visible: true,
-      },
-      y: {
-        style: {
-          ...lineStyle,
-          'fill': 'none',
-          'stroke': '#bbb',
-          'stroke-opacity': 0.7,
-          'stroke-width': 1,
-        },
-        ticks: 5,
-        visible: true,
-      },
-    },
-    height: 200,
-    margin: {
-      left: 5,
-      top: 5,
-    },
-    stroke: {
-      ...stroke,
-      color: (d, i, colors) => rgb(colors(i)).darker(1).toString(),
-      width: 1,
-    },
-    width: '100%',
-  };
+  private chart: IChartAdaptor<IJoyPlotProps>;
+  private ref: HTMLDivElement | null = null;
 
   /**
    * Constructor
-   * @param {Object} props
    */
-  constructor(props: IJoyPlotProps) {
+  constructor(props: DeepPartial<IJoyPlotProps>) {
     super(props);
     this.chart = joyPlotD3();
     this.state = {
@@ -108,19 +59,26 @@ class Histogram extends React.Component<IJoyPlotProps, IChartState> {
    * Handle the page resize
    */
   private handleResize() {
-    const elem = this.getDOMNode();
+    const el = this.getDOMNode();
+    if (!el) {
+      return;
+    }
     const width = (this.ref && this.ref.offsetWidth) ? this.ref.offsetWidth : 0;
 
     this.setState({
       parentWidth: width,
-    }, () => this.chart.create(elem, this.getChartState()));
+    }, () => this.chart.create(el, this.getChartState()));
   }
 
   /**
    * Component mounted
    */
   public componentDidMount() {
-    this.chart.create(this.getDOMNode(), this.getChartState());
+    const el = this.getDOMNode();
+    if (!el) {
+      return;
+    }
+    this.chart.create(el, this.getChartState());
     if (this.props.width === '100%') {
       window.addEventListener('resize', (e) => this.handleResize());
       this.handleResize();
@@ -131,14 +89,17 @@ class Histogram extends React.Component<IJoyPlotProps, IChartState> {
    * Component updated
    */
   public componentDidUpdate() {
-    this.chart.update(this.getDOMNode(), this.getChartState());
+    const el = this.getDOMNode();
+    if (!el) {
+      return;
+    }
+    this.chart.update(el, this.getChartState());
   }
 
   /**
    * Get the chart state
-   * @return {Object} ChartState
    */
-  public getChartState(): IJoyPlotProps {
+  public getChartState(): DeepPartial<IJoyPlotProps> {
     let { width } = this.props;
     const { children, ...rest } = this.props;
     if (width === '100%') {
@@ -155,27 +116,33 @@ class Histogram extends React.Component<IJoyPlotProps, IChartState> {
    * any event listeners
    */
   public componentWillUnmount() {
+    const el = this.getDOMNode();
+    if (!el) {
+      return;
+    }
     if (this.props.width === '100%') {
       window.removeEventListener('resize', this.handleResize);
     }
-    this.chart.destroy(this.getDOMNode());
+    this.chart.destroy(el);
   }
 
   /**
    * Get the chart's dom node
-   * @return {Element} dom noe
    */
-  private getDOMNode() {
-    return ReactDOM.findDOMNode(this.ref);
+  private getDOMNode(): Element | undefined {
+    const node = ReactDOM.findDOMNode(this.ref);
+    if (node instanceof HTMLElement) {
+      return node;
+    }
+    return undefined;
   }
 
   /**
    * Render
-   * @return {Dom} node
    */
   public render(): JSX.Element {
     return (<div ref={(ref) => this.ref = ref} className="histogram-chart-container"></div>);
   }
 }
 
-export default Histogram;
+export default JoyPlot;

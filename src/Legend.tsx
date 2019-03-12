@@ -1,5 +1,5 @@
 import { scaleOrdinal } from 'd3-scale';
-import * as React from 'react';
+import React, { FC } from 'react';
 
 import colorScheme from './colors';
 import { IHistogramDataSet } from './Histogram';
@@ -27,7 +27,7 @@ const listStyle = {
   listStyle: 'none',
 };
 
-const Legend: React.SFC<IProps> = ({ className, theme = colorScheme, data, onSelect, visible }) => {
+const Legend: FC<IProps> = ({ className, theme = colorScheme, data, onSelect, visible }) => {
   const scheme: any = scaleOrdinal(theme);
   const labels = data.bins;
   return (

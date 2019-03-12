@@ -35,7 +35,8 @@ const JoyPlotExample = () => {
                 <JoyPlot
                   data={[data2, data3]}
                   colorScheme={['rgba(0, 0, 0, 0.5)', '#666']}
-                  width={400} height={400} />
+                  width={400} 
+                  height={400} />
               </CardContent>
             </Card>
           </Grid>

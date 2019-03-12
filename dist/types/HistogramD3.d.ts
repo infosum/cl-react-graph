@@ -1,2 +1,3 @@
-import { IChartAdaptor } from './Histogram';
-export declare const histogramD3: () => IChartAdaptor;
+import { IAxis, IChartAdaptor, IHistogramProps } from './Histogram';
+export declare const formatTickTime: (axis: IAxis) => (v: string | number) => string;
+export declare const histogramD3: () => IChartAdaptor<IHistogramProps>;

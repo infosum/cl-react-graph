@@ -1,8 +1,9 @@
 import { Component } from 'react';
 import { IChartState, IHistogramDataSet, IMargin, TipContentFn } from './Histogram';
+import { DeepPartial } from './utils/types';
 interface ILabels {
     display: boolean;
-    displayFn?: (d: any, ix: number) => string | number;
+    displayFn: (d: any, ix: number) => string | number;
 }
 export interface IPieDataItem {
     count: number;
@@ -14,32 +15,59 @@ export interface IPieChartProps {
         bins: string[];
         counts: IHistogramDataSet[];
     };
-    backgroundColor?: string;
-    className?: string;
-    colorScheme?: string[];
-    donutWidth?: number;
+    backgroundColor: string;
+    className: string;
+    colorScheme: string[];
+    donutWidth: number;
     height: number;
-    labels?: ILabels;
-    margin?: IMargin;
-    tip?: any;
-    tipContainer?: string;
-    tipContentFn?: TipContentFn<string>;
-    visible?: {
+    labels: ILabels;
+    margin: IMargin;
+    tip: any;
+    tipContainer: string;
+    tipContentFn: TipContentFn<string>;
+    visible: {
         [key: string]: boolean;
     };
     width: number | string;
 }
-declare class PieChart extends Component<IPieChartProps, IChartState> {
+/**
+ * PieChart component
+ */
+declare class PieChart extends Component<DeepPartial<IPieChartProps>, IChartState> {
     private chart;
     private ref;
-    static defaultProps: Partial<IPieChartProps>;
-    constructor(props: IPieChartProps);
+    /**
+     * Constructor
+     */
+    constructor(props: DeepPartial<IPieChartProps>);
+    /**
+     * Handle the page resize
+     */
     private handleResize;
+    /**
+     * Component mounted
+     */
     componentDidMount(): void;
+    /**
+     * Component updated
+     */
     componentDidUpdate(): void;
-    getChartState(): IPieChartProps;
+    /**
+     * Get the chart state
+     */
+    getChartState(): DeepPartial<IPieChartProps>;
+    /**
+     * Component will un mount, remove the chart and
+     * any event listeners
+     */
     componentWillUnmount(): void;
+    /**
+     * Get the chart's dom node
+     */
     private getDOMNode;
+    /**
+     * Render
+     */
     render(): JSX.Element;
 }
 export default PieChart;

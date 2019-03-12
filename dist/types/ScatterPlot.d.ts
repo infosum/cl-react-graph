@@ -1,31 +1,25 @@
 import { Component } from 'react';
-interface IChartState {
-    choices: string[];
-    data: any[];
-    height: number;
-    distModels: string[];
-    split: string;
-    parentWidth: number;
-    width: number | string;
-}
-export declare type ScatterPlotData = any[];
+import { IChartState } from './Histogram';
+import { DeepPartial } from './utils/types';
 export interface IScatterPlotProps {
-    choices?: any[];
-    className?: string;
-    chartSize?: number;
-    data: ScatterPlotData;
-    delay?: number;
-    distModels?: string[];
-    duration?: number;
+    choices: string[];
+    className: string;
+    data: {
+        keys: string[];
+        values: any[];
+    };
+    delay: number;
+    distModels: string[];
+    duration: number;
     height: number;
-    legendWidth?: number;
-    colorScheme?: string[];
-    padding?: number;
-    radius?: number;
-    split?: string;
+    legendWidth: number;
+    colorScheme: string[];
+    padding: number;
+    radius: number;
+    split: string;
     width: string | number;
 }
-declare class ScatterPlot extends Component<IScatterPlotProps, IChartState> {
+declare class ScatterPlot extends Component<DeepPartial<IScatterPlotProps>, IChartState> {
     private chart;
     private ref;
     static defaultProps: {
@@ -37,7 +31,7 @@ declare class ScatterPlot extends Component<IScatterPlotProps, IChartState> {
     componentDidMount(): void;
     componentDidUpdate(): void;
     private getChartState;
-    componentWillReceiveProps(props: IScatterPlotProps): void;
+    componentWillReceiveProps(props: DeepPartial<IScatterPlotProps>): void;
     componentWillUnmount(): void;
     private getDOMNode;
     render(): JSX.Element;

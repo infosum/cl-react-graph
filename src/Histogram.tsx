@@ -1,38 +1,32 @@
-import { rgb } from 'd3-color';
-import * as React from 'react';
-import * as ReactDOM from 'react-dom';
+import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 
 import { histogramD3 } from './HistogramD3';
-import {
-  axis as defaultAxis,
-  lineStyle,
-  stroke,
-} from './utils/defaults';
-import Omit from './utils/types';
+import { DeepPartial } from './utils/types';
 
-export interface IChartAdaptor {
-  create: (el: Element | Text, props: { [key: string]: any }) => void;
-  update: (el: Element | Text, props: { [key: string]: any }) => void;
-  destroy: (el: Element | Text) => void;
+export interface IChartAdaptor<P> {
+  create: (el: Element, props: DeepPartial<P>) => void;
+  update: (el: Element, props: DeepPartial<P>) => void;
+  destroy: (el: Element) => void;
 }
 
 export interface IHistogramBar {
-  groupMargin?: number;
-  margin?: number;
-  width?: number;
+  groupMargin: number;
+  margin: number;
+  width: number;
 }
 
 export interface IGrid {
-  x?: {
-    height?: number;
-    ticks?: number;
-    visible?: boolean;
-    style?: ISVGLineStyle;
+  x: {
+    height: number;
+    ticks: number;
+    visible: boolean;
+    style: ISVGLineStyle;
   };
-  y?: {
-    style?: ISVGLineStyle;
-    ticks?: number;
-    visible?: boolean;
+  y: {
+    style: ISVGLineStyle;
+    ticks: number;
+    visible: boolean;
   };
 }
 
@@ -62,33 +56,33 @@ export interface IHistogramData {
 }
 
 export interface IDomain {
-  max: number;
-  min: number;
+  max: number | null;
+  min: number | null;
 }
 
 export interface IMargin {
-  top?: number;
-  left?: number;
-  right?: number;
-  bottom?: number;
+  top: number;
+  left: number;
+  right: number;
+  bottom: number;
 }
 export interface IHistogramProps {
   axis: IAxes;
-  bar?: IHistogramBar;
-  className?: string;
+  bar: IHistogramBar;
+  className: string;
   data: IHistogramData;
-  delay?: number;
-  duration?: number;
-  colorScheme?: string[];
-  domain?: IDomain;
-  grid?: IGrid;
+  delay: number;
+  duration: number;
+  colorScheme: string[];
+  domain: IDomain;
+  grid: IGrid;
   height: number;
-  margin?: IMargin;
-  stroke?: IStroke;
-  tip?: any;
-  tipContainer?: string;
-  tipContentFn?: TipContentFn<string>;
-  visible?: { [key: string]: boolean };
+  margin: IMargin;
+  stroke: IStroke;
+  tip: any;
+  tipContainer: string;
+  tipContentFn: TipContentFn<string>;
+  visible: { [key: string]: boolean };
   width: number | string;
 }
 
@@ -118,7 +112,6 @@ interface ISVGTextStyle {
 export interface IChartState {
   parentWidth?: number;
 }
-
 export interface IAxis {
   dateFormat: string;
   numberFormat: string;
@@ -142,60 +135,15 @@ export type TipContentFn<T> = (bins: T[], i: number, d: number, groupTitle?: str
 /**
  * Histogram component
  */
-class Histogram extends React.Component<IHistogramProps, IChartState> {
+class Histogram extends Component<DeepPartial<IHistogramProps>, IChartState> {
 
-  private chart: IChartAdaptor;
-  private ref;
-
-  public static defaultProps: Omit<IHistogramProps, 'data'> = {
-    axis: defaultAxis,
-    bar: {
-      margin: 0,
-      width: 10,
-    },
-    grid: {
-      x: {
-        style: {
-          ...lineStyle,
-          'fill': 'none',
-          'stroke': '#bbb',
-          'stroke-opacity': 0.7,
-          'stroke-width': 1,
-        },
-        ticks: 5,
-        visible: true,
-      },
-      y: {
-        style: {
-          ...lineStyle,
-          'fill': 'none',
-          'stroke': '#bbb',
-          'stroke-opacity': 0.7,
-          'stroke-width': 1,
-        },
-        ticks: 5,
-        visible: true,
-      },
-    },
-    height: 200,
-    margin: {
-      left: 5,
-      top: 5,
-    },
-    stroke: {
-      ...stroke,
-      color: (d, i, colors) => rgb(colors(i)).darker(1).toString(),
-    },
-    tipContentFn: (bins: string[], i, d) =>
-      bins[i] + '<br />' + d.toFixed(2),
-    visible: {},
-    width: '100%',
-  };
+  private chart: IChartAdaptor<IHistogramProps>;
+  private ref: HTMLDivElement | null = null;
 
   /**
    * Constructor
    */
-  constructor(props: IHistogramProps) {
+  constructor(props: DeepPartial<IHistogramProps>) {
     super(props);
     this.chart = histogramD3();
     this.state = {
@@ -207,19 +155,26 @@ class Histogram extends React.Component<IHistogramProps, IChartState> {
    * Handle the page resize
    */
   private handleResize() {
-    const elem = this.getDOMNode();
+    const el = this.getDOMNode();
+    if (!el) {
+      return;
+    }
     const width = (this.ref && this.ref.offsetWidth) ? this.ref.offsetWidth : 0;
 
     this.setState({
       parentWidth: width,
-    }, () => this.chart.create(elem, this.getChartState()));
+    }, () => this.chart.create(el, this.getChartState()));
   }
 
   /**
    * Component mounted
    */
   public componentDidMount() {
-    this.chart.create(this.getDOMNode(), this.getChartState());
+    const el = this.getDOMNode();
+    if (!el) {
+      return;
+    }
+    this.chart.create(el, this.getChartState());
     if (this.props.width === '100%') {
       window.addEventListener('resize', (e) => this.handleResize());
       this.handleResize();
@@ -230,13 +185,17 @@ class Histogram extends React.Component<IHistogramProps, IChartState> {
    * Component updated
    */
   public componentDidUpdate() {
-    this.chart.update(this.getDOMNode(), this.getChartState());
+    const el = this.getDOMNode();
+    if (!el) {
+      return;
+    }
+    this.chart.update(el, this.getChartState());
   }
 
   /**
    * Get the chart state
    */
-  public getChartState(): IHistogramProps {
+  public getChartState(): DeepPartial<IHistogramProps> {
     let { width } = this.props;
     const { children, ...rest } = this.props;
     if (width === '100%') {
@@ -254,17 +213,25 @@ class Histogram extends React.Component<IHistogramProps, IChartState> {
    * any event listeners
    */
   public componentWillUnmount() {
+    const el = this.getDOMNode();
+    if (!el) {
+      return;
+    }
     if (this.props.width === '100%') {
       window.removeEventListener('resize', this.handleResize);
     }
-    this.chart.destroy(this.getDOMNode());
+    this.chart.destroy(el);
   }
 
   /**
    * Get the chart's dom node
    */
-  private getDOMNode() {
-    return ReactDOM.findDOMNode(this.ref);
+  private getDOMNode(): Element | undefined {
+    const node = ReactDOM.findDOMNode(this.ref);
+    if (node instanceof HTMLElement) {
+      return node;
+    }
+    return undefined;
   }
 
   /**

@@ -1,5 +1,5 @@
-import * as React from 'react';
-import * as ReactDOM from 'react-dom';
+import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 
 import {
   IChartAdaptor,
@@ -9,10 +9,11 @@ import {
   TipContentFn,
 } from './Histogram';
 import { pieChartD3 } from './PieChartD3';
+import { DeepPartial } from './utils/types';
 
 interface ILabels {
   display: boolean;
-  displayFn?: (d: any, ix: number) => string | number;
+  displayFn: (d: any, ix: number) => string | number;
 }
 
 export interface IPieDataItem {
@@ -26,43 +27,32 @@ export interface IPieChartProps {
     bins: string[],
     counts: IHistogramDataSet[];
   };
-  backgroundColor?: string;
-  className?: string;
-  colorScheme?: string[];
-  donutWidth?: number;
+  backgroundColor: string;
+  className: string;
+  colorScheme: string[];
+  donutWidth: number;
   height: number;
-  labels?: ILabels;
-  margin?: IMargin;
-  tip?: any;
-  tipContainer?: string;
-  tipContentFn?: TipContentFn<string>;
-  visible?: { [key: string]: boolean };
+  labels: ILabels;
+  margin: IMargin;
+  tip: any;
+  tipContainer: string;
+  tipContentFn: TipContentFn<string>;
+  visible: { [key: string]: boolean };
   width: number | string;
 }
 
 /**
  * PieChart component
  */
-class PieChart extends React.Component<IPieChartProps, IChartState> {
+class PieChart extends Component<DeepPartial<IPieChartProps>, IChartState> {
 
-  private chart: IChartAdaptor;
-  private ref;
-
-  public static defaultProps: Partial<IPieChartProps> = {
-    backgroundColor: '#ddd',
-    donutWidth: 0,
-    height: 200,
-    margin: {
-      left: 5,
-      top: 5,
-    },
-  };
+  private chart: IChartAdaptor<IPieChartProps>;
+  private ref: HTMLDivElement | null = null;
 
   /**
    * Constructor
-   * @param {Object} props
    */
-  constructor(props: IPieChartProps) {
+  constructor(props: DeepPartial<IPieChartProps>) {
     super(props);
     this.chart = pieChartD3();
 
@@ -75,22 +65,27 @@ class PieChart extends React.Component<IPieChartProps, IChartState> {
    * Handle the page resize
    */
   private handleResize() {
-    const elem = this.getDOMNode();
-    const width = (this.ref && this.ref.offsetWidth) ? this.ref.offsetWidth : 0;
+    const el = this.getDOMNode();
+    if (el) {
+      const width = (this.ref && this.ref.offsetWidth) ? this.ref.offsetWidth : 0;
 
-    this.setState({
-      parentWidth: width,
-    }, () => this.chart.create(this.getDOMNode(), this.getChartState()));
+      this.setState({
+        parentWidth: width,
+      }, () => this.chart.create(el, this.getChartState()));
+    }
   }
 
   /**
    * Component mounted
    */
   public componentDidMount() {
-    this.chart.create(this.getDOMNode(), this.getChartState());
-    if (this.props.width === '100%') {
-      window.addEventListener('resize', (e) => this.handleResize());
-      this.handleResize();
+    const el = this.getDOMNode();
+    if (el) {
+      this.chart.create(el, this.getChartState());
+      if (this.props.width === '100%') {
+        window.addEventListener('resize', (e) => this.handleResize());
+        this.handleResize();
+      }
     }
   }
 
@@ -98,14 +93,16 @@ class PieChart extends React.Component<IPieChartProps, IChartState> {
    * Component updated
    */
   public componentDidUpdate() {
-    this.chart.update(this.getDOMNode(), this.getChartState());
+    const el = this.getDOMNode();
+    if (el) {
+      this.chart.update(el, this.getChartState());
+    }
   }
 
   /**
    * Get the chart state
-   * @return {Object} ChartState
    */
-  public getChartState(): IPieChartProps {
+  public getChartState(): DeepPartial<IPieChartProps> {
     let { width } = this.props;
     const { children, ...rest } = this.props;
     if (width === '100%') {
@@ -125,20 +122,25 @@ class PieChart extends React.Component<IPieChartProps, IChartState> {
     if (this.props.width === '100%') {
       window.removeEventListener('resize', this.handleResize);
     }
-    this.chart.destroy(this.getDOMNode());
+    const el = this.getDOMNode();
+    if (el) {
+      this.chart.destroy(el);
+    }
   }
 
   /**
    * Get the chart's dom node
-   * @return {Element} dom noe
    */
-  private getDOMNode() {
-    return ReactDOM.findDOMNode(this.ref);
+  private getDOMNode(): Element | undefined {
+    const node = ReactDOM.findDOMNode(this.ref);
+    if (node instanceof HTMLElement) {
+      return node;
+    }
+    return undefined;
   }
 
   /**
    * Render
-   * @return {Dom} node
    */
   public render(): JSX.Element {
     return (<div ref={(ref) => this.ref = ref} className="piechart-chart-container"></div>);

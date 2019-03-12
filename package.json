@@ -1,11 +1,11 @@
 {
   "name": "cl-react-graph",
-  "version": "1.6.31",
+  "version": "1.6.33",
   "description": "React D3 Charts",
   "main": "./dist/index.js",
   "types": "./dist/types/index.d.ts",
   "scripts": {
-    "build": "export NODE_ENV=production|| set NODE_ENV=production && TS_NODE_PROJECT=\"tsconfig-for-webpack.json\" webpack",
+    "build": "export NODE_ENV=production|| set NODE_ENV=production && TS_NODE_PROJECT=\"tsconfig.json\" webpack",
     "test": "istanbul cover _mocha --recursive -x '**/*.spec.js' -x '**/config/**' -x '**/node_modules/**' -g './{,!(node_modules)/**/}*.spec.js'"
   },
   "repository": {
@@ -34,6 +34,7 @@
     "@types/react": "*",
     "@types/react-dom": "*",
     "@types/webpack": "^4.4.21",
+    "@types/webpack-bundle-analyzer": "^2.13.1",
     "babel-core": "^6.26.3",
     "babel-eslint": "^10.0.1",
     "babel-loader": "^8.0.5",
@@ -61,7 +62,6 @@
     "react-dom": "*"
   },
   "dependencies": {
-    "@types/geojson": "^7946.0.6",
     "color": "^3.0.0",
     "d3-array": "^2.0.3",
     "d3-axis": "^1.0.8",
@@ -79,6 +79,7 @@
     "deepmerge": "^3.2.0",
     "geojson": "^0.5.0",
     "lodash.get": "^4.4.2",
+    "lodash.merge": "^4.6.1",
     "text-width": "^1.2.0"
   }
 }

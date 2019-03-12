@@ -1,20 +1,24 @@
 {
     "compilerOptions": {
-        "allowJs": false,
         "allowSyntheticDefaultImports": true,
+        "skipLibCheck": false,
         "declaration": true,
-        "outDir": "./types",
-        "jsx": "react",
+        "jsx": "preserve",
         "module": "commonjs",
+        "moduleResolution": "node",
+        "esModuleInterop": true,
         "noImplicitAny": false,
-        "removeComments": true,
-        "sourceMap": true,
-        "strictNullChecks": false,
+        "strict": true,
+        "forceConsistentCasingInFileNames": true,
+        "resolveJsonModule": true,
+        "outDir": "./dist/types",
         "lib": [
-            "es6",
+            "es2015",
+            "es2016",
+            "es2017",
             "dom"
         ],
-        "target": "es5"
+        "target": "esnext",
     },
     "include": [
         "node_modules/@types/**/*.d.ts",

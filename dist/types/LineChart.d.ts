@@ -1,65 +1,74 @@
-import { Component } from 'react';
+import { CurveFactory, CurveFactoryLineOnly } from 'd3-shape';
+import React from 'react';
 import { IAxes, IGrid, IMargin, ISVGLineStyle, TipContentFn } from './Histogram';
+import { DeepPartial } from './utils/types';
 interface IState {
     parentWidth?: number;
 }
 export declare type IChartPointValue = number | string | Date | object;
-export interface IChartPoint<X extends IChartPointValue = Date, Y extends IChartPointValue = number> {
+export interface IChartPoint<X extends IChartPointValue = Date | number, Y extends IChartPointValue = number> {
     x: X;
     y: Y;
 }
-export interface ILineChartDataSet<T extends IChartPoint<IChartPointValue, IChartPointValue> = IChartPoint> {
+export interface ILineProps {
+    show: boolean;
+    fill: {
+        show: boolean;
+        fill: string;
+    };
+    curveType: CurveFactory | CurveFactoryLineOnly;
+    stroke: string;
+    strokeDashOffset: number;
+    strokeDashArray: string;
+}
+export interface ILineChartDataSet<T> {
     label: string;
-    point?: {
+    point: {
         radius: number;
         stroke: string;
         fill: string;
         show: boolean;
     };
-    line?: {
-        show: boolean;
-        fill?: {
-            show: boolean;
-            fill: string;
-        };
-        curveType?: any;
-        stroke?: string;
-        strokeDashOffset?: number;
-        strokeDashArray?: string;
-    };
+    line: ILineProps;
     data: T[];
 }
 export interface ISVGPoint extends ISVGLineStyle {
     radius?: 4;
+    show: boolean;
 }
-export interface ILineChartProps {
-    axis?: IAxes;
-    className?: string;
-    data?: ILineChartDataSet[];
-    fx?: (n: number) => number;
-    grid?: IGrid;
-    height?: number | string;
-    line?: any;
-    margin?: IMargin;
-    point?: ISVGPoint;
-    tip?: any;
+export interface ILineChartProps<T extends IChartPoint<IChartPointValue, IChartPointValue> = IChartPoint> {
+    axis: IAxes;
+    className: string;
+    data: Array<ILineChartDataSet<T>>;
+    grid: IGrid;
+    height: number | string;
+    margin: IMargin;
+    tip: any;
     tipContainer?: string;
-    tipContentFn?: TipContentFn<{
+    tipContentFn: TipContentFn<{
         x: string | number;
         y: string | number;
     }>;
-    width?: number | string;
+    visible: {
+        [key: string]: boolean;
+    };
+    width: number | string;
 }
-declare class LineChart extends Component<ILineChartProps, IState> {
+declare class LineChart extends React.Component<DeepPartial<ILineChartProps>, IState> {
     private chart;
     private ref;
-    constructor(props: ILineChartProps);
+    constructor(props: DeepPartial<ILineChartProps>);
     private handleResize;
     componentDidMount(): void;
     componentDidUpdate(): void;
-    getChartState(): ILineChartProps;
+    /**
+     * Get the chart state. If a histogram has been assigned
+     * to the props, then render this data. Otherwise generate
+     * a random normal dist
+     */
+    getChartState(): DeepPartial<ILineChartProps>;
     componentWillUnmount(): void;
-    getDOMNode(): Element | Text;
+    private getDOMNode;
     render(): JSX.Element;
 }
 export default LineChart;

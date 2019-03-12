@@ -1,5 +1,4 @@
 import { json } from 'd3-request';
-import { Link } from 'gatsby';
 import { FeatureCollection } from 'geojson';
 import React, {
   useEffect,
@@ -30,7 +29,6 @@ const MapExample = () => {
     <Layout>
       <SEO title="Histogram" description="" />
       <h1>Map</h1>
-      <Link to="/">Go back to the homepage</Link>
       <div>
         <Map
           data={data}

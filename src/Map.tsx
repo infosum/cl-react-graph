@@ -1,15 +1,16 @@
 import { FeatureCollection } from 'geojson';
-import * as React from 'react';
-import * as ReactDOM from 'react-dom';
+import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 
 import {
   IChartAdaptor,
   IChartState,
 } from './Histogram';
 import { mapD3 } from './MapD3';
+import { DeepPartial } from './utils/types';
 
 export interface IMapProps {
-  className?: string;
+  className: string;
   data: any;
   geojson: FeatureCollection<any, any>;
   height: number;
@@ -19,25 +20,15 @@ export interface IMapProps {
 /**
  * Map component
  */
-class Map extends React.Component<IMapProps, IChartState> {
+class Map extends Component<DeepPartial<IMapProps>, IChartState> {
 
-  private chart: IChartAdaptor;
-  private ref;
-
-  public static defaultProps: Partial<IMapProps> = {
-    geojson: {
-      features: [],
-      type: 'FeatureCollection',
-    },
-    height: 200,
-    width: '100%',
-  };
+  private chart: IChartAdaptor<IMapProps>;
+  private ref: HTMLDivElement | null = null;
 
   /**
    * Constructor
-   * @param {Object} props
    */
-  constructor(props: IMapProps) {
+  constructor(props: DeepPartial<IMapProps>) {
     super(props);
     this.chart = mapD3();
     this.state = {
@@ -49,19 +40,26 @@ class Map extends React.Component<IMapProps, IChartState> {
    * Handle the page resize
    */
   private handleResize() {
-    const elem = this.getDOMNode();
+    const el = this.getDOMNode();
+    if (!el) {
+      return;
+    }
     const width = (this.ref && this.ref.offsetWidth) ? this.ref.offsetWidth : 0;
 
     this.setState({
       parentWidth: width,
-    }, () => this.chart.create(elem, this.getChartState()));
+    }, () => this.chart.create(el, this.getChartState()));
   }
 
   /**
    * Component mounted
    */
   public componentDidMount() {
-    this.chart.create(this.getDOMNode(), this.getChartState());
+    const el = this.getDOMNode();
+    if (!el) {
+      return;
+    }
+    this.chart.create(el, this.getChartState());
     if (this.props.width === '100%') {
       window.addEventListener('resize', (e) => this.handleResize());
       this.handleResize();
@@ -72,14 +70,17 @@ class Map extends React.Component<IMapProps, IChartState> {
    * Component updated
    */
   public componentDidUpdate() {
-    this.chart.update(this.getDOMNode(), this.getChartState());
+    const el = this.getDOMNode();
+    if (!el) {
+      return;
+    }
+    this.chart.update(el, this.getChartState());
   }
 
   /**
    * Get the chart state
-   * @return {Object} ChartState
    */
-  public getChartState(): IMapProps {
+  public getChartState(): DeepPartial<IMapProps> {
     let { width } = this.props;
     const { children, ...rest } = this.props;
     if (width === '100%') {
@@ -97,23 +98,29 @@ class Map extends React.Component<IMapProps, IChartState> {
    * any event listeners
    */
   public componentWillUnmount() {
+    const el = this.getDOMNode();
+    if (!el) {
+      return;
+    }
     if (this.props.width === '100%') {
       window.removeEventListener('resize', this.handleResize);
     }
-    this.chart.destroy(this.getDOMNode());
+    this.chart.destroy(el);
   }
 
   /**
    * Get the chart's dom node
-   * @return {Element} dom noe
    */
-  private getDOMNode() {
-    return ReactDOM.findDOMNode(this.ref);
+  private getDOMNode(): Element | undefined {
+    const node = ReactDOM.findDOMNode(this.ref);
+    if (node instanceof HTMLElement) {
+      return node;
+    }
+    return undefined;
   }
 
   /**
    * Render
-   * @return {Dom} node
    */
   public render(): JSX.Element {
     return (<div ref={(ref) => this.ref = ref} className="map-chart-container"></div>);

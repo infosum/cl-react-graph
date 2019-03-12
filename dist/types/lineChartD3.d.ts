@@ -1,2 +1,3 @@
 import { IChartAdaptor } from './Histogram';
-export declare const lineChartD3: () => IChartAdaptor;
+import { ILineChartProps } from './LineChart';
+export declare const lineChartD3: () => IChartAdaptor<ILineChartProps<import("./LineChart").IChartPoint<number | Date, number>>>;

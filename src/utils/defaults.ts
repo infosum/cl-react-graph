@@ -4,7 +4,10 @@ import {
   IAxes,
   IStroke,
 } from '../';
-import { ISVGLineStyle } from '../Histogram';
+import {
+  IGrid,
+  ISVGLineStyle,
+} from '../Histogram';
 import { ILineProps } from '../LineChart';
 
 export const lineStyle: ISVGLineStyle = {
@@ -85,5 +88,31 @@ export const axis: IAxes = {
     ticks: 3,
     visible: true,
     width: 50,
+  },
+};
+
+export const grid: IGrid = {
+  x: {
+    height: 1,
+    style: {
+      ...lineStyle,
+      'fill': 'none',
+      'stroke': '#bbb',
+      'stroke-opacity': 0.7,
+      'stroke-width': 1,
+    },
+    ticks: 5,
+    visible: true,
+  },
+  y: {
+    style: {
+      ...lineStyle,
+      'fill': 'none',
+      'stroke': '#bbb',
+      'stroke-opacity': 0.7,
+      'stroke-width': 1,
+    },
+    ticks: 5,
+    visible: true,
   },
 };

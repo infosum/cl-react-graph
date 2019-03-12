@@ -2,17 +2,20 @@ import {
   geoMercator,
   geoPath,
 } from 'd3-geo';
-import { select } from 'd3-selection';
-import * as merge from 'deepmerge';
+import {
+  select,
+  Selection,
+} from 'd3-selection';
 import { FeatureCollection } from 'geojson';
+import merge from 'lodash.merge';
 
 import { IChartAdaptor } from './Histogram';
 import { IMapProps } from './Map';
+import { DeepPartial } from './utils/types';
 
-export const mapD3 = ((): IChartAdaptor => {
-  let svg;
+export const mapD3 = ((): IChartAdaptor<IMapProps> => {
 
-  const defaultProps: IMapProps = {
+  const props: IMapProps = {
     className: 'map-d3',
     data: [],
     geojson: {
@@ -23,33 +26,33 @@ export const mapD3 = ((): IChartAdaptor => {
     width: 200,
   };
 
+  let svg: Selection<any, any, any, any>;
+  let container: Selection<SVGElement, any, any, any>;
+
   const MapD3 = {
     /**
      * Initialization
-     * @param {Node} el Target DOM node
-     * @param {Object} props Chart properties
      */
-    create(el: HTMLElement, props: Partial<IMapProps> = {}) {
-      this.mergeProps(props);
+    create(el: Element, newProps: DeepPartial<IMapProps> = {}) {
+      this.mergeProps(newProps);
       this._makeSvg(el);
-      this.container = svg
-        .append('g')
+      container = svg
+        .append<SVGElement>('g')
         .attr('class', 'histogram-container');
 
       this.update(el, props);
     },
 
-    mergeProps(newProps: Partial<IMapProps>) {
-      this.props = merge<IMapProps>(defaultProps, newProps);
-      this.props.data = newProps.data;
+    mergeProps(newProps: DeepPartial<IMapProps>) {
+      merge(props, newProps);
+      props.data = newProps.data;
     },
 
     /**
      * Make the SVG container element
      * Recreate if it previously existed
-     * @param {Dom} el Dom container node
      */
-    _makeSvg(el) {
+    _makeSvg(el: Element) {
       if (svg) {
         svg.selectAll('svg > *').remove();
         svg.remove();
@@ -58,7 +61,7 @@ export const mapD3 = ((): IChartAdaptor => {
           el.removeChild(childNodes[0]);
         }
       }
-      const { width, height, className } = this.props;
+      const { width, height, className } = props;
 
       // Reference to svg element containing chart
       svg = select(el).append('svg')
@@ -77,11 +80,11 @@ export const mapD3 = ((): IChartAdaptor => {
       geojson: FeatureCollection<any, any>,
     ) {
 
-      const { width, height } = this.props;
+      const { width, height } = props;
       const zoom = 3;
       const projection = geoMercator()
-        .scale((width / 2 / Math.PI) * zoom)
-        .translate([(width / 2), (height / 2)]);
+        .scale((Number(width) / 2 / Math.PI) * zoom)
+        .translate([(Number(width) / 2), (height / 2)]);
 
       const geoGenerator = geoPath()
         .projection(projection);
@@ -91,7 +94,7 @@ export const mapD3 = ((): IChartAdaptor => {
       // .data(groupData);
 
       // Join the FeatureCollection's features array to path elements
-      const u = this.container
+      const u = container
         .selectAll('path')
         .data(geojson.features);
 
@@ -103,23 +106,20 @@ export const mapD3 = ((): IChartAdaptor => {
 
     /**
      * Update chart
-     * @param {HTMLElement} el Chart element
-     * @param {Object} props Chart props
      */
-    update(el: HTMLElement, props: IMapProps) {
+    update(el: Element, newProps: DeepPartial<IMapProps>) {
       if (!props.data) {
         return;
       }
-      this.mergeProps(props);
-      const { data, geojson } = this.props;
+      this.mergeProps(newProps);
+      const { data, geojson } = props;
       this.updateChart(data, geojson);
     },
 
     /**
      * Any necessary clean up
-     * @param {Element} el To remove
      */
-    destroy(el: HTMLElement) {
+    destroy(el: Element) {
       svg.selectAll('svg > *').remove();
     },
   };
