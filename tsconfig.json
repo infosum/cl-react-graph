@@ -3,7 +3,7 @@
         "allowSyntheticDefaultImports": true,
         "skipLibCheck": false,
         "declaration": true,
-        "jsx": "preserve",
+        "jsx": "react",
         "module": "commonjs",
         "moduleResolution": "node",
         "esModuleInterop": true,
@@ -18,7 +18,7 @@
             "es2017",
             "dom"
         ],
-        "target": "esnext",
+        "target": "es5",
     },
     "include": [
         "node_modules/@types/**/*.d.ts",
