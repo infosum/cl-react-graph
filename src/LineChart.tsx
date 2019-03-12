@@ -14,6 +14,7 @@ import {
   TipContentFn,
 } from './Histogram';
 import { lineChartD3 } from './lineChartD3';
+import { DeepPartial } from './utils/types';
 
 interface IState {
   parentWidth?: number;
@@ -67,12 +68,12 @@ export interface ILineChartProps<T extends IChartPoint<IChartPointValue, IChartP
   width: number | string;
 }
 
-class LineChart extends React.Component<ILineChartProps, IState> {
+class LineChart extends React.Component<DeepPartial<ILineChartProps>, IState> {
 
   private chart: IChartAdaptor<ILineChartProps>;
   private ref: HTMLDivElement | null = null;
 
-  constructor(props: ILineChartProps) {
+  constructor(props: DeepPartial<ILineChartProps>) {
     super(props);
     this.chart = lineChartD3();
     this.state = {
@@ -118,14 +119,14 @@ class LineChart extends React.Component<ILineChartProps, IState> {
    * to the props, then render this data. Otherwise generate
    * a random normal dist
    */
-  public getChartState(): ILineChartProps {
+  public getChartState(): DeepPartial<ILineChartProps> {
     let { width } = this.props;
     const { children, ...rest } = this.props;
 
     if (width === '100%') {
       width = this.state.parentWidth || 300;
     }
-
+    console.log('get chart state, width', width, this.state.parentWidth);
     return {
       ...rest,
       width,

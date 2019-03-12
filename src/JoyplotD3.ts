@@ -13,8 +13,8 @@ import {
   select,
   Selection,
 } from 'd3-selection';
-import merge from 'deepmerge';
 import get from 'lodash.get';
+import merge from 'lodash.merge';
 
 import colorScheme from './colors';
 import attrs from './d3/attrs';
@@ -29,6 +29,7 @@ import {
   axis as defaultAxis,
   grid as defaultGrid,
 } from './utils/defaults';
+import { DeepPartial } from './utils/types';
 
 interface IGroupDataItem {
   label: string;
@@ -41,7 +42,6 @@ export const joyPlotD3 = ((): IChartAdaptor<IJoyPlotProps> => {
   let svg: Selection<any, any, any, any>;;
   let tipContainer;
   let tipContent;
-  let props: IJoyPlotProps;
   let dataSets: IGroupData[];
   let containers: Array<Selection<SVGGElement, any, any, any>>;
   let xAxisContainer: Selection<SVGGElement, any, any, any>;
@@ -65,7 +65,7 @@ export const joyPlotD3 = ((): IChartAdaptor<IJoyPlotProps> => {
       .ticks(ticks);
   }
 
-  const defaultProps: IJoyPlotProps = {
+  const props: IJoyPlotProps = {
     axis: defaultAxis,
     bar: {
       groupMargin: 0,
@@ -111,7 +111,7 @@ export const joyPlotD3 = ((): IChartAdaptor<IJoyPlotProps> => {
     /**
      * Initialization
      */
-    create(el: Element, newProps: Partial<IJoyPlotProps> = {}) {
+    create(el: Element, newProps: DeepPartial<IJoyPlotProps> = {}) {
       this.mergeProps(newProps);
       this._makeSvg(el);
       this.makeGrid();
@@ -124,10 +124,10 @@ export const joyPlotD3 = ((): IChartAdaptor<IJoyPlotProps> => {
       this.update(el, props);
     },
 
-    mergeProps(newProps: Partial<IJoyPlotProps>) {
-      props = merge<IJoyPlotProps>(defaultProps, newProps);
+    mergeProps(newProps: DeepPartial<IJoyPlotProps>) {
+      merge(props, newProps);
       if (newProps.data) {
-        props.data = newProps.data;
+        props.data = newProps.data as IJoyPlotProps['data'];
       }
       if (newProps.colorScheme) {
         props.colorScheme = newProps.colorScheme;
@@ -165,8 +165,6 @@ export const joyPlotD3 = ((): IChartAdaptor<IJoyPlotProps> => {
 
     /**
      * Get a max count of values in each data set
-     * @param {Object} counts Histogram data set values
-     * @return {Number} count
      */
     valuesCount(counts: IHistogramDataSet[]): number {
       return counts.reduce((a: number, b: IHistogramDataSet): number => {
@@ -250,10 +248,9 @@ export const joyPlotD3 = ((): IChartAdaptor<IJoyPlotProps> => {
 
     /**
      * Draw scales
-     * @param {Object} data Chart data
      */
     _drawScales(data: IHistogramData[]) {
-      const { bar, domain, margin, width, height, axis } = props;
+      const { margin, height, axis } = props;
       const valuesCount = data.reduce((prev, next) => {
         const c = this.valuesCount(next.counts);
         return c > prev ? c : prev;
@@ -368,20 +365,14 @@ export const joyPlotD3 = ((): IChartAdaptor<IJoyPlotProps> => {
       groupData: IGroupData[],
     ) {
       const bins = this.getBins();
-      const { height, width, margin, bar, delay, duration,
-        axis, stroke, tip, tipContentFn } = props;
+      const { delay, duration, axis, stroke, tip, tipContentFn } = props;
       const barWidth = this.barWidth();
 
       const colors = scaleOrdinal(props.colorScheme);
       const borderColors = scaleOrdinal(['#FFF']);
 
       const yAxisWidth = this.yAxisWidth();
-      const groupedMargin = this.groupedMargin();
 
-      const maxItems = groupData.reduce((prev, next) => {
-        const thisMax = next.reduce((p, n) => n.length > p ? n.length : p, 0);
-        return thisMax > prev ? thisMax : prev;
-      }, 0);
       groupData.forEach((data, i) => {
         const joyTitle = props.data[i].title;
         const g = containers[i]
@@ -458,10 +449,9 @@ export const joyPlotD3 = ((): IChartAdaptor<IJoyPlotProps> => {
 
     /**
      * Draw a grid onto the chart background
-     * @param {Object} props Props
      */
     _drawGrid() {
-      const { data, height, width, axis, grid, margin, bar } = props;
+      const { data, height, width, axis, grid, margin } = props;
       const ticks = data.reduce((prev, next) => {
         const c = this.valuesCount(next.counts);
         return c > prev ? prev : c;
@@ -506,10 +496,7 @@ export const joyPlotD3 = ((): IChartAdaptor<IJoyPlotProps> => {
     /**
      * Update chart
      */
-    update(el: Element, newProps: Partial<IJoyPlotProps>) {
-      if (!props.data) {
-        return;
-      }
+    update(el: Element, newProps: DeepPartial<IJoyPlotProps>) {
       this.mergeProps(newProps);
       const { data, visible } = props;
 

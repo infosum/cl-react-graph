@@ -1,5 +1,4 @@
-import { rgb } from 'd3-color';
-import React from 'react';
+import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 
 import {
@@ -15,12 +14,7 @@ import {
   TipContentFn,
 } from './Histogram';
 import { joyPlotD3 } from './JoyplotD3';
-import {
-  axis as defaultAxis,
-  grid as gridDefault,
-  lineStyle,
-  stroke,
-} from './utils/defaults';
+import { DeepPartial } from './utils/types';
 
 export interface IJoyPlotProps {
   axis: IAxes;
@@ -45,38 +39,15 @@ export interface IJoyPlotProps {
 /**
  * JoyPlot component
  */
-class JoyPlot extends React.Component<IJoyPlotProps, IChartState> {
+class JoyPlot extends Component<DeepPartial<IJoyPlotProps>, IChartState> {
 
   private chart: IChartAdaptor<IJoyPlotProps>;
   private ref: HTMLDivElement | null = null;
 
-  public static defaultProps: Partial<IJoyPlotProps> = {
-    axis: defaultAxis,
-    bar: {
-      groupMargin: 0.1,
-      margin: 0,
-      width: 10,
-    },
-    grid: gridDefault,
-    height: 200,
-    margin: {
-      bottom: 0,
-      left: 5,
-      right: 0,
-      top: 5,
-    },
-    stroke: {
-      ...stroke,
-      color: (d, i, colors) => rgb(colors(i)).darker(1).toString(),
-      width: 1,
-    },
-    width: '100%',
-  };
-
   /**
    * Constructor
    */
-  constructor(props: IJoyPlotProps) {
+  constructor(props: DeepPartial<IJoyPlotProps>) {
     super(props);
     this.chart = joyPlotD3();
     this.state = {
@@ -128,7 +99,7 @@ class JoyPlot extends React.Component<IJoyPlotProps, IChartState> {
   /**
    * Get the chart state
    */
-  public getChartState(): IJoyPlotProps {
+  public getChartState(): DeepPartial<IJoyPlotProps> {
     let { width } = this.props;
     const { children, ...rest } = this.props;
     if (width === '100%') {

@@ -24,6 +24,7 @@ import Histogram, {
 } from '../../../src/Histogram';
 import Legend from '../../../src/Legend';
 import { axis as defaultAxis } from '../../../src/utils/defaults';
+import { DeepPartial } from '../../../src/utils/types';
 import { GridOptionsFactory } from '../components/GridOptions';
 import JSXToString from '../components/JSXToString';
 import Layout from '../components/layout';
@@ -35,14 +36,14 @@ import {
   theme,
 } from '../data';
 
-export const axis: IAxes = {
+export const axis: DeepPartial<IAxes> = {
   x: {
-    ...defaultAxis.x,
+    // ...defaultAxis.x,
     dateFormat: '%d-%b-%y',
     scale: 'TIME',
   },
   y: {
-    ...defaultAxis.y,
+    // ...defaultAxis.y,
     ticks: 3,
   },
 };
@@ -65,7 +66,7 @@ const dataLegendData = {
 };
 
 interface IInitialState {
-  axis: IAxes;
+  axis: DeepPartial<IAxes>;
   chartType: string;
   data: IHistogramData;
   delay: number;

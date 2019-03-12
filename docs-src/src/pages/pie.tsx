@@ -20,6 +20,7 @@ import Slider from '@material-ui/lab/Slider';
 
 import Legend from '../../../src/Legend';
 import PieChart, { IPieChartProps } from '../../../src/PieChart';
+import { DeepPartial } from '../../../src/utils/types';
 import JSXToString from '../components/JSXToString';
 import Layout from '../components/layout';
 import SEO from '../components/seo';
@@ -30,13 +31,12 @@ import {
 } from '../data';
 import { dataToSpreadSheet } from './histogram';
 
-const initialSate: IPieChartProps = {
+const initialSate: DeepPartial<IPieChartProps> = {
   data: data2,
   donutWidth: 0,
   height: 200,
   labels: {
     display: false,
-    // displayFn: () => null,
   },
   visible: {},
   width: '100%',
@@ -70,7 +70,7 @@ function reducer(state: IPieChartProps, action: Actions) {
 
 const PieExample = () => {
   const [tab, setTab] = useState(0);
-  const [state, dispatch] = useReducer(reducer, initialSate);
+  const [state, dispatch] = useReducer(reducer, initialSate as IPieChartProps);
 
   const speadSheetData = dataToSpreadSheet(state.data);
   const chart = <PieChart

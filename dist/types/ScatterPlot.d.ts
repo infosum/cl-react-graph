@@ -1,16 +1,6 @@
-import React from 'react';
-interface IChartState {
-    choices: string[];
-    data: {
-        keys: any[];
-        values: any[];
-    };
-    height: number;
-    distModels: string[];
-    split: string;
-    parentWidth: number;
-    width: number | string;
-}
+import { Component } from 'react';
+import { IChartState } from './Histogram';
+import { DeepPartial } from './utils/types';
 export interface IScatterPlotProps {
     choices: string[];
     className: string;
@@ -29,7 +19,7 @@ export interface IScatterPlotProps {
     split: string;
     width: string | number;
 }
-declare class ScatterPlot extends React.Component<IScatterPlotProps, IChartState> {
+declare class ScatterPlot extends Component<DeepPartial<IScatterPlotProps>, IChartState> {
     private chart;
     private ref;
     static defaultProps: {
@@ -41,7 +31,7 @@ declare class ScatterPlot extends React.Component<IScatterPlotProps, IChartState
     componentDidMount(): void;
     componentDidUpdate(): void;
     private getChartState;
-    componentWillReceiveProps(props: IScatterPlotProps): void;
+    componentWillReceiveProps(props: DeepPartial<IScatterPlotProps>): void;
     componentWillUnmount(): void;
     private getDOMNode;
     render(): JSX.Element;

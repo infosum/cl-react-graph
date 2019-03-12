@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 
 import {
@@ -9,6 +9,7 @@ import {
   TipContentFn,
 } from './Histogram';
 import { pieChartD3 } from './PieChartD3';
+import { DeepPartial } from './utils/types';
 
 interface ILabels {
   display: boolean;
@@ -43,27 +44,15 @@ export interface IPieChartProps {
 /**
  * PieChart component
  */
-class PieChart extends React.Component<IPieChartProps, IChartState> {
+class PieChart extends Component<DeepPartial<IPieChartProps>, IChartState> {
 
   private chart: IChartAdaptor<IPieChartProps>;
   private ref: HTMLDivElement | null = null;
 
-  public static defaultProps: Partial<IPieChartProps> = {
-    backgroundColor: '#ddd',
-    donutWidth: 0,
-    height: 200,
-    margin: {
-      bottom: 0,
-      left: 5,
-      right: 0,
-      top: 5,
-    },
-  };
-
   /**
    * Constructor
    */
-  constructor(props: IPieChartProps) {
+  constructor(props: DeepPartial<IPieChartProps>) {
     super(props);
     this.chart = pieChartD3();
 
@@ -113,7 +102,7 @@ class PieChart extends React.Component<IPieChartProps, IChartState> {
   /**
    * Get the chart state
    */
-  public getChartState(): IPieChartProps {
+  public getChartState(): DeepPartial<IPieChartProps> {
     let { width } = this.props;
     const { children, ...rest } = this.props;
     if (width === '100%') {

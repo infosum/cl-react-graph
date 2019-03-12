@@ -6,15 +6,16 @@ import {
   select,
   Selection,
 } from 'd3-selection';
-import merge from 'deepmerge';
 import { FeatureCollection } from 'geojson';
+import merge from 'lodash.merge';
 
 import { IChartAdaptor } from './Histogram';
 import { IMapProps } from './Map';
+import { DeepPartial } from './utils/types';
 
 export const mapD3 = ((): IChartAdaptor<IMapProps> => {
 
-  const defaultProps: IMapProps = {
+  const props: IMapProps = {
     className: 'map-d3',
     data: [],
     geojson: {
@@ -25,7 +26,6 @@ export const mapD3 = ((): IChartAdaptor<IMapProps> => {
     width: 200,
   };
 
-  let props: IMapProps;
   let svg: Selection<any, any, any, any>;
   let container: Selection<SVGElement, any, any, any>;
 
@@ -33,7 +33,7 @@ export const mapD3 = ((): IChartAdaptor<IMapProps> => {
     /**
      * Initialization
      */
-    create(el: Element, newProps: Partial<IMapProps> = {}) {
+    create(el: Element, newProps: DeepPartial<IMapProps> = {}) {
       this.mergeProps(newProps);
       this._makeSvg(el);
       container = svg
@@ -43,8 +43,8 @@ export const mapD3 = ((): IChartAdaptor<IMapProps> => {
       this.update(el, props);
     },
 
-    mergeProps(newProps: Partial<IMapProps>) {
-      props = merge<IMapProps>(defaultProps, newProps);
+    mergeProps(newProps: DeepPartial<IMapProps>) {
+      merge(props, newProps);
       props.data = newProps.data;
     },
 
@@ -107,7 +107,7 @@ export const mapD3 = ((): IChartAdaptor<IMapProps> => {
     /**
      * Update chart
      */
-    update(el: Element, newProps: Partial<IMapProps>) {
+    update(el: Element, newProps: DeepPartial<IMapProps>) {
       if (!props.data) {
         return;
       }

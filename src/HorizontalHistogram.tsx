@@ -1,5 +1,5 @@
 import { rgb } from 'd3-color';
-import React from 'react';
+import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 
 import {
@@ -8,61 +8,20 @@ import {
   IHistogramProps,
 } from './Histogram';
 import { horizontalHistogramD3 } from './HorizontalHistogramD3';
+import { DeepPartial } from './utils/types';
 
 /**
  * Horizontal Histogram component
  */
-class HorizontalHistogram extends React.Component<IHistogramProps, IChartState> {
+class HorizontalHistogram extends Component<DeepPartial<IHistogramProps>, IChartState> {
 
   private histogram: IChartAdaptor<IHistogramProps>;
   private ref: HTMLDivElement | null = null;
 
-  public static defaultProps = {
-    axis: {},
-    bar: {
-      margin: 2,
-      width: 10,
-    },
-    grid: {
-      x: {
-        style: {
-          'fill': 'none',
-          'stroke': '#bbb',
-          'stroke-opacity': 0.7,
-          'stroke-width': 1,
-        },
-        ticks: 5,
-        visible: true,
-      },
-      y: {
-        style: {
-          'fill': 'none',
-          'stroke': '#bbb',
-          'stroke-opacity': 0.7,
-          'stroke-width': 1,
-        },
-        ticks: 5,
-        visible: true,
-      },
-    },
-    height: 200,
-    margin: {
-      left: 5,
-      top: 5,
-    },
-    stroke: {
-      color: (d, i, colors) => rgb(colors(i)).darker(1),
-      width: 1,
-    },
-    tipContentFn: (bins: string[], i, d) =>
-      bins[i] + '<br />' + d.toFixed(2),
-    width: '100%',
-  };
-
   /**
    * Constructor
    */
-  constructor(props: IHistogramProps) {
+  constructor(props: DeepPartial<IHistogramProps>) {
     super(props);
     this.histogram = horizontalHistogramD3();
     this.state = {
@@ -114,7 +73,7 @@ class HorizontalHistogram extends React.Component<IHistogramProps, IChartState> 
   /**
    * Get the chart state
    */
-  public getChartState(): IHistogramProps {
+  public getChartState(): DeepPartial<IHistogramProps> {
     let { width } = this.props;
     const { children, ...rest } = this.props;
     if (width === '100%') {
@@ -130,7 +89,7 @@ class HorizontalHistogram extends React.Component<IHistogramProps, IChartState> 
   /**
    * Props recieved, update the chart
    */
-  public componentWillReceiveProps(props: IHistogramProps) {
+  public componentWillReceiveProps() {
     const el = this.getDOMNode();
     if (!el) {
       return;

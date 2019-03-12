@@ -11,14 +11,15 @@ import {
   select,
   Selection,
 } from 'd3-selection';
-import merge from 'deepmerge';
-import { number } from 'prop-types';
+import merge from 'lodash.merge';
 
 import colorScheme from './colors';
+import { IChartAdaptor } from './Histogram';
 import { IChartPoint } from './LineChart';
 import { IScatterPlotProps } from './ScatterPlot';
+import { DeepPartial } from './utils/types';
 
-export const scatterPlotD3 = (() => {
+export const scatterPlotD3 = ((): IChartAdaptor<IScatterPlotProps> => {
   let svg: Selection<any, any, any, any>;
   const yScale = scaleLinear();
   const xScale = scaleLinear();
@@ -27,7 +28,7 @@ export const scatterPlotD3 = (() => {
   let color;
   let yAxis;
 
-  const defaultProps: IScatterPlotProps = {
+  const props: IScatterPlotProps = {
     choices: [],
     className: 'scatter-plot-d3',
     colorScheme,
@@ -46,15 +47,13 @@ export const scatterPlotD3 = (() => {
     width: '100%',
   };
 
-  let props: IScatterPlotProps;
-
   const GenerateChart = {
 
     /**
      * Initialization
      */
-    create(el: Element, newProps: Partial<IScatterPlotProps> = defaultProps) {
-      props = merge(defaultProps, newProps);
+    create(el: Element, newProps: DeepPartial<IScatterPlotProps> = props) {
+      merge(props, newProps);
       this.update(el, newProps);
     },
 
@@ -237,8 +236,8 @@ export const scatterPlotD3 = (() => {
     /**
      * Update chart
      */
-    update(el: Element, newProps: Partial<IScatterPlotProps>) {
-      props = merge(props, newProps);
+    update(el: Element, newProps: DeepPartial<IScatterPlotProps>) {
+      merge(props, newProps);
       if (!props.data) {
         return;
       }

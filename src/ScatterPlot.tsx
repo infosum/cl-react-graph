@@ -1,21 +1,12 @@
-import React from 'react';
+import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 
-import { IChartAdaptor } from './Histogram';
+import {
+  IChartAdaptor,
+  IChartState,
+} from './Histogram';
 import { scatterPlotD3 } from './ScatterPlotD3';
-
-interface IChartState {
-  choices: string[];
-  data: {
-    keys: any[],
-    values: any[],
-  };
-  height: number;
-  distModels: string[];
-  split: string;
-  parentWidth: number;
-  width: number | string;
-}
+import { DeepPartial } from './utils/types';
 
 export interface IScatterPlotProps {
   choices: string[];
@@ -35,7 +26,7 @@ export interface IScatterPlotProps {
   split: string;
   width: string | number;
 }
-class ScatterPlot extends React.Component<IScatterPlotProps, IChartState> {
+class ScatterPlot extends Component<DeepPartial<IScatterPlotProps>, IChartState> {
 
   private chart: IChartAdaptor<IScatterPlotProps>;
   private ref: HTMLDivElement | null = null;
@@ -49,35 +40,19 @@ class ScatterPlot extends React.Component<IScatterPlotProps, IChartState> {
     super(props);
     this.chart = scatterPlotD3();
     this.state = {
-      choices: [],
-      data: {
-        keys: [],
-        values: [],
-      },
-      distModels: [],
-      height: this.props.height,
-      parentWidth: 400,
-      split: '',
-      width: this.props.width,
+      parentWidth: 300,
     };
   }
 
   private handleResize() {
-    const { legendWidth, padding } = this.props;
-    if (!this.ref) {
-      return;
-    }
-    const chartWidth = Math.max(200, this.ref.offsetWidth - padding - legendWidth);
-    const chartHeight = Math.max(200, window.innerHeight - padding -
-      this.ref.getBoundingClientRect().top);
-    const width = Math.min(chartHeight, chartWidth);
     const el = this.getDOMNode();
-    if (!el) {
-      return;
+    if (el) {
+      const width = (this.ref && this.ref.offsetWidth) ? this.ref.offsetWidth : 0;
+
+      this.setState({
+        parentWidth: width,
+      }, () => this.chart.create(el, this.getChartState()));
     }
-    this.setState({
-      parentWidth: width,
-    }, () => this.chart.create(el, this.getChartState()));
   }
 
   public componentDidMount() {
@@ -101,25 +76,20 @@ class ScatterPlot extends React.Component<IScatterPlotProps, IChartState> {
     this.chart.update(el, this.getChartState());
   }
 
-  private getChartState(): IChartState {
+  private getChartState(): DeepPartial<IScatterPlotProps> {
     let { width } = this.props;
-    const { data, choices, split, distModels, height } = this.props;
+    const { children, ...rest } = this.props;
     if (typeof width === 'string' && width === '100%') {
       width = this.state.parentWidth || 300;
     }
 
     return {
-      choices,
-      data,
-      distModels,
-      height,
-      parentWidth: this.state.parentWidth,
-      split,
+      ...rest,
       width,
     };
   }
 
-  public componentWillReceiveProps(props: IScatterPlotProps) {
+  public componentWillReceiveProps(props: DeepPartial<IScatterPlotProps>) {
     const el = this.getDOMNode();
     if (!el) {
       return;

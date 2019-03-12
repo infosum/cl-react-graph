@@ -1,8 +1,8 @@
-import React from 'react';
-import Omit from './utils/types';
+import { Component } from 'react';
+import { DeepPartial } from './utils/types';
 export interface IChartAdaptor<P> {
-    create: (el: Element, props: Partial<P>) => void;
-    update: (el: Element, props: Partial<P>) => void;
+    create: (el: Element, props: DeepPartial<P>) => void;
+    update: (el: Element, props: DeepPartial<P>) => void;
     destroy: (el: Element) => void;
 }
 export interface IHistogramBar {
@@ -120,14 +120,13 @@ export declare type TipContentFn<T> = (bins: T[], i: number, d: number, groupTit
 /**
  * Histogram component
  */
-declare class Histogram extends React.Component<IHistogramProps, IChartState> {
+declare class Histogram extends Component<DeepPartial<IHistogramProps>, IChartState> {
     private chart;
     private ref;
-    static defaultProps: Omit<IHistogramProps, 'data'>;
     /**
      * Constructor
      */
-    constructor(props: IHistogramProps);
+    constructor(props: DeepPartial<IHistogramProps>);
     /**
      * Handle the page resize
      */
@@ -143,7 +142,7 @@ declare class Histogram extends React.Component<IHistogramProps, IChartState> {
     /**
      * Get the chart state
      */
-    getChartState(): IHistogramProps;
+    getChartState(): DeepPartial<IHistogramProps>;
     /**
      * Component will un mount, remove the chart and
      * any event listeners

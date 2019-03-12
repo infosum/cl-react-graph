@@ -12,9 +12,8 @@ import {
   pie,
   PieArcDatum,
 } from 'd3-shape';
-import merge from 'deepmerge';
 import get from 'lodash.get';
-import { string } from 'prop-types';
+import merge from 'lodash.merge';
 
 import colorScheme from './colors';
 import {
@@ -26,6 +25,7 @@ import {
   IPieDataItem,
 } from './PieChart';
 import tips, { makeTip } from './tip';
+import { DeepPartial } from './utils/types';
 
 interface IPieDataset {
   count: number;
@@ -38,7 +38,7 @@ export const pieChartD3 = ((): IChartAdaptor<IPieChartProps> => {
   let tipContainer;
   let tipContent;
 
-  const defaultProps: IPieChartProps = {
+  const props: IPieChartProps = {
     backgroundColor: '#ddd',
     className: 'piechart-d3',
     colorScheme,
@@ -68,7 +68,6 @@ export const pieChartD3 = ((): IChartAdaptor<IPieChartProps> => {
   };
 
   let containers: any[];
-  let props: IPieChartProps;
   let svg: Selection<any, any, any, any>;
   let dataSets: IPieDataset[][];
   let previousData: any;
@@ -78,8 +77,8 @@ export const pieChartD3 = ((): IChartAdaptor<IPieChartProps> => {
 
   const PieChartD3 = {
 
-    create(el: Element, newProps: Partial<IPieChartProps> = {}) {
-      props = merge(defaultProps, newProps);
+    create(el: Element, newProps: DeepPartial<IPieChartProps> = {}) {
+      merge(props, newProps);
       previousData = props.data.counts.map((set: IHistogramDataSet, setIndex: number) => {
         return set.data
           .map((count, i) => ({
@@ -123,11 +122,11 @@ export const pieChartD3 = ((): IChartAdaptor<IPieChartProps> => {
       tipContainer = r.tipContainer;
     },
 
-    update(el: Element, newProps: Partial<IPieChartProps>) {
+    update(el: Element, newProps: DeepPartial<IPieChartProps>) {
       if (!props.data) {
         return;
       }
-      props = merge(defaultProps, newProps);
+      merge(props, newProps);
       if (props.colorScheme) {
         props.colorScheme = props.colorScheme;
       }
@@ -249,7 +248,6 @@ export const pieChartD3 = ((): IChartAdaptor<IPieChartProps> => {
       // Fade in when adding (merge)
       path
         .merge(path)
-
         .on('mouseover', (d: PieArcDatum<IPieDataItem>, ix: number) => {
           tipContent.html(() => tipContentFn(bins, ix, d.data.count, d.data.groupLabel));
           tip.fx.in(tipContainer);
@@ -264,7 +262,7 @@ export const pieChartD3 = ((): IChartAdaptor<IPieChartProps> => {
 
       const path2 = containers[i].selectAll('text.label')
         .data(thisPie(data));
-      const gLabel = path2.enter().append('text')
+      path2.enter().append('text')
         .attr('class', 'label')
         .each(() => {
           // Store initial offset incase we change chart heights.
@@ -302,9 +300,9 @@ export const pieChartD3 = ((): IChartAdaptor<IPieChartProps> => {
         })
         .transition()
         .duration(500)
-        .style('opacity', (d, ix, c) => {
+        .style('opacity', (d) => {
           // Only show if the new value is not 0 and labels are set to be displayed
-          return labels.display === false || d.data.count === 0 || c[ix]._current.value === 0 ? 0 : 1;
+          return labels.display === false || d.data.value === 0 ? 0 : 1;
         });
 
       path2.exit().remove();

@@ -14,8 +14,8 @@ import {
   Selection,
 } from 'd3-selection';
 import { timeFormat } from 'd3-time-format';
-import merge from 'deepmerge';
 import get from 'lodash.get';
+import merge from 'lodash.merge';
 
 import colorScheme from './colors';
 import attrs from './d3/attrs';
@@ -37,6 +37,7 @@ import {
   axis as defaultAxis,
   grid,
 } from './utils/defaults';
+import { DeepPartial } from './utils/types';
 
 export const formatTickTime = (axis: IAxis) => (v: string | number) => {
   return timeFormat(axis.dateFormat)(new Date(v));
@@ -68,7 +69,7 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
   // @TODO make this a prop
   const stacked = false;
 
-  const defaultProps: IHistogramProps = {
+  const props: IHistogramProps = {
     axis: defaultAxis,
     bar: {
       groupMargin: 0.1,
@@ -109,13 +110,11 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
     width: 200,
   };
 
-  let props: IHistogramProps;
-
   const HistogramD3 = {
     /**
      * Initialization
      */
-    create(el: Element, newProps: Partial<IHistogramProps> = {}) {
+    create(el: Element, newProps: DeepPartial<IHistogramProps> = {}) {
       this.mergeProps(newProps);
       this._makeSvg(el);
       this.makeGrid();
@@ -127,10 +126,10 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
       this.update(el, newProps);
     },
 
-    mergeProps(newProps: Partial<IHistogramProps>) {
-      props = merge<IHistogramProps>(defaultProps, newProps);
+    mergeProps(newProps: DeepPartial<IHistogramProps>) {
+      merge(props, newProps);
       if (newProps.data) {
-        props.data = newProps.data;
+        props.data = newProps.data as IHistogramProps['data'];
       }
       if (newProps.colorScheme) {
         props.colorScheme = newProps.colorScheme;
@@ -424,7 +423,7 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
     /**
      * Update chart
      */
-    update(el: Element, newProps: Partial<IHistogramProps>) {
+    update(el: Element, newProps: DeepPartial<IHistogramProps>) {
       if (!newProps.data) {
         return;
       }

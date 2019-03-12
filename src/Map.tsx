@@ -1,5 +1,5 @@
 import { FeatureCollection } from 'geojson';
-import React from 'react';
+import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 
 import {
@@ -7,6 +7,7 @@ import {
   IChartState,
 } from './Histogram';
 import { mapD3 } from './MapD3';
+import { DeepPartial } from './utils/types';
 
 export interface IMapProps {
   className: string;
@@ -19,24 +20,15 @@ export interface IMapProps {
 /**
  * Map component
  */
-class Map extends React.Component<IMapProps, IChartState> {
+class Map extends Component<DeepPartial<IMapProps>, IChartState> {
 
   private chart: IChartAdaptor<IMapProps>;
   private ref: HTMLDivElement | null = null;
 
-  public static defaultProps: Partial<IMapProps> = {
-    geojson: {
-      features: [],
-      type: 'FeatureCollection',
-    },
-    height: 200,
-    width: '100%',
-  };
-
   /**
    * Constructor
    */
-  constructor(props: IMapProps) {
+  constructor(props: DeepPartial<IMapProps>) {
     super(props);
     this.chart = mapD3();
     this.state = {
@@ -88,7 +80,7 @@ class Map extends React.Component<IMapProps, IChartState> {
   /**
    * Get the chart state
    */
-  public getChartState(): IMapProps {
+  public getChartState(): DeepPartial<IMapProps> {
     let { width } = this.props;
     const { children, ...rest } = this.props;
     if (width === '100%') {

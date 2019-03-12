@@ -18,7 +18,7 @@ import {
   timeFormat,
   timeParse,
 } from 'd3-time-format';
-import merge from 'deepmerge';
+import merge from 'lodash.merge';
 
 import attrs from './d3/attrs';
 import {
@@ -45,6 +45,7 @@ import {
   AnyScale,
   buildScales,
 } from './utils/scales';
+import { DeepPartial } from './utils/types';
 
 const ZERO_SUBSITUTE: number = 1e-6;
 
@@ -74,7 +75,7 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
     stroke: '#005870',
   };
 
-  const defaultProps: ILineChartProps = {
+  const props: ILineChartProps = {
     axis: defaultAxis,
     className: 'line-chart-d3',
     data: [],
@@ -115,7 +116,7 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
     .x((d: any) => x(d.x) + yAxisWidth)
     .y((d: any) => y(d.y));
 
-  let props: ILineChartProps;
+  // let props: ILineChartProps;
   let svg: Selection<any, any, any, any>;
   let container: Selection<SVGElement, any, any, any>;
   let lineContainer: Selection<any, any, any, any>;
@@ -130,8 +131,9 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
     /**
      * Initialization
      */
-    create(el: Element, newProps: Partial<ILineChartProps> = {}) {
-      props = merge(defaultProps, newProps);
+    create(el: Element, newProps: DeepPartial<ILineChartProps> = {}) {
+      merge(props, newProps);
+      console.log(props);
       this._makeSvg(el);
       this.makeScales();
       [xScale, yScale] = buildScales(props.axis);
@@ -160,23 +162,27 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
           el.removeChild(childNodes[0]);
         }
       }
-      const { margin, width, height, className } = props;
-      const scale = {
-        x: 1 - (margin.left / Number(width)),
-        y: 1 - (margin.top / Number(height)),
-      };
-
       // Reference to svg element containing chart
       svg = select(el).append('svg')
-        .attr('class', className)
-        .attr('width', width)
-        .attr('height', height)
-        .append('g')
-        .attr('transform', `translate(${margin.left},${margin.top}) scale(${scale.x},${scale.y})`);
+      this.sizeSVG();
 
       const r = makeTip(props.tipContainer, tipContainer);
       tipContent = r.tipContent;
       tipContainer = r.tipContainer;
+    },
+
+    sizeSVG() {
+      const { margin, width, height, className } = props;
+      console.log('size svg', width, height);
+      const scale = {
+        x: 1 - (margin.left / Number(width)),
+        y: 1 - (margin.top / Number(height)),
+      };
+      svg.attr('class', className)
+        .attr('width', width)
+        .attr('height', height)
+        .append('g')
+        .attr('transform', `translate(${margin.left},${margin.top}) scale(${scale.x},${scale.y})`);
     },
 
     /**
@@ -406,11 +412,12 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
     /**
      * Update chart
      */
-    update(el: Element, newProps: Partial<ILineChartProps>) {
+    update(el: Element, newProps: DeepPartial<ILineChartProps>) {
       if (!newProps.data) {
         return;
       }
-      props = merge(defaultProps, newProps);
+      merge(props, newProps);
+      this.sizeSVG();
       [xScale, yScale] = buildScales(props.axis);
       let data = props.data;
 

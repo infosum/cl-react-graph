@@ -1,5 +1,6 @@
-import React from 'react';
+import { Component } from 'react';
 import { IChartState, IHistogramDataSet, IMargin, TipContentFn } from './Histogram';
+import { DeepPartial } from './utils/types';
 interface ILabels {
     display: boolean;
     displayFn: (d: any, ix: number) => string | number;
@@ -32,14 +33,13 @@ export interface IPieChartProps {
 /**
  * PieChart component
  */
-declare class PieChart extends React.Component<IPieChartProps, IChartState> {
+declare class PieChart extends Component<DeepPartial<IPieChartProps>, IChartState> {
     private chart;
     private ref;
-    static defaultProps: Partial<IPieChartProps>;
     /**
      * Constructor
      */
-    constructor(props: IPieChartProps);
+    constructor(props: DeepPartial<IPieChartProps>);
     /**
      * Handle the page resize
      */
@@ -55,7 +55,7 @@ declare class PieChart extends React.Component<IPieChartProps, IChartState> {
     /**
      * Get the chart state
      */
-    getChartState(): IPieChartProps;
+    getChartState(): DeepPartial<IPieChartProps>;
     /**
      * Component will un mount, remove the chart and
      * any event listeners

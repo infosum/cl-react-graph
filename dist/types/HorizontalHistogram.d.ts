@@ -1,55 +1,16 @@
-import React from 'react';
+import { Component } from 'react';
 import { IChartState, IHistogramProps } from './Histogram';
+import { DeepPartial } from './utils/types';
 /**
  * Horizontal Histogram component
  */
-declare class HorizontalHistogram extends React.Component<IHistogramProps, IChartState> {
+declare class HorizontalHistogram extends Component<DeepPartial<IHistogramProps>, IChartState> {
     private histogram;
     private ref;
-    static defaultProps: {
-        axis: {};
-        bar: {
-            margin: number;
-            width: number;
-        };
-        grid: {
-            x: {
-                style: {
-                    'fill': string;
-                    'stroke': string;
-                    'stroke-opacity': number;
-                    'stroke-width': number;
-                };
-                ticks: number;
-                visible: boolean;
-            };
-            y: {
-                style: {
-                    'fill': string;
-                    'stroke': string;
-                    'stroke-opacity': number;
-                    'stroke-width': number;
-                };
-                ticks: number;
-                visible: boolean;
-            };
-        };
-        height: number;
-        margin: {
-            left: number;
-            top: number;
-        };
-        stroke: {
-            color: (d: any, i: any, colors: any) => import("d3-color").RGBColor;
-            width: number;
-        };
-        tipContentFn: (bins: string[], i: any, d: any) => string;
-        width: string;
-    };
     /**
      * Constructor
      */
-    constructor(props: IHistogramProps);
+    constructor(props: DeepPartial<IHistogramProps>);
     /**
      * Handle the page resize
      */
@@ -65,11 +26,11 @@ declare class HorizontalHistogram extends React.Component<IHistogramProps, IChar
     /**
      * Get the chart state
      */
-    getChartState(): IHistogramProps;
+    getChartState(): DeepPartial<IHistogramProps>;
     /**
      * Props recieved, update the chart
      */
-    componentWillReceiveProps(props: IHistogramProps): void;
+    componentWillReceiveProps(): void;
     /**
      * Component will un mount, remove the chart and
      * any event listeners

@@ -1,19 +1,12 @@
-import { rgb } from 'd3-color';
-import React from 'react';
+import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 
 import { histogramD3 } from './HistogramD3';
-import tips from './tip';
-import {
-  axis as defaultAxis,
-  lineStyle,
-  stroke,
-} from './utils/defaults';
-import Omit from './utils/types';
+import { DeepPartial } from './utils/types';
 
 export interface IChartAdaptor<P> {
-  create: (el: Element, props: Partial<P>) => void;
-  update: (el: Element, props: Partial<P>) => void;
+  create: (el: Element, props: DeepPartial<P>) => void;
+  update: (el: Element, props: DeepPartial<P>) => void;
   destroy: (el: Element) => void;
 }
 
@@ -142,74 +135,15 @@ export type TipContentFn<T> = (bins: T[], i: number, d: number, groupTitle?: str
 /**
  * Histogram component
  */
-class Histogram extends React.Component<IHistogramProps, IChartState> {
+class Histogram extends Component<DeepPartial<IHistogramProps>, IChartState> {
 
   private chart: IChartAdaptor<IHistogramProps>;
   private ref: HTMLDivElement | null = null;
 
-  public static defaultProps: Omit<IHistogramProps, 'data'> = {
-    axis: defaultAxis,
-    bar: {
-      groupMargin: 0,
-      margin: 0,
-      width: 10,
-    },
-    className: '',
-    colorScheme: [],
-    delay: 0,
-    domain: {
-      max: null,
-      min: null,
-    },
-    duration: 100,
-    grid: {
-      x: {
-        height: 0,
-        style: {
-          ...lineStyle,
-          'fill': 'none',
-          'stroke': '#bbb',
-          'stroke-opacity': 0.7,
-          'stroke-width': 1,
-        },
-        ticks: 5,
-        visible: true,
-      },
-      y: {
-        style: {
-          ...lineStyle,
-          'fill': 'none',
-          'stroke': '#bbb',
-          'stroke-opacity': 0.7,
-          'stroke-width': 1,
-        },
-        ticks: 5,
-        visible: true,
-      },
-    },
-    height: 200,
-    margin: {
-      bottom: 0,
-      left: 5,
-      right: 0,
-      top: 5,
-    },
-    stroke: {
-      ...stroke,
-      color: (d, i, colors) => rgb(colors(i)).darker(1).toString(),
-    },
-    tip: tips,
-    tipContainer: 'body',
-    tipContentFn: (bins: string[], i, d) =>
-      bins[i] + '<br />' + d.toFixed(2),
-    visible: {},
-    width: '100%',
-  };
-
   /**
    * Constructor
    */
-  constructor(props: IHistogramProps) {
+  constructor(props: DeepPartial<IHistogramProps>) {
     super(props);
     this.chart = histogramD3();
     this.state = {
@@ -261,7 +195,7 @@ class Histogram extends React.Component<IHistogramProps, IChartState> {
   /**
    * Get the chart state
    */
-  public getChartState(): IHistogramProps {
+  public getChartState(): DeepPartial<IHistogramProps> {
     let { width } = this.props;
     const { children, ...rest } = this.props;
     if (width === '100%') {

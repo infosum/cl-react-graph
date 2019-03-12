@@ -1,6 +1,7 @@
 import { FeatureCollection } from 'geojson';
-import React from 'react';
+import { Component } from 'react';
 import { IChartState } from './Histogram';
+import { DeepPartial } from './utils/types';
 export interface IMapProps {
     className: string;
     data: any;
@@ -11,14 +12,13 @@ export interface IMapProps {
 /**
  * Map component
  */
-declare class Map extends React.Component<IMapProps, IChartState> {
+declare class Map extends Component<DeepPartial<IMapProps>, IChartState> {
     private chart;
     private ref;
-    static defaultProps: Partial<IMapProps>;
     /**
      * Constructor
      */
-    constructor(props: IMapProps);
+    constructor(props: DeepPartial<IMapProps>);
     /**
      * Handle the page resize
      */
@@ -34,7 +34,7 @@ declare class Map extends React.Component<IMapProps, IChartState> {
     /**
      * Get the chart state
      */
-    getChartState(): IMapProps;
+    getChartState(): DeepPartial<IMapProps>;
     /**
      * Component will un mount, remove the chart and
      * any event listeners

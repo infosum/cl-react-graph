@@ -1,4 +1,4 @@
-import React from 'react';
+import { FC } from 'react';
 import { IHistogramDataSet } from './Histogram';
 interface IProps {
     className?: string;
@@ -12,5 +12,5 @@ interface IProps {
         [key: string]: boolean;
     };
 }
-declare const Legend: React.SFC<IProps>;
+declare const Legend: FC<IProps>;
 export default Legend;

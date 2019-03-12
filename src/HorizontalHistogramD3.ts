@@ -12,7 +12,7 @@ import {
   select,
   Selection,
 } from 'd3-selection';
-import merge from 'deepmerge';
+import merge from 'lodash.merge';
 
 import colorScheme from './colors';
 import attrs from './d3/attrs';
@@ -27,6 +27,7 @@ import {
   axis as defaultAxis,
   grid as defaultGrid,
 } from './utils/defaults';
+import { DeepPartial } from './utils/types';
 
 export const horizontalHistogramD3 = ((): IChartAdaptor<IHistogramProps> => {
   let svg: Selection<any, any, any, any>;;
@@ -34,7 +35,6 @@ export const horizontalHistogramD3 = ((): IChartAdaptor<IHistogramProps> => {
   let tipContent;
   const x = scaleLinear();
   const y = scaleBand();
-  let props: IHistogramProps;
 
   // Gridlines in y axis function
   function make_y_gridlines(ticks: number = 5) {
@@ -48,7 +48,7 @@ export const horizontalHistogramD3 = ((): IChartAdaptor<IHistogramProps> => {
       .ticks(ticks);
   }
 
-  const defaultProps: IHistogramProps = {
+  const props: IHistogramProps = {
     axis: defaultAxis,
     bar: {
       groupMargin: 0.1,
@@ -94,8 +94,8 @@ export const horizontalHistogramD3 = ((): IChartAdaptor<IHistogramProps> => {
     /**
      * Initialization
      */
-    create(el: Element, newProps: Partial<IHistogramProps> = {}) {
-      props = merge(defaultProps, newProps);
+    create(el: Element, newProps: DeepPartial<IHistogramProps> = {}) {
+      merge(props, newProps);
       this.update(el, newProps);
     },
 
@@ -379,11 +379,11 @@ export const horizontalHistogramD3 = ((): IChartAdaptor<IHistogramProps> => {
     /**
      * Update chart
      */
-    update(el: Element, newProps: Partial<IHistogramProps>) {
+    update(el: Element, newProps: DeepPartial<IHistogramProps>) {
       if (!props.data) {
         return;
       }
-      props = merge(defaultProps, newProps);
+      merge(props, newProps);
       this._makeSvg(el);
       if (!props.data.bins) {
         return;

@@ -1,6 +1,7 @@
-import { CurveFactory, CurveFactoryLineOnly } from 'd3';
+import { CurveFactory, CurveFactoryLineOnly } from 'd3-shape';
 import React from 'react';
 import { IAxes, IGrid, IMargin, ISVGLineStyle, TipContentFn } from './Histogram';
+import { DeepPartial } from './utils/types';
 interface IState {
     parentWidth?: number;
 }
@@ -39,7 +40,6 @@ export interface ILineChartProps<T extends IChartPoint<IChartPointValue, IChartP
     axis: IAxes;
     className: string;
     data: Array<ILineChartDataSet<T>>;
-    fx: (n: number) => number;
     grid: IGrid;
     height: number | string;
     margin: IMargin;
@@ -54,10 +54,10 @@ export interface ILineChartProps<T extends IChartPoint<IChartPointValue, IChartP
     };
     width: number | string;
 }
-declare class LineChart extends React.Component<ILineChartProps, IState> {
+declare class LineChart extends React.Component<DeepPartial<ILineChartProps>, IState> {
     private chart;
     private ref;
-    constructor(props: ILineChartProps);
+    constructor(props: DeepPartial<ILineChartProps>);
     private handleResize;
     componentDidMount(): void;
     componentDidUpdate(): void;
@@ -66,7 +66,7 @@ declare class LineChart extends React.Component<ILineChartProps, IState> {
      * to the props, then render this data. Otherwise generate
      * a random normal dist
      */
-    getChartState(): ILineChartProps;
+    getChartState(): DeepPartial<ILineChartProps>;
     componentWillUnmount(): void;
     private getDOMNode;
     render(): JSX.Element;

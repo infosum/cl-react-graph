@@ -2,7 +2,6 @@
 import 'react-datasheet/lib/react-datasheet.css';
 
 import { curveCatmullRom } from 'd3-shape';
-import deepcopy from 'deepcopy';
 import merge from 'deepmerge';
 import ColorPicker from 'material-ui-color-picker';
 import React, {
@@ -30,23 +29,21 @@ import {
   ILineChartProps,
   LineChart,
 } from '../../../src';
-import { axis as defaultAxis } from '../../../src/utils/defaults';
+import { DeepPartial } from '../../../src/utils/types';
 import { CurveSelector } from '../components/CurveSelector';
 import { GridOptionsFactory } from '../components/GridOptions';
 import JSXToString from '../components/JSXToString';
 import Layout from '../components/layout';
 import SEO from '../components/seo';
 import { TabContainer } from '../components/TabContainer';
-import {
-  grid,
-} from '../data';
+import { grid } from '../data';
 import {
   GridActions,
   gridReducer,
 } from './histogram';
 
-const initialState: ILineChartProps<{ x: number, y: number }> = {
-  axis: defaultAxis,
+const initialState: DeepPartial<ILineChartProps<{ x: number, y: number }>> = {
+  // axis: defaultAxis,
   data: [
     {
       data: [
@@ -75,6 +72,7 @@ const initialState: ILineChartProps<{ x: number, y: number }> = {
       },
     },
   ],
+  width: '100%',
   grid,
 };
 
@@ -144,7 +142,7 @@ export interface IGridElement extends ReactDataSheet.Cell<IGridElement, number> 
   value: number | null | string;
 }
 const LineExample: FC<{}> = () => {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer(reducer, initialState as ILineChartProps);
   const [tab, setTab] = useState(0);
   const data: Cell[][] = state.data[0].data.map((point) => {
     return [{ value: Number(point.x) }, { value: Number(point.y) }];
