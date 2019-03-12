@@ -1,4 +1,3 @@
-import { rgb } from 'd3-color';
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 
