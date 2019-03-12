@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { IHistogramDataSet } from './Histogram';
 interface IProps {
     className?: string;

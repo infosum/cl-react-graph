@@ -1,10 +1,8 @@
-import filterRange from './colors/filterRange';
-import Histogram, { IAxes, IHistogramBar, IHistogramData, IHistogramDataSet, IHistogramProps, IStroke } from './Histogram';
-import HorizontalHistogram from './HorizontalHistogram';
-import JoyPlot from './JoyPlot';
-import Legend from './Legend';
-import LineChart, { IChartPoint, ILineChartDataSet, ILineChartProps } from './LineChart';
-import Map from './Map';
-import PieChart from './PieChart';
-import ScatterPlot from './ScatterPlot';
-export { filterRange, JoyPlot, Histogram, HorizontalHistogram, Legend, LineChart, Map, PieChart, ScatterPlot, ILineChartDataSet, IChartPoint, ILineChartProps, IAxes, IHistogramBar, IHistogramData, IHistogramDataSet, IHistogramProps, IStroke, };
+export { default as Histogram, IAxes, IHistogramBar, IHistogramData, IHistogramDataSet, IHistogramProps, IStroke, } from './Histogram';
+export { default as LineChart, IChartPoint, ILineChartDataSet, ILineChartProps, } from './LineChart';
+export { default as Legend } from './Legend';
+export { default as JoyPlot } from './JoyPlot';
+export { default as PieChart } from './PieChart';
+export { default as ScatterPlot } from './ScatterPlot';
+export { default as HorizontalHistogram } from './HorizontalHistogram';
+export { default as filterRange } from './colors/filterRange';

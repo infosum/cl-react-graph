@@ -8,8 +8,11 @@ import {
   scaleLinear,
   scaleOrdinal,
 } from 'd3-scale';
-import { select } from 'd3-selection';
-import * as merge from 'deepmerge';
+import {
+  select,
+  Selection,
+} from 'd3-selection';
+import merge from 'deepmerge';
 
 import colorScheme from './colors';
 import attrs from './d3/attrs';
@@ -20,13 +23,18 @@ import {
   IHistogramProps,
 } from './Histogram';
 import tips, { makeTip } from './tip';
+import {
+  axis as defaultAxis,
+  grid as defaultGrid,
+} from './utils/defaults';
 
-export const horizontalHistogramD3 = ((): IChartAdaptor => {
-  let svg;
+export const horizontalHistogramD3 = ((): IChartAdaptor<IHistogramProps> => {
+  let svg: Selection<any, any, any, any>;;
   let tipContainer;
   let tipContent;
   const x = scaleLinear();
   const y = scaleBand();
+  let props: IHistogramProps;
 
   // Gridlines in y axis function
   function make_y_gridlines(ticks: number = 5) {
@@ -40,74 +48,32 @@ export const horizontalHistogramD3 = ((): IChartAdaptor => {
       .ticks(ticks);
   }
 
-  const defaultProps = {
-    axis: {
-      x: {
-        height: 25,
-        style: {
-          'fill': 'none',
-          'shape-rendering': 'crispEdges',
-          'stroke': '#666',
-          'stroke-opacity': 1,
-          'stroke-width': 1,
-        },
-        text: {
-          style: {
-            fill: '#666',
-          },
-        },
-        ticks: 10,
-      },
-      y: {
-        style: {
-          'fill': 'none',
-          'shape-rendering': 'crispEdges',
-          'stroke': '#666',
-          'stroke-opacity': 1,
-          'stroke-width': 1,
-        },
-        text: {
-          style: {
-            fill: '#666',
-          },
-        },
-        width: 20,
-      },
-    },
+  const defaultProps: IHistogramProps = {
+    axis: defaultAxis,
     bar: {
-      height: 50,
+      groupMargin: 0.1,
       margin: 10,
+      width: 50,
     },
     className: 'histogram-d3',
     colorScheme,
-    data: [],
-    delay: 0,
-    duration: 400,
-    grid: {
-      x: {
-        style: {
-          'fill': 'none',
-          'stroke': '#bbb',
-          'stroke-opacity': 0.7,
-          'stroke-width': 1,
-        },
-        ticks: 5,
-        visible: true,
-      },
-      y: {
-        style: {
-          'fill': 'none',
-          'stroke': '#bbb',
-          'stroke-opacity': 0.7,
-          'stroke-width': 1,
-        },
-        ticks: 5,
-        visible: true,
-      },
+    data: {
+      bins: [],
+      colorScheme: [],
+      counts: [],
     },
+    delay: 0,
+    domain: {
+      max: null,
+      min: null,
+    },
+    duration: 400,
+    grid: defaultGrid,
     height: 200,
     margin: {
+      bottom: 0,
       left: 5,
+      right: 0,
       top: 5,
     },
     stroke: {
@@ -120,26 +86,24 @@ export const horizontalHistogramD3 = ((): IChartAdaptor => {
     tipContainer: 'body',
     tipContentFn: (bins: string[], i: number, d: number): string =>
       bins[i] + '<br />' + d,
+    visible: {},
     width: 200,
   };
 
   const HorizontalHistogramD3 = {
     /**
      * Initialization
-     * @param {Node} el Target DOM node
-     * @param {Object} props Chart properties
      */
-    create(el: HTMLElement, props = {}) {
-      this.props = merge(defaultProps, props);
-      this.update(el, this.props);
+    create(el: Element, newProps: Partial<IHistogramProps> = {}) {
+      props = merge(defaultProps, newProps);
+      this.update(el, newProps);
     },
 
     /**
      * Make the SVG container element
      * Recreate if it previously existed
-     * @param {Dom} el Dom container node
      */
-    _makeSvg(el) {
+    _makeSvg(el: Element) {
       if (svg) {
         svg.selectAll('svg > *').remove();
         svg.remove();
@@ -148,7 +112,7 @@ export const horizontalHistogramD3 = ((): IChartAdaptor => {
           el.removeChild(childNodes[0]);
         }
       }
-      const { margin, width, height, className } = this.props;
+      const { margin, width, height, className } = props;
 
       // Reference to svg element containing chart
       svg = select(el).append('svg')
@@ -159,15 +123,13 @@ export const horizontalHistogramD3 = ((): IChartAdaptor => {
         .append('g')
         .attr('transform',
           'translate(' + margin.left + ',' + margin.top + ')');
-      const r = makeTip(this.props.tipContainer, tipContainer);
+      const r = makeTip(props.tipContainer, tipContainer);
       tipContent = r.tipContent;
       tipContainer = r.tipContainer;
     },
 
     /**
      * Get a max count of values in each data set
-     * @param {Object} counts Histogram data set values
-     * @return {Number} count
      */
     valuesCount(counts: IHistogramDataSet[]): number {
       return counts.reduce((a: number, b: IHistogramDataSet): number => {
@@ -180,7 +142,7 @@ export const horizontalHistogramD3 = ((): IChartAdaptor => {
      * @param {Object} data Chart data
      */
     _drawScales(data: IHistogramData) {
-      const { margin, width, height, axis } = this.props;
+      const { margin, width, height, axis } = props;
       const valuesCount = this.valuesCount(data.counts);
 
       svg.selectAll('.y-axis').remove();
@@ -208,7 +170,7 @@ export const horizontalHistogramD3 = ((): IChartAdaptor => {
 
       xDomain = extent(allCounts, (d) => d);
       xDomain[0] = 0;
-      xRange = [0, width - (margin.top * 2) - axis.y.width];
+      xRange = [0, Number(width) - (margin.top * 2) - axis.y.width];
       x.range(xRange)
         .domain(xDomain);
 
@@ -222,10 +184,10 @@ export const horizontalHistogramD3 = ((): IChartAdaptor => {
         .call(xAxis);
 
       attrs(svg.selectAll('.y-axis .domain, .y-axis .tick line'), axis.y.style);
-      attrs(svg.selectAll('.y-axis .tick text'), axis.y.text.style);
+      attrs(svg.selectAll('.y-axis .tick text'), axis.y.text.style as any);
 
       attrs(svg.selectAll('.x-axis .domain, .x-axis .tick line'), axis.x.style);
-      attrs(svg.selectAll('.x-axis .tick text'), axis.x.text.style);
+      attrs(svg.selectAll('.x-axis .tick text'), axis.x.text.style as any);
     },
 
     /**
@@ -243,21 +205,19 @@ export const horizontalHistogramD3 = ((): IChartAdaptor => {
      * Calculate the width of the area used to display the
      * chart bars. Removes chart margins and Y axis from
      * chart total width.
-     * @return {number} width
      */
     gridWidth(): number {
-      const { axis, width, margin } = this.props;
-      return width - (margin.left * 2) - axis.y.width;
+      const { axis, width, margin } = props;
+      return Number(width) - (margin.left * 2) - axis.y.width;
     },
 
     /**
      * Calculate the height of the area used to display the
      * chart bars. Removes chart margins and X axis from
      * chart total height.
-     * @return {number} width
      */
     gridHeight(): number {
-      const { height, margin, axis } = this.props;
+      const { height, margin, axis } = props;
       return height - (margin.top * 2) - axis.x.height;
     },
 
@@ -266,7 +226,7 @@ export const horizontalHistogramD3 = ((): IChartAdaptor => {
      * @return {Number} Margin
      */
     groupedMargin(): number {
-      const { data } = this.props;
+      const { data } = props;
       return ((data.counts.length - 1) * 3);
     },
 
@@ -275,7 +235,7 @@ export const horizontalHistogramD3 = ((): IChartAdaptor => {
      * @return {number} bar height
      */
     barHeight() {
-      const { axis, width, margin, data, bar, stroke } = this.props;
+      const { axis, width, margin, data, bar, stroke } = props;
       const h = this.gridHeight();
       const valuesCount = this.valuesCount(data.counts);
       const setCount = data.counts.length;
@@ -304,10 +264,10 @@ export const horizontalHistogramD3 = ((): IChartAdaptor => {
       setIndex: number, setCount: number,
     ) {
       const { height, width, margin, bar, delay, duration,
-        axis, stroke, tip, tipContentFn } = this.props;
+        axis, stroke, tip, tipContentFn } = props;
       let barItem;
       const barHeight = this.barHeight();
-      const colors = scaleOrdinal(set.colors || this.props.colorScheme);
+      const colors = scaleOrdinal(set.colors || props.colorScheme);
       const borderColors = set.borderColors ? scaleOrdinal(set.borderColors) : null;
 
       const selector = '.bar-' + setIndex;
@@ -329,7 +289,7 @@ export const horizontalHistogramD3 = ((): IChartAdaptor => {
             + multiLineOffset(index);
         })
         .attr('height', (d) => barHeight)
-        .attr('fill', (d, i) => colors(i))
+        .attr('fill', (d, i) => colors(String(i)))
         .on('mouseover', (d: number, i: number) => {
           tipContent.html(() => tipContentFn(bins, i, d));
           tip.fx.in(tipContainer);
@@ -344,7 +304,7 @@ export const horizontalHistogramD3 = ((): IChartAdaptor => {
           return borderColors(i);
         }
         return typeof stroke.color === 'function'
-          ? stroke.color(d, i, colors)
+          ? stroke.color(d, i, (j: number) => colors[j])
           : stroke.color;
       })
         .attr('shape-rendering', 'crispEdges')
@@ -372,9 +332,8 @@ export const horizontalHistogramD3 = ((): IChartAdaptor => {
 
     /**
      * Draw a grid onto the chart background
-     * @param {Object} props Props
      */
-    _drawGrid(props: IHistogramProps) {
+    _drawGrid() {
       const { data, height, width, axis, grid, margin } = props;
       const ticks = this.valuesCount(data.counts);
       const axisWidth = axis.y.style['stroke-width'];
@@ -419,29 +378,26 @@ export const horizontalHistogramD3 = ((): IChartAdaptor => {
 
     /**
      * Update chart
-     * @param {HTMLElement} el Chart element
-     * @param {Object} props Chart props
      */
-    update(el: HTMLElement, props: IHistogramProps) {
+    update(el: Element, newProps: Partial<IHistogramProps>) {
       if (!props.data) {
         return;
       }
-      this.props = merge(defaultProps, props);
+      props = merge(defaultProps, newProps);
       this._makeSvg(el);
-      if (!this.props.data.bins) {
+      if (!props.data.bins) {
         return;
       }
 
-      this._drawScales(this.props.data);
-      this._drawGrid(this.props);
-      this._drawBars(this.props.data);
+      this._drawScales(props.data);
+      this._drawGrid();
+      this._drawBars(props.data);
     },
 
     /**
      * Any necessary clean up
-     * @param {Element} el To remove
      */
-    destroy(el: HTMLElement) {
+    destroy(el: Element) {
       svg.selectAll('svg > *').remove();
     },
   };

@@ -1,11 +1,15 @@
-import * as React from 'react';
-import { Component } from 'react';
-import * as ReactDOM from 'react-dom';
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+import { IChartAdaptor } from './Histogram';
 import { scatterPlotD3 } from './ScatterPlotD3';
 
 interface IChartState {
   choices: string[];
-  data: any[];
+  data: {
+    keys: any[],
+    values: any[],
+  };
   height: number;
   distModels: string[];
   split: string;
@@ -13,28 +17,28 @@ interface IChartState {
   width: number | string;
 }
 
-export type ScatterPlotData = any[];
-
 export interface IScatterPlotProps {
-  choices?: any[];
-  className?: string;
-  chartSize?: number;
-  data: ScatterPlotData;
-  delay?: number;
-  distModels?: string[];
-  duration?: number;
+  choices: string[];
+  className: string;
+  data: {
+    keys: string[],
+    values: any[];
+  };
+  delay: number;
+  distModels: string[];
+  duration: number;
   height: number;
-  legendWidth?: number;
-  colorScheme?: string[];
-  padding?: number;
-  radius?: number;
-  split?: string;
+  legendWidth: number;
+  colorScheme: string[];
+  padding: number;
+  radius: number;
+  split: string;
   width: string | number;
 }
-class ScatterPlot extends Component<IScatterPlotProps, IChartState> {
+class ScatterPlot extends React.Component<IScatterPlotProps, IChartState> {
 
-  private chart;
-  private ref;
+  private chart: IChartAdaptor<IScatterPlotProps>;
+  private ref: HTMLDivElement | null = null;
 
   public static defaultProps = {
     height: 400,
@@ -46,7 +50,10 @@ class ScatterPlot extends Component<IScatterPlotProps, IChartState> {
     this.chart = scatterPlotD3();
     this.state = {
       choices: [],
-      data: [],
+      data: {
+        keys: [],
+        values: [],
+      },
       distModels: [],
       height: this.props.height,
       parentWidth: 400,
@@ -57,18 +64,28 @@ class ScatterPlot extends Component<IScatterPlotProps, IChartState> {
 
   private handleResize() {
     const { legendWidth, padding } = this.props;
+    if (!this.ref) {
+      return;
+    }
     const chartWidth = Math.max(200, this.ref.offsetWidth - padding - legendWidth);
     const chartHeight = Math.max(200, window.innerHeight - padding -
       this.ref.getBoundingClientRect().top);
     const width = Math.min(chartHeight, chartWidth);
-
+    const el = this.getDOMNode();
+    if (!el) {
+      return;
+    }
     this.setState({
       parentWidth: width,
-    }, () => this.chart.create(this.getDOMNode(), this.getChartState()));
+    }, () => this.chart.create(el, this.getChartState()));
   }
 
   public componentDidMount() {
-    this.chart.create(this.getDOMNode(), this.getChartState());
+    const el = this.getDOMNode();
+    if (!el) {
+      return;
+    }
+    this.chart.create(el, this.getChartState());
     const { width } = this.props;
     if (typeof width === 'string' && width === '100%') {
       window.addEventListener('resize', (e) => this.handleResize());
@@ -77,7 +94,11 @@ class ScatterPlot extends Component<IScatterPlotProps, IChartState> {
   }
 
   public componentDidUpdate() {
-    this.chart.update(this.getDOMNode(), this.getChartState());
+    const el = this.getDOMNode();
+    if (!el) {
+      return;
+    }
+    this.chart.update(el, this.getChartState());
   }
 
   private getChartState(): IChartState {
@@ -99,7 +120,11 @@ class ScatterPlot extends Component<IScatterPlotProps, IChartState> {
   }
 
   public componentWillReceiveProps(props: IScatterPlotProps) {
-    this.chart.update(this.getDOMNode(), this.getChartState());
+    const el = this.getDOMNode();
+    if (!el) {
+      return;
+    }
+    this.chart.update(el, this.getChartState());
   }
 
   public componentWillUnmount() {
@@ -107,11 +132,19 @@ class ScatterPlot extends Component<IScatterPlotProps, IChartState> {
     if (typeof width === 'string' && width === '100%') {
       window.removeEventListener('resize', this.handleResize);
     }
-    this.chart.destroy(this.getDOMNode());
+    const el = this.getDOMNode();
+    if (!el) {
+      return;
+    }
+    this.chart.destroy(el);
   }
 
-  private getDOMNode() {
-    return ReactDOM.findDOMNode(this.ref);
+  private getDOMNode(): Element | undefined {
+    const node = ReactDOM.findDOMNode(this.ref);
+    if (node instanceof HTMLElement) {
+      return node;
+    }
+    return undefined;
   }
 
   public render() {

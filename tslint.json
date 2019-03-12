@@ -28,6 +28,14 @@
         "no-console": [
             false
         ],
-        "no-debugger": false
+        "no-debugger": false,
+        "space-before-function-paren": [
+            "error",
+            {
+                "anonymous": "always",
+                "named": "never",
+                "asyncArrow": "never"
+            }
+        ],
     }
 }

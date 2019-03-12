@@ -1,31 +1,35 @@
-import { Component } from 'react';
+import React from 'react';
 interface IChartState {
     choices: string[];
-    data: any[];
+    data: {
+        keys: any[];
+        values: any[];
+    };
     height: number;
     distModels: string[];
     split: string;
     parentWidth: number;
     width: number | string;
 }
-export declare type ScatterPlotData = any[];
 export interface IScatterPlotProps {
-    choices?: any[];
-    className?: string;
-    chartSize?: number;
-    data: ScatterPlotData;
-    delay?: number;
-    distModels?: string[];
-    duration?: number;
+    choices: string[];
+    className: string;
+    data: {
+        keys: string[];
+        values: any[];
+    };
+    delay: number;
+    distModels: string[];
+    duration: number;
     height: number;
-    legendWidth?: number;
-    colorScheme?: string[];
-    padding?: number;
-    radius?: number;
-    split?: string;
+    legendWidth: number;
+    colorScheme: string[];
+    padding: number;
+    radius: number;
+    split: string;
     width: string | number;
 }
-declare class ScatterPlot extends Component<IScatterPlotProps, IChartState> {
+declare class ScatterPlot extends React.Component<IScatterPlotProps, IChartState> {
     private chart;
     private ref;
     static defaultProps: {

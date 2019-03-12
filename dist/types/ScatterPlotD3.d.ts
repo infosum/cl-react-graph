@@ -1,10 +1,35 @@
 import { IScatterPlotProps } from './ScatterPlot';
 export declare const scatterPlotD3: () => {
-    create(el: Element, props?: IScatterPlotProps): void;
-    _makeSvg(el: Element, data: any[]): void;
-    _drawScales(data: any): void;
+    /**
+     * Initialization
+     */
+    create(el: Element, newProps?: Partial<IScatterPlotProps>): void;
+    /**
+     * Make the SVG container element
+     * Recreate if it previously existed
+     */
+    _makeSvg(el: Element, data: {
+        keys: string[];
+        values: any[];
+    }): void;
+    /**
+     * Draw the chart scales
+     */
+    _drawScales(data: string[]): void;
+    /**
+     * Make a legend showing spit choice options
+     */
     _drawLegend(): void;
+    /**
+     * Draw scatter points
+     */
     _drawPoints(traits: any, width: number, height: number): void;
-    update(el: Element, props: IScatterPlotProps): void;
+    /**
+     * Update chart
+     */
+    update(el: Element, newProps: Partial<IScatterPlotProps>): void;
+    /**
+     * Any necessary clean up
+     */
     destroy(el: Element): void;
 };

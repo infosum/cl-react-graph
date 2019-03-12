@@ -1,6 +1,6 @@
 import { rgb } from 'd3-color';
-import * as React from 'react';
-import * as ReactDOM from 'react-dom';
+import React from 'react';
+import ReactDOM from 'react-dom';
 
 import {
   IChartAdaptor,
@@ -14,8 +14,8 @@ import { horizontalHistogramD3 } from './HorizontalHistogramD3';
  */
 class HorizontalHistogram extends React.Component<IHistogramProps, IChartState> {
 
-  private histogram: IChartAdaptor;
-  private ref;
+  private histogram: IChartAdaptor<IHistogramProps>;
+  private ref: HTMLDivElement | null = null;
 
   public static defaultProps = {
     axis: {},
@@ -61,7 +61,6 @@ class HorizontalHistogram extends React.Component<IHistogramProps, IChartState> 
 
   /**
    * Constructor
-   * @param {Object} props
    */
   constructor(props: IHistogramProps) {
     super(props);
@@ -75,19 +74,26 @@ class HorizontalHistogram extends React.Component<IHistogramProps, IChartState> 
    * Handle the page resize
    */
   private handleResize() {
-    const elem = this.getDOMNode();
+    const el = this.getDOMNode();
+    if (!el) {
+      return;
+    }
     const width = (this.ref && this.ref.offsetWidth) ? this.ref.offsetWidth : 0;
 
     this.setState({
       parentWidth: width,
-    }, () => this.histogram.create(elem, this.getChartState()));
+    }, () => this.histogram.create(el, this.getChartState()));
   }
 
   /**
    * Component mounted
    */
   public componentDidMount() {
-    this.histogram.create(this.getDOMNode(), this.getChartState());
+    const el = this.getDOMNode();
+    if (!el) {
+      return;
+    }
+    this.histogram.create(el, this.getChartState());
     if (this.props.width === '100%') {
       window.addEventListener('resize', (e) => this.handleResize());
       this.handleResize();
@@ -98,12 +104,15 @@ class HorizontalHistogram extends React.Component<IHistogramProps, IChartState> 
    * Component updated
    */
   public componentDidUpdate() {
-    this.histogram.update(this.getDOMNode(), this.getChartState());
+    const el = this.getDOMNode();
+    if (!el) {
+      return;
+    }
+    this.histogram.update(el, this.getChartState());
   }
 
   /**
    * Get the chart state
-   * @return {Object} ChartState
    */
   public getChartState(): IHistogramProps {
     let { width } = this.props;
@@ -120,10 +129,13 @@ class HorizontalHistogram extends React.Component<IHistogramProps, IChartState> 
 
   /**
    * Props recieved, update the chart
-   * @param {Object} props Props
    */
   public componentWillReceiveProps(props: IHistogramProps) {
-    this.histogram.update(this.getDOMNode(), this.getChartState());
+    const el = this.getDOMNode();
+    if (!el) {
+      return;
+    }
+    this.histogram.update(el, this.getChartState());
   }
 
   /**
@@ -131,23 +143,29 @@ class HorizontalHistogram extends React.Component<IHistogramProps, IChartState> 
    * any event listeners
    */
   public componentWillUnmount() {
+    const el = this.getDOMNode();
+    if (!el) {
+      return;
+    }
     if (this.props.width === '100%') {
       window.removeEventListener('resize', this.handleResize);
     }
-    this.histogram.destroy(this.getDOMNode());
+    this.histogram.destroy(el);
   }
 
   /**
    * Get the chart's dom node
-   * @return {Element} dom noe
    */
-  private getDOMNode() {
-    return ReactDOM.findDOMNode(this.ref);
+  private getDOMNode(): Element | undefined {
+    const node = ReactDOM.findDOMNode(this.ref);
+    if (node instanceof HTMLElement) {
+      return node;
+    }
+    return undefined;
   }
 
   /**
    * Render
-   * @return {Dom} node
    */
   public render(): JSX.Element {
     return (<div ref={(ref) => this.ref = ref} className="histogram-chart-container"></div>);

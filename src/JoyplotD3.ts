@@ -9,9 +9,12 @@ import {
   ScaleLinear,
   scaleOrdinal,
 } from 'd3-scale';
-import { select } from 'd3-selection';
-import * as merge from 'deepmerge';
-import * as get from 'lodash.get';
+import {
+  select,
+  Selection,
+} from 'd3-selection';
+import merge from 'deepmerge';
+import get from 'lodash.get';
 
 import colorScheme from './colors';
 import attrs from './d3/attrs';
@@ -24,7 +27,7 @@ import { IJoyPlotProps } from './JoyPlot';
 import tips, { makeTip } from './tip';
 import {
   axis as defaultAxis,
-  lineStyle,
+  grid as defaultGrid,
 } from './utils/defaults';
 
 interface IGroupDataItem {
@@ -34,12 +37,17 @@ interface IGroupDataItem {
 
 type IGroupData = IGroupDataItem[][];
 
-export const joyPlotD3 = ((): IChartAdaptor => {
-  let svg;
+export const joyPlotD3 = ((): IChartAdaptor<IJoyPlotProps> => {
+  let svg: Selection<any, any, any, any>;;
   let tipContainer;
   let tipContent;
   let props: IJoyPlotProps;
   let dataSets: IGroupData[];
+  let containers: Array<Selection<SVGGElement, any, any, any>>;
+  let xAxisContainer: Selection<SVGGElement, any, any, any>;
+  let yAxisContainer: Selection<SVGGElement, any, any, any>;
+  let gridXContainer: Selection<SVGGElement, any, any, any>;
+  let gridYContainer: Selection<SVGGElement, any, any, any>;
   const yOuterScaleBand = scaleBand();
   const y = scaleLinear();
   const x = scaleBand();
@@ -76,33 +84,12 @@ export const joyPlotD3 = ((): IChartAdaptor => {
       min: null,
     },
     duration: 400,
-    grid: {
-      x: {
-        style: {
-          ...lineStyle,
-          'fill': 'none',
-          'stroke': '#bbb',
-          'stroke-opacity': 0.7,
-          'stroke-width': 1,
-        },
-        ticks: 5,
-        visible: true,
-      },
-      y: {
-        style: {
-          ...lineStyle,
-          'fill': 'none',
-          'stroke': '#bbb',
-          'stroke-opacity': 0.7,
-          'stroke-width': 1,
-        },
-        ticks: 5,
-        visible: true,
-      },
-    },
+    grid: defaultGrid,
     height: 200,
     margin: {
+      bottom: 0,
       left: 5,
+      right: 0,
       top: 5,
     },
     stroke: {
@@ -123,15 +110,13 @@ export const joyPlotD3 = ((): IChartAdaptor => {
   const JoyPlotD3 = {
     /**
      * Initialization
-     * @param {Node} el Target DOM node
-     * @param {Object} props Chart properties
      */
-    create(el: HTMLElement, newProps: Partial<IJoyPlotProps> = {}) {
+    create(el: Element, newProps: Partial<IJoyPlotProps> = {}) {
       this.mergeProps(newProps);
       this._makeSvg(el);
       this.makeGrid();
       this.makeScales();
-      this.containers = props.data.map((d, i) => svg
+      containers = props.data.map((d, i) => svg
         .append('g')
         .attr('class', `histogram-container-${i}`),
       );
@@ -141,7 +126,9 @@ export const joyPlotD3 = ((): IChartAdaptor => {
 
     mergeProps(newProps: Partial<IJoyPlotProps>) {
       props = merge<IJoyPlotProps>(defaultProps, newProps);
-      props.data = newProps.data;
+      if (newProps.data) {
+        props.data = newProps.data;
+      }
       if (newProps.colorScheme) {
         props.colorScheme = newProps.colorScheme;
       }
@@ -150,9 +137,8 @@ export const joyPlotD3 = ((): IChartAdaptor => {
     /**
      * Make the SVG container element
      * Recreate if it previously existed
-     * @param {Dom} el Dom container node
      */
-    _makeSvg(el) {
+    _makeSvg(el: Element) {
       if (svg) {
         svg.selectAll('svg > *').remove();
         svg.remove();
@@ -206,10 +192,10 @@ export const joyPlotD3 = ((): IChartAdaptor => {
       const thisExtent = extent(allCounts, (d) => d);
       yDomain[1] = domain && domain.hasOwnProperty('max') && domain.max !== null
         ? domain.max
-        : thisExtent[1];
+        : Number(thisExtent[1]);
       yDomain[0] = domain && domain.hasOwnProperty('min') && domain.min !== null
         ? domain.min
-        : thisExtent[0];
+        : Number(thisExtent[0]);
       const yRange = [yOuterScaleBand.bandwidth(), 0];
       scale.range(yRange)
         .domain(yDomain);
@@ -231,8 +217,8 @@ export const joyPlotD3 = ((): IChartAdaptor => {
 
     makeScales() {
       const { axis, margin, height, width } = props;
-      this.xAxis = svg.append('g').attr('class', 'x-axis');
-      this.yAxis = svg.append('g').attr('class', 'y-axis');
+      xAxisContainer = svg.append('g').attr('class', 'x-axis');
+      yAxisContainer = svg.append('g').attr('class', 'y-axis');
 
       if (axis.x.label !== '') {
         svg.append('text')
@@ -300,12 +286,12 @@ export const joyPlotD3 = ((): IChartAdaptor => {
         }
       }
 
-      this.xAxis
+      xAxisContainer
         .attr('transform', 'translate(' + (this.yAxisWidth() + axis.y.style['stroke-width']) + ',' +
           (height - this.xAxisHeight() - (margin.left * 2)) + ')')
         .call(xAxis);
 
-      const yLabels = data.map((d) => d.title);
+      const yLabels = data.map((d) => String(d.title));
       const yOuterBounds: [number, number] = [height - (margin.top * 2) - this.xAxisHeight(), 0];
       yOuterScaleBand.domain(yLabels)
         .rangeRound(yOuterBounds);
@@ -319,13 +305,11 @@ export const joyPlotD3 = ((): IChartAdaptor => {
         yAxis.tickSize(yTickSize);
       }
 
-      this.yAxis
+      yAxisContainer
         .attr('transform', 'translate(' + this.yAxisWidth() + ', 0)')
         .transition()
         .call(yAxis);
 
-      const { ...xLabelStyle } = axis.x.text.style;
-      const { ...yLabelStyle } = axis.y.text.style;
       attrs(svg.selectAll('.y-axis .domain, .y-axis .tick line'), axis.y.style);
       attrs(svg.selectAll('.y-axis .tick text'), axis.y.text.style as any);
 
@@ -337,10 +321,9 @@ export const joyPlotD3 = ((): IChartAdaptor => {
      * Calculate the width of the area used to display the
      * chart bars. Removes chart margins and Y axis from
      * chart total width.
-     * @return {number} width
      */
     gridWidth(): number {
-      const { axis, width, margin } = props;
+      const { width, margin } = props;
       return Number(width) - (margin.left * 2) - this.yAxisWidth();
     },
 
@@ -348,16 +331,14 @@ export const joyPlotD3 = ((): IChartAdaptor => {
      * Calculate the height of the area used to display the
      * chart bars. Removes chart margins and X axis from
      * chart total height.
-     * @return {number} width
      */
     gridHeight(): number {
-      const { height, margin, axis } = props;
+      const { height, margin } = props;
       return height - (margin.top * 2) - this.xAxisHeight();
     },
 
     /**
      * Returns the margin between similar bars in different data sets
-     * @return {Number} Margin
      */
     groupedMargin(): number {
       const m = get(props.bar, 'groupMargin', 0.1);
@@ -375,7 +356,6 @@ export const joyPlotD3 = ((): IChartAdaptor => {
 
     /**
      * Calculate the bar width
-     * @return {number} bar width
      */
     barWidth() {
       return innerScaleBand.bandwidth();
@@ -404,34 +384,34 @@ export const joyPlotD3 = ((): IChartAdaptor => {
       }, 0);
       groupData.forEach((data, i) => {
         const joyTitle = props.data[i].title;
-        const g = this.containers[i]
-          .selectAll('g')
+        const g = containers[i]
+          .selectAll<SVGGElement, {}>('g')
           .data(data);
 
         const bars = g.enter()
-          .append('g')
+          .append<SVGGElement>('g')
           .merge(g)
           .attr('transform', (d) => {
             const xdelta = yAxisWidth
               + axis.y.style['stroke-width']
-              + x(d[0].label);
+              + (x(d[0].label) || 0);
 
-            const ydelta = yOuterScaleBand(d[0].joyLabel);
+            const ydelta = yOuterScaleBand(d[0].label);
             return `translate(${xdelta}, ${ydelta})`;
           })
-          .selectAll('rect')
+          .selectAll<SVGRectElement, {}>('rect')
           .data((d) => d);
 
         bars
           .enter()
-          .append('rect')
+          .append<SVGRectElement>('rect')
           .attr('height', 0)
           .attr('y', (d: IGroupDataItem): number => yOuterScaleBand.bandwidth())
 
           .attr('class', 'bar')
-          .attr('x', (d) => innerScaleBand(d.groupLabel))
+          .attr('x', (d) => String(innerScaleBand(d.label)))
           .attr('width', (d) => barWidth)
-          .attr('fill', (d, ix) => colors(ix))
+          .attr('fill', (d, ix) => colors(String(ix)))
 
           .on('mouseover', (d: IGroupDataItem) => {
             const ix = bins.findIndex((b) => b === d.label);
@@ -447,8 +427,9 @@ export const joyPlotD3 = ((): IChartAdaptor => {
           .attr('y', (d: IGroupDataItem): number => y(d.value))
           .attr('stroke', (d, ix) => {
             if (borderColors) {
-              return borderColors(ix);
+              return borderColors(String(ix));
             }
+            return '';
           })
           .attr('shape-rendering', 'crispEdges')
           .attr('stroke-width', stroke.width)
@@ -469,9 +450,9 @@ export const joyPlotD3 = ((): IChartAdaptor => {
     },
 
     makeGrid() {
-      this.gridX = svg.append('g')
+      gridXContainer = svg.append('g')
         .attr('class', 'grid gridX');
-      this.gridY = svg.append('g')
+      gridYContainer = svg.append('g')
         .attr('class', 'grid gridY');
     },
 
@@ -494,40 +475,38 @@ export const joyPlotD3 = ((): IChartAdaptor => {
 
       if (grid.x.visible) {
         // Add the X gridlines
-        this.gridX.attr('transform', `translate(${offset.x}, ${offset.y})`);
+        gridXContainer.attr('transform', `translate(${offset.x}, ${offset.y})`);
 
-        this.gridX.call(make_x_gridlines(get(grid, 'x.ticks', ticks))
+        gridXContainer.call(make_x_gridlines(get(grid, 'x.ticks', ticks))
           .tickSize(-height + this.xAxisHeight() + (margin.top * 2))
           .tickFormat(() => ''));
 
-        attrs(this.gridX.selectAll('.tick line'), grid.x.style);
-        attrs(this.gridX.selectAll('.domain'), { ...axis.y.style, stroke: 'transparent' });
+        attrs(gridXContainer.selectAll('.tick line'), grid.x.style);
+        attrs(gridXContainer.selectAll('.domain'), { ...axis.y.style, stroke: 'transparent' });
       }
 
       if (grid.y.visible) {
         // add the Y gridlines
-        this.gridY.attr('transform', 'translate(' + (this.yAxisWidth() + axisWidth) + ', 0)')
+        gridYContainer.attr('transform', 'translate(' + (this.yAxisWidth() + axisWidth) + ', 0)')
           .transition()
           .call(make_y_gridlines(get(grid, 'y.ticks', ticks))
             .tickSize(-width + (margin.left * 2) + this.yAxisWidth())
             .tickFormat(() => ''),
           );
 
-        attrs(this.gridY.selectAll('.tick line'), grid.y.style);
+        attrs(gridYContainer.selectAll('.tick line'), grid.y.style);
 
         // Hide the first horizontal grid line to show axis
-        this.gridY.selectAll('.gridY .tick line').filter((d, i) => i === 0)
+        gridYContainer.selectAll('.gridY .tick line').filter((d, i) => i === 0)
           .attr('display', 'none');
-        attrs(this.gridY.selectAll('.domain'), { ...axis.x.style, stroke: 'transparent' });
+        attrs(gridYContainer.selectAll('.domain'), { ...axis.x.style, stroke: 'transparent' });
       }
     },
 
     /**
      * Update chart
-     * @param {HTMLElement} el Chart element
-     * @param {Object} props Chart props
      */
-    update(el: HTMLElement, newProps: IJoyPlotProps) {
+    update(el: Element, newProps: Partial<IJoyPlotProps>) {
       if (!props.data) {
         return;
       }
@@ -559,9 +538,8 @@ export const joyPlotD3 = ((): IChartAdaptor => {
 
     /**
      * Any necessary clean up
-     * @param {Element} el To remove
      */
-    destroy(el: HTMLElement) {
+    destroy(el: Element) {
       svg.selectAll('svg > *').remove();
     },
   };

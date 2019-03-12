@@ -9,7 +9,8 @@ import {
 
 import { IAxes } from '../';
 
-export type AnyScale = ScaleLinear<number, number> | ScaleTime<any, any>
+export type AnyScale = ScaleLinear<number, number>
+  | ScaleTime<any, any>
   | ScaleLogarithmic<any, any>;
 
 export const buildScales = (axis: IAxes) => {
@@ -32,7 +33,7 @@ export const buildScales = (axis: IAxes) => {
       y = scaleLog().clamp(true); // clamp values below 1 to be equal to 0
       break;
     case 'TIME':
-      x = scaleTime();
+      y = scaleTime();
       break;
     default:
       y = scaleLinear();

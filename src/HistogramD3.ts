@@ -9,10 +9,13 @@ import {
   ScaleLinear,
   scaleOrdinal,
 } from 'd3-scale';
-import { select } from 'd3-selection';
+import {
+  select,
+  Selection,
+} from 'd3-selection';
 import { timeFormat } from 'd3-time-format';
-import * as merge from 'deepmerge';
-import * as get from 'lodash.get';
+import merge from 'deepmerge';
+import get from 'lodash.get';
 
 import colorScheme from './colors';
 import attrs from './d3/attrs';
@@ -26,17 +29,16 @@ import {
 import {
   IAxis,
   IChartAdaptor,
-  IHistogramData,
   IHistogramDataSet,
   IHistogramProps,
 } from './Histogram';
 import tips, { makeTip } from './tip';
 import {
   axis as defaultAxis,
-  lineStyle,
+  grid,
 } from './utils/defaults';
 
-const formatTickTime = (axis: IAxis) => (v: string) => {
+export const formatTickTime = (axis: IAxis) => (v: string | number) => {
   return timeFormat(axis.dateFormat)(new Date(v));
 };
 
@@ -47,13 +49,22 @@ interface IGroupDataItem {
 
 type IGroupData = IGroupDataItem[][];
 
-export const histogramD3 = ((): IChartAdaptor => {
-  let svg;
+export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
+  let svg: Selection<any, any, any, any>;;
   let tipContainer;
   let tipContent;
   const y = scaleLinear();
   const x = scaleBand();
   const innerScaleBand = scaleBand();
+  let container: any;
+  let dataSets: any[];
+  let gridX: any;
+  let gridY: any;
+  let yAxisContainer: any;
+  let xAxisContainer: any;
+  let xAxisLabel: any;
+  let yAxisLabel: any;
+
   // @TODO make this a prop
   const stacked = false;
 
@@ -76,33 +87,12 @@ export const histogramD3 = ((): IChartAdaptor => {
       min: null,
     },
     duration: 400,
-    grid: {
-      x: {
-        style: {
-          ...lineStyle,
-          'fill': 'none',
-          'stroke': '#bbb',
-          'stroke-opacity': 0.7,
-          'stroke-width': 1,
-        },
-        ticks: 5,
-        visible: true,
-      },
-      y: {
-        style: {
-          ...lineStyle,
-          'fill': 'none',
-          'stroke': '#bbb',
-          'stroke-opacity': 0.7,
-          'stroke-width': 1,
-        },
-        ticks: 5,
-        visible: true,
-      },
-    },
+    grid,
     height: 200,
     margin: {
+      bottom: 0,
       left: 5,
+      right: 0,
       top: 5,
     },
     stroke: {
@@ -125,12 +115,12 @@ export const histogramD3 = ((): IChartAdaptor => {
     /**
      * Initialization
      */
-    create(el: HTMLElement, newProps: Partial<IHistogramProps> = {}) {
+    create(el: Element, newProps: Partial<IHistogramProps> = {}) {
       this.mergeProps(newProps);
       this._makeSvg(el);
       this.makeGrid();
       this.makeScales();
-      this.container = svg
+      container = svg
         .append('g')
         .attr('class', 'histogram-container');
 
@@ -139,7 +129,9 @@ export const histogramD3 = ((): IChartAdaptor => {
 
     mergeProps(newProps: Partial<IHistogramProps>) {
       props = merge<IHistogramProps>(defaultProps, newProps);
-      props.data = newProps.data;
+      if (newProps.data) {
+        props.data = newProps.data;
+      }
       if (newProps.colorScheme) {
         props.colorScheme = newProps.colorScheme;
       }
@@ -149,7 +141,7 @@ export const histogramD3 = ((): IChartAdaptor => {
      * Make the SVG container element
      * Recreate if it previously existed
      */
-    _makeSvg(el: HTMLElement) {
+    _makeSvg(el: Element) {
       if (svg) {
         svg.selectAll('svg > *').remove();
         svg.remove();
@@ -195,24 +187,24 @@ export const histogramD3 = ((): IChartAdaptor => {
         return [...prev, ...next.map((n) => n.value)];
       }, [0]);
 
-      const thisExtent = extent(allCounts, (d) => d);
+      const thisExtent = extent<any>(allCounts, (d) => d);
       yDomain[1] = domain && domain.hasOwnProperty('max') && domain.max !== null
         ? domain.max
-        : thisExtent[1];
+        : Number(thisExtent[1]);
       yDomain[0] = domain && domain.hasOwnProperty('min') && domain.min !== null
         ? domain.min
-        : thisExtent[0];
+        : Number(thisExtent[0]);
       const yRange = [height - (margin.top * 2) - xAxisHeight(props.axis), 0];
       scale.range(yRange)
         .domain(yDomain);
     },
 
     makeScales() {
-      this.xAxis = svg.append('g').attr('class', 'x-axis');
-      this.yAxis = svg.append('g').attr('class', 'y-axis');
+      xAxisContainer = svg.append('g').attr('class', 'x-axis');
+      yAxisContainer = svg.append('g').attr('class', 'y-axis');
 
-      this.xAxisLabel = svg.append('g');
-      this.yAxisLabel = svg.append('g');
+      xAxisLabel = svg.append('g');
+      yAxisLabel = svg.append('g');
     },
 
     /**
@@ -256,23 +248,23 @@ export const histogramD3 = ((): IChartAdaptor => {
         xAxis.tickFormat(formatTickTime(axis.x));
       }
 
-      this.xAxis
+      xAxisContainer
         .attr('transform', 'translate(' + (yAxisWidth(axis) + axis.y.style['stroke-width']) + ',' +
           (height - xAxisHeight(props.axis) - (margin.left * 2)) + ')')
         .call(xAxis);
 
-      this.appendDomainRange(y, this.dataSets);
+      this.appendDomainRange(y, dataSets);
 
-      const yAxis = axisLeft(y).ticks(axis.y.ticks);
+      const yAxis = axisLeft<number>(y).ticks(axis.y.ticks);
 
       const yTickSize = get(axis, 'y.tickSize', undefined);
       if (yTickSize !== undefined) {
         yAxis.tickSize(yTickSize);
       }
       if (axis.y.scale === 'TIME' && axis.y.dateFormat) {
-        yAxis.tickFormat(timeFormat(axis.y.dateFormat));
+        yAxis.tickFormat(formatTickTime(axis.y));
       }
-      this.yAxis
+      yAxisContainer
         .attr('transform', 'translate(' + yAxisWidth(axis) + ', 0)')
         .transition()
         .call(yAxis);
@@ -319,17 +311,21 @@ export const histogramD3 = ((): IChartAdaptor => {
       const colors = scaleOrdinal(props.colorScheme);
       const gHeight = gridHeight(props);
 
-      const g = this.container
+      const g = container
         .selectAll('g')
         .data(groupData);
 
       const bars = g.enter()
         .append('g')
         .merge(g)
-        .attr('transform', (d) => {
+        .attr('transform', (d: any[]) => {
+          let xd = x(d[0].label);
+          if (xd === undefined) {
+            xd = 0;
+          }
           const xdelta = yAxisWidth(axis)
             + axis.y.style['stroke-width']
-            + x(d[0].label);
+            + xd;
           return `translate(${xdelta}, 0)`;
         })
         .selectAll('rect')
@@ -391,7 +387,7 @@ export const histogramD3 = ((): IChartAdaptor => {
       bars.exit().remove();
       g.exit().remove();
 
-      const xText = this.xAxisLabel
+      const xText = xAxisLabel
         .selectAll('text')
         .data([axis.x.label]);
 
@@ -404,7 +400,7 @@ export const histogramD3 = ((): IChartAdaptor => {
         .style('text-anchor', 'middle')
         .text((d) => d);
 
-      const yText = this.yAxisLabel
+      const yText = yAxisLabel
         .selectAll('text')
         .data([axis.y.label]);
 
@@ -420,15 +416,15 @@ export const histogramD3 = ((): IChartAdaptor => {
     },
 
     makeGrid() {
-      this.gridX = svg.append('g')
+      gridX = svg.append('g')
         .attr('class', 'grid gridX');
-      this.gridY = svg.append('g')
+      gridY = svg.append('g')
         .attr('class', 'grid gridY');
     },
     /**
      * Update chart
      */
-    update(el: HTMLElement, newProps: IHistogramProps) {
+    update(el: Element, newProps: Partial<IHistogramProps>) {
       if (!newProps.data) {
         return;
       }
@@ -438,14 +434,14 @@ export const histogramD3 = ((): IChartAdaptor => {
       }
 
       const { data, visible } = props;
-      this.dataSets = [] as IGroupData;
+      dataSets = [] as IGroupData;
 
       data.counts.forEach((count) => {
         count.data.forEach((value, i) => {
-          if (!this.dataSets[i]) {
-            this.dataSets[i] = [];
+          if (!dataSets[i]) {
+            dataSets[i] = [];
           }
-          this.dataSets[i].push({
+          dataSets[i].push({
             groupLabel: count.label,
             label: data.bins[i],
             value: visible[data.bins[i]] !== false && visible[count.label] !== false ? value : 0,
@@ -454,14 +450,14 @@ export const histogramD3 = ((): IChartAdaptor => {
       });
 
       this._drawScales();
-      drawGrid(x, y, this.gridX, this.gridY, props, this.valuesCount(data.counts));
-      this.updateChart(data.bins, this.dataSets);
+      drawGrid(x, y, gridX, gridY, props, this.valuesCount(data.counts));
+      this.updateChart(data.bins, dataSets);
     },
 
     /**
      * Any necessary clean up
      */
-    destroy(el: HTMLElement) {
+    destroy(el: Element) {
       svg.selectAll('svg > *').remove();
     },
   };

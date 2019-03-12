@@ -7,18 +7,19 @@ import {
   scaleLinear,
   scaleOrdinal,
 } from 'd3-scale';
-import { select } from 'd3-selection';
-import * as merge from 'deepmerge';
+import {
+  select,
+  Selection,
+} from 'd3-selection';
+import merge from 'deepmerge';
+import { number } from 'prop-types';
 
 import colorScheme from './colors';
 import { IChartPoint } from './LineChart';
-import {
-  IScatterPlotProps,
-  ScatterPlotData,
-} from './ScatterPlot';
+import { IScatterPlotProps } from './ScatterPlot';
 
 export const scatterPlotD3 = (() => {
-  let svg;
+  let svg: Selection<any, any, any, any>;
   const yScale = scaleLinear();
   const xScale = scaleLinear();
   const domainByTrait = {};
@@ -26,39 +27,42 @@ export const scatterPlotD3 = (() => {
   let color;
   let yAxis;
 
-  const defaultProps = {
+  const defaultProps: IScatterPlotProps = {
     choices: [],
     className: 'scatter-plot-d3',
     colorScheme,
-    data: [],
+    data: {
+      keys: [],
+      values: []
+    },
     delay: 0,
+    distModels: [],
     duration: 400,
     height: 300,
     legendWidth: 100,
     padding: 20,
     radius: 4,
+    split: '',
     width: '100%',
   };
+
+  let props: IScatterPlotProps;
 
   const GenerateChart = {
 
     /**
      * Initialization
-     * @param {Element} el Target DOM node
-     * @param {Object} props Chart properties
      */
-    create(el: Element, props: IScatterPlotProps = defaultProps) {
-      this.props = merge(defaultProps, props);
-      this.update(el, props);
+    create(el: Element, newProps: Partial<IScatterPlotProps> = defaultProps) {
+      props = merge(defaultProps, newProps);
+      this.update(el, newProps);
     },
 
     /**
      * Make the SVG container element
      * Recreate if it previously existed
-     * @param {Element} el Dom container node
-     * @param {Array} data Chart data
      */
-    _makeSvg(el: Element, data: ScatterPlotData) {
+    _makeSvg(el: Element, data: IScatterPlotProps['data']) {
       if (svg) {
         svg.selectAll('svg > *').remove();
         svg.remove();
@@ -67,27 +71,25 @@ export const scatterPlotD3 = (() => {
           el.removeChild(childNodes[0]);
         }
       }
-      const { width, className, height,
-        legendWidth, padding } = this.props;
+      const { width, className, height, legendWidth, padding } = props;
 
       // Reference to svg element containing chart
       svg = select(el).append('svg')
         .attr('class', className)
-        .attr('width', width + padding + legendWidth)
+        .attr('width', Number(width) + padding + legendWidth)
         .attr('height', height + padding)
         .append('g')
         .attr('transform', 'translate(' + padding + ',' + padding / 2 + ')');
 
-      color = scaleOrdinal(this.props.colorScheme);
+      color = scaleOrdinal(props.colorScheme);
     },
 
     /**
      * Draw the chart scales
-     * @param {Object} data Chart data
      */
-    _drawScales(data) {
-      const { height, padding, width } = this.props;
-      const xSize = width / data.length;
+    _drawScales(data: IScatterPlotProps['data']['keys']) {
+      const { height, padding, width } = props;
+      const xSize = Number(width) / data.length;
       const ySize = height / data.length;
       xScale.range([padding / 2, xSize - padding / 2]);
       yScale.range([height - padding / 2, padding / 2]);
@@ -98,7 +100,7 @@ export const scatterPlotD3 = (() => {
         .attr('class', 'x axis')
         .attr('transform', (d, i) =>
           'translate(' + (data.length - i - 1) * xSize + ',0)')
-        .each(function (d) {
+        .each(function (this: any, d: any) {
           xScale.domain(domainByTrait[d]);
           select(this).call(xAxis);
         });
@@ -108,7 +110,7 @@ export const scatterPlotD3 = (() => {
         .enter().append('g')
         .attr('class', 'y axis')
         .attr('transform', (d: any, i: number) => 'translate(0,' + i * ySize + ')')
-        .each(function (d: any) {
+        .each(function (this: any, d: any) {
           yScale.domain(domainByTrait[d]);
           select(this).call(yAxis);
         });
@@ -118,12 +120,12 @@ export const scatterPlotD3 = (() => {
      * Make a legend showing spit choice options
      */
     _drawLegend() {
-      const { choices, padding, width, split } = this.props;
+      const { choices, padding, width, split } = props;
       if (choices === undefined) {
         return;
       }
       const legend = svg.append('g')
-        .attr('transform', 'translate(' + (width + padding / 2) +
+        .attr('transform', 'translate(' + (Number(width) + padding / 2) +
           ', ' + (padding + 50) + ')');
 
       legend.append('g').append('text')
@@ -134,7 +136,7 @@ export const scatterPlotD3 = (() => {
       legend.selectAll('.legendItem')
         .data(choices)
         .enter().append('g')
-        .each(function (c, i: number) {
+        .each(function (this: any, c, i: number) {
           const cell = select(this);
           cell.append('rect')
             .attr('class', 'legendItem')
@@ -156,12 +158,10 @@ export const scatterPlotD3 = (() => {
 
     /**
      * Draw scatter points
-     * @param {Object} traits Chart data
-     * @param {Number} size Chart size
      */
     _drawPoints(traits, width: number, height: number) {
       const { data, delay, duration,
-        choices, split, padding, radius } = this.props;
+        choices, split, padding, radius } = props;
       const n = traits.length;
       const cell = svg.selectAll('.cell')
         .data(cross(traits, traits))
@@ -180,15 +180,14 @@ export const scatterPlotD3 = (() => {
 
       /**
        * Plot a point
-       * @param {Object} p Point
        */
-      function plot(p: IChartPoint) {
+      function plot(this: any, p: IChartPoint) {
         const plotCell = select(this);
-        let circle;
+        let circle: Selection<SVGCircleElement, any, any, any>;
         xScale.domain(domainByTrait[Number(p.x)]);
         yScale.domain(domainByTrait[Number(p.y)]);
 
-        plotCell.append('rect')
+        plotCell.append<SVGRectElement>('rect')
           .attr('class', 'frame')
           .attr('x', padding / 2)
           .attr('y', padding / 2)
@@ -219,12 +218,9 @@ export const scatterPlotD3 = (() => {
       /**
        * Create cross array
        * // @TODO looks like d3 has its own cross function now...
-       * @param {Object} a point
-       * @param {Object} b point
-       * @return {Array} data
        */
       function cross(a, b) {
-        const c = [];
+        const c: Array<{ x: number; i: number; y: number; j: number; }> = [];
         const nx = a.length;
         const m = b.length;
         let i: number;
@@ -240,24 +236,22 @@ export const scatterPlotD3 = (() => {
 
     /**
      * Update chart
-     * @param {Node} el Chart element
-     * @param {Object} props Chart props
      */
-    update(el: Element, props: IScatterPlotProps) {
-      this.props = { ...this.props, ...props };
+    update(el: Element, newProps: Partial<IScatterPlotProps>) {
+      props = merge(props, newProps);
       if (!props.data) {
         return;
       }
-      const { data, distModels, height, width } = this.props;
+      const { data, distModels, height, width } = props;
       this._makeSvg(el, props.data);
       this._drawLegend();
       const traits = data.keys.filter((k) => distModels.indexOf(k) !== -1);
-      const xSize = width / traits.length;
+      const xSize = Number(width) / traits.length;
       const ySize = height / traits.length;
       const n = traits.length;
 
       traits.forEach((trait) => {
-        domainByTrait[trait] = extent(data.values, (d) => d[trait]);
+        domainByTrait[trait] = extent<any>(data.values, (d) => d[trait]);
       });
       xAxis = axisBottom(xScale)
         .ticks(6)
@@ -272,7 +266,6 @@ export const scatterPlotD3 = (() => {
 
     /**
      * Any necessary clean up
-     * @param {Element} el To remove
      */
     destroy(el: Element) {
       svg.selectAll('svg > *').remove();
