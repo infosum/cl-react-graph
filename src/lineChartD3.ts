@@ -3,7 +3,6 @@ import {
   axisBottom,
   axisLeft,
 } from 'd3-axis';
-import { easeCubic } from 'd3-ease';
 import {
   select,
   Selection,
@@ -79,7 +78,6 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
     axis: defaultAxis,
     className: 'line-chart-d3',
     data: [],
-    fx: easeCubic,
     grid: defaultGrid,
     height: 250,
     margin: {

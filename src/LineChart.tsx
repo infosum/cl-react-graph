@@ -1,7 +1,7 @@
 import {
   CurveFactory,
   CurveFactoryLineOnly,
-} from 'd3';
+} from 'd3-shape';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
@@ -57,7 +57,6 @@ export interface ILineChartProps<T extends IChartPoint<IChartPointValue, IChartP
   axis: IAxes;
   className: string;
   data: Array<ILineChartDataSet<T>>;
-  fx: (n: number) => number;
   grid: IGrid;
   height: number | string;
   margin: IMargin;
