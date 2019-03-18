@@ -413,7 +413,6 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
      * Update chart
      */
     update(el: Element, newProps: DeepPartial<IHistogramProps>) {
-      console.log('----- update');
       if (!newProps.data) {
         return;
       }
