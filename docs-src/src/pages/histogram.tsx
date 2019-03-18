@@ -3,13 +3,14 @@ import React, {
   useReducer,
   useState,
 } from 'react';
-import ReactDataSheet from 'react-datasheet';
 
 import {
   Card,
   CardContent,
+  FormControlLabel,
   Grid,
   MenuItem,
+  Switch,
   Tab,
   Tabs,
   TextField,
@@ -23,8 +24,8 @@ import Histogram, {
   IHistogramData,
 } from '../../../src/Histogram';
 import Legend from '../../../src/Legend';
-import { axis as defaultAxis } from '../../../src/utils/defaults';
 import { DeepPartial } from '../../../src/utils/types';
+import DataGroup from '../components/DataGroup';
 import { GridOptionsFactory } from '../components/GridOptions';
 import JSXToString from '../components/JSXToString';
 import Layout from '../components/layout';
@@ -57,20 +58,15 @@ const tipContentFns = [
 
 const now = new Date();
 data.bins = data.bins.map((d, i) => new Date(new Date().setDate(now.getDate() + i)).toLocaleString());
-const dataLegendData = {
-  bins: data.counts.map((c) => c.label),
-  counts: [{
-    data: data.counts.map((c) => c.data.reduce((p, n) => p + n, 0)),
-    label: '',
-  }],
-};
 
-interface IInitialState {
+
+export interface IInitialState {
   axis: DeepPartial<IAxes>;
   chartType: string;
   data: IHistogramData;
   delay: number;
   duration: number;
+  stacked: boolean;
   grid: IGrid;
 }
 const initialSate: IInitialState = {
@@ -79,6 +75,7 @@ const initialSate: IInitialState = {
   data,
   delay: 0,
   duration: 400,
+  stacked: false,
   grid,
 };
 
@@ -86,10 +83,11 @@ export type GridActions = { type: 'setGridTicks', ticks: number, axis: 'x' | 'y'
   | { type: 'setGridStroke', color: string, axis: 'x' | 'y' }
   | { type: 'setGridStrokeOpacity', opacity: number, axis: 'x' | 'y' };
 
-type Actions = { type: 'setChartType'; chartType: string }
+export type Actions = { type: 'setChartType'; chartType: string }
   | { type: 'setData', data: IHistogramData }
   | { type: 'setDuration', duration: number }
   | { type: 'setDelay', delay: number }
+  | { type: 'setStacked', stacked: boolean }
   | GridActions
   ;
 
@@ -131,37 +129,48 @@ function reducer(state: IInitialState, action: Actions) {
       return merge(state, { grid: { [action.axis]: { style: { stroke: action.color } } } });
     case 'setGridStrokeOpacity':
       return merge(state, { grid: { [action.axis]: { style: { 'stroke-opacity': action.opacity } } } });
+    case 'setStacked':
+      return { ...state, stacked: action.stacked }
     default:
       return state;
   }
 }
 
 export const dataToSpreadSheet = (datum: IHistogramData): any => {
-  const speadSheetData: any = [];
+  const spreadSheetData: any = [];
 
   datum.bins.forEach((b, i) => {
-    if (!speadSheetData[i]) {
-      speadSheetData[i] = [];
+    if (!spreadSheetData[i]) {
+      spreadSheetData[i] = [];
     }
-    speadSheetData[i][0] = { value: b };
+    spreadSheetData[i][0] = { value: b };
   });
   datum.counts.forEach((c, i) => {
     c.data.forEach((d, x) => {
-      if (!speadSheetData[x]) {
-        speadSheetData[x] = [];
+      if (!spreadSheetData[x]) {
+        spreadSheetData[x] = [];
       }
-      speadSheetData[x][i + 1] = { value: d };
+      spreadSheetData[x][i + 1] = { value: d };
     });
   });
-  return speadSheetData;
+  return spreadSheetData;
 };
+
 const GridOptions = GridOptionsFactory<(action: Actions) => void, IInitialState>();
 
 const HistogramExample = () => {
   const [tab, setTab] = useState(0);
   const [state, dispatch] = useReducer(reducer, initialSate);
   const [visible, setVisible] = useState({});
-  const speadSheetData = dataToSpreadSheet(state.data);
+  const spreadSheetData = dataToSpreadSheet(state.data);
+  const dataLegendData = {
+    bins: data.counts.map((c) => c.label),
+    counts: [{
+      data: data.counts.map((c) => c.data.reduce((p, n) => p + n, 0)),
+      label: '',
+    }],
+  };
+
   const Chart = state.chartType === 'Histogram' ? Histogram : HorizontalHistogram;
   const chart = <Chart data={state.data}
     axis={state.axis}
@@ -172,6 +181,7 @@ const HistogramExample = () => {
     duration={state.duration}
     visible={visible}
     colorScheme={theme}
+    stacked={state.stacked}
     tipContentFn={tipContentFns[0]}
   />;
   return (
@@ -212,35 +222,28 @@ const HistogramExample = () => {
                 </Tabs>
                 {
                   tab === 0 && <TabContainer>
-                    <ReactDataSheet<any, any> data={speadSheetData}
-                      valueRenderer={(cell) => cell.value}
-                      sheetRenderer={(props) => (
-                        <table className={props.className + ' my-awesome-extra-class'}>
-                          <thead>
-                            <tr>
-                              <th className="action-cell">Bin</th>
-                              {
-                                state.data.counts.map((count) => (<th key={count.label} className="action-cell">
-                                  {count.label}
-                                </th>))
-                              }
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {props.children}
-                          </tbody>
-                        </table>
-                      )}
-                      onCellsChanged={(changes) => {
-                        changes.forEach(({ cell, row, col, value }) => {
-                          if (col === 0) {
-                            state.data.bins[row] = value;
-                          } else {
-                            state.data.counts[col - 1].data[row] = Number(value);
-                          }
-                        });
-                        dispatch({ type: 'setData', data: state.data });
-                      }} />
+                    <DataGroup<Actions, IInitialState>
+                      dispatch={dispatch}
+                      state={state}
+                      headings={state.data.counts.map((count, i) => count.label)}
+                      spreadSheetData={spreadSheetData}
+                      onDeleteData={(i) => {
+                        const newData = { ...state.data };
+                        newData.counts = newData.counts.filter((_, k) => k !== i);
+                        if (newData.counts.length > 0) {
+                          dispatch({ type: 'setData', data: newData } as any);
+                        }
+                      }}
+                      onAddData={() => {
+                        const newData = { ...state.data };
+                        const newDataset = {
+                          label: 'dataset ' + (newData.counts.length + 1),
+                          data: new Array(state.data.counts[0].data.length).fill(0),
+                        };
+                        newData.counts.push(newDataset);
+                        dispatch({ type: 'setData', data: newData } as any);
+                      }}
+                    />
                   </TabContainer>
                 }
                 {
@@ -263,6 +266,19 @@ const HistogramExample = () => {
                             </MenuItem>
 
                         </TextField>
+                      </Grid>
+                      <Grid item xs={6}>
+                        <FormControlLabel
+                          control={
+                            <Switch
+                              checked={state.stacked}
+                              onChange={(e) => {
+                                dispatch({ type: 'setStacked', stacked: e.target.checked });
+                              }}
+                            />
+                          }
+                          label="Stacked"
+                        />
                       </Grid>
                     </Grid>
                   </TabContainer>

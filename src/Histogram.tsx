@@ -78,6 +78,7 @@ export interface IHistogramProps {
   grid: IGrid;
   height: number;
   margin: IMargin;
+  stacked: boolean;
   stroke: IStroke;
   tip: any;
   tipContainer: string;

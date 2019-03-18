@@ -76,6 +76,7 @@ export const horizontalHistogramD3 = ((): IChartAdaptor<IHistogramProps> => {
       right: 0,
       top: 5,
     },
+    stacked: false,
     stroke: {
       color: '#005870',
       dasharray: '',
@@ -139,7 +140,6 @@ export const horizontalHistogramD3 = ((): IChartAdaptor<IHistogramProps> => {
 
     /**
      * Draw scales
-     * @param {Object} data Chart data
      */
     _drawScales(data: IHistogramData) {
       const { margin, width, height, axis } = props;
