@@ -26,23 +26,31 @@ import TextField from '@material-ui/core/TextField';
 import Slider from '@material-ui/lab/Slider';
 
 import {
+  ILineChartDataSet,
   ILineChartProps,
   LineChart,
 } from '../../../src';
 import { DeepPartial } from '../../../src/utils/types';
 import { CurveSelector } from '../components/CurveSelector';
+import DataGroup from '../components/DataGroup';
 import { GridOptionsFactory } from '../components/GridOptions';
 import JSXToString from '../components/JSXToString';
 import Layout from '../components/layout';
 import SEO from '../components/seo';
 import { TabContainer } from '../components/TabContainer';
-import { grid } from '../data';
+import {
+  data,
+  grid,
+} from '../data';
 import {
   GridActions,
   gridReducer,
 } from './histogram';
 
-const initialState: DeepPartial<ILineChartProps<{ x: number, y: number }>> = {
+type TInitialState = DeepPartial<ILineChartProps<{ x: number, y: number }>>;
+type TData = ILineChartDataSet<{ x: number, y: number }>;
+
+const initialState: TInitialState = {
   // axis: defaultAxis,
   data: [
     {
@@ -87,12 +95,17 @@ type Actions = { type: 'applyChanges', index: 0, changes: any }
   | { type: 'pointShow', show: boolean, index: number }
   | { type: 'lineFillShow', show: boolean, index: number }
   | { type: 'lineFillColor', fill: string, index: number }
+  | { type: 'addRow', row: TData; }
   | GridActions
   ;
 
 function reducer(state: ILineChartProps, action: Actions) {
   state = gridReducer(state, action);
   switch (action.type) {
+    case 'addRow': {
+      state.data.push(action.row);
+      return state;
+    }
     case 'applyChanges':
       const newData: any = state.data[action.index].data.map((row) => ({ ...row }));
       action.changes.forEach(({ cell, row, col, value }) => {

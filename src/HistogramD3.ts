@@ -66,9 +66,6 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
   let xAxisLabel: any;
   let yAxisLabel: any;
 
-  // @TODO make this a prop
-  const stacked = false;
-
   const props: IHistogramProps = {
     axis: defaultAxis,
     bar: {
@@ -96,6 +93,7 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
       right: 0,
       top: 5,
     },
+    stacked: false,
     stroke: {
       color: '#005870',
       dasharray: '',
@@ -177,15 +175,17 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
 
     /**
      * Update a linear scale with range and domain values taken either from the compiled
-     * group data
+     * group data. If the chart is stacked then sum all bin values first.
      */
     appendDomainRange(scale: ScaleLinear<number, number>, data: IGroupData): void {
       const yDomain: number[] = [];
-      const { domain, margin, height } = props;
-      const allCounts: number[] = data.reduce((prev: number[], next): number[] => {
-        return [...prev, ...next.map((n) => n.value)];
-      }, [0]);
+      const { domain, margin, height, stacked } = props;
 
+      const allCounts: number[] = data.reduce((prev: number[], next): number[] => {
+        return stacked
+          ? [...prev, next.reduce((p: number, n): number => p + n.value, 0)]
+          : [...prev, ...next.map((n) => n.value)];
+      }, [0]);
       const thisExtent = extent<any>(allCounts, (d) => d);
       yDomain[1] = domain && domain.hasOwnProperty('max') && domain.max !== null
         ? domain.max
@@ -210,7 +210,7 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
      * Draw scales
      */
     _drawScales() {
-      const { axis, data, margin, height } = props;
+      const { axis, data, margin, height, stacked } = props;
       const valuesCount = this.valuesCount(data.counts);
       const w = gridWidth(props);
 
@@ -221,17 +221,10 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
         .rangeRound([0, w])
         .paddingInner(this.groupedMargin());
 
-      if (stacked) {
-        innerScaleBand
-          .domain(['main'])
-          .rangeRound([0, x.bandwidth()])
-          .paddingInner(this.barMargin());
-      } else {
-        innerScaleBand
-          .domain(dataLabels)
-          .rangeRound([0, x.bandwidth()])
-          .paddingInner(this.barMargin());
-      }
+      innerScaleBand
+        .domain(stacked ? ['main'] : dataLabels)
+        .rangeRound([0, x.bandwidth()])
+        .paddingInner(this.barMargin());
       const xAxis = axisBottom<string>(x);
 
       const tickSize = get(axis, 'x.tickSize', undefined);
@@ -303,9 +296,23 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
       bins: string[],
       groupData: IGroupData,
     ) {
-      const { axis, height, width, margin, delay, duration, tip } = props;
+      const { axis, height, width, margin, delay, duration, tip, stacked } = props;
       const barWidth = this.barWidth();
 
+      const barY = (d: IGroupDataItem, stackIndex: number): number => {
+        const thisGroupData = groupData.find((gData) => {
+          return gData.find((dx) => dx.label === d.label) !== undefined;
+        });
+        const oSet = thisGroupData ?
+          thisGroupData
+            .filter((_, i) => i < stackIndex)
+            .reduce((prev, next) => prev + next.value, 0)
+          : 0;
+        const offset = stacked && stackIndex > 0
+          ? oSet
+          : 0;
+        return y(d.value + offset);
+      }
       // const borderColors = set.borderColors ? d3.scaleOrdinal(set.borderColors) : null;
       const colors = scaleOrdinal(props.colorScheme);
       const gHeight = gridHeight(props);
@@ -342,16 +349,7 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
         .enter()
         .append('rect')
         .attr('height', 0)
-        .attr('y', (d: IGroupDataItem, stackIndex: number): number => {
-          const setIndex = bins.findIndex((b) => b === d.label);
-          const thisSetData = groupData[setIndex];
-          // @TODO stack charts
-          // const offset = stackIndex > 0
-          //   ? y(10)
-          //   : 0;
-          const offset = 0;
-          return gHeight - offset;
-        })
+        .attr('y', barY)
         .attr('class', 'bar')
         .on('mouseover', onMouseOver)
         .on('mousemove', () => tip.fx.move(tipContainer))
@@ -365,16 +363,7 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
         .transition()
         .duration(duration)
         .delay(delay)
-        .attr('y', (d: IGroupDataItem, stackIndex: number): number => {
-          // const setIndex = bins.findIndex((b) => b === d.label);
-          // const thisSetData = groupData[setIndex];
-          // @TODO stack charts
-          // const offset = stackIndex > 0
-          //   ? 5
-          //   : 0;
-          const offset = 0;
-          return y(d.value + offset);
-        })
+        .attr('y', barY)
         // Hide bar's bottom border
         .attr('stroke-dasharray',
           (d: IGroupDataItem): string => {
