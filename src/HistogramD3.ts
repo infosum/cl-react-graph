@@ -3,6 +3,7 @@ import {
   axisBottom,
   axisLeft,
 } from 'd3-axis';
+import { format } from 'd3-format';
 import {
   scaleBand,
   scaleLinear,
@@ -39,12 +40,20 @@ import {
 } from './utils/defaults';
 import { DeepPartial } from './utils/types';
 
-export const formatTickTime = (axis: IAxis) => (v: string | number) => {
-  return timeFormat(axis.dateFormat)(new Date(v));
+export const shouldFormatTick = (axis: IAxis): boolean => {
+  return (axis.scale === 'TIME' && axis.hasOwnProperty('dateFormat'))
+    || axis.hasOwnProperty('numberFormat');
+}
+export const formatTick = (axis: IAxis) => (v: string | number) => {
+  if (axis.scale === 'TIME') {
+    return timeFormat(axis.dateFormat)(new Date(v));
+  }
+  return format(axis.numberFormat)(Number(v))
 };
 
 interface IGroupDataItem {
   label: string;
+  groupLabel?: string;
   value: number;
 }
 
@@ -57,12 +66,12 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
   const y = scaleLinear();
   const x = scaleBand();
   const innerScaleBand = scaleBand();
-  let container: any;
+  let container: Selection<SVGElement, any, any, any>;
   let dataSets: any[];
   let gridX: any;
   let gridY: any;
-  let yAxisContainer: any;
-  let xAxisContainer: any;
+  let yAxisContainer: Selection<any, any, any, any>;
+  let xAxisContainer: Selection<any, any, any, any>;
   let xAxisLabel: any;
   let yAxisLabel: any;
 
@@ -118,7 +127,7 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
       this.makeGrid();
       this.makeScales();
       container = svg
-        .append('g')
+        .append<SVGElement>('g')
         .attr('class', 'histogram-container');
 
       this.update(el, newProps);
@@ -147,24 +156,27 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
           el.removeChild(childNodes[0]);
         }
       }
+      // Reference to svg element containing chart
+      svg = select(el).append('svg');
+      this.sizeSVG();
+
+      const r = makeTip(props.tipContainer, tipContainer);
+      tipContent = r.tipContent;
+      tipContainer = r.tipContainer;
+    },
+
+    sizeSVG() {
       const { margin, width, height, className } = props;
       const scale = {
         x: 1 - (margin.left / Number(width)),
         y: 1 - (margin.top / height),
       };
-
-      // Reference to svg element containing chart
-      svg = select(el).append('svg')
-        .attr('class', className)
+      svg.attr('class', className)
         .attr('width', width)
         .attr('height', height)
         .attr('viewBox', `0 0 ${width} ${height}`)
         .append('g')
         .attr('transform', `translate(${margin.left},${margin.top}) scale(${scale.x},${scale.y})`);
-
-      const r = makeTip(props.tipContainer, tipContainer);
-      tipContent = r.tipContent;
-      tipContainer = r.tipContainer;
     },
 
     valuesCount(counts: IHistogramDataSet[]): number {
@@ -236,8 +248,8 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
           xAxis.tickValues(x.domain().filter((d, i) => !(i % 10)));
         }
       }
-      if (axis.x.scale === 'TIME' && axis.x.dateFormat) {
-        xAxis.tickFormat(formatTickTime(axis.x));
+      if (shouldFormatTick(axis.x)) {
+        xAxis.tickFormat(formatTick(axis.x));
       }
 
       xAxisContainer
@@ -253,8 +265,8 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
       if (yTickSize !== undefined) {
         yAxis.tickSize(yTickSize);
       }
-      if (axis.y.scale === 'TIME' && axis.y.dateFormat) {
-        yAxis.tickFormat(formatTickTime(axis.y));
+      if (shouldFormatTick(axis.y)) {
+        yAxis.tickFormat(formatTick(axis.y));
       }
       yAxisContainer
         .attr('transform', 'translate(' + yAxisWidth(axis) + ', 0)')
@@ -318,11 +330,11 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
       const gHeight = gridHeight(props);
 
       const g = container
-        .selectAll('g')
+        .selectAll<SVGElement, {}>('g')
         .data(groupData);
 
       const bars = g.enter()
-        .append('g')
+        .append<SVGElement>('g')
         .merge(g)
         .attr('transform', (d: any[]) => {
           let xd = x(d[0].label);
@@ -334,7 +346,7 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
             + xd;
           return `translate(${xdelta}, 0)`;
         })
-        .selectAll('rect')
+        .selectAll<SVGElement, {}>('rect')
         .data((d) => d);
 
       // Don't ask why but we must reference tipContentFn as props.tipContentFn otherwise
@@ -347,7 +359,7 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
 
       bars
         .enter()
-        .append('rect')
+        .append<SVGElement>('rect')
         .attr('height', 0)
         .attr('y', barY)
         .attr('class', 'bar')
@@ -355,11 +367,11 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
         .on('mousemove', () => tip.fx.move(tipContainer))
         .on('mouseout', () => tip.fx.out(tipContainer))
         .merge(bars)
-        .attr('x', (d) => {
-          return innerScaleBand(d.groupLabel);
+        .attr('x', (d: IGroupDataItem) => {
+          return Number(innerScaleBand(String(d.groupLabel)));
         })
         .attr('width', (d) => barWidth)
-        .attr('fill', (d, i) => colors(i))
+        .attr('fill', (d, i) => colors(String(i)))
         .transition()
         .duration(duration)
         .delay(delay)
@@ -420,7 +432,7 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
       if (!props.data.bins) {
         return;
       }
-
+      this.sizeSVG();
       const { data, visible } = props;
       dataSets = [] as IGroupData;
 

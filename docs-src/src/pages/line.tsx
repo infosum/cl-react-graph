@@ -32,16 +32,12 @@ import {
 } from '../../../src';
 import { DeepPartial } from '../../../src/utils/types';
 import { CurveSelector } from '../components/CurveSelector';
-import DataGroup from '../components/DataGroup';
 import { GridOptionsFactory } from '../components/GridOptions';
 import JSXToString from '../components/JSXToString';
 import Layout from '../components/layout';
 import SEO from '../components/seo';
 import { TabContainer } from '../components/TabContainer';
-import {
-  data,
-  grid,
-} from '../data';
+import { grid } from '../data';
 import {
   GridActions,
   gridReducer,
@@ -51,7 +47,14 @@ type TInitialState = DeepPartial<ILineChartProps<{ x: number, y: number }>>;
 type TData = ILineChartDataSet<{ x: number, y: number }>;
 
 const initialState: TInitialState = {
-  // axis: defaultAxis,
+  axis: {
+    x: {
+      scale: 'LINEAR'
+    },
+    y: {
+      ticks: 3
+    }
+  },
   data: [
     {
       data: [

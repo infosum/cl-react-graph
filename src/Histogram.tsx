@@ -117,7 +117,6 @@ export interface IAxis {
   dateFormat: string;
   numberFormat: string;
   ticks: number;
-  tickValues: number[];
   height: number;
   label: string;
   margin: number;

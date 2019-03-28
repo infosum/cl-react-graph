@@ -126,7 +126,6 @@ class LineChart extends React.Component<DeepPartial<ILineChartProps>, IState> {
     if (width === '100%') {
       width = this.state.parentWidth || 300;
     }
-    console.log('get chart state, width', width, this.state.parentWidth);
     return {
       ...rest,
       width,

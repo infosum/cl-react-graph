@@ -18,6 +18,7 @@ import {
   timeFormat,
   timeParse,
 } from 'd3-time-format';
+import get from 'lodash.get';
 import merge from 'lodash.merge';
 
 import attrs from './d3/attrs';
@@ -28,7 +29,10 @@ import {
   yAxisWidth as getYAxisWidth,
 } from './grid';
 import { IChartAdaptor } from './Histogram';
-import { formatTickTime } from './HistogramD3';
+import {
+  formatTick,
+  shouldFormatTick,
+} from './HistogramD3';
 import {
   ILineChartDataSet,
   ILineChartProps,
@@ -133,7 +137,6 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
      */
     create(el: Element, newProps: DeepPartial<ILineChartProps> = {}) {
       merge(props, newProps);
-      console.log(props);
       this._makeSvg(el);
       this.makeScales();
       [xScale, yScale] = buildScales(props.axis);
@@ -143,7 +146,7 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
         .attr('class', 'linechart-container');
 
       lineContainer = container
-        .append('g')
+        .append<SVGElement>('g')
         .attr('class', 'line-container');
       this._createLines(props.data);
       this.update(el, props);
@@ -173,7 +176,6 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
 
     sizeSVG() {
       const { margin, width, height, className } = props;
-      console.log('size svg', width, height);
       const scale = {
         x: 1 - (margin.left / Number(width)),
         y: 1 - (margin.top / Number(height)),
@@ -262,23 +264,23 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
       let xDomain;
       const ys: any[] = [];
       const xs: any[] = [];
-      const yAxis = axisLeft<number | string>(yScale);
-      if (axis.y.tickValues) {
-        yAxis.tickValues(axis.y.tickValues);
-      } else {
-        yAxis.ticks(axis.y.ticks);
+      const yAxis = axisLeft<number>(yScale).ticks(axis.y.ticks);
+
+      const yTickSize = get(axis, 'y.tickSize', undefined);
+      if (yTickSize !== undefined) {
+        yAxis.tickSize(yTickSize);
       }
-      if (axis.y.numberFormat) {
-        yAxis.tickFormat(formatTickTime(axis.y));
+      if (shouldFormatTick(axis.y)) {
+        yAxis.tickFormat(formatTick(axis.y));
       }
 
-      const xAxis = axisBottom<number | string>(xScale);
-      if (axis.x.tickValues) {
-        xAxis.tickValues(axis.x.tickValues);
+      const xAxis = axisBottom<number | string>(xScale)
+        .ticks(axis.x.ticks);;
+
+      if (shouldFormatTick(axis.x)) {
+        xAxis.tickFormat(formatTick(axis.x));
       }
-      if (axis.x.scale === 'TIME' && axis.x.dateFormat) {
-        xAxis.tickFormat(formatTickTime(axis.x));
-      }
+
       const xAxisHeight = getXAxisHeight(axis);
       const yAxisWidth = getYAxisWidth(axis);
 
