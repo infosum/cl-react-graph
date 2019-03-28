@@ -12,6 +12,7 @@ import React, {
 import ReactDataSheet, { Cell } from 'react-datasheet';
 
 import {
+  Button,
   Card,
   CardContent,
   FormControlLabel,
@@ -46,6 +47,60 @@ import {
 type TInitialState = DeepPartial<ILineChartProps<{ x: number, y: number }>>;
 type TData = ILineChartDataSet<{ x: number, y: number }>;
 
+const data = {
+  data: [
+    { x: 1, y: 1 },
+    { x: 2, y: 12 },
+    { x: 3, y: 3 },
+    { x: 4, y: 4 },
+  ],
+  label: 'test data',
+  line: {
+    curveType: curveCatmullRom,
+    fill: {
+      fill: 'rgba(54, 174, 141, 0.28)',
+      show: true,
+    },
+    show: true,
+    stroke: '#00a97b',
+    strokeDashArray: '10 5',
+    strokeDashOffset: 0,
+  },
+  point: {
+    fill: '#08697F',
+    radius: 10,
+    show: true,
+    stroke: '#483A3A',
+  },
+};
+
+const data2 = {
+  data: [
+    { x: 13, y: 1 },
+    { x: 23, y: 12 },
+    { x: 32, y: 3 },
+    { x: 41, y: 4 },
+  ],
+  label: 'test data 2',
+  line: {
+    curveType: curveCatmullRom,
+    fill: {
+      fill: 'rgba(54, 174, 141, 0.28)',
+      show: true,
+    },
+    show: true,
+    stroke: '#08697F',
+    strokeDashArray: '10 5',
+    strokeDashOffset: 0,
+  },
+  point: {
+    fill: '#00a97b',
+    radius: 10,
+    show: true,
+    stroke: '#483A3A',
+  },
+};
+
 const initialState: TInitialState = {
   axis: {
     x: {
@@ -56,32 +111,8 @@ const initialState: TInitialState = {
     }
   },
   data: [
-    {
-      data: [
-        { x: 1, y: 1 },
-        { x: 2, y: 12 },
-        { x: 3, y: 3 },
-        { x: 4, y: 4 },
-      ],
-      label: 'test data',
-      line: {
-        curveType: curveCatmullRom,
-        fill: {
-          fill: 'rgba(54, 174, 141, 0.28)',
-          show: true,
-        },
-        show: true,
-        stroke: '#00a97b',
-        strokeDashArray: '10 5',
-        strokeDashOffset: 0,
-      },
-      point: {
-        fill: '#08697F',
-        radius: 10,
-        show: true,
-        stroke: '#483A3A',
-      },
-    },
+    data,
+    data2,
   ],
   width: '100%',
   grid,
@@ -99,6 +130,7 @@ type Actions = { type: 'applyChanges', index: 0, changes: any }
   | { type: 'lineFillShow', show: boolean, index: number }
   | { type: 'lineFillColor', fill: string, index: number }
   | { type: 'addRow', row: TData; }
+  | { type: 'toggleRow'; }
   | GridActions
   ;
 
@@ -147,6 +179,8 @@ function reducer(state: ILineChartProps, action: Actions) {
     case 'lineFillColor':
       state.data[action.index] = merge(state.data[action.index], { line: { fill: { fill: action.fill } } });
       return { ...state };
+    case 'toggleRow':
+      return { ...state, data: state.data.length === 2 ? [data] : [data, data2] };
     default:
       return state;
   }
@@ -216,6 +250,7 @@ const LineExample: FC<{}> = () => {
                       onCellsChanged={(changes) => {
                         dispatch({ type: 'applyChanges', index: 0, changes });
                       }} />
+                    <Button onClick={() => dispatch({ type: 'toggleRow' })}>Toggle Row</Button>
                   </TabContainer>
                 }
                 {
