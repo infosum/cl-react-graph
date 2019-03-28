@@ -136,7 +136,7 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
      * Initialization
      */
     create(el: Element, newProps: DeepPartial<ILineChartProps> = {}) {
-      merge(props, newProps);
+      this.mergeProps(newProps);
       this._makeSvg(el);
       this.makeScales();
       [xScale, yScale] = buildScales(props.axis);
@@ -148,8 +148,14 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
       lineContainer = container
         .append<SVGElement>('g')
         .attr('class', 'line-container');
-      this._createLines(props.data);
       this.update(el, props);
+    },
+
+    mergeProps(newProps: DeepPartial<ILineChartProps>) {
+      merge(props, newProps);
+      if (newProps.data) {
+        props.data = newProps.data as ILineChartProps['data'];
+      }
     },
 
     /**
@@ -330,32 +336,32 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
       attrs(svg.selectAll('.x-axis .tick text'), axis.x.text.style as any);
     },
 
-    _createLines(data: Array<ILineChartDataSet<any>>) {
-      data.forEach((d, i) => {
-        lineContainer.append('path')
-          .attr('class', `line-${i}`);
-      });
-
-      // change the line
-      data
-        .forEach((d, i) => {
-          lineContainer.append('path')
-            .attr('class', `fill-${i}`);
-
-        });
-
-    },
-
     /**
      * Iterate over data and update lines
      */
-    _drawLines(data: Array<ILineChartDataSet<any>>) {
+    _drawLines(data: Array<ILineChartDataSet<any>>, oldData: Array<ILineChartDataSet<any>>) {
       const { axis } = props;
       const yAxisWidth = getYAxisWidth(axis);
 
+      // Remove old lines
+      oldData.forEach((d, i) => {
+        const keep = data.find(((newD) => newD.label === d.label));
+        if (keep === undefined) {
+          lineContainer.select(`.line-${i}`)
+            .remove();
+        }
+      })
+
       // change the line
       data.forEach((d, i) => {
-        lineContainer.select(`.line-${i}`)
+        let selection = lineContainer.select(`.line-${i}`)
+        if (selection.empty()) {
+          lineContainer.append('path')
+            .attr('class', `line-${i}`);
+          selection = lineContainer.select(`.line-${i}`)
+        }
+
+        selection
           .attr('fill', 'none')
           .attr('stroke-dashoffset', d.line.strokeDashOffset)
           .attr('stroke-dasharray', d.line.strokeDashOffset)
@@ -370,7 +376,7 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
     /**
      * Iterates ove data and updates area fills
      */
-    drawAreas(data: Array<ILineChartDataSet<any>>) {
+    drawAreas(data: Array<ILineChartDataSet<any>>, oldData: Array<ILineChartDataSet<any>>) {
       const { axis, height } = props;
       const yAxisWidth = getYAxisWidth(axis);
       const xAxisHeight = getXAxisHeight(axis);
@@ -380,10 +386,25 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
         .y0((d) => Number(height) - xAxisHeight)
         .y1((d: any) => yScale(d.y));
 
+      // Remove old lines
+      oldData.forEach((d, i) => {
+        const keep = data.find(((newD) => newD.label === d.label));
+        if (keep === undefined) {
+          lineContainer.select(`.fill-${i}`).remove();
+        }
+      })
+
       // change the line
       data
         .forEach((d, i) => {
-          lineContainer.select(`.fill-${i}`)
+          let selection = lineContainer.select(`.fill-${i}`);
+          if (selection.empty()) {
+            lineContainer.append('path')
+              .attr('class', `fill-${i}`);
+            selection = lineContainer.select(`.fill-${i}`)
+
+          }
+          selection
             .attr('fill', d.line.fill.fill)
             .style('opacity', d.line.show && d.line.fill.show ? 1 : 0)
             .transition()
@@ -418,7 +439,8 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
       if (!newProps.data) {
         return;
       }
-      merge(props, newProps);
+      const oldData = [...props.data];
+      this.mergeProps(newProps);
       this.sizeSVG();
       [xScale, yScale] = buildScales(props.axis);
       let data = props.data;
@@ -441,8 +463,8 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
         return Object.assign({}, datumProps, datum);
       });
       this._drawScales(data);
-      this._drawLines(data);
-      this.drawAreas(data);
+      this._drawLines(data, oldData);
+      this.drawAreas(data, oldData);
       drawGrid(xScale, yScale, gridX, gridY, props, this.valuesCount(data));
       this._drawDataPointSet(data);
     },
