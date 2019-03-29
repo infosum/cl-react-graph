@@ -180,7 +180,7 @@ function reducer(state: ILineChartProps, action: Actions) {
       state.data[action.index] = merge(state.data[action.index], { line: { fill: { fill: action.fill } } });
       return { ...state };
     case 'toggleRow':
-      return { ...state, data: state.data.length === 2 ? [data] : [data, data2] };
+      return { ...state, data: state.data.length === 2 ? [data2] : [data, data2] };
     default:
       return state;
   }
@@ -396,10 +396,8 @@ const LineExample: FC<{}> = () => {
             </Card>
           </Grid>
         </Grid>
-
       </div>
-
-    </Layout >
+    </Layout>
   );
 };
 
