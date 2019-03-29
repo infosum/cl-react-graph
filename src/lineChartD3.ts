@@ -19,7 +19,7 @@ import {
   timeParse,
 } from 'd3-time-format';
 import get from 'lodash.get';
-import merge from 'lodash.merge';
+import mergeWith from 'lodash.mergewith';
 
 import attrs from './d3/attrs';
 import {
@@ -152,10 +152,12 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
     },
 
     mergeProps(newProps: DeepPartial<ILineChartProps>) {
-      merge(props, newProps);
-      if (newProps.data) {
-        props.data = newProps.data as ILineChartProps['data'];
+      const customerizer = (objValue, srcValue, key, object, source, stack) => {
+        if (key === 'data') {
+          return srcValue;
+        }
       }
+      mergeWith(props, newProps, customerizer);
     },
 
     /**
@@ -347,18 +349,20 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
       oldData.forEach((d, i) => {
         const keep = data.find(((newD) => newD.label === d.label));
         if (keep === undefined) {
-          lineContainer.select(`.line-${i}`)
+          const l = d.label.replace(/ /g, '');
+          lineContainer.select(`.line-${l}`)
             .remove();
         }
       })
 
       // change the line
       data.forEach((d, i) => {
-        let selection = lineContainer.select(`.line-${i}`)
+        const selector = `line-${d.label.replace(/ /g, '')}`;
+        let selection = lineContainer.select(`.${selector}`)
         if (selection.empty()) {
           lineContainer.append('path')
-            .attr('class', `line-${i}`);
-          selection = lineContainer.select(`.line-${i}`)
+            .attr('class', selector);
+          selection = lineContainer.select(`.${selector}`)
         }
 
         selection
@@ -390,18 +394,20 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
       oldData.forEach((d, i) => {
         const keep = data.find(((newD) => newD.label === d.label));
         if (keep === undefined) {
-          lineContainer.select(`.fill-${i}`).remove();
+          const l = d.label.replace(/ /g, '');
+          lineContainer.select(`.fill-${l}`).remove();
         }
       })
 
       // change the line
       data
         .forEach((d, i) => {
-          let selection = lineContainer.select(`.fill-${i}`);
+          const selector = `fill-${d.label.replace(/ /g, '')}`;
+          let selection = lineContainer.select(`.${selector}`);
           if (selection.empty()) {
             lineContainer.append('path')
-              .attr('class', `fill-${i}`);
-            selection = lineContainer.select(`.fill-${i}`)
+              .attr('class', selector);
+            selection = lineContainer.select(`.${selector}`)
 
           }
           selection
@@ -410,9 +416,7 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
             .transition()
             .duration(500)
             .delay(50)
-            .attr('d', thisArea(d.line.curveType)(d.data) as any)
-
-            ;
+            .attr('d', thisArea(d.line.curveType)(d.data) as any);
         });
     },
 
