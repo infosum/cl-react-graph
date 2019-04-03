@@ -1207,12 +1207,12 @@
       "host": "localhost",
       "pathPrefix": "/cl-react-graph",
       "polyfill": true,
-      "buildTime": "2019-04-03T20:56:32.757Z",
+      "buildTime": "2019-04-03T21:49:30.315Z",
       "id": "Site",
       "parent": null,
       "children": [],
       "internal": {
-        "contentDigest": "5e051068a5069afd3c2ea1d6b05a905f",
+        "contentDigest": "0c62505590fc8b78b9980263015da221",
         "type": "Site",
         "owner": "internal-data-bridge"
       }

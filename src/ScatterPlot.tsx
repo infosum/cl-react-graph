@@ -51,7 +51,7 @@ class ScatterPlot extends Component<DeepPartial<IScatterPlotProps>, IChartState>
 
       this.setState({
         parentWidth: width,
-      }, () => this.chart.create(el, this.getChartState()));
+      }, () => this.chart.update(el, this.getChartState()));
     }
   }
 
