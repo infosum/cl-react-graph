@@ -127,6 +127,7 @@ export interface IAxis {
   };
   width: number;
   tickSize: number;
+  tickValues: null | number[];
   visible: boolean;
 }
 
@@ -163,7 +164,7 @@ class Histogram extends Component<DeepPartial<IHistogramProps>, IChartState> {
 
     this.setState({
       parentWidth: width,
-    }, () => this.chart.create(el, this.getChartState()));
+    }, () => this.chart.update(el, this.getChartState()));
   }
 
   /**

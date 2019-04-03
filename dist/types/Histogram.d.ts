@@ -114,6 +114,7 @@ export interface IAxis {
     };
     width: number;
     tickSize: number;
+    tickValues: null | number[];
     visible: boolean;
 }
 export declare type TipContentFn<T> = (bins: T[], i: number, d: number, groupTitle?: string) => string;
