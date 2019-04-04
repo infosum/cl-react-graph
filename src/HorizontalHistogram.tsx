@@ -40,7 +40,7 @@ class HorizontalHistogram extends Component<DeepPartial<IHistogramProps>, IChart
 
     this.setState({
       parentWidth: width,
-    }, () => this.histogram.create(el, this.getChartState()));
+    }, () => this.histogram.update(el, this.getChartState()));
   }
 
   /**

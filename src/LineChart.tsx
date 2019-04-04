@@ -90,7 +90,7 @@ class LineChart extends React.Component<DeepPartial<ILineChartProps>, IState> {
 
     this.setState({
       parentWidth: width,
-    }, () => this.chart.create(el, this.getChartState()));
+    }, () => this.chart.update(el, this.getChartState()));
 
   }
 
