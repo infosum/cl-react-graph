@@ -48,7 +48,7 @@ export const formatTick = (axis: IAxis) => (v: string | number) => {
   if (axis.scale === 'TIME') {
     return timeFormat(axis.dateFormat)(new Date(v));
   }
-  return format(axis.numberFormat)(Number(v))
+  return isNaN(Number(v)) ? v : format(axis.numberFormat)(Number(v))
 };
 
 interface IGroupDataItem {
