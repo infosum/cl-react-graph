@@ -44,7 +44,7 @@ export const shouldFormatTick = (axis: IAxis): boolean => {
   return (axis.scale === 'TIME' && axis.hasOwnProperty('dateFormat'))
     || axis.hasOwnProperty('numberFormat');
 }
-export const formatTick = (axis: IAxis) => (v: string | number) => {
+export const formatTick = (axis: IAxis) => (v: any) => { // value has to be any to work with different types
   if (axis.scale === 'TIME') {
     return timeFormat(axis.dateFormat)(new Date(v));
   }
@@ -249,7 +249,7 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
         }
       }
       if (shouldFormatTick(axis.x)) {
-        xAxis.tickFormat(formatTick(axis.x));
+        xAxis.tickFormat(formatTick(axis.x) as any);
       }
 
       xAxisContainer
@@ -266,7 +266,7 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
         yAxis.tickSize(yTickSize);
       }
       if (shouldFormatTick(axis.y)) {
-        yAxis.tickFormat(formatTick(axis.y));
+        yAxis.tickFormat(formatTick(axis.y) as any);
       }
       yAxisContainer
         .attr('transform', 'translate(' + yAxisWidth(axis) + ', 0)')
