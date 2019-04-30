@@ -279,14 +279,14 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
         yAxis.tickSize(yTickSize);
       }
       if (shouldFormatTick(axis.y)) {
-        yAxis.tickFormat(formatTick(axis.y));
+        yAxis.tickFormat(formatTick(axis.y) as any);
       }
 
       const xAxis = axisBottom<number | string>(xScale)
         .ticks(axis.x.ticks);;
 
       if (shouldFormatTick(axis.x)) {
-        xAxis.tickFormat(formatTick(axis.x));
+        xAxis.tickFormat(formatTick(axis.x) as any);
       }
 
       const xAxisHeight = getXAxisHeight(axis);

@@ -44,7 +44,7 @@ export const shouldFormatTick = (axis: IAxis): boolean => {
   return (axis.scale === 'TIME' && axis.hasOwnProperty('dateFormat'))
     || axis.hasOwnProperty('numberFormat');
 }
-export const formatTick = (axis: IAxis) => (v: any) => { // value has to be any to work with different types
+export const formatTick = (axis: IAxis) => (v: string | number) => {
   if (axis.scale === 'TIME') {
     return timeFormat(axis.dateFormat)(new Date(v));
   }
