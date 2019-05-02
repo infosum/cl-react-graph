@@ -9,7 +9,7 @@ npm i -S cl-react-graph
 
 ## Documentation
 
-The interactive docs can be found at: https://cognitivelogic.github.io/cl-react-graph/
+The interactive docs can be found at: https://infosum.github.io/cl-react-graph/
 
 ## Developers
 
