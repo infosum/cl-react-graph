@@ -12,7 +12,7 @@ import {
   select,
   Selection,
 } from 'd3-selection';
-import merge from 'lodash.merge';
+import merge from 'lodash/merge';
 
 import colorScheme from './colors';
 import attrs from './d3/attrs';

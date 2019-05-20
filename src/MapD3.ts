@@ -7,7 +7,7 @@ import {
   Selection,
 } from 'd3-selection';
 import { FeatureCollection } from 'geojson';
-import merge from 'lodash.merge';
+import merge from 'lodash/merge';
 
 import { IChartAdaptor } from './Histogram';
 import { IMapProps } from './Map';
