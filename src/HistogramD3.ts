@@ -16,7 +16,7 @@ import {
 } from 'd3-selection';
 import { timeFormat } from 'd3-time-format';
 import get from 'lodash.get';
-import merge from 'lodash.merge';
+import merge from 'lodash/merge';
 
 import colorScheme from './colors';
 import attrs from './d3/attrs';

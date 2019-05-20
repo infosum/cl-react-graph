@@ -13,7 +13,7 @@ import {
   PieArcDatum,
 } from 'd3-shape';
 import get from 'lodash.get';
-import merge from 'lodash.merge';
+import merge from 'lodash/merge';
 
 import colorScheme from './colors';
 import {
