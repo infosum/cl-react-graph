@@ -17,6 +17,7 @@ import merge from 'lodash/merge';
 import colorScheme from './colors';
 import attrs from './d3/attrs';
 import {
+  EGroupedBarLayout,
   IChartAdaptor,
   IHistogramData,
   IHistogramDataSet,
@@ -53,6 +54,7 @@ export const horizontalHistogramD3 = ((): IChartAdaptor<IHistogramProps> => {
     bar: {
       groupMargin: 0.1,
       margin: 10,
+      overlayMargin: 5,
       width: 50,
     },
     className: 'histogram-d3',
@@ -69,6 +71,7 @@ export const horizontalHistogramD3 = ((): IChartAdaptor<IHistogramProps> => {
     },
     duration: 400,
     grid: defaultGrid,
+    groupLayout: EGroupedBarLayout.GROUPED,
     height: 200,
     margin: {
       bottom: 0,
@@ -76,7 +79,7 @@ export const horizontalHistogramD3 = ((): IChartAdaptor<IHistogramProps> => {
       right: 0,
       top: 5,
     },
-    stacked: false,
+    stacked: false, // Deprecated use groupLayout instead
     stroke: {
       color: '#005870',
       dasharray: '',
