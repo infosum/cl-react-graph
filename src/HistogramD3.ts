@@ -28,6 +28,7 @@ import {
   yAxisWidth,
 } from './grid';
 import {
+  EGroupedBarLayout,
   IAxis,
   IChartAdaptor,
   IHistogramDataSet,
@@ -80,6 +81,7 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
     bar: {
       groupMargin: 0.1,
       margin: 0,
+      overlayMargin: 5,
       width: 50,
     },
     className: 'histogram-d3',
@@ -95,6 +97,7 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
     },
     duration: 400,
     grid,
+    groupLayout: EGroupedBarLayout.GROUPED,
     height: 200,
     margin: {
       bottom: 0,
@@ -102,7 +105,7 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
       right: 0,
       top: 5,
     },
-    stacked: false,
+    stacked: false, // Deprecated use groupLayout instead
     stroke: {
       color: '#005870',
       dasharray: '',
@@ -185,16 +188,26 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
       }, 0);
     },
 
+    isStacked() {
+      const { groupLayout, stacked } = props;
+      return stacked || groupLayout === EGroupedBarLayout.STACKED;
+    },
+
+    groupedBarsUseSameXAxisValue() {
+      const { groupLayout, stacked } = props;
+      return stacked || groupLayout === EGroupedBarLayout.STACKED || groupLayout === EGroupedBarLayout.OVERLAID;
+    },
+
     /**
      * Update a linear scale with range and domain values taken either from the compiled
      * group data. If the chart is stacked then sum all bin values first.
      */
     appendDomainRange(scale: ScaleLinear<number, number>, data: IGroupData): void {
       const yDomain: number[] = [];
-      const { domain, margin, height, stacked } = props;
+      const { domain, margin, height } = props;
 
       const allCounts: number[] = data.reduce((prev: number[], next): number[] => {
-        return stacked
+        return this.isStacked()
           ? [...prev, next.reduce((p: number, n): number => p + n.value, 0)]
           : [...prev, ...next.map((n) => n.value)];
       }, [0]);
@@ -222,7 +235,7 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
      * Draw scales
      */
     _drawScales() {
-      const { axis, data, margin, height, stacked } = props;
+      const { axis, data, margin, height } = props;
       const valuesCount = this.valuesCount(data.counts);
       const w = gridWidth(props);
 
@@ -234,7 +247,7 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
         .paddingInner(this.groupedMargin());
 
       innerScaleBand
-        .domain(stacked ? ['main'] : dataLabels)
+        .domain(this.groupedBarsUseSameXAxisValue() ? ['main'] : dataLabels)
         .rangeRound([0, x.bandwidth()])
         .paddingInner(this.barMargin());
       const xAxis = axisBottom<string>(x);
@@ -297,8 +310,11 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
         : 0.1;
     },
 
-    barWidth() {
-      return innerScaleBand.bandwidth();
+    barWidth(i: number) {
+      const overlay = (props.groupLayout === EGroupedBarLayout.OVERLAID)
+        ? i * props.bar.overlayMargin * 2
+        : 0;
+      return innerScaleBand.bandwidth() - overlay;
     },
 
     /**
@@ -308,8 +324,8 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
       bins: string[],
       groupData: IGroupData,
     ) {
-      const { axis, height, width, margin, delay, duration, tip, stacked } = props;
-      const barWidth = this.barWidth();
+      const { axis, height, width, margin, delay, duration, tip } = props;
+
 
       const barY = (d: IGroupDataItem, stackIndex: number): number => {
         const thisGroupData = groupData.find((gData) => {
@@ -320,7 +336,7 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
             .filter((_, i) => i < stackIndex)
             .reduce((prev, next) => prev + next.value, 0)
           : 0;
-        const offset = stacked && stackIndex > 0
+        const offset = this.isStacked() && stackIndex > 0
           ? oSet
           : 0;
         return y(d.value + offset);
@@ -346,6 +362,7 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
             + xd;
           return `translate(${xdelta}, 0)`;
         })
+
         .selectAll<SVGElement, {}>('rect')
         .data((d) => d);
 
@@ -367,10 +384,14 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
         .on('mousemove', () => tip.fx.move(tipContainer))
         .on('mouseout', () => tip.fx.out(tipContainer))
         .merge(bars)
-        .attr('x', (d: IGroupDataItem) => {
-          return Number(innerScaleBand(String(d.groupLabel)));
+        .attr('x', (d: IGroupDataItem, i) => {
+          const overlay = (props.groupLayout === EGroupedBarLayout.OVERLAID)
+            ? i * props.bar.overlayMargin
+            : 0;
+          return overlay;
+          // return Number(innerScaleBand(String(d.groupLabel)));
         })
-        .attr('width', (d) => barWidth)
+        .attr('width', (d, i) => this.barWidth(i))
         .attr('fill', (d, i) => colors(String(i)))
         .transition()
         .duration(duration)
@@ -378,8 +399,9 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
         .attr('y', barY)
         // Hide bar's bottom border
         .attr('stroke-dasharray',
-          (d: IGroupDataItem): string => {
+          (d: IGroupDataItem, i): string => {
             const currentHeight = gHeight - (y(d.value));
+            const barWidth = this.barWidth(i);
             return `${barWidth} 0 ${currentHeight} ${barWidth}`;
           })
         .attr('height', (d: IGroupDataItem): number => gHeight - (y(d.value)));

@@ -70,6 +70,7 @@ export const joyPlotD3 = ((): IChartAdaptor<IJoyPlotProps> => {
     bar: {
       groupMargin: 0,
       margin: 0,
+      overlayMargin: 5,
       width: 50,
     },
     className: 'histogram-d3',

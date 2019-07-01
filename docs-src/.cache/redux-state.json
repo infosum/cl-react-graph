@@ -1,22 +1,13 @@
 {
   "nodes": {
     "SitePage /dev-404-page/": {
-      "jsonName": "dev-404-page-5f9",
-      "internalComponentName": "ComponentDev404Page",
       "path": "/dev-404-page/",
-      "component": "/home/rob/cl-react-graph/docs-src/.cache/dev-404-page.js",
-      "componentChunkName": "component---cache-dev-404-page-js",
-      "context": {},
-      "pluginCreator___NODE": "d48d1c52-fe48-53cb-8f08-aa4b47dde5a5",
-      "pluginCreatorId": "d48d1c52-fe48-53cb-8f08-aa4b47dde5a5",
-      "componentPath": "/home/rob/cl-react-graph/docs-src/.cache/dev-404-page.js",
       "id": "SitePage /dev-404-page/",
       "parent": null,
       "children": [],
       "internal": {
         "type": "SitePage",
-        "contentDigest": "bdbccb796b4e690731d533a8e5b297fd",
-        "description": "d48d1c52-fe48-53cb-8f08-aa4b47dde5a5",
+        "contentDigest": "f91d29e10ba680b413138cf9ed86e655",
         "owner": "internal-data-bridge"
       }
     },
@@ -1203,16 +1194,14 @@
         "description": "Kick off your next, great Gatsby project with this default starter. This barebones starter ships with the main Gatsby configuration files you might need.",
         "author": "@gatsbyjs"
       },
-      "port": "8000",
-      "host": "localhost",
       "pathPrefix": "/cl-react-graph",
       "polyfill": true,
-      "buildTime": "2019-04-03T21:49:30.315Z",
+      "buildTime": "2019-07-01T11:19:13.210Z",
       "id": "Site",
       "parent": null,
       "children": [],
       "internal": {
-        "contentDigest": "0c62505590fc8b78b9980263015da221",
+        "contentDigest": "5959b72cb955d7fcea47b9811ecc6061",
         "type": "Site",
         "owner": "internal-data-bridge"
       }
@@ -1597,10 +1586,6 @@
     "/home/rob/cl-react-graph/docs-src/src/pages/pie.tsx": {
       "query": "",
       "componentPath": "/home/rob/cl-react-graph/docs-src/src/pages/pie.tsx"
-    },
-    "/home/rob/cl-react-graph/docs-src/.cache/dev-404-page.js": {
-      "query": "",
-      "componentPath": "/home/rob/cl-react-graph/docs-src/.cache/dev-404-page.js"
     }
   },
   "staticQueryComponents": {
