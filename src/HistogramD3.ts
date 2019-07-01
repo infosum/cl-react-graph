@@ -311,7 +311,6 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
     },
 
     barWidth(i: number) {
-      console.log('bar width', i, props.groupLayout);
       const overlay = (props.groupLayout === EGroupedBarLayout.OVERLAID)
         ? i * props.bar.overlayMargin * 2
         : 0;
