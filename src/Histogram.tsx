@@ -13,6 +13,7 @@ export interface IChartAdaptor<P> {
 export interface IHistogramBar {
   groupMargin: number;
   margin: number;
+  overlayMargin: number; // When bars are rendered as EGroupedBarLayout.OVERLAID 
   width: number;
 }
 
@@ -66,6 +67,12 @@ export interface IMargin {
   right: number;
   bottom: number;
 }
+
+export enum EGroupedBarLayout {
+  GROUPED,
+  STACKED,
+  OVERLAID,
+}
 export interface IHistogramProps {
   axis: IAxes;
   bar: IHistogramBar;
@@ -79,6 +86,7 @@ export interface IHistogramProps {
   height: number;
   margin: IMargin;
   stacked: boolean;
+  groupLayout: EGroupedBarLayout;
   stroke: IStroke;
   tip: any;
   tipContainer: string;

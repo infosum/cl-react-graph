@@ -19,6 +19,7 @@ import {
 
 import { HorizontalHistogram } from '../../../src';
 import Histogram, {
+  EGroupedBarLayout,
   IAxes,
   IGrid,
   IHistogramData,
@@ -59,24 +60,30 @@ const tipContentFns = [
 const now = new Date();
 data.bins = data.bins.map((d, i) => new Date(new Date().setDate(now.getDate() + i)).toLocaleString());
 
-
 export interface IInitialState {
   axis: DeepPartial<IAxes>;
+  bar: {
+    overlayMargin: number;
+  };
   chartType: string;
   data: IHistogramData;
   delay: number;
   duration: number;
-  stacked: boolean;
   grid: IGrid;
+  groupLayout: EGroupedBarLayout;
 }
+
 const initialSate: IInitialState = {
   axis,
+  bar: {
+    overlayMargin: 5,
+  },
   chartType: 'Histogram',
   data,
   delay: 0,
   duration: 400,
-  stacked: false,
   grid,
+  groupLayout: EGroupedBarLayout.GROUPED,
 };
 
 export type GridActions = { type: 'setGridTicks', ticks: number, axis: 'x' | 'y' }
@@ -87,7 +94,8 @@ export type Actions = { type: 'setChartType'; chartType: string }
   | { type: 'setData', data: IHistogramData }
   | { type: 'setDuration', duration: number }
   | { type: 'setDelay', delay: number }
-  | { type: 'setStacked', stacked: boolean }
+  | { type: 'setGroupedBarLayout', layout: EGroupedBarLayout; }
+  | { type: 'setOverlayMargin', margin: number; }
   | GridActions
   ;
 
@@ -129,8 +137,16 @@ function reducer(state: IInitialState, action: Actions) {
       return merge(state, { grid: { [action.axis]: { style: { stroke: action.color } } } });
     case 'setGridStrokeOpacity':
       return merge(state, { grid: { [action.axis]: { style: { 'stroke-opacity': action.opacity } } } });
-    case 'setStacked':
-      return { ...state, stacked: action.stacked }
+    case 'setGroupedBarLayout':
+      return { ...state, groupLayout: action.layout };
+    case 'setOverlayMargin':
+      return {
+        ...state,
+        bar: {
+          ...state.bar,
+          overlayMargin: action.margin,
+        }
+      }
     default:
       return state;
   }
@@ -174,6 +190,7 @@ const HistogramExample = () => {
   const Chart = state.chartType === 'Histogram' ? Histogram : HorizontalHistogram;
   const chart = <Chart data={state.data}
     axis={state.axis}
+    bar={state.bar}
     grid={state.grid}
     width={'100%'}
     height={300}
@@ -181,7 +198,7 @@ const HistogramExample = () => {
     duration={state.duration}
     visible={visible}
     colorScheme={theme}
-    stacked={state.stacked}
+    groupLayout={state.groupLayout}
     tipContentFn={tipContentFns[0]}
   />;
   return (
@@ -268,16 +285,25 @@ const HistogramExample = () => {
                         </TextField>
                       </Grid>
                       <Grid item xs={6}>
-                        <FormControlLabel
-                          control={
-                            <Switch
-                              checked={state.stacked}
-                              onChange={(e) => {
-                                dispatch({ type: 'setStacked', stacked: e.target.checked });
-                              }}
-                            />
-                          }
-                          label="Stacked"
+                        <TextField
+                          select
+                          label="Group Layout"
+                          value={state.groupLayout}
+                          onChange={(e) => {
+                            dispatch({ type: 'setGroupedBarLayout', layout: Number(e.target.value) })
+                          }}>
+                          <MenuItem value={EGroupedBarLayout.GROUPED}>Grouped</MenuItem>
+                          <MenuItem value={EGroupedBarLayout.OVERLAID}>Overlaid</MenuItem>
+                          <MenuItem value={EGroupedBarLayout.STACKED}>Stacked</MenuItem>
+                        </TextField>
+                      </Grid>
+                      <Grid item xs={6}>
+                        <TextField
+                          label="overlay margin"
+                          value={state.bar.overlayMargin}
+                          onChange={(e) => {
+                            dispatch(({ type: 'setOverlayMargin', margin: Number(e.target.value) }))
+                          }}
                         />
                       </Grid>
                     </Grid>
