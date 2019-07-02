@@ -1,5 +1,6 @@
 export {
   default as Histogram,
+  EGroupedBarLayout,
   IAxes,
   IHistogramBar,
   IHistogramData,
