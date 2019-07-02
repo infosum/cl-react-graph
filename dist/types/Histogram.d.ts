@@ -73,6 +73,9 @@ export interface IHistogramProps {
     grid: IGrid;
     height: number;
     margin: IMargin;
+    /**
+     *  @deprecated
+     */
     stacked: boolean;
     groupLayout: EGroupedBarLayout;
     stroke: IStroke;
