@@ -1,4 +1,4 @@
-export { default as Histogram, IAxes, IHistogramBar, IHistogramData, IHistogramDataSet, IHistogramProps, IStroke, } from './Histogram';
+export { default as Histogram, EGroupedBarLayout, IAxes, IHistogramBar, IHistogramData, IHistogramDataSet, IHistogramProps, IStroke, } from './Histogram';
 export { default as LineChart, IChartPoint, ILineChartDataSet, ILineChartProps, } from './LineChart';
 export { default as Legend } from './Legend';
 export { default as JoyPlot } from './JoyPlot';
