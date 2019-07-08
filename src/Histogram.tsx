@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 
-import { histogramD3 } from './HistogramD3';
+import {
+  histogramD3,
+  IGroupDataItem,
+} from './HistogramD3';
 import { DeepPartial } from './utils/types';
 
 export interface IChartAdaptor<P> {
@@ -90,6 +93,7 @@ export interface IHistogramProps {
    */
   stacked: boolean;
   groupLayout: EGroupedBarLayout;
+  onClick?: (bar: IGroupDataItem) => void;
   stroke: IStroke;
   tip: any;
   tipContainer: string;

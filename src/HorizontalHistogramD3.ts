@@ -238,7 +238,7 @@ export const horizontalHistogramD3 = ((): IChartAdaptor<IHistogramProps> => {
      * @return {number} bar height
      */
     barHeight() {
-      const { axis, width, margin, data, bar, stroke } = props;
+      const { data, bar } = props;
       const h = this.gridHeight();
       const valuesCount = this.valuesCount(data.counts);
       const setCount = data.counts.length;
@@ -266,7 +266,7 @@ export const horizontalHistogramD3 = ((): IChartAdaptor<IHistogramProps> => {
       bins: string[], set: IHistogramDataSet,
       setIndex: number, setCount: number,
     ) {
-      const { height, width, margin, bar, delay, duration,
+      const { bar, delay, duration,
         axis, stroke, tip, tipContentFn } = props;
       let barItem;
       const barHeight = this.barHeight();
@@ -280,6 +280,11 @@ export const horizontalHistogramD3 = ((): IChartAdaptor<IHistogramProps> => {
 
       svg.selectAll(selector).remove();
 
+      const onClick = (d: any) => {
+        if (props.onClick) {
+          props.onClick(d);
+        }
+      }
       // Set up bar initial props
       barItem = svg.selectAll(selector)
         .data(set.data)
@@ -297,6 +302,7 @@ export const horizontalHistogramD3 = ((): IChartAdaptor<IHistogramProps> => {
           tipContent.html(() => tipContentFn(bins, i, d));
           tip.fx.in(tipContainer);
         })
+        .on('click', onClick)
         .on('mousemove', () => tip.fx.move(tipContainer))
         .on('mouseout', () => tip.fx.out(tipContainer))
         .attr('x', (d: number): number => axis.y.width + axis.y.style['stroke-width'])

@@ -52,7 +52,7 @@ export const formatTick = (axis: IAxis) => (v: string | number) => {
   return isNaN(Number(v)) ? v : format(axis.numberFormat)(Number(v))
 };
 
-interface IGroupDataItem {
+export interface IGroupDataItem {
   label: string;
   groupLabel?: string;
   value: number;
@@ -326,7 +326,6 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
     ) {
       const { axis, height, width, margin, delay, duration, tip } = props;
 
-
       const barY = (d: IGroupDataItem, stackIndex: number): number => {
         const thisGroupData = groupData.find((gData) => {
           return gData.find((dx) => dx.label === d.label) !== undefined;
@@ -374,12 +373,19 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
         tip.fx.in(tipContainer);
       };
 
+      const onClick = (d: IGroupDataItem) => {
+        if (props.onClick) {
+          props.onClick(d);
+        }
+      }
+
       bars
         .enter()
         .append<SVGElement>('rect')
         .attr('height', 0)
         .attr('y', barY)
         .attr('class', 'bar')
+        .on('click', onClick)
         .on('mouseover', onMouseOver)
         .on('mousemove', () => tip.fx.move(tipContainer))
         .on('mouseout', () => tip.fx.out(tipContainer))
