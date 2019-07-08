@@ -193,6 +193,7 @@ const HistogramExample = () => {
     bar={state.bar}
     grid={state.grid}
     width={'100%'}
+    onClick={(d) => console.log(d)}
     height={300}
     delay={state.delay}
     duration={state.duration}
