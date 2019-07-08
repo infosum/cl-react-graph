@@ -1,4 +1,5 @@
 import { Component } from 'react';
+import { IGroupDataItem } from './HistogramD3';
 import { DeepPartial } from './utils/types';
 export interface IChartAdaptor<P> {
     create: (el: Element, props: DeepPartial<P>) => void;
@@ -78,6 +79,7 @@ export interface IHistogramProps {
      */
     stacked: boolean;
     groupLayout: EGroupedBarLayout;
+    onClick?: (bar: IGroupDataItem) => void;
     stroke: IStroke;
     tip: any;
     tipContainer: string;
