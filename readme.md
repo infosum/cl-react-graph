@@ -32,7 +32,13 @@ Note you will need to authenticate to NPM to publish.
 
 ### Running docs in development mode
 
-To run the docs in development mode
+If you don't have Gatsby already installed:
+```
+npm i -g gatsby
+```
+
+Then, to run the docs in development mode
+
 
 ```
 cd docs-src

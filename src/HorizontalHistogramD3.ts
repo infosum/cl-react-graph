@@ -29,6 +29,7 @@ import {
   grid as defaultGrid,
 } from './utils/defaults';
 import { DeepPartial } from './utils/types';
+import { onMouseOver, onMouseOut, onClick } from './utils/mouseOver';
 
 export const horizontalHistogramD3 = ((): IChartAdaptor<IHistogramProps> => {
   let svg: Selection<any, any, any, any>;;
@@ -244,7 +245,7 @@ export const horizontalHistogramD3 = ((): IChartAdaptor<IHistogramProps> => {
       const setCount = data.counts.length;
       let barHeight = (h / valuesCount) - (bar.margin * 2) - this.groupedMargin();
 
-      // Small bars - reduce margin and re-calcualate bar width
+      // Small bars - reduce margin and re-calculate bar width
       if (barHeight < 5) {
         bar.margin = 1;
         barHeight = Math.max(1, (h - (valuesCount + 1) * bar.margin) /
@@ -280,11 +281,6 @@ export const horizontalHistogramD3 = ((): IChartAdaptor<IHistogramProps> => {
 
       svg.selectAll(selector).remove();
 
-      const onClick = (d: any) => {
-        if (props.onClick) {
-          props.onClick(d);
-        }
-      }
       // Set up bar initial props
       barItem = svg.selectAll(selector)
         .data(set.data)
@@ -298,13 +294,10 @@ export const horizontalHistogramD3 = ((): IChartAdaptor<IHistogramProps> => {
         })
         .attr('height', (d) => barHeight)
         .attr('fill', (d, i) => colors(String(i)))
-        .on('mouseover', (d: number, i: number) => {
-          tipContent.html(() => tipContentFn(bins, i, d));
-          tip.fx.in(tipContainer);
-        })
-        .on('click', onClick)
+        .on('mouseover', onMouseOver({bins, hover: props.bar.hover, colors, tipContentFn, tipContent, tip, tipContainer}))
+        .on('click', onClick(props.onClick))
         .on('mousemove', () => tip.fx.move(tipContainer))
-        .on('mouseout', () => tip.fx.out(tipContainer))
+        .on('mouseout', onMouseOut({tip, tipContainer, colors}))
         .attr('x', (d: number): number => axis.y.width + axis.y.style['stroke-width'])
         .attr('width', 0);
 

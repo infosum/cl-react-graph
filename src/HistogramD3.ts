@@ -4,6 +4,7 @@ import {
   axisLeft,
 } from 'd3-axis';
 import { format } from 'd3-format';
+import Color from 'color';
 import {
   scaleBand,
   scaleLinear,
@@ -17,7 +18,7 @@ import {
 import { timeFormat } from 'd3-time-format';
 import get from 'lodash.get';
 import merge from 'lodash/merge';
-
+import { onMouseOver, onMouseOut, onClick } from './utils/mouseOver';
 import colorScheme from './colors';
 import attrs from './d3/attrs';
 import {
@@ -356,28 +357,14 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
           if (xd === undefined) {
             xd = 0;
           }
-          const xdelta = yAxisWidth(axis)
+          const xDelta = yAxisWidth(axis)
             + axis.y.style['stroke-width']
             + xd;
-          return `translate(${xdelta}, 0)`;
+          return `translate(${xDelta}, 0)`;
         })
 
         .selectAll<SVGElement, {}>('rect')
         .data((d) => d);
-
-      // Don't ask why but we must reference tipContentFn as props.tipContentFn otherwise
-      // it doesn't update with props changes
-      const onMouseOver = (d: IGroupDataItem, i: number) => {
-        const ix = bins.findIndex((b) => b === d.label);
-        tipContent.html(() => props.tipContentFn(bins, ix, d.value));
-        tip.fx.in(tipContainer);
-      };
-
-      const onClick = (d: IGroupDataItem) => {
-        if (props.onClick) {
-          props.onClick(d);
-        }
-      }
 
       bars
         .enter()
@@ -385,12 +372,12 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
         .attr('height', 0)
         .attr('y', barY)
         .attr('class', 'bar')
-        .on('click', onClick)
-        .on('mouseover', onMouseOver)
+        .on('click', onClick(props.onClick))
+        .on('mouseover', onMouseOver({ bins, hover: props.bar.hover, colors, tipContentFn: props.tipContentFn, tipContent, tip, tipContainer }))
         .on('mousemove', () => tip.fx.move(tipContainer))
-        .on('mouseout', () => tip.fx.out(tipContainer))
+        .on('mouseout', onMouseOut({ tip, tipContainer, colors }))
         .merge(bars)
-        .attr('x', (d: IGroupDataItem, i) => {
+        .attr('x', (d: IGroupDataItem, i: number) => {
           const overlay = (props.groupLayout === EGroupedBarLayout.OVERLAID)
             ? i * props.bar.overlayMargin
             : 0;

@@ -13,9 +13,23 @@ export interface IChartAdaptor<P> {
   destroy: (el: Element) => void;
 }
 
-export interface IHistogramBar {
+export enum EColorManipulations {
+  'negate' = 'negate',
+  'lighten' = 'lighten',
+  'darken' = 'darken',
+  'saturate' = 'saturate',
+  'desaturate' = 'desaturate',
+  'whiten' = 'whiten',
+  'blacken' = 'blacken',
+  'fade' = 'fade',
+  'opaquer' = 'opaquer',
+  'rotate' = 'rotate',
+};
+
+ export interface IHistogramBar {
   groupMargin: number;
   margin: number;
+  hover?: Partial<Record<EColorManipulations, number>>,
   overlayMargin: number; // When bars are rendered as EGroupedBarLayout.OVERLAID 
   width: number;
 }

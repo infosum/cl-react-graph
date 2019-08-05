@@ -7,10 +7,8 @@ import React, {
 import {
   Card,
   CardContent,
-  FormControlLabel,
   Grid,
   MenuItem,
-  Switch,
   Tab,
   Tabs,
   TextField,
@@ -23,6 +21,7 @@ import Histogram, {
   IAxes,
   IGrid,
   IHistogramData,
+  EColorManipulations,
 } from '../../../src/Histogram';
 import Legend from '../../../src/Legend';
 import { DeepPartial } from '../../../src/utils/types';
@@ -37,6 +36,7 @@ import {
   grid,
   theme,
 } from '../data';
+import ColorModifierFields from '../components/ColorModifierFields';
 
 export const axis: DeepPartial<IAxes> = {
   x: {
@@ -52,9 +52,9 @@ export const axis: DeepPartial<IAxes> = {
 
 const tipContentFns = [
   (bins, i, d) =>
-    bins[i] + '<br />HI THere ' + d.toFixed(2),
+    bins[i] + '<br />HI There ' + d.toFixed(2),
   (bins, i, d) =>
-    bins[i] + '<br />Bookay ' + d.toFixed(2),
+    bins[i] + '<br />Another tip ' + d.toFixed(2),
 ];
 
 const now = new Date();
@@ -64,6 +64,7 @@ export interface IInitialState {
   axis: DeepPartial<IAxes>;
   bar: {
     overlayMargin: number;
+    hover: Partial<Record<EColorManipulations, number>>;
   };
   chartType: string;
   data: IHistogramData;
@@ -77,6 +78,9 @@ const initialSate: IInitialState = {
   axis,
   bar: {
     overlayMargin: 5,
+    hover: {
+      lighten: 0.1,
+    },
   },
   chartType: 'Histogram',
   data,
@@ -91,11 +95,13 @@ export type GridActions = { type: 'setGridTicks', ticks: number, axis: 'x' | 'y'
   | { type: 'setGridStrokeOpacity', opacity: number, axis: 'x' | 'y' };
 
 export type Actions = { type: 'setChartType'; chartType: string }
-  | { type: 'setData', data: IHistogramData }
-  | { type: 'setDuration', duration: number }
-  | { type: 'setDelay', delay: number }
-  | { type: 'setGroupedBarLayout', layout: EGroupedBarLayout; }
-  | { type: 'setOverlayMargin', margin: number; }
+  | { type: 'setData'; data: IHistogramData }
+  | { type: 'setDuration'; duration: number }
+  | { type: 'setDelay'; delay: number }
+  | { type: 'setGroupedBarLayout'; layout: EGroupedBarLayout; }
+  | { type: 'setOverlayMargin'; margin: number; }
+  | { type: 'setHoverModifier'; value: number; key: string; index: number; }
+  | { type : 'removeHoverModifier'; index: number; }
   | GridActions
   ;
 
@@ -147,6 +153,40 @@ function reducer(state: IInitialState, action: Actions) {
           overlayMargin: action.margin,
         }
       }
+    case 'setHoverModifier': {
+      const hover = {...state.bar.hover};
+      const keys = Object.keys(hover);
+      delete hover[''];
+      let i: number;
+      // When adding an option its initially keyed to '' - remove those 
+      for (i = keys.length; i >= 0; i--) {
+        if (keys[i] === '') {
+          delete hover[''];
+        }
+      }
+      const k = Object.keys(hover)[action.index];
+      delete hover[k];
+      hover[action.key] = action.value;
+      return {
+        ...state,
+        bar: {
+          ...state.bar,
+          hover,
+        }
+      }
+    }
+    case 'removeHoverModifier': {
+      const hover = {...state.bar.hover};
+      const k = Object.keys(hover)[action.index];
+      delete hover[k];
+      return {
+        ...state,
+        bar: {
+          ...state.bar,
+          hover,
+        }
+      }
+    }
     default:
       return state;
   }
@@ -278,10 +318,10 @@ const HistogramExample = () => {
                         >
                           <MenuItem value="Histogram">
                             Histogram
-                            </MenuItem>
+                          </MenuItem>
                           <MenuItem value="HorizontalHistogram">
                             HorizontalHistogram
-                            </MenuItem>
+                          </MenuItem>
 
                         </TextField>
                       </Grid>
@@ -307,6 +347,9 @@ const HistogramExample = () => {
                           }}
                         />
                       </Grid>
+                      <ColorModifierFields 
+                        values={state.bar.hover}
+                        dispatch={dispatch} />
                     </Grid>
                   </TabContainer>
                 }
