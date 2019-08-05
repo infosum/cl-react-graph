@@ -215,7 +215,7 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
       const thisExtent = extent<any>(allCounts, (d) => d);
       yDomain[1] = domain && domain.hasOwnProperty('max') && domain.max !== null
         ? domain.max
-        : Number(thisExtent[1]);
+        : Number(thisExtent[1]) + Number(thisExtent[1]) * 5 / 100;
       yDomain[0] = domain && domain.hasOwnProperty('min') && domain.min !== null
         ? domain.min
         : Number(thisExtent[0]);

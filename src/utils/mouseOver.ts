@@ -1,19 +1,19 @@
-import { IGroupDataItem } from "../HistogramD3";
+import { IGroupDataItem } from '../HistogramD3';
 import Color from 'color';
 import {
   select,
 } from 'd3-selection';
-import { EColorManipulations } from "../Histogram";
+import { EColorManipulations, TipContentFn } from "../Histogram";
 import { ScaleOrdinal } from "d3";
 
 interface IProps {
   bins: string[],
   hover?: Partial<Record<EColorManipulations, number>>,
   colors: ScaleOrdinal<string, string>,
-  tipContentFn: any,
+  tipContentFn: TipContentFn<string>,
   tipContent: any,
   tip: any,
-  tipContainer: any,
+  tipContainer: string,
 };
 
 interface IMouseOutProps {
@@ -51,7 +51,7 @@ export const onMouseOver = (props: IProps) => (d: IGroupDataItem | any, i: numbe
 };
 
 export const onMouseOut = (props: IMouseOutProps) => (d: IGroupDataItem | number, i: number, nodes: any) => {
-  const {tip, tipContainer, colors} = props;
+  const { tip, tipContainer, colors } = props;
   tip.fx.out(tipContainer);
   select(nodes[i])
     .transition()
