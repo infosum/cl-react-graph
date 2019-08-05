@@ -101,7 +101,7 @@ export type Actions = { type: 'setChartType'; chartType: string }
   | { type: 'setGroupedBarLayout'; layout: EGroupedBarLayout; }
   | { type: 'setOverlayMargin'; margin: number; }
   | { type: 'setHoverModifier'; value: number; key: string; index: number; }
-  | { type : 'removeHoverModifier'; index: number; }
+  | { type: 'removeHoverModifier'; index: number; }
   | GridActions
   ;
 
@@ -116,7 +116,7 @@ export function gridReducer<S extends any, A extends any>(state: S, action: A): 
     case 'setDelay':
       return { ...state, delay: action.delay };
     case 'setGridTicks':
-      return merge(state, { grid: { [action.axis]: { ticks: action.ticks } } });
+      return merge(state, { axis: { [action.axis]: { ticks: action.ticks } } })
     case 'setGridStroke':
       return merge(state, { grid: { [action.axis]: { style: { stroke: action.color } } } });
     case 'setGridStrokeOpacity':
@@ -154,7 +154,7 @@ function reducer(state: IInitialState, action: Actions) {
         }
       }
     case 'setHoverModifier': {
-      const hover = {...state.bar.hover};
+      const hover = { ...state.bar.hover };
       const keys = Object.keys(hover);
       delete hover[''];
       let i: number;
@@ -176,7 +176,7 @@ function reducer(state: IInitialState, action: Actions) {
       }
     }
     case 'removeHoverModifier': {
-      const hover = {...state.bar.hover};
+      const hover = { ...state.bar.hover };
       const k = Object.keys(hover)[action.index];
       delete hover[k];
       return {
@@ -347,7 +347,7 @@ const HistogramExample = () => {
                           }}
                         />
                       </Grid>
-                      <ColorModifierFields 
+                      <ColorModifierFields
                         values={state.bar.hover}
                         dispatch={dispatch} />
                     </Grid>
