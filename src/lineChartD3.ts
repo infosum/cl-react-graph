@@ -4,7 +4,6 @@ import {
   axisLeft,
 } from 'd3-axis';
 import {
-  select,
   Selection,
 } from 'd3-selection';
 import {
@@ -18,7 +17,6 @@ import {
   timeFormat,
   timeParse,
 } from 'd3-time-format';
-import get from 'lodash.get';
 import mergeWith from 'lodash.mergewith';
 
 import attrs from './d3/attrs';
@@ -29,10 +27,6 @@ import {
   yAxisWidth as getYAxisWidth,
 } from './grid';
 import { IChartAdaptor } from './Histogram';
-import {
-  formatTick,
-  shouldFormatTick,
-} from './HistogramD3';
 import {
   ILineChartDataSet,
   ILineChartProps,
@@ -46,14 +40,16 @@ import {
   lineStyle,
 } from './utils/defaults';
 import {
-  AnyScale,
   buildScales,
 } from './utils/scales';
 import { DeepPartial } from './utils/types';
+import { ticks, applyDomainAffordance } from './utils/domain';
+import { makeGrid, makeScales, makeSvg, sizeSVG, TSelection } from './utils/svg';
 
 const ZERO_SUBSITUTE: number = 1e-6;
 
 export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
+  let svg: TSelection;
   let tipContainer;
   let xParseTime;
   let xFormatTime;
@@ -121,15 +117,16 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
     .y((d: any) => y(d.y));
 
   // let props: ILineChartProps;
-  let svg: Selection<any, any, any, any>;
   let container: Selection<SVGElement, any, any, any>;
-  let lineContainer: Selection<any, any, any, any>;
-  let gridX: Selection<any, any, any, any>;
-  let gridY: Selection<any, any, any, any>;
+  let lineContainer: TSelection;
+  let gridX: TSelection;
+  let gridY: TSelection;
   let xScale: any; // AnyScale;
   let yScale: any; // AnyScale;
-  let xAxisContainer: Selection<any, any, any, any>;
-  let yAxisContainer: Selection<any, any, any, any>;
+  let xAxisContainer: TSelection;
+  let yAxisContainer: TSelection;
+  let xAxisLabel: TSelection;
+  let yAxisLabel: TSelection;
 
   const LineChartD3 = {
     /**
@@ -137,10 +134,15 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
      */
     create(el: Element, newProps: DeepPartial<ILineChartProps> = {}) {
       this.mergeProps(newProps);
-      this._makeSvg(el);
-      this.makeScales();
+      svg = makeSvg(el, svg);
+      const { margin, width, height, className } = props;
+      sizeSVG(svg, { margin, width, height, className });
+      const r = makeTip(props.tipContainer, tipContainer);
+      tipContent = r.tipContent;
+      tipContainer = r.tipContainer;
       [xScale, yScale] = buildScales(props.axis);
-      this.makeGrid();
+      [xAxisContainer, yAxisContainer, xAxisLabel, yAxisLabel] = makeScales(svg);
+      [gridX, gridY] = makeGrid(svg);
       container = svg
         .append<SVGElement>('g')
         .attr('class', 'linechart-container');
@@ -161,56 +163,24 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
     },
 
     /**
-     * Make the SVG container element
-     * Recreate if it previously existed
-     */
-    _makeSvg(el: Element) {
-      if (svg) {
-        svg.selectAll('svg > *').remove();
-        svg.remove();
-        const childNodes = el.getElementsByTagName('svg');
-        if (childNodes.length > 0) {
-          el.removeChild(childNodes[0]);
-        }
-      }
-      // Reference to svg element containing chart
-      svg = select(el).append('svg')
-      this.sizeSVG();
-
-      const r = makeTip(props.tipContainer, tipContainer);
-      tipContent = r.tipContent;
-      tipContainer = r.tipContainer;
-    },
-
-    sizeSVG() {
-      const { margin, width, height, className } = props;
-      const scale = {
-        x: 1 - (margin.left / Number(width)),
-        y: 1 - (margin.top / Number(height)),
-      };
-      svg.attr('class', className)
-        .attr('width', width)
-        .attr('height', height)
-        .append('g')
-        .attr('transform', `translate(${margin.left},${margin.top}) scale(${scale.x},${scale.y})`);
-    },
-
-    /**
      * Iterate over the dataset drawing points for sets marked as
      * requiring points.
      */
     _drawDataPointSet(data: ILineChartProps['data']) {
-      const { axis, tip } = props;
+      const { axis, tip, tipContentFn } = props;
       const yAxisWidth = getYAxisWidth(axis);
 
       const pointContainer = container.selectAll<SVGElement, {}>('g').data(data);
 
       // Don't ask why but we must reference tipContentFn as props.tipContentFn otherwise
       // it doesn't update with props changes
-      const onMouseOver = (d: ILineChartDataSet<any>, i: number) => {
-        tipContent.html(() => props.tipContentFn([d as any], 0, 0, ''));
+      const onMouseOver = (d:any, i: number) => {
+        tipContent.html(() => tipContentFn([d as any], 0, 0, ''));
         tip.fx.in(tipContainer);
       };
+      const onMouseMove = () => tip.fx.move(tipContainer);
+      const onMouseOut = () => tip.fx.out(tipContainer);
+
       const points = pointContainer.enter()
         .append<SVGElement>('g')
         .attr('class', (d, i: number) => 'point-container' + i)
@@ -231,12 +201,9 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
       // apply operations to both.
       points.enter().append<SVGElement>('circle')
         .attr('class', 'enter')
-        .on('mouseover', (d, i) => {
-          tipContent.html(() => props.tipContentFn([d as any], 0, 0, ''));
-          tip.fx.in(tipContainer);
-        })
-        .on('mousemove', () => tip.fx.move(tipContainer))
-        .on('mouseout', () => tip.fx.out(tipContainer))
+        .on('mouseover', onMouseOver)
+        .on('mousemove', onMouseMove)
+        .on('mouseout', onMouseOut)
         .merge(points)
         .attr('class', 'point')
         .attr('cy', (d) => yScale(d.y))
@@ -256,17 +223,15 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
       points.exit().remove();
     },
 
-    makeScales() {
-      xAxisContainer = svg.append('g').attr('class', 'x-axis');
-      yAxisContainer = svg.append('g').attr('class', 'y-axis');
-    },
-
     /**
      * Draw the chart scales
      */
-    _drawScales(data: ILineChartProps['data']) {
+    drawAxes() {
       // @TODO Grid not rendering down to x axis
-      const { axis, height } = props;
+      const { axis, height, data } = props;
+      const valuesCount = data.reduce((a: number, b): number => {
+        return b.data.length > a ? b.data.length : a;
+      }, 0)
       const w = gridWidth(props);
       let yDomain;
       let xDomain;
@@ -274,20 +239,25 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
       const xs: any[] = [];
       const yAxis = axisLeft<number>(yScale).ticks(axis.y.ticks);
 
-      const yTickSize = get(axis, 'y.tickSize', undefined);
-      if (yTickSize !== undefined) {
-        yAxis.tickSize(yTickSize);
-      }
-      if (shouldFormatTick(axis.y)) {
-        yAxis.tickFormat(formatTick(axis.y) as any);
-      }
+      const xAxis = axisBottom<number | string>(xScale);
 
-      const xAxis = axisBottom<number | string>(xScale)
-        .ticks(axis.x.ticks);;
+      ticks({
+        axis: xAxis,
+        valuesCount,
+        axisLength: w,
+        axisConfig: axis,
+        scaleBand: xScale,
+        limitByValues: true,
+      });
 
-      if (shouldFormatTick(axis.x)) {
-        xAxis.tickFormat(formatTick(axis.x) as any);
-      }
+      ticks({
+        axis: yAxis,
+        valuesCount,
+        axisLength: w,
+        axisConfig: axis,
+        scaleBand: yScale,
+      });
+
 
       const xAxisHeight = getXAxisHeight(axis);
       const yAxisWidth = getYAxisWidth(axis);
@@ -302,8 +272,8 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
           if (axis.x.scale === 'LOG' && d.x === 0) {
             parsedX = ZERO_SUBSITUTE;
           }
-          ys.push((parsedY));
-          xs.push((parsedX));
+          ys.push((typeof parsedY === 'number' ? applyDomainAffordance(parsedY) : parsedY));
+          xs.push((typeof parsedX === 'number' ? applyDomainAffordance(parsedX) : parsedX));
         });
       });
       yDomain = extent(ys);
@@ -429,13 +399,6 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
       }, 0);
     },
 
-    makeGrid() {
-      gridX = svg.append('g')
-        .attr('class', 'grid gridX');
-      gridY = svg.append('g')
-        .attr('class', 'grid gridY');
-    },
-
     /**
      * Update chart
      */
@@ -445,7 +408,8 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
       }
       const oldData = [...props.data];
       this.mergeProps(newProps);
-      this.sizeSVG();
+      const { margin, width, height, className } = props;
+      sizeSVG(svg, { margin, width, height, className });
       [xScale, yScale] = buildScales(props.axis);
       let data = props.data;
 
@@ -466,7 +430,7 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
         // Assign in default line & point styles
         return Object.assign({}, datumProps, datum);
       });
-      this._drawScales(data);
+      this.drawAxes();
       this._drawLines(data, oldData);
       this.drawAreas(data, oldData);
       drawGrid(xScale, yScale, gridX, gridY, props, this.valuesCount(data));

@@ -6,9 +6,22 @@ export interface IChartAdaptor<P> {
     update: (el: Element, props: DeepPartial<P>) => void;
     destroy: (el: Element) => void;
 }
+export declare enum EColorManipulations {
+    'negate' = "negate",
+    'lighten' = "lighten",
+    'darken' = "darken",
+    'saturate' = "saturate",
+    'desaturate' = "desaturate",
+    'whiten' = "whiten",
+    'blacken' = "blacken",
+    'fade' = "fade",
+    'opaquer' = "opaquer",
+    'rotate' = "rotate"
+}
 export interface IHistogramBar {
     groupMargin: number;
     margin: number;
+    hover?: Partial<Record<EColorManipulations, number>>;
     overlayMargin: number;
     width: number;
 }

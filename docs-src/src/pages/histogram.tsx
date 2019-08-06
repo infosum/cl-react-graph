@@ -15,28 +15,36 @@ import {
   Typography,
 } from '@material-ui/core';
 
-import { HorizontalHistogram } from '../../../src';
+import {
+  HorizontalHistogram,
+} from '../../../src';
 import Histogram, {
+  EColorManipulations,
   EGroupedBarLayout,
   IAxes,
   IGrid,
   IHistogramData,
-  EColorManipulations,
 } from '../../../src/Histogram';
 import Legend from '../../../src/Legend';
-import { DeepPartial } from '../../../src/utils/types';
+import {
+  DeepPartial,
+} from '../../../src/utils/types';
+import ColorModifierFields from '../components/ColorModifierFields';
 import DataGroup from '../components/DataGroup';
-import { GridOptionsFactory } from '../components/GridOptions';
+import {
+  GridOptionsFactory,
+} from '../components/GridOptions';
 import JSXToString from '../components/JSXToString';
 import Layout from '../components/layout';
 import SEO from '../components/seo';
-import { TabContainer } from '../components/TabContainer';
+import {
+  TabContainer,
+} from '../components/TabContainer';
 import {
   data,
   grid,
   theme,
 } from '../data';
-import ColorModifierFields from '../components/ColorModifierFields';
 
 export const axis: DeepPartial<IAxes> = {
   x: {
@@ -280,6 +288,24 @@ const HistogramExample = () => {
                 </Tabs>
                 {
                   tab === 0 && <TabContainer>
+                    <Grid item xs={6}>
+                        <TextField
+                          select
+                          label="Chart direction"
+                          value={state.chartType}
+                          onChange={(e) => {
+                            dispatch({ type: 'setChartType', chartType: e.target.value });
+                          }}
+                        >
+                          <MenuItem value="Histogram">
+                            Histogram
+                          </MenuItem>
+                          <MenuItem value="HorizontalHistogram">
+                            HorizontalHistogram
+                          </MenuItem>
+
+                        </TextField>
+                      </Grid>
                     <DataGroup<Actions, IInitialState>
                       dispatch={dispatch}
                       state={state}
@@ -307,24 +333,6 @@ const HistogramExample = () => {
                 {
                   tab === 1 && <TabContainer>
                     <Grid container spacing={24}>
-                      <Grid item xs={6}>
-                        <TextField
-                          select
-                          label="Chart direction"
-                          value={state.chartType}
-                          onChange={(e) => {
-                            dispatch({ type: 'setChartType', chartType: e.target.value });
-                          }}
-                        >
-                          <MenuItem value="Histogram">
-                            Histogram
-                          </MenuItem>
-                          <MenuItem value="HorizontalHistogram">
-                            HorizontalHistogram
-                          </MenuItem>
-
-                        </TextField>
-                      </Grid>
                       <Grid item xs={6}>
                         <TextField
                           select

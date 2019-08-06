@@ -1,6 +1,6 @@
 import { ScaleLinear, ScaleBand } from 'd3-scale';
 import { extent } from 'd3-array';
-import { IGroupDataItem } from '../HistogramD3';
+import { IGroupDataItem, IGroupData } from '../HistogramD3';
 import { EGroupedBarLayout, IDomain, IAxes, IAxis, IHistogramDataSet } from '../Histogram';
 import { Axis } from 'd3';
 import get from 'lodash/get';
@@ -14,11 +14,12 @@ export const  isStacked = ({ groupLayout, stacked }) => {
 interface IAppendDomainRangeProps {
   domain: IDomain;
   scale: ScaleLinear<number, number>, 
-  data: IGroupDataItem[] | number[],
+  data: IGroupData | number[],
   range: number[],
   stacked: boolean,
 }
 
+export const applyDomainAffordance = (v: number) => v + v * 5 / 100;
 /**
  * Update a linear scale with range and domain values taken either from the compiled
  * group data. If the chart is stacked then sum all bin values first.
@@ -38,7 +39,7 @@ export const appendDomainRange = (props: IAppendDomainRangeProps): void => {
   const thisExtent = extent<any>(allCounts, (d) => d);
   aDomain[1] = domain && domain.hasOwnProperty('max') && domain.max !== null
     ? domain.max
-    : Number(thisExtent[1]) + Number(thisExtent[1]) * 5 / 100;
+    : applyDomainAffordance(Number(thisExtent[1]));
   aDomain[0] = domain && domain.hasOwnProperty('min') && domain.min !== null
     ? domain.min
     : Number(thisExtent[0]);
@@ -61,7 +62,7 @@ export const formatTick = (axis: IAxis) => (v: string | number) => {
 
 
 interface ITickProps {
-  axis: Axis<string> | Axis<number> | Axis<number | { valueOf(): number}>;
+  axis: Axis<string> | Axis<number> | Axis<number | { valueOf(): number}> | Axis<number | string>;
   axisConfig: IAxes;
   axisLength: number;
   valuesCount: number;
@@ -77,7 +78,6 @@ export const ticks = ({
   limitByValues,
 }: ITickProps) => {
   const tickSize = get(axisConfig, 'x.tickSize', undefined);
-  console.log(axisConfig, tickSize);
   if (tickSize !== undefined) {
     axis.tickSize(tickSize);
   } else {

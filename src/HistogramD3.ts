@@ -8,12 +8,10 @@ import {
   scaleOrdinal,
 } from 'd3-scale';
 import {
-  select,
   Selection,
 } from 'd3-selection';
-import get from 'lodash.get';
 import merge from 'lodash/merge';
-import { onMouseOver, onMouseOut, onClick } from './utils/mouseOver';
+
 import colorScheme from './colors';
 import attrs from './d3/attrs';
 import {
@@ -28,15 +26,40 @@ import {
   IChartAdaptor,
   IHistogramProps,
 } from './Histogram';
-import tips, { makeTip } from './tip';
+import tips, {
+  makeTip,
+} from './tip';
+import {
+  barMargin,
+  getBarWidth,
+  groupedBarsUseSameXAxisValue,
+  groupedMargin,
+} from './utils/bars';
 import {
   axis as defaultAxis,
   grid,
 } from './utils/defaults';
-import { DeepPartial } from './utils/types';
-import { appendDomainRange, isStacked, ticks, maxValueCount } from './utils/domain';
-
-
+import {
+  appendDomainRange,
+  isStacked,
+  maxValueCount,
+  ticks,
+} from './utils/domain';
+import {
+  onClick,
+  onMouseOut,
+  onMouseOver,
+} from './utils/mouseOver';
+import {
+  makeGrid,
+  makeScales,
+  makeSvg,
+  sizeSVG,
+  TSelection,
+} from './utils/svg';
+import {
+  DeepPartial,
+} from './utils/types';
 
 export interface IGroupDataItem {
   label: string;
@@ -47,18 +70,18 @@ export interface IGroupDataItem {
 export type IGroupData = IGroupDataItem[][];
 
 export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
-  let svg: Selection<any, any, any, any>;;
+  let svg: Selection<any, any, any, any>;
   let tipContainer;
   let tipContent;
   const y = scaleLinear();
   const x = scaleBand();
   const innerScaleBand = scaleBand();
   let container: Selection<SVGElement, any, any, any>;
-  let dataSets: any[];
-  let gridX: any;
-  let gridY: any;
-  let yAxisContainer: Selection<any, any, any, any>;
-  let xAxisContainer: Selection<any, any, any, any>;
+  let dataSets: IGroupData;
+  let gridX: TSelection;
+  let gridY: TSelection;
+  let yAxisContainer: TSelection;
+  let xAxisContainer:TSelection;
   let xAxisLabel: any;
   let yAxisLabel: any;
 
@@ -112,9 +135,14 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
      */
     create(el: Element, newProps: DeepPartial<IHistogramProps> = {}) {
       this.mergeProps(newProps);
-      this._makeSvg(el);
-      this.makeGrid();
-      this.makeScales();
+      svg = makeSvg(el, svg);
+      const { margin, width, height, className } = props;
+      sizeSVG(svg, { margin, width, height, className });
+      const r = makeTip(props.tipContainer, tipContainer);
+      tipContent = r.tipContent;
+      tipContainer = r.tipContainer;
+      [gridX, gridY] = makeGrid(svg);
+      [xAxisContainer, yAxisContainer, xAxisLabel, yAxisLabel] = makeScales(svg);
       container = svg
         .append<SVGElement>('g')
         .attr('class', 'histogram-container');
@@ -133,75 +161,29 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
     },
 
     /**
-     * Make the SVG container element
-     * Recreate if it previously existed
-     */
-    _makeSvg(el: Element) {
-      if (svg) {
-        svg.selectAll('svg > *').remove();
-        svg.remove();
-        const childNodes = el.getElementsByTagName('svg');
-        if (childNodes.length > 0) {
-          el.removeChild(childNodes[0]);
-        }
-      }
-      // Reference to svg element containing chart
-      svg = select(el).append('svg');
-      this.sizeSVG();
-
-      const r = makeTip(props.tipContainer, tipContainer);
-      tipContent = r.tipContent;
-      tipContainer = r.tipContainer;
-    },
-
-    sizeSVG() {
-      const { margin, width, height, className } = props;
-      const scale = {
-        x: 1 - (margin.left / Number(width)),
-        y: 1 - (margin.top / height),
-      };
-      svg.attr('class', className)
-        .attr('width', width)
-        .attr('height', height)
-        .attr('viewBox', `0 0 ${width} ${height}`)
-        .append('g')
-        .attr('transform', `translate(${margin.left},${margin.top}) scale(${scale.x},${scale.y})`);
-    },
-
-    groupedBarsUseSameXAxisValue() {
-      const { groupLayout, stacked } = props;
-      return stacked || groupLayout === EGroupedBarLayout.STACKED || groupLayout === EGroupedBarLayout.OVERLAID;
-    },
-
-    makeScales() {
-      xAxisContainer = svg.append('g').attr('class', 'x-axis');
-      yAxisContainer = svg.append('g').attr('class', 'y-axis');
-
-      xAxisLabel = svg.append('g');
-      yAxisLabel = svg.append('g');
-    },
-
-    /**
      * Draw scales
      */
-    _drawScales() {
-      const { axis, domain, groupLayout, stacked, data, margin, height } = props;
+    drawAxes() {
+      const { axis, bar, domain, groupLayout, stacked, data, margin, height } = props;
       const valuesCount = maxValueCount(data.counts);
       const w = gridWidth(props);
-
+      const h = gridHeight(props);
       const dataLabels = data.counts.map((c) => c.label);
 
       x
         .domain(data.bins)
         .rangeRound([0, w])
-        .paddingInner(this.groupedMargin());
+        .paddingInner(groupedMargin(bar));
 
       innerScaleBand
-        .domain(this.groupedBarsUseSameXAxisValue() ? ['main'] : dataLabels)
+        .domain(groupedBarsUseSameXAxisValue({groupLayout, stacked}) ? ['main'] : dataLabels)
         .rangeRound([0, x.bandwidth()])
-        .paddingInner(this.barMargin());
-      const xAxis = axisBottom<string>(x);
+        .paddingInner(barMargin(props.bar));
 
+      const xAxis = axisBottom<string>(x);
+      const yAxis = axisLeft<number>(y).ticks(axis.y.ticks);
+
+      /** X-Axis (label axis) set up */
       ticks({
         axis: xAxis, 
         valuesCount, 
@@ -216,15 +198,14 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
           (height - xAxisHeight(props.axis) - (margin.left * 2)) + ')')
         .call(xAxis);
 
+      /** Y-Axis (value axis) set up */
       appendDomainRange({
         data: dataSets,
         domain,
-        range: [height - (margin.top * 2) - xAxisHeight(axis), 0],
+        range: [h, 0],
         scale: y,
         stacked: isStacked({groupLayout, stacked})
-      })
-
-      const yAxis = axisLeft<number>(y).ticks(axis.y.ticks);
+      });
 
       ticks({
         axis: yAxis, 
@@ -247,30 +228,6 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
     },
 
     /**
-     * Returns the margin between similar bars in different data sets
-     */
-    groupedMargin(): number {
-      const m = get(props.bar, 'groupMargin', 0.1);
-      return m >= 0 && m <= 1
-        ? m
-        : 0.1;
-    },
-
-    barMargin(): number {
-      const m = get(props.bar, 'margin', 0);
-      return m >= 0 && m <= 1
-        ? m
-        : 0.1;
-    },
-
-    barWidth(i: number) {
-      const overlay = (props.groupLayout === EGroupedBarLayout.OVERLAID)
-        ? i * props.bar.overlayMargin * 2
-        : 0;
-      return innerScaleBand.bandwidth() - overlay;
-    },
-
-    /**
      * Draw a single data set into the chart
      */
     updateChart(
@@ -279,7 +236,7 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
     ) {
       const { axis, height, width, margin, delay, duration, tip, groupLayout, stacked } = props;
 
-      const barY = (d: IGroupDataItem, stackIndex: number): number => {
+      const stackedOffset = (d: IGroupDataItem, stackIndex: number): number => {
         const thisGroupData = groupData.find((gData) => {
           return gData.find((dx) => dx.label === d.label) !== undefined;
         });
@@ -322,7 +279,7 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
         .enter()
         .append<SVGElement>('rect')
         .attr('height', 0)
-        .attr('y', barY)
+        .attr('y', stackedOffset)
         .attr('class', 'bar')
         .on('click', onClick(props.onClick))
         .on('mouseover', onMouseOver({ bins, hover: props.bar.hover, colors, tipContentFn: props.tipContentFn, tipContent, tip, tipContainer }))
@@ -336,17 +293,17 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
           return overlay;
           // return Number(innerScaleBand(String(d.groupLabel)));
         })
-        .attr('width', (d, i) => this.barWidth(i))
+        .attr('width', (d, i) => getBarWidth(i, props.groupLayout, props.bar, innerScaleBand))
         .attr('fill', (d, i) => colors(String(i)))
         .transition()
         .duration(duration)
         .delay(delay)
-        .attr('y', barY)
+        .attr('y', stackedOffset)
         // Hide bar's bottom border
         .attr('stroke-dasharray',
           (d: IGroupDataItem, i): string => {
             const currentHeight = gHeight - (y(d.value));
-            const barWidth = this.barWidth(i);
+            const barWidth = getBarWidth(i, props.groupLayout, props.bar, innerScaleBand);
             return `${barWidth} 0 ${currentHeight} ${barWidth}`;
           })
         .attr('height', (d: IGroupDataItem): number => gHeight - (y(d.value)));
@@ -382,12 +339,6 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
         .text((d) => d);
     },
 
-    makeGrid() {
-      gridX = svg.append('g')
-        .attr('class', 'grid gridX');
-      gridY = svg.append('g')
-        .attr('class', 'grid gridY');
-    },
     /**
      * Update chart
      */
@@ -399,9 +350,9 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
       if (!props.data.bins) {
         return;
       }
-      this.sizeSVG();
-      const { data, visible } = props;
-      dataSets = [] as IGroupData;
+      const { margin, width, height, className, data, visible } = props;
+      sizeSVG(svg, { margin, width, height, className });
+      dataSets = [];
 
       data.counts.forEach((count) => {
         count.data.forEach((value, i) => {
@@ -412,11 +363,11 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
             groupLabel: count.label,
             label: data.bins[i],
             value: visible[data.bins[i]] !== false && visible[count.label] !== false ? value : 0,
-          } as IGroupDataItem);
+          });
         });
       });
 
-      this._drawScales();
+      this.drawAxes();
       drawGrid(x, y, gridX, gridY, props, maxValueCount(data.counts));
       this.updateChart(data.bins, dataSets);
     },

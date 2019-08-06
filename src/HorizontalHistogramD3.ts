@@ -8,7 +8,6 @@ import {
   scaleOrdinal,
 } from 'd3-scale';
 import {
-  select,
   Selection,
 } from 'd3-selection';
 import merge from 'lodash/merge';
@@ -16,22 +15,55 @@ import merge from 'lodash/merge';
 import colorScheme from './colors';
 import attrs from './d3/attrs';
 import {
+  drawHorizontalGrid,
+  gridHeight,
+  gridWidth,
+  xAxisHeight,
+  yAxisWidth,
+} from './grid';
+import {
   EGroupedBarLayout,
   IChartAdaptor,
-  IHistogramData,
-  IHistogramDataSet,
   IHistogramProps,
 } from './Histogram';
-import tips, { makeTip } from './tip';
+import {
+  IGroupData,
+  IGroupDataItem,
+} from './HistogramD3';
+import tips, {
+  makeTip,
+} from './tip';
+import {
+  barMargin,
+  getBarWidth,
+  groupedBarsUseSameXAxisValue,
+  groupedMargin,
+} from './utils/bars';
 import {
   axis as defaultAxis,
   grid as defaultGrid,
 } from './utils/defaults';
-import { DeepPartial } from './utils/types';
-import { onMouseOver, onMouseOut, onClick } from './utils/mouseOver';
-import { appendDomainRange, isStacked, ticks, maxValueCount } from './utils/domain';
-import { IGroupDataItem, IGroupData } from './HistogramD3';
-import { gridHeight } from './grid';
+import {
+  appendDomainRange,
+  isStacked,
+  maxValueCount,
+  ticks,
+} from './utils/domain';
+import {
+  onClick,
+  onMouseOut,
+  onMouseOver,
+} from './utils/mouseOver';
+import {
+  makeGrid,
+  makeScales,
+  makeSvg,
+  sizeSVG,
+  TSelection,
+} from './utils/svg';
+import {
+  DeepPartial,
+} from './utils/types';
 
 export const horizontalHistogramD3 = ((): IChartAdaptor<IHistogramProps> => {
   let svg: Selection<any, any, any, any>;;
@@ -39,18 +71,15 @@ export const horizontalHistogramD3 = ((): IChartAdaptor<IHistogramProps> => {
   let tipContent;
   const x = scaleLinear();
   const y = scaleBand();
+  const innerScaleBand = scaleBand();
+  let container: Selection<SVGElement, any, any, any>;
   let dataSets: IGroupData;
-  // Gridlines in y axis function
-  function make_y_gridlines(ticks: number = 5) {
-    return axisBottom(x)
-      .ticks(ticks);
-  }
-
-  // Gridlines in x axis function
-  function make_x_gridlines(ticks: number = 5) {
-    return axisLeft(y)
-      .ticks(ticks);
-  }
+  let gridX: TSelection;
+  let gridY: TSelection;
+  let yAxisContainer: TSelection;
+  let xAxisContainer: TSelection;
+  let xAxisLabel: TSelection;
+  let yAxisLabel: TSelection;
 
   const props: IHistogramProps = {
     axis: defaultAxis,
@@ -103,77 +132,71 @@ export const horizontalHistogramD3 = ((): IChartAdaptor<IHistogramProps> => {
      */
     create(el: Element, newProps: DeepPartial<IHistogramProps> = {}) {
       merge(props, newProps);
+      svg = makeSvg(el, svg);
+      const { margin, width, height, className } = props;
+      sizeSVG(svg, { margin, width, height, className });
+      const r = makeTip(props.tipContainer, tipContainer);
+      tipContent = r.tipContent;
+      tipContainer = r.tipContainer;
+      [gridX, gridY] = makeGrid(svg);
+      [xAxisContainer, yAxisContainer, xAxisLabel, yAxisLabel] = makeScales(svg);
+      container = svg
+        .append<SVGElement>('g')
+        .attr('class', 'histogram-container');
+
       this.update(el, newProps);
     },
 
     /**
-     * Make the SVG container element
-     * Recreate if it previously existed
-     */
-    _makeSvg(el: Element) {
-      if (svg) {
-        svg.selectAll('svg > *').remove();
-        svg.remove();
-        const childNodes = el.getElementsByTagName('svg');
-        if (childNodes.length > 0) {
-          el.removeChild(childNodes[0]);
-        }
-      }
-      const { margin, width, height, className } = props;
-
-      // Reference to svg element containing chart
-      svg = select(el).append('svg')
-        .attr('class', className)
-        .attr('width', width)
-        .attr('height', height)
-        .attr('viewBox', `0 0 ${width} ${height}`)
-        .append('g')
-        .attr('transform',
-          'translate(' + margin.left + ',' + margin.top + ')');
-      const r = makeTip(props.tipContainer, tipContainer);
-      tipContent = r.tipContent;
-      tipContainer = r.tipContainer;
-    },
-
-    /**
-     * Draw scales
-     */
-    _drawScales() {
-      const { data, domain, groupLayout, stacked, margin, width, height, axis } = props;
-
-      svg.selectAll('.y-axis').remove();
-      svg.selectAll('.x-axis').remove();
-
+    * Draw Axes
+    */
+    drawAxes() {
+      const { bar, data, domain, groupLayout, stacked, margin, width, height, axis } = props;
+      const valuesCount = maxValueCount(data.counts);
+      const w = gridWidth(props);
       const h = gridHeight(props);
+      const dataLabels = data.counts.map((c) => c.label);
 
       y.domain(data.bins)
-        .rangeRound([0, h]);
+        .rangeRound([0, h])
+        .paddingInner(groupedMargin(bar));
 
-      const xAxis = axisBottom(x).ticks(axis.x.ticks);
-      const yAxis = axisLeft(y).ticks(axis.y.ticks);
+      innerScaleBand
+        .domain(groupedBarsUseSameXAxisValue({groupLayout, stacked}) ? ['main'] : dataLabels)
+        .rangeRound([0, y.bandwidth()])
+        .paddingInner(barMargin(props.bar));
+
+      const xAxis = axisBottom<number>(x);
+      const yAxis = axisLeft<string>(y);
+
+      /** Y-Axis (label axis) set up */
 
       ticks({
-        axis: xAxis, 
-        valuesCount: maxValueCount(data.counts), 
+        axis: yAxis,
+        valuesCount,
         axisLength: h,
         axisConfig: axis,
-        scaleBand: x,
+        scaleBand: y,
+        limitByValues: true,
       });
 
+      yAxisContainer
+      .attr('transform', 'translate(' + yAxisWidth(axis) + ', ' + margin.top + ' )')
+      .call(yAxis);
+
+      /** X-Axis (value axis) set up */
       appendDomainRange({
         data: dataSets,
         domain,
         range: [0, Number(width) - (margin.top * 2) - axis.y.width],
         scale: x,
-        stacked: isStacked({groupLayout, stacked})
+        stacked: isStacked({ groupLayout, stacked })
       })
-      svg.append('g').attr('class', 'y-axis')
-        .attr('transform', 'translate(' + axis.y.width + ', 0)')
-        .call(yAxis);
 
-      svg.append('g').attr('class', 'x-axis')
-        .attr('transform', 'translate(' + axis.y.width + ',' +
-          (height - axis.x.height - (margin.left * 2)) + ')')
+      const xAxisY = height - xAxisHeight(props.axis) - margin.top;
+      xAxisContainer
+        .attr('transform', 'translate(' + yAxisWidth(axis) + ',' +
+        xAxisY + ')')
         .call(xAxis);
 
       attrs(svg.selectAll('.y-axis .domain, .y-axis .tick line'), axis.y.style);
@@ -184,166 +207,111 @@ export const horizontalHistogramD3 = ((): IChartAdaptor<IHistogramProps> => {
     },
 
     /**
-     * Draw the bars
-     * @param {Object} info Bar data etc
-     */
-    _drawBars(info: IHistogramData) {
-      info.counts.forEach((set: IHistogramDataSet, setIndex: number) => {
-        this.drawDataSet(info.bins, set, setIndex, info.counts.length);
-      });
-    },
-
-    /**
-     * Returns the margin between similar bars in different data sets
-     * @return {Number} Margin
-     */
-    groupedMargin(): number {
-      const { data } = props;
-      return ((data.counts.length - 1) * 3);
-    },
-
-    /**
-     * Calculate the bar height
-     * @return {number} bar height
-     */
-    barHeight() {
-      const { data, bar } = props;
-      const h = gridHeight(props);
-      const valuesCount = maxValueCount(data.counts);
-      const setCount = data.counts.length;
-      let barHeight = (h / valuesCount) - (bar.margin * 2) - this.groupedMargin();
-
-      // Small bars - reduce margin and re-calculate bar width
-      if (barHeight < 5) {
-        bar.margin = 1;
-        barHeight = Math.max(1, (h - (valuesCount + 1) * bar.margin) /
-          valuesCount);
-      }
-
-      // show data sets next to each other...
-      return barHeight / setCount;
-    },
-
-    /**
      * Draw a single data set into the chart
-     * @param {Array} bins Data set labels
-     * @param {Object} set HistogramDataSet
-     * @param {number} setIndex Data set index
-     * @param {number} setCount Total number of data sets
      */
-    drawDataSet(
-      bins: string[], set: IHistogramDataSet,
-      setIndex: number, setCount: number,
+    updateChart(
+      bins: string[],
+      groupData: IGroupData,
     ) {
-      const { bar, delay, duration,
-        axis, stroke, tip, tipContentFn } = props;
-      let barItem;
-      const barHeight = this.barHeight();
-      const colors = scaleOrdinal(set.colors || props.colorScheme);
-      const borderColors = set.borderColors ? scaleOrdinal(set.borderColors) : null;
+      const { axis, height, margin, delay, duration, tip, groupLayout, stacked } = props;
 
-      const selector = '.bar-' + setIndex;
-      const multiLineOffset = (index) => setCount === 1
-        ? 0
-        : ((index + setIndex) * (barHeight + this.groupedMargin()));
+      const stackedOffset = (d: IGroupDataItem, stackIndex: number) => {
+        const thisGroupData = groupData.find((gData) => {
+          return gData.find((dx) => dx.label === d.label) !== undefined;
+        });
+        const oSet = (thisGroupData || [])
+          .filter((_, i) => i < stackIndex)
+          .reduce((prev, next) => prev + next.value, 0);
+        const isItStacked = isStacked({ groupLayout, stacked });
+        const offset = isItStacked && stackIndex > 0
+          ? oSet
+          : 0;
+        return isItStacked ? x(offset) : 0;
+      }
+      
+      const colors = scaleOrdinal(props.colorScheme);
+      const gWidth = gridWidth(props);
 
-      svg.selectAll(selector).remove();
+      const g = container
+        .selectAll<SVGElement, {}>('g')
+        .data(groupData);
 
-      // Set up bar initial props
-      barItem = svg.selectAll(selector)
-        .data(set.data)
-        .enter()
-        .append('rect')
-        .attr('class', 'bar ' + selector)
-        .attr('y', (d, index, all) => {
-          return bar.margin
-            + (barHeight + (bar.margin * 2)) * (index)
-            + multiLineOffset(index);
+      const bars = g.enter()
+        .append<SVGElement>('g')
+        .merge(g)
+        .attr('transform', (d: any[]) => {
+          let yd = y(d[0].label);
+          if (yd === undefined) {
+            yd = 0;
+          }
+          const x = yAxisWidth(axis) + axis.x.style['stroke-width'];
+          return `translate(${x}, ${margin.top + yd})`;
         })
-        .attr('height', (d) => barHeight)
-        .attr('fill', (d, i) => colors(String(i)))
-        .on('mouseover', onMouseOver({bins, hover: props.bar.hover, colors, tipContentFn, tipContent, tip, tipContainer}))
+
+        .selectAll<SVGElement, {}>('rect')
+        .data((d) => d);
+
+      bars
+        .enter()
+        .append<SVGElement>('rect')
+        .attr('width', 0)
+        .attr('x', stackedOffset)
+        .attr('class', 'bar')
         .on('click', onClick(props.onClick))
+        .on('mouseover', onMouseOver({ bins, hover: props.bar.hover, colors, tipContentFn: props.tipContentFn, tipContent, tip, tipContainer }))
         .on('mousemove', () => tip.fx.move(tipContainer))
-        .on('mouseout', onMouseOut({tip, tipContainer, colors}))
-        .attr('x', (d: number): number => axis.y.width + axis.y.style['stroke-width'])
-        .attr('width', 0);
-
-      barItem.attr('stroke', (d, i) => {
-        if (borderColors) {
-          return borderColors(i);
-        }
-        return typeof stroke.color === 'function'
-          ? stroke.color(d, i, (j: number) => colors[j])
-          : stroke.color;
-      })
-        .attr('shape-rendering', 'crispEdges')
-        .attr('stroke-width', stroke.width)
-        .attr('stroke-linecap', stroke.linecap);
-
-      barItem.attr('stroke-dasharray', stroke.dasharray);
-
-      // Animate in bar
-      barItem
+        .on('mouseout', onMouseOut({ tip, tipContainer, colors }))
+        .merge(bars)
+        .attr('y', (d: IGroupDataItem, i: number) => {
+          const overlay = (props.groupLayout === EGroupedBarLayout.OVERLAID)
+            ? i * props.bar.overlayMargin
+            : Number(innerScaleBand(String(d.groupLabel)));
+          return overlay;
+        })
+        .attr('height', (d, i) => getBarWidth(i, props.groupLayout, props.bar, innerScaleBand))
+        .attr('fill', (d, i) => colors(String(i)))
         .transition()
         .duration(duration)
         .delay(delay)
-        // Hide bar's left border
+        .attr('x', stackedOffset)
+        // Hide bar's bottom border
         .attr('stroke-dasharray',
-          (d: number): string => {
-            const currentWidth = x(d);
-            return `${currentWidth + barHeight + currentWidth} ${barHeight}`;
+          (d: IGroupDataItem, i): string => {
+            const currentHeight = gWidth - (x(d.value));
+            const barWidth = getBarWidth(i, props.groupLayout, props.bar, innerScaleBand);
+            return `${barWidth} 0 ${currentHeight} ${barWidth}`;
           })
-        .attr('width',
-          (d: number): number => x(d));
+          .attr('width', (d: IGroupDataItem): number => x(d.value));
 
-      barItem.exit().remove();
-    },
+      bars.exit().remove();
+      g.exit().remove();
 
-    /**
-     * Draw a grid onto the chart background
-     */
-    _drawGrid() {
-      const { data, height, width, axis, grid, margin } = props;
-      const ticks = maxValueCount(data.counts);
-      const axisWidth = axis.y.style['stroke-width'];
-      const offset = {
-        x: axis.y.width + this.groupedMargin() / 2,
-        y: 0,
-      };
-      let g;
-      let gy;
+      const yText = yAxisLabel
+        .selectAll<any, any>('text')
+        .data([axis.y.label]);
 
-      // Horizontal lines
-      if (grid.x.visible) {
-        // Add the X gridlines
-        g = svg.append('g')
-          .attr('class', 'grid gridX')
-          .attr('transform', `translate(${offset.x}, ${offset.y})`);
+      yText.enter().append('text')
+        .attr('class', 'y-axis-label')
+        .merge(yText)
+        .attr('transform',
+          'translate(' + (Number(height) / 2) + ' ,' +
+          ((height - yAxisWidth(props.axis) - (margin.left * 2)) + axis.x.margin) + ')')
+        .style('text-anchor', 'middle')
+        .text((d) => d);
 
-        g.call(make_x_gridlines(grid.x.ticks || ticks)
-          .tickSize(-width + (margin.left * 2) + axis.y.width)
-          .tickFormat(() => ''));
+      const xText = yAxisLabel
+        .selectAll<any, any>('text')
+        .data([axis.x.label]);
 
-        attrs(g.selectAll('.tick line'), grid.x.style);
-        attrs(g.selectAll('.domain'), { ...axis.y.style, stroke: 'transparent' });
-      }
-
-      // Vertical lines.....
-      if (grid.y.visible) {
-        // add the Y gridlines
-        gy = svg.append('g')
-          .attr('class', 'grid gridY')
-          .attr('transform', 'translate(' + (axis.y.width + axisWidth) + ', '
-            + (height - axis.x.height - (margin.top * 2)) + ')')
-          .call(make_y_gridlines(grid.y.ticks || ticks)
-            .tickSize(-height + (margin.left * 2) + axis.x.height) // Line Length
-            .tickFormat(() => ''),
-          );
-        attrs(gy.selectAll('.tick line'), grid.y.style);
-
-        attrs(gy.selectAll('.domain'), { ...axis.x.style, stroke: 'transparent' });
-      }
+      xText.enter().append('text')
+        .attr('class', 'x-axis-label')
+        .merge(xText)
+        .attr('transform', 'rotate(-90)')
+        .attr('y', 0)
+        .attr('x', 0 - (gWidth / 2 - (margin.top * 2)))
+        .attr('dy', '1em')
+        .style('text-anchor', 'middle')
+        .text((d) => d);
     },
 
     /**
@@ -354,12 +322,12 @@ export const horizontalHistogramD3 = ((): IChartAdaptor<IHistogramProps> => {
         return;
       }
       merge(props, newProps);
-      this._makeSvg(el);
       if (!props.data.bins) {
         return;
       }
-      const { data, visible } = props;
-      dataSets = [] as IGroupData;
+      const { margin, width, height, className, data, visible } = props;
+      sizeSVG(svg, { margin, width, height, className });
+      dataSets = [];
 
       data.counts.forEach((count) => {
         count.data.forEach((value, i) => {
@@ -370,14 +338,14 @@ export const horizontalHistogramD3 = ((): IChartAdaptor<IHistogramProps> => {
             groupLabel: count.label,
             label: data.bins[i],
             value: visible[data.bins[i]] !== false && visible[count.label] !== false ? value : 0,
-          } as IGroupDataItem);
+          });
         });
       });
 
 
-      this._drawScales();
-      this._drawGrid();
-      this._drawBars(props.data);
+      this.drawAxes();
+      drawHorizontalGrid(x, y, gridX, gridY, props, maxValueCount(data.counts));
+      this.updateChart(data.bins, dataSets);
     },
 
     /**

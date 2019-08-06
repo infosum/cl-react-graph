@@ -42,6 +42,45 @@ export const drawGrid = (x, y, gridX, gridY, props, ticks) => {
 
   if (grid.y.visible) {
     // add the Y gridlines
+    gridY.attr('transform', 'translate(' + (offset.x) + ', 0)')
+      .transition()
+      .call(makeYGridlines(y, get(grid, 'y.ticks', ticks))
+        .tickSize(-width + (margin.left * 2) + yAxisWidth(axis))
+        .tickFormat(() => ''),
+      );
+
+    attrs(gridY.selectAll('.tick line'), grid.y.style);
+
+    // Hide the first horizontal grid line to show axis
+    gridY.selectAll('.gridY .tick line').filter((d, i) => i === 0)
+      .attr('display', 'none');
+    attrs(gridY.selectAll('.domain'), { ...axis.x.style, stroke: 'transparent' });
+  }
+};
+
+export const drawHorizontalGrid = (x, y, gridX, gridY, props, ticks) => {
+  const { height, width, axis, grid, margin } = props;
+  const axisWidth = axis.y.style['stroke-width'];
+
+  const offset = {
+    x: yAxisWidth(axis) + axisWidth,
+    y: gridHeight(props) + margin.top,
+  };
+
+  if (grid.x.visible) {
+    // Add the X gridlines
+    gridX.attr('transform', `translate(${offset.x}, ${offset.y})`)
+      .transition()
+      .call(makeXGridlines(x, get(grid, 'x.ticks', ticks))
+        .tickSize(-height + xAxisHeight(props.axis) + (margin.top * 2))
+        .tickFormat(() => ''));
+
+    attrs(gridX.selectAll('.tick line'), grid.x.style);
+    attrs(gridX.selectAll('.domain'), { ...axis.y.style, stroke: 'transparent' });
+  }
+
+  if (grid.y.visible) {
+    // add the Y gridlines
     gridY.attr('transform', 'translate(' + (yAxisWidth(axis) + axisWidth) + ', 0)')
       .transition()
       .call(makeYGridlines(y, get(grid, 'y.ticks', ticks))
