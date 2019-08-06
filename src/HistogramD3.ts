@@ -1,21 +1,16 @@
-import { extent } from 'd3-array';
 import {
   axisBottom,
   axisLeft,
 } from 'd3-axis';
-import { format } from 'd3-format';
-import Color from 'color';
 import {
   scaleBand,
   scaleLinear,
-  ScaleLinear,
   scaleOrdinal,
 } from 'd3-scale';
 import {
   select,
   Selection,
 } from 'd3-selection';
-import { timeFormat } from 'd3-time-format';
 import get from 'lodash.get';
 import merge from 'lodash/merge';
 import { onMouseOver, onMouseOut, onClick } from './utils/mouseOver';
@@ -30,9 +25,7 @@ import {
 } from './grid';
 import {
   EGroupedBarLayout,
-  IAxis,
   IChartAdaptor,
-  IHistogramDataSet,
   IHistogramProps,
 } from './Histogram';
 import tips, { makeTip } from './tip';
@@ -41,17 +34,9 @@ import {
   grid,
 } from './utils/defaults';
 import { DeepPartial } from './utils/types';
+import { appendDomainRange, isStacked, ticks, maxValueCount } from './utils/domain';
 
-export const shouldFormatTick = (axis: IAxis): boolean => {
-  return (axis.scale === 'TIME' && axis.hasOwnProperty('dateFormat'))
-    || axis.hasOwnProperty('numberFormat');
-}
-export const formatTick = (axis: IAxis) => (v: string | number) => {
-  if (axis.scale === 'TIME') {
-    return timeFormat(axis.dateFormat)(new Date(v));
-  }
-  return isNaN(Number(v)) ? v : format(axis.numberFormat)(Number(v))
-};
+
 
 export interface IGroupDataItem {
   label: string;
@@ -59,7 +44,7 @@ export interface IGroupDataItem {
   value: number;
 }
 
-type IGroupData = IGroupDataItem[][];
+export type IGroupData = IGroupDataItem[][];
 
 export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
   let svg: Selection<any, any, any, any>;;
@@ -183,45 +168,9 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
         .attr('transform', `translate(${margin.left},${margin.top}) scale(${scale.x},${scale.y})`);
     },
 
-    valuesCount(counts: IHistogramDataSet[]): number {
-      return counts.reduce((a: number, b: IHistogramDataSet): number => {
-        return b.data.length > a ? b.data.length : a;
-      }, 0);
-    },
-
-    isStacked() {
-      const { groupLayout, stacked } = props;
-      return stacked || groupLayout === EGroupedBarLayout.STACKED;
-    },
-
     groupedBarsUseSameXAxisValue() {
       const { groupLayout, stacked } = props;
       return stacked || groupLayout === EGroupedBarLayout.STACKED || groupLayout === EGroupedBarLayout.OVERLAID;
-    },
-
-    /**
-     * Update a linear scale with range and domain values taken either from the compiled
-     * group data. If the chart is stacked then sum all bin values first.
-     */
-    appendDomainRange(scale: ScaleLinear<number, number>, data: IGroupData): void {
-      const yDomain: number[] = [];
-      const { domain, margin, height } = props;
-
-      const allCounts: number[] = data.reduce((prev: number[], next): number[] => {
-        return this.isStacked()
-          ? [...prev, next.reduce((p: number, n): number => p + n.value, 0)]
-          : [...prev, ...next.map((n) => n.value)];
-      }, [0]);
-      const thisExtent = extent<any>(allCounts, (d) => d);
-      yDomain[1] = domain && domain.hasOwnProperty('max') && domain.max !== null
-        ? domain.max
-        : Number(thisExtent[1]);
-      yDomain[0] = domain && domain.hasOwnProperty('min') && domain.min !== null
-        ? domain.min
-        : Number(thisExtent[0]);
-      const yRange = [height - (margin.top * 2) - xAxisHeight(props.axis), 0];
-      scale.range(yRange)
-        .domain(yDomain);
     },
 
     makeScales() {
@@ -236,8 +185,8 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
      * Draw scales
      */
     _drawScales() {
-      const { axis, data, margin, height } = props;
-      const valuesCount = this.valuesCount(data.counts);
+      const { axis, domain, groupLayout, stacked, data, margin, height } = props;
+      const valuesCount = maxValueCount(data.counts);
       const w = gridWidth(props);
 
       const dataLabels = data.counts.map((c) => c.label);
@@ -253,35 +202,38 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
         .paddingInner(this.barMargin());
       const xAxis = axisBottom<string>(x);
 
-      const tickSize = get(axis, 'x.tickSize', undefined);
-      if (tickSize !== undefined) {
-        xAxis.tickSize(tickSize);
-      } else {
-        if (w / valuesCount < 10) {
-          // Show one in 10 x axis labels
-          xAxis.tickValues(x.domain().filter((d, i) => !(i % 10)));
-        }
-      }
-      if (shouldFormatTick(axis.x)) {
-        xAxis.tickFormat(formatTick(axis.x) as any);
-      }
+      ticks({
+        axis: xAxis, 
+        valuesCount, 
+        axisLength: w,
+        axisConfig: axis,
+        scaleBand: x,
+        limitByValues: true,
+      });
 
       xAxisContainer
         .attr('transform', 'translate(' + (yAxisWidth(axis) + axis.y.style['stroke-width']) + ',' +
           (height - xAxisHeight(props.axis) - (margin.left * 2)) + ')')
         .call(xAxis);
 
-      this.appendDomainRange(y, dataSets);
+      appendDomainRange({
+        data: dataSets,
+        domain,
+        range: [height - (margin.top * 2) - xAxisHeight(axis), 0],
+        scale: y,
+        stacked: isStacked({groupLayout, stacked})
+      })
 
       const yAxis = axisLeft<number>(y).ticks(axis.y.ticks);
 
-      const yTickSize = get(axis, 'y.tickSize', undefined);
-      if (yTickSize !== undefined) {
-        yAxis.tickSize(yTickSize);
-      }
-      if (shouldFormatTick(axis.y)) {
-        yAxis.tickFormat(formatTick(axis.y) as any);
-      }
+      ticks({
+        axis: yAxis, 
+        valuesCount, 
+        axisLength: w,
+        axisConfig: axis,
+        scaleBand: y,
+      });
+
       yAxisContainer
         .attr('transform', 'translate(' + yAxisWidth(axis) + ', 0)')
         .transition()
@@ -325,7 +277,7 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
       bins: string[],
       groupData: IGroupData,
     ) {
-      const { axis, height, width, margin, delay, duration, tip } = props;
+      const { axis, height, width, margin, delay, duration, tip, groupLayout, stacked } = props;
 
       const barY = (d: IGroupDataItem, stackIndex: number): number => {
         const thisGroupData = groupData.find((gData) => {
@@ -336,7 +288,7 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
             .filter((_, i) => i < stackIndex)
             .reduce((prev, next) => prev + next.value, 0)
           : 0;
-        const offset = this.isStacked() && stackIndex > 0
+        const offset = isStacked({groupLayout, stacked}) && stackIndex > 0
           ? oSet
           : 0;
         return y(d.value + offset);
@@ -380,7 +332,7 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
         .attr('x', (d: IGroupDataItem, i: number) => {
           const overlay = (props.groupLayout === EGroupedBarLayout.OVERLAID)
             ? i * props.bar.overlayMargin
-            : 0;
+            : Number(innerScaleBand(String(d.groupLabel)));
           return overlay;
           // return Number(innerScaleBand(String(d.groupLabel)));
         })
@@ -465,7 +417,7 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
       });
 
       this._drawScales();
-      drawGrid(x, y, gridX, gridY, props, this.valuesCount(data.counts));
+      drawGrid(x, y, gridX, gridY, props, maxValueCount(data.counts));
       this.updateChart(data.bins, dataSets);
     },
 

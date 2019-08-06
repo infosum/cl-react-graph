@@ -1,4 +1,3 @@
-import { extent } from 'd3-array';
 import {
   axisBottom,
   axisLeft,
@@ -30,6 +29,9 @@ import {
 } from './utils/defaults';
 import { DeepPartial } from './utils/types';
 import { onMouseOver, onMouseOut, onClick } from './utils/mouseOver';
+import { appendDomainRange, isStacked, ticks, maxValueCount } from './utils/domain';
+import { IGroupDataItem, IGroupData } from './HistogramD3';
+import { gridHeight } from './grid';
 
 export const horizontalHistogramD3 = ((): IChartAdaptor<IHistogramProps> => {
   let svg: Selection<any, any, any, any>;;
@@ -37,7 +39,7 @@ export const horizontalHistogramD3 = ((): IChartAdaptor<IHistogramProps> => {
   let tipContent;
   const x = scaleLinear();
   const y = scaleBand();
-
+  let dataSets: IGroupData;
   // Gridlines in y axis function
   function make_y_gridlines(ticks: number = 5) {
     return axisBottom(x)
@@ -134,50 +136,37 @@ export const horizontalHistogramD3 = ((): IChartAdaptor<IHistogramProps> => {
     },
 
     /**
-     * Get a max count of values in each data set
-     */
-    valuesCount(counts: IHistogramDataSet[]): number {
-      return counts.reduce((a: number, b: IHistogramDataSet): number => {
-        return b.data.length > a ? b.data.length : a;
-      }, 0);
-    },
-
-    /**
      * Draw scales
      */
-    _drawScales(data: IHistogramData) {
-      const { margin, width, height, axis } = props;
-      const valuesCount = this.valuesCount(data.counts);
+    _drawScales() {
+      const { data, domain, groupLayout, stacked, margin, width, height, axis } = props;
 
       svg.selectAll('.y-axis').remove();
       svg.selectAll('.x-axis').remove();
 
-      const h = this.gridHeight();
-      let xDomain;
-      let xAxis;
-      let yAxis;
-      let xRange;
-      const allCounts = data.counts.reduce((a: number[], b: IHistogramDataSet): number[] => {
-        return [...a, ...b.data];
-      }, []);
+      const h = gridHeight(props);
 
       y.domain(data.bins)
         .rangeRound([0, h]);
 
-      xAxis = axisBottom(x).ticks(axis.x.ticks);
-      yAxis = axisLeft(y).ticks(axis.y.ticks);
+      const xAxis = axisBottom(x).ticks(axis.x.ticks);
+      const yAxis = axisLeft(y).ticks(axis.y.ticks);
 
-      if (h / valuesCount < 10) {
-        // Show one in 10 x axis labels
-        xAxis.tickValues(x.domain().filter((d, i) => !(i % 10)));
-      }
+      ticks({
+        axis: xAxis, 
+        valuesCount: maxValueCount(data.counts), 
+        axisLength: h,
+        axisConfig: axis,
+        scaleBand: x,
+      });
 
-      xDomain = extent(allCounts, (d) => d);
-      xDomain[0] = 0;
-      xRange = [0, Number(width) - (margin.top * 2) - axis.y.width];
-      x.range(xRange)
-        .domain(xDomain);
-
+      appendDomainRange({
+        data: dataSets,
+        domain,
+        range: [0, Number(width) - (margin.top * 2) - axis.y.width],
+        scale: x,
+        stacked: isStacked({groupLayout, stacked})
+      })
       svg.append('g').attr('class', 'y-axis')
         .attr('transform', 'translate(' + axis.y.width + ', 0)')
         .call(yAxis);
@@ -199,30 +188,9 @@ export const horizontalHistogramD3 = ((): IChartAdaptor<IHistogramProps> => {
      * @param {Object} info Bar data etc
      */
     _drawBars(info: IHistogramData) {
-      const valuesCount = this.valuesCount(info.counts);
       info.counts.forEach((set: IHistogramDataSet, setIndex: number) => {
         this.drawDataSet(info.bins, set, setIndex, info.counts.length);
       });
-    },
-
-    /**
-     * Calculate the width of the area used to display the
-     * chart bars. Removes chart margins and Y axis from
-     * chart total width.
-     */
-    gridWidth(): number {
-      const { axis, width, margin } = props;
-      return Number(width) - (margin.left * 2) - axis.y.width;
-    },
-
-    /**
-     * Calculate the height of the area used to display the
-     * chart bars. Removes chart margins and X axis from
-     * chart total height.
-     */
-    gridHeight(): number {
-      const { height, margin, axis } = props;
-      return height - (margin.top * 2) - axis.x.height;
     },
 
     /**
@@ -240,8 +208,8 @@ export const horizontalHistogramD3 = ((): IChartAdaptor<IHistogramProps> => {
      */
     barHeight() {
       const { data, bar } = props;
-      const h = this.gridHeight();
-      const valuesCount = this.valuesCount(data.counts);
+      const h = gridHeight(props);
+      const valuesCount = maxValueCount(data.counts);
       const setCount = data.counts.length;
       let barHeight = (h / valuesCount) - (bar.margin * 2) - this.groupedMargin();
 
@@ -337,7 +305,7 @@ export const horizontalHistogramD3 = ((): IChartAdaptor<IHistogramProps> => {
      */
     _drawGrid() {
       const { data, height, width, axis, grid, margin } = props;
-      const ticks = this.valuesCount(data.counts);
+      const ticks = maxValueCount(data.counts);
       const axisWidth = axis.y.style['stroke-width'];
       const offset = {
         x: axis.y.width + this.groupedMargin() / 2,
@@ -390,8 +358,24 @@ export const horizontalHistogramD3 = ((): IChartAdaptor<IHistogramProps> => {
       if (!props.data.bins) {
         return;
       }
+      const { data, visible } = props;
+      dataSets = [] as IGroupData;
 
-      this._drawScales(props.data);
+      data.counts.forEach((count) => {
+        count.data.forEach((value, i) => {
+          if (!dataSets[i]) {
+            dataSets[i] = [];
+          }
+          dataSets[i].push({
+            groupLabel: count.label,
+            label: data.bins[i],
+            value: visible[data.bins[i]] !== false && visible[count.label] !== false ? value : 0,
+          } as IGroupDataItem);
+        });
+      });
+
+
+      this._drawScales();
       this._drawGrid();
       this._drawBars(props.data);
     },
