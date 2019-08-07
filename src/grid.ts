@@ -5,7 +5,12 @@ import {
 import get from 'lodash.get';
 
 import attrs from './d3/attrs';
-import { IAxes } from './Histogram';
+import {
+  IAxes,
+  IHistogramProps,
+} from './Histogram';
+import { AnyScale } from './utils/scales';
+import { TSelection } from './utils/svg';
 
 // Grid lines in y axis function
 export const makeYGridLines = (y, ticks: number = 5) => {
@@ -58,7 +63,14 @@ export const drawGrid = (x, y, gridX, gridY, props, ticks) => {
   }
 };
 
-export const drawHorizontalGrid = (x, y, gridX, gridY, props, ticks) => {
+export const drawHorizontalGrid = (
+  x: AnyScale,
+  y: AnyScale,
+  gridX: TSelection,
+  gridY: TSelection,
+  props: IHistogramProps,
+  ticks: number,
+) => {
   const { height, width, axis, grid, margin } = props;
   const axisWidth = axis.y.style['stroke-width'];
 

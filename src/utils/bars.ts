@@ -1,9 +1,16 @@
 import { ScaleBand } from 'd3-scale';
 import get from 'lodash.get';
 
-import { EGroupedBarLayout, IHistogramBar } from '../Histogram';
+import {
+  EGroupedBarLayout,
+  IHistogramBar,
+} from '../Histogram';
 
-export const groupedBarsUseSameXAxisValue = ({ groupLayout, stacked }): boolean => {
+export interface IGroupedProps {
+    groupLayout: EGroupedBarLayout,
+    stacked: boolean;
+}
+export const groupedBarsUseSameXAxisValue = ({ groupLayout, stacked }: IGroupedProps): boolean => {
     return stacked || groupLayout === EGroupedBarLayout.STACKED || groupLayout === EGroupedBarLayout.OVERLAID;
 };
 
@@ -26,7 +33,7 @@ export const getBarWidth = (
     return innerScaleBand.bandwidth() - overlay;
 };
 
-export const groupedMargin = (bar: IHistogramBar) => {
+export const groupedMargin = (bar: IHistogramBar): number => {
     const m = get(bar, 'groupMargin', 0.1);
     return m >= 0 && m <= 1
         ? m

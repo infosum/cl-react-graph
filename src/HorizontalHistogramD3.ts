@@ -7,9 +7,7 @@ import {
   scaleLinear,
   scaleOrdinal,
 } from 'd3-scale';
-import {
-  Selection,
-} from 'd3-selection';
+import { Selection } from 'd3-selection';
 import merge from 'lodash/merge';
 
 import colorScheme from './colors';
@@ -30,9 +28,7 @@ import {
   IGroupData,
   IGroupDataItem,
 } from './HistogramD3';
-import tips, {
-  makeTip,
-} from './tip';
+import tips, { makeTip } from './tip';
 import {
   barMargin,
   getBarWidth,
@@ -61,9 +57,7 @@ import {
   sizeSVG,
   TSelection,
 } from './utils/svg';
-import {
-  DeepPartial,
-} from './utils/types';
+import { DeepPartial } from './utils/types';
 
 export const horizontalHistogramD3 = ((): IChartAdaptor<IHistogramProps> => {
   let svg: Selection<any, any, any, any>;;
@@ -162,7 +156,7 @@ export const horizontalHistogramD3 = ((): IChartAdaptor<IHistogramProps> => {
         .paddingInner(groupedMargin(bar));
 
       innerScaleBand
-        .domain(groupedBarsUseSameXAxisValue({groupLayout, stacked}) ? ['main'] : dataLabels)
+        .domain(groupedBarsUseSameXAxisValue({ groupLayout, stacked }) ? ['main'] : dataLabels)
         .rangeRound([0, y.bandwidth()])
         .paddingInner(barMargin(props.bar));
 
@@ -181,8 +175,8 @@ export const horizontalHistogramD3 = ((): IChartAdaptor<IHistogramProps> => {
       });
 
       yAxisContainer
-      .attr('transform', 'translate(' + yAxisWidth(axis) + ', ' + margin.top + ' )')
-      .call(yAxis);
+        .attr('transform', 'translate(' + yAxisWidth(axis) + ', ' + margin.top + ' )')
+        .call(yAxis);
 
       /** X-Axis (value axis) set up */
       appendDomainRange({
@@ -196,7 +190,7 @@ export const horizontalHistogramD3 = ((): IChartAdaptor<IHistogramProps> => {
       const xAxisY = height - xAxisHeight(props.axis) - margin.top;
       xAxisContainer
         .attr('transform', 'translate(' + yAxisWidth(axis) + ',' +
-        xAxisY + ')')
+          xAxisY + ')')
         .call(xAxis);
 
       attrs(svg.selectAll('.y-axis .domain, .y-axis .tick line'), axis.y.style);
@@ -228,7 +222,7 @@ export const horizontalHistogramD3 = ((): IChartAdaptor<IHistogramProps> => {
           : 0;
         return isItStacked ? x(offset) : 0;
       }
-      
+
       const colors = scaleOrdinal(props.colorScheme);
       const gWidth = gridWidth(props);
 
@@ -281,7 +275,7 @@ export const horizontalHistogramD3 = ((): IChartAdaptor<IHistogramProps> => {
             const barWidth = getBarWidth(i, props.groupLayout, props.bar, innerScaleBand);
             return `${barWidth} 0 ${currentHeight} ${barWidth}`;
           })
-          .attr('width', (d: IGroupDataItem): number => x(d.value));
+        .attr('width', (d: IGroupDataItem): number => x(d.value));
 
       bars.exit().remove();
       g.exit().remove();

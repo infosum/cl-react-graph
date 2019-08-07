@@ -12,9 +12,10 @@ import {
   IHistogramDataSet,
 } from '../Histogram';
 import { IGroupData } from '../HistogramD3';
+import { IGroupedProps } from './bars';
 import { AnyScale } from './scales';
 
-export const isStacked = ({ groupLayout, stacked }) => {
+export const isStacked = ({ groupLayout, stacked }: IGroupedProps) => {
   return stacked || groupLayout === EGroupedBarLayout.STACKED;
 };
 

@@ -297,7 +297,7 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
         .range([h, 0]);
 
       yAxisContainer
-        .attr('transform', `translate(${yAxisWidth}, ${0})`)
+        .attr('transform', `translate(${yAxisWidth}, 0)`)
         .transition()
         .call(yAxis);
 
