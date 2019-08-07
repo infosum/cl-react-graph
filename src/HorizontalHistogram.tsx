@@ -86,7 +86,7 @@ class HorizontalHistogram extends Component<DeepPartial<IHistogramProps>, IChart
   }
 
   /**
-   * Props recieved, update the chart
+   * Props received, update the chart
    */
   public componentWillReceiveProps() {
     const el = this.getDOMNode();

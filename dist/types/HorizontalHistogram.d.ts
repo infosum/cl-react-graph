@@ -28,7 +28,7 @@ declare class HorizontalHistogram extends Component<DeepPartial<IHistogramProps>
      */
     getChartState(): DeepPartial<IHistogramProps>;
     /**
-     * Props recieved, update the chart
+     * Props received, update the chart
      */
     componentWillReceiveProps(): void;
     /**

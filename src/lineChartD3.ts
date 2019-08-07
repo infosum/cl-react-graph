@@ -3,10 +3,7 @@ import {
   axisBottom,
   axisLeft,
 } from 'd3-axis';
-import {
-  select,
-  Selection,
-} from 'd3-selection';
+import { Selection } from 'd3-selection';
 import {
   area,
   curveCatmullRom,
@@ -18,21 +15,17 @@ import {
   timeFormat,
   timeParse,
 } from 'd3-time-format';
-import get from 'lodash.get';
 import mergeWith from 'lodash.mergewith';
 
 import attrs from './d3/attrs';
 import {
   drawGrid,
+  gridHeight,
   gridWidth,
   xAxisHeight as getXAxisHeight,
   yAxisWidth as getYAxisWidth,
 } from './grid';
 import { IChartAdaptor } from './Histogram';
-import {
-  formatTick,
-  shouldFormatTick,
-} from './HistogramD3';
 import {
   ILineChartDataSet,
   ILineChartProps,
@@ -46,14 +39,23 @@ import {
   lineStyle,
 } from './utils/defaults';
 import {
-  AnyScale,
-  buildScales,
-} from './utils/scales';
+  applyDomainAffordance,
+  ticks,
+} from './utils/domain';
+import { buildScales } from './utils/scales';
+import {
+  makeGrid,
+  makeScales,
+  makeSvg,
+  sizeSVG,
+  TSelection,
+} from './utils/svg';
 import { DeepPartial } from './utils/types';
 
-const ZERO_SUBSITUTE: number = 1e-6;
+const ZERO_SUBSTITUTE: number = 1e-6;
 
 export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
+  let svg: TSelection;
   let tipContainer;
   let xParseTime;
   let xFormatTime;
@@ -120,16 +122,16 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
     .x((d: any) => x(d.x) + yAxisWidth)
     .y((d: any) => y(d.y));
 
-  // let props: ILineChartProps;
-  let svg: Selection<any, any, any, any>;
   let container: Selection<SVGElement, any, any, any>;
-  let lineContainer: Selection<any, any, any, any>;
-  let gridX: Selection<any, any, any, any>;
-  let gridY: Selection<any, any, any, any>;
+  let lineContainer: TSelection;
+  let gridX: TSelection;
+  let gridY: TSelection;
   let xScale: any; // AnyScale;
   let yScale: any; // AnyScale;
-  let xAxisContainer: Selection<any, any, any, any>;
-  let yAxisContainer: Selection<any, any, any, any>;
+  let xAxisContainer: TSelection;
+  let yAxisContainer: TSelection;
+  let xAxisLabel: TSelection;
+  let yAxisLabel: TSelection;
 
   const LineChartD3 = {
     /**
@@ -137,10 +139,15 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
      */
     create(el: Element, newProps: DeepPartial<ILineChartProps> = {}) {
       this.mergeProps(newProps);
-      this._makeSvg(el);
-      this.makeScales();
+      svg = makeSvg(el, svg);
+      const { margin, width, height, className } = props;
+      sizeSVG(svg, { margin, width, height, className });
+      const r = makeTip(props.tipContainer, tipContainer);
+      tipContent = r.tipContent;
+      tipContainer = r.tipContainer;
       [xScale, yScale] = buildScales(props.axis);
-      this.makeGrid();
+      [xAxisContainer, yAxisContainer, xAxisLabel, yAxisLabel] = makeScales(svg);
+      [gridX, gridY] = makeGrid(svg);
       container = svg
         .append<SVGElement>('g')
         .attr('class', 'linechart-container');
@@ -161,56 +168,24 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
     },
 
     /**
-     * Make the SVG container element
-     * Recreate if it previously existed
-     */
-    _makeSvg(el: Element) {
-      if (svg) {
-        svg.selectAll('svg > *').remove();
-        svg.remove();
-        const childNodes = el.getElementsByTagName('svg');
-        if (childNodes.length > 0) {
-          el.removeChild(childNodes[0]);
-        }
-      }
-      // Reference to svg element containing chart
-      svg = select(el).append('svg')
-      this.sizeSVG();
-
-      const r = makeTip(props.tipContainer, tipContainer);
-      tipContent = r.tipContent;
-      tipContainer = r.tipContainer;
-    },
-
-    sizeSVG() {
-      const { margin, width, height, className } = props;
-      const scale = {
-        x: 1 - (margin.left / Number(width)),
-        y: 1 - (margin.top / Number(height)),
-      };
-      svg.attr('class', className)
-        .attr('width', width)
-        .attr('height', height)
-        .append('g')
-        .attr('transform', `translate(${margin.left},${margin.top}) scale(${scale.x},${scale.y})`);
-    },
-
-    /**
      * Iterate over the dataset drawing points for sets marked as
      * requiring points.
      */
     _drawDataPointSet(data: ILineChartProps['data']) {
-      const { axis, tip } = props;
+      const { axis, tip, tipContentFn } = props;
       const yAxisWidth = getYAxisWidth(axis);
 
       const pointContainer = container.selectAll<SVGElement, {}>('g').data(data);
 
       // Don't ask why but we must reference tipContentFn as props.tipContentFn otherwise
       // it doesn't update with props changes
-      const onMouseOver = (d: ILineChartDataSet<any>, i: number) => {
-        tipContent.html(() => props.tipContentFn([d as any], 0, 0, ''));
+      const onMouseOver = (d: any) => {
+        tipContent.html(() => tipContentFn([d as any], 0, 0, ''));
         tip.fx.in(tipContainer);
       };
+      const onMouseMove = () => tip.fx.move(tipContainer);
+      const onMouseOut = () => tip.fx.out(tipContainer);
+
       const points = pointContainer.enter()
         .append<SVGElement>('g')
         .attr('class', (d, i: number) => 'point-container' + i)
@@ -231,12 +206,9 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
       // apply operations to both.
       points.enter().append<SVGElement>('circle')
         .attr('class', 'enter')
-        .on('mouseover', (d, i) => {
-          tipContent.html(() => props.tipContentFn([d as any], 0, 0, ''));
-          tip.fx.in(tipContainer);
-        })
-        .on('mousemove', () => tip.fx.move(tipContainer))
-        .on('mouseout', () => tip.fx.out(tipContainer))
+        .on('mouseover', onMouseOver)
+        .on('mousemove', onMouseMove)
+        .on('mouseout', onMouseOut)
         .merge(points)
         .attr('class', 'point')
         .attr('cy', (d) => yScale(d.y))
@@ -256,40 +228,40 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
       points.exit().remove();
     },
 
-    makeScales() {
-      xAxisContainer = svg.append('g').attr('class', 'x-axis');
-      yAxisContainer = svg.append('g').attr('class', 'y-axis');
-    },
-
     /**
      * Draw the chart scales
      */
-    _drawScales(data: ILineChartProps['data']) {
+    drawAxes() {
       // @TODO Grid not rendering down to x axis
-      const { axis, height } = props;
+      const { axis, data } = props;
+      const valuesCount = data.reduce((a: number, b): number => {
+        return b.data.length > a ? b.data.length : a;
+      }, 0)
       const w = gridWidth(props);
-      let yDomain;
-      let xDomain;
+      const h = gridHeight(props);
       const ys: any[] = [];
       const xs: any[] = [];
-      const yAxis = axisLeft<number>(yScale).ticks(axis.y.ticks);
 
-      const yTickSize = get(axis, 'y.tickSize', undefined);
-      if (yTickSize !== undefined) {
-        yAxis.tickSize(yTickSize);
-      }
-      if (shouldFormatTick(axis.y)) {
-        yAxis.tickFormat(formatTick(axis.y) as any);
-      }
+      const yAxis = axisLeft<number>(yScale);
+      const xAxis = axisBottom<number | string>(xScale);
 
-      const xAxis = axisBottom<number | string>(xScale)
-        .ticks(axis.x.ticks);;
+      ticks({
+        axis: xAxis,
+        valuesCount,
+        axisLength: w,
+        axisConfig: axis.x,
+        scaleBand: xScale,
+        limitByValues: true,
+      });
 
-      if (shouldFormatTick(axis.x)) {
-        xAxis.tickFormat(formatTick(axis.x) as any);
-      }
+      ticks({
+        axis: yAxis,
+        valuesCount,
+        axisLength: h,
+        axisConfig: axis.y,
+        scaleBand: yScale,
+      });
 
-      const xAxisHeight = getXAxisHeight(axis);
       const yAxisWidth = getYAxisWidth(axis);
 
       data.forEach((datum) => {
@@ -297,30 +269,32 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
           let parsedY = d.y;
           let parsedX = d.x;
           if (axis.y.scale === 'LOG' && d.y === 0) {
-            parsedY = ZERO_SUBSITUTE;
+            parsedY = ZERO_SUBSTITUTE;
           }
           if (axis.x.scale === 'LOG' && d.x === 0) {
-            parsedX = ZERO_SUBSITUTE;
+            parsedX = ZERO_SUBSTITUTE;
           }
           ys.push((parsedY));
-          xs.push((parsedX));
+          xs.push((typeof parsedX === 'number' ? applyDomainAffordance(parsedX) : parsedX));
         });
       });
-      yDomain = extent(ys);
-      xDomain = extent(xs);
+      const yDomain = extent(ys);
+      yDomain[0] = applyDomainAffordance(yDomain[0], false);
+      yDomain[1] = applyDomainAffordance(yDomain[1]);
+
+      const xDomain = extent(xs);;
       // domain mustn't be 0 as log(0) gives Infinity. 1 lower domain gives better looking graphs
-      if (axis.y.scale === 'LOG' && yDomain[0] === ZERO_SUBSITUTE) {
+      if (axis.y.scale === 'LOG' && yDomain[0] === ZERO_SUBSTITUTE) {
         yDomain[0] = 1;
       }
-      if (axis.x.scale === 'LOG' && xDomain[0] === ZERO_SUBSITUTE) {
+      if (axis.x.scale === 'LOG' && xDomain[0] === ZERO_SUBSTITUTE) {
         xDomain[0] = 1;
       }
       xScale
         .domain(xDomain)
         .rangeRound([0, w]);
-
       yScale.domain(yDomain)
-        .range([Number(height) - xAxisHeight, 0]);
+        .range([h, 0]);
 
       yAxisContainer
         .attr('transform', `translate(${yAxisWidth}, 0)`)
@@ -328,7 +302,7 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
         .call(yAxis);
 
       xAxisContainer
-        .attr('transform', `translate(${yAxisWidth},${(Number(height) - xAxisHeight)})`)
+        .attr('transform', `translate(${yAxisWidth + axis.y.style['stroke-width']},${h})`)
         .call(xAxis);
 
       attrs(svg.selectAll('.y-axis .domain, .y-axis .tick line'), axis.y.style);
@@ -381,13 +355,13 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
      * Iterates ove data and updates area fills
      */
     drawAreas(data: Array<ILineChartDataSet<any>>, oldData: Array<ILineChartDataSet<any>>) {
-      const { axis, height } = props;
+      const { axis } = props;
+      const h = gridHeight(props);
       const yAxisWidth = getYAxisWidth(axis);
-      const xAxisHeight = getXAxisHeight(axis);
       const thisArea = (curveType) => area()
         .curve(curveType)
         .x((d: any) => xScale(d.x) + yAxisWidth)
-        .y0((d) => Number(height) - xAxisHeight)
+        .y0((d) => h)
         .y1((d: any) => yScale(d.y));
 
       // Remove old lines
@@ -429,13 +403,6 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
       }, 0);
     },
 
-    makeGrid() {
-      gridX = svg.append('g')
-        .attr('class', 'grid gridX');
-      gridY = svg.append('g')
-        .attr('class', 'grid gridY');
-    },
-
     /**
      * Update chart
      */
@@ -445,7 +412,8 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
       }
       const oldData = [...props.data];
       this.mergeProps(newProps);
-      this.sizeSVG();
+      const { margin, width, height, className } = props;
+      sizeSVG(svg, { margin, width, height, className });
       [xScale, yScale] = buildScales(props.axis);
       let data = props.data;
 
@@ -466,7 +434,7 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
         // Assign in default line & point styles
         return Object.assign({}, datumProps, datum);
       });
-      this._drawScales(data);
+      this.drawAxes();
       this._drawLines(data, oldData);
       this.drawAreas(data, oldData);
       drawGrid(xScale, yScale, gridX, gridY, props, this.valuesCount(data));

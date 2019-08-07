@@ -1,7 +1,9 @@
 // Be sure to include styles at some point, probably during your bootstrapping
 import 'react-datasheet/lib/react-datasheet.css';
 
-import { curveCatmullRom } from 'd3-shape';
+import {
+  curveCatmullRom,
+} from 'd3-shape';
 import merge from 'deepmerge';
 import ColorPicker from 'material-ui-color-picker';
 import React, {
@@ -9,7 +11,9 @@ import React, {
   useReducer,
   useState,
 } from 'react';
-import ReactDataSheet, { Cell } from 'react-datasheet';
+import ReactDataSheet, {
+  Cell,
+} from 'react-datasheet';
 
 import {
   Button,
@@ -18,6 +22,8 @@ import {
   FormControlLabel,
   FormGroup,
   Grid,
+  Input,
+  MenuItem,
   Switch,
   Tab,
   Tabs,
@@ -31,15 +37,32 @@ import {
   ILineChartProps,
   LineChart,
 } from '../../../src';
-import { DeepPartial } from '../../../src/utils/types';
-import { CurveSelector } from '../components/CurveSelector';
-import { GridOptionsFactory } from '../components/GridOptions';
+import {
+  Scale,
+} from '../../../src/Histogram';
+import {
+  DeepPartial,
+} from '../../../src/utils/types';
+import {
+  AxisActions,
+} from '../components/AxisOptions';
+import {
+  CurveSelector,
+} from '../components/CurveSelector';
+import {
+  GridOptionsFactory,
+} from '../components/GridOptions';
 import JSXToString from '../components/JSXToString';
 import Layout from '../components/layout';
 import SEO from '../components/seo';
-import { TabContainer } from '../components/TabContainer';
-import { grid } from '../data';
 import {
+  TabContainer,
+} from '../components/TabContainer';
+import {
+  grid,
+} from '../data';
+import {
+  axisReducer,
   GridActions,
   gridReducer,
 } from './histogram';
@@ -107,7 +130,8 @@ const initialState: TInitialState = {
       scale: 'LINEAR'
     },
     y: {
-      ticks: 3
+      ticks: 3,
+      scale: 'LINEAR'
     }
   },
   data: [
@@ -131,11 +155,13 @@ type Actions = { type: 'applyChanges', index: 0, changes: any }
   | { type: 'lineFillColor', fill: string, index: number }
   | { type: 'addRow', row: TData; }
   | { type: 'toggleRow'; }
+  | AxisActions
   | GridActions
   ;
 
 function reducer(state: ILineChartProps, action: Actions) {
   state = gridReducer(state, action);
+  state = axisReducer(state, action);
   switch (action.type) {
     case 'addRow': {
       state.data.push(action.row);
@@ -251,6 +277,24 @@ const LineExample: FC<{}> = () => {
                         dispatch({ type: 'applyChanges', index: 0, changes });
                       }} />
                     <Button onClick={() => dispatch({ type: 'toggleRow' })}>Toggle Row</Button>
+                    <Grid item xs={6}>
+                      <TextField
+                        label="Y Axis Scale"
+                        select
+                        value={state.axis.y.scale}
+                        onChange={(e) => dispatch({ type: 'setScale', axis: 'y', value: e.target.value as Scale })}
+                      >
+                        <MenuItem value="LINEAR">
+                          Linear
+                          </MenuItem>
+                        <MenuItem value="LOG">
+                          Log
+                          </MenuItem>
+                        <MenuItem value="TIME">
+                          Time
+                          </MenuItem>
+                      </TextField>
+                    </Grid>
                   </TabContainer>
                 }
                 {
