@@ -5,13 +5,15 @@ import {
   ScaleLogarithmic,
   scaleTime,
   ScaleTime,
+  ScaleBand,
 } from 'd3-scale';
 
 import { IAxes } from '../';
 
 export type AnyScale = ScaleLinear<number, number>
   | ScaleTime<any, any>
-  | ScaleLogarithmic<any, any>;
+  | ScaleLogarithmic<any, any>
+  | ScaleBand<string>;
 
 export const buildScales = (axis: IAxes) => {
   let x: AnyScale;

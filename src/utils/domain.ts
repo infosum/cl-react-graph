@@ -1,25 +1,34 @@
-import { ScaleLinear, ScaleBand } from 'd3-scale';
-import { extent } from 'd3-array';
-import { IGroupDataItem, IGroupData } from '../HistogramD3';
-import { EGroupedBarLayout, IDomain, IAxes, IAxis, IHistogramDataSet } from '../Histogram';
 import { Axis } from 'd3';
-import get from 'lodash/get';
-import { timeFormat } from 'd3-time-format';
+import { extent } from 'd3-array';
 import { format } from 'd3-format';
+import { ScaleLinear } from 'd3-scale';
+import { timeFormat } from 'd3-time-format';
+import get from 'lodash/get';
 
-export const  isStacked = ({ groupLayout, stacked }) => {
+import {
+  EGroupedBarLayout,
+  IAxis,
+  IDomain,
+  IHistogramDataSet,
+} from '../Histogram';
+import { IGroupData } from '../HistogramD3';
+import { AnyScale } from './scales';
+
+export const isStacked = ({ groupLayout, stacked }) => {
   return stacked || groupLayout === EGroupedBarLayout.STACKED;
 };
 
 interface IAppendDomainRangeProps {
   domain: IDomain;
-  scale: ScaleLinear<number, number>, 
+  scale: ScaleLinear<number, number>,
   data: IGroupData | number[],
   range: number[],
   stacked: boolean,
 }
 
-export const applyDomainAffordance = (v: number) => v + v * 5 / 100;
+export const applyDomainAffordance = (v: number, inc: boolean = true) =>
+  inc ? v + v * 5 / 100
+    : v - v * 5 / 100;
 /**
  * Update a linear scale with range and domain values taken either from the compiled
  * group data. If the chart is stacked then sum all bin values first.
@@ -43,7 +52,7 @@ export const appendDomainRange = (props: IAppendDomainRangeProps): void => {
   aDomain[0] = domain && domain.hasOwnProperty('min') && domain.min !== null
     ? domain.min
     : Number(thisExtent[0]);
-  
+
   scale.range(range)
     .domain(aDomain);
 }
@@ -62,11 +71,11 @@ export const formatTick = (axis: IAxis) => (v: string | number) => {
 
 
 interface ITickProps {
-  axis: Axis<string> | Axis<number> | Axis<number | { valueOf(): number}> | Axis<number | string>;
-  axisConfig: IAxes;
+  axis: Axis<string> | Axis<number> | Axis<number | { valueOf(): number }> | Axis<number | string>;
+  axisConfig: IAxis;
   axisLength: number;
   valuesCount: number;
-  scaleBand: ScaleBand<string> | ScaleLinear<number, number>;
+  scaleBand: AnyScale;
   limitByValues?: boolean;
 }
 export const ticks = ({
@@ -77,7 +86,7 @@ export const ticks = ({
   scaleBand,
   limitByValues,
 }: ITickProps) => {
-  const tickSize = get(axisConfig, 'x.tickSize', undefined);
+  const tickSize = get(axisConfig, 'tickSize', undefined);
   if (tickSize !== undefined) {
     axis.tickSize(tickSize);
   } else {
@@ -86,12 +95,12 @@ export const ticks = ({
       axis.tickValues((scaleBand.domain() as any[]).filter((d, i) => !(i % 10)));
     }
   }
-  if (shouldFormatTick(axisConfig.x)) {
-    axis.tickFormat(formatTick(axisConfig.x) as any);
+  if (shouldFormatTick(axisConfig)) {
+    axis.tickFormat(formatTick(axisConfig) as any);
   }
 }
 
-export const maxValueCount = (counts: IHistogramDataSet[]): number  => {
+export const maxValueCount = (counts: IHistogramDataSet[]): number => {
   return counts.reduce((a: number, b: IHistogramDataSet): number => {
     return b.data.length > a ? b.data.length : a;
   }, 0);

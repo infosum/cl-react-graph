@@ -26,7 +26,7 @@ export enum EColorManipulations {
   'rotate' = 'rotate',
 };
 
- export interface IHistogramBar {
+export interface IHistogramBar {
   groupMargin: number;
   margin: number;
   hover?: Partial<Record<EColorManipulations, number>>,
@@ -116,7 +116,7 @@ export interface IHistogramProps {
   width: number | string;
 }
 
-type Scale = 'LINEAR' | 'TIME' | 'LOG';
+export type Scale = 'LINEAR' | 'TIME' | 'LOG';
 
 export interface ISVGLineStyle {
   'stroke': string;

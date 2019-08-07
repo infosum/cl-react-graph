@@ -7,9 +7,7 @@ import {
   scaleLinear,
   scaleOrdinal,
 } from 'd3-scale';
-import {
-  Selection,
-} from 'd3-selection';
+import { Selection } from 'd3-selection';
 import merge from 'lodash/merge';
 
 import colorScheme from './colors';
@@ -26,9 +24,7 @@ import {
   IChartAdaptor,
   IHistogramProps,
 } from './Histogram';
-import tips, {
-  makeTip,
-} from './tip';
+import tips, { makeTip } from './tip';
 import {
   barMargin,
   getBarWidth,
@@ -57,9 +53,7 @@ import {
   sizeSVG,
   TSelection,
 } from './utils/svg';
-import {
-  DeepPartial,
-} from './utils/types';
+import { DeepPartial } from './utils/types';
 
 export interface IGroupDataItem {
   label: string;
@@ -81,7 +75,7 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
   let gridX: TSelection;
   let gridY: TSelection;
   let yAxisContainer: TSelection;
-  let xAxisContainer:TSelection;
+  let xAxisContainer: TSelection;
   let xAxisLabel: any;
   let yAxisLabel: any;
 
@@ -176,7 +170,7 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
         .paddingInner(groupedMargin(bar));
 
       innerScaleBand
-        .domain(groupedBarsUseSameXAxisValue({groupLayout, stacked}) ? ['main'] : dataLabels)
+        .domain(groupedBarsUseSameXAxisValue({ groupLayout, stacked }) ? ['main'] : dataLabels)
         .rangeRound([0, x.bandwidth()])
         .paddingInner(barMargin(props.bar));
 
@@ -185,10 +179,10 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
 
       /** X-Axis (label axis) set up */
       ticks({
-        axis: xAxis, 
-        valuesCount, 
+        axis: xAxis,
+        valuesCount,
         axisLength: w,
-        axisConfig: axis,
+        axisConfig: axis.x,
         scaleBand: x,
         limitByValues: true,
       });
@@ -204,14 +198,14 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
         domain,
         range: [h, 0],
         scale: y,
-        stacked: isStacked({groupLayout, stacked})
+        stacked: isStacked({ groupLayout, stacked })
       });
 
       ticks({
-        axis: yAxis, 
-        valuesCount, 
+        axis: yAxis,
+        valuesCount,
         axisLength: w,
-        axisConfig: axis,
+        axisConfig: axis.y,
         scaleBand: y,
       });
 
@@ -245,12 +239,12 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
             .filter((_, i) => i < stackIndex)
             .reduce((prev, next) => prev + next.value, 0)
           : 0;
-        const offset = isStacked({groupLayout, stacked}) && stackIndex > 0
+        const offset = isStacked({ groupLayout, stacked }) && stackIndex > 0
           ? oSet
           : 0;
         return y(d.value + offset);
       }
-      // const borderColors = set.borderColors ? d3.scaleOrdinal(set.borderColors) : null;
+
       const colors = scaleOrdinal(props.colorScheme);
       const gHeight = gridHeight(props);
 
@@ -291,7 +285,6 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
             ? i * props.bar.overlayMargin
             : Number(innerScaleBand(String(d.groupLabel)));
           return overlay;
-          // return Number(innerScaleBand(String(d.groupLabel)));
         })
         .attr('width', (d, i) => getBarWidth(i, props.groupLayout, props.bar, innerScaleBand))
         .attr('fill', (d, i) => colors(String(i)))

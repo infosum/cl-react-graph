@@ -29,6 +29,10 @@ import Legend from '../../../src/Legend';
 import {
   DeepPartial,
 } from '../../../src/utils/types';
+import {
+  AxisActions,
+  AxisOptionsFactory,
+} from '../components/AxisOptions';
 import ColorModifierFields from '../components/ColorModifierFields';
 import DataGroup from '../components/DataGroup';
 import {
@@ -111,6 +115,7 @@ export type Actions = { type: 'setChartType'; chartType: string }
   | { type: 'setHoverModifier'; value: number; key: string; index: number; }
   | { type: 'removeHoverModifier'; index: number; }
   | GridActions
+  | AxisActions
   ;
 
 export function gridReducer<S extends any, A extends any>(state: S, action: A): any {
@@ -134,8 +139,25 @@ export function gridReducer<S extends any, A extends any>(state: S, action: A): 
   }
 }
 
+// Unclear why but you can't import a reduced in and have it update state??? 
+export function axisReducer<S extends any, A extends any>(state: S, action: A): any {
+  switch (action.type) {
+    case 'setScale':
+      return merge(state, {
+        axis: {
+          [action.axis]: {
+            scale: action.value,
+          },
+        }
+      })
+    default:
+      return state;
+  }
+}
+
 function reducer(state: IInitialState, action: Actions) {
   state = gridReducer(state, action);
+  state = axisReducer(state, action);
   switch (action.type) {
     case 'setChartType':
       return { ...state, chartType: action.chartType };
@@ -221,6 +243,7 @@ export const dataToSpreadSheet = (datum: IHistogramData): any => {
 };
 
 const GridOptions = GridOptionsFactory<(action: Actions) => void, IInitialState>();
+const AxisOptions = AxisOptionsFactory<(action: Actions) => void, IInitialState>();
 
 const HistogramExample = () => {
   const [tab, setTab] = useState(0);
@@ -253,7 +276,9 @@ const HistogramExample = () => {
   return (
     <Layout>
       <SEO title="Histogram" description="" />
-      <Typography variant="h2">Histogram</Typography>
+      <Typography variant="h2">
+        Histogram
+      </Typography>
       <div>
         <Grid container spacing={24}>
           <Grid item xs={6}>
@@ -285,10 +310,12 @@ const HistogramExample = () => {
                   <Tab label="Styling" />
                   <Tab label="Animation" />
                   <Tab label="Grid" />
+                  <Tab label="Axes" />
                 </Tabs>
                 {
                   tab === 0 && <TabContainer>
-                    <Grid item xs={6}>
+                    <Grid container spacing={24}>
+                      <Grid item xs={6}>
                         <TextField
                           select
                           label="Chart direction"
@@ -306,6 +333,7 @@ const HistogramExample = () => {
 
                         </TextField>
                       </Grid>
+                    </Grid>
                     <DataGroup<Actions, IInitialState>
                       dispatch={dispatch}
                       state={state}
@@ -386,6 +414,13 @@ const HistogramExample = () => {
                 {
                   tab === 3 && <TabContainer>
                     <GridOptions
+                      dispatch={dispatch}
+                      state={state} />
+                  </TabContainer>
+                }
+                {
+                  tab === 4 && <TabContainer>
+                    <AxisOptions
                       dispatch={dispatch}
                       state={state} />
                   </TabContainer>

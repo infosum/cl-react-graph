@@ -7,14 +7,14 @@ import get from 'lodash.get';
 import attrs from './d3/attrs';
 import { IAxes } from './Histogram';
 
-// Gridlines in y axis function
-export const makeYGridlines = (y, ticks: number = 5) => {
+// Grid lines in y axis function
+export const makeYGridLines = (y, ticks: number = 5) => {
   return axisLeft(y)
     .ticks(ticks);
 };
 
-// Gridlines in x axis function
-export const makeXGridlines = (x, ticks: number = 5) => {
+// Grid lines in x axis function
+export const makeXGridLines = (x, ticks: number = 5) => {
   return axisBottom(x)
     .ticks(ticks);
 };
@@ -29,10 +29,10 @@ export const drawGrid = (x, y, gridX, gridY, props, ticks) => {
   };
 
   if (grid.x.visible) {
-    // Add the X gridlines
+    // Add the X grid lines
     gridX.attr('transform', `translate(${offset.x}, ${offset.y})`)
       .transition()
-      .call(makeXGridlines(x, get(grid, 'x.ticks', ticks))
+      .call(makeXGridLines(x, get(grid, 'x.ticks', ticks))
         .tickSize(-height + xAxisHeight(props.axis) + (margin.top * 2))
         .tickFormat(() => ''));
 
@@ -41,10 +41,10 @@ export const drawGrid = (x, y, gridX, gridY, props, ticks) => {
   }
 
   if (grid.y.visible) {
-    // add the Y gridlines
-    gridY.attr('transform', 'translate(' + (offset.x) + ', 0)')
+    // add the Y grid lines
+    gridY.attr('transform', `translate(${offset.x}, 0)`)
       .transition()
-      .call(makeYGridlines(y, get(grid, 'y.ticks', ticks))
+      .call(makeYGridLines(y, get(grid, 'y.ticks', ticks))
         .tickSize(-width + (margin.left * 2) + yAxisWidth(axis))
         .tickFormat(() => ''),
       );
@@ -68,10 +68,10 @@ export const drawHorizontalGrid = (x, y, gridX, gridY, props, ticks) => {
   };
 
   if (grid.x.visible) {
-    // Add the X gridlines
+    // Add the X grid lines
     gridX.attr('transform', `translate(${offset.x}, ${offset.y})`)
       .transition()
-      .call(makeXGridlines(x, get(grid, 'x.ticks', ticks))
+      .call(makeXGridLines(x, get(grid, 'x.ticks', ticks))
         .tickSize(-height + xAxisHeight(props.axis) + (margin.top * 2))
         .tickFormat(() => ''));
 
@@ -80,10 +80,10 @@ export const drawHorizontalGrid = (x, y, gridX, gridY, props, ticks) => {
   }
 
   if (grid.y.visible) {
-    // add the Y gridlines
+    // add the Y grid lines
     gridY.attr('transform', 'translate(' + (yAxisWidth(axis) + axisWidth) + ', 0)')
       .transition()
-      .call(makeYGridlines(y, get(grid, 'y.ticks', ticks))
+      .call(makeYGridLines(y, get(grid, 'y.ticks', ticks))
         .tickSize(-width + (margin.left * 2) + yAxisWidth(axis))
         .tickFormat(() => ''),
       );

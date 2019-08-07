@@ -175,7 +175,7 @@ export const horizontalHistogramD3 = ((): IChartAdaptor<IHistogramProps> => {
         axis: yAxis,
         valuesCount,
         axisLength: h,
-        axisConfig: axis,
+        axisConfig: axis.y,
         scaleBand: y,
         limitByValues: true,
       });
