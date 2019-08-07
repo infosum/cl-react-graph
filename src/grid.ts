@@ -63,7 +63,7 @@ export const drawHorizontalGrid = (x, y, gridX, gridY, props, ticks) => {
   const axisWidth = axis.y.style['stroke-width'];
 
   const offset = {
-    x: yAxisWidth(axis) + axisWidth,
+    x: yAxisWidth(axis),
     y: gridHeight(props) + margin.top,
   };
 
