@@ -1,7 +1,8 @@
-import { ScaleLinear, ScaleBand } from 'd3-scale';
-import { IGroupData } from '../HistogramD3';
-import { IDomain, IAxes, IAxis, IHistogramDataSet } from '../Histogram';
 import { Axis } from 'd3';
+import { ScaleLinear } from 'd3-scale';
+import { IAxis, IDomain, IHistogramDataSet } from '../Histogram';
+import { IGroupData } from '../HistogramD3';
+import { AnyScale } from './scales';
 export declare const isStacked: ({ groupLayout, stacked }: {
     groupLayout: any;
     stacked: any;
@@ -13,7 +14,7 @@ interface IAppendDomainRangeProps {
     range: number[];
     stacked: boolean;
 }
-export declare const applyDomainAffordance: (v: number) => number;
+export declare const applyDomainAffordance: (v: number, inc?: boolean) => number;
 /**
  * Update a linear scale with range and domain values taken either from the compiled
  * group data. If the chart is stacked then sum all bin values first.
@@ -25,10 +26,10 @@ interface ITickProps {
     axis: Axis<string> | Axis<number> | Axis<number | {
         valueOf(): number;
     }> | Axis<number | string>;
-    axisConfig: IAxes;
+    axisConfig: IAxis;
     axisLength: number;
     valuesCount: number;
-    scaleBand: ScaleBand<string> | ScaleLinear<number, number>;
+    scaleBand: AnyScale;
     limitByValues?: boolean;
 }
 export declare const ticks: ({ axis, axisConfig, axisLength, valuesCount, scaleBand, limitByValues, }: ITickProps) => void;

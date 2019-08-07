@@ -102,7 +102,7 @@ export interface IHistogramProps {
     };
     width: number | string;
 }
-declare type Scale = 'LINEAR' | 'TIME' | 'LOG';
+export declare type Scale = 'LINEAR' | 'TIME' | 'LOG';
 export interface ISVGLineStyle {
     'stroke': string;
     'fill': string;

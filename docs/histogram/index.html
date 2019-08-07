@@ -569,6 +569,193 @@ body {
 .MuiTypography-inline {
   display: inline;
 }
+.MuiSvgIcon-root {
+  fill: currentColor;
+  width: 1em;
+  height: 1em;
+  display: inline-block;
+  font-size: 24px;
+  transition: fill 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  user-select: none;
+  flex-shrink: 0;
+}
+.MuiSvgIcon-colorPrimary {
+  color: #00a97b;
+}
+.MuiSvgIcon-colorSecondary {
+  color: #27626a;
+}
+.MuiSvgIcon-colorAction {
+  color: rgba(0, 0, 0, 0.54);
+}
+.MuiSvgIcon-colorError {
+  color: #f44336;
+}
+.MuiSvgIcon-colorDisabled {
+  color: rgba(0, 0, 0, 0.26);
+}
+.MuiSvgIcon-fontSizeInherit {
+  font-size: inherit;
+}
+.MuiSvgIcon-fontSizeSmall {
+  font-size: 20px;
+}
+.MuiSvgIcon-fontSizeLarge {
+  font-size: 35px;
+}
+.MuiModal-root {
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1300;
+  position: fixed;
+}
+.MuiModal-hidden {
+  visibility: hidden;
+}
+.MuiInputBase-root {
+  color: rgba(0, 0, 0, 0.87);
+  cursor: text;
+  display: inline-flex;
+  font-size: 1rem;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  line-height: 1.1875em;
+  align-items: center;
+}
+.MuiInputBase-root.MuiInputBase-disabled {
+  color: rgba(0, 0, 0, 0.38);
+  cursor: default;
+}
+.MuiInputBase-multiline {
+  padding: 6px 0 7px;
+}
+.MuiInputBase-fullWidth {
+  width: 100%;
+}
+.MuiInputBase-input {
+  font: inherit;
+  color: currentColor;
+  width: 100%;
+  border: 0;
+  margin: 0;
+  padding: 6px 0 7px;
+  display: block;
+  min-width: 0;
+  box-sizing: content-box;
+  background: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.MuiInputBase-input::-webkit-input-placeholder {
+  color: currentColor;
+  opacity: 0.42;
+  transition: opacity 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+}
+.MuiInputBase-input::-moz-placeholder {
+  color: currentColor;
+  opacity: 0.42;
+  transition: opacity 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+}
+.MuiInputBase-input:-ms-input-placeholder {
+  color: currentColor;
+  opacity: 0.42;
+  transition: opacity 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+}
+.MuiInputBase-input::-ms-input-placeholder {
+  color: currentColor;
+  opacity: 0.42;
+  transition: opacity 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+}
+.MuiInputBase-input:focus {
+  outline: 0;
+}
+.MuiInputBase-input:invalid {
+  box-shadow: none;
+}
+.MuiInputBase-input::-webkit-search-decoration {
+  -webkit-appearance: none;
+}
+.MuiInputBase-input.MuiInputBase-disabled {
+  opacity: 1;
+}
+label[data-shrink=false] + .MuiInputBase-formControl .MuiInputBase-input::-webkit-input-placeholder {
+  opacity: 0;
+}
+label[data-shrink=false] + .MuiInputBase-formControl .MuiInputBase-input::-moz-placeholder {
+  opacity: 0;
+}
+label[data-shrink=false] + .MuiInputBase-formControl .MuiInputBase-input:-ms-input-placeholder {
+  opacity: 0;
+}
+label[data-shrink=false] + .MuiInputBase-formControl .MuiInputBase-input::-ms-input-placeholder {
+  opacity: 0;
+}
+label[data-shrink=false] + .MuiInputBase-formControl .MuiInputBase-input:focus::-webkit-input-placeholder {
+  opacity: 0.42;
+}
+label[data-shrink=false] + .MuiInputBase-formControl .MuiInputBase-input:focus::-moz-placeholder {
+  opacity: 0.42;
+}
+label[data-shrink=false] + .MuiInputBase-formControl .MuiInputBase-input:focus:-ms-input-placeholder {
+  opacity: 0.42;
+}
+label[data-shrink=false] + .MuiInputBase-formControl .MuiInputBase-input:focus::-ms-input-placeholder {
+  opacity: 0.42;
+}
+.MuiInputBase-inputMarginDense {
+  padding-top: 3px;
+}
+.MuiInputBase-inputMultiline {
+  resize: none;
+  padding: 0;
+}
+.MuiInputBase-inputType {
+  height: 1.1875em;
+}
+.MuiInputBase-inputTypeSearch {
+  -moz-appearance: textfield;
+  -webkit-appearance: textfield;
+}
+.MuiFormControl-root {
+  margin: 0;
+  border: 0;
+  display: inline-flex;
+  padding: 0;
+  position: relative;
+  min-width: 0;
+  flex-direction: column;
+  vertical-align: top;
+}
+.MuiFormControl-marginNormal {
+  margin-top: 16px;
+  margin-bottom: 8px;
+}
+.MuiFormControl-marginDense {
+  margin-top: 8px;
+  margin-bottom: 4px;
+}
+.MuiFormControl-fullWidth {
+  width: 100%;
+}
+.MuiFormLabel-root {
+  color: rgba(0, 0, 0, 0.54);
+  padding: 0;
+  font-size: 1rem;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  line-height: 1;
+}
+.MuiFormLabel-root.MuiFormLabel-focused {
+  color: rgb(0, 118, 86);
+}
+.MuiFormLabel-root.MuiFormLabel-disabled {
+  color: rgba(0, 0, 0, 0.38);
+}
+.MuiFormLabel-root.MuiFormLabel-error {
+  color: #f44336;
+}
+.MuiFormLabel-asterisk.MuiFormLabel-error {
+  color: #f44336;
+}
 .MuiGrid-container {
   width: 100%;
   display: flex;
@@ -1032,6 +1219,162 @@ body {
     flex-basis: 100%;
   }
 }
+.MuiInput-root {
+  position: relative;
+}
+label + .MuiInput-formControl {
+  margin-top: 16px;
+}
+.MuiInput-underline:after {
+  left: 0;
+  right: 0;
+  bottom: 0;
+  content: "";
+  position: absolute;
+  transform: scaleX(0);
+  transition: transform 200ms cubic-bezier(0.0, 0, 0.2, 1) 0ms;
+  border-bottom: 2px solid rgb(0, 118, 86);
+  pointer-events: none;
+}
+.MuiInput-underline.MuiInput-focused:after {
+  transform: scaleX(1);
+}
+.MuiInput-underline.MuiInput-error:after {
+  transform: scaleX(1);
+  border-bottom-color: #f44336;
+}
+.MuiInput-underline:before {
+  left: 0;
+  right: 0;
+  bottom: 0;
+  content: "\00a0";
+  position: absolute;
+  transition: border-bottom-color 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.42);
+  pointer-events: none;
+}
+.MuiInput-underline:hover:not(.MuiInput-disabled):not(.MuiInput-focused):not(.MuiInput-error):before {
+  border-bottom: 2px solid rgba(0, 0, 0, 0.87);
+}
+.MuiInput-underline.MuiInput-disabled:before {
+  border-bottom-style: dotted;
+}
+@media (hover: none) {
+  .MuiInput-underline:hover:not(.MuiInput-disabled):not(.MuiInput-focused):not(.MuiInput-error):before {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.42);
+  }
+}
+.MuiInputLabel-root {
+  transform-origin: top left;
+}
+.MuiInputLabel-formControl {
+  top: 0;
+  left: 0;
+  position: absolute;
+  transform: translate(0, 24px) scale(1);
+}
+.MuiInputLabel-marginDense {
+  transform: translate(0, 21px) scale(1);
+}
+.MuiInputLabel-shrink {
+  transform: translate(0, 1.5px) scale(0.75);
+  transform-origin: top left;
+}
+.MuiInputLabel-animated {
+  transition: color 200ms cubic-bezier(0.0, 0, 0.2, 1) 0ms,transform 200ms cubic-bezier(0.0, 0, 0.2, 1) 0ms;
+}
+.MuiInputLabel-filled {
+  z-index: 1;
+  transform: translate(12px, 20px) scale(1);
+  pointer-events: none;
+}
+.MuiInputLabel-filled.MuiInputLabel-marginDense {
+  transform: translate(12px, 17px) scale(1);
+}
+.MuiInputLabel-filled.MuiInputLabel-shrink {
+  transform: translate(12px, 10px) scale(0.75);
+}
+.MuiInputLabel-filled.MuiInputLabel-shrink.MuiInputLabel-marginDense {
+  transform: translate(12px, 7px) scale(0.75);
+}
+.MuiInputLabel-outlined {
+  z-index: 1;
+  transform: translate(14px, 20px) scale(1);
+  pointer-events: none;
+}
+.MuiInputLabel-outlined.MuiInputLabel-marginDense {
+  transform: translate(14px, 17px) scale(1);
+}
+.MuiInputLabel-outlined.MuiInputLabel-shrink {
+  transform: translate(14px, -6px) scale(0.75);
+}
+.MuiPopover-paper {
+  outline: none;
+  position: absolute;
+  min-width: 16px;
+  max-width: calc(100% - 32px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  min-height: 16px;
+  max-height: calc(100% - 32px);
+}
+.MuiMenu-paper {
+  max-height: calc(100% - 96px);
+  -webkit-overflow-scrolling: touch;
+}
+.MuiSelect-root {
+  width: 100%;
+  position: relative;
+}
+.MuiSelect-select {
+  width: calc(100% - 32px);
+  height: 1.1875em;
+  cursor: pointer;
+  min-width: 16px;
+  user-select: none;
+  padding-right: 32px;
+  border-radius: 0;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+}
+.MuiSelect-select:focus {
+  border-radius: 0;
+  background-color: rgba(0, 0, 0, 0.05);
+}
+.MuiSelect-select::-ms-expand {
+  display: none;
+}
+.MuiSelect-select.MuiSelect-disabled {
+  cursor: default;
+}
+.MuiSelect-select[multiple] {
+  height: auto;
+}
+.MuiSelect-select:not([multiple]) option, .MuiSelect-select:not([multiple]) optgroup {
+  background-color: #fff;
+}
+.MuiSelect-filled {
+  width: calc(100% - 44px);
+}
+.MuiSelect-outlined {
+  width: calc(100% - 46px);
+  border-radius: 4px;
+}
+.MuiSelect-selectMenu {
+  width: auto;
+  height: auto;
+  overflow: hidden;
+  min-height: 1.1875em;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.MuiSelect-icon {
+  top: calc(50% - 12px);
+  right: 0;
+  color: rgba(0, 0, 0, 0.54);
+  position: absolute;
+  pointer-events: none;
+}
 .MuiTab-root {
   color: rgba(0, 0, 0, 0.87);
   padding: 0;
@@ -1181,7 +1524,7 @@ body {
   .MuiTabs-scrollButtonsAuto {
     display: none;
   }
-}</style><link as="script" rel="preload" href="/cl-react-graph/webpack-runtime-0d63802666a346430bb1.js"/><link as="script" rel="preload" href="/cl-react-graph/app-884ab09eb8dd6b4b0ed3.js"/><link as="script" rel="preload" href="/cl-react-graph/styles-6bfc6bf58911ea263547.js"/><link as="script" rel="preload" href="/cl-react-graph/1-fd5a36b3c6cd7d33ebee.js"/><link as="script" rel="preload" href="/cl-react-graph/2-74d086abed6257569827.js"/><link as="script" rel="preload" href="/cl-react-graph/3-4190a3200b396efaab36.js"/><link as="script" rel="preload" href="/cl-react-graph/component---src-pages-histogram-tsx-92f6914ae3fc8c760435.js"/><link as="fetch" rel="preload" href="/cl-react-graph/static/d/702/path---histogram-a-4-a-906-NZuapzHg3X9TaN1iIixfv1W23E.json" crossorigin="use-credentials"/></head><body><noscript id="gatsby-noscript">This app works best with JavaScript enabled.</noscript><div id="___gatsby"><div style="outline:none" tabindex="-1" role="group"><header class="MuiPaper-root MuiPaper-elevation4 MuiAppBar-root MuiAppBar-positionStatic MuiAppBar-colorPrimary"><div class="MuiToolbar-root MuiToolbar-regular MuiToolbar-gutters"><h6 class="MuiTypography-root MuiTypography-h6 MuiTypography-colorInherit"><a href="/cl-react-graph/">Infosum Charts</a></h6><button class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-flat" tabindex="0" type="button"><span class="MuiButton-label"><a href="/cl-react-graph/histogram">Histogram</a></span></button><button class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-flat" tabindex="0" type="button"><span class="MuiButton-label"><a href="/cl-react-graph/line">Line Chart</a></span></button><button class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-flat" tabindex="0" type="button"><span class="MuiButton-label"><a href="/cl-react-graph/pie">Pie Chart</a></span></button><button class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-flat" tabindex="0" type="button"><span class="MuiButton-label"><a href="/cl-react-graph/joyplot">Joy Plot</a></span></button></div></header><div style="flex-grow:2;margin:0 auto;padding:0px 1.0875rem 1.45rem;padding-top:0;width:100%"><main><h2 class="MuiTypography-root MuiTypography-h2">Histogram</h2><div><div class="MuiGrid-container MuiGrid-spacing-xs-24"><div class="MuiGrid-item MuiGrid-grid-xs-6"><div class="MuiPaper-root MuiPaper-elevation1 MuiPaper-rounded MuiCard-root"><div class="MuiCardContent-root"><div class="histogram-chart-container"></div><div><ul style="list-style:none"><li><div style="cursor:pointer;display:inline-block;height:1rem;margin:0.25rem 0.5rem;width:1rem;background-color:#D7263D;border:2px solid #D7263D"></div> <!-- -->DataSet 1</li><li><div style="cursor:pointer;display:inline-block;height:1rem;margin:0.25rem 0.5rem;width:1rem;background-color:#FBD7D9;border:2px solid #FBD7D9"></div> <!-- -->DataSet 2</li></ul></div></div></div><br/><div class="MuiPaper-root MuiPaper-elevation1 MuiPaper-rounded MuiCard-root"><div class="MuiCardContent-root"><h6 class="MuiTypography-root MuiTypography-h6">JSX</h6><pre style="background-color:#303030;color:#eee;padding:1rem">&lt;Histogram
+}</style><link as="script" rel="preload" href="/cl-react-graph/webpack-runtime-3b2c858217aa4abaa0cb.js"/><link as="script" rel="preload" href="/cl-react-graph/app-884ab09eb8dd6b4b0ed3.js"/><link as="script" rel="preload" href="/cl-react-graph/styles-9f5cec9c701f1badd13e.js"/><link as="script" rel="preload" href="/cl-react-graph/1-88032fced1bdbb41dd23.js"/><link as="script" rel="preload" href="/cl-react-graph/2-dc072f943a7abb7af020.js"/><link as="script" rel="preload" href="/cl-react-graph/3-9f4f9baae1d5e7b57e08.js"/><link as="script" rel="preload" href="/cl-react-graph/component---src-pages-histogram-tsx-2894d144930c8b3c868e.js"/><link as="fetch" rel="preload" href="/cl-react-graph/static/d/702/path---histogram-a-4-a-906-NZuapzHg3X9TaN1iIixfv1W23E.json" crossorigin="use-credentials"/></head><body><noscript id="gatsby-noscript">This app works best with JavaScript enabled.</noscript><div id="___gatsby"><div style="outline:none" tabindex="-1" role="group"><header class="MuiPaper-root MuiPaper-elevation4 MuiAppBar-root MuiAppBar-positionStatic MuiAppBar-colorPrimary"><div class="MuiToolbar-root MuiToolbar-regular MuiToolbar-gutters"><h6 class="MuiTypography-root MuiTypography-h6 MuiTypography-colorInherit"><a href="/cl-react-graph/">Infosum Charts</a></h6><button class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-flat" tabindex="0" type="button"><span class="MuiButton-label"><a href="/cl-react-graph/histogram">Histogram</a></span></button><button class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-flat" tabindex="0" type="button"><span class="MuiButton-label"><a href="/cl-react-graph/line">Line Chart</a></span></button><button class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-flat" tabindex="0" type="button"><span class="MuiButton-label"><a href="/cl-react-graph/pie">Pie Chart</a></span></button><button class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-flat" tabindex="0" type="button"><span class="MuiButton-label"><a href="/cl-react-graph/joyplot">Joy Plot</a></span></button></div></header><div style="flex-grow:2;margin:0 auto;padding:0px 1.0875rem 1.45rem;padding-top:0;width:100%"><main><h2 class="MuiTypography-root MuiTypography-h2">Histogram</h2><div><div class="MuiGrid-container MuiGrid-spacing-xs-24"><div class="MuiGrid-item MuiGrid-grid-xs-6"><div class="MuiPaper-root MuiPaper-elevation1 MuiPaper-rounded MuiCard-root"><div class="MuiCardContent-root"><div class="histogram-chart-container"></div><div><ul style="list-style:none"><li><div style="cursor:pointer;display:inline-block;height:1rem;margin:0.25rem 0.5rem;width:1rem;background-color:#449098;border:2px solid #449098"></div> <!-- -->DataSet 1</li><li><div style="cursor:pointer;display:inline-block;height:1rem;margin:0.25rem 0.5rem;width:1rem;background-color:#f9c80e;border:2px solid #f9c80e"></div> <!-- -->DataSet 2</li></ul></div></div></div><br/><div class="MuiPaper-root MuiPaper-elevation1 MuiPaper-rounded MuiCard-root"><div class="MuiCardContent-root"><h6 class="MuiTypography-root MuiTypography-h6">JSX</h6><pre style="background-color:#303030;color:#eee;padding:1rem">&lt;Histogram
   axis={{
     x: {
       dateFormat: &#x27;%d-%b-%y&#x27;,
@@ -1198,38 +1541,38 @@ body {
     overlayMargin: 5
   }}
   colorScheme={[
-    &#x27;#D7263D&#x27;,
+    &#x27;#449098&#x27;,
+    &#x27;#f9c80e&#x27;,
+    &#x27;#F9C80E&#x27;,
     &#x27;#FBD7D9&#x27;,
     &#x27;#cccccc&#x27;,
-    &#x27;#e6e6e6&#x27;,
-    &#x27;#f9c80e&#x27;,
-    &#x27;#888888&#x27;,
-    &#x27;#56b4bf&#x27;,
-    &#x27;#ff7101&#x27;,
-    &#x27;#77c3cb&#x27;,
-    &#x27;#c5e5e9&#x27;,
-    &#x27;#007656&#x27;,
-    &#x27;#008762&#x27;,
-    &#x27;#F9C80E&#x27;,
-    &#x27;#cdcdcd&#x27;,
-    &#x27;#FF7101&#x27;,
-    &#x27;#7d5d2e&#x27;,
-    &#x27;#d7263d&#x27;,
-    &#x27;#a9a9a9&#x27;,
-    &#x27;#dbdbdb&#x27;,
-    &#x27;#cc5a00&#x27;,
-    &#x27;#33ba95&#x27;,
-    &#x27;#227839&#x27;,
-    &#x27;#449098&#x27;,
     &#x27;#00a97b&#x27;,
-    &#x27;#ff8d33&#x27;
+    &#x27;#FF7101&#x27;,
+    &#x27;#56b4bf&#x27;,
+    &#x27;#a9a9a9&#x27;,
+    &#x27;#33ba95&#x27;,
+    &#x27;#d7263d&#x27;,
+    &#x27;#ff8d33&#x27;,
+    &#x27;#77c3cb&#x27;,
+    &#x27;#D7263D&#x27;,
+    &#x27;#007656&#x27;,
+    &#x27;#dbdbdb&#x27;,
+    &#x27;#227839&#x27;,
+    &#x27;#ff7101&#x27;,
+    &#x27;#008762&#x27;,
+    &#x27;#7d5d2e&#x27;,
+    &#x27;#888888&#x27;,
+    &#x27;#cdcdcd&#x27;,
+    &#x27;#cc5a00&#x27;,
+    &#x27;#e6e6e6&#x27;,
+    &#x27;#c5e5e9&#x27;
   ]}
   data={{
     bins: [
-      &#x27;05/08/2019, 13:46:26&#x27;,
-      &#x27;06/08/2019, 13:46:26&#x27;,
-      &#x27;07/08/2019, 13:46:26&#x27;,
-      &#x27;08/08/2019, 13:46:26&#x27;
+      &#x27;07/08/2019, 11:29:27&#x27;,
+      &#x27;08/08/2019, 11:29:27&#x27;,
+      &#x27;09/08/2019, 11:29:27&#x27;,
+      &#x27;10/08/2019, 11:29:27&#x27;
     ],
     counts: [
       {
@@ -1286,4 +1629,4 @@ body {
   tipContentFn={function noRefCheck() {}}
   visible={{}}
   width=&quot;100%&quot;
-/&gt;</pre></div></div></div><div class="MuiGrid-item MuiGrid-grid-xs-6"><div class="MuiPaper-root MuiPaper-elevation1 MuiPaper-rounded MuiCard-root"><div class="MuiCardContent-root"><div class="MuiTabs-root"><div class="MuiTabs-flexContainer"><div class="MuiTabs-scroller MuiTabs-fixed" style="margin-bottom:0" role="tablist"><div class="MuiTabs-flexContainer"><button class="MuiButtonBase-root MuiTab-root MuiTab-textColorInherit MuiTab-selected" tabindex="0" type="button" role="tab" aria-selected="true"><span class="MuiTab-wrapper"><span class="MuiTab-labelContainer"><span class="MuiTab-label">Data</span></span></span><span class="MuiPrivateTabIndicator-root MuiPrivateTabIndicator-colorSecondary MuiTabs-indicator"></span></button><button class="MuiButtonBase-root MuiTab-root MuiTab-textColorInherit" tabindex="0" type="button" role="tab" aria-selected="false"><span class="MuiTab-wrapper"><span class="MuiTab-labelContainer"><span class="MuiTab-label">Styling</span></span></span></button><button class="MuiButtonBase-root MuiTab-root MuiTab-textColorInherit" tabindex="0" type="button" role="tab" aria-selected="false"><span class="MuiTab-wrapper"><span class="MuiTab-labelContainer"><span class="MuiTab-label">Animation</span></span></span></button><button class="MuiButtonBase-root MuiTab-root MuiTab-textColorInherit" tabindex="0" type="button" role="tab" aria-selected="false"><span class="MuiTab-wrapper"><span class="MuiTab-labelContainer"><span class="MuiTab-label">Grid</span></span></span></button></div></div></div></div><div class="MuiTypography-root MuiTypography-body1" style="padding:24px"><div><button class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-raised MuiButton-raisedSecondary" tabindex="0" type="button"><span class="MuiButton-label">Add</span></button><span tabindex="0" class="data-grid-container"><table class="data-grid my-awesome-extra-class"><thead><tr><th class="action-cell">Bin</th><th class="action-cell">DataSet 1<button class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textSecondary MuiButton-flat MuiButton-flatSecondary MuiButton-sizeSmall" tabindex="0" type="button"><span class="MuiButton-label">Delete</span></button></th><th class="action-cell">DataSet 2<button class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textSecondary MuiButton-flat MuiButton-flatSecondary MuiButton-sizeSmall" tabindex="0" type="button"><span class="MuiButton-label">Delete</span></button></th></tr></thead><tbody><tr><td class="cell"><span class="value-viewer">05/08/2019, 13:46:26</span></td><td class="cell"><span class="value-viewer">1</span></td><td class="cell"><span class="value-viewer">13</span></td></tr><tr><td class="cell"><span class="value-viewer">06/08/2019, 13:46:26</span></td><td class="cell"><span class="value-viewer">2</span></td><td class="cell"><span class="value-viewer">14</span></td></tr><tr><td class="cell"><span class="value-viewer">07/08/2019, 13:46:26</span></td><td class="cell"><span class="value-viewer">3</span></td><td class="cell"><span class="value-viewer">15</span></td></tr><tr><td class="cell"><span class="value-viewer">08/08/2019, 13:46:26</span></td><td class="cell"><span class="value-viewer">4</span></td><td class="cell"><span class="value-viewer">16</span></td></tr></tbody></table></span></div></div></div></div></div></div></div></main></div><footer>© <!-- -->2019<!-- -->, Built by<!-- --> <a href="https://www.infosum.com">InfoSum</a></footer></div></div><script id="gatsby-script-loader">/*<![CDATA[*/window.page={"componentChunkName":"component---src-pages-histogram-tsx","jsonName":"histogram-a4a","path":"/histogram/"};window.dataPath="702/path---histogram-a-4-a-906-NZuapzHg3X9TaN1iIixfv1W23E";/*]]>*/</script><script id="gatsby-chunk-mapping">/*<![CDATA[*/window.___chunkMapping={"app":["/app-884ab09eb8dd6b4b0ed3.js"],"component---src-pages-404-js":["/component---src-pages-404-js-01ff4ef6ce65db6871e2.js"],"component---src-pages-histogram-tsx":["/component---src-pages-histogram-tsx-92f6914ae3fc8c760435.js"],"component---src-pages-index-tsx":["/component---src-pages-index-tsx-c4124033972464aeeccc.js"],"component---src-pages-joyplot-tsx":["/component---src-pages-joyplot-tsx-e465b438da3688cf68a0.js"],"component---src-pages-line-tsx":["/component---src-pages-line-tsx-ba164ded5626c2742b7e.js"],"component---src-pages-map-tsx":["/component---src-pages-map-tsx-0cb67e2d6b744458eb72.js"],"component---src-pages-pie-tsx":["/component---src-pages-pie-tsx-eccdf0bbd17d5fd3ab39.js"],"pages-manifest":["/pages-manifest-7a0fcc4ddfefa33d9874.js"]};/*]]>*/</script><script src="/cl-react-graph/component---src-pages-histogram-tsx-92f6914ae3fc8c760435.js" async=""></script><script src="/cl-react-graph/3-4190a3200b396efaab36.js" async=""></script><script src="/cl-react-graph/2-74d086abed6257569827.js" async=""></script><script src="/cl-react-graph/1-fd5a36b3c6cd7d33ebee.js" async=""></script><script src="/cl-react-graph/styles-6bfc6bf58911ea263547.js" async=""></script><script src="/cl-react-graph/app-884ab09eb8dd6b4b0ed3.js" async=""></script><script src="/cl-react-graph/webpack-runtime-0d63802666a346430bb1.js" async=""></script></body></html>
+/&gt;</pre></div></div></div><div class="MuiGrid-item MuiGrid-grid-xs-6"><div class="MuiPaper-root MuiPaper-elevation1 MuiPaper-rounded MuiCard-root"><div class="MuiCardContent-root"><div class="MuiTabs-root"><div class="MuiTabs-flexContainer"><div class="MuiTabs-scroller MuiTabs-fixed" style="margin-bottom:0" role="tablist"><div class="MuiTabs-flexContainer"><button class="MuiButtonBase-root MuiTab-root MuiTab-textColorInherit MuiTab-selected" tabindex="0" type="button" role="tab" aria-selected="true"><span class="MuiTab-wrapper"><span class="MuiTab-labelContainer"><span class="MuiTab-label">Data</span></span></span><span class="MuiPrivateTabIndicator-root MuiPrivateTabIndicator-colorSecondary MuiTabs-indicator"></span></button><button class="MuiButtonBase-root MuiTab-root MuiTab-textColorInherit" tabindex="0" type="button" role="tab" aria-selected="false"><span class="MuiTab-wrapper"><span class="MuiTab-labelContainer"><span class="MuiTab-label">Styling</span></span></span></button><button class="MuiButtonBase-root MuiTab-root MuiTab-textColorInherit" tabindex="0" type="button" role="tab" aria-selected="false"><span class="MuiTab-wrapper"><span class="MuiTab-labelContainer"><span class="MuiTab-label">Animation</span></span></span></button><button class="MuiButtonBase-root MuiTab-root MuiTab-textColorInherit" tabindex="0" type="button" role="tab" aria-selected="false"><span class="MuiTab-wrapper"><span class="MuiTab-labelContainer"><span class="MuiTab-label">Grid</span></span></span></button><button class="MuiButtonBase-root MuiTab-root MuiTab-textColorInherit" tabindex="0" type="button" role="tab" aria-selected="false"><span class="MuiTab-wrapper"><span class="MuiTab-labelContainer"><span class="MuiTab-label">Axes</span></span></span></button></div></div></div></div><div class="MuiTypography-root MuiTypography-body1" style="padding:24px"><div class="MuiGrid-container MuiGrid-spacing-xs-24"><div class="MuiGrid-item MuiGrid-grid-xs-6"><div class="MuiFormControl-root"><label class="MuiFormLabel-root MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink" data-shrink="true">Chart direction</label><div class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-formControl MuiInput-formControl"><div class="MuiSelect-root"><div class="MuiSelect-select MuiSelect-selectMenu MuiInputBase-input MuiInput-input" aria-pressed="false" tabindex="0" role="button" aria-haspopup="true">Histogram</div><input type="hidden" value="Histogram"/><svg class="MuiSvgIcon-root MuiSelect-icon" focusable="false" viewBox="0 0 24 24" aria-hidden="true" role="presentation"><path d="M7 10l5 5 5-5z"></path></svg></div></div></div></div></div><div><button class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-raised MuiButton-raisedSecondary" tabindex="0" type="button"><span class="MuiButton-label">Add</span></button><span tabindex="0" class="data-grid-container"><table class="data-grid my-awesome-extra-class"><thead><tr><th class="action-cell">Bin</th><th class="action-cell">DataSet 1<button class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textSecondary MuiButton-flat MuiButton-flatSecondary MuiButton-sizeSmall" tabindex="0" type="button"><span class="MuiButton-label">Delete</span></button></th><th class="action-cell">DataSet 2<button class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textSecondary MuiButton-flat MuiButton-flatSecondary MuiButton-sizeSmall" tabindex="0" type="button"><span class="MuiButton-label">Delete</span></button></th></tr></thead><tbody><tr><td class="cell"><span class="value-viewer">07/08/2019, 11:29:27</span></td><td class="cell"><span class="value-viewer">1</span></td><td class="cell"><span class="value-viewer">13</span></td></tr><tr><td class="cell"><span class="value-viewer">08/08/2019, 11:29:27</span></td><td class="cell"><span class="value-viewer">2</span></td><td class="cell"><span class="value-viewer">14</span></td></tr><tr><td class="cell"><span class="value-viewer">09/08/2019, 11:29:27</span></td><td class="cell"><span class="value-viewer">3</span></td><td class="cell"><span class="value-viewer">15</span></td></tr><tr><td class="cell"><span class="value-viewer">10/08/2019, 11:29:27</span></td><td class="cell"><span class="value-viewer">4</span></td><td class="cell"><span class="value-viewer">16</span></td></tr></tbody></table></span></div></div></div></div></div></div></div></main></div><footer>© <!-- -->2019<!-- -->, Built by<!-- --> <a href="https://www.infosum.com">InfoSum</a></footer></div></div><script id="gatsby-script-loader">/*<![CDATA[*/window.page={"componentChunkName":"component---src-pages-histogram-tsx","jsonName":"histogram-a4a","path":"/histogram/"};window.dataPath="702/path---histogram-a-4-a-906-NZuapzHg3X9TaN1iIixfv1W23E";/*]]>*/</script><script id="gatsby-chunk-mapping">/*<![CDATA[*/window.___chunkMapping={"app":["/app-884ab09eb8dd6b4b0ed3.js"],"component---src-pages-404-js":["/component---src-pages-404-js-94291eecbc50fa575e34.js"],"component---src-pages-histogram-tsx":["/component---src-pages-histogram-tsx-2894d144930c8b3c868e.js"],"component---src-pages-index-tsx":["/component---src-pages-index-tsx-be5459d164b50268be60.js"],"component---src-pages-joyplot-tsx":["/component---src-pages-joyplot-tsx-42f56633b11ab158cb8c.js"],"component---src-pages-line-tsx":["/component---src-pages-line-tsx-90d6dbd7093c82bb2f73.js"],"component---src-pages-map-tsx":["/component---src-pages-map-tsx-366fb24fadadfc194c81.js"],"component---src-pages-pie-tsx":["/component---src-pages-pie-tsx-26c68e0d5f3c40a79411.js"],"pages-manifest":["/pages-manifest-7a0fcc4ddfefa33d9874.js"]};/*]]>*/</script><script src="/cl-react-graph/component---src-pages-histogram-tsx-2894d144930c8b3c868e.js" async=""></script><script src="/cl-react-graph/3-9f4f9baae1d5e7b57e08.js" async=""></script><script src="/cl-react-graph/2-dc072f943a7abb7af020.js" async=""></script><script src="/cl-react-graph/1-88032fced1bdbb41dd23.js" async=""></script><script src="/cl-react-graph/styles-9f5cec9c701f1badd13e.js" async=""></script><script src="/cl-react-graph/app-884ab09eb8dd6b4b0ed3.js" async=""></script><script src="/cl-react-graph/webpack-runtime-3b2c858217aa4abaa0cb.js" async=""></script></body></html>
