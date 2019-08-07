@@ -73,6 +73,7 @@ export const formatTick = (axis: IAxis) => (v: string | number) => {
 
 interface ITickProps {
   axis: Axis<string> | Axis<number> | Axis<number | { valueOf(): number }> | Axis<number | string>;
+  // axis: Axis<string | number | { valueOf(): number }>;
   axisConfig: IAxis;
   axisLength: number;
   valuesCount: number;

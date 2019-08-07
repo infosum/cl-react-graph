@@ -2,6 +2,7 @@ import {
   select,
   Selection,
 } from 'd3-selection';
+
 import { IMargin } from '../Histogram';
 
 export type TSelection = Selection<any, any, any, any>;
@@ -14,7 +15,7 @@ interface ISizeProps {
   className: string;
 }
 
-export const makeSvg = (el: Element, svg: TSelection) => {
+export const makeSvg = (el: Element, svg: TSelection): TSelection => {
   if (svg) {
     svg.selectAll('svg > *').remove();
     svg.remove();
