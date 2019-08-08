@@ -22,7 +22,6 @@ import {
   drawGrid,
   gridHeight,
   gridWidth,
-  xAxisHeight as getXAxisHeight,
   yAxisWidth as getYAxisWidth,
 } from './grid';
 import { IChartAdaptor } from './Histogram';
@@ -232,7 +231,6 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
      * Draw the chart scales
      */
     drawAxes() {
-      // @TODO Grid not rendering down to x axis
       const { axis, data } = props;
       const valuesCount = data.reduce((a: number, b): number => {
         return b.data.length > a ? b.data.length : a;
@@ -260,6 +258,7 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
         axisLength: h,
         axisConfig: axis.y,
         scaleBand: yScale,
+        limitByValues: true,
       });
 
       const yAxisWidth = getYAxisWidth(axis);
@@ -415,7 +414,7 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
       const { margin, width, height, className } = props;
       sizeSVG(svg, { margin, width, height, className });
       [xScale, yScale] = buildScales(props.axis);
-      let data = props.data;
+      let data = [...props.data];
 
       xParseTime = timeParse(props.axis.x.dateFormat);
       xFormatTime = timeFormat(props.axis.x.dateFormat);

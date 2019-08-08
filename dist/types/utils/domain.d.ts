@@ -2,11 +2,9 @@ import { Axis } from 'd3';
 import { ScaleLinear } from 'd3-scale';
 import { IAxis, IDomain, IHistogramDataSet } from '../Histogram';
 import { IGroupData } from '../HistogramD3';
+import { IGroupedProps } from './bars';
 import { AnyScale } from './scales';
-export declare const isStacked: ({ groupLayout, stacked }: {
-    groupLayout: any;
-    stacked: any;
-}) => any;
+export declare const isStacked: ({ groupLayout, stacked }: IGroupedProps) => boolean;
 interface IAppendDomainRangeProps {
     domain: IDomain;
     scale: ScaleLinear<number, number>;

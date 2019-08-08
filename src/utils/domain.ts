@@ -73,7 +73,6 @@ export const formatTick = (axis: IAxis) => (v: string | number) => {
 
 interface ITickProps {
   axis: Axis<string> | Axis<number> | Axis<number | { valueOf(): number }> | Axis<number | string>;
-  // axis: Axis<string | number | { valueOf(): number }>;
   axisConfig: IAxis;
   axisLength: number;
   valuesCount: number;
@@ -89,8 +88,12 @@ export const ticks = ({
   limitByValues,
 }: ITickProps) => {
   const tickSize = get(axisConfig, 'tickSize', undefined);
+  const ticks = get(axisConfig, 'ticks', undefined);
   if (tickSize !== undefined) {
     axis.tickSize(tickSize);
+  }
+  if (ticks !== undefined) {
+    axis.ticks(ticks);
   } else {
     if (limitByValues && axisLength / valuesCount < 10) {
       // Show one in 10 x axis labels
