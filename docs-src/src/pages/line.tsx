@@ -1,9 +1,8 @@
 // Be sure to include styles at some point, probably during your bootstrapping
 import 'react-datasheet/lib/react-datasheet.css';
 
-import {
-  curveCatmullRom,
-} from 'd3-shape';
+import { curveCatmullRom } from 'd3-shape';
+import { timeFormat } from 'd3-time-format';
 import merge from 'deepmerge';
 import ColorPicker from 'material-ui-color-picker';
 import React, {
@@ -11,9 +10,7 @@ import React, {
   useReducer,
   useState,
 } from 'react';
-import ReactDataSheet, {
-  Cell,
-} from 'react-datasheet';
+import ReactDataSheet, { Cell } from 'react-datasheet';
 
 import {
   Button,
@@ -22,7 +19,6 @@ import {
   FormControlLabel,
   FormGroup,
   Grid,
-  Input,
   MenuItem,
   Switch,
   Tab,
@@ -37,46 +33,38 @@ import {
   ILineChartProps,
   LineChart,
 } from '../../../src';
-import {
-  Scale,
-} from '../../../src/Histogram';
-import {
-  DeepPartial,
-} from '../../../src/utils/types';
-import {
-  AxisActions,
-} from '../components/AxisOptions';
-import {
-  CurveSelector,
-} from '../components/CurveSelector';
-import {
-  GridOptionsFactory,
-} from '../components/GridOptions';
+import { Scale } from '../../../src/Histogram';
+import { DeepPartial } from '../../../src/utils/types';
+import { AxisActions } from '../components/AxisOptions';
+import { CurveSelector } from '../components/CurveSelector';
+import { GridOptionsFactory } from '../components/GridOptions';
 import JSXToString from '../components/JSXToString';
 import Layout from '../components/layout';
 import SEO from '../components/seo';
-import {
-  TabContainer,
-} from '../components/TabContainer';
-import {
-  grid,
-} from '../data';
+import { TabContainer } from '../components/TabContainer';
+import { grid } from '../data';
 import {
   axisReducer,
   GridActions,
   gridReducer,
 } from './histogram';
 
-type TInitialState = DeepPartial<ILineChartProps<{ x: number, y: number }>>;
-type TData = ILineChartDataSet<{ x: number, y: number }>;
+type TInitialState = DeepPartial<ILineChartProps<{ x: number | string, y: number }>>;
+type TData = ILineChartDataSet<{ x: string | number, y: number }>;
+
+const dateFormat = '%d-%b-%y';
+const formatTime = timeFormat(dateFormat);
+const now = new Date();
+const xs = [1, 2, 4, 5, 6, 8, 10].map((i) => formatTime(new Date(new Date().setDate(now.getDate() + i))))
+const dateValues = [
+  { x: xs[0], y: 1500000 },
+  { x: xs[1], y: 12 },
+  { x: xs[2], y: 3 },
+  { x: xs[3], y: 4 },
+];
 
 const data = {
-  data: [
-    { x: 1, y: 1 },
-    { x: 2, y: 12 },
-    { x: 3, y: 3 },
-    { x: 4, y: 4 },
-  ],
+  data: dateValues,
   label: 'test data',
   line: {
     curveType: curveCatmullRom,
@@ -127,12 +115,21 @@ const data2 = {
 const initialState: TInitialState = {
   axis: {
     x: {
-      scale: 'LINEAR'
+      dateFormat,
+      scale: 'TIME',
+      ticks: 2,
     },
     y: {
-      ticks: 3,
-      scale: 'LINEAR'
-    }
+      label: 'TAB_VIEW_CREDITS',
+      numberFormat: 'd',
+      scale: 'LOG',
+      text: {
+        style: {
+          'font-size': '.7rem',
+        },
+      },
+      ticks: 5,
+    },
   },
   data: [
     data,
@@ -214,14 +211,14 @@ function reducer(state: ILineChartProps, action: Actions) {
 
 const GridOptions = GridOptionsFactory<(action: Actions) => void, ILineChartProps>();
 
-export interface IGridElement extends ReactDataSheet.Cell<IGridElement, number> {
+export interface IGridElement extends ReactDataSheet.Cell<IGridElement, number | string> {
   value: number | null | string;
 }
 const LineExample: FC<{}> = () => {
   const [state, dispatch] = useReducer(reducer, initialState as ILineChartProps);
   const [tab, setTab] = useState(0);
   const data: Cell[][] = state.data[0].data.map((point) => {
-    return [{ value: Number(point.x) }, { value: Number(point.y) }];
+    return [{ value: point.x }, { value: Number(point.y) }];
   });
   const chart = <LineChart
     axis={state.axis}

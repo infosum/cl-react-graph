@@ -6,7 +6,7 @@ interface IState {
     parentWidth?: number;
 }
 export declare type IChartPointValue = number | string | Date | object;
-export interface IChartPoint<X extends IChartPointValue = Date | number, Y extends IChartPointValue = number> {
+export interface IChartPoint<X extends IChartPointValue = Date | number | string, Y extends IChartPointValue = number> {
     x: X;
     y: Y;
 }

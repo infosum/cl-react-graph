@@ -175,7 +175,7 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
         .paddingInner(barMargin(props.bar));
 
       const xAxis = axisBottom<string>(x);
-      const yAxis = axisLeft<number>(y).ticks(axis.y.ticks);
+      const yAxis = axisLeft<number>(y);
 
       /** X-Axis (label axis) set up */
       ticks({
