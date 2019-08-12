@@ -279,9 +279,8 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
           if (axis.x.scale === 'LOG' && d.x === 0) {
             parsedX = ZERO_SUBSTITUTE;
           }
-          ys.push((parsedY));
-          // xs.push((typeof parsedX === 'number' ? applyDomainAffordance(parsedX) : parsedX));
-          xs.push((typeof parsedX === 'number' ? (parsedX) : parsedX));
+          ys.push(parsedY);
+          xs.push(parsedX);
         });
       });
       const yDomain = extent(ys);
