@@ -132,6 +132,10 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
   let xAxisLabel: TSelection;
   let yAxisLabel: TSelection;
 
+  const xOffset = (d) => {
+    return d.point.show ? d.point.radius / 2 : 0;
+  };
+
   const LineChartD3 = {
     /**
      * Initialization
@@ -147,9 +151,11 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
       [xScale, yScale] = buildScales(props.axis);
       [xAxisContainer, yAxisContainer, xAxisLabel, yAxisLabel] = makeScales(svg);
       [gridX, gridY] = makeGrid(svg);
+      const yAxisWidth = getYAxisWidth(props.axis);
       container = svg
         .append<SVGElement>('g')
-        .attr('class', 'linechart-container');
+        .attr('class', 'linechart-container')
+        .attr('transform', `translate(${yAxisWidth}, 0)`)
 
       lineContainer = container
         .append<SVGElement>('g')
@@ -215,11 +221,11 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
         .attr('fill', (d) => d.point.fill)
         .attr('stroke', (d) => d.point.stroke)
         .attr('cx', (d) => {
-          return xScale(d.x) + yAxisWidth;
+          return xScale(d.x) + xOffset(d);
         })
         .transition()
         .duration(400)
-        .attr('r', (d) => d.point.show ? d.point.radius : 0)
+        .attr('r', (d) => xOffset(d))
         .delay(650);
 
       // EXIT - Remove old elements as needed.
@@ -274,14 +280,15 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
             parsedX = ZERO_SUBSTITUTE;
           }
           ys.push((parsedY));
-          xs.push((typeof parsedX === 'number' ? applyDomainAffordance(parsedX) : parsedX));
+          // xs.push((typeof parsedX === 'number' ? applyDomainAffordance(parsedX) : parsedX));
+          xs.push((typeof parsedX === 'number' ? (parsedX) : parsedX));
         });
       });
       const yDomain = extent(ys);
       yDomain[0] = applyDomainAffordance(yDomain[0], false);
       yDomain[1] = applyDomainAffordance(yDomain[1]);
 
-      const xDomain = extent(xs);;
+      const xDomain = extent(xs);
       // domain mustn't be 0 as log(0) gives Infinity. 1 lower domain gives better looking graphs
       if (axis.y.scale === 'LOG' && yDomain[0] === ZERO_SUBSTITUTE) {
         yDomain[0] = 1;
@@ -289,6 +296,9 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
       if (axis.x.scale === 'LOG' && xDomain[0] === ZERO_SUBSTITUTE) {
         xDomain[0] = 1;
       }
+      // Only apply affordance at the end as line should start from y axis.
+      xDomain[1] = applyDomainAffordance(xDomain[1]);
+
       xScale
         .domain(xDomain)
         .rangeRound([0, w]);
@@ -337,7 +347,6 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
             .attr('class', selector);
           selection = lineContainer.select(`.${selector}`)
         }
-
         selection
           .attr('fill', 'none')
           .attr('stroke-dashoffset', d.line.strokeDashOffset)
@@ -345,21 +354,23 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
           .attr('stroke', d.line.stroke)
           .transition()
           .duration(500)
-          .attr('d', curve(d.line.curveType, yAxisWidth, xScale, yScale)(d.data as any) as any)
+          .attr('d', curve(d.line.curveType, xOffset(d), xScale, yScale)(d.data as any) as any)
           .delay(50);
       });
     },
 
     /**
-     * Iterates ove data and updates area fills
-     */
+       * Iterates ove data and updates area fills
+       */
     drawAreas(data: Array<ILineChartDataSet<any>>, oldData: Array<ILineChartDataSet<any>>) {
       const { axis } = props;
       const h = gridHeight(props);
       const yAxisWidth = getYAxisWidth(axis);
       const thisArea = (curveType) => area()
         .curve(curveType)
-        .x((d: any) => xScale(d.x) + yAxisWidth)
+        .x((d: any) => {
+          return xScale(d.x);//+ xOffset(d);
+        })
         .y0((d) => h)
         .y1((d: any) => yScale(d.y));
 
