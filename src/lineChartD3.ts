@@ -324,14 +324,12 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
      * Iterate over data and update lines
      */
     _drawLines(data: Array<ILineChartDataSet<any>>, oldData: Array<ILineChartDataSet<any>>) {
-      const { axis } = props;
-      const yAxisWidth = getYAxisWidth(axis);
 
       // Remove old lines
       oldData.forEach((d, i) => {
         const keep = data.find(((newD) => newD.label === d.label));
         if (keep === undefined) {
-          const l = d.label.replace(/ /g, '');
+          const l = d.label.replace(/[^a-z]/gi, '');
           lineContainer.select(`.line-${l}`)
             .remove();
         }
@@ -339,7 +337,7 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
 
       // change the line
       data.forEach((d, i) => {
-        const selector = `line-${d.label.replace(/ /g, '')}`;
+        const selector = `line-${d.label.replace(/[^a-z]/gi, '')}`;
         let selection = lineContainer.select(`.${selector}`)
         if (selection.empty()) {
           lineContainer.append('path')
@@ -364,7 +362,6 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
     drawAreas(data: Array<ILineChartDataSet<any>>, oldData: Array<ILineChartDataSet<any>>) {
       const { axis } = props;
       const h = gridHeight(props);
-      const yAxisWidth = getYAxisWidth(axis);
       const thisArea = (curveType) => area()
         .curve(curveType)
         .x((d: any) => {
@@ -377,7 +374,7 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
       oldData.forEach((d, i) => {
         const keep = data.find(((newD) => newD.label === d.label));
         if (keep === undefined) {
-          const l = d.label.replace(/ /g, '');
+          const l = d.label.replace(/[^a-z]/gi, '');
           lineContainer.select(`.fill-${l}`).remove();
         }
       })
@@ -385,7 +382,7 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
       // change the line
       data
         .forEach((d, i) => {
-          const selector = `fill-${d.label.replace(/ /g, '')}`;
+          const selector = `fill-${d.label.replace(/[^a-z]/gi, '')}`;
           let selection = lineContainer.select(`.${selector}`);
           if (selection.empty()) {
             lineContainer.append('path')
