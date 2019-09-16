@@ -15,9 +15,7 @@ import {
   Typography,
 } from '@material-ui/core';
 
-import {
-  HorizontalHistogram,
-} from '../../../src';
+import { HorizontalHistogram } from '../../../src';
 import Histogram, {
   EColorManipulations,
   EGroupedBarLayout,
@@ -26,24 +24,18 @@ import Histogram, {
   IHistogramData,
 } from '../../../src/Histogram';
 import Legend from '../../../src/Legend';
-import {
-  DeepPartial,
-} from '../../../src/utils/types';
+import { DeepPartial } from '../../../src/utils/types';
 import {
   AxisActions,
   AxisOptionsFactory,
 } from '../components/AxisOptions';
 import ColorModifierFields from '../components/ColorModifierFields';
 import DataGroup from '../components/DataGroup';
-import {
-  GridOptionsFactory,
-} from '../components/GridOptions';
+import { GridOptionsFactory } from '../components/GridOptions';
 import JSXToString from '../components/JSXToString';
 import Layout from '../components/layout';
 import SEO from '../components/seo';
-import {
-  TabContainer,
-} from '../components/TabContainer';
+import { TabContainer } from '../components/TabContainer';
 import {
   data,
   grid,
@@ -280,7 +272,7 @@ const HistogramExample = () => {
         Histogram
       </Typography>
       <div>
-        <Grid container spacing={24}>
+        <Grid container spacing={10}>
           <Grid item xs={6}>
             <Card>
               <CardContent>
@@ -314,7 +306,7 @@ const HistogramExample = () => {
                 </Tabs>
                 {
                   tab === 0 && <TabContainer>
-                    <Grid container spacing={24}>
+                    <Grid container spacing={10}>
                       <Grid item xs={6}>
                         <TextField
                           select
@@ -360,7 +352,7 @@ const HistogramExample = () => {
                 }
                 {
                   tab === 1 && <TabContainer>
-                    <Grid container spacing={24}>
+                    <Grid container spacing={10}>
                       <Grid item xs={6}>
                         <TextField
                           select
@@ -391,7 +383,7 @@ const HistogramExample = () => {
                 }
                 {
                   tab === 2 && <TabContainer>
-                    <Grid container spacing={24}>
+                    <Grid container spacing={10}>
                       <Grid item xs={6}>
                         <TextField
                           id="animationDuration"
