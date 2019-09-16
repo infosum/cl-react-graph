@@ -112,7 +112,7 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
   };
 
   const curve = (
-    dataset: ILineChartDataSet,
+    dataset: ILineChartDataSet<any>,
     yAxisWidth: number,
     x,
     y,
@@ -132,7 +132,7 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
   let xAxisLabel: TSelection;
   let yAxisLabel: TSelection;
 
-  const xOffset = (d: ILineChartDataSet) => {
+  const xOffset = (d: ILineChartDataSet<any>) => {
     return d.point.show ? d.point.radius / 2 : 0;
   };
 
@@ -195,7 +195,7 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
         .attr('class', (d, i: number) => 'point-container' + i)
         .merge(pointContainer)
         .selectAll<SVGElement, {}>('circle')
-        .data((d) => {
+        .data((d: ILineChartDataSet<any>) => {
           return d.data.map((dx) => ({
             ...dx,
             point: d.point,
@@ -224,7 +224,7 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
         })
         .transition()
         .duration(400)
-        .attr('r', (d) => xOffset(d) * 2)
+        .attr('r', (d: ILineChartDataSet<any>) => xOffset(d) * 2)
         .delay(650);
 
       // EXIT - Remove old elements as needed.
@@ -348,8 +348,8 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
        */
     drawAreas(data: Array<ILineChartDataSet<any>>, oldData: Array<ILineChartDataSet<any>>) {
       const h = gridHeight(props);
-      const thisArea = (dataset: ILineChartDataSet) => area()
-        .curve(dataset.line.curveType)
+      const thisArea = (dataset: ILineChartDataSet<any>) => area()
+        .curve(dataset.line.curveType as CurveFactory)
         .x((d: any) => xScale(d.x))
         .y0((d) => h)
         .y1((d: any) => yScale(d.y));

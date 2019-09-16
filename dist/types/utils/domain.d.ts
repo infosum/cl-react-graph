@@ -12,7 +12,11 @@ interface IAppendDomainRangeProps {
     range: number[];
     stacked: boolean;
 }
-export declare const applyDomainAffordance: (v: number, inc?: boolean) => number;
+/**
+ * Slightly better attempt from applyDomainAffordance, taking into
+ * account axis types.
+ */
+export declare const rangeAffordance: (range: [any, any], axis: IAxis, inc?: boolean) => [any, any];
 /**
  * Update a linear scale with range and domain values taken either from the compiled
  * group data. If the chart is stacked then sum all bin values first.
