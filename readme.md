@@ -54,4 +54,4 @@ cd docs-src
 npm run build
 ```
 
-The docs will be build in `/docs`
+The docs will be built in `/docs`

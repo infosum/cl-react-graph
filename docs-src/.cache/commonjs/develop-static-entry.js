@@ -39,7 +39,11 @@ try {
 Html = Html && Html.__esModule ? Html.default : Html;
 
 var _default = (pagePath, callback) => {
-  let headComponents = [];
+  let headComponents = [_react.default.createElement("meta", {
+    key: "environment",
+    name: "note",
+    content: "environment=development"
+  })];
   let htmlAttributes = {};
   let bodyAttributes = {};
   let preBodyComponents = [];
@@ -95,7 +99,8 @@ var _default = (pagePath, callback) => {
     setBodyAttributes,
     setPreBodyComponents,
     setPostBodyComponents,
-    setBodyProps
+    setBodyProps,
+    pathname: pagePath
   });
   (0, _apiRunnerSsr.default)(`onPreRenderHTML`, {
     getHeadComponents,
@@ -103,7 +108,8 @@ var _default = (pagePath, callback) => {
     getPreBodyComponents,
     replacePreBodyComponents,
     getPostBodyComponents,
-    replacePostBodyComponents
+    replacePostBodyComponents,
+    pathname: pagePath
   });
 
   const htmlElement = _react.default.createElement(Html, Object.assign({}, bodyProps, {

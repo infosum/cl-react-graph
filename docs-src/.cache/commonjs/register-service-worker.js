@@ -5,7 +5,7 @@ var _apiRunnerBrowser = require("./api-runner-browser");
 if (window.location.protocol !== `https:` && window.location.hostname !== `localhost`) {
   console.error(`Service workers can only be used over HTTPS, or on localhost for development`);
 } else if (`serviceWorker` in navigator) {
-  navigator.serviceWorker.register(`${__PATH_PREFIX__}/sw.js`).then(function (reg) {
+  navigator.serviceWorker.register(`${__BASE_PATH__}/sw.js`).then(function (reg) {
     reg.addEventListener(`updatefound`, () => {
       (0, _apiRunnerBrowser.apiRunner)(`onServiceWorkerUpdateFound`, {
         serviceWorker: reg

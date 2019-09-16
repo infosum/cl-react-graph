@@ -1,7 +1,5 @@
 "use strict";
 
-var _interopRequireWildcard = require("@babel/runtime/helpers/interopRequireWildcard");
-
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
 
 exports.__esModule = true;
@@ -9,7 +7,7 @@ exports.default = void 0;
 
 var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/extends"));
 
-var _react = _interopRequireWildcard(require("react"));
+var _react = _interopRequireDefault(require("react"));
 
 var _router = require("@reach/router");
 
@@ -18,10 +16,6 @@ var _gatsbyReactRouterScroll = require("gatsby-react-router-scroll");
 var _navigation = require("./navigation");
 
 var _apiRunnerBrowser = require("./api-runner-browser");
-
-var _syncRequires = _interopRequireDefault(require("./sync-requires"));
-
-var _pages = _interopRequireDefault(require("./pages.json"));
 
 var _loader = _interopRequireDefault(require("./loader"));
 
@@ -51,16 +45,29 @@ if (window.__webpack_hot_middleware_reporter__ !== undefined) {
   });
 }
 
-(0, _navigation.init)();
+(0, _navigation.init)(); // In gatsby v2 if Router is used in page using matchPaths
+// paths need to contain full path.
+// For example:
+//   - page have `/app/*` matchPath
+//   - inside template user needs to use `/app/xyz` as path
+// Resetting `basepath`/`baseuri` keeps current behaviour
+// to not introduce breaking change.
+// Remove this in v3
 
-class RouteHandler extends _react.default.Component {
+const RouteHandler = props => _react.default.createElement(_router.BaseContext.Provider, {
+  value: {
+    baseuri: `/`,
+    basepath: `/`
+  }
+}, _react.default.createElement(_jsonStore.default, props));
+
+class LocationHandler extends _react.default.Component {
   render() {
-    let location = this.props.location; // check if page exists - in dev pages are sync loaded, it's safe to use
-    // loader.getPage
+    let {
+      location
+    } = this.props;
 
-    let page = _loader.default.getPage(location.pathname);
-
-    if (page) {
+    if (!_loader.default.isPageNotFound(location.pathname)) {
       return _react.default.createElement(_ensureResources.default, {
         location: location
       }, locationAndPageResources => _react.default.createElement(_navigation.RouteUpdates, {
@@ -68,42 +75,44 @@ class RouteHandler extends _react.default.Component {
       }, _react.default.createElement(_gatsbyReactRouterScroll.ScrollContext, {
         location: location,
         shouldUpdateScroll: _navigation.shouldUpdateScroll
-      }, _react.default.createElement(_jsonStore.default, (0, _extends2.default)({
-        pages: _pages.default
-      }, this.props, locationAndPageResources)))));
-    } else {
-      const dev404Page = _pages.default.find(p => /^\/dev-404-page\/?$/.test(p.path));
-
-      const Dev404Page = _syncRequires.default.components[dev404Page.componentChunkName];
-
-      if (!_loader.default.getPage(`/404.html`)) {
-        return _react.default.createElement(_navigation.RouteUpdates, {
-          location: location
-        }, _react.default.createElement(Dev404Page, (0, _extends2.default)({
-          pages: _pages.default
-        }, this.props)));
-      }
-
-      return _react.default.createElement(_ensureResources.default, {
-        location: location
-      }, locationAndPageResources => _react.default.createElement(_navigation.RouteUpdates, {
-        location: location
-      }, _react.default.createElement(Dev404Page, (0, _extends2.default)({
-        pages: _pages.default,
-        custom404: _react.default.createElement(_jsonStore.default, (0, _extends2.default)({
-          pages: _pages.default
-        }, this.props, locationAndPageResources))
-      }, this.props))));
+      }, _react.default.createElement(_router.Router, {
+        basepath: __BASE_PATH__,
+        location: location,
+        id: "gatsby-focus-wrapper"
+      }, _react.default.createElement(RouteHandler, (0, _extends2.default)({
+        path: encodeURI(locationAndPageResources.pageResources.page.matchPath || locationAndPageResources.pageResources.page.path)
+      }, this.props, locationAndPageResources))))));
     }
+
+    const dev404PageResources = _loader.default.loadPageSync(`/dev-404-page`);
+
+    const real404PageResources = _loader.default.loadPageSync(`/404.html`);
+
+    let custom404;
+
+    if (real404PageResources) {
+      custom404 = _react.default.createElement(_jsonStore.default, (0, _extends2.default)({}, this.props, {
+        pageResources: real404PageResources
+      }));
+    }
+
+    return _react.default.createElement(_navigation.RouteUpdates, {
+      location: location
+    }, _react.default.createElement(_router.Router, {
+      basepath: __BASE_PATH__,
+      location: location,
+      id: "gatsby-focus-wrapper"
+    }, _react.default.createElement(RouteHandler, {
+      path: location.pathname,
+      location: location,
+      pageResources: dev404PageResources,
+      custom404: custom404
+    })));
   }
 
 }
 
-const Root = () => (0, _react.createElement)(_router.Router, {
-  basepath: __PATH_PREFIX__
-}, (0, _react.createElement)(RouteHandler, {
-  path: `/*`
-})); // Let site, plugins wrap the site e.g. for Redux.
+const Root = () => _react.default.createElement(_router.Location, null, locationContext => _react.default.createElement(LocationHandler, locationContext)); // Let site, plugins wrap the site e.g. for Redux.
 
 
 const WrappedRoot = (0, _apiRunnerBrowser.apiRunner)(`wrapRootElement`, {

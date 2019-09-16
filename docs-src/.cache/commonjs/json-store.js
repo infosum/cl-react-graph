@@ -7,13 +7,13 @@ exports.default = void 0;
 
 var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/extends"));
 
-var _objectWithoutPropertiesLoose2 = _interopRequireDefault(require("@babel/runtime/helpers/objectWithoutPropertiesLoose"));
-
 var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));
 
 var _react = _interopRequireDefault(require("react"));
 
 var _pageRenderer = _interopRequireDefault(require("./page-renderer"));
+
+var _normalizePagePath = _interopRequireDefault(require("./normalize-page-path"));
 
 var _gatsby = require("gatsby");
 
@@ -23,7 +23,7 @@ if (process.env.NODE_ENV === `production`) {
   throw new Error(`It appears like Gatsby is misconfigured. JSONStore is Gatsby internal ` + `development-only component and should never be used in production.\n\n` + `Unless your site has a complex or custom webpack/Gatsby ` + `configuration this is likely a bug in Gatsby. ` + `Please report this at https://github.com/gatsbyjs/gatsby/issues ` + `with steps to reproduce this error.`);
 }
 
-const getPathFromProps = props => props.pageResources && props.pageResources.page ? props.pageResources.page.path : undefined;
+const getPathFromProps = props => props.pageResources && props.pageResources.page ? (0, _normalizePagePath.default)(props.pageResources.page.path) : undefined;
 
 class JSONStore extends _react.default.Component {
   constructor(props) {
@@ -72,15 +72,11 @@ class JSONStore extends _react.default.Component {
     // - location changed
     // - page data for path changed
     // - static query results changed
-    return this.props.location !== nextProps.location || this.state.path !== nextState.path || this.state.pageQueryData[nextState.path] !== nextState.pageQueryData[nextState.path] || this.state.staticQueryData !== nextState.staticQueryData;
+    return this.props.location !== nextProps.location || this.state.path !== nextState.path || this.state.pageQueryData[(0, _normalizePagePath.default)(nextState.path)] !== nextState.pageQueryData[(0, _normalizePagePath.default)(nextState.path)] || this.state.staticQueryData !== nextState.staticQueryData;
   }
 
   render() {
     const data = this.state.pageQueryData[getPathFromProps(this.props)]; // eslint-disable-next-line
-
-    const _this$props = this.props,
-          pages = _this$props.pages,
-          propsWithoutPages = (0, _objectWithoutPropertiesLoose2.default)(_this$props, ["pages"]);
 
     if (!data) {
       return _react.default.createElement("div", null);
@@ -88,7 +84,7 @@ class JSONStore extends _react.default.Component {
 
     return _react.default.createElement(_gatsby.StaticQueryContext.Provider, {
       value: this.state.staticQueryData
-    }, _react.default.createElement(_pageRenderer.default, (0, _extends2.default)({}, propsWithoutPages, data)));
+    }, _react.default.createElement(_pageRenderer.default, (0, _extends2.default)({}, this.props, data)));
   }
 
 }

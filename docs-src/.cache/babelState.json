@@ -4,7 +4,7 @@
       "plugins": [],
       "presets": [
         {
-          "name": "@babel/preset-typescript",
+          "name": "/home/rob/cl-react-graph/docs-src/node_modules/@babel/preset-typescript/lib/index.js",
           "options": {
             "plugins": []
           }
@@ -19,7 +19,7 @@
       "plugins": [],
       "presets": [
         {
-          "name": "@babel/preset-typescript",
+          "name": "/home/rob/cl-react-graph/docs-src/node_modules/@babel/preset-typescript/lib/index.js",
           "options": {
             "plugins": []
           }
@@ -34,7 +34,7 @@
       "plugins": [],
       "presets": [
         {
-          "name": "@babel/preset-typescript",
+          "name": "/home/rob/cl-react-graph/docs-src/node_modules/@babel/preset-typescript/lib/index.js",
           "options": {
             "plugins": []
           }
@@ -49,7 +49,7 @@
       "plugins": [],
       "presets": [
         {
-          "name": "@babel/preset-typescript",
+          "name": "/home/rob/cl-react-graph/docs-src/node_modules/@babel/preset-typescript/lib/index.js",
           "options": {
             "plugins": []
           }

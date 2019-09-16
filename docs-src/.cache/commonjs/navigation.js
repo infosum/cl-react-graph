@@ -34,7 +34,7 @@ function maybeRedirect(pathname) {
 
   if (redirect != null) {
     if (process.env.NODE_ENV !== `production`) {
-      const pageResources = _loader.default.getResourcesForPathnameSync(pathname);
+      const pageResources = _loader.default.loadPageSync(pathname);
 
       if (pageResources != null) {
         console.error(`The route "${pathname}" matches both a page and a redirect; this is probably not intentional.`);
@@ -75,9 +75,9 @@ const navigate = (to, options = {}) => {
     window.__navigatingToLink = true;
   }
 
-  let _parsePath = (0, _gatsbyLink.parsePath)(to),
-      pathname = _parsePath.pathname;
-
+  let {
+    pathname
+  } = (0, _gatsbyLink.parsePath)(to);
   const redirect = redirectMap[pathname]; // If we're redirecting, just replace the passed in pathname
   // to the one we want to redirect to.
 
@@ -105,7 +105,34 @@ const navigate = (to, options = {}) => {
     });
   }, 1000);
 
-  _loader.default.getResourcesForPathname(pathname).then(pageResources => {
+  _loader.default.loadPage(pathname).then(pageResources => {
+    // If no page resources, then refresh the page
+    // Do this, rather than simply `window.location.reload()`, so that
+    // pressing the back/forward buttons work - otherwise when pressing
+    // back, the browser will just change the URL and expect JS to handle
+    // the change, which won't always work since it might not be a Gatsby
+    // page.
+    if (!pageResources || pageResources.status === `error`) {
+      window.history.replaceState({}, ``, location.href);
+      window.location = pathname;
+    } // If the loaded page has a different compilation hash to the
+    // window, then a rebuild has occurred on the server. Reload.
+
+
+    if (process.env.NODE_ENV === `production` && pageResources) {
+      if (pageResources.page.webpackCompilationHash !== window.___webpackCompilationHash) {
+        // Purge plugin-offline cache
+        if (`serviceWorker` in navigator && navigator.serviceWorker.controller !== null && navigator.serviceWorker.controller.state === `activated`) {
+          navigator.serviceWorker.controller.postMessage({
+            gatsbyApi: `resetWhitelist`
+          });
+        }
+
+        console.log(`Site has changed on server. Reloading browser`);
+        window.location = pathname;
+      }
+    }
+
     (0, _router.navigate)(to, options);
     clearTimeout(timeoutId);
   });
@@ -114,8 +141,10 @@ const navigate = (to, options = {}) => {
 function shouldUpdateScroll(prevRouterProps, {
   location
 }) {
-  const pathname = location.pathname,
-        hash = location.hash;
+  const {
+    pathname,
+    hash
+  } = location;
   const results = (0, _apiRunnerBrowser.apiRunner)(`shouldUpdateScroll`, {
     prevRouterProps,
     // `pathname` for backwards compatibility
@@ -127,11 +156,17 @@ function shouldUpdateScroll(prevRouterProps, {
   });
 
   if (results.length > 0) {
-    return results[0];
+    // Use the latest registered shouldUpdateScroll result, this allows users to override plugin's configuration
+    // @see https://github.com/gatsbyjs/gatsby/issues/12038
+    return results[results.length - 1];
   }
 
   if (prevRouterProps) {
-    const oldPathname = prevRouterProps.location.pathname;
+    const {
+      location: {
+        pathname: oldPathname
+      }
+    } = prevRouterProps;
 
     if (oldPathname === pathname) {
       // Scroll to element if it exists, if it doesn't, or no hash is provided,
@@ -146,7 +181,6 @@ function shouldUpdateScroll(prevRouterProps, {
 function init() {
   // Temp hack while awaiting https://github.com/reach/router/issues/119
   window.__navigatingToLink = false;
-  window.___loader = _loader.default;
 
   window.___push = to => navigate(to, {
     replace: false

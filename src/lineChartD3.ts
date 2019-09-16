@@ -118,7 +118,10 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
     y,
   ) => line()
     .curve(curveType)
-    .x((d: any) => x(d.x) + yAxisWidth)
+    .x((d: any) => {
+      console.log('curve', d.x, x(d.x));
+      return x(d.x) + yAxisWidth;
+    })
     .y((d: any) => y(d.y));
 
   let container: Selection<SVGElement, any, any, any>;
@@ -178,7 +181,6 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
      */
     _drawDataPointSet(data: ILineChartProps['data']) {
       const { axis, tip, tipContentFn } = props;
-      const yAxisWidth = getYAxisWidth(axis);
 
       const pointContainer = container.selectAll<SVGElement, {}>('g').data(data);
 
@@ -221,6 +223,7 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
         .attr('fill', (d) => d.point.fill)
         .attr('stroke', (d) => d.point.stroke)
         .attr('cx', (d) => {
+          console.log('point', d.x, xScale(d.x));
           return xScale(d.x) + xOffset(d);
         })
         .transition()
@@ -234,7 +237,7 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
     },
 
     /**
-     * Draw the chart scales
+     * Draw the chart axes
      */
     drawAxes() {
       const { axis, data } = props;
@@ -283,6 +286,7 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
           xs.push(parsedX);
         });
       });
+      console.log('xAxis', xAxis);
       const yDomain = extent(ys);
       yDomain[0] = applyDomainAffordance(yDomain[0], false);
       yDomain[1] = applyDomainAffordance(yDomain[1]);
@@ -297,7 +301,7 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
       }
       // Only apply affordance at the end as line should start from y axis.
       xDomain[1] = applyDomainAffordance(xDomain[1]);
-
+      console.log('xDomain', xDomain);
       xScale
         .domain(xDomain)
         .rangeRound([0, w]);
@@ -360,7 +364,6 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
        * Iterates ove data and updates area fills
        */
     drawAreas(data: Array<ILineChartDataSet<any>>, oldData: Array<ILineChartDataSet<any>>) {
-      const { axis } = props;
       const h = gridHeight(props);
       const thisArea = (curveType) => area()
         .curve(curveType)
@@ -417,6 +420,7 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
         return;
       }
       const oldData = [...props.data];
+      console.log('oldData', oldData);
       this.mergeProps(newProps);
       const { margin, width, height, className } = props;
       sizeSVG(svg, { margin, width, height, className });
@@ -425,6 +429,7 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
 
       xParseTime = timeParse(props.axis.x.dateFormat);
       xFormatTime = timeFormat(props.axis.x.dateFormat);
+      console.log('x scale', props.axis.x.scale);
       data = data.map((datum) => {
         if (props.axis.x.scale === 'TIME') {
           datum.data = datum.data.map((d) => {
@@ -440,6 +445,7 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
         // Assign in default line & point styles
         return Object.assign({}, datumProps, datum);
       });
+      console.log('data', data);
       this.drawAxes();
       this._drawLines(data, oldData);
       this.drawAreas(data, oldData);

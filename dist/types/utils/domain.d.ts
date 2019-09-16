@@ -1,4 +1,3 @@
-/// <reference types="react" />
 import { Axis } from 'd3';
 import { ScaleLinear } from 'd3-scale';
 import { IAxis, IDomain, IHistogramDataSet } from '../Histogram';
@@ -20,7 +19,7 @@ export declare const applyDomainAffordance: (v: number, inc?: boolean) => number
  */
 export declare const appendDomainRange: (props: IAppendDomainRangeProps) => void;
 export declare const shouldFormatTick: (axis: IAxis) => boolean;
-export declare const formatTick: (axis: IAxis) => (v: import("react").ReactText) => import("react").ReactText;
+export declare const formatTick: (axis: IAxis) => (v: string | number) => string | number;
 interface ITickProps {
     axis: Axis<string> | Axis<number> | Axis<number | {
         valueOf(): number;
