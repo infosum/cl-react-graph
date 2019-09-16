@@ -38,7 +38,7 @@ import {
   lineStyle,
 } from './utils/defaults';
 import {
-  applyDomainAffordance,
+  rangeAffordance,
   ticks,
 } from './utils/domain';
 import { buildScales } from './utils/scales';
@@ -112,13 +112,13 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
   };
 
   const curve = (
-    curveType: CurveFactory | CurveFactoryLineOnly,
+    dataset: ILineChartDataSet<any>,
     yAxisWidth: number,
     x,
     y,
   ) => line()
-    .curve(curveType)
-    .x((d: any) => x(d.x) + yAxisWidth)
+    .curve(dataset.line.curveType)
+    .x((d: any) => x(d.x))
     .y((d: any) => y(d.y));
 
   let container: Selection<SVGElement, any, any, any>;
@@ -132,7 +132,7 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
   let xAxisLabel: TSelection;
   let yAxisLabel: TSelection;
 
-  const xOffset = (d) => {
+  const xOffset = (d: ILineChartDataSet<any>) => {
     return d.point.show ? d.point.radius / 2 : 0;
   };
 
@@ -178,7 +178,6 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
      */
     _drawDataPointSet(data: ILineChartProps['data']) {
       const { axis, tip, tipContentFn } = props;
-      const yAxisWidth = getYAxisWidth(axis);
 
       const pointContainer = container.selectAll<SVGElement, {}>('g').data(data);
 
@@ -196,7 +195,7 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
         .attr('class', (d, i: number) => 'point-container' + i)
         .merge(pointContainer)
         .selectAll<SVGElement, {}>('circle')
-        .data((d) => {
+        .data((d: ILineChartDataSet<any>) => {
           return d.data.map((dx) => ({
             ...dx,
             point: d.point,
@@ -221,11 +220,11 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
         .attr('fill', (d) => d.point.fill)
         .attr('stroke', (d) => d.point.stroke)
         .attr('cx', (d) => {
-          return xScale(d.x) + xOffset(d);
+          return xScale(d.x);
         })
         .transition()
         .duration(400)
-        .attr('r', (d) => xOffset(d))
+        .attr('r', (d: ILineChartDataSet<any>) => xOffset(d) * 2)
         .delay(650);
 
       // EXIT - Remove old elements as needed.
@@ -234,7 +233,7 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
     },
 
     /**
-     * Draw the chart scales
+     * Draw the chart axes
      */
     drawAxes() {
       const { axis, data } = props;
@@ -283,20 +282,8 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
           xs.push(parsedX);
         });
       });
-      const yDomain = extent(ys);
-      yDomain[0] = applyDomainAffordance(yDomain[0], false);
-      yDomain[1] = applyDomainAffordance(yDomain[1]);
-
-      const xDomain = extent(xs);
-      // domain mustn't be 0 as log(0) gives Infinity. 1 lower domain gives better looking graphs
-      if (axis.y.scale === 'LOG' && yDomain[0] === ZERO_SUBSTITUTE) {
-        yDomain[0] = 1;
-      }
-      if (axis.x.scale === 'LOG' && xDomain[0] === ZERO_SUBSTITUTE) {
-        xDomain[0] = 1;
-      }
-      // Only apply affordance at the end as line should start from y axis.
-      xDomain[1] = applyDomainAffordance(xDomain[1]);
+      const yDomain = rangeAffordance(extent(ys), axis.y);
+      const xDomain = rangeAffordance(extent(xs), axis.x);
 
       xScale
         .domain(xDomain)
@@ -351,7 +338,7 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
           .attr('stroke', d.line.stroke)
           .transition()
           .duration(500)
-          .attr('d', curve(d.line.curveType, xOffset(d), xScale, yScale)(d.data as any) as any)
+          .attr('d', curve(d, xOffset(d), xScale, yScale)(d.data as any) as any)
           .delay(50);
       });
     },
@@ -360,13 +347,10 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
        * Iterates ove data and updates area fills
        */
     drawAreas(data: Array<ILineChartDataSet<any>>, oldData: Array<ILineChartDataSet<any>>) {
-      const { axis } = props;
       const h = gridHeight(props);
-      const thisArea = (curveType) => area()
-        .curve(curveType)
-        .x((d: any) => {
-          return xScale(d.x);//+ xOffset(d);
-        })
+      const thisArea = (dataset: ILineChartDataSet<any>) => area()
+        .curve(dataset.line.curveType as CurveFactory)
+        .x((d: any) => xScale(d.x))
         .y0((d) => h)
         .y1((d: any) => yScale(d.y));
 
@@ -396,13 +380,13 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
             .transition()
             .duration(500)
             .delay(50)
-            .attr('d', thisArea(d.line.curveType)(d.data) as any);
+            .attr('d', thisArea(d)(d.data) as any);
         });
     },
 
     /**
-     * Get a max count of values in each data set
-     */
+    * Get a max count of values in each data set
+       */
     valuesCount(data: ILineChartProps['data']): number {
       return data.reduce((a: number, b): number => {
         return b.data.length > a ? b.data.length : a;
@@ -410,7 +394,7 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
     },
 
     /**
-     * Update chart
+    * Update chart
      */
     update(el: Element, newProps: DeepPartial<ILineChartProps>) {
       if (!newProps.data) {
@@ -448,7 +432,7 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
     },
 
     /**
-     * Any necessary clean up
+    * Any necessary clean up
      */
     destroy(el: Element) {
       svg.selectAll('svg > *').remove();

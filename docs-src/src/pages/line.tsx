@@ -49,8 +49,8 @@ import {
   gridReducer,
 } from './histogram';
 
-type TInitialState = DeepPartial<ILineChartProps<{ x: number | string, y: number }>>;
-type TData = ILineChartDataSet<{ x: string | number, y: number }>;
+type TInitialState = DeepPartial<ILineChartProps<{ x: number | string | Date, y: number }>>;
+type TData = ILineChartDataSet<{ x: string | number | Date, y: number }>;
 
 const dateFormat = '%d-%b-%y';
 const formatTime = timeFormat(dateFormat);
@@ -112,6 +112,79 @@ const data2 = {
   },
 };
 
+const data3: ILineChartDataSet<any>[] = [{
+  "label": "rob Allocation",
+  "line": {
+    "curveType": curveCatmullRom,
+    "fill": { "fill": "rgba(11, 85, 167, 0.2)", "show": true },
+    "show": true,
+    "stroke": "rgb(11, 85, 167)",
+    "strokeDashArray": "0",
+    "strokeDashOffset": 0
+  },
+  "point":
+    { "fill": "#000", "radius": 4, "show": true, "stroke": "" },
+  "data": [
+    { x: new Date("2019-08-20T00:00:00.000Z"), y: 0 },
+    { x: new Date("2019-08-21T00:00:00.000Z"), y: 0 },
+    { x: new Date("2019-08-22T00:00:00.000Z"), y: 0 },
+    { x: new Date("2019-08-23T00:00:00.000Z"), y: 0 },
+    { x: new Date("2019-08-24T00:00:00.000Z"), y: 0 },
+    { x: new Date("2019-08-25T00:00:00.000Z"), y: 0 },
+    { x: new Date("2019-08-26T00:00:00.000Z"), y: 0 },
+    { x: new Date("2019-08-27T00:00:00.000Z"), y: 2000 }]
+}, {
+  "label": "rob'",
+  "line": {
+    "curveType": curveCatmullRom,
+    "fill": { "fill": "rgba(11, 85, 167, 0.7)", "show": true },
+    "show": true, "stroke": "#000", "strokeDashArray": "0", "strokeDashOffset": 0
+  },
+  "point": { "fill": "", "radius": 0, "show": false, "stroke": "" },
+  "data": [
+    { x: new Date("2019-08-20T00:00:00.000Z"), y: 0 },
+    { x: new Date("2019-08-21T00:00:00.000Z"), y: 0 },
+    { x: new Date("2019-08-22T00:00:00.000Z"), y: 0 },
+    { x: new Date("2019-08-23T00:00:00.000Z"), y: 0 },
+    { x: new Date("2019-08-24T00:00:00.000Z"), y: 0 },
+    { x: new Date("2019-08-25T00:00:00.000Z"), y: 0 },
+    { x: new Date("2019-08-26T00:00:00.000Z"), y: 0 },
+    { x: new Date("2019-08-27T00:00:00.000Z"), y: 0 }]
+},
+{
+  "label": "Their Allocation",
+  "line": {
+    "curveType": curveCatmullRom,
+    "fill": { "fill": "rgba(0, 169, 123, 0.2)", "show": true },
+    "show": true, "stroke": "rgb(0, 169, 123)", "strokeDashArray": "0", "strokeDashOffset": 0
+  },
+  "point": { "fill": "", "radius": 0, "show": false, "stroke": "" }, "data": [
+    { x: new Date("2019-08-20T00:00:00.000Z"), y: 0 },
+    { x: new Date("2019-08-21T00:00:00.000Z"), y: 0 },
+    { x: new Date("2019-08-22T00:00:00.000Z"), y: 0 },
+    { x: new Date("2019-08-23T00:00:00.000Z"), y: 0 },
+    { x: new Date("2019-08-24T00:00:00.000Z"), y: 0 },
+    { x: new Date("2019-08-25T00:00:00.000Z"), y: 0 },
+    { x: new Date("2019-08-26T00:00:00.000Z"), y: 0 },
+    { x: new Date("2019-08-27T00:00:00.000Z"), y: 0 }]
+}, {
+  "label": "Theirs",
+  "line": {
+    "curveType": curveCatmullRom,
+    "fill": { "fill": "rgba(0, 169, 123, 0.7)", "show": true },
+    "show": true, "stroke": "#000", "strokeDashArray": "0", "strokeDashOffset": 0
+  },
+  "point": { "fill": "", "radius": 0, "show": false, "stroke": "" }, "data": [
+    { x: new Date("2019-08-20T00:00:00.000Z"), y: 0 },
+    { x: new Date("2019-08-21T00:00:00.000Z"), y: 0 },
+    { x: new Date("2019-08-22T00:00:00.000Z"), y: 0 },
+    { x: new Date("2019-08-23T00:00:00.000Z"), y: 0 },
+    { x: new Date("2019-08-24T00:00:00.000Z"), y: 0 },
+    { x: new Date("2019-08-25T00:00:00.000Z"), y: 0 },
+    { x: new Date("2019-08-26T00:00:00.000Z"), y: 0 },
+    { x: new Date("2019-08-27T00:00:00.000Z"), y: 0 }]
+}];
+
 const initialState: TInitialState = {
   axis: {
     x: {
@@ -131,10 +204,7 @@ const initialState: TInitialState = {
       ticks: 5,
     },
   },
-  data: [
-    data,
-    data2,
-  ],
+  data: data3,
   width: '100%',
   grid,
 };
@@ -214,11 +284,12 @@ const GridOptions = GridOptionsFactory<(action: Actions) => void, ILineChartProp
 export interface IGridElement extends ReactDataSheet.Cell<IGridElement, number | string> {
   value: number | null | string;
 }
-const LineExample: FC<{}> = () => {
+const LineExample: FC = () => {
   const [state, dispatch] = useReducer(reducer, initialState as ILineChartProps);
   const [tab, setTab] = useState(0);
-  const data: Cell[][] = state.data[0].data.map((point) => {
-    return [{ value: point.x }, { value: Number(point.y) }];
+  const gridData: Cell[][] = state.data[0].data.map((point) => {
+    const x = typeof (point.x) === 'object' ? point.x.toDateString() : point.x;
+    return [{ value: x }, { value: Number(point.y) }];
   });
   const chart = <LineChart
     axis={state.axis}
@@ -230,7 +301,7 @@ const LineExample: FC<{}> = () => {
       <SEO title="Line Chart" description="" />
       <Typography variant="h2">Line Chart</Typography>
       <div>
-        <Grid container spacing={24}>
+        <Grid container spacing={10}>
           <Grid item xs={6}>
             <Card>
               <CardContent>
@@ -256,7 +327,7 @@ const LineExample: FC<{}> = () => {
                 {
                   tab === 0 && <TabContainer>
                     <ReactDataSheet
-                      data={data}
+                      data={gridData}
                       valueRenderer={(cell) => cell.value}
                       sheetRenderer={(props) => (
                         <table className={props.className + ' my-awesome-extra-class'}>
@@ -299,7 +370,7 @@ const LineExample: FC<{}> = () => {
                     <Card>
                       <CardContent>
                         <Typography variant="h6" gutterBottom>Line</Typography>
-                        <Grid container spacing={24}>
+                        <Grid container spacing={10}>
                           <Grid item xs={6}>
                             <CurveSelector
                               value={'curveCatmullRom'}
@@ -338,7 +409,7 @@ const LineExample: FC<{}> = () => {
                     <Card elevation={3}>
                       <CardContent>
                         <Typography variant="h6" gutterBottom>Point</Typography>
-                        <Grid container spacing={24}>
+                        <Grid container spacing={10}>
                           <Grid item xs={6}>
                             <FormControlLabel
                               control={
@@ -396,7 +467,7 @@ const LineExample: FC<{}> = () => {
                       <CardContent>
 
                         <Typography variant="h6" gutterBottom>Fill</Typography>
-                        <Grid container spacing={24}>
+                        <Grid container spacing={10}>
                           <Grid item xs={6}>
                             <FormControlLabel
                               control={

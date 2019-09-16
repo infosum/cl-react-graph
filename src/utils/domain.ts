@@ -27,9 +27,40 @@ interface IAppendDomainRangeProps {
   stacked: boolean,
 }
 
-export const applyDomainAffordance = (v: number, inc: boolean = true) =>
-  inc ? v + v * 5 / 100
-    : v - v * 5 / 100;
+/**
+ * Slightly better attempt from applyDomainAffordance, taking into 
+ * account axis types.
+ */
+export const rangeAffordance = (
+  range: [any, any],
+  axis: IAxis,
+  inc: boolean = true,
+): [any, any] => {
+
+  const first = axis.scale === 'TIME' ? range[0].getTime() : range[0];
+  const last = axis.scale === 'TIME' ? range[1].getTime() : range[1];
+  const diff = last - first;
+  const percentIncrement = axis.scale === 'LOG' ? 100 : 5;
+
+  const incremental = applyDomainAffordance(diff, inc, percentIncrement);
+
+  const newLast = last + (incremental - diff);
+
+  if (axis.scale === 'TIME') {
+    return [range[0], new Date(newLast)];
+  }
+  // Only apply affordance at the end as line should start from origin.
+  return [range[0], newLast];
+}
+
+const applyDomainAffordance = (
+  v: number,
+  inc: boolean = true,
+  percentIncrement: number = 5,
+) =>
+  inc ? v + v * percentIncrement / 100
+    : v - v * percentIncrement / 100;
+
 /**
  * Update a linear scale with range and domain values taken either from the compiled
  * group data. If the chart is stacked then sum all bin values first.
@@ -96,7 +127,7 @@ export const ticks = ({
     axis.ticks(ticks);
   } else {
     if (limitByValues && axisLength / valuesCount < 10) {
-      // Show one in 10 x axis labels
+      // Show one in 10 axis labels
       axis.tickValues((scaleBand.domain() as any[]).filter((d, i) => !(i % 10)));
     }
   }

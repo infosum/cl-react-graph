@@ -1,11 +1,11 @@
 import {
+  ScaleBand,
   scaleLinear,
   ScaleLinear,
   scaleLog,
   ScaleLogarithmic,
   scaleTime,
   ScaleTime,
-  ScaleBand,
 } from 'd3-scale';
 
 import { IAxes } from '../';

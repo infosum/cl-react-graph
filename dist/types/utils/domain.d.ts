@@ -1,4 +1,3 @@
-/// <reference types="react" />
 import { Axis } from 'd3';
 import { ScaleLinear } from 'd3-scale';
 import { IAxis, IDomain, IHistogramDataSet } from '../Histogram';
@@ -13,14 +12,18 @@ interface IAppendDomainRangeProps {
     range: number[];
     stacked: boolean;
 }
-export declare const applyDomainAffordance: (v: number, inc?: boolean) => number;
+/**
+ * Slightly better attempt from applyDomainAffordance, taking into
+ * account axis types.
+ */
+export declare const rangeAffordance: (range: [any, any], axis: IAxis, inc?: boolean) => [any, any];
 /**
  * Update a linear scale with range and domain values taken either from the compiled
  * group data. If the chart is stacked then sum all bin values first.
  */
 export declare const appendDomainRange: (props: IAppendDomainRangeProps) => void;
 export declare const shouldFormatTick: (axis: IAxis) => boolean;
-export declare const formatTick: (axis: IAxis) => (v: import("react").ReactText) => import("react").ReactText;
+export declare const formatTick: (axis: IAxis) => (v: string | number) => string | number;
 interface ITickProps {
     axis: Axis<string> | Axis<number> | Axis<number | {
         valueOf(): number;
