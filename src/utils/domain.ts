@@ -86,7 +86,8 @@ export const appendDomainRange = (props: IAppendDomainRangeProps): void => {
     : Number(thisExtent[0]);
 
   scale.range(range)
-    .domain(aDomain);
+    .domain(aDomain)
+    .nice();
 }
 
 export const shouldFormatTick = (axis: IAxis): boolean => {
