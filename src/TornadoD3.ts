@@ -13,7 +13,7 @@ import merge from 'lodash/merge';
 import colorScheme from './colors';
 import attrs from './d3/attrs';
 import {
-  drawGrid,
+  drawHorizontalGrid,
   gridHeight,
   gridWidth,
   xAxisHeight,
@@ -22,9 +22,16 @@ import {
 import {
   EGroupedBarLayout,
   IChartAdaptor,
-  IHistogramProps,
 } from './Histogram';
+import {
+  IGroupData,
+  IGroupDataItem,
+} from './HistogramD3';
 import tips, { makeTip } from './tip';
+import {
+  ITornadoDataSet,
+  ITornadoProps,
+} from './Tornado';
 import {
   barMargin,
   getBarWidth,
@@ -33,12 +40,11 @@ import {
 } from './utils/bars';
 import {
   axis as defaultAxis,
-  grid,
+  grid as defaultGrid,
 } from './utils/defaults';
 import {
   appendDomainRange,
   isStacked,
-  maxValueCount,
   ticks,
 } from './utils/domain';
 import {
@@ -55,21 +61,18 @@ import {
 } from './utils/svg';
 import { DeepPartial } from './utils/types';
 
-export interface IGroupDataItem {
-  label: string;
-  groupLabel?: string;
-  value: number;
-  index?: number; // For Tornados
-}
+export const maxValueCount = (counts: ITornadoDataSet[]): number => {
+  return counts.reduce((a: number, b: ITornadoDataSet): number => {
+    return b.data.length > a ? b.data.length : a;
+  }, 0);
+};
 
-export type IGroupData = IGroupDataItem[][];
-
-export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
-  let svg: Selection<any, any, any, any>;
+export const tornadoD3 = ((): IChartAdaptor<ITornadoProps> => {
+  let svg: Selection<any, any, any, any>;;
   let tipContainer;
   let tipContent;
-  const y = scaleLinear();
-  const x = scaleBand();
+  const x = scaleLinear();
+  const y = scaleBand();
   const innerScaleBand = scaleBand();
   let container: Selection<SVGElement, any, any, any>;
   let dataSets: IGroupData;
@@ -77,21 +80,22 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
   let gridY: TSelection;
   let yAxisContainer: TSelection;
   let xAxisContainer: TSelection;
-  let xAxisLabel: any;
-  let yAxisLabel: any;
+  let yAxisLabel: TSelection;
+  let xAxisLabel: TSelection;
 
-  const props: IHistogramProps = {
+  const props: ITornadoProps = {
     axis: defaultAxis,
     bar: {
       groupMargin: 0.1,
-      margin: 0,
+      margin: 10,
       overlayMargin: 5,
       width: 50,
     },
-    className: 'histogram-d3',
+    className: 'torando-d3',
     colorScheme,
     data: {
       bins: [],
+      colorScheme: [],
       counts: [],
     },
     delay: 0,
@@ -100,7 +104,7 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
       min: null,
     },
     duration: 400,
-    grid,
+    grid: defaultGrid,
     groupLayout: EGroupedBarLayout.GROUPED,
     height: 200,
     margin: {
@@ -109,7 +113,6 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
       right: 0,
       top: 5,
     },
-    stacked: false, // Deprecated use groupLayout instead
     stroke: {
       color: '#005870',
       dasharray: '',
@@ -124,12 +127,12 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
     width: 200,
   };
 
-  const HistogramD3 = {
+  const TornadoD3 = {
     /**
      * Initialization
      */
-    create(el: Element, newProps: DeepPartial<IHistogramProps> = {}) {
-      this.mergeProps(newProps);
+    create(el: Element, newProps: DeepPartial<ITornadoProps> = {}) {
+      merge(props, newProps);
       svg = makeSvg(el, svg);
       const { margin, width, height, className } = props;
       sizeSVG(svg, { margin, width, height, className });
@@ -145,75 +148,58 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
       this.update(el, newProps);
     },
 
-    mergeProps(newProps: DeepPartial<IHistogramProps>) {
-      merge(props, newProps);
-      if (newProps.data) {
-        props.data = newProps.data as IHistogramProps['data'];
-      }
-      if (newProps.colorScheme) {
-        props.colorScheme = newProps.colorScheme;
-      }
-    },
-
     /**
-     * Draw scales
-     */
+    * Draw Axes
+    */
     drawAxes() {
-      const { axis, bar, domain, groupLayout, stacked, data, margin, height } = props;
+      const { bar, data, domain, groupLayout, margin, width, height, axis } = props;
       const valuesCount = maxValueCount(data.counts);
       const w = gridWidth(props);
       const h = gridHeight(props);
       const dataLabels = data.counts.map((c) => c.label);
 
-      x
-        .domain(data.bins)
-        .rangeRound([0, w])
+      console.log('y domain', data.bins);
+      y.domain(data.bins)
+        .rangeRound([0, h])
         .paddingInner(groupedMargin(bar));
 
       innerScaleBand
-        .domain(groupedBarsUseSameXAxisValue({ groupLayout, stacked }) ? ['main'] : dataLabels)
-        .rangeRound([0, x.bandwidth()])
+        .domain(groupedBarsUseSameXAxisValue({ groupLayout }) ? ['main'] : dataLabels)
+        .rangeRound([0, y.bandwidth()])
         .paddingInner(barMargin(props.bar));
 
-      const xAxis = axisBottom<string>(x);
-      const yAxis = axisLeft<number>(y);
+      const xAxis = axisBottom<number>(x);
+      const yAxis = axisLeft<string>(y);
 
-      /** X-Axis (label axis) set up */
-      ticks({
-        axis: xAxis,
-        valuesCount,
-        axisLength: w,
-        axisConfig: axis.x,
-        scaleBand: x,
-        limitByValues: true,
-      });
-
-      xAxisContainer
-        .attr('transform', 'translate(' + (yAxisWidth(axis) + axis.y.style['stroke-width']) + ',' +
-          (height - xAxisHeight(props.axis) - (margin.left * 2)) + ')')
-        .call(xAxis);
-
-      /** Y-Axis (value axis) set up */
-      appendDomainRange({
-        data: dataSets,
-        domain,
-        range: [h, 0],
-        scale: y,
-        stacked: isStacked({ groupLayout, stacked })
-      });
+      /** Y-Axis (label axis) set up */
 
       ticks({
         axis: yAxis,
         valuesCount,
-        axisLength: w,
+        axisLength: h,
         axisConfig: axis.y,
         scaleBand: y,
+        limitByValues: true,
       });
 
       yAxisContainer
-        .attr('transform', 'translate(' + yAxisWidth(axis) + ', 0)')
-        .transition()
+        .attr('transform', 'translate(' + yAxisWidth(axis) + ', ' + margin.top + ' )')
         .call(yAxis);
+
+      /** X-Axis (value axis) set up */
+      appendDomainRange({
+        data: dataSets,
+        domain,
+        range: [0, Number(width) - (margin.top * 2) - axis.y.width],
+        scale: x,
+        stacked: isStacked({ groupLayout })
+      })
+
+      const xAxisY = height - xAxisHeight(props.axis) - margin.top;
+      xAxisContainer
+        .attr('transform', 'translate(' + yAxisWidth(axis) + ',' +
+          xAxisY + ')')
+        .call(xAxis);
 
       attrs(svg.selectAll('.y-axis .domain, .y-axis .tick line'), axis.y.style);
       attrs(svg.selectAll('.y-axis .tick text'), axis.y.text.style as any);
@@ -229,25 +215,24 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
       bins: string[],
       groupData: IGroupData,
     ) {
-      const { axis, height, width, margin, delay, duration, tip, groupLayout, stacked } = props;
+      const { axis, height, margin, delay, duration, tip, groupLayout } = props;
 
-      const stackedOffset = (d: IGroupDataItem, stackIndex: number): number => {
+      const stackedOffset = (d: IGroupDataItem, stackIndex: number) => {
         const thisGroupData = groupData.find((gData) => {
           return gData.find((dx) => dx.label === d.label) !== undefined;
         });
-        const oSet = thisGroupData ?
-          thisGroupData
-            .filter((_, i) => i < stackIndex)
-            .reduce((prev, next) => prev + next.value, 0)
-          : 0;
-        const offset = isStacked({ groupLayout, stacked }) && stackIndex > 0
+        const oSet = (thisGroupData || [])
+          .filter((_, i) => i < stackIndex)
+          .reduce((prev, next) => prev + next.value, 0);
+        const isItStacked = isStacked({ groupLayout });
+        const offset = isItStacked && stackIndex > 0
           ? oSet
           : 0;
-        return y(d.value + offset);
+        return isItStacked ? x(offset) : 0;
       }
 
       const colors = scaleOrdinal(props.colorScheme);
-      const gHeight = gridHeight(props);
+      const gWidth = gridWidth(props);
 
       const g = container
         .selectAll<SVGElement, {}>('g')
@@ -257,14 +242,12 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
         .append<SVGElement>('g')
         .merge(g)
         .attr('transform', (d: any[]) => {
-          let xd = x(d[0].label);
-          if (xd === undefined) {
-            xd = 0;
+          let yd = y(d[0].label);
+          if (yd === undefined) {
+            yd = 0;
           }
-          const xDelta = yAxisWidth(axis)
-            + axis.y.style['stroke-width']
-            + xd;
-          return `translate(${xDelta}, 0)`;
+          const x = yAxisWidth(axis) + axis.x.style['stroke-width'];
+          return `translate(${x}, ${margin.top + yd})`;
         })
 
         .selectAll<SVGElement, {}>('rect')
@@ -273,61 +256,61 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
       bars
         .enter()
         .append<SVGElement>('rect')
-        .attr('height', 0)
-        .attr('y', stackedOffset)
+        .attr('width', 0)
+        .attr('x', stackedOffset)
         .attr('class', 'bar')
         .on('click', onClick(props.onClick))
         .on('mouseover', onMouseOver({ bins, hover: props.bar.hover, colors, tipContentFn: props.tipContentFn, tipContent, tip, tipContainer }))
         .on('mousemove', () => tip.fx.move(tipContainer))
         .on('mouseout', onMouseOut({ tip, tipContainer, colors }))
         .merge(bars)
-        .attr('x', (d: IGroupDataItem, i: number) => {
+        .attr('y', (d: IGroupDataItem, i: number) => {
           const overlay = (props.groupLayout === EGroupedBarLayout.OVERLAID)
             ? i * props.bar.overlayMargin
             : Number(innerScaleBand(String(d.groupLabel)));
           return overlay;
         })
-        .attr('width', (d, i) => getBarWidth(i, props.groupLayout, props.bar, innerScaleBand))
+        .attr('height', (d, i) => getBarWidth(i, props.groupLayout, props.bar, innerScaleBand))
         .attr('fill', (d, i) => colors(String(i)))
         .transition()
         .duration(duration)
         .delay(delay)
-        .attr('y', stackedOffset)
+        .attr('x', stackedOffset)
         // Hide bar's bottom border
         .attr('stroke-dasharray',
           (d: IGroupDataItem, i): string => {
-            const currentHeight = gHeight - (y(d.value));
+            const currentHeight = gWidth - (x(d.value));
             const barWidth = getBarWidth(i, props.groupLayout, props.bar, innerScaleBand);
             return `${barWidth} 0 ${currentHeight} ${barWidth}`;
           })
-        .attr('height', (d: IGroupDataItem): number => gHeight - (y(d.value)));
+        .attr('width', (d: IGroupDataItem): number => x(d.value));
 
       bars.exit().remove();
       g.exit().remove();
 
-      const xText = xAxisLabel
-        .selectAll('text')
-        .data([axis.x.label]);
-
-      xText.enter().append('text')
-        .attr('class', 'x-axis-label')
-        .merge(xText)
-        .attr('transform',
-          'translate(' + (Number(width) / 2) + ' ,' +
-          ((height - xAxisHeight(props.axis) - (margin.left * 2)) + axis.x.margin) + ')')
-        .style('text-anchor', 'middle')
-        .text((d) => d);
-
       const yText = yAxisLabel
-        .selectAll('text')
+        .selectAll<any, any>('text')
         .data([axis.y.label]);
 
       yText.enter().append('text')
         .attr('class', 'y-axis-label')
         .merge(yText)
+        .attr('transform',
+          'translate(' + (Number(height) / 2) + ' ,' +
+          ((height - yAxisWidth(props.axis) - (margin.left * 2)) + axis.x.margin) + ')')
+        .style('text-anchor', 'middle')
+        .text((d) => d);
+
+      const xText = yAxisLabel
+        .selectAll<any, any>('text')
+        .data([axis.x.label]);
+
+      xText.enter().append('text')
+        .attr('class', 'x-axis-label')
+        .merge(xText)
         .attr('transform', 'rotate(-90)')
         .attr('y', 0)
-        .attr('x', 0 - (gHeight / 2 - (margin.top * 2)))
+        .attr('x', 0 - (gWidth / 2 - (margin.top * 2)))
         .attr('dy', '1em')
         .style('text-anchor', 'middle')
         .text((d) => d);
@@ -336,11 +319,11 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
     /**
      * Update chart
      */
-    update(el: Element, newProps: DeepPartial<IHistogramProps>) {
-      if (!newProps.data) {
+    update(el: Element, newProps: DeepPartial<ITornadoProps>) {
+      if (!props.data) {
         return;
       }
-      this.mergeProps(newProps);
+      merge(props, newProps);
       if (!props.data.bins) {
         return;
       }
@@ -353,16 +336,22 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
           if (!dataSets[i]) {
             dataSets[i] = [];
           }
-          dataSets[i].push({
-            groupLabel: count.label,
-            label: data.bins[i],
-            value: visible[data.bins[i]] !== false && visible[count.label] !== false ? value : 0,
-          });
+          value.forEach((aValue, index) => {
+            dataSets[i].push({
+              index,
+              groupLabel: count.label,
+              label: data.bins[i],
+              // TODO value[0] doesn't take into account index 1
+              value: visible[data.bins[i]] !== false && visible[count.label] !== false ? aValue : 0,
+            });
+          })
+
         });
       });
-
+      console.log('dataSets', dataSets);
       this.drawAxes();
-      drawGrid(x, y, gridX, gridY, props, maxValueCount(data.counts));
+      // @TODO add back in,
+      // drawHorizontalGrid<any>({ x, y, gridX, gridY, props, ticks: maxValueCount(data.counts) });
       this.updateChart(data.bins, dataSets);
     },
 
@@ -373,5 +362,5 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
       svg.selectAll('svg > *').remove();
     },
   };
-  return HistogramD3;
+  return TornadoD3;
 });

@@ -8,7 +8,7 @@ import {
 
 export interface IGroupedProps {
     groupLayout: EGroupedBarLayout,
-    stacked: boolean;
+    stacked?: boolean;
 }
 export const groupedBarsUseSameXAxisValue = ({ groupLayout, stacked }: IGroupedProps): boolean => {
     return stacked || groupLayout === EGroupedBarLayout.STACKED || groupLayout === EGroupedBarLayout.OVERLAID;

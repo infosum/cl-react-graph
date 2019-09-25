@@ -12,6 +12,7 @@ const IndexPage = () => (
       <li><Link to="/line">Line Chart</Link></li>
       <li><Link to="/pie">Pie Chart</Link></li>
       <li><Link to="/joyplot">Joy Plot</Link></li>
+      <li><Link to="/tornado">Tornado</Link></li>
       <li><Link to="/map">Map</Link></li>
     </ul>
   </Layout>

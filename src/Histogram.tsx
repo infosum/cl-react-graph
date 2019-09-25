@@ -105,7 +105,7 @@ export interface IHistogramProps {
   /** 
    *  @deprecated
    */
-  stacked: boolean;
+  stacked?: boolean;
   groupLayout: EGroupedBarLayout;
   onClick?: (bar: IGroupDataItem) => void;
   stroke: IStroke;
