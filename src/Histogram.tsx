@@ -31,7 +31,7 @@ export interface IHistogramBar {
   margin: number;
   hover?: Partial<Record<EColorManipulations, number>>,
   overlayMargin: number; // When bars are rendered as EGroupedBarLayout.OVERLAID 
-  width: number;
+  width?: number;
 }
 
 export interface IGrid {
@@ -105,7 +105,7 @@ export interface IHistogramProps {
   /** 
    *  @deprecated
    */
-  stacked: boolean;
+  stacked?: boolean;
   groupLayout: EGroupedBarLayout;
   onClick?: (bar: IGroupDataItem) => void;
   stroke: IStroke;

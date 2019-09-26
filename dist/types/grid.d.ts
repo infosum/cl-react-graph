@@ -1,10 +1,20 @@
 import { IAxes, IHistogramProps } from './Histogram';
 import { AnyScale } from './utils/scales';
+import { TSelection } from './utils/svg';
 export declare const makeYGridLines: (y: any, ticks?: number) => import("d3-axis").Axis<import("d3-axis").AxisDomain>;
 export declare const makeXGridLines: (x: any, ticks?: number) => import("d3-axis").Axis<import("d3-axis").AxisDomain>;
 export declare const drawGrid: (x: any, y: any, gridX: any, gridY: any, props: any, ticks: any) => void;
-export declare const drawHorizontalGrid: (x: AnyScale, y: AnyScale, gridX: import("d3-selection").Selection<any, any, any, any>, gridY: import("d3-selection").Selection<any, any, any, any>, props: IHistogramProps, ticks: number) => void;
+interface IProps<T = IHistogramProps> {
+    x: AnyScale;
+    y: AnyScale;
+    gridX: TSelection;
+    gridY: TSelection;
+    props: T;
+    ticks: number;
+}
+export declare const drawHorizontalGrid: <T extends IHistogramProps>(props: IProps<T>) => void;
 export declare const gridHeight: (props: any) => number;
 export declare const yAxisWidth: (axis: IAxes) => number;
 export declare const xAxisHeight: (axis: IAxes) => any;
 export declare const gridWidth: (props: any) => number;
+export {};

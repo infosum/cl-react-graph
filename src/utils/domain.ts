@@ -69,14 +69,11 @@ export const appendDomainRange = (props: IAppendDomainRangeProps): void => {
   const aDomain: number[] = [];
   const { domain, data, stacked, scale, range } = props;
 
-  // const sta = isStacked({ groupLayout, stacked });
-
   const allCounts: number[] = (data as any).reduce((prev: number[], next): number[] => {
     return stacked
       ? [...prev, next.reduce((p: number, n): number => p + (n.value || n), 0)]
       : [...prev, ...next.map((n) => n.value || n)];
   }, [0]);
-
   const thisExtent = extent<any>(allCounts, (d) => d);
   aDomain[1] = domain && domain.hasOwnProperty('max') && domain.max !== null
     ? domain.max
@@ -86,7 +83,8 @@ export const appendDomainRange = (props: IAppendDomainRangeProps): void => {
     : Number(thisExtent[0]);
 
   scale.range(range)
-    .domain(aDomain);
+    .domain(aDomain)
+    .nice();
 }
 
 export const shouldFormatTick = (axis: IAxis): boolean => {

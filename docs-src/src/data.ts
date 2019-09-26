@@ -1,7 +1,11 @@
-import { IHistogramData } from '../../src';
+import {
+  IAxes,
+  IHistogramData,
+} from '../../src';
 import filterRange from '../../src/colors/filterRange';
 import { IGrid } from '../../src/Histogram';
 import { lineStyle } from '../../src/utils/defaults';
+import { DeepPartial } from '../../src/utils/types';
 
 export const grid: IGrid = {
   x: {
@@ -34,6 +38,18 @@ export const data: IHistogramData = {
       label: 'DataSet 2',
     },
   ],
+};
+
+export const axis: DeepPartial<IAxes> = {
+  x: {
+    // ...defaultAxis.x,
+    dateFormat: '%d-%b-%y',
+    scale: 'TIME',
+  },
+  y: {
+    // ...defaultAxis.y,
+    ticks: 3,
+  },
 };
 
 export const data2 = {

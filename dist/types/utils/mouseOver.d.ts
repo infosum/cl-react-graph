@@ -1,6 +1,6 @@
+import { ScaleOrdinal } from 'd3';
+import { EColorManipulations, TipContentFn } from '../Histogram';
 import { IGroupDataItem } from '../HistogramD3';
-import { EColorManipulations, TipContentFn } from "../Histogram";
-import { ScaleOrdinal } from "d3";
 interface IProps {
     bins: string[];
     hover?: Partial<Record<EColorManipulations, number>>;
@@ -9,6 +9,7 @@ interface IProps {
     tipContent: any;
     tip: any;
     tipContainer: string;
+    colourIndex?: string;
 }
 interface IMouseOutProps {
     colors: ScaleOrdinal<string, string>;

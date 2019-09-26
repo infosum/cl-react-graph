@@ -63,14 +63,17 @@ export const drawGrid = (x, y, gridX, gridY, props, ticks) => {
   }
 };
 
-export const drawHorizontalGrid = (
+interface IProps<T = IHistogramProps> {
   x: AnyScale,
   y: AnyScale,
   gridX: TSelection,
   gridY: TSelection,
-  props: IHistogramProps,
+  props: T,
   ticks: number,
-) => {
+}
+
+export const drawHorizontalGrid: <T extends IHistogramProps>(props: IProps<T>) => void = (args) => {
+  const { x, y, gridX, gridY, props, ticks } = args;
   const { height, width, axis, grid, margin } = props;
   const axisWidth = axis.y.style['stroke-width'];
 

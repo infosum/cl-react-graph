@@ -19,6 +19,7 @@ const Header = ({ siteTitle }) => (
       <Button><Link to="histogram">Histogram</Link></Button>
       <Button><Link to="line">Line Chart</Link></Button>
       <Button><Link to="pie">Pie Chart</Link></Button>
+      <Button><Link to="tornado">Tornado Chart</Link></Button>
       <Button><Link to="joyplot">Joy Plot</Link></Button>
       {/* <Button><Link to="/map">Map</Link></Button> */}
     </Toolbar>

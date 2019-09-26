@@ -37,22 +37,11 @@ import Layout from '../components/layout';
 import SEO from '../components/seo';
 import { TabContainer } from '../components/TabContainer';
 import {
+  axis,
   data,
   grid,
   theme,
 } from '../data';
-
-export const axis: DeepPartial<IAxes> = {
-  x: {
-    // ...defaultAxis.x,
-    dateFormat: '%d-%b-%y',
-    scale: 'TIME',
-  },
-  y: {
-    // ...defaultAxis.y,
-    ticks: 3,
-  },
-};
 
 const tipContentFns = [
   (bins, i, d) =>

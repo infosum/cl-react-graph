@@ -58,7 +58,9 @@ import { DeepPartial } from './utils/types';
 export interface IGroupDataItem {
   label: string;
   groupLabel?: string;
+  colorRef?: string; // String which can be used to return same colour value
   value: number;
+  side?: 'left' | 'right'; // For Tornados
 }
 
 export type IGroupData = IGroupDataItem[][];
