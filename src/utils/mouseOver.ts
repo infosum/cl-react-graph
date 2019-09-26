@@ -1,10 +1,12 @@
-import { IGroupDataItem } from '../HistogramD3';
 import Color from 'color';
+import { ScaleOrdinal } from 'd3';
+import { select } from 'd3-selection';
+
 import {
-  select,
-} from 'd3-selection';
-import { EColorManipulations, TipContentFn } from "../Histogram";
-import { ScaleOrdinal } from "d3";
+  EColorManipulations,
+  TipContentFn,
+} from '../Histogram';
+import { IGroupDataItem } from '../HistogramD3';
 
 interface IProps {
   bins: string[],
@@ -14,6 +16,7 @@ interface IProps {
   tipContent: any,
   tip: any,
   tipContainer: string,
+  colourIndex?: string,
 };
 
 interface IMouseOutProps {
@@ -33,7 +36,7 @@ export const onMouseOver = (props: IProps) => (d: IGroupDataItem | any, i: numbe
   } = props;
   const ix = bins.findIndex((b) => b === d.label);
   // Initial color
-  let color = Color(colors(String(i)));
+  let color = Color(colors(d.colorRef || String(i)));
   if (hover) {
     // Apply hover modifiers
     Object.keys(hover).forEach((key) => {
@@ -56,7 +59,7 @@ export const onMouseOut = (props: IMouseOutProps) => (d: IGroupDataItem | number
   select(nodes[i])
     .transition()
     .duration(250)
-    .attr('fill', colors(String(i)));
+    .attr('fill', colors(typeof d === 'object' && d.colorRef ? d.colorRef : String(i)));
 }
 export const onClick = (onClick?: (v: any) => void) => (d: IGroupDataItem | number) => {
   if (onClick) {

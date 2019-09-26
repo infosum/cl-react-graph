@@ -31,7 +31,7 @@ export interface IHistogramBar {
   margin: number;
   hover?: Partial<Record<EColorManipulations, number>>,
   overlayMargin: number; // When bars are rendered as EGroupedBarLayout.OVERLAID 
-  width: number;
+  width?: number;
 }
 
 export interface IGrid {

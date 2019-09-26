@@ -336,9 +336,8 @@ export const horizontalHistogramD3 = ((): IChartAdaptor<IHistogramProps> => {
         });
       });
 
-
       this.drawAxes();
-      drawHorizontalGrid(x, y, gridX, gridY, props, maxValueCount(data.counts));
+      drawHorizontalGrid({ x, y, gridX, gridY, props, ticks: maxValueCount(data.counts) });
       this.updateChart(data.bins, dataSets);
     },
 

@@ -35,33 +35,39 @@ type TInitialState = ITornadoProps | {
 const initialState: TInitialState = {
   data: {
     bins: ['0 - 10', '11 - 20'],
-    counts: [{
-      label: 'Foreground',
-      data: [
-        [2, 1], // Male bin 1, Male bin 2,
-        [5, 3], // Female bin 1, Female bin 2,
-      ]
-    },
-    {
-      label: 'Background',
-      data: [
-        [5, 10], // Male bin 1, Male bin 2,
-        [5, 3], // Female bin 1, Female bin 2,
-      ]
-    },
+    // @Todo test with only one count set
+    counts: [
+      {
+        label: 'Background',
+        data: [
+          [5, 100], // Male bin 1, Male bin 2,
+          [10, 20], // Female bin 1, Female bin 2,
+        ]
+      },
+      {
+        label: 'Foreground',
+        data: [
+          [2, 1], // Male bin 1, Male bin 2,
+          [5, 3], // Female bin 1, Female bin 2,
+        ]
+      },
+
     ],
   },
   axis,
+  splitBins: ['Male', 'Female'],
   bar: {
-    overlayMargin: 5,
+    overlayMargin: 10,
     hover: {
       lighten: 0.1,
     },
+    // width: 40,
   },
+  center: true,
   delay: 0,
   duration: 400,
   grid,
-  groupLayout: EGroupedBarLayout.GROUPED,
+  groupLayout: EGroupedBarLayout.OVERLAID,
 }
 
 function reducer(state: ITornadoProps, action: Actions) {
@@ -72,7 +78,7 @@ function reducer(state: ITornadoProps, action: Actions) {
 const Tornado = () => {
   const [state, dispatch] = useReducer(reducer, initialState as ITornadoProps);
   const chart = <TornadoChart
-
+    {...initialState}
     data={state.data}
     width="100%" />;
   return (

@@ -71,8 +71,9 @@ interface IProps<T = IHistogramProps> {
   props: T,
   ticks: number,
 }
+
 export const drawHorizontalGrid: <T extends IHistogramProps>(props: IProps<T>) => void = (args) => {
-  const { gridX, gridY, props, ticks } = args;
+  const { x, y, gridX, gridY, props, ticks } = args;
   const { height, width, axis, grid, margin } = props;
   const axisWidth = axis.y.style['stroke-width'];
 
@@ -110,53 +111,6 @@ export const drawHorizontalGrid: <T extends IHistogramProps>(props: IProps<T>) =
     attrs(gridY.selectAll('.domain'), { ...axis.x.style, stroke: 'transparent' });
   }
 };
-
-
-// export const drawHorizontalGrid: <T extends IHistogramData>(props: any) = (
-//   x: AnyScale,
-//   y: AnyScale,
-//   gridX: TSelection,
-//   gridY: TSelection,
-//   props: T,
-//   ticks: number,
-// ) => {
-//   const { height, width, axis, grid, margin } = props;
-//   const axisWidth = axis.y.style['stroke-width'];
-
-//   const offset = {
-//     x: yAxisWidth(axis),
-//     y: gridHeight(props) + margin.top,
-//   };
-
-//   if (grid.x.visible) {
-//     // Add the X grid lines
-//     gridX.attr('transform', `translate(${offset.x}, ${offset.y})`)
-//       .transition()
-//       .call(makeXGridLines(x, get(grid, 'x.ticks', ticks))
-//         .tickSize(-height + xAxisHeight(props.axis) + (margin.top * 2))
-//         .tickFormat(() => ''));
-
-//     attrs(gridX.selectAll('.tick line'), grid.x.style);
-//     attrs(gridX.selectAll('.domain'), { ...axis.y.style, stroke: 'transparent' });
-//   }
-
-//   if (grid.y.visible) {
-//     // add the Y grid lines
-//     gridY.attr('transform', 'translate(' + (yAxisWidth(axis) + axisWidth) + ', 0)')
-//       .transition()
-//       .call(makeYGridLines(y, get(grid, 'y.ticks', ticks))
-//         .tickSize(-width + (margin.left * 2) + yAxisWidth(axis))
-//         .tickFormat(() => ''),
-//       );
-
-//     attrs(gridY.selectAll('.tick line'), grid.y.style);
-
-//     // Hide the first horizontal grid line to show axis
-//     gridY.selectAll('.gridY .tick line').filter((d, i) => i === 0)
-//       .attr('display', 'none');
-//     attrs(gridY.selectAll('.domain'), { ...axis.x.style, stroke: 'transparent' });
-//   }
-// };
 
 export const gridHeight = (props): number => {
   const { height, margin, axis } = props;

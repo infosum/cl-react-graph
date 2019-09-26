@@ -1,6 +1,8 @@
 import { Component } from 'react';
+
 import { IGroupDataItem } from './HistogramD3';
 import { DeepPartial } from './utils/types';
+
 export interface IChartAdaptor<P> {
     create: (el: Element, props: DeepPartial<P>) => void;
     update: (el: Element, props: DeepPartial<P>) => void;
@@ -18,12 +20,13 @@ export declare enum EColorManipulations {
     'opaquer' = "opaquer",
     'rotate' = "rotate"
 }
+
 export interface IHistogramBar {
     groupMargin: number;
     margin: number;
     hover?: Partial<Record<EColorManipulations, number>>;
     overlayMargin: number;
-    width: number;
+    width?: number;
 }
 export interface IGrid {
     x: {
@@ -90,7 +93,7 @@ export interface IHistogramProps {
     /**
      *  @deprecated
      */
-    stacked: boolean;
+    stacked?: boolean;
     groupLayout: EGroupedBarLayout;
     onClick?: (bar: IGroupDataItem) => void;
     stroke: IStroke;

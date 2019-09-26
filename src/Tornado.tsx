@@ -34,6 +34,7 @@ export interface ITornadoData {
 export interface ITornadoProps {
   axis: IAxes;
   bar: IHistogramBar;
+  center: boolean;
   className: string;
   data: ITornadoData;
   delay: number;
@@ -45,6 +46,7 @@ export interface ITornadoProps {
   margin: IMargin;
   groupLayout: EGroupedBarLayout;
   onClick?: (bar: IGroupDataItem) => void;
+  splitBins: [string, string];
   stroke: IStroke;
   tip: any;
   tipContainer: string;
