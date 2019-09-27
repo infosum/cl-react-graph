@@ -25,15 +25,16 @@ export declare const appendDomainRange: (props: IAppendDomainRangeProps) => void
 export declare const shouldFormatTick: (axis: IAxis) => boolean;
 export declare const formatTick: (axis: IAxis) => (v: string | number) => string | number;
 interface ITickProps {
+    scaleBand: AnyScale;
     axis: Axis<string> | Axis<number> | Axis<number | {
         valueOf(): number;
     }> | Axis<number | string>;
     axisConfig: IAxis;
     axisLength: number;
-    valuesCount: number;
-    scaleBand: AnyScale;
     limitByValues?: boolean;
+    valuesCount: number;
 }
-export declare const ticks: ({ axis, axisConfig, axisLength, valuesCount, scaleBand, limitByValues, }: ITickProps) => void;
+export declare const ticks: (props: ITickProps) => void;
+export declare const tickSize: ({ axis, axisConfig, axisLength, limitByValues, scaleBand, valuesCount, }: ITickProps) => void;
 export declare const maxValueCount: (counts: IHistogramDataSet[]) => number;
 export {};
