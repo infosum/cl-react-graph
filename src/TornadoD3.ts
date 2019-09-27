@@ -2,6 +2,7 @@ import {
   axisBottom,
   axisLeft,
 } from 'd3-axis';
+import { format } from 'd3-format';
 import {
   scaleBand,
   scaleLinear,
@@ -9,6 +10,7 @@ import {
   scalePoint,
 } from 'd3-scale';
 import { Selection } from 'd3-selection';
+import { timeFormat } from 'd3-time-format';
 import merge from 'lodash/merge';
 
 import colorScheme from './colors';
@@ -44,9 +46,10 @@ import {
   grid as defaultGrid,
 } from './utils/defaults';
 import {
-  appendDomainRange,
   isStacked,
+  shouldFormatTick,
   ticks,
+  tickSize,
 } from './utils/domain';
 import {
   onClick,
@@ -176,8 +179,27 @@ export const tornadoD3 = ((): IChartAdaptor<ITornadoProps> => {
         .paddingInner(barMargin(props.bar));
 
       const xAxis = axisBottom<number>(x)
-        .tickFormat((v) => v.toString().replace('-', ''));
-      const yAxis = axisLeft<string>(y);
+        .tickFormat((v) => {
+          const n = v.toString().replace('-', '');
+
+          if (shouldFormatTick(axis.x)) {
+            if (axis.x.scale === 'TIME') {
+              return timeFormat(axis.x.dateFormat)(new Date(n));
+            }
+            return isNaN(Number(v)) ? n : format(axis.x.numberFormat)(Number(n))
+          }
+          return n;
+        });
+
+      tickSize({
+        axis: xAxis,
+        axisLength: w,
+        scaleBand: x,
+        axisConfig: axis.x,
+        limitByValues: false,
+        valuesCount: 10,
+      });
+
       this.calculateDomain();
 
       const x2 = scalePoint<any>();
@@ -189,7 +211,7 @@ export const tornadoD3 = ((): IChartAdaptor<ITornadoProps> => {
         .domain(props.splitBins);
 
       /** Y-Axis (label axis) set up */
-
+      const yAxis = axisLeft<string>(y);
       ticks({
         axis: yAxis,
         valuesCount,
