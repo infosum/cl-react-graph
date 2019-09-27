@@ -1,3 +1,4 @@
+import approxNumber from 'approximate-number';
 import React, { useReducer } from 'react';
 
 import {
@@ -17,10 +18,20 @@ import { DeepPartial } from '../../../src/utils/types';
 import JSXToString from '../components/JSXToString';
 import Layout from '../components/layout';
 import SEO from '../components/seo';
-import {
-  axis,
-  grid,
-} from '../data';
+import { grid } from '../data';
+
+const axis: DeepPartial<IAxes> = {
+  x: {
+    numberFormat: ".2s",
+    scale: 'LINEAR',
+    ticks: 4,
+  },
+  y: {
+    ticks: 3,
+    tickSize: 0,
+  },
+};
+
 
 type Actions = { type: 'TEST' }
   | { type: 'HERE' };
@@ -40,15 +51,15 @@ const initialState: TInitialState = {
       {
         label: 'Background',
         data: [
-          [5, 100], // Male bin 1, Male bin 2,
-          [10, 20], // Female bin 1, Female bin 2,
+          [5000, 100000], // Male bin 1, Male bin 2,
+          [10000, 20000], // Female bin 1, Female bin 2,
         ]
       },
       {
         label: 'Foreground',
         data: [
-          [2, 1], // Male bin 1, Male bin 2,
-          [5, 3], // Female bin 1, Female bin 2,
+          [2000, 1000], // Male bin 1, Male bin 2,
+          [5000, 3000], // Female bin 1, Female bin 2,
         ]
       },
 

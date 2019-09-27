@@ -101,20 +101,29 @@ export const formatTick = (axis: IAxis) => (v: string | number) => {
 
 
 interface ITickProps {
+  scaleBand: AnyScale;
   axis: Axis<string> | Axis<number> | Axis<number | { valueOf(): number }> | Axis<number | string>;
   axisConfig: IAxis;
   axisLength: number;
-  valuesCount: number;
-  scaleBand: AnyScale;
   limitByValues?: boolean;
+  valuesCount: number;
 }
-export const ticks = ({
+
+export const ticks = (props: ITickProps) => {
+  const { axis, axisConfig } = props;
+  tickSize(props);
+  if (shouldFormatTick(axisConfig)) {
+    axis.tickFormat(formatTick(axisConfig) as any);
+  }
+}
+
+export const tickSize = ({
   axis,
   axisConfig,
   axisLength,
-  valuesCount,
-  scaleBand,
   limitByValues,
+  scaleBand,
+  valuesCount,
 }: ITickProps) => {
   const tickSize = get(axisConfig, 'tickSize', undefined);
   const ticks = get(axisConfig, 'ticks', undefined);
@@ -128,9 +137,6 @@ export const ticks = ({
       // Show one in 10 axis labels
       axis.tickValues((scaleBand.domain() as any[]).filter((d, i) => !(i % 10)));
     }
-  }
-  if (shouldFormatTick(axisConfig)) {
-    axis.tickFormat(formatTick(axisConfig) as any);
   }
 }
 
