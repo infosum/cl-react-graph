@@ -71,6 +71,9 @@ export const maxValueCount = (counts: ITornadoDataSet[]): number => {
   }, 0);
 };
 
+// The height for the x axis labels showing the left/right labels. 
+const SPLIT_AXIS_HEIGHT = 20;
+
 export const tornadoD3 = ((): IChartAdaptor<ITornadoProps> => {
   let svg: Selection<any, any, any, any>;;
   let tipContainer;
@@ -147,7 +150,6 @@ export const tornadoD3 = ((): IChartAdaptor<ITornadoProps> => {
       tipContent = r.tipContent;
       tipContainer = r.tipContainer;
       [gridX, gridY] = makeGrid(svg);
-      [xAxisContainer, yAxisContainer, xAxisLabel, yAxisLabel] = makeScales(svg);
 
       // Used to display the 2 split bin labels
       xAxisContainer2 = svg.append('g').attr('class', 'xAxisContainer2');
@@ -155,7 +157,10 @@ export const tornadoD3 = ((): IChartAdaptor<ITornadoProps> => {
         .append<SVGElement>('g')
         .attr('class', 'histogram-container');
 
-      this.update(el, newProps);
+      // Render Axis above bars so that we can see the y axis overlaid
+      [xAxisContainer, yAxisContainer, xAxisLabel, yAxisLabel] = makeScales(svg);
+
+      this.update(el, props);
     },
 
     /**
@@ -163,7 +168,6 @@ export const tornadoD3 = ((): IChartAdaptor<ITornadoProps> => {
     */
     drawAxes() {
       const { bar, data, groupLayout, margin, width, height, axis } = props;
-      const SPLIT_AXIS_HEIGHT = 20;
       const valuesCount = maxValueCount(data.counts);
       const w = gridWidth(props);
       const h = gridHeight(props) - SPLIT_AXIS_HEIGHT;
@@ -220,9 +224,11 @@ export const tornadoD3 = ((): IChartAdaptor<ITornadoProps> => {
         scaleBand: y,
         limitByValues: true,
       });
-
+      // Move the y axis ticks to the left of the chart
+      yAxis.tickPadding(x(0) + 10)
       yAxisContainer
-        .attr('transform', 'translate(' + yAxisWidth(axis) + ', ' + margin.top + ' )')
+        // Place the y axis in the middle of the chart
+        .attr('transform', 'translate(' + (yAxisWidth(axis) + x(0)) + ', ' + margin.top + ' )')
         .call(yAxis);
 
       // @TODO - Stacked? (was using appendDomainRange())
@@ -332,13 +338,6 @@ export const tornadoD3 = ((): IChartAdaptor<ITornadoProps> => {
         .duration(duration)
         .delay(delay)
         .attr('x', stackedOffset)
-        // Hide bar's bottom border
-        .attr('stroke-dasharray',
-          (d: IGroupDataItem, i): string => {
-            const currentHeight = gWidth - (x(d.value));
-            const barWidth = getBarWidth(i, props.groupLayout, props.bar, innerScaleBand);
-            return `${barWidth} 0 ${currentHeight} ${barWidth}`;
-          })
         .attr('width', (d: IGroupDataItem): number => {
           const w = d.side === 'left' ? -d.value : d.value;
           return Math.abs(x(w) - x(0))
