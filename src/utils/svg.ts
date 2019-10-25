@@ -51,11 +51,12 @@ export const makeGrid = (svg: TSelection): [TSelection, TSelection] => {
   return [gridX, gridY];
 }
 
-export const makeScales = (svg: TSelection): [TSelection, TSelection, TSelection, TSelection] => {
+export const makeScales = (svg: TSelection): [TSelection, TSelection, TSelection, TSelection, TSelection] => {
   return [
     svg.append('g').attr('class', 'x-axis'),
     svg.append('g').attr('class', 'y-axis'),
     svg.append('g'),
     svg.append('g'),
+    svg.append('g').attr('class', 'x-axis-top'),
   ];
 };

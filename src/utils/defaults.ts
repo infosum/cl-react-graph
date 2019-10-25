@@ -5,6 +5,7 @@ import {
   IStroke,
 } from '../';
 import {
+  IAxis,
   IGrid,
   ISVGLineStyle,
 } from '../Histogram';
@@ -37,6 +38,36 @@ export const line: ILineProps = {
   stroke: '#000',
   strokeDashArray: '0',
   strokeDashOffset: 0,
+};
+
+export const annotationAxisDefaults: IAxis = {
+  dateFormat: '',
+  height: 20,
+  label: '',
+  margin: 20,
+  numberFormat: '',
+  scale: 'ORDINAL',
+  style: {
+    ...lineStyle,
+    'stroke': 'transparent',
+    'stroke-opacity': 0,
+    'stroke-width': 0,
+    'visible': false,
+    'opacity': 0,
+  },
+  text: {
+    style: {
+      dy: '.35em',
+      transform: 'rotate(0)',
+      x: 0,
+      y: 10,
+    },
+  },
+  tickSize: 0,
+  ticks: 3,
+  tickValues: null,
+  visible: true,
+  width: 50,
 };
 
 export const axis: IAxes = {
