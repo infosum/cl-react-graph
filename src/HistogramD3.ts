@@ -32,6 +32,7 @@ import {
   groupedMargin,
 } from './utils/bars';
 import {
+  annotationAxisDefaults,
   axis as defaultAxis,
   grid,
 } from './utils/defaults';
@@ -71,6 +72,7 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
   let tipContent;
   const y = scaleLinear();
   const x = scaleBand();
+  const xAnnotations = scaleBand();
   const innerScaleBand = scaleBand();
   let container: Selection<SVGElement, any, any, any>;
   let dataSets: IGroupData;
@@ -78,8 +80,10 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
   let gridY: TSelection;
   let yAxisContainer: TSelection;
   let xAxisContainer: TSelection;
+  let AnnotationAxisContainer: TSelection;
   let xAxisLabel: any;
   let yAxisLabel: any;
+  let percentBarLabel: any;
 
   const props: IHistogramProps = {
     axis: defaultAxis,
@@ -91,6 +95,7 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
     },
     className: 'histogram-d3',
     colorScheme,
+    annotations: [],
     data: {
       bins: [],
       counts: [],
@@ -110,6 +115,7 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
       right: 0,
       top: 5,
     },
+    showBinPercentages: [],
     stacked: false, // Deprecated use groupLayout instead
     stroke: {
       color: '#005870',
@@ -138,7 +144,7 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
       tipContent = r.tipContent;
       tipContainer = r.tipContainer;
       [gridX, gridY] = makeGrid(svg);
-      [xAxisContainer, yAxisContainer, xAxisLabel, yAxisLabel] = makeScales(svg);
+      [xAxisContainer, yAxisContainer, xAxisLabel, yAxisLabel, AnnotationAxisContainer] = makeScales(svg);
       container = svg
         .append<SVGElement>('g')
         .attr('class', 'histogram-container');
@@ -160,7 +166,7 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
      * Draw scales
      */
     drawAxes() {
-      const { axis, bar, domain, groupLayout, stacked, data, margin, height } = props;
+      const { axis, bar, annotations, domain, groupLayout, stacked, data, margin, height } = props;
       const valuesCount = maxValueCount(data.counts);
       const w = gridWidth(props);
       const h = gridHeight(props);
@@ -194,6 +200,42 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
           (height - xAxisHeight(props.axis) - (margin.left * 2)) + ')')
         .call(xAxis);
 
+      /** X-Axis 2 (bottom axis) for annoations if annotations data sent (and match bin length) */
+      if (annotations && annotations.length === data.bins.length) {
+
+        xAnnotations
+          .domain(annotations.map(({ value }) => value))
+          .rangeRound([0, w])
+          .paddingInner(groupedMargin(bar));
+
+        const annotationAxis = axisBottom<string>(xAnnotations);
+
+        ticks({
+          axis: annotationAxis,
+          valuesCount: annotations.length,
+          axisLength: w,
+          axisConfig: annotationAxisDefaults,
+          scaleBand: xAnnotations,
+          limitByValues: true,
+        });
+
+        AnnotationAxisContainer
+          .attr('transform', 'translate(' + (yAxisWidth(axis) + axis.y.style['stroke-width']) + ',' + (h + 14) + ')')
+          .call(annotationAxis);
+
+        // Annotation Axis styling
+        attrs(svg.selectAll('.x-axis-top .domain, .x-axis-top .tick line'), axis.x.style);
+        attrs(svg.selectAll('.x-axis-top .tick text'), axis.x.text.style as any);
+
+        // Style the annotations with their specific color
+        AnnotationAxisContainer
+          .selectAll('g.tick')
+          .select('text')
+          .style('fill', (d, i) => annotations[i].color);
+        // Hide the line for the annotations axis
+        AnnotationAxisContainer.call(g => g.select(".domain").remove());
+
+      }
       /** Y-Axis (value axis) set up */
       appendDomainRange({
         data: dataSets,
@@ -230,7 +272,7 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
       bins: string[],
       groupData: IGroupData,
     ) {
-      const { axis, height, width, margin, delay, duration, tip, groupLayout, stacked } = props;
+      const { axis, annotations, data, height, width, margin, delay, duration, tip, groupLayout, showBinPercentages, stacked } = props;
 
       const stackedOffset = (d: IGroupDataItem, stackIndex: number): number => {
         const thisGroupData = groupData.find((gData) => {
@@ -245,6 +287,16 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
           ? oSet
           : 0;
         return y(d.value + offset);
+      }
+
+      const calculateXPosition = (d: IGroupDataItem, stackIndex: number, offset?: number): number => {
+        const totalWidth = innerScaleBand.bandwidth();
+        const barWidth = getBarWidth(stackIndex, props.groupLayout, props.bar, innerScaleBand);
+        const overlaidXPos = (totalWidth / 2) - (barWidth / 2);
+        const finalXPos = (props.groupLayout === EGroupedBarLayout.OVERLAID)
+          ? overlaidXPos
+          : Number(innerScaleBand(String(d.groupLabel)));
+        return offset ? finalXPos + offset : finalXPos;
       }
 
       const colors = scaleOrdinal(props.colorScheme);
@@ -282,12 +334,7 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
         .on('mousemove', () => tip.fx.move(tipContainer))
         .on('mouseout', onMouseOut({ tip, tipContainer, colors }))
         .merge(bars)
-        .attr('x', (d: IGroupDataItem, i: number) => {
-          const overlay = (props.groupLayout === EGroupedBarLayout.OVERLAID)
-            ? i * props.bar.overlayMargin
-            : Number(innerScaleBand(String(d.groupLabel)));
-          return overlay;
-        })
+        .attr('x', (d: IGroupDataItem, i: number) => calculateXPosition(d, i))
         .attr('width', (d, i) => getBarWidth(i, props.groupLayout, props.bar, innerScaleBand))
         .attr('fill', (d, i) => colors(String(i)))
         .transition()
@@ -303,6 +350,49 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
           })
         .attr('height', (d: IGroupDataItem): number => gHeight - (y(d.value)));
 
+      // We need to show the bar percentage splits if flag enabled
+      if (showBinPercentages) {
+
+        const percents = g.enter()
+          .append<SVGElement>('g')
+          .merge(g)
+          .attr('transform', (d: any[]) => {
+            let xd = x(d[0].label);
+            if (xd === undefined) {
+              xd = 0;
+            }
+            const xDelta = yAxisWidth(axis)
+              + axis.y.style['stroke-width']
+              + xd;
+            return `translate(${xDelta}, 0)`;
+          })
+
+          .selectAll<SVGElement, {}>('text')
+          .data((d) => d);
+
+        percents
+          .enter()
+          .append<SVGElement>('text')
+          .attr('class', 'percentage-label')
+          .attr('y', stackedOffset)
+          .data((d) => d)
+          .merge(percents)
+          .text((d, i) => {
+            let total = 0;
+            groupData.forEach((group) => total += group[i].value);
+            const percentage = Math.round((d.value / total) * 100);
+            return showBinPercentages[i] ? `${percentage}%` : '';
+          })
+          .style('text-anchor', 'middle')
+          .style('font-size', '0.675rem')
+          .attr('fill', (d, i) => colors(String(i)))
+          .attr('x', (d: IGroupDataItem, i: number) => {
+            const barWidthForOffset = getBarWidth(i, props.groupLayout, props.bar, innerScaleBand);
+            return calculateXPosition(d, i, barWidthForOffset / 2);
+          })
+          .attr('dy', -2);
+        percents.exit().remove();
+      };
       bars.exit().remove();
       g.exit().remove();
 

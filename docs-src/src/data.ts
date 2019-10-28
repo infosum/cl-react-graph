@@ -30,11 +30,11 @@ export const data: IHistogramData = {
   bins: ['Data 1', 'Data 6', 'Data 3', 'Dat 4'],
   counts: [
     {
-      data: [1, 2, 3, 4],
+      data: [10, 40, 300, 1200],
       label: 'DataSet 1',
     },
     {
-      data: [13, 14, 15, 16],
+      data: [5, 10, 15, 50],
       label: 'DataSet 2',
     },
   ],

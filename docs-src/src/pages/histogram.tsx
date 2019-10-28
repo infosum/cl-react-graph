@@ -80,7 +80,7 @@ const initialSate: IInitialState = {
   delay: 0,
   duration: 400,
   grid,
-  groupLayout: EGroupedBarLayout.GROUPED,
+  groupLayout: EGroupedBarLayout.OVERLAID,
 };
 
 export type GridActions = { type: 'setGridTicks', ticks: number, axis: 'x' | 'y' }
@@ -244,7 +244,14 @@ const HistogramExample = () => {
     axis={state.axis}
     bar={state.bar}
     grid={state.grid}
-    width={'100%'}
+    annotations={[
+      { color: 'red', value: '-30%' },
+      { color: 'green', value: '+4%' },
+      { color: 'red', value: '-5%' },
+      { color: 'green', value: '+15%' }
+    ]}
+    showBinPercentages={[true, true]}
+    width="100%"
     onClick={(d) => console.log(d)}
     height={300}
     delay={state.delay}
