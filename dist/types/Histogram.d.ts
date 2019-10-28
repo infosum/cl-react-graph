@@ -70,6 +70,10 @@ export interface IMargin {
     right: number;
     bottom: number;
 }
+export interface IAnnotation {
+    color: string;
+    value: string;
+}
 export declare enum EGroupedBarLayout {
     GROUPED = 0,
     STACKED = 1,
@@ -79,6 +83,7 @@ export interface IHistogramProps {
     axis: IAxes;
     bar: IHistogramBar;
     className: string;
+    annotations?: IAnnotation[];
     data: IHistogramData;
     delay: number;
     duration: number;
@@ -87,6 +92,7 @@ export interface IHistogramProps {
     grid: IGrid;
     height: number;
     margin: IMargin;
+    showBinPercentages?: boolean[];
     /**
      *  @deprecated
      */
@@ -102,7 +108,7 @@ export interface IHistogramProps {
     };
     width: number | string;
 }
-export declare type Scale = 'LINEAR' | 'TIME' | 'LOG';
+export declare type Scale = 'LINEAR' | 'TIME' | 'LOG' | 'ORDINAL';
 export interface ISVGLineStyle {
     'stroke': string;
     'fill': string;
