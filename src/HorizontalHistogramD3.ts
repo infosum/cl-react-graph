@@ -1,4 +1,3 @@
-import d3 from 'd3';
 import {
   axisBottom,
   axisLeft,
@@ -347,8 +346,8 @@ export const horizontalHistogramD3 = ((): IChartAdaptor<IHistogramProps> => {
           .attr('class', 'percentage-label')
           .attr('x', stackedOffset)
           .text((d, i) => {
-            let total = 0;
-            groupData.forEach((group) => total += group[i].value);
+            // To show the correct percentage split we need to total all the other values in this count set
+            const total = groupData.reduce((prev, group) => prev + group[i].value, 0);
             const percentage = Math.round((d.value / total) * 100);
             return showBinPercentages[i] ? `${percentage}%` : '';
           })
@@ -356,7 +355,6 @@ export const horizontalHistogramD3 = ((): IChartAdaptor<IHistogramProps> => {
           .style('text-anchor', 'middle')
           .style('font-size', '0.675rem')
           .attr('fill', (d, i) => colors(String(i)))
-          //.attr('transform', 'rotate(90)')
           .merge(percents)
           .attr('x', (d: IGroupDataItem, i: number): number => {
             const barWidth = getBarWidth(i, props.groupLayout, props.bar, innerScaleBand);
@@ -368,10 +366,19 @@ export const horizontalHistogramD3 = ((): IChartAdaptor<IHistogramProps> => {
           })
           .attr('dy', (d, i) => {
             const barWidth = getBarWidth(i, props.groupLayout, props.bar, innerScaleBand);
+            const datasetsCount = innerScaleBand.domain().length;
+            // Overlaid group type we need to use the bar width / 2 for the first bar 
+            // center point but for the second bar we need to take into account half of the overlay margin as it's
+            // positioned within the previous bar
             if (props.groupLayout === EGroupedBarLayout.OVERLAID) {
-              return i === 0 ? (barWidth / 2) + 2 : (barWidth / 2) + (props.bar.overlayMargin + 2)
+              return i === 0 ? (barWidth / 2) : (barWidth + props.bar.overlayMargin * 2) / 2
             } else {
-              return i === 0 ? (barWidth / 2) + 2 : ((innerScaleBand.bandwidth() * (innerScaleBand.domain().length + 1)) / 2) + 6
+              // If we are using grouped layout then we need to calculate the total width of the bars + margin
+              // Center point calculated by dividing the bar width and margin / datasets count and adding together
+              // Second bar calculation needs to minus this value from the total width
+              const totalWidth = ((barWidth * innerScaleBand.domain().length)) + props.bar.margin;
+              const centerPos = (barWidth / datasetsCount) + (props.bar.margin / datasetsCount);
+              return i === 0 ? centerPos : totalWidth - centerPos
             }
           });
         percents.exit().remove();
