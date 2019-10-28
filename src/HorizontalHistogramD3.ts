@@ -316,7 +316,7 @@ export const horizontalHistogramD3 = ((): IChartAdaptor<IHistogramProps> => {
             const barWidth = getBarWidth(i, props.groupLayout, props.bar, innerScaleBand);
             return `${barWidth} 0 ${currentHeight} ${barWidth}`;
           })
-        .attr('width', (d: IGroupDataItem): number => { console.log('bars:', x(d.value)); return x(d.value) });
+        .attr('width', (d: IGroupDataItem): number => x(d.value));
 
       // We need to show the bar percentage splits if flag enabled
       if (showBinPercentages) {
