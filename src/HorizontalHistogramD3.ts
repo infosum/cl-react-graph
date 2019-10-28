@@ -356,14 +356,7 @@ export const horizontalHistogramD3 = ((): IChartAdaptor<IHistogramProps> => {
           .style('font-size', '0.675rem')
           .attr('fill', (d, i) => colors(String(i)))
           .merge(percents)
-          .attr('x', (d: IGroupDataItem, i: number): number => {
-            const barWidth = getBarWidth(i, props.groupLayout, props.bar, innerScaleBand);
-            if (props.groupLayout === EGroupedBarLayout.OVERLAID) {
-              return x(d.value) + (barWidth / 3)
-            } else {
-              return x(d.value) + (barWidth / 2)
-            }
-          })
+          .attr('x', (d: IGroupDataItem): number => x(d.value) + 15) // 15 added to space the label away from the bar
           .attr('dy', (d, i) => {
             const barWidth = getBarWidth(i, props.groupLayout, props.bar, innerScaleBand);
             const datasetsCount = innerScaleBand.domain().length;
