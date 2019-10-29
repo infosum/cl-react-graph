@@ -244,7 +244,7 @@ const HistogramExample = () => {
     axis={state.axis}
     bar={state.bar}
     grid={state.grid}
-    width={100 %}
+    width="100%"
     annotations={[
       { color: 'red', value: '-30%' },
       { color: 'red', value: '-30%' },
