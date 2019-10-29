@@ -37,7 +37,7 @@ import Layout from '../components/layout';
 import SEO from '../components/seo';
 import { TabContainer } from '../components/TabContainer';
 import {
-  axis,
+  analyticsAxis,
   data,
   grid,
   theme,
@@ -50,8 +50,8 @@ const tipContentFns = [
     bins[i] + '<br />Another tip ' + d.toFixed(2),
 ];
 
-const now = new Date();
-data.bins = data.bins.map((d, i) => new Date(new Date().setDate(now.getDate() + i)).toLocaleString());
+// const now = new Date();
+// data.bins = data.bins.map((d, i) => new Date(new Date().setDate(now.getDate() + i)).toLocaleString());
 
 export interface IInitialState {
   axis: DeepPartial<IAxes>;
@@ -68,7 +68,7 @@ export interface IInitialState {
 }
 
 const initialSate: IInitialState = {
-  axis,
+  axis: analyticsAxis,
   bar: {
     overlayMargin: 5,
     hover: {
@@ -238,7 +238,6 @@ const HistogramExample = () => {
       label: '',
     }],
   };
-
   const Chart = state.chartType === 'Histogram' ? Histogram : HorizontalHistogram;
   const chart = <Chart data={state.data}
     axis={state.axis}
@@ -246,10 +245,9 @@ const HistogramExample = () => {
     grid={state.grid}
     width="100%"
     annotations={[
-      { color: 'red', value: '-30%' },
-      { color: 'red', value: '-30%' },
+      { color: 'grey', value: '0%' },
+      { color: 'grey', value: '0%' },
       { color: 'red', value: '-5%' },
-      { color: 'green', value: '+15%' }
     ]}
     showBinPercentages={[true, true]}
     onClick={(d) => console.log(d)}

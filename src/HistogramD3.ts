@@ -380,10 +380,10 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
           .data((d) => d)
           .merge(percents)
           .text((d, i) => {
-            let total = 0;
-            groupData.forEach((group) => total += group[i].value);
+            // To show the correct percentage split we need to total all the other values in this count set
+            const total = groupData.reduce((prev, group) => prev + group[i].value, 0);
             const percentage = Math.round((d.value / total) * 100);
-            return showBinPercentages[i] ? `${percentage}%` : '';
+            return showBinPercentages[i] ? `${d.value === 0 ? 0 : percentage}%` : '';
           })
           .style('text-anchor', 'middle')
           .style('font-size', '0.675rem')
