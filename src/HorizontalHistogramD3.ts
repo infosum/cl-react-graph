@@ -185,7 +185,7 @@ export const horizontalHistogramD3 = ((): IChartAdaptor<IHistogramProps> => {
       if (annotations && annotations.length === data.bins.length) {
 
         yAnnotations
-          .domain(annotations.map(({ value }) => value))
+          .domain(data.bins)
           .rangeRound([0, h])
           .paddingInner(groupedMargin(bar));
 
@@ -199,7 +199,8 @@ export const horizontalHistogramD3 = ((): IChartAdaptor<IHistogramProps> => {
           scaleBand: yAnnotations,
           limitByValues: true,
         });
-
+        // Override the default axis bin labels with the custom annotations 
+        annotationAxis.tickFormat((d, i) => annotations[i].value);
         AnnotationAxisContainer
           .attr('transform', 'translate(' + Number(yAxisWidth(axis) - 20) + ', ' + margin.top + ' )')
           .call(annotationAxis);
