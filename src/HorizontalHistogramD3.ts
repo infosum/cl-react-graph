@@ -324,13 +324,13 @@ export const horizontalHistogramD3 = ((): IChartAdaptor<IHistogramProps> => {
         const percents = g.enter()
           .append<SVGElement>('g')
           .merge(g)
-          .attr('transform', (d: any[]) => {
+          .attr('transform', (d: any[], index: number) => {
             let yd = y(d[0].label);
             if (yd === undefined) {
               yd = 0;
             }
             const x = yAxisWidth(axis) + axis.x.style['stroke-width'];
-            return `translate(${x}, ${margin.top + yd})`;
+            return `translate(${x}, ${(margin.top + yd) * index + 1})`;
           })
 
           .selectAll<SVGElement, {}>('text')
@@ -349,7 +349,7 @@ export const horizontalHistogramD3 = ((): IChartAdaptor<IHistogramProps> => {
           .text((d, i) => {
             // To show the correct percentage split we need to total all the other values in this count set
             const total = groupData.reduce((prev, group) => prev + group[i].value, 0);
-            const percentage = Math.round((d.value / total) * 100);
+            const percentage = d.value === 0 ? 0 : Math.round((d.value / total) * 100);
             return showBinPercentages[i] ? `${percentage}%` : '';
           })
           .data((d) => d)

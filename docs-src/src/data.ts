@@ -27,6 +27,20 @@ export const grid: IGrid = {
 };
 
 export const data: IHistogramData = {
+  bins: ['Female', 'Male', 'Other'],
+  counts: [
+    {
+      data: [79200, 52400, 13300],
+      label: 'Baseline',
+    },
+    {
+      data: [60000, 34230, 10000],
+      label: 'Filtered',
+    },
+  ]
+}
+/*
+export const data: IHistogramData = {
   bins: ['Data 1', 'Data 6', 'Data 3', 'Dat 4'],
   counts: [
     {
@@ -38,6 +52,17 @@ export const data: IHistogramData = {
       label: 'DataSet 2',
     },
   ],
+};
+*/
+
+export const analyticsAxis: DeepPartial<IAxes> = {
+  x: {
+    scale: 'ORDINAL',
+  },
+  y: {
+    // ...defaultAxis.y,
+    ticks: 3,
+  },
 };
 
 export const axis: DeepPartial<IAxes> = {
