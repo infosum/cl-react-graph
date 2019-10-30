@@ -224,10 +224,6 @@ export const horizontalHistogramD3 = ((): IChartAdaptor<IHistogramProps> => {
           .attr('transform', 'translate(' + Number(yAxisWidth(axis)) + ', ' + margin.top + ' )')
           .call(annotationAxis);
 
-        // Annotation Axis styling
-        attrs(svg.selectAll('.y-axis-left .domain, .y-axis-left .tick line'), axis.x.style);
-        attrs(svg.selectAll('.y-axis-left .tick text'), axis.y.text.style as any);
-
         // Style the annotations with their specific color
         yAnnotationAxisContainer
           .selectAll('g.tick')
