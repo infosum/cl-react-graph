@@ -11,5 +11,5 @@ interface ISizeProps {
 export declare const makeSvg: (el: Element, svg: Selection<any, any, any, any>) => Selection<any, any, any, any>;
 export declare const sizeSVG: (svg: Selection<any, any, any, any>, props: ISizeProps) => void;
 export declare const makeGrid: (svg: Selection<any, any, any, any>) => [Selection<any, any, any, any>, Selection<any, any, any, any>];
-export declare const makeScales: (svg: Selection<any, any, any, any>) => [Selection<any, any, any, any>, Selection<any, any, any, any>, Selection<any, any, any, any>, Selection<any, any, any, any>, Selection<any, any, any, any>];
+export declare const makeScales: (svg: Selection<any, any, any, any>) => [Selection<any, any, any, any>, Selection<any, any, any, any>, Selection<any, any, any, any>, Selection<any, any, any, any>, Selection<any, any, any, any>, Selection<any, any, any, any>];
 export {};

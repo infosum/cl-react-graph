@@ -21,6 +21,7 @@ import {
 } from './grid';
 import {
   EGroupedBarLayout,
+  IAxis,
   IChartAdaptor,
   IHistogramProps,
 } from './Histogram';
@@ -76,8 +77,8 @@ export const horizontalHistogramD3 = ((): IChartAdaptor<IHistogramProps> => {
   let xAxisContainer: TSelection;
   let xAxisLabel: TSelection;
   let yAxisLabel: TSelection;
-  let AnnotationAxisContainer: TSelection;
-
+  let xAnnotationAxisContainer: TSelection;
+  let yAnnotationAxisContainer: TSelection;
   const props: IHistogramProps = {
     axis: defaultAxis,
     bar: {
@@ -136,7 +137,7 @@ export const horizontalHistogramD3 = ((): IChartAdaptor<IHistogramProps> => {
       tipContent = r.tipContent;
       tipContainer = r.tipContainer;
       [gridX, gridY] = makeGrid(svg);
-      [xAxisContainer, yAxisContainer, xAxisLabel, yAxisLabel, AnnotationAxisContainer] = makeScales(svg);
+      [xAxisContainer, yAxisContainer, xAxisLabel, yAxisLabel, xAnnotationAxisContainer, yAnnotationAxisContainer] = makeScales(svg);
       container = svg
         .append<SVGElement>('g')
         .attr('class', 'histogram-container');
@@ -153,6 +154,7 @@ export const horizontalHistogramD3 = ((): IChartAdaptor<IHistogramProps> => {
       const w = gridWidth(props);
       const h = gridHeight(props);
       const dataLabels = data.counts.map((c) => c.label);
+      const annotationsEnabled = annotations && annotations.length === data.bins.length;
 
       y.domain(data.bins)
         .rangeRound([0, h])
@@ -167,22 +169,39 @@ export const horizontalHistogramD3 = ((): IChartAdaptor<IHistogramProps> => {
       const yAxis = axisLeft<string>(y);
 
       /** Y-Axis (label axis) set up */
+      const axisYAnnotationAllowance: IAxis = {
+        ...axis.y,
+        tickSize: 30,
+        style: {
+          fill: 'none',
+          stroke: 'none',
+          opacity: 0,
+          "shape-rendering": 'none',
+          "stroke-opacity": 0,
+          "stroke-width": 0,
+          visible: false,
+        },
+        visible: false,
+      }
 
       ticks({
         axis: yAxis,
         valuesCount,
         axisLength: h,
-        axisConfig: axis.y,
+        axisConfig: annotationsEnabled ? axisYAnnotationAllowance : axis.y,
         scaleBand: y,
         limitByValues: true,
       });
-
       yAxisContainer
         .attr('transform', 'translate(' + yAxisWidth(axis) + ', ' + margin.top + ' )')
         .call(yAxis);
 
-      /** X-Axis 2 (bottom axis) for annoations if annotations data sent (and match bin length) */
+      /** Y-Axis 2 (bottom axis) for annoations if annotations data sent (and match bin length) */
       if (annotations && annotations.length === data.bins.length) {
+
+        yAxisContainer
+          .selectAll('line')
+          .style('opacity', 0)
 
         yAnnotations
           .domain(data.bins)
@@ -201,21 +220,23 @@ export const horizontalHistogramD3 = ((): IChartAdaptor<IHistogramProps> => {
         });
         // Override the default axis bin labels with the custom annotations 
         annotationAxis.tickFormat((d, i) => annotations[i].value);
-        AnnotationAxisContainer
-          .attr('transform', 'translate(' + Number(yAxisWidth(axis) - 20) + ', ' + margin.top + ' )')
+        yAnnotationAxisContainer
+          .attr('transform', 'translate(' + Number(yAxisWidth(axis)) + ', ' + margin.top + ' )')
           .call(annotationAxis);
 
         // Annotation Axis styling
-        attrs(svg.selectAll('.x-axis-top .domain, .x-axis-top .tick line'), axis.x.style);
-        attrs(svg.selectAll('.x-axis-top .tick text'), axis.x.text.style as any);
+        attrs(svg.selectAll('.y-axis-left .domain, .y-axis-left .tick line'), axis.x.style);
+        attrs(svg.selectAll('.y-axis-left .tick text'), axis.y.text.style as any);
 
         // Style the annotations with their specific color
-        AnnotationAxisContainer
+        yAnnotationAxisContainer
           .selectAll('g.tick')
           .select('text')
-          .style('fill', (d, i) => annotations[i].color);
+          .style('font-size', '0.475rem')
+          .style('fill', (d, i) => annotations[i].color)
+
         // Hide the line for the annotations axis
-        AnnotationAxisContainer.call(g => g.select(".domain").remove());
+        yAnnotationAxisContainer.call(g => g.select(".domain").remove());
 
       }
 
@@ -269,7 +290,7 @@ export const horizontalHistogramD3 = ((): IChartAdaptor<IHistogramProps> => {
         const barWidth = getBarWidth(stackIndex, props.groupLayout, props.bar, innerScaleBand);
         const overlaidYPos = (totalWidth / 2) - (barWidth / 2);
         const finalYPos = (props.groupLayout === EGroupedBarLayout.OVERLAID)
-          ? overlaidYPos + (props.bar.overlayMargin * 2)
+          ? overlaidYPos
           : Number(innerScaleBand(String(d.groupLabel)));
         return offset ? finalYPos + offset : finalYPos;
       }
@@ -362,10 +383,11 @@ export const horizontalHistogramD3 = ((): IChartAdaptor<IHistogramProps> => {
           .style('font-size', '0.675rem')
           .attr('fill', (d, i) => colors(String(i)))
           .merge(percents)
-          .attr('x', (d: IGroupDataItem): number => x(d.value) + 15) // 15 added to space the label away from the bar
+          .attr('x', (d: IGroupDataItem): number => x(d.value) + 12) // 12 added to space the label away from the bar
           .attr('y', (d: IGroupDataItem, i: number) => {
             const barWidth = getBarWidth(i, props.groupLayout, props.bar, innerScaleBand);
-            return calculateYPosition(d, i, barWidth / 2);
+            const overlaidOffset = props.bar.overlayMargin;
+            return calculateYPosition(d, i, ((barWidth + overlaidOffset) / 2));
           });
         percents.exit().remove();
       };
