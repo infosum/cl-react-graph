@@ -264,6 +264,16 @@ export const horizontalHistogramD3 = ((): IChartAdaptor<IHistogramProps> => {
         return isItStacked ? x(offset) : 0;
       }
 
+      const calculateYPosition = (d: IGroupDataItem, stackIndex: number, offset?: number): number => {
+        const totalWidth = innerScaleBand.bandwidth();
+        const barWidth = getBarWidth(stackIndex, props.groupLayout, props.bar, innerScaleBand);
+        const overlaidYPos = (totalWidth / 2) - (barWidth / 2);
+        const finalYPos = (props.groupLayout === EGroupedBarLayout.OVERLAID)
+          ? overlaidYPos + (props.bar.overlayMargin * 2)
+          : Number(innerScaleBand(String(d.groupLabel)));
+        return offset ? finalYPos + offset : finalYPos;
+      }
+
       const colors = scaleOrdinal(props.colorScheme);
       const gWidth = gridWidth(props);
 
@@ -297,18 +307,13 @@ export const horizontalHistogramD3 = ((): IChartAdaptor<IHistogramProps> => {
         .on('mousemove', () => tip.fx.move(tipContainer))
         .on('mouseout', onMouseOut({ tip, tipContainer, colors }))
         .merge(bars)
-        .attr('y', (d: IGroupDataItem, i: number) => {
-          const overlay = (props.groupLayout === EGroupedBarLayout.OVERLAID)
-            ? i * props.bar.overlayMargin
-            : Number(innerScaleBand(String(d.groupLabel)));
-          return overlay;
-        })
+        .attr('x', stackedOffset)
+        .attr('y', (d: IGroupDataItem, i: number) => calculateYPosition(d, i))
         .attr('height', (d, i) => getBarWidth(i, props.groupLayout, props.bar, innerScaleBand))
         .attr('fill', (d, i) => colors(String(i)))
         .transition()
         .duration(duration)
         .delay(delay)
-        .attr('x', stackedOffset)
         // Hide bar's bottom border
         .attr('stroke-dasharray',
           (d: IGroupDataItem, i): string => {
@@ -330,7 +335,7 @@ export const horizontalHistogramD3 = ((): IChartAdaptor<IHistogramProps> => {
               yd = 0;
             }
             const x = yAxisWidth(axis) + axis.x.style['stroke-width'];
-            return `translate(${x}, ${(margin.top + yd) * index + 1})`;
+            return `translate(${x}, ${(margin.top + yd)})`;
           })
 
           .selectAll<SVGElement, {}>('text')
@@ -358,22 +363,9 @@ export const horizontalHistogramD3 = ((): IChartAdaptor<IHistogramProps> => {
           .attr('fill', (d, i) => colors(String(i)))
           .merge(percents)
           .attr('x', (d: IGroupDataItem): number => x(d.value) + 15) // 15 added to space the label away from the bar
-          .attr('dy', (d, i) => {
+          .attr('y', (d: IGroupDataItem, i: number) => {
             const barWidth = getBarWidth(i, props.groupLayout, props.bar, innerScaleBand);
-            const datasetsCount = innerScaleBand.domain().length;
-            // Overlaid group type we need to use the bar width / 2 for the first bar 
-            // center point but for the second bar we need to take into account half of the overlay margin as it's
-            // positioned within the previous bar
-            if (props.groupLayout === EGroupedBarLayout.OVERLAID) {
-              return i === 0 ? (barWidth / 2) : (barWidth + props.bar.overlayMargin * 2) / 2
-            } else {
-              // If we are using grouped layout then we need to calculate the total width of the bars + margin
-              // Center point calculated by dividing the bar width and margin / datasets count and adding together
-              // Second bar calculation needs to minus this value from the total width
-              const totalWidth = ((barWidth * innerScaleBand.domain().length)) + props.bar.margin;
-              const centerPos = (barWidth / datasetsCount) + (props.bar.margin / datasetsCount);
-              return i === 0 ? centerPos : totalWidth - centerPos
-            }
+            return calculateYPosition(d, i, barWidth / 2);
           });
         percents.exit().remove();
       };
