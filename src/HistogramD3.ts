@@ -21,6 +21,7 @@ import {
 } from './grid';
 import {
   EGroupedBarLayout,
+  IAxis,
   IChartAdaptor,
   IHistogramProps,
 } from './Histogram';
@@ -80,7 +81,8 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
   let gridY: TSelection;
   let yAxisContainer: TSelection;
   let xAxisContainer: TSelection;
-  let AnnotationAxisContainer: TSelection;
+  let xAnnotationAxisContainer: TSelection;
+  let yAnnotationAxisContainer: TSelection;
   let xAxisLabel: any;
   let yAxisLabel: any;
   let percentBarLabel: any;
@@ -144,7 +146,7 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
       tipContent = r.tipContent;
       tipContainer = r.tipContainer;
       [gridX, gridY] = makeGrid(svg);
-      [xAxisContainer, yAxisContainer, xAxisLabel, yAxisLabel, AnnotationAxisContainer] = makeScales(svg);
+      [xAxisContainer, yAxisContainer, xAxisLabel, yAxisLabel, xAnnotationAxisContainer, yAnnotationAxisContainer] = makeScales(svg);
       container = svg
         .append<SVGElement>('g')
         .attr('class', 'histogram-container');
@@ -171,6 +173,7 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
       const w = gridWidth(props);
       const h = gridHeight(props);
       const dataLabels = data.counts.map((c) => c.label);
+      const annotationsEnabled = annotations && annotations.length === data.bins.length;
 
       x
         .domain(data.bins)
@@ -185,12 +188,16 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
       const xAxis = axisBottom<string>(x);
       const yAxis = axisLeft<number>(y);
 
+      const axisXAnnotationAllowance: IAxis = {
+        ...axis.x,
+        tickSize: 5,
+      }
       /** X-Axis (label axis) set up */
       ticks({
         axis: xAxis,
         valuesCount,
         axisLength: w,
-        axisConfig: axis.x,
+        axisConfig: annotationsEnabled ? axisXAnnotationAllowance : axis.x,
         scaleBand: x,
         limitByValues: true,
       });
@@ -221,21 +228,27 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
         // Override the default axis bin labels with the custom annotations 
         annotationAxis.tickFormat((d, i) => annotations[i].value);
 
-        AnnotationAxisContainer
+        xAnnotationAxisContainer
           .attr('transform', 'translate(' + (yAxisWidth(axis) + axis.y.style['stroke-width']) + ',' + (h + 14) + ')')
           .call(annotationAxis);
 
         // Annotation Axis styling
-        attrs(svg.selectAll('.x-axis-top .domain, .x-axis-top .tick line'), axis.x.style);
-        attrs(svg.selectAll('.x-axis-top .tick text'), axis.x.text.style as any);
+        attrs(svg.selectAll('.x-axis-bottom .domain, .x-axis-bottom .tick line'), axis.x.style);
+        attrs(svg.selectAll('.x-axis-bottom .tick text'), axis.x.text.style as any);
 
         // Style the annotations with their specific color
-        AnnotationAxisContainer
+        xAnnotationAxisContainer
           .selectAll('g.tick')
           .select('text')
-          .style('fill', (d, i) => annotations[i].color);
+          .style('fill', (d, i) => annotations[i].color)
+          .style('font-size', '0.475rem');
+
+        xAnnotationAxisContainer
+          .selectAll('line')
+          .style('opacity', 0);
+
         // Hide the line for the annotations axis
-        AnnotationAxisContainer.call(g => g.select(".domain").remove());
+        xAnnotationAxisContainer.call(g => g.select(".domain").remove());
 
       }
       /** Y-Axis (value axis) set up */
