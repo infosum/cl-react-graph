@@ -251,7 +251,7 @@ const HistogramExample = () => {
     ]}
     showBinPercentages={[true, true]}
     onClick={(d) => console.log(d)}
-    height={400}
+    height={600}
     delay={state.delay}
     duration={state.duration}
     visible={visible}
