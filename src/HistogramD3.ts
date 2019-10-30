@@ -232,10 +232,6 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
           .attr('transform', 'translate(' + (yAxisWidth(axis) + axis.y.style['stroke-width']) + ',' + (h + 14) + ')')
           .call(annotationAxis);
 
-        // Annotation Axis styling
-        attrs(svg.selectAll('.x-axis-bottom .domain, .x-axis-bottom .tick line'), axis.x.style);
-        attrs(svg.selectAll('.x-axis-bottom .tick text'), axis.x.text.style as any);
-
         // Style the annotations with their specific color
         xAnnotationAxisContainer
           .selectAll('g.tick')
