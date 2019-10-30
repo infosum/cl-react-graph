@@ -38,9 +38,13 @@ import SEO from '../components/seo';
 import { TabContainer } from '../components/TabContainer';
 import {
   analyticsAxis,
+  annotationsData,
   data,
   grid,
+  smallAnnotationsData,
+  smallData,
   theme,
+  verticalXAxis,
 } from '../data';
 
 const tipContentFns = [
@@ -243,15 +247,27 @@ const HistogramExample = () => {
     axis={state.axis}
     bar={state.bar}
     grid={state.grid}
-    width="100%"
-    annotations={[
-      { color: 'grey', value: '0%' },
-      { color: 'grey', value: '0%' },
-      { color: 'red', value: '-5%' },
-    ]}
+    width={420}
+    annotations={annotationsData}
     showBinPercentages={[true, true]}
     onClick={(d) => console.log(d)}
-    height={600}
+    height={420}
+    delay={state.delay}
+    duration={state.duration}
+    visible={visible}
+    colorScheme={theme}
+    groupLayout={state.groupLayout}
+    tipContentFn={tipContentFns[0]}
+  />;
+  const smallDataChart = <Chart data={smallData}
+    axis={state.axis}
+    bar={state.bar}
+    grid={state.grid}
+    width={420}
+    annotations={smallAnnotationsData}
+    showBinPercentages={[true, true]}
+    onClick={(d) => console.log(d)}
+    height={420}
     delay={state.delay}
     duration={state.duration}
     visible={visible}
@@ -271,6 +287,7 @@ const HistogramExample = () => {
             <Card>
               <CardContent>
                 {chart}
+                {smallDataChart}
                 <Legend
                   theme={theme}
                   data={dataLegendData}

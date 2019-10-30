@@ -58,16 +58,13 @@ export const annotationAxisDefaults: IAxis = {
   text: {
     style: {
       dy: '.35em',
-      transform: 'rotate(0)',
-      x: 0,
-      y: 10,
     },
   },
-  tickSize: 0,
+  tickSize: 5,
   ticks: 3,
   tickValues: null,
   visible: true,
-  width: 50,
+  width: 30,
 };
 
 export const axis: IAxes = {

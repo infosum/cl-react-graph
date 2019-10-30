@@ -3,7 +3,10 @@ import {
   IHistogramData,
 } from '../../src';
 import filterRange from '../../src/colors/filterRange';
-import { IGrid } from '../../src/Histogram';
+import {
+  IAnnotation,
+  IGrid,
+} from '../../src/Histogram';
 import { lineStyle } from '../../src/utils/defaults';
 import { DeepPartial } from '../../src/utils/types';
 
@@ -26,7 +29,7 @@ export const grid: IGrid = {
   },
 };
 
-export const data: IHistogramData = {
+export const smallData: IHistogramData = {
   bins: ['Female', 'Male', 'Other'],
   counts: [
     {
@@ -39,6 +42,56 @@ export const data: IHistogramData = {
     },
   ]
 }
+
+export const data: IHistogramData = {
+  bins: ['Female', 'Male', 'Other', 'sdfdfg', 'dagdsg', 'sfsd', 'ds34fsdf', 'dfsfsd', 'sdfs34dfs', 'ghf34hfg', 'fd33gag', 'jg343hj', 'a343wes', 'ye343ye', 'fd343gjs', 'sdfd343fg', '34', 'sfsd', '433', '45245', '745', 'ghfhf45g', 'fd45ag', 'j3ghj', '3434211', '4564526', '5645645'],
+  counts: [
+    {
+      data: [79200, 52400, 13300, 79200, 52400, 13300, 79200, 52400, 13300, 79200, 52400, 13300, 79200, 52400, 13300, 79200, 52400, 13300, 79200, 52400, 13300, 79200, 52400, 13300, 79200, 52400, 13300],
+      label: 'Baseline',
+    },
+    {
+      data: [60000, 34230, 10000, 60000, 34230, 10000, 60000, 34230, 10000, 60000, 34230, 10000, 60000, 34230, 10000, 60000, 34230, 10000, 60000, 34230, 10000, 60000, 34230, 10000, 60000, 34230, 10000],
+      label: 'Filtered',
+    },
+  ]
+}
+
+export const annotationsData: IAnnotation[] = [
+  { color: 'grey', value: '0%' },
+  { color: 'grey', value: '0%' },
+  { color: 'red', value: '-50%' },
+  { color: 'grey', value: '-1%' },
+  { color: 'red', value: '-56%' },
+  { color: 'grey', value: '-99%' },
+  { color: 'grey', value: '-100%' },
+  { color: 'red', value: '-5%' },
+  { color: 'grey', value: '0%' },
+  { color: 'red', value: '-5%' },
+  { color: 'grey', value: '0%' },
+  { color: 'grey', value: '0%' },
+  { color: 'red', value: '-5%' },
+  { color: 'grey', value: '0%' },
+  { color: 'red', value: '-50%' },
+  { color: 'grey', value: '-67%' },
+  { color: 'red', value: '-5%' },
+  { color: 'grey', value: '0%' },
+  { color: 'red', value: '-100%' },
+  { color: 'grey', value: '-70%' },
+  { color: 'grey', value: '-99%' },
+  { color: 'red', value: '-5%' },
+  { color: 'grey', value: '-65%' },
+  { color: 'red', value: '-5%' },
+  { color: 'green', value: '-16%' },
+  { color: 'green', value: '-10%' },
+  { color: 'green', value: '-99%' },
+];
+
+export const smallAnnotationsData: IAnnotation[] = [
+  { color: 'grey', value: '0%' },
+  { color: 'grey', value: '0%' },
+  { color: 'red', value: '-5%' },
+]
 /*
 export const data: IHistogramData = {
   bins: ['Data 1', 'Data 6', 'Data 3', 'Dat 4'],
@@ -64,6 +117,25 @@ export const analyticsAxis: DeepPartial<IAxes> = {
     ticks: 3,
   },
 };
+
+export const verticalXAxis: DeepPartial<IAxes> = {
+  x: {
+    scale: 'ORDINAL',
+    text: {
+      style: {
+        'dy': '.35em',
+        'font-size': '0.1rem',
+        'stroke-opacity': 0,
+        'text-anchor': 'start',
+        'transform': 'rotate(90)',
+      },
+    }
+  },
+  y: {
+    // ...defaultAxis.y,
+    ticks: 3,
+  },
+}
 
 export const axis: DeepPartial<IAxes> = {
   x: {
