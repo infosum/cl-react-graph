@@ -21,6 +21,7 @@ import {
 } from './grid';
 import {
   EGroupedBarLayout,
+  IAnnotation,
   IAxis,
   IChartAdaptor,
   IHistogramProps,
@@ -161,6 +162,12 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
       }
       if (newProps.colorScheme) {
         props.colorScheme = newProps.colorScheme;
+      }
+      if (newProps.annotations) {
+        props.annotations = newProps.annotations as IHistogramProps['annotations'];
+      }
+      if (newProps.annotationTextSize) {
+        props.annotationTextSize = newProps.annotationTextSize as IHistogramProps['annotationTextSize'];
       }
     },
 
@@ -462,7 +469,6 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
           });
         });
       });
-
       this.drawAxes();
       drawGrid(x, y, gridX, gridY, props, maxValueCount(data.counts));
       this.updateChart(data.bins, dataSets);

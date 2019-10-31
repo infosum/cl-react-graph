@@ -419,6 +419,21 @@ export const horizontalHistogramD3 = ((): IChartAdaptor<IHistogramProps> => {
         .text((d) => d);
     },
 
+    mergeProps(newProps: DeepPartial<IHistogramProps>) {
+      merge(props, newProps);
+      if (newProps.data) {
+        props.data = newProps.data as IHistogramProps['data'];
+      }
+      if (newProps.colorScheme) {
+        props.colorScheme = newProps.colorScheme;
+      }
+      if (newProps.annotations) {
+        props.annotations = newProps.annotations as IHistogramProps['annotations'];
+      }
+      if (newProps.annotationTextSize) {
+        props.annotationTextSize = newProps.annotationTextSize as IHistogramProps['annotationTextSize'];
+      }
+    },
     /**
      * Update chart
      */
@@ -426,7 +441,7 @@ export const horizontalHistogramD3 = ((): IChartAdaptor<IHistogramProps> => {
       if (!props.data) {
         return;
       }
-      merge(props, newProps);
+      this.mergeProps(newProps);
       if (!props.data.bins) {
         return;
       }
