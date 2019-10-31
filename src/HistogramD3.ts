@@ -168,7 +168,7 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
      * Draw scales
      */
     drawAxes() {
-      const { axis, bar, annotations, domain, groupLayout, stacked, data, margin, height } = props;
+      const { axis, bar, annotations, annotationTextSize, domain, groupLayout, stacked, data, margin, height } = props;
       const valuesCount = maxValueCount(data.counts);
       const w = gridWidth(props);
       const h = gridHeight(props);
@@ -237,7 +237,7 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
           .selectAll('g.tick')
           .select('text')
           .style('fill', (d, i) => annotations[i].color)
-          .style('font-size', '0.475rem');
+          .style('font-size', annotationTextSize ? annotationTextSize : '0.475rem');
 
         xAnnotationAxisContainer
           .selectAll('line')
@@ -283,7 +283,7 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
       bins: string[],
       groupData: IGroupData,
     ) {
-      const { axis, annotations, data, height, width, margin, delay, duration, tip, groupLayout, showBinPercentages, stacked } = props;
+      const { axis, data, height, width, margin, delay, duration, tip, groupLayout, showBinPercentages, stacked } = props;
 
       const stackedOffset = (d: IGroupDataItem, stackIndex: number): number => {
         const thisGroupData = groupData.find((gData) => {
