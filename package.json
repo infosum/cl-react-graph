@@ -1,6 +1,6 @@
 {
   "name": "cl-react-graph",
-  "version": "1.10.11",
+  "version": "1.10.12",
   "description": "React D3 Charts",
   "main": "./dist/index.js",
   "types": "./dist/types/index.d.ts",
@@ -17,7 +17,7 @@
     "D3",
     "Charts"
   ],
-  "author": "Rob Clayburn - InfoSum",
+  "author": "Rob Clayburn - Martin Lewis-Dalgarno - InfoSum",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/cognitivelogic/cl-react-graph/issues"

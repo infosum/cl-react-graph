@@ -109,6 +109,7 @@ export interface IHistogramProps {
   height: number;
   margin: IMargin;
   showBinPercentages?: boolean[];
+  annotationTextSize?: string;
   /** 
    *  @deprecated
    */

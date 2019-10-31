@@ -249,6 +249,7 @@ const HistogramExample = () => {
     grid={state.grid}
     width={420}
     annotations={annotationsData}
+    annotationTextSize={'0.5rem'}
     showBinPercentages={[true, true]}
     onClick={(d) => console.log(d)}
     height={420}

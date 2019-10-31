@@ -149,7 +149,7 @@ export const horizontalHistogramD3 = ((): IChartAdaptor<IHistogramProps> => {
     * Draw Axes
     */
     drawAxes() {
-      const { annotations, bar, data, domain, groupLayout, stacked, margin, width, height, axis } = props;
+      const { annotations, annotationTextSize, bar, data, domain, groupLayout, stacked, margin, width, height, axis } = props;
       const valuesCount = maxValueCount(data.counts);
       const w = gridWidth(props);
       const h = gridHeight(props);
@@ -228,7 +228,7 @@ export const horizontalHistogramD3 = ((): IChartAdaptor<IHistogramProps> => {
         yAnnotationAxisContainer
           .selectAll('g.tick')
           .select('text')
-          .style('font-size', '0.475rem')
+          .style('font-size', annotationTextSize ? annotationTextSize : '0.475rem')
           .style('fill', (d, i) => annotations[i].color)
 
         // Hide the line for the annotations axis
