@@ -1,4 +1,4 @@
-import Color from 'color';
+// import Color from 'color';
 import { ScaleOrdinal } from 'd3';
 import { select } from 'd3-selection';
 
@@ -36,18 +36,22 @@ export const onMouseOver = (props: IProps) => (d: IGroupDataItem | any, i: numbe
   } = props;
   const ix = bins.findIndex((b) => b === d.label);
   // Initial color
-  let color = Color(colors(d.colorRef || String(i)));
+  // let color = Color(colors(d.colorRef || String(i)));
   if (hover) {
+    // @TODO need to investigate an alternative way of doing this with changing counts
     // Apply hover modifiers
+    /*
     Object.keys(hover).forEach((key) => {
       if (color[key]) {
         color = color[key](hover![key]);
       }
     })
+    */
     select(nodes[i])
-      .transition()
-      .duration(250)
-      .attr('fill', color.hsl().string());
+      .attr('fill-opacity', 1)
+      .transition('easeIn')
+      .attr('fill-opacity', 0.7);
+    // .attr('fill', color.hsl().string());
   }
   tipContent.html(() => tipContentFn(bins, ix, d.value || d));
   tip.fx.in(tipContainer);
@@ -57,8 +61,11 @@ export const onMouseOut = (props: IMouseOutProps) => (d: IGroupDataItem | number
   const { tip, tipContainer, colors } = props;
   tip.fx.out(tipContainer);
   select(nodes[i])
-    .transition()
-    .duration(250);
+    .attr('fill-opacity', 0.7)
+    .transition('easeIn')
+    .attr('fill-opacity', 1);
+  // @TODO need to investigate an alternative way of doing this with changing counts
+  // .attr('fill', colors(typeof d === 'object' && d.colorRef ? d.colorRef : String(i)));
 }
 export const onClick = (onClick?: (v: any) => void) => (d: IGroupDataItem | number) => {
   if (onClick) {
