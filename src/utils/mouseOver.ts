@@ -58,8 +58,7 @@ export const onMouseOut = (props: IMouseOutProps) => (d: IGroupDataItem | number
   tip.fx.out(tipContainer);
   select(nodes[i])
     .transition()
-    .duration(250)
-    .attr('fill', colors(typeof d === 'object' && d.colorRef ? d.colorRef : String(i)));
+    .duration(250);
 }
 export const onClick = (onClick?: (v: any) => void) => (d: IGroupDataItem | number) => {
   if (onClick) {
