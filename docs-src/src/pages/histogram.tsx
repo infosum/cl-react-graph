@@ -256,7 +256,7 @@ const HistogramExample = () => {
     delay={state.delay}
     duration={state.duration}
     visible={visible}
-    colorScheme={theme}
+    colorScheme={["#a9a9a9", "#2a5379"]}
     groupLayout={state.groupLayout}
     tipContentFn={tipContentFns[0]}
   />;
@@ -272,7 +272,7 @@ const HistogramExample = () => {
     delay={state.delay}
     duration={state.duration}
     visible={visible}
-    colorScheme={theme}
+    colorScheme={["#a9a9a9", "#2a5379"]}
     groupLayout={state.groupLayout}
     tipContentFn={tipContentFns[0]}
   />;
