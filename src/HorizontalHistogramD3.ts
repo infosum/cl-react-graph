@@ -294,11 +294,11 @@ export const horizontalHistogramD3 = ((): IChartAdaptor<IHistogramProps> => {
         return isItStacked ? x(offset) : 0;
       }
 
-      const calculateYPosition = (d: IGroupDataItem, stackIndex: number, offset?: number): number => {
+      const calculateYPosition = (d: IGroupDataItem, stackIndex: number, offset: number, counts: number): number => {
         const totalWidth = innerScaleBand.bandwidth();
         const barWidth = getBarWidth(stackIndex, props.groupLayout, props.bar, innerScaleBand);
         const overlaidYPos = (totalWidth / 2) - (barWidth / 2);
-        const finalYPos = (props.groupLayout === EGroupedBarLayout.OVERLAID)
+        const finalYPos = (props.groupLayout === EGroupedBarLayout.OVERLAID || counts === 1)
           ? overlaidYPos
           : Number(innerScaleBand(String(d.groupLabel)));
         return offset ? finalYPos + offset : finalYPos;
@@ -337,13 +337,13 @@ export const horizontalHistogramD3 = ((): IChartAdaptor<IHistogramProps> => {
         .on('mousemove', () => tip.fx.move(tipContainer))
         .on('mouseout', onMouseOut({ tip, tipContainer, colors }))
         .merge(bars)
-        .attr('x', stackedOffset)
-        .attr('y', (d: IGroupDataItem, i: number) => calculateYPosition(d, i))
+        .attr('y', (d: IGroupDataItem, i: number) => calculateYPosition(d, i, 0, props.data.counts.length))
         .attr('height', (d, i) => getBarWidth(i, props.groupLayout, props.bar, innerScaleBand))
         .attr('fill', (d, i) => colors(String(i)))
         .transition()
         .duration(duration)
         .delay(delay)
+        .attr('x', stackedOffset)
         // Hide bar's bottom border
         .attr('stroke-dasharray',
           (d: IGroupDataItem, i): string => {
@@ -396,7 +396,7 @@ export const horizontalHistogramD3 = ((): IChartAdaptor<IHistogramProps> => {
           .attr('y', (d: IGroupDataItem, i: number) => {
             const barWidth = getBarWidth(i, props.groupLayout, props.bar, innerScaleBand);
             const overlaidOffset = props.bar.overlayMargin;
-            return calculateYPosition(d, i, ((barWidth + overlaidOffset) / 2));
+            return calculateYPosition(d, i, ((barWidth + overlaidOffset) / 2), props.data.counts.length);
           });
         percents.exit().remove();
       };

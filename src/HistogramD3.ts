@@ -319,11 +319,11 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
         return y(d.value + offset);
       }
 
-      const calculateXPosition = (d: IGroupDataItem, stackIndex: number, offset?: number): number => {
+      const calculateXPosition = (d: IGroupDataItem, stackIndex: number, offset: number, counts: number): number => {
         const totalWidth = innerScaleBand.bandwidth();
         const barWidth = getBarWidth(stackIndex, props.groupLayout, props.bar, innerScaleBand);
         const overlaidXPos = (totalWidth / 2) - (barWidth / 2);
-        const finalXPos = (props.groupLayout === EGroupedBarLayout.OVERLAID)
+        const finalXPos = (props.groupLayout === EGroupedBarLayout.OVERLAID || counts === 1)
           ? overlaidXPos
           : Number(innerScaleBand(String(d.groupLabel)));
         return offset ? finalXPos + offset : finalXPos;
@@ -364,7 +364,7 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
         .on('mousemove', () => tip.fx.move(tipContainer))
         .on('mouseout', onMouseOut({ tip, tipContainer, colors }))
         .merge(bars)
-        .attr('x', (d: IGroupDataItem, i: number) => calculateXPosition(d, i))
+        .attr('x', (d: IGroupDataItem, i: number) => calculateXPosition(d, i, 0, props.data.counts.length))
         .attr('width', (d, i) => getBarWidth(i, props.groupLayout, props.bar, innerScaleBand))
         .attr('fill', (d, i) => colors(String(i)))
         .transition()
@@ -418,7 +418,7 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
           .attr('fill', (d, i) => colors(String(i)))
           .attr('x', (d: IGroupDataItem, i: number) => {
             const barWidthForOffset = getBarWidth(i, props.groupLayout, props.bar, innerScaleBand);
-            return calculateXPosition(d, i, barWidthForOffset / 2);
+            return calculateXPosition(d, i, barWidthForOffset / 2, props.data.counts.length);
           })
           .attr('dy', -2);
         percents.exit().remove();
