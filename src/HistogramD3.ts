@@ -48,6 +48,7 @@ import {
   onClick,
   onMouseOut,
   onMouseOver,
+  onMouseOverAxis,
 } from './utils/mouseOver';
 import {
   makeGrid,
@@ -175,7 +176,7 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
      * Draw scales
      */
     drawAxes() {
-      const { axis, bar, annotations, annotationTextSize, domain, groupLayout, stacked, data, margin, height } = props;
+      const { axis, bar, annotations, annotationTextSize, domain, groupLayout, stacked, data, margin, height, tip } = props;
       const valuesCount = maxValueCount(data.counts);
       const w = gridWidth(props);
       const h = gridHeight(props);
@@ -213,6 +214,17 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
         .attr('transform', 'translate(' + (yAxisWidth(axis) + axis.y.style['stroke-width']) + ',' +
           (height - xAxisHeight(props.axis) - (margin.left * 2)) + ')')
         .call(xAxis);
+
+      // Add a tooltip to the x axis if a custom method has been sent
+      const colors = scaleOrdinal(props.colorScheme);
+      if (props.axisLabelTipContentFn) {
+        xAxisContainer
+          .selectAll('g.tick')
+          .select('text')
+          .on('mouseover', (onMouseOverAxis({ ...props.data, colors, tipContentFn: props.axisLabelTipContentFn, tipContent, tip, tipContainer })))
+          .on('mousemove', () => tip.fx.move(tipContainer))
+          .on('mouseout', () => tip.fx.out(tipContainer))
+      }
 
       /** X-Axis 2 (bottom axis) for annoations if annotations data sent (and match bin length) */
       if (annotations && annotations.length === data.bins.length) {

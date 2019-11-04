@@ -51,6 +51,7 @@ import {
   onClick,
   onMouseOut,
   onMouseOver,
+  onMouseOverAxis,
 } from './utils/mouseOver';
 import {
   makeGrid,
@@ -149,7 +150,7 @@ export const horizontalHistogramD3 = ((): IChartAdaptor<IHistogramProps> => {
     * Draw Axes
     */
     drawAxes() {
-      const { annotations, annotationTextSize, bar, data, domain, groupLayout, stacked, margin, width, height, axis } = props;
+      const { annotations, annotationTextSize, bar, data, domain, groupLayout, stacked, margin, width, height, axis, tip } = props;
       const valuesCount = maxValueCount(data.counts);
       const w = gridWidth(props);
       const h = gridHeight(props);
@@ -196,6 +197,18 @@ export const horizontalHistogramD3 = ((): IChartAdaptor<IHistogramProps> => {
         .attr('transform', 'translate(' + yAxisWidth(axis) + ', ' + margin.top + ' )')
         .call(yAxis);
 
+      // Add a tooltip to the y axis if a custom method has been sent
+      const colors = scaleOrdinal(props.colorScheme);
+      if (props.axisLabelTipContentFn) {
+        yAxisContainer
+          .selectAll('g.tick')
+          .select('text')
+          .on('mouseover', (onMouseOverAxis({ ...props.data, colors, tipContentFn: props.axisLabelTipContentFn, tipContent, tip, tipContainer })))
+          .on('mousemove', () => tip.fx.move(tipContainer))
+          .on('mouseout', () => tip.fx.out(tipContainer))
+      }
+
+
       /** Y-Axis 2 (bottom axis) for annoations if annotations data sent (and match bin length) */
       if (annotations && annotations.length === data.bins.length) {
 
@@ -229,7 +242,7 @@ export const horizontalHistogramD3 = ((): IChartAdaptor<IHistogramProps> => {
           .selectAll('g.tick')
           .select('text')
           .style('font-size', annotationTextSize ? annotationTextSize : '0.475rem')
-          .style('fill', (d, i) => annotations[i].color)
+          .style('fill', (d, i) => annotations[i].color);
 
         // Hide the line for the annotations axis
         yAnnotationAxisContainer.call(g => g.select(".domain").remove());

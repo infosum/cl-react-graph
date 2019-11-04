@@ -258,7 +258,13 @@ const HistogramExample = () => {
     visible={visible}
     colorScheme={["#a9a9a9", "#2a5379"]}
     groupLayout={state.groupLayout}
-    tipContentFn={tipContentFns[0]}
+    tipContentFn={(bin, i, d) => {
+      return 'ABC12345' + '<br />' + d.toFixed(2);
+    }}
+    axisLabelTipContentFn={(bin, i, d) => {
+      const binPos = bin.findIndex((b) => b === d);
+      return bin[binPos];
+    }}
   />;
   const smallDataChart = <Chart data={smallData}
     axis={state.axis}

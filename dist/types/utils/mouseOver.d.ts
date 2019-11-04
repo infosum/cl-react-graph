@@ -11,11 +11,14 @@ interface IProps {
     tipContainer: string;
     colourIndex?: string;
 }
-interface IMouseOutProps {
-    colors: ScaleOrdinal<string, string>;
+interface IMouseOutTipProps {
     tip: any;
     tipContainer: any;
 }
+interface IMouseOutProps extends IMouseOutTipProps {
+    colors: ScaleOrdinal<string, string>;
+}
+export declare const onMouseOverAxis: (props: IProps) => (d: any, i: number, nodes: any) => void;
 export declare const onMouseOver: (props: IProps) => (d: any, i: number, nodes: any) => void;
 export declare const onMouseOut: (props: IMouseOutProps) => (d: number | IGroupDataItem, i: number, nodes: any) => void;
 export declare const onClick: (onClick?: ((v: any) => void) | undefined) => (d: number | IGroupDataItem) => void;
