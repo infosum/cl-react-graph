@@ -40,11 +40,6 @@ export const onMouseOverAxis = (props: IProps) => (d: IGroupDataItem | any, i: n
   tip.fx.in(tipContainer);
 };
 
-export const onMouseOutAxis = (props: IMouseOutTipProps) => (d: IGroupDataItem | number, i: number, nodes: any) => {
-  const { tip, tipContainer } = props;
-  tip.fx.out(tipContainer);
-}
-
 export const onMouseOver = (props: IProps) => (d: IGroupDataItem | any, i: number, nodes: any) => {
   const {
     bins,
