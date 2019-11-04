@@ -104,6 +104,7 @@ export interface IHistogramProps {
     tip: any;
     tipContainer: string;
     tipContentFn: TipContentFn<string>;
+    axisLabelTipContentFn?: TipContentFn<string>;
     visible: {
         [key: string]: boolean;
     };
