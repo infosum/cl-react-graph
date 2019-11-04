@@ -18,16 +18,37 @@ interface IProps {
   colourIndex?: string,
 };
 
-interface IMouseOutProps {
-  colors: ScaleOrdinal<string, string>,
+interface IMouseOutTipProps {
   tip: any,
   tipContainer: any,
 }
+
+interface IMouseOutProps extends IMouseOutTipProps {
+  colors: ScaleOrdinal<string, string>,
+}
+
+export const onMouseOverAxis = (props: IProps) => (d: IGroupDataItem | any, i: number, nodes: any) => {
+  const {
+    bins,
+    tipContentFn,
+    tipContent,
+    tip,
+    tipContainer,
+  } = props;
+  const ix = bins.findIndex((b) => b === d.label);
+  tipContent.html(() => tipContentFn(bins, ix, d.value || d));
+  tip.fx.in(tipContainer);
+};
+
+export const onMouseOutAxis = (props: IMouseOutTipProps) => (d: IGroupDataItem | number, i: number, nodes: any) => {
+  const { tip, tipContainer } = props;
+  tip.fx.out(tipContainer);
+}
+
 export const onMouseOver = (props: IProps) => (d: IGroupDataItem | any, i: number, nodes: any) => {
   const {
     bins,
     hover,
-    colors,
     tipContentFn,
     tipContent,
     tip,
