@@ -50,7 +50,6 @@ import {
 import {
   onClick,
   onMouseOut,
-  onMouseOutAxis,
   onMouseOver,
   onMouseOverAxis,
 } from './utils/mouseOver';
@@ -206,7 +205,7 @@ export const horizontalHistogramD3 = ((): IChartAdaptor<IHistogramProps> => {
           .select('text')
           .on('mouseover', (onMouseOverAxis({ ...props.data, colors, tipContentFn: props.axisLabelTipContentFn, tipContent, tip, tipContainer })))
           .on('mousemove', () => tip.fx.move(tipContainer))
-          .on('mouseout', (onMouseOutAxis({ tip, tipContainer })));
+          .on('mouseout', () => tip.fx.out(tipContainer))
       }
 
 
