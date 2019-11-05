@@ -98,16 +98,26 @@ export const formatTick = (axis: IAxis) => (v: string | number) => {
   }
   return isNaN(Number(v)) ? v : format(axis.numberFormat)(Number(v))
 };
-// Specialist format tick method to convert long numbers to capital representations
+
+// Utility method to convert number from tick into letter abbreviation
+const abbreviateNumber = (number: number) => {
+  const SI_SYMBOL = ["", "k", "M", "G", "T", "P", "E"];
+  // what tier? (determines SI symbol)
+  var tier = Math.log10(number) / 3 | 0;
+  // if zero, we don't need a suffix
+  if (tier == 0) return number;
+  // get suffix and determine scale
+  var suffix = SI_SYMBOL[tier];
+  var scale = Math.pow(10, tier * 3);
+  // scale the number
+  var scaled = number / scale;
+  // format number and add suffix
+  return scaled.toFixed(1) + suffix;
+}
+
+// Custom format tick method 
 export const formatTickNumbersToLetters = (d): string => {
-  const limits: number[] = [1000000000000000, 1000000000000, 1000000000, 1000000, 1000];
-  const shorteners: string[] = ['Q', 'T', 'B', 'M', 'K'];
-  for (const i in limits) {
-    if (d > limits[i]) {
-      return (d / limits[i]).toFixed() + shorteners[i];
-    }
-  }
-  return d;
+  return String(abbreviateNumber(d));
 };
 
 interface ITickProps {
