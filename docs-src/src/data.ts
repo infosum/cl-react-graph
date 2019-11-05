@@ -47,11 +47,11 @@ export const data: IHistogramData = {
   bins: ['Female', 'Male', 'Other', 'sdfdfg', 'dagdsg', 'sfsd', 'ds34fsdf', 'dfsfsd', 'sdfs34dfs', 'ghf34hfg', 'fd33gag', 'jg343hj', 'a343wes', 'ye343ye', 'fd343gjs', 'sdfd343fg', '34', 'sfsd', '433', '45245', '745'],
   counts: [
     {
-      data: [79200, 52400, 13300, 79200, 52400, 13300, 79200, 52400, 13300, 79200, 52400, 13300, 79200, 52400, 13300, 79200, 52400, 13300, 79200, 52400, 13300],
+      data: [58483, 52400, 13300, 79200, 52400, 13300, 79200, 52400, 13300, 79200, 52400, 13300, 79200, 52400, 13300, 79200, 52400, 13300, 79200, 52400, 13300],
       label: 'Baseline',
     },
     {
-      data: [60000, 34230, 10000, 60000, 34230, 10000, 60000, 34230, 10000, 60000, 34230, 10000, 60000, 34230, 10000, 60000, 34230, 10000, 60000, 34230, 10000],
+      data: [54932, 34230, 10000, 60000, 34230, 10000, 60000, 34230, 10000, 60000, 34230, 10000, 60000, 34230, 10000, 60000, 34230, 10000, 60000, 34230, 10000],
       label: 'Filtered',
     },
   ]
@@ -105,11 +105,12 @@ export const data: IHistogramData = {
 export const analyticsAxis: DeepPartial<IAxes> = {
   x: {
     scale: 'ORDINAL',
-    formatLargeNumbersToLetters: true,
+    numberFormat: '.2s',
   },
   y: {
     // ...defaultAxis.y,
     ticks: 3,
+    numberFormat: '.2s',
   },
 };
 
