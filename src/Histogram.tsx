@@ -153,6 +153,7 @@ export interface IChartState {
 }
 export interface IAxis {
   dateFormat: string;
+  formatLargeNumbersToLetters?: boolean;
   numberFormat: string;
   ticks: number;
   height: number;

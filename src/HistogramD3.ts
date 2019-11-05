@@ -40,6 +40,7 @@ import {
 } from './utils/defaults';
 import {
   appendDomainRange,
+  formatTickNumbersToLetters,
   isStacked,
   maxValueCount,
   ticks,
@@ -282,7 +283,10 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
         axisConfig: axis.y,
         scaleBand: y,
       });
-
+      // Format large numbers to text if axis prop present
+      if (props.axis.y.formatLargeNumbersToLetters) {
+        yAxis.tickFormat(formatTickNumbersToLetters);
+      }
       yAxisContainer
         .attr('transform', 'translate(' + yAxisWidth(axis) + ', 0)')
         .transition()

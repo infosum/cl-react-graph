@@ -98,7 +98,17 @@ export const formatTick = (axis: IAxis) => (v: string | number) => {
   }
   return isNaN(Number(v)) ? v : format(axis.numberFormat)(Number(v))
 };
-
+// Specialist format tick method to convert long numbers to capital representations
+export const formatTickNumbersToLetters = (d): string => {
+  const limits: number[] = [1000000000000000, 1000000000000, 1000000000, 1000000, 1000];
+  const shorteners: string[] = ['Q', 'T', 'B', 'M', 'K'];
+  for (const i in limits) {
+    if (d > limits[i]) {
+      return (d / limits[i]).toFixed() + shorteners[i];
+    }
+  }
+  return d;
+};
 
 interface ITickProps {
   scaleBand: AnyScale;

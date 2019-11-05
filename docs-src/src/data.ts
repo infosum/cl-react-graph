@@ -44,14 +44,14 @@ export const smallData: IHistogramData = {
 }
 
 export const data: IHistogramData = {
-  bins: ['Female', 'Male', 'Other', 'sdfdfg', 'dagdsg', 'sfsd', 'ds34fsdf', 'dfsfsd', 'sdfs34dfs', 'ghf34hfg', 'fd33gag', 'jg343hj', 'a343wes', 'ye343ye', 'fd343gjs', 'sdfd343fg', '34', 'sfsd', '433', '45245', '745', 'ghfhf45g', 'fd45ag', 'j3ghj', '3434211', '4564526', '5645645'],
+  bins: ['Female', 'Male', 'Other', 'sdfdfg', 'dagdsg', 'sfsd', 'ds34fsdf', 'dfsfsd', 'sdfs34dfs', 'ghf34hfg', 'fd33gag', 'jg343hj', 'a343wes', 'ye343ye', 'fd343gjs', 'sdfd343fg', '34', 'sfsd', '433', '45245', '745'],
   counts: [
     {
-      data: [79200, 52400, 13300, 79200, 52400, 13300, 79200, 52400, 13300, 79200, 52400, 13300, 79200, 52400, 13300, 79200, 52400, 13300, 79200, 52400, 13300, 79200, 52400, 13300, 79200, 52400, 13300],
+      data: [79200, 52400, 13300, 79200, 52400, 13300, 79200, 52400, 13300, 79200, 52400, 13300, 79200, 52400, 13300, 79200, 52400, 13300, 79200, 52400, 13300],
       label: 'Baseline',
     },
     {
-      data: [60000, 34230, 10000, 60000, 34230, 10000, 60000, 34230, 10000, 60000, 34230, 10000, 60000, 34230, 10000, 60000, 34230, 10000, 60000, 34230, 10000, 60000, 34230, 10000, 60000, 34230, 10000],
+      data: [60000, 34230, 10000, 60000, 34230, 10000, 60000, 34230, 10000, 60000, 34230, 10000, 60000, 34230, 10000, 60000, 34230, 10000, 60000, 34230, 10000],
       label: 'Filtered',
     },
   ]
@@ -79,12 +79,6 @@ export const annotationsData: IAnnotation[] = [
   { color: 'red', value: '-100%' },
   { color: 'grey', value: '-70%' },
   { color: 'grey', value: '-99%' },
-  { color: 'red', value: '-5%' },
-  { color: 'grey', value: '-65%' },
-  { color: 'red', value: '-5%' },
-  { color: 'green', value: '-16%' },
-  { color: 'green', value: '-10%' },
-  { color: 'green', value: '-99%' },
 ];
 
 export const smallAnnotationsData: IAnnotation[] = [
@@ -111,6 +105,7 @@ export const data: IHistogramData = {
 export const analyticsAxis: DeepPartial<IAxes> = {
   x: {
     scale: 'ORDINAL',
+    formatLargeNumbersToLetters: true,
   },
   y: {
     // ...defaultAxis.y,
