@@ -24,6 +24,7 @@ export declare const rangeAffordance: (range: [any, any], axis: IAxis, inc?: boo
 export declare const appendDomainRange: (props: IAppendDomainRangeProps) => void;
 export declare const shouldFormatTick: (axis: IAxis) => boolean;
 export declare const formatTick: (axis: IAxis) => (v: string | number) => string | number;
+export declare const formatTickNumbersToLetters: (d: any) => string;
 interface ITickProps {
     scaleBand: AnyScale;
     axis: Axis<string> | Axis<number> | Axis<number | {
