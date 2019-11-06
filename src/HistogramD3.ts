@@ -40,9 +40,10 @@ import {
 } from './utils/defaults';
 import {
   appendDomainRange,
-  formatTickNumbersToLetters,
+  formatTick,
   isStacked,
   maxValueCount,
+  shouldFormatTick,
   ticks,
 } from './utils/domain';
 import {
@@ -283,9 +284,12 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
         axisConfig: axis.y,
         scaleBand: y,
       });
-      // Format large numbers to text if axis prop present
-      if (props.axis.y.formatLargeNumbersToLetters) {
-        yAxis.tickFormat(formatTickNumbersToLetters);
+      // Format number axis if format prop provided
+      if (shouldFormatTick(axis.y)) {
+        yAxis.tickFormat((v) => {
+          const n = v.toString().replace('-', '');
+          return String(formatTick(axis.y)(n));
+        });
       }
       yAxisContainer
         .attr('transform', 'translate(' + yAxisWidth(axis) + ', 0)')
