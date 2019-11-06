@@ -285,10 +285,10 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
         scaleBand: y,
       });
       // Format number axis if format prop provided
-      if (shouldFormatTick(axis.x)) {
-        xAxis.tickFormat((v) => {
+      if (shouldFormatTick(axis.y)) {
+        yAxis.tickFormat((v) => {
           const n = v.toString().replace('-', '');
-          return String(formatTick(axis.x)(n));
+          return String(formatTick(axis.y)(n));
         });
       }
       yAxisContainer
