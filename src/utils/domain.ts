@@ -36,21 +36,28 @@ export const rangeAffordance = (
   axis: IAxis,
   inc: boolean = true,
 ): [any, any] => {
-
-  const first = axis.scale === 'TIME' ? range[0].getTime() : range[0];
-  const last = axis.scale === 'TIME' ? range[1].getTime() : range[1];
-  const diff = last - first;
-  const percentIncrement = axis.scale === 'LOG' ? 100 : 5;
-
-  const incremental = applyDomainAffordance(diff, inc, percentIncrement);
-
-  const newLast = last + (incremental - diff);
-
-  if (axis.scale === 'TIME') {
-    return [range[0], new Date(newLast)];
+  if (range[0] === undefined || range[1] === undefined) {
+    return [0, 0];
   }
-  // Only apply affordance at the end as line should start from origin.
-  return [range[0], newLast];
+  try {
+    const first = axis.scale === 'TIME' ? range[0].getTime() : range[0];
+    const last = axis.scale === 'TIME' ? range[1].getTime() : range[1];
+    const diff = last - first;
+    const percentIncrement = axis.scale === 'LOG' ? 100 : 5;
+
+    const incremental = applyDomainAffordance(diff, inc, percentIncrement);
+
+    const newLast = last + (incremental - diff);
+
+    if (axis.scale === 'TIME') {
+      return [range[0], new Date(newLast)];
+    }
+    // Only apply affordance at the end as line should start from origin.
+    return [range[0], newLast];
+  } catch (e) {
+    return [0, 0];
+  }
+
 }
 
 const applyDomainAffordance = (
