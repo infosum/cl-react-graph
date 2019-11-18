@@ -30,7 +30,7 @@ export interface IHistogramBar {
   groupMargin: number;
   margin: number;
   hover?: Partial<Record<EColorManipulations, number>>,
-  overlayMargin: number; // When bars are rendered as EGroupedBarLayout.OVERLAID 
+  overlayMargin: number; // When bars are rendered as EGroupedBarLayout.OVERLAID
   width?: number;
 }
 
@@ -110,7 +110,7 @@ export interface IHistogramProps {
   margin: IMargin;
   showBinPercentages?: boolean[];
   annotationTextSize?: string;
-  /** 
+  /**
    *  @deprecated
    */
   stacked?: boolean;

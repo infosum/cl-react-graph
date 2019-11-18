@@ -13,6 +13,7 @@ import {
   select,
   Selection,
 } from 'd3-selection';
+import { cloneDeep } from 'lodash';
 import get from 'lodash.get';
 import merge from 'lodash/merge';
 
@@ -66,7 +67,7 @@ export const joyPlotD3 = ((): IChartAdaptor<IJoyPlotProps> => {
   }
 
   const props: IJoyPlotProps = {
-    axis: defaultAxis,
+    axis: cloneDeep(defaultAxis),
     bar: {
       groupMargin: 0,
       margin: 0,

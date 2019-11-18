@@ -8,6 +8,7 @@ import {
   scaleOrdinal,
 } from 'd3-scale';
 import { Selection } from 'd3-selection';
+import { cloneDeep } from 'lodash';
 import merge from 'lodash/merge';
 
 import colorScheme from './colors';
@@ -83,7 +84,7 @@ export const horizontalHistogramD3 = ((): IChartAdaptor<IHistogramProps> => {
   let xAnnotationAxisContainer: TSelection;
   let yAnnotationAxisContainer: TSelection;
   const props: IHistogramProps = {
-    axis: defaultAxis,
+    axis: cloneDeep(defaultAxis),
     bar: {
       groupMargin: 0.1,
       margin: 10,
@@ -233,7 +234,7 @@ export const horizontalHistogramD3 = ((): IChartAdaptor<IHistogramProps> => {
           scaleBand: yAnnotations,
           limitByValues: true,
         });
-        // Override the default axis bin labels with the custom annotations 
+        // Override the default axis bin labels with the custom annotations
         annotationAxis.tickFormat((d, i) => annotations[i].value);
         yAnnotationAxisContainer
           .attr('transform', 'translate(' + Number(yAxisWidth(axis)) + ', ' + margin.top + ' )')
