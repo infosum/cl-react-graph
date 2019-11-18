@@ -306,7 +306,7 @@ export const horizontalHistogramD3 = ((): IChartAdaptor<IHistogramProps> => {
       const calculateYPosition = (d: IGroupDataItem, stackIndex: number, offset: number, counts: number): number => {
         const totalWidth = innerScaleBand.bandwidth();
         const barWidth = getBarWidth(stackIndex, props.groupLayout, props.bar, innerScaleBand);
-        const overlaidYPos = (totalWidth / 2) - (barWidth / 2);
+        const overlaidYPos = (totalWidth / 2) - (barWidth / 3) + (stackIndex === 1 ? 1 : 0)
         const finalYPos = (props.groupLayout === EGroupedBarLayout.OVERLAID || counts === 1)
           ? overlaidYPos
           : Number(innerScaleBand(String(d.groupLabel)));
