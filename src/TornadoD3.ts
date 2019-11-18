@@ -11,6 +11,7 @@ import {
 } from 'd3-scale';
 import { Selection } from 'd3-selection';
 import { timeFormat } from 'd3-time-format';
+import { cloneDeep } from 'lodash';
 import merge from 'lodash/merge';
 
 import colorScheme from './colors';
@@ -71,7 +72,7 @@ export const maxValueCount = (counts: ITornadoDataSet[]): number => {
   }, 0);
 };
 
-// The height for the x axis labels showing the left/right labels. 
+// The height for the x axis labels showing the left/right labels.
 const SPLIT_AXIS_HEIGHT = 20;
 
 export const tornadoD3 = ((): IChartAdaptor<ITornadoProps> => {
@@ -93,7 +94,7 @@ export const tornadoD3 = ((): IChartAdaptor<ITornadoProps> => {
   let domain: [number, number];
 
   const props: ITornadoProps = {
-    axis: defaultAxis,
+    axis: cloneDeep(defaultAxis),
     bar: {
       groupMargin: 0.1,
       margin: 10,

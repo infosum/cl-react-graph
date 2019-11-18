@@ -15,6 +15,7 @@ import {
   timeFormat,
   timeParse,
 } from 'd3-time-format';
+import { cloneDeep } from 'lodash';
 import mergeWith from 'lodash.mergewith';
 
 import attrs from './d3/attrs';
@@ -81,7 +82,7 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
   };
 
   const props: ILineChartProps = {
-    axis: defaultAxis,
+    axis: cloneDeep(defaultAxis),
     className: 'line-chart-d3',
     data: [],
     grid: defaultGrid,
@@ -177,7 +178,7 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
      * requiring points.
      */
     _drawDataPointSet(data: ILineChartProps['data']) {
-      const { axis, tip, tipContentFn } = props;
+      const { tip, tipContentFn } = props;
 
       const pointContainer = container.selectAll<SVGElement, {}>('g').data(data);
 

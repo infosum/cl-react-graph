@@ -8,6 +8,7 @@ import {
   scaleOrdinal,
 } from 'd3-scale';
 import { Selection } from 'd3-selection';
+import { cloneDeep } from 'lodash';
 import merge from 'lodash/merge';
 
 import colorScheme from './colors';
@@ -92,7 +93,7 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
   let percentBarLabel: any;
 
   const props: IHistogramProps = {
-    axis: defaultAxis,
+    axis: cloneDeep(defaultAxis),
     bar: {
       groupMargin: 0.1,
       margin: 0,
@@ -246,7 +247,7 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
           scaleBand: xAnnotations,
           limitByValues: true,
         });
-        // Override the default axis bin labels with the custom annotations 
+        // Override the default axis bin labels with the custom annotations
         annotationAxis.tickFormat((d, i) => annotations[i].value);
 
         xAnnotationAxisContainer
