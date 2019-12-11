@@ -15,7 +15,7 @@ interface ISizeProps {
   className: string;
 }
 
-export const makeSvg = (el: Element, svg: TSelection): TSelection => {
+export const makeSvg = (el: Element, svg: TSelection, svgId?: string): TSelection => {
   if (svg) {
     svg.selectAll('svg > *').remove();
     svg.remove();
@@ -26,6 +26,10 @@ export const makeSvg = (el: Element, svg: TSelection): TSelection => {
   }
   // Reference to svg element containing chart
   svg = select(el).append('svg');
+  // If svg id passed in (for download target) then assign it
+  if (svgId) {
+    svg.attr('id', svgId);
+  }
   return svg;
 }
 
