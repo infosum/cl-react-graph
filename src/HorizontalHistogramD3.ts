@@ -134,8 +134,8 @@ export const horizontalHistogramD3 = ((): IChartAdaptor<IHistogramProps> => {
      */
     create(el: Element, newProps: DeepPartial<IHistogramProps> = {}) {
       merge(props, newProps);
-      svg = makeSvg(el, svg);
-      const { margin, width, height, className } = props;
+      const { id, margin, width, height, className } = props;
+      svg = makeSvg(el, svg, id);
       sizeSVG(svg, { margin, width, height, className });
       const r = makeTip(props.tipContainer, tipContainer);
       tipContent = r.tipContent;

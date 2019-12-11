@@ -1,10 +1,12 @@
 import merge from 'deepmerge';
+import fileDownload from 'js-file-download';
 import React, {
   useReducer,
   useState,
 } from 'react';
 
 import {
+  Button,
   Card,
   CardContent,
   Grid,
@@ -24,6 +26,7 @@ import Histogram, {
   IHistogramData,
 } from '../../../src/Histogram';
 import Legend from '../../../src/Legend';
+import { outputSvg } from '../../../src/utils/outputSvg';
 import { DeepPartial } from '../../../src/utils/types';
 import {
   AxisActions,
@@ -229,6 +232,7 @@ export const dataToSpreadSheet = (datum: IHistogramData): any => {
 
 const GridOptions = GridOptionsFactory<(action: Actions) => void, IInitialState>();
 const AxisOptions = AxisOptionsFactory<(action: Actions) => void, IInitialState>();
+const watermarkSvg = require('../../../src/assets/Powered-By-InfoSum_DARK.svg') as string;
 
 const HistogramExample = () => {
   const [tab, setTab] = useState(0);
@@ -258,6 +262,7 @@ const HistogramExample = () => {
     visible={visible}
     colorScheme={["#a9a9a9", "#2a5379"]}
     groupLayout={state.groupLayout}
+    id="bigHistogram"
     tipContentFn={(bin, i, d) => {
       return 'ABC12345' + '<br />' + d.toFixed(2);
     }}
@@ -281,7 +286,9 @@ const HistogramExample = () => {
     colorScheme={["#a9a9a9", "#2a5379"]}
     groupLayout={state.groupLayout}
     tipContentFn={tipContentFns[0]}
+    id="smallHistogram"
   />;
+
   return (
     <Layout>
       <SEO title="Histogram" description="" />
@@ -293,7 +300,33 @@ const HistogramExample = () => {
           <Grid item xs={6}>
             <Card>
               <CardContent>
+                <Button size="small" color="primary" variant="contained" style={{ marginBottom: '1rem' }} onClick={(e) => {
+                  e.preventDefault();
+                  outputSvg('bigHistogram', 420, 420, (blobData) => {
+                    fileDownload(blobData, 'big_chart.png');
+                  },
+                    {
+                      svg: watermarkSvg,
+                      width: 200,
+                      height: 62,
+                    },
+                    'blob',
+                  )
+                }}>Download</Button>
                 {chart}
+                <Button size="small" color="primary" variant="contained" style={{ marginBottom: '1rem' }} onClick={(e) => {
+                  e.preventDefault();
+                  outputSvg('smallHistogram', 420, 420, (blobData) => {
+                    fileDownload(blobData, 'small_chart.png');
+                  },
+                    {
+                      svg: watermarkSvg,
+                      width: 120,
+                      height: 37,
+                    },
+                    'blob',
+                  )
+                }}>Download</Button>
                 {smallDataChart}
                 <Legend
                   theme={theme}

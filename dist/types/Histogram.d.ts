@@ -89,6 +89,7 @@ export interface IHistogramProps {
     duration: number;
     colorScheme: string[];
     domain: IDomain;
+    id?: string;
     grid: IGrid;
     height: number;
     margin: IMargin;
