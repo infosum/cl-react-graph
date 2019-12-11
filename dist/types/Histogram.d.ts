@@ -89,6 +89,7 @@ export interface IHistogramProps {
     duration: number;
     colorScheme: string[];
     domain: IDomain;
+    downloadChartId?: string;
     grid: IGrid;
     height: number;
     margin: IMargin;
