@@ -1,7 +1,11 @@
 import { select } from 'd3-selection';
 
 export type TOutputType = 'png' | 'blob';
-
+export interface IWatermark {
+  svg: string;
+  width: number;
+  height: number;
+}
 // Method to combine an svg specified by id with the InfoSum watermark and 
 // produce a blob or png output that can be used for download
 export const outputSvg = (
@@ -9,6 +13,7 @@ export const outputSvg = (
   width: number,
   height: number,
   callback: (outpuData: string | Blob | null) => void,
+  watermark: IWatermark,
   type: TOutputType = 'blob',
 ) => {
   // Select the first svg element
@@ -16,13 +21,12 @@ export const outputSvg = (
   const serializer = new XMLSerializer();
   // generate IMG in new tab
   const svgStr = serializer.serializeToString(svg.node());
-  const watermark = require('../assets/Powered-By-InfoSum_DARK.svg') as string;
   const svgData = 'data:image/svg+xml;base64,' + window.btoa(unescape(encodeURIComponent(svgStr)));
   // create canvas in memory(not in DOM)
   const canvas = document.createElement('canvas');
   // set canvas size
-  canvas.width = width + 200;
-  canvas.height = height;
+  canvas.width = width + 20 + watermark.width;
+  canvas.height = height + 20;
   // get canvas context for drawing on canvas
   const context = canvas.getContext('2d');
   // create images in memory(not DOM)
@@ -33,10 +37,10 @@ export const outputSvg = (
     // later when image loads run this
     image.onload = () => {
       // clear canvas
-      context!.clearRect(0, 0, width + 20, height + 20);
+      context!.clearRect(0, 0, canvas.width, canvas.height);
       // draw image with SVG data to canvas
-      context!.drawImage(image, 0, 0, width, height);
-      context!.drawImage(watermarkImage, canvas.width - 200, 0, 200, 62);
+      context!.drawImage(image, 10, 10, width, height);
+      context!.drawImage(watermarkImage, canvas.width - watermark.width - 10, 10, watermark.width, watermark.height);
       // add a background
       context!.globalCompositeOperation = 'destination-over'
       context!.fillStyle = "#FFF";
@@ -53,15 +57,5 @@ export const outputSvg = (
     image.src = svgData;
   }
   // start loading watermark SVG data into memory
-  watermarkImage.src = watermark;
+  watermarkImage.src = watermark.svg;
 };
-/* Alternate method for downloading image in new tab kept for reference
-const downloadImage = (pngData) => {
-  let w = window.open('about:blank');
-  let image = new Image();
-  image.src = pngData;
-  setTimeout(function () {
-    w!.document.write(image.outerHTML);
-  }, 0);
-}
-*/
