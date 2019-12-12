@@ -7,4 +7,5 @@ export { default as ScatterPlot } from './ScatterPlot';
 export { default as HorizontalHistogram } from './HorizontalHistogram';
 export { default as filterRange } from './colors/filterRange';
 export { default as TornadoChart } from './Tornado';
+export { outputSvg } from './utils/outputSvg';
 export { axis as defaultAxis, lineStyle as defaultLineStyle, stroke as defaultStroke, line as defaultLine, grid as defaultGrid, } from './utils/defaults';
