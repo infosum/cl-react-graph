@@ -8,7 +8,7 @@ import {
   scaleOrdinal,
 } from 'd3-scale';
 import { Selection } from 'd3-selection';
-import { cloneDeep } from 'lodash';
+import cloneDeep from 'lodash/cloneDeep';
 import merge from 'lodash/merge';
 
 import colorScheme from './colors';
@@ -32,10 +32,12 @@ import {
 } from './HistogramD3';
 import tips, { makeTip } from './tip';
 import {
-  barMargin,
   getBarWidth,
   groupedBarsUseSameXAxisValue,
-  groupedMargin,
+  groupedPaddingInner,
+  groupedPaddingOuter,
+  paddingInner,
+  paddingOuter,
 } from './utils/bars';
 import {
   annotationAxisDefaults,
@@ -86,10 +88,13 @@ export const horizontalHistogramD3 = ((): IChartAdaptor<IHistogramProps> => {
   const props: IHistogramProps = {
     axis: cloneDeep(defaultAxis),
     bar: {
-      groupMargin: 0.1,
-      margin: 10,
+      grouped: {
+        paddingInner: 0.1,
+        paddingOuter: 0,
+      },
+      paddingInner: 0.1,
+      paddingOuter: 1,
       overlayMargin: 5,
-      width: 50,
     },
     className: 'histogram-d3',
     colorScheme,
@@ -162,12 +167,14 @@ export const horizontalHistogramD3 = ((): IChartAdaptor<IHistogramProps> => {
 
       y.domain(data.bins)
         .rangeRound([0, h])
-        .paddingInner(groupedMargin(bar));
+        .paddingInner(paddingInner(bar))
+        .paddingOuter(paddingOuter(bar));
 
       innerScaleBand
         .domain(groupedBarsUseSameXAxisValue({ groupLayout, stacked }) ? ['main'] : dataLabels)
         .rangeRound([0, y.bandwidth()])
-        .paddingInner(barMargin(props.bar));
+        .paddingInner(groupedPaddingInner(bar))
+        .paddingOuter(groupedPaddingOuter(bar));
 
       const xAxis = axisBottom<number>(x);
       const yAxis = axisLeft<string>(y);
@@ -212,7 +219,7 @@ export const horizontalHistogramD3 = ((): IChartAdaptor<IHistogramProps> => {
       }
 
 
-      /** Y-Axis 2 (bottom axis) for annoations if annotations data sent (and match bin length) */
+      /** Y-Axis 2 (bottom axis) for annotations if annotations data sent (and match bin length) */
       if (annotations && annotations.length === data.bins.length) {
 
         yAxisContainer
@@ -222,7 +229,7 @@ export const horizontalHistogramD3 = ((): IChartAdaptor<IHistogramProps> => {
         yAnnotations
           .domain(data.bins)
           .rangeRound([0, h])
-          .paddingInner(groupedMargin(bar));
+          .paddingInner(paddingInner(bar));
 
         const annotationAxis = axisLeft<string>(yAnnotations);
 

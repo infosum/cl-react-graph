@@ -13,8 +13,8 @@ import {
   select,
   Selection,
 } from 'd3-selection';
-import { cloneDeep } from 'lodash';
-import get from 'lodash.get';
+import cloneDeep from 'lodash/cloneDeep';
+import get from 'lodash/get';
 import merge from 'lodash/merge';
 
 import colorScheme from './colors';
@@ -26,6 +26,12 @@ import {
 } from './Histogram';
 import { IJoyPlotProps } from './JoyPlot';
 import tips, { makeTip } from './tip';
+import {
+  groupedPaddingInner,
+  groupedPaddingOuter,
+  paddingInner,
+  paddingOuter,
+} from './utils/bars';
 import {
   axis as defaultAxis,
   grid as defaultGrid,
@@ -69,10 +75,13 @@ export const joyPlotD3 = ((): IChartAdaptor<IJoyPlotProps> => {
   const props: IJoyPlotProps = {
     axis: cloneDeep(defaultAxis),
     bar: {
-      groupMargin: 0,
-      margin: 0,
+      grouped: {
+        paddingInner: 0,
+        paddingOuter: 0,
+      },
+      paddingInner: 0,
+      paddingOuter: 0,
       overlayMargin: 5,
-      width: 50,
     },
     className: 'histogram-d3',
     colorScheme,
@@ -252,7 +261,7 @@ export const joyPlotD3 = ((): IChartAdaptor<IJoyPlotProps> => {
      * Draw scales
      */
     _drawScales(data: IHistogramData[]) {
-      const { margin, height, axis } = props;
+      const { bar, margin, height, axis } = props;
       const valuesCount = data.reduce((prev, next) => {
         const c = this.valuesCount(next.counts);
         return c > prev ? c : prev;
@@ -266,12 +275,14 @@ export const joyPlotD3 = ((): IChartAdaptor<IJoyPlotProps> => {
       x
         .domain(bins)
         .rangeRound([0, w])
-        .paddingInner(this.groupedMargin());
+        .paddingInner(paddingInner(bar))
+        .paddingOuter(paddingOuter(bar));
 
       innerScaleBand
         .domain(dataLabels)
         .rangeRound([0, x.bandwidth()])
-        .paddingInner(this.barMargin());
+        .paddingInner(groupedPaddingInner(bar))
+        .paddingOuter(groupedPaddingOuter(bar));
 
       xAxis = axisBottom(x);
 
@@ -337,25 +348,8 @@ export const joyPlotD3 = ((): IChartAdaptor<IJoyPlotProps> => {
     },
 
     /**
-     * Returns the margin between similar bars in different data sets
-     */
-    groupedMargin(): number {
-      const m = get(props.bar, 'groupMargin', 0.1);
-      return m >= 0 && m <= 1
-        ? m
-        : 0;
-    },
-
-    barMargin(): number {
-      const m = get(props.bar, 'margin', 0);
-      return m >= 0 && m <= 1
-        ? m
-        : 0.1;
-    },
-
-    /**
-     * Calculate the bar width
-     */
+    * Calculate the bar width
+    */
     barWidth() {
       return innerScaleBand.bandwidth();
     },

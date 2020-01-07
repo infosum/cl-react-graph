@@ -8,7 +8,7 @@ import {
   scaleOrdinal,
 } from 'd3-scale';
 import { Selection } from 'd3-selection';
-import { cloneDeep } from 'lodash';
+import cloneDeep from 'lodash/cloneDeep';
 import merge from 'lodash/merge';
 
 import colorScheme from './colors';
@@ -22,17 +22,18 @@ import {
 } from './grid';
 import {
   EGroupedBarLayout,
-  IAnnotation,
   IAxis,
   IChartAdaptor,
   IHistogramProps,
 } from './Histogram';
 import tips, { makeTip } from './tip';
 import {
-  barMargin,
   getBarWidth,
   groupedBarsUseSameXAxisValue,
-  groupedMargin,
+  groupedPaddingInner,
+  groupedPaddingOuter,
+  paddingInner,
+  paddingOuter,
 } from './utils/bars';
 import {
   annotationAxisDefaults,
@@ -95,10 +96,13 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
   const props: IHistogramProps = {
     axis: cloneDeep(defaultAxis),
     bar: {
-      groupMargin: 0.1,
-      margin: 0,
+      grouped: {
+        paddingInner: 0.1,
+        paddingOuter: 0,
+      },
+      paddingInner: 0,
+      paddingOuter: 0,
       overlayMargin: 5,
-      width: 50,
     },
     className: 'histogram-d3',
     colorScheme,
@@ -189,12 +193,14 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
       x
         .domain(data.bins)
         .rangeRound([0, w])
-        .paddingInner(groupedMargin(bar));
+        .paddingInner(paddingInner(bar))
+        .paddingOuter(paddingOuter(bar));
 
       innerScaleBand
         .domain(groupedBarsUseSameXAxisValue({ groupLayout, stacked }) ? ['main'] : dataLabels)
         .rangeRound([0, x.bandwidth()])
-        .paddingInner(barMargin(props.bar));
+        .paddingInner(groupedPaddingInner(bar))
+        .paddingOuter(groupedPaddingOuter(bar)) // Center the bar distribution around the middle;
 
       const xAxis = axisBottom<string>(x);
       const yAxis = axisLeft<number>(y);
@@ -235,7 +241,7 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
         xAnnotations
           .domain(data.bins)
           .rangeRound([0, w])
-          .paddingInner(groupedMargin(bar));
+          .paddingInner(groupedPaddingInner(bar));
 
         const annotationAxis = axisBottom<string>(xAnnotations);
 
@@ -329,13 +335,26 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
       }
 
       const calculateXPosition = (d: IGroupDataItem, stackIndex: number, offset: number, counts: number): number => {
-        const totalWidth = innerScaleBand.bandwidth();
+        const dataLabels = props.data.counts.map((c) => c.label);
         const barWidth = getBarWidth(stackIndex, props.groupLayout, props.bar, innerScaleBand);
-        const overlaidXPos = (totalWidth / 2) - (barWidth / 2);
-        const finalXPos = (props.groupLayout === EGroupedBarLayout.OVERLAID || counts === 1)
-          ? overlaidXPos
-          : Number(innerScaleBand(String(d.groupLabel)));
-        return offset ? finalXPos + offset : finalXPos;
+        console.log('barWidth', barWidth);
+        const scaleVars = groupedBarsUseSameXAxisValue({ groupLayout, stacked }) ? ['main'] : dataLabels;
+        let bandX = 0;
+
+        switch (props.groupLayout) {
+          case EGroupedBarLayout.OVERLAID:
+            const overlaidOffset = props.bar.overlayMargin * stackIndex;
+            bandX = Number(innerScaleBand(String(scaleVars[0]))) + overlaidOffset;
+            break;
+          case EGroupedBarLayout.STACKED:
+            bandX = Number(innerScaleBand(String(scaleVars[0])));
+            break;
+          case EGroupedBarLayout.GROUPED:
+            bandX = Number(innerScaleBand(String(d.groupLabel)));
+            break;
+        }
+
+        return offset ? bandX + offset : bandX;
       }
 
       const colors = scaleOrdinal(props.colorScheme);
@@ -366,7 +385,7 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
         .enter()
         .append<SVGElement>('rect')
         .attr('height', 0)
-        .attr('y', stackedOffset)
+        .attr('y', y(0)) // Start animation from y Axis 0
         .attr('class', 'bar')
         .on('click', onClick(props.onClick))
         .on('mouseover', onMouseOver({ bins, hover: props.bar.hover, colors, tipContentFn: props.tipContentFn, tipContent, tip, tipContainer }))

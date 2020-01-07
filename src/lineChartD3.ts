@@ -8,15 +8,14 @@ import {
   area,
   curveCatmullRom,
   CurveFactory,
-  CurveFactoryLineOnly,
   line,
 } from 'd3-shape';
 import {
   timeFormat,
   timeParse,
 } from 'd3-time-format';
-import { cloneDeep } from 'lodash';
-import mergeWith from 'lodash.mergewith';
+import cloneDeep from 'lodash/cloneDeep';
+import mergeWith from 'lodash/mergeWith';
 
 import attrs from './d3/attrs';
 import {

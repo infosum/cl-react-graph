@@ -27,11 +27,16 @@ export enum EColorManipulations {
 };
 
 export interface IHistogramBar {
-  groupMargin: number;
-  margin: number;
+  // Padding for the inside of grouped datasets 
+  grouped: {
+    paddingInner: number;
+    paddingOuter: number;
+  }
+  // Padding for the outside of grouped datasets or single datasets
+  paddingOuter: number;
+  paddingInner: number;
   hover?: Partial<Record<EColorManipulations, number>>,
-  overlayMargin: number; // When bars are rendered as EGroupedBarLayout.OVERLAID
-  width?: number;
+  overlayMargin: number; // When bars are rendered as EGroupedBarLayout.OVERLAID (offset between the two overlaid bars)
 }
 
 export interface IGrid {

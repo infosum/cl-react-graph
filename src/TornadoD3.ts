@@ -11,7 +11,7 @@ import {
 } from 'd3-scale';
 import { Selection } from 'd3-selection';
 import { timeFormat } from 'd3-time-format';
-import { cloneDeep } from 'lodash';
+import cloneDeep from 'lodash/cloneDeep';
 import merge from 'lodash/merge';
 
 import colorScheme from './colors';
@@ -37,10 +37,10 @@ import {
   ITornadoProps,
 } from './Tornado';
 import {
-  barMargin,
   getBarWidth,
   groupedBarsUseSameXAxisValue,
-  groupedMargin,
+  groupedPaddingInner,
+  paddingInner,
 } from './utils/bars';
 import {
   axis as defaultAxis,
@@ -96,8 +96,12 @@ export const tornadoD3 = ((): IChartAdaptor<ITornadoProps> => {
   const props: ITornadoProps = {
     axis: cloneDeep(defaultAxis),
     bar: {
-      groupMargin: 0.1,
-      margin: 10,
+      grouped: {
+        paddingInner: 0.1,
+        paddingOuter: 0,
+      },
+      paddingInner: 0.1,
+      paddingOuter: 0,
       overlayMargin: 5,
     },
     className: 'torando-d3',
@@ -176,12 +180,12 @@ export const tornadoD3 = ((): IChartAdaptor<ITornadoProps> => {
 
       y.domain(data.bins)
         .rangeRound([h, 0])
-        .paddingInner(groupedMargin(bar));
+        .paddingInner(groupedPaddingInner(bar));
 
       innerScaleBand
         .domain(groupedBarsUseSameXAxisValue({ groupLayout }) ? ['main'] : dataLabels)
         .rangeRound([0, y.bandwidth()])
-        .paddingInner(barMargin(props.bar));
+        .paddingInner(paddingInner(props.bar));
 
       const xAxis = axisBottom<number>(x)
         .tickFormat((v) => {
