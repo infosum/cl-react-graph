@@ -19,10 +19,10 @@ import {
 
 import { HorizontalHistogram } from '../../../src';
 import Histogram, {
-  EColorManipulations,
   EGroupedBarLayout,
   IAxes,
   IGrid,
+  IHistogramBar,
   IHistogramData,
 } from '../../../src/Histogram';
 import Legend from '../../../src/Legend';
@@ -62,21 +62,25 @@ const tipContentFns = [
 
 export interface IInitialState {
   axis: DeepPartial<IAxes>;
-  bar: {
-    overlayMargin: number;
-    hover: Partial<Record<EColorManipulations, number>>;
-  };
+  bar: DeepPartial<IHistogramBar>;
   chartType: string;
   data: IHistogramData;
   delay: number;
   duration: number;
   grid: IGrid;
   groupLayout: EGroupedBarLayout;
+  width: number | string;
 }
 
 const initialSate: IInitialState = {
   axis: analyticsAxis,
   bar: {
+    grouped: {
+      paddingInner: 0.1,
+      paddingOuter: 0,
+    },
+    paddingInner: 0.1,
+    paddingOuter: 0,
     overlayMargin: 5,
     hover: {
       lighten: 0.1,
@@ -85,9 +89,10 @@ const initialSate: IInitialState = {
   chartType: 'Histogram',
   data,
   delay: 0,
-  duration: 400,
+  duration: 800,
   grid,
-  groupLayout: EGroupedBarLayout.OVERLAID,
+  groupLayout: EGroupedBarLayout.GROUPED,
+  width: '600',
 };
 
 export type GridActions = { type: 'setGridTicks', ticks: number, axis: 'x' | 'y' }
@@ -99,9 +104,15 @@ export type Actions = { type: 'setChartType'; chartType: string }
   | { type: 'setDuration'; duration: number }
   | { type: 'setDelay'; delay: number }
   | { type: 'setGroupedBarLayout'; layout: EGroupedBarLayout; }
+  | { type: 'setGroupedPaddingInner'; padding: number; }
+  | { type: 'setGroupedPaddingOuter'; padding: number; }
   | { type: 'setOverlayMargin'; margin: number; }
+  | { type: 'setWidth', width: string; }
   | { type: 'setHoverModifier'; value: number; key: string; index: number; }
   | { type: 'removeHoverModifier'; index: number; }
+  | { type: 'setPaddingInner'; padding: number; }
+  | { type: 'setPaddingOuter'; padding: number; }
+  | {type: 'setBarWidth', width: number }
   | GridActions
   | AxisActions
   ;
@@ -143,7 +154,7 @@ export function axisReducer<S extends any, A extends any>(state: S, action: A): 
   }
 }
 
-function reducer(state: IInitialState, action: Actions) {
+function reducer(state: IInitialState, action: Actions): IInitialState {
   state = gridReducer(state, action);
   state = axisReducer(state, action);
   switch (action.type) {
@@ -155,6 +166,8 @@ function reducer(state: IInitialState, action: Actions) {
       return { ...state, duration: action.duration };
     case 'setDelay':
       return { ...state, delay: action.delay };
+    case 'setWidth':
+      return { ...state, width: action.width };
     case 'setGridTicks':
       return merge(state, { grid: { [action.axis]: { ticks: action.ticks } } });
     case 'setGridStroke':
@@ -169,7 +182,53 @@ function reducer(state: IInitialState, action: Actions) {
         bar: {
           ...state.bar,
           overlayMargin: action.margin,
-        }
+        },
+      }
+    case 'setGroupedPaddingInner':
+      return {
+        ...state,
+        bar: {
+          ...state.bar,
+          grouped: {
+            ...state.bar.grouped,
+            paddingInner: action.padding,
+          }
+        },
+      }
+    case 'setGroupedPaddingOuter':
+      return {
+        ...state,
+        bar: {
+          ...state.bar,
+          grouped: {
+            ...state.bar.grouped,
+            paddingOuter: action.padding,
+          }
+        },
+      }
+    case 'setPaddingInner':
+      return {
+        ...state,
+        bar: {
+          ...state.bar,
+          paddingInner: action.padding,
+        },
+      };
+    case 'setPaddingOuter':
+      return {
+        ...state,
+        bar: {
+          ...state.bar,
+          paddingOuter: action.padding,
+        },
+      };
+    case 'setBarWidth':
+      return {
+        ...state,
+        bar: {
+          ...state.bar,
+          width: action.width,
+        },
       }
     case 'setHoverModifier': {
       const hover = { ...state.bar.hover };
@@ -251,7 +310,7 @@ const HistogramExample = () => {
     axis={state.axis}
     bar={state.bar}
     grid={state.grid}
-    width={420}
+    width={state.width}
     annotations={annotationsData}
     annotationTextSize={'0.5rem'}
     showBinPercentages={[true, true]}
@@ -275,7 +334,7 @@ const HistogramExample = () => {
     axis={state.axis}
     bar={state.bar}
     grid={state.grid}
-    width={420}
+    width={state.width}
     annotations={smallAnnotationsData}
     showBinPercentages={[true, true]}
     onClick={(d) => console.log(d)}
@@ -419,13 +478,114 @@ const HistogramExample = () => {
                       </Grid>
                       <Grid item xs={6}>
                         <TextField
-                          label="overlay margin"
-                          value={state.bar.overlayMargin}
+                          label="Chart width"
+                          value={state.width}
                           onChange={(e) => {
-                            dispatch(({ type: 'setOverlayMargin', margin: Number(e.target.value) }))
+                            dispatch(({ type: 'setWidth', width: e.target.value }))
                           }}
                         />
                       </Grid>
+                      <Grid item xs={6}>
+                        <TextField
+                          label="Bar width"
+                          value={state.bar.width}
+                          onChange={(e) => {
+                            dispatch(({ type: 'setBarWidth', width: parseInt(e.target.value) }))
+                          }}
+                        />
+                      </Grid>
+                      <Grid item xs={6}>
+                        <label>
+                          Grouped padding inner (0 - 1)
+                        </label>
+                        <input
+                          type="number"
+                          min={0}
+                          max={1}
+                          step={0.1}
+                          value={state.bar.grouped.paddingInner.toString()}
+                          onChange={(e: any) => {
+                            dispatch(({ type: 'setGroupedPaddingInner', padding: parseFloat(e.target.value) }))
+                          }}
+                        />
+                        <div><small>
+                          When rendered as grouped, this is the relative spacing between each bar in the group
+                        </small>
+                        </div>
+                      </Grid>
+                      <Grid item xs={6}>
+                        <label>
+                          Grouped padding outer (0 - 1)
+                        </label>
+                        <input
+                          type="number"
+                          min={0}
+                          step={0.1}
+                          max={1}
+                          value={state.bar.grouped.paddingOuter.toString()}
+                          onChange={(e: any) => {
+                            dispatch(({ type: 'setGroupedPaddingOuter', padding: parseFloat(e.target.value) }))
+                          }}
+                        />
+                        <div>
+                          <small>
+                            When rendered as grouped, this is the relative spacing at the start  and end of the group's bars
+                        </small>
+                        </div>
+                      </Grid>
+
+                      <Grid item xs={6}>
+                        <label>
+                          Padding inner (0 - 1)
+                        </label>
+                        <input
+                          type="number"
+                          min={0}
+                          max={1}
+                          step={0.1}
+                          value={state.bar.paddingInner.toString()}
+                          onChange={(e: any) => {
+                            dispatch(({ type: 'setPaddingInner', padding: parseFloat(e.target.value) }))
+                          }}
+                        />
+                        <div>
+                          <small>
+                            This is the relative padding for the inside of grouped datasets or single datasets
+                        </small>
+                        </div>
+                      </Grid>
+                      <Grid item xs={6}>
+                        <label>
+                          Padding outer (0 - 1)
+                        </label>
+                        <input
+                          type="number"
+                          min={0}
+                          step={0.1}
+                          max={1}
+                          value={state.bar.paddingOuter.toString()}
+                          onChange={(e: any) => {
+                            dispatch(({ type: 'setPaddingOuter', padding: parseFloat(e.target.value) }))
+                          }}
+                        />
+                        <small>
+                          This is the relative padding for the outside of grouped datasets or single datasets
+                        </small>
+                      </Grid>
+
+                      {
+                        state.groupLayout === EGroupedBarLayout.OVERLAID &&
+                        <Grid item xs={6}>
+                          <TextField
+                            helperText="When rendered as overlaid, this is the space between the overlaid bars"
+                            label="Overlay margin (px)"
+                            value={state.bar.overlayMargin}
+                            onChange={(e) => {
+                              dispatch(({ type: 'setOverlayMargin', margin: Number(e.target.value) }))
+                            }}
+                          />
+                        </Grid>
+                      }
                       <ColorModifierFields
                         values={state.bar.hover}
                         dispatch={dispatch} />

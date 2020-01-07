@@ -19,11 +19,14 @@ export declare enum EColorManipulations {
     'rotate' = "rotate"
 }
 export interface IHistogramBar {
-    groupMargin: number;
-    margin: number;
+    grouped: {
+        paddingInner: number;
+        paddingOuter: number;
+    };
+    paddingOuter: number;
+    paddingInner: number;
     hover?: Partial<Record<EColorManipulations, number>>;
     overlayMargin: number;
-    width?: number;
 }
 export interface IGrid {
     x: {

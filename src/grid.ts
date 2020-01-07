@@ -2,7 +2,7 @@ import {
   axisBottom,
   axisLeft,
 } from 'd3-axis';
-import get from 'lodash.get';
+import get from 'lodash/get';
 
 import attrs from './d3/attrs';
 import {
