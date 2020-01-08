@@ -47,7 +47,7 @@ import {
   grid as defaultGrid,
 } from './utils/defaults';
 import {
-  isStacked,
+  applyDomainAffordance,
   shouldFormatTick,
   ticks,
   tickSize,
@@ -240,6 +240,7 @@ export const tornadoD3 = ((): IChartAdaptor<ITornadoProps> => {
       const xGroupAxis = axisBottom(x2).tickPadding(SPLIT_AXIS_HEIGHT)
         .tickSize(0)
 
+      console.log('props.splitBins', props.splitBins);
       x2.range([Number(width) / 4, Number(width) * (3 / 4) - (margin.top * 2) - axis.y.width])
         .domain(props.splitBins);
 
@@ -265,6 +266,10 @@ export const tornadoD3 = ((): IChartAdaptor<ITornadoProps> => {
         .domain(domain)
         .nice();
 
+      console.log('width', width, margin, axis.y);
+      console.log('x range', [0, Number(width) - (margin.top * 2) - axis.y.width]);
+      console.log('x domain', domain);
+      console.log('x(0)', x(0));
       const xAxisY = height - xAxisHeight(props.axis) - margin.top - SPLIT_AXIS_HEIGHT;
       xAxisContainer
         .attr('transform', 'translate(' + yAxisWidth(axis) + ',' +
@@ -287,11 +292,19 @@ export const tornadoD3 = ((): IChartAdaptor<ITornadoProps> => {
       const { data, center } = props;
       const leftValues = data.counts.reduce((prev, next) => prev.concat(next.data[0]), [] as number[]);
       const rightValues = data.counts.reduce((prev, next) => prev.concat(next.data[1]), [] as number[]);
-      domain = [-Math.max(...leftValues), Math.max(...rightValues)];
+
+      // Use applyDomainAffordance to allow space for percentage labels
+      domain = [
+        applyDomainAffordance(-Math.max(...leftValues)),
+        applyDomainAffordance(Math.max(...rightValues)),
+      ];
+
       // Center the 0 axis value in the middle of the chart
       if (center) {
         const max = Math.max(Math.max(...leftValues), domain[1]);
-        domain = [-max, max];
+        domain = [
+          applyDomainAffordance(-max),
+          applyDomainAffordance(max)];
       }
       return domain;
     },
@@ -308,20 +321,8 @@ export const tornadoD3 = ((): IChartAdaptor<ITornadoProps> => {
       const percentData = calculatePercents(groupData);
 
       const stackedOffset = (d: IGroupDataItem, stackIndex: number) => {
-        const thisGroupData = percentData.find((gData) => {
-          return gData.find((dx) => dx.label === d.label) !== undefined;
-        });
-        const oSet = (thisGroupData || [])
-          .filter((_, i) => i < stackIndex)
-          .reduce((prev, next) => prev + next.value, 0);
-        const isItStacked = isStacked({ groupLayout });
-        const offset = isItStacked && stackIndex > 0
-          ? oSet
-          : 0;
-        // @TODO  reapply offset
         const w = d.side === 'left' ? -d.value : d.value;
         return x(Math.min(0, w));
-        // return isItStacked ? x(offset) : x(0);
       }
 
       const colors = scaleOrdinal(props.colorScheme);
@@ -345,12 +346,14 @@ export const tornadoD3 = ((): IChartAdaptor<ITornadoProps> => {
 
         .selectAll<SVGElement, {}>('rect')
         .data((d) => d);
-
+      console.log('bars enter x', x(0));
       bars
         .enter()
         .append<SVGElement>('rect')
         .attr('width', 0)
-        .attr('x', stackedOffset)
+        .attr('x', (d) => {
+          return x(0);// + w;
+        })
         .attr('class', (d) => `bar ${d.side}`)
         .on('click', onClick(props.onClick))
         .on('mouseover', onMouseOver({ bins, hover: props.bar.hover, colors, tipContentFn: props.tipContentFn, tipContent, tip, tipContainer }))
@@ -371,8 +374,119 @@ export const tornadoD3 = ((): IChartAdaptor<ITornadoProps> => {
         .attr('x', stackedOffset)
         .attr('width', (d: IGroupDataItem): number => {
           const w = d.side === 'left' ? -d.value : d.value;
-          return Math.abs(x(w) - x(0))
+          return Math.abs(x(w) - x(0));
         });
+
+      const showBinPercentages = true;
+      if (showBinPercentages) {
+
+        const percents = g.enter()
+          .append<SVGElement>('g')
+          .merge(g)
+          .attr('transform', (d: any[]) => {
+            let yd = y(d[0].label);
+            if (yd === undefined) {
+              yd = 0;
+            }
+            const x = yAxisWidth(axis) + axis.x.style['stroke-width'];
+            return `translate(${x}, ${margin.top + yd})`;
+          })
+
+          .selectAll<SVGElement, {}>('text')
+          .data((d) => d);
+
+        percents
+          .enter()
+          .append<SVGElement>('text')
+          .attr('width', 0)
+          .attr('x', (d) => {
+            const w = d.side === 'left' ? -40 : 40;
+            return x(0) + w;
+          })
+          .attr('class', 'percentage-label')
+          .style('text-anchor', 'middle')
+          .style('font-size', '0.675rem')
+          .text((d, i) => {
+            return `${d.percent}%`;
+          })
+          .merge(percents)
+          .attr('y', (d: IGroupDataItem, i: number) => {
+            const overlay = (props.groupLayout === EGroupedBarLayout.OVERLAID)
+              ? Math.floor(i / 2) * props.bar.overlayMargin
+              : Number(innerScaleBand(String(d.groupLabel)));
+
+            const h = getBarWidth(0, props.groupLayout, props.bar, innerScaleBand);
+            // const offset = i === 0 || i === 2 ? h / 4 : h - 10;
+            const offset = h / 2;
+            console.log('d', d, i, h);
+            console.log('offset', offset);
+            console.log('props.groupLayout', innerScaleBand(String(d.groupLabel)));
+
+            // Ensure that percentage labels don't overlap 
+            const verticalOffset = i < 2 ? 0 : 20;
+            return offset + verticalOffset; //h / 2;
+          })
+          .attr('fill', (d, i) => colors(String(d.groupLabel)))
+          .transition()
+          .duration(duration)
+          .delay(delay)
+          .attr('x', (d) => {
+            const w = d.side === 'left' ? - 20 : 20;
+            const v = d.side === 'left' ? -d.value : d.value;
+            return x(v) + w;
+          })
+          .attr('width', (d: IGroupDataItem): number => {
+            const w = d.side === 'left' ? -d.value : d.value;
+            return Math.abs(x(w) - x(0));
+          });
+        // const percents = g.enter()
+        //   .append<SVGElement>('g')
+        //   .merge(g)
+        //   .attr('transform', (d: any[]) => {
+        //     let xd = x(d[0].label);
+        //     if (xd === undefined) {
+        //       xd = 0;
+        //     }
+        //     const xDelta = yAxisWidth(axis)
+        //       + axis.y.style['stroke-width']
+        //       + xd;
+        //     return `translate(${xDelta}, 0)`;
+        //   })
+
+        //   .selectAll<SVGElement, {}>('text')
+        //   .data((d) => d);
+
+        // bars
+        //   .enter()
+        //   .append<SVGElement>('text')
+        //   .attr('class', 'percentage-label')
+        //   .attr('y', (d: IGroupDataItem, i: number) => {
+        //     return i * 50;
+        //     // const overlay = (props.groupLayout === EGroupedBarLayout.OVERLAID)
+        //     //   ? Math.floor(i / 2) * props.bar.overlayMargin
+        //     //   : Number(innerScaleBand(String(d.groupLabel)));
+        //     // const w = d.side === 'left' ? -d.value : d.value;
+        //     // return Math.abs(x(w) - x(0))
+        //     // // return overlay;
+        //   })
+        //   // .data((d) => d)
+        //   .merge(bars)
+        //   .text((d, i) => {
+        //     return `${d.percent}% ${d.value}`;
+        //   })
+        //   // .style('text-anchor', 'middle')
+        //   .style('font-size', '0.675rem')
+        //   .attr('fill', (d, i) => colors(String(d.groupLabel)))
+        //   .attr('x', (d: IGroupDataItem, stackIndex: number) => {
+        //     const w = d.side === 'left' ? -d.value : d.value;
+        //     return (x(w) - x(0))
+        //     return x(200000);
+
+        //     return x(Math.min(0, w));
+        //   });
+        // .attr('dy', -2);
+        // percents.exit().remove();
+      };
 
       bars.exit().remove();
       g.exit().remove();
@@ -404,53 +518,7 @@ export const tornadoD3 = ((): IChartAdaptor<ITornadoProps> => {
         .style('text-anchor', 'middle')
         .text((d) => d);
 
-      const showBinPercentages = true;
-      if (showBinPercentages) {
 
-        const percents = g.enter()
-          .append<SVGElement>('g')
-          .merge(g)
-          .attr('transform', (d: any[]) => {
-            let xd = x(d[0].label);
-            if (xd === undefined) {
-              xd = 0;
-            }
-            const xDelta = yAxisWidth(axis)
-              + axis.y.style['stroke-width']
-              + xd;
-            return `translate(${xDelta}, 0)`;
-          })
-
-          .selectAll<SVGElement, {}>('text')
-          .data((d) => d);
-
-        percents
-          .enter()
-          .append<SVGElement>('text')
-          .attr('class', 'percentage-label')
-          .attr('y', (d: IGroupDataItem, i: number) => {
-            return i * 50;
-            // const overlay = (props.groupLayout === EGroupedBarLayout.OVERLAID)
-            //   ? Math.floor(i / 2) * props.bar.overlayMargin
-            //   : Number(innerScaleBand(String(d.groupLabel)));
-            // const w = d.side === 'left' ? -d.value : d.value;
-            // return Math.abs(x(w) - x(0))
-            // // return overlay;
-          })
-          .data((d) => d)
-          .merge(percents)
-          .text((d, i) => {
-            console.log('text', d, i);
-            console.log(`${d.percent}%`);
-            return `${d.percent}%`;
-          })
-          .style('text-anchor', 'middle')
-          .style('font-size', '0.675rem')
-          .attr('fill', (d, i) => colors(String(i)))
-          .attr('x', 100)
-          .attr('dy', -2);
-        percents.exit().remove();
-      };
     },
 
     /**

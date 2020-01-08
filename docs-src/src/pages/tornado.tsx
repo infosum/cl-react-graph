@@ -50,8 +50,9 @@ const initialState: TInitialState = {
       {
         label: 'Background',
         data: [
-          [2000, 1000], // Male bin 1, Male bin 2,
-          [5000, 3000], // Female bin 1, Female bin 2,
+          [5000, 100000], // Male bin 1, Male bin 2,
+          [10000, 20000], // Female bin 1, Female bin 2,
+          [1000, 2000]
         ]
       },
       {
@@ -59,6 +60,7 @@ const initialState: TInitialState = {
         data: [
           [2000, 1000], // Male bin 1, Male bin 2,
           [5000, 3000], // Female bin 1, Female bin 2,
+          [3000, 300]
         ]
       },
 
@@ -90,7 +92,7 @@ const Tornado = () => {
   const chart = <TornadoChart
     {...initialState}
     data={state.data}
-    width="100%" />;
+    width="600" />;
   return (
     <Layout>
       <SEO title="Line Chart" description="" />
