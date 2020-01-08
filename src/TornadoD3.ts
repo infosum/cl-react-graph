@@ -75,6 +75,30 @@ export const maxValueCount = (counts: ITornadoDataSet[]): number => {
 // The height for the x axis labels showing the left/right labels.
 const SPLIT_AXIS_HEIGHT = 20;
 
+const calculatePercents = (groupData: IGroupData) => {
+  const totals: Array<{ left: number, right: number }> = groupData.reduce((prev, next) => {
+    const values = next.reduce((p, n) => {
+      const k = n.side!;
+      if (!p[k]) {
+        p[k] = 0;
+      }
+      p[k] = p[k] + n.value;
+      return p;
+    }, { left: 0, right: 0 });
+    return prev.concat(values);
+  }, [] as Array<{ left: number, right: number }>);
+
+  return groupData.map((data, i) => {
+    return data.map((datum) => {
+      const total = totals[i][datum.side!];
+      return {
+        ...datum,
+        percent: Math.round(datum.value / total * 100),
+      }
+    })
+
+  });
+}
 export const tornadoD3 = ((): IChartAdaptor<ITornadoProps> => {
   let svg: Selection<any, any, any, any>;;
   let tipContainer;
@@ -281,8 +305,10 @@ export const tornadoD3 = ((): IChartAdaptor<ITornadoProps> => {
     ) {
       const { axis, height, margin, delay, duration, tip, groupLayout } = props;
 
+      const percentData = calculatePercents(groupData);
+
       const stackedOffset = (d: IGroupDataItem, stackIndex: number) => {
-        const thisGroupData = groupData.find((gData) => {
+        const thisGroupData = percentData.find((gData) => {
           return gData.find((dx) => dx.label === d.label) !== undefined;
         });
         const oSet = (thisGroupData || [])
@@ -300,10 +326,10 @@ export const tornadoD3 = ((): IChartAdaptor<ITornadoProps> => {
 
       const colors = scaleOrdinal(props.colorScheme);
       const gWidth = gridWidth(props);
-
+      console.log('percent data', percentData);
       const g = container
         .selectAll<SVGElement, {}>('g')
-        .data(groupData);
+        .data(percentData);
 
       const bars = g.enter()
         .append<SVGElement>('g')
@@ -377,6 +403,54 @@ export const tornadoD3 = ((): IChartAdaptor<ITornadoProps> => {
         .attr('dy', '1em')
         .style('text-anchor', 'middle')
         .text((d) => d);
+
+      const showBinPercentages = true;
+      if (showBinPercentages) {
+
+        const percents = g.enter()
+          .append<SVGElement>('g')
+          .merge(g)
+          .attr('transform', (d: any[]) => {
+            let xd = x(d[0].label);
+            if (xd === undefined) {
+              xd = 0;
+            }
+            const xDelta = yAxisWidth(axis)
+              + axis.y.style['stroke-width']
+              + xd;
+            return `translate(${xDelta}, 0)`;
+          })
+
+          .selectAll<SVGElement, {}>('text')
+          .data((d) => d);
+
+        percents
+          .enter()
+          .append<SVGElement>('text')
+          .attr('class', 'percentage-label')
+          .attr('y', (d: IGroupDataItem, i: number) => {
+            return i * 50;
+            // const overlay = (props.groupLayout === EGroupedBarLayout.OVERLAID)
+            //   ? Math.floor(i / 2) * props.bar.overlayMargin
+            //   : Number(innerScaleBand(String(d.groupLabel)));
+            // const w = d.side === 'left' ? -d.value : d.value;
+            // return Math.abs(x(w) - x(0))
+            // // return overlay;
+          })
+          .data((d) => d)
+          .merge(percents)
+          .text((d, i) => {
+            console.log('text', d, i);
+            console.log(`${d.percent}%`);
+            return `${d.percent}%`;
+          })
+          .style('text-anchor', 'middle')
+          .style('font-size', '0.675rem')
+          .attr('fill', (d, i) => colors(String(i)))
+          .attr('x', 100)
+          .attr('dy', -2);
+        percents.exit().remove();
+      };
     },
 
     /**
