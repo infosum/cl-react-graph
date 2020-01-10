@@ -3,7 +3,9 @@ import React, { useReducer } from 'react';
 import {
   Card,
   CardContent,
+  FormControlLabel,
   Grid,
+  Switch,
   Typography,
 } from '@material-ui/core';
 
@@ -12,7 +14,10 @@ import {
   IAxes,
 } from '../../../src';
 import { EColorManipulations } from '../../../src/Histogram';
-import TornadoChart, { ITornadoProps } from '../../../src/Tornado';
+import TornadoChart, {
+  ITornadoData,
+  ITornadoProps,
+} from '../../../src/Tornado';
 import { DeepPartial } from '../../../src/utils/types';
 import JSXToString from '../components/JSXToString';
 import Layout from '../components/layout';
@@ -32,35 +37,26 @@ const axis: DeepPartial<IAxes> = {
 };
 
 
-type Actions = { type: 'TEST' }
+type Actions = { type: 'SET_SHOW_PERCENTAGES', show: boolean }
   | { type: 'HERE' };
 
-type TInitialState = ITornadoProps | {
-  axis: DeepPartial<IAxes>;
-  bar: {
-    overlayMargin: number;
-    hover: Partial<Record<EColorManipulations, number>>;
-  };
-}
-const initialState: TInitialState = {
+const initialState: DeepPartial<ITornadoProps> = {
   data: {
-    bins: ['0 - 10', '11 - 20'],
+    bins: ['0 - 10', '11 - 20', '21 - 30'],
     // @Todo test with only one count set
     counts: [
       {
         label: 'Background',
         data: [
-          [5000, 100000], // Male bin 1, Male bin 2,
-          [10000, 20000], // Female bin 1, Female bin 2,
-          [1000, 2000]
+          [5000, 100000, 100000], // Male bin 1, Male bin 2,
+          [10000, 20000, 20000], // Female bin 1, Female bin 2,
         ]
       },
       {
         label: 'Foreground',
         data: [
-          [2000, 1000], // Male bin 1, Male bin 2,
-          [5000, 3000], // Female bin 1, Female bin 2,
-          [3000, 300]
+          [2000, 1000, 1000], // Male bin 1, Male bin 2,
+          [5000, 3000, 3000], // Female bin 1, Female bin 2,
         ]
       },
 
@@ -69,6 +65,12 @@ const initialState: TInitialState = {
   axis,
   splitBins: ['Male', 'Female'],
   bar: {
+    grouped: {
+      paddingInner: 0.1,
+      paddingOuter: 0,
+    },
+    paddingInner: 0.1,
+    paddingOuter: 0,
     overlayMargin: 10,
     hover: {
       lighten: 0.1,
@@ -82,7 +84,14 @@ const initialState: TInitialState = {
   groupLayout: EGroupedBarLayout.OVERLAID,
 }
 
-function reducer(state: ITornadoProps, action: Actions) {
+function reducer(state: ITornadoProps, action: Actions): ITornadoProps {
+  switch (action.type) {
+    case 'SET_SHOW_PERCENTAGES':
+      return {
+        ...state,
+        showBinPercentages: action.show,
+      };
+  }
   return state;
 }
 
@@ -90,8 +99,7 @@ function reducer(state: ITornadoProps, action: Actions) {
 const Tornado = () => {
   const [state, dispatch] = useReducer(reducer, initialState as ITornadoProps);
   const chart = <TornadoChart
-    {...initialState}
-    data={state.data}
+    {...state}
     width="600" />;
   return (
     <Layout>
@@ -111,6 +119,20 @@ const Tornado = () => {
                 <JSXToString component={chart} />
               </CardContent>
             </Card>
+          </Grid>
+          <Grid item xs={6}>
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={state.showBinPercentages}
+                  color="primary"
+                  onChange={(_, value) => {
+                    dispatch({ type: 'SET_SHOW_PERCENTAGES', show: value });
+                  }}
+                />
+              }
+              label="Show points"
+            />
           </Grid>
 
           <Grid item xs={6}>

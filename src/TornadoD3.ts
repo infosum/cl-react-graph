@@ -151,6 +151,7 @@ export const tornadoD3 = ((): IChartAdaptor<ITornadoProps> => {
       right: 0,
       top: 5,
     },
+    showBinPercentages: false,
     splitBins: ['Left', 'Right'],
     stroke: {
       color: '#005870',
@@ -240,7 +241,6 @@ export const tornadoD3 = ((): IChartAdaptor<ITornadoProps> => {
       const xGroupAxis = axisBottom(x2).tickPadding(SPLIT_AXIS_HEIGHT)
         .tickSize(0)
 
-      console.log('props.splitBins', props.splitBins);
       x2.range([Number(width) / 4, Number(width) * (3 / 4) - (margin.top * 2) - axis.y.width])
         .domain(props.splitBins);
 
@@ -266,10 +266,6 @@ export const tornadoD3 = ((): IChartAdaptor<ITornadoProps> => {
         .domain(domain)
         .nice();
 
-      console.log('width', width, margin, axis.y);
-      console.log('x range', [0, Number(width) - (margin.top * 2) - axis.y.width]);
-      console.log('x domain', domain);
-      console.log('x(0)', x(0));
       const xAxisY = height - xAxisHeight(props.axis) - margin.top - SPLIT_AXIS_HEIGHT;
       xAxisContainer
         .attr('transform', 'translate(' + yAxisWidth(axis) + ',' +
@@ -316,7 +312,7 @@ export const tornadoD3 = ((): IChartAdaptor<ITornadoProps> => {
       bins: string[],
       groupData: IGroupData,
     ) {
-      const { axis, height, margin, delay, duration, tip, groupLayout } = props;
+      const { axis, height, margin, delay, duration, tip, showBinPercentages } = props;
 
       const percentData = calculatePercents(groupData);
 
@@ -327,7 +323,7 @@ export const tornadoD3 = ((): IChartAdaptor<ITornadoProps> => {
 
       const colors = scaleOrdinal(props.colorScheme);
       const gWidth = gridWidth(props);
-      console.log('percent data', percentData);
+
       const g = container
         .selectAll<SVGElement, {}>('g')
         .data(percentData);
@@ -346,7 +342,7 @@ export const tornadoD3 = ((): IChartAdaptor<ITornadoProps> => {
 
         .selectAll<SVGElement, {}>('rect')
         .data((d) => d);
-      console.log('bars enter x', x(0));
+
       bars
         .enter()
         .append<SVGElement>('rect')
@@ -377,116 +373,59 @@ export const tornadoD3 = ((): IChartAdaptor<ITornadoProps> => {
           return Math.abs(x(w) - x(0));
         });
 
-      const showBinPercentages = true;
-      if (showBinPercentages) {
+      const percents = g.enter()
+        .append<SVGElement>('g')
+        .merge(g)
+        .attr('transform', (d: any[]) => {
+          let yd = y(d[0].label);
+          if (yd === undefined) {
+            yd = 0;
+          }
+          const x = yAxisWidth(axis) + axis.x.style['stroke-width'];
+          return `translate(${x}, ${margin.top + yd})`;
+        })
 
-        const percents = g.enter()
-          .append<SVGElement>('g')
-          .merge(g)
-          .attr('transform', (d: any[]) => {
-            let yd = y(d[0].label);
-            if (yd === undefined) {
-              yd = 0;
-            }
-            const x = yAxisWidth(axis) + axis.x.style['stroke-width'];
-            return `translate(${x}, ${margin.top + yd})`;
-          })
+        .selectAll<SVGElement, {}>('text')
+        .data((d) => d);
 
-          .selectAll<SVGElement, {}>('text')
-          .data((d) => d);
+      percents
+        .enter()
+        .append<SVGElement>('text')
+        .attr('width', 0)
+        .attr('x', (d) => {
+          const w = d.side === 'left' ? -40 : 40;
+          return x(0) + w;
+        })
+        .attr('class', 'percentage-label')
+        .style('text-anchor', 'middle')
+        .style('font-size', '0.675rem')
+        .merge(percents)
+        .text((d, i) => {
+          return showBinPercentages ? `${d.percent}%` : '';
+        })
+        .attr('y', (d: IGroupDataItem, i: number) => {
+          const h = getBarWidth(0, props.groupLayout, props.bar, innerScaleBand);
+          const offset = h / 2;
 
-        percents
-          .enter()
-          .append<SVGElement>('text')
-          .attr('width', 0)
-          .attr('x', (d) => {
-            const w = d.side === 'left' ? -40 : 40;
-            return x(0) + w;
-          })
-          .attr('class', 'percentage-label')
-          .style('text-anchor', 'middle')
-          .style('font-size', '0.675rem')
-          .text((d, i) => {
-            return `${d.percent}%`;
-          })
-          .merge(percents)
-          .attr('y', (d: IGroupDataItem, i: number) => {
-            const overlay = (props.groupLayout === EGroupedBarLayout.OVERLAID)
-              ? Math.floor(i / 2) * props.bar.overlayMargin
-              : Number(innerScaleBand(String(d.groupLabel)));
+          // Ensure that percentage labels don't overlap 
+          const verticalOffset = i < 2 ? 0 : 14;
+          return offset + verticalOffset;
+        })
+        .attr('fill', (d, i) => colors(String(d.groupLabel)))
+        .transition()
+        .duration(duration)
+        .delay(delay)
+        .attr('x', (d) => {
+          const w = d.side === 'left' ? - 20 : 20;
+          const v = d.side === 'left' ? -d.value : d.value;
+          return x(v) + w;
+        })
+        .attr('width', (d: IGroupDataItem): number => {
+          const w = d.side === 'left' ? -d.value : d.value;
+          return Math.abs(x(w) - x(0));
+        });
 
-            const h = getBarWidth(0, props.groupLayout, props.bar, innerScaleBand);
-            // const offset = i === 0 || i === 2 ? h / 4 : h - 10;
-            const offset = h / 2;
-            console.log('d', d, i, h);
-            console.log('offset', offset);
-            console.log('props.groupLayout', innerScaleBand(String(d.groupLabel)));
-
-            // Ensure that percentage labels don't overlap 
-            const verticalOffset = i < 2 ? 0 : 20;
-            return offset + verticalOffset; //h / 2;
-          })
-          .attr('fill', (d, i) => colors(String(d.groupLabel)))
-          .transition()
-          .duration(duration)
-          .delay(delay)
-          .attr('x', (d) => {
-            const w = d.side === 'left' ? - 20 : 20;
-            const v = d.side === 'left' ? -d.value : d.value;
-            return x(v) + w;
-          })
-          .attr('width', (d: IGroupDataItem): number => {
-            const w = d.side === 'left' ? -d.value : d.value;
-            return Math.abs(x(w) - x(0));
-          });
-        // const percents = g.enter()
-        //   .append<SVGElement>('g')
-        //   .merge(g)
-        //   .attr('transform', (d: any[]) => {
-        //     let xd = x(d[0].label);
-        //     if (xd === undefined) {
-        //       xd = 0;
-        //     }
-        //     const xDelta = yAxisWidth(axis)
-        //       + axis.y.style['stroke-width']
-        //       + xd;
-        //     return `translate(${xDelta}, 0)`;
-        //   })
-
-        //   .selectAll<SVGElement, {}>('text')
-        //   .data((d) => d);
-
-        // bars
-        //   .enter()
-        //   .append<SVGElement>('text')
-        //   .attr('class', 'percentage-label')
-        //   .attr('y', (d: IGroupDataItem, i: number) => {
-        //     return i * 50;
-        //     // const overlay = (props.groupLayout === EGroupedBarLayout.OVERLAID)
-        //     //   ? Math.floor(i / 2) * props.bar.overlayMargin
-        //     //   : Number(innerScaleBand(String(d.groupLabel)));
-        //     // const w = d.side === 'left' ? -d.value : d.value;
-        //     // return Math.abs(x(w) - x(0))
-        //     // // return overlay;
-        //   })
-        //   // .data((d) => d)
-        //   .merge(bars)
-        //   .text((d, i) => {
-        //     return `${d.percent}% ${d.value}`;
-        //   })
-        //   // .style('text-anchor', 'middle')
-        //   .style('font-size', '0.675rem')
-        //   .attr('fill', (d, i) => colors(String(d.groupLabel)))
-        //   .attr('x', (d: IGroupDataItem, stackIndex: number) => {
-        //     const w = d.side === 'left' ? -d.value : d.value;
-        //     return (x(w) - x(0))
-        //     return x(200000);
-
-        //     return x(Math.min(0, w));
-        //   });
-        // .attr('dy', -2);
-        // percents.exit().remove();
-      };
+      percents.exit().remove();
 
       bars.exit().remove();
       g.exit().remove();
@@ -517,8 +456,6 @@ export const tornadoD3 = ((): IChartAdaptor<ITornadoProps> => {
         .attr('dy', '1em')
         .style('text-anchor', 'middle')
         .text((d) => d);
-
-
     },
 
     /**
