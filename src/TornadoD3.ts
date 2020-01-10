@@ -47,7 +47,7 @@ import {
   grid as defaultGrid,
 } from './utils/defaults';
 import {
-  isStacked,
+  applyDomainAffordance,
   shouldFormatTick,
   ticks,
   tickSize,
@@ -75,6 +75,30 @@ export const maxValueCount = (counts: ITornadoDataSet[]): number => {
 // The height for the x axis labels showing the left/right labels.
 const SPLIT_AXIS_HEIGHT = 20;
 
+const calculatePercents = (groupData: IGroupData) => {
+  const totals: Array<{ left: number, right: number }> = groupData.reduce((prev, next) => {
+    const values = next.reduce((p, n) => {
+      const k = n.side!;
+      if (!p[k]) {
+        p[k] = 0;
+      }
+      p[k] = p[k] + n.value;
+      return p;
+    }, { left: 0, right: 0 });
+    return prev.concat(values);
+  }, [] as Array<{ left: number, right: number }>);
+
+  return groupData.map((data, i) => {
+    return data.map((datum) => {
+      const total = totals[i][datum.side!];
+      return {
+        ...datum,
+        percent: Math.round(datum.value / total * 100),
+      }
+    })
+
+  });
+}
 export const tornadoD3 = ((): IChartAdaptor<ITornadoProps> => {
   let svg: Selection<any, any, any, any>;;
   let tipContainer;
@@ -127,6 +151,7 @@ export const tornadoD3 = ((): IChartAdaptor<ITornadoProps> => {
       right: 0,
       top: 5,
     },
+    showBinPercentages: false,
     splitBins: ['Left', 'Right'],
     stroke: {
       color: '#005870',
@@ -263,11 +288,19 @@ export const tornadoD3 = ((): IChartAdaptor<ITornadoProps> => {
       const { data, center } = props;
       const leftValues = data.counts.reduce((prev, next) => prev.concat(next.data[0]), [] as number[]);
       const rightValues = data.counts.reduce((prev, next) => prev.concat(next.data[1]), [] as number[]);
-      domain = [-Math.max(...leftValues), Math.max(...rightValues)];
+
+      // Use applyDomainAffordance to allow space for percentage labels
+      domain = [
+        applyDomainAffordance(-Math.max(...leftValues)),
+        applyDomainAffordance(Math.max(...rightValues)),
+      ];
+
       // Center the 0 axis value in the middle of the chart
       if (center) {
         const max = Math.max(Math.max(...leftValues), domain[1]);
-        domain = [-max, max];
+        domain = [
+          applyDomainAffordance(-max),
+          applyDomainAffordance(max)];
       }
       return domain;
     },
@@ -279,23 +312,13 @@ export const tornadoD3 = ((): IChartAdaptor<ITornadoProps> => {
       bins: string[],
       groupData: IGroupData,
     ) {
-      const { axis, height, margin, delay, duration, tip, groupLayout } = props;
+      const { axis, height, margin, delay, duration, tip, showBinPercentages } = props;
+
+      const percentData = calculatePercents(groupData);
 
       const stackedOffset = (d: IGroupDataItem, stackIndex: number) => {
-        const thisGroupData = groupData.find((gData) => {
-          return gData.find((dx) => dx.label === d.label) !== undefined;
-        });
-        const oSet = (thisGroupData || [])
-          .filter((_, i) => i < stackIndex)
-          .reduce((prev, next) => prev + next.value, 0);
-        const isItStacked = isStacked({ groupLayout });
-        const offset = isItStacked && stackIndex > 0
-          ? oSet
-          : 0;
-        // @TODO  reapply offset
         const w = d.side === 'left' ? -d.value : d.value;
         return x(Math.min(0, w));
-        // return isItStacked ? x(offset) : x(0);
       }
 
       const colors = scaleOrdinal(props.colorScheme);
@@ -303,7 +326,7 @@ export const tornadoD3 = ((): IChartAdaptor<ITornadoProps> => {
 
       const g = container
         .selectAll<SVGElement, {}>('g')
-        .data(groupData);
+        .data(percentData);
 
       const bars = g.enter()
         .append<SVGElement>('g')
@@ -324,7 +347,7 @@ export const tornadoD3 = ((): IChartAdaptor<ITornadoProps> => {
         .enter()
         .append<SVGElement>('rect')
         .attr('width', 0)
-        .attr('x', stackedOffset)
+        .attr('x', (d) => x(0))
         .attr('class', (d) => `bar ${d.side}`)
         .on('click', onClick(props.onClick))
         .on('mouseover', onMouseOver({ bins, hover: props.bar.hover, colors, tipContentFn: props.tipContentFn, tipContent, tip, tipContainer }))
@@ -345,8 +368,62 @@ export const tornadoD3 = ((): IChartAdaptor<ITornadoProps> => {
         .attr('x', stackedOffset)
         .attr('width', (d: IGroupDataItem): number => {
           const w = d.side === 'left' ? -d.value : d.value;
-          return Math.abs(x(w) - x(0))
+          return Math.abs(x(w) - x(0));
         });
+
+      const percents = g.enter()
+        .append<SVGElement>('g')
+        .merge(g)
+        .attr('transform', (d: any[]) => {
+          let yd = y(d[0].label);
+          if (yd === undefined) {
+            yd = 0;
+          }
+          const x = yAxisWidth(axis) + axis.x.style['stroke-width'];
+          return `translate(${x}, ${margin.top + yd})`;
+        })
+
+        .selectAll<SVGElement, {}>('text')
+        .data((d) => d);
+
+      percents
+        .enter()
+        .append<SVGElement>('text')
+        .attr('width', 0)
+        .attr('x', (d) => {
+          const w = d.side === 'left' ? -40 : 40;
+          return x(0) + w;
+        })
+        .attr('class', 'percentage-label')
+        .style('text-anchor', 'middle')
+        .style('font-size', '0.675rem')
+        .merge(percents)
+        .text((d, i) => {
+          return showBinPercentages ? `${d.percent}%` : '';
+        })
+        .attr('y', (d: IGroupDataItem, i: number) => {
+          const h = getBarWidth(0, props.groupLayout, props.bar, innerScaleBand);
+          const offset = h / 2;
+
+          // Ensure that percentage labels don't overlap 
+          const verticalOffset = i < 2 ? 0 : 14;
+          return offset + verticalOffset;
+        })
+        .attr('fill', (d, i) => colors(String(d.groupLabel)))
+        .transition()
+        .duration(duration)
+        .delay(delay)
+        .attr('x', (d) => {
+          const w = d.side === 'left' ? - 20 : 20;
+          const v = d.side === 'left' ? -d.value : d.value;
+          return x(v) + w;
+        })
+        .attr('width', (d: IGroupDataItem): number => {
+          const w = d.side === 'left' ? -d.value : d.value;
+          return Math.abs(x(w) - x(0));
+        });
+
+      percents.exit().remove();
 
       bars.exit().remove();
       g.exit().remove();

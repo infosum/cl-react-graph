@@ -29,6 +29,7 @@ export interface ITornadoProps {
     margin: IMargin;
     groupLayout: EGroupedBarLayout;
     onClick?: (bar: IGroupDataItem) => void;
+    showBinPercentages: boolean;
     splitBins: [string, string];
     stroke: IStroke;
     tip: any;

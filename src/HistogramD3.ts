@@ -317,7 +317,7 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
       bins: string[],
       groupData: IGroupData,
     ) {
-      const { axis, data, height, width, margin, delay, duration, tip, groupLayout, showBinPercentages, stacked } = props;
+      const { axis, height, width, margin, delay, duration, tip, groupLayout, showBinPercentages, stacked } = props;
 
       const stackedOffset = (d: IGroupDataItem, stackIndex: number): number => {
         const thisGroupData = groupData.find((gData) => {
@@ -336,8 +336,6 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
 
       const calculateXPosition = (d: IGroupDataItem, stackIndex: number, offset: number, counts: number): number => {
         const dataLabels = props.data.counts.map((c) => c.label);
-        const barWidth = getBarWidth(stackIndex, props.groupLayout, props.bar, innerScaleBand);
-        console.log('barWidth', barWidth);
         const scaleVars = groupedBarsUseSameXAxisValue({ groupLayout, stacked }) ? ['main'] : dataLabels;
         let bandX = 0;
 

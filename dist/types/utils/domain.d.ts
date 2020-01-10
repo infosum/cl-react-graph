@@ -17,6 +17,7 @@ interface IAppendDomainRangeProps {
  * account axis types.
  */
 export declare const rangeAffordance: (range: [any, any], axis: IAxis, inc?: boolean) => [any, any];
+export declare const applyDomainAffordance: (v: number, inc?: boolean, percentIncrement?: number) => number;
 /**
  * Update a linear scale with range and domain values taken either from the compiled
  * group data. If the chart is stacked then sum all bin values first.

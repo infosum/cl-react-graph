@@ -60,7 +60,7 @@ export const rangeAffordance = (
 
 }
 
-const applyDomainAffordance = (
+export const applyDomainAffordance = (
   v: number,
   inc: boolean = true,
   percentIncrement: number = 5,
