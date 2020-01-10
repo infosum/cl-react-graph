@@ -76,24 +76,28 @@ export const maxValueCount = (counts: ITornadoDataSet[]): number => {
 const SPLIT_AXIS_HEIGHT = 20;
 
 const calculatePercents = (groupData: IGroupData) => {
-  const totals: Array<{ left: number, right: number }> = groupData.reduce((prev, next) => {
-    const values = next.reduce((p, n) => {
-      const k = n.side!;
-      if (!p[k]) {
-        p[k] = 0;
+  const totals = groupData.reduce((prev, next) => {
+
+    next.forEach((datum, i) => {
+      const side = datum.side!;
+      const groupLabel = datum.groupLabel!;
+      if (!prev[groupLabel]) {
+        prev[groupLabel] = { left: 0, right: 0 };
       }
-      p[k] = p[k] + n.value;
-      return p;
-    }, { left: 0, right: 0 });
-    return prev.concat(values);
-  }, [] as Array<{ left: number, right: number }>);
+      prev[groupLabel][side] = prev[groupLabel][side] + datum.value;
+    })
+    return prev;
+  }, {} as Record<string, { left: number, right: number }>);
+
 
   return groupData.map((data, i) => {
     return data.map((datum) => {
-      const total = totals[i][datum.side!];
+      const side = datum.side!;
+      const groupLabel = datum.groupLabel!;
+      const total = totals[groupLabel][side];
       return {
         ...datum,
-        percent: Math.round(datum.value / total * 100),
+        percent: total === 0 ? 0 : Math.round(datum.value / total * 100),
       }
     })
 
