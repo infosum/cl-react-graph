@@ -347,9 +347,7 @@ export const tornadoD3 = ((): IChartAdaptor<ITornadoProps> => {
         .enter()
         .append<SVGElement>('rect')
         .attr('width', 0)
-        .attr('x', (d) => {
-          return x(0);// + w;
-        })
+        .attr('x', (d) => x(0))
         .attr('class', (d) => `bar ${d.side}`)
         .on('click', onClick(props.onClick))
         .on('mouseover', onMouseOver({ bins, hover: props.bar.hover, colors, tipContentFn: props.tipContentFn, tipContent, tip, tipContainer }))
