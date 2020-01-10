@@ -42,22 +42,22 @@ type Actions = { type: 'SET_SHOW_PERCENTAGES', show: boolean }
 
 const initialState: DeepPartial<ITornadoProps> = {
   data: {
-    bins: ['0 - 10', '11 - 20', '21 - 30'],
+    bins: ["16-18", "18-25", "25-35", "35-50", "50-65", "65-∞"],
     // @Todo test with only one count set
     counts: [
       {
         label: 'Background',
         data: [
-          [5000, 100000, 100000], // Male bin 1, Male bin 2,
-          [10000, 20000, 20000], // Female bin 1, Female bin 2,
-        ]
+          [0, 2600, 5100, 9700, 8400, 6700], // Male bin 1, Male bin 2,
+          [0, 2100, 4700, 8700, 4900, 1400], // Female bin 1, Female bin 2,
+        ],
       },
       {
         label: 'Foreground',
         data: [
-          [2000, 1000, 1000], // Male bin 1, Male bin 2,
-          [5000, 3000, 3000], // Female bin 1, Female bin 2,
-        ]
+          [0, 2600, 5100, 9700, 8400, 6700], // Male bin 1, Male bin 2,
+          [0, 2100, 4700, 8700, 4900, 1400], // Female bin 1, Female bin 2,
+        ],
       },
 
     ],
