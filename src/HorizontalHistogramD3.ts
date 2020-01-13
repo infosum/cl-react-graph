@@ -226,10 +226,10 @@ export const horizontalHistogramD3 = ((): IChartAdaptor<IHistogramProps> => {
           .selectAll('line')
           .style('opacity', 0)
 
-        yAnnotations
-          .domain(data.bins)
+        yAnnotations.domain(data.bins)
           .rangeRound([0, h])
-          .paddingInner(paddingInner(bar));
+          .paddingInner(paddingInner(bar))
+          .paddingOuter(paddingOuter(bar));
 
         const annotationAxis = axisLeft<string>(yAnnotations);
 

@@ -238,10 +238,10 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
       /** X-Axis 2 (bottom axis) for annoations if annotations data sent (and match bin length) */
       if (annotations && annotations.length === data.bins.length) {
 
-        xAnnotations
-          .domain(data.bins)
+        xAnnotations.domain(data.bins)
           .rangeRound([0, w])
-          .paddingInner(groupedPaddingInner(bar));
+          .paddingInner(paddingInner(bar))
+          .paddingOuter(paddingOuter(bar));
 
         const annotationAxis = axisBottom<string>(xAnnotations);
 
