@@ -2,7 +2,7 @@ export { default as Histogram, EGroupedBarLayout, IAxes, IHistogramBar, IHistogr
 export { default as LineChart, IChartPoint, ILineChartDataSet, ILineChartProps, } from './LineChart';
 export { default as Legend } from './Legend';
 export { default as JoyPlot } from './JoyPlot';
-export { default as PieChart } from './PieChart';
+export { default as PieChart, IPieChartProps } from './PieChart';
 export { default as ScatterPlot } from './ScatterPlot';
 export { default as HorizontalHistogram } from './HorizontalHistogram';
 export { default as filterRange } from './colors/filterRange';

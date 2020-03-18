@@ -39,7 +39,7 @@ const initialSate: DeepPartial<IPieChartProps> = {
     display: false,
   },
   visible: {},
-  width: '100%',
+  width: 300,
 };
 
 type Actions = { type: 'toggleVisible'; key: string }
@@ -86,7 +86,7 @@ const PieExample = () => {
       <SEO title="Histogram" description="" />
       <Typography variant="h2">Pie Chart</Typography>
       <div>
-        <Grid container spacing={24}>
+        <Grid container>
           <Grid item xs={6}>
             <Card>
               <CardContent>
@@ -148,7 +148,7 @@ const PieExample = () => {
                 }
                 {
                   tab === 1 && <TabContainer>
-                    <Grid container spacing={24}>
+                    <Grid container>
                       <Grid item xs={6}>
                         <FormGroup>
                           <Typography>Donut <small>({state.donutWidth})</small></Typography>

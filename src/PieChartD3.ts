@@ -12,6 +12,7 @@ import {
   pie,
   PieArcDatum,
 } from 'd3-shape';
+import cloneDeep from 'lodash/cloneDeep';
 import get from 'lodash/get';
 import merge from 'lodash/merge';
 
@@ -25,12 +26,43 @@ import {
   IPieDataItem,
 } from './PieChart';
 import tips, { makeTip } from './tip';
+import { onMouseOut } from './utils/mouseOver';
 import { DeepPartial } from './utils/types';
 
 interface IPieDataset {
   count: number;
   groupLabel: string;
   label: string;
+}
+
+
+// Function to calculate pie chart paths from data
+const thisPie = pie()
+  .sort(null)
+  .value((d: any) => d.count);
+
+
+const outerRadius = (props, setIndex = 0) => {
+  const { donutWidth = 0, width, height } = props;
+
+  const radius = Math.min(Number(width), height) / 2;
+  return donutWidth === 0
+    ? radius - 10
+    : radius - 10 - (setIndex * (donutWidth + 10));
+};
+
+const innerRadius = (props, setIndex = 0) => {
+  const { donutWidth = 0, width, height } = props;
+  const radius = Math.min(Number(width), height) / 2;
+  return donutWidth === 0
+    ? 0
+    : radius - 10 - donutWidth - (setIndex * (donutWidth + 10));
+};
+
+const getArc = (props, i: number) => {
+  return arc()
+    .outerRadius(outerRadius(props, i))
+    .innerRadius(innerRadius(props, i));
 }
 
 export const pieChartD3 = ((): IChartAdaptor<IPieChartProps> => {
@@ -48,9 +80,12 @@ export const pieChartD3 = ((): IChartAdaptor<IPieChartProps> => {
     },
     donutWidth: 0,
     height: 200,
+    hover: {
+      lighten: 0.1,
+    },
     labels: {
       display: true,
-      displayFn: (d, ix) => d.value,
+      displayFn: (d) => d.value,
     },
     margin: {
       bottom: 0,
@@ -71,7 +106,6 @@ export const pieChartD3 = ((): IChartAdaptor<IPieChartProps> => {
   let svg: Selection<any, any, any, any>;
   let dataSets: IPieDataset[][];
   let previousData: any;
-  let current: any;
   let storedWidth: number;
   let storedHeight: number;
 
@@ -90,7 +124,7 @@ export const pieChartD3 = ((): IChartAdaptor<IPieChartProps> => {
       this._makeSvg(el);
       containers = [];
       previousData.forEach((dataSet, i) => {
-        this.drawChartBg(props.data, i);
+        this.drawChartBg(i);
       });
 
       this.update(el, props);
@@ -127,6 +161,9 @@ export const pieChartD3 = ((): IChartAdaptor<IPieChartProps> => {
         return;
       }
       merge(props, newProps);
+      if (newProps.data) {
+        props.data = cloneDeep(newProps.data) as IPieChartProps['data'];
+      }
       if (props.colorScheme) {
         props.colorScheme = props.colorScheme;
       }
@@ -135,23 +172,6 @@ export const pieChartD3 = ((): IChartAdaptor<IPieChartProps> => {
       }
 
       this.drawCharts();
-    },
-
-    outerRadius(setIndex = 0) {
-      const { donutWidth = 0, width, height } = props;
-
-      const radius = Math.min(Number(width), height) / 2;
-      return donutWidth === 0
-        ? radius - 10
-        : radius - 10 - (setIndex * (donutWidth + 10));
-    },
-
-    innerRadius(setIndex = 0) {
-      const { donutWidth = 0, width, height } = props;
-      const radius = Math.min(Number(width), height) / 2;
-      return donutWidth === 0
-        ? 0
-        : radius - 10 - donutWidth - (setIndex * (donutWidth + 10));
     },
 
     drawCharts() {
@@ -168,18 +188,17 @@ export const pieChartD3 = ((): IChartAdaptor<IPieChartProps> => {
       dataSets.forEach((dataSet, i) => {
         const theme = get(data.counts[i], 'colors', props.colorScheme);
         this.drawChart(dataSet, i, data.bins, theme);
+        this.drawLabels(dataSet, i, data.bins, theme);
       });
       previousData = dataSets;
     },
 
-    drawChartBg(data, i) {
+    drawChartBg(i: number) {
       const { backgroundColor, width, height } = props;
       const tau = 2 * Math.PI; // http://tauday.com/tau-manifesto
-      const outerRadius = this.outerRadius(i);
-      const innerRadius = this.innerRadius(i);
       const bgArc = arc()
-        .innerRadius(innerRadius)
-        .outerRadius(outerRadius)
+        .innerRadius(innerRadius(props, i))
+        .outerRadius(outerRadius(props, i))
         .startAngle(0)
         .endAngle(tau);
       const container = svg
@@ -195,51 +214,56 @@ export const pieChartD3 = ((): IChartAdaptor<IPieChartProps> => {
       background.merge(background);
 
       if (!containers[i]) {
-        containers[i] = svg
+        svg
           .append('g')
-          .attr('class', 'pie-container');
+          .attr('class', 'pie-container')
+
+        svg
+          .append('g')
+          .attr('class', 'pie-labels')
+        containers[i] = svg;
       }
     },
 
     drawChart(data, i: number, bins: string[], theme: string[]) {
-      const { labels, width, height, tip, tipContentFn } = props;
-      // Stack multiple charts in concentric circles
-      const outerRadius = this.outerRadius(i);
-      const innerRadius = this.innerRadius(i);
+      const { width, height, tip, tipContentFn, hover } = props;
 
-      // Function to calculate pie chart paths from data
-      const thisPie = pie()
-        .sort(null)
-        .value((d: any) => d.count);
-
-      // Formated pie chart arcs based on previous current data
-      const arcs = thisPie(previousData[i]);
-
+      // Formatted pie chart arcs based on previous current data.
+      // If data has changed length (i.e. swapping the entire dataset) use the new data.
+      const prev = previousData[i].length === data.length
+        ? previousData[i]
+        : data;
+      const arcs = thisPie(prev);
       const colors = scaleOrdinal(theme);
+      // Set the domain to get consistent colours
+      colors.domain(Array.from(new Array(data.length).keys()).map(s => s.toString()));
 
-      const thisArc = arc()
-        .outerRadius(outerRadius)
-        .innerRadius(innerRadius);
+      // Stack multiple charts in concentric circles
+      const thisArc = getArc(props, i);
 
-      const path = containers[i].selectAll('path')
+      const path = containers[i].select('.pie-container').selectAll('path')
         .data(thisPie(data));
 
-      const g = path.enter().append('g')
-        .attr('class', 'arc');
-
-      g.append('path')
-        .attr('transform', 'translate(' + Number(width) / 2 + ',' + height / 2 + ')')
+      path.enter()
+        .append('path')
+        .attr('transform', (d) => {
+          return 'translate(' + Number(width) / 2 + ',' + height / 2 + ')';
+        })
         .attr('stroke', '#FFF')
-        .attr('fill', (d, j) => colors(j))
-
-        .each((d, j) => { current = arcs[j]; }) // store the initial angles
-        .attr('d', thisArc)
-        .on('mouseover', (d: PieArcDatum<IPieDataItem>, ix: number) => {
+        .attr('fill', (_, j) => colors(j))
+        .on('mouseover', (d: PieArcDatum<IPieDataItem>, ix: number, nodes: any[]) => {
+          if (hover) {
+            select(nodes[ix])
+              .attr('fill-opacity', 1)
+              .transition('easeIn')
+              .attr('fill-opacity', 0.7);
+          }
           tipContent.html(() => tipContentFn(bins, ix, d.data.count, d.data.groupLabel));
           tip.fx.in(tipContainer);
         })
         .on('mousemove', () => tip.fx.move(tipContainer))
-        .on('mouseout', () => tip.fx.out(tipContainer))
+        .on('mouseout', onMouseOut({ tip, tipContainer, colors }))
+        .attr('d', thisArc)
         .style('opacity', 0)
         .transition()
         .duration(500)
@@ -248,19 +272,33 @@ export const pieChartD3 = ((): IChartAdaptor<IPieChartProps> => {
       // Fade in when adding (merge)
       path
         .merge(path)
-        .on('mouseover', (d: PieArcDatum<IPieDataItem>, ix: number) => {
+        .on('mouseover', (d: PieArcDatum<IPieDataItem>, ix: number, nodes: any[]) => {
+          if (hover) {
+            select(nodes[ix])
+              .attr('fill-opacity', 1)
+              .transition('easeIn')
+              .attr('fill-opacity', 0.7);
+          }
           tipContent.html(() => tipContentFn(bins, ix, d.data.count, d.data.groupLabel));
           tip.fx.in(tipContainer);
         })
         .on('mousemove', () => tip.fx.move(tipContainer))
-        .on('mouseout', () => tip.fx.out(tipContainer))
+        .on('mouseout', onMouseOut({ tip, tipContainer, colors }))
         .transition()
         .delay(400)
         .duration(500)
-        .attr('fill', (d, j) => colors(j))
         .attrTween('d', arcTween(thisArc));
 
-      const path2 = containers[i].selectAll('text.label')
+      path.exit().transition()
+        .attrTween('d', arcTween(thisArc))
+        .duration(500)
+        .style('opacity', 0).remove();
+    },
+
+    drawLabels(data, i: number, bins: string[], theme: string[]) {
+      const { labels, width, height } = props;
+      const thisArc = getArc(props, i);
+      const path2 = containers[i].select('.pie-labels').selectAll('text.label')
         .data(thisPie(data));
       path2.enter().append('text')
         .attr('class', 'label')
@@ -269,22 +307,17 @@ export const pieChartD3 = ((): IChartAdaptor<IPieChartProps> => {
           storedHeight = height;
           storedWidth = Number(width);
         })
+        .style('opacity', 0)
+        .text((d, ix: number) => d.value === 0 ? '' : labels.displayFn(d, ix))
         .attr('transform', (d) => {
           const centroid = thisArc.centroid(d);
           const x = centroid[0] + (storedWidth / 2);
           const y = centroid[1] + (storedHeight / 2);
           return 'translate(' + x + ',' + y + ')';
         })
-        .each((d: any) => {
-          // Store current value to work out fx transition opacities
-          current = d;
-        })
-        .text((d, ix) => {
-          if (d.value === 0) {
-            return '';
-          }
-          return labels.displayFn(d, ix);
-        });
+        .transition()
+        .duration(500)
+        .style('opacity', (d) => labels.display === false || d.value === 0 ? 0 : 1);
 
       path2
         .merge(path2)
@@ -298,18 +331,17 @@ export const pieChartD3 = ((): IChartAdaptor<IPieChartProps> => {
           const y = centroid[1] + (storedHeight / 2);
           return 'translate(' + x + ',' + y + ')';
         })
+        .text((d, ix: number) => d.value === 0 ? '' : labels.displayFn(d, ix))
         .transition()
         .duration(500)
         .style('opacity', (d) => {
           // Only show if the new value is not 0 and labels are set to be displayed
-          return labels.display === false || d.data.value === 0 ? 0 : 1;
+          return labels.display === false || d.value === 0 ? 0 : 1;
         });
 
-      path2.exit().remove();
-
-      path.exit().transition()
+      path2.exit().transition()
         .duration(500)
-        .style('opacity', 0).remove();
+        .style('opacity', 0);
     },
 
     /**

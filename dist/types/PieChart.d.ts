@@ -1,5 +1,5 @@
 import { Component } from 'react';
-import { IChartState, IHistogramDataSet, IMargin, TipContentFn } from './Histogram';
+import { EColorManipulations, IChartState, IHistogramDataSet, IMargin, TipContentFn } from './Histogram';
 import { DeepPartial } from './utils/types';
 interface ILabels {
     display: boolean;
@@ -20,6 +20,7 @@ export interface IPieChartProps {
     colorScheme: string[];
     donutWidth: number;
     height: number;
+    hover?: Partial<Record<EColorManipulations, number>>;
     labels: ILabels;
     margin: IMargin;
     tip: any;
