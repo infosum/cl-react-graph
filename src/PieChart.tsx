@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 
 import {
+  EColorManipulations,
   IChartAdaptor,
   IChartState,
   IHistogramDataSet,
@@ -32,6 +33,7 @@ export interface IPieChartProps {
   colorScheme: string[];
   donutWidth: number;
   height: number;
+  hover?: Partial<Record<EColorManipulations, number>>,
   labels: ILabels;
   margin: IMargin;
   tip: any;

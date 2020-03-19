@@ -112,7 +112,6 @@ export type Actions = { type: 'setChartType'; chartType: string }
   | { type: 'removeHoverModifier'; index: number; }
   | { type: 'setPaddingInner'; padding: number; }
   | { type: 'setPaddingOuter'; padding: number; }
-  | {type: 'setBarWidth', width: number }
   | GridActions
   | AxisActions
   ;
@@ -222,14 +221,6 @@ function reducer(state: IInitialState, action: Actions): IInitialState {
           paddingOuter: action.padding,
         },
       };
-    case 'setBarWidth':
-      return {
-        ...state,
-        bar: {
-          ...state.bar,
-          width: action.width,
-        },
-      }
     case 'setHoverModifier': {
       const hover = { ...state.bar.hover };
       const keys = Object.keys(hover);
@@ -482,15 +473,6 @@ const HistogramExample = () => {
                           value={state.width}
                           onChange={(e) => {
                             dispatch(({ type: 'setWidth', width: e.target.value }))
-                          }}
-                        />
-                      </Grid>
-                      <Grid item xs={6}>
-                        <TextField
-                          label="Bar width"
-                          value={state.bar.width}
-                          onChange={(e) => {
-                            dispatch(({ type: 'setBarWidth', width: parseInt(e.target.value) }))
                           }}
                         />
                       </Grid>

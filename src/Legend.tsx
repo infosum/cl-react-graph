@@ -25,9 +25,22 @@ const legendIconStyle = {
 
 const listStyle = {
   listStyle: 'none',
+  padding: 0,
+  margin: 0,
 };
 
-const Legend: FC<IProps> = ({ className, theme = colorScheme, data, onSelect, visible }) => {
+const liStyle = {
+  display: 'flex',
+  alignItems: 'center',
+}
+
+const Legend: FC<IProps> = ({
+  className,
+  theme = colorScheme,
+  data,
+  onSelect,
+  visible,
+}) => {
   const scheme: any = scaleOrdinal(theme);
   const labels = data.bins;
   return (
@@ -37,14 +50,18 @@ const Legend: FC<IProps> = ({ className, theme = colorScheme, data, onSelect, vi
           labels.map((label) => {
             const active = (visible.hasOwnProperty(label) && visible[label]) || !visible.hasOwnProperty(label);
             return (
-              <li key={label}>
+              <li key={label}
+                style={liStyle}>
                 <div style={{
                   ...legendIconStyle,
                   backgroundColor: active ? scheme(label) : '#FFF',
                   border: '2px solid ' + scheme(label),
                 }}
                   onClick={() => onSelect(label)}>
-                </div> {label}
+                </div>
+                <div>
+                  {label}
+                </div>
               </li>
             );
           })

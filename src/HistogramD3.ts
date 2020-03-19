@@ -235,7 +235,7 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
           .on('mouseout', () => tip.fx.out(tipContainer))
       }
 
-      /** X-Axis 2 (bottom axis) for annoations if annotations data sent (and match bin length) */
+      /** X-Axis 2 (bottom axis) for annotations if annotations data sent (and match bin length) */
       if (annotations && annotations.length === data.bins.length) {
 
         xAnnotations.domain(data.bins)
