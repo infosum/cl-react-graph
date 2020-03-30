@@ -160,7 +160,7 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
       lineContainer = container
         .append<SVGElement>('g')
         .attr('class', 'line-container');
-      this.update(el, props);
+      this.update(props);
     },
 
     mergeProps(newProps: DeepPartial<ILineChartProps>) {
@@ -396,7 +396,7 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
     /**
     * Update chart
      */
-    update(el: Element, newProps: DeepPartial<ILineChartProps>) {
+    update(newProps: DeepPartial<ILineChartProps>) {
       if (!newProps.data) {
         return;
       }

@@ -1,5 +1,5 @@
-import { Component } from 'react';
-import { EColorManipulations, IChartState, IHistogramDataSet, IMargin, TipContentFn } from './Histogram';
+import { FC } from 'react';
+import { EColorManipulations, IHistogramDataSet, IMargin, TipContentFn } from './Histogram';
 import { DeepPartial } from './utils/types';
 interface ILabels {
     display: boolean;
@@ -31,44 +31,5 @@ export interface IPieChartProps {
     };
     width: number | string;
 }
-/**
- * PieChart component
- */
-declare class PieChart extends Component<DeepPartial<IPieChartProps>, IChartState> {
-    private chart;
-    private ref;
-    /**
-     * Constructor
-     */
-    constructor(props: DeepPartial<IPieChartProps>);
-    /**
-     * Handle the page resize
-     */
-    private handleResize;
-    /**
-     * Component mounted
-     */
-    componentDidMount(): void;
-    /**
-     * Component updated
-     */
-    componentDidUpdate(): void;
-    /**
-     * Get the chart state
-     */
-    getChartState(): DeepPartial<IPieChartProps>;
-    /**
-     * Component will un mount, remove the chart and
-     * any event listeners
-     */
-    componentWillUnmount(): void;
-    /**
-     * Get the chart's dom node
-     */
-    private getDOMNode;
-    /**
-     * Render
-     */
-    render(): JSX.Element;
-}
+declare const PieChart: FC<DeepPartial<IPieChartProps>>;
 export default PieChart;

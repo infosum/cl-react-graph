@@ -2,8 +2,10 @@ import {
   CurveFactory,
   CurveFactoryLineOnly,
 } from 'd3-shape';
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React, {
+  FC,
+  useRef,
+} from 'react';
 
 import {
   IAxes,
@@ -15,10 +17,7 @@ import {
 } from './Histogram';
 import { lineChartD3 } from './lineChartD3';
 import { DeepPartial } from './utils/types';
-
-interface IState {
-  parentWidth?: number;
-}
+import { useChart } from './utils/useChart';
 
 export type IChartPointValue = number | string | Date | object;
 export interface IChartPoint<X extends IChartPointValue = Date | number | string, Y extends IChartPointValue = number> {
@@ -68,92 +67,11 @@ export interface ILineChartProps<T extends IChartPoint<IChartPointValue, IChartP
   width: number | string;
 }
 
-class LineChart extends React.Component<DeepPartial<ILineChartProps>, IState> {
+const chart = lineChartD3();
 
-  private chart: IChartAdaptor<ILineChartProps>;
-  private ref: HTMLDivElement | null = null;
-
-  constructor(props: DeepPartial<ILineChartProps>) {
-    super(props);
-    this.chart = lineChartD3();
-    this.state = {
-      parentWidth: 300,
-    };
-  }
-
-  private handleResize() {
-    const el = this.getDOMNode();
-    if (!el) {
-      return;
-    }
-    const width = (this.ref && this.ref.offsetWidth) ? this.ref.offsetWidth : 0;
-
-    this.setState({
-      parentWidth: width,
-    }, () => this.chart.update(el, this.getChartState()));
-
-  }
-
-  public componentDidMount() {
-    const el = this.getDOMNode();
-    if (!el) {
-      return;
-    }
-    this.chart.create(el, this.getChartState());
-    if (this.props.width === '100%') {
-      window.addEventListener('resize', (e) => this.handleResize());
-      this.handleResize();
-    }
-  }
-
-  public componentDidUpdate() {
-    const el = this.getDOMNode();
-    if (!el) {
-      return;
-    }
-    this.chart.update(el, this.getChartState());
-  }
-
-  /**
-   * Get the chart state. If a histogram has been assigned
-   * to the props, then render this data. Otherwise generate
-   * a random normal dist
-   */
-  public getChartState(): DeepPartial<ILineChartProps> {
-    let { width } = this.props;
-    const { children, ...rest } = this.props;
-
-    if (width === '100%') {
-      width = this.state.parentWidth || 300;
-    }
-    return {
-      ...rest,
-      width,
-    };
-  }
-
-  public componentWillUnmount() {
-    if (this.props.width === '100%') {
-      window.removeEventListener('resize', this.handleResize);
-    }
-    const el = this.getDOMNode();
-    if (!el) {
-      return;
-    }
-    this.chart.destroy(el);
-  }
-
-  private getDOMNode(): Element | undefined {
-    const node = ReactDOM.findDOMNode(this.ref);
-    if (node instanceof HTMLElement) {
-      return node;
-    }
-    return undefined;
-  }
-
-  public render(): JSX.Element {
-    return <div ref={(ref) => this.ref = ref} className="chart-container"></div>;
-  }
-}
+const LineChart: FC<DeepPartial<ILineChartProps>> = ({ children, ...rest }) => {
+  const [refs] = useChart(useRef(), chart, rest);
+  return <div ref={refs} className="chart-container"></div>;
+};
 
 export default LineChart;

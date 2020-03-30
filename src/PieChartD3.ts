@@ -127,7 +127,7 @@ export const pieChartD3 = ((): IChartAdaptor<IPieChartProps> => {
         this.drawChartBg(i);
       });
 
-      this.update(el, props);
+      this.update(props);
     },
 
     _makeSvg(el: Element) {
@@ -156,7 +156,7 @@ export const pieChartD3 = ((): IChartAdaptor<IPieChartProps> => {
       tipContainer = r.tipContainer;
     },
 
-    update(el: Element, newProps: DeepPartial<IPieChartProps>) {
+    update(newProps: DeepPartial<IPieChartProps>) {
       if (!props.data) {
         return;
       }

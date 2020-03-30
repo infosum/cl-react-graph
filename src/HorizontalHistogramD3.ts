@@ -151,7 +151,7 @@ export const horizontalHistogramD3 = ((): IChartAdaptor<IHistogramProps> => {
         .append<SVGElement>('g')
         .attr('class', 'histogram-container');
 
-      this.update(el, newProps);
+      this.update(newProps);
     },
 
     /**
@@ -187,9 +187,9 @@ export const horizontalHistogramD3 = ((): IChartAdaptor<IHistogramProps> => {
           fill: 'none',
           stroke: 'none',
           opacity: 0,
-          "shape-rendering": 'none',
-          "stroke-opacity": 0,
-          "stroke-width": 0,
+          'shape-rendering': 'none',
+          'stroke-opacity': 0,
+          'stroke-width': 0,
           visible: false,
         },
         visible: false,
@@ -255,7 +255,7 @@ export const horizontalHistogramD3 = ((): IChartAdaptor<IHistogramProps> => {
           .style('fill', (d, i) => annotations[i].color);
 
         // Hide the line for the annotations axis
-        yAnnotationAxisContainer.call(g => g.select(".domain").remove());
+        yAnnotationAxisContainer.call(g => g.select('.domain').remove());
 
       }
 
@@ -467,7 +467,7 @@ export const horizontalHistogramD3 = ((): IChartAdaptor<IHistogramProps> => {
     /**
      * Update chart
      */
-    update(el: Element, newProps: DeepPartial<IHistogramProps>) {
+    update(newProps: DeepPartial<IHistogramProps>) {
       if (!props.data) {
         return;
       }

@@ -1,5 +1,5 @@
-import { Component } from 'react';
-import { EGroupedBarLayout, IAxes, IChartState, IDomain, IGrid, IHistogramBar, IMargin, IStroke, TipContentFn } from './Histogram';
+import { FC } from 'react';
+import { EGroupedBarLayout, IAxes, IDomain, IGrid, IHistogramBar, IMargin, IStroke, TipContentFn } from './Histogram';
 import { IGroupDataItem } from './HistogramD3';
 import { DeepPartial } from './utils/types';
 export interface ITornadoDataSet {
@@ -40,44 +40,5 @@ export interface ITornadoProps {
     };
     width: number | string;
 }
-/**
- * Tornado component
- */
-declare class Tornado extends Component<DeepPartial<ITornadoProps>, IChartState> {
-    private chart;
-    private ref;
-    /**
-     * Constructor
-     */
-    constructor(props: DeepPartial<ITornadoProps>);
-    /**
-     * Handle the page resize
-     */
-    private handleResize;
-    /**
-     * Component mounted
-     */
-    componentDidMount(): void;
-    /**
-     * Component updated
-     */
-    componentDidUpdate(): void;
-    /**
-     * Get the chart state
-     */
-    getChartState(): DeepPartial<ITornadoProps>;
-    /**
-     * Component will un mount, remove the chart and
-     * any event listeners
-     */
-    componentWillUnmount(): void;
-    /**
-     * Get the chart's dom node
-     */
-    private getDOMNode;
-    /**
-     * Render
-     */
-    render(): JSX.Element;
-}
+declare const Tornado: FC<DeepPartial<ITornadoProps>>;
 export default Tornado;
