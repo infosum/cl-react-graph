@@ -50,7 +50,7 @@ export const joyPlotD3 = ((): IChartAdaptor<IJoyPlotProps> => {
   let tipContainer;
   let tipContent;
   let dataSets: IGroupData[];
-  let containers: Array<Selection<SVGGElement, any, any, any>>;
+  let containers: Selection<SVGGElement, any, any, any>[];
   let xAxisContainer: Selection<SVGGElement, any, any, any>;
   let yAxisContainer: Selection<SVGGElement, any, any, any>;
   let gridXContainer: Selection<SVGGElement, any, any, any>;
@@ -132,7 +132,7 @@ export const joyPlotD3 = ((): IChartAdaptor<IJoyPlotProps> => {
         .attr('class', `histogram-container-${i}`),
       );
 
-      this.update(el, props);
+      this.update(props);
     },
 
     mergeProps(newProps: DeepPartial<IJoyPlotProps>) {
@@ -348,8 +348,8 @@ export const joyPlotD3 = ((): IChartAdaptor<IJoyPlotProps> => {
     },
 
     /**
-    * Calculate the bar width
-    */
+     * Calculate the bar width
+     */
     barWidth() {
       return innerScaleBand.bandwidth();
     },
@@ -492,7 +492,7 @@ export const joyPlotD3 = ((): IChartAdaptor<IJoyPlotProps> => {
     /**
      * Update chart
      */
-    update(el: Element, newProps: DeepPartial<IJoyPlotProps>) {
+    update(newProps: DeepPartial<IJoyPlotProps>) {
       this.mergeProps(newProps);
       const { data, visible } = props;
 

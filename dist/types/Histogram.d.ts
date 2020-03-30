@@ -1,9 +1,9 @@
-import { Component } from 'react';
+import { FC } from 'react';
 import { IGroupDataItem } from './HistogramD3';
 import { DeepPartial } from './utils/types';
 export interface IChartAdaptor<P> {
     create: (el: Element, props: DeepPartial<P>) => void;
-    update: (el: Element, props: DeepPartial<P>) => void;
+    update: (props: DeepPartial<P>) => void;
     destroy: (el: Element) => void;
 }
 export declare enum EColorManipulations {
@@ -134,9 +134,6 @@ interface ISVGTextStyle {
     x?: string | number;
     y?: string | number;
 }
-export interface IChartState {
-    parentWidth?: number;
-}
 export interface IAxis {
     dateFormat: string;
     numberFormat: string;
@@ -155,44 +152,5 @@ export interface IAxis {
     visible: boolean;
 }
 export declare type TipContentFn<T> = (bins: T[], i: number, d: number, groupTitle?: string) => string;
-/**
- * Histogram component
- */
-declare class Histogram extends Component<DeepPartial<IHistogramProps>, IChartState> {
-    private chart;
-    private ref;
-    /**
-     * Constructor
-     */
-    constructor(props: DeepPartial<IHistogramProps>);
-    /**
-     * Handle the page resize
-     */
-    private handleResize;
-    /**
-     * Component mounted
-     */
-    componentDidMount(): void;
-    /**
-     * Component updated
-     */
-    componentDidUpdate(): void;
-    /**
-     * Get the chart state
-     */
-    getChartState(): DeepPartial<IHistogramProps>;
-    /**
-     * Component will un mount, remove the chart and
-     * any event listeners
-     */
-    componentWillUnmount(): void;
-    /**
-     * Get the chart's dom node
-     */
-    private getDOMNode;
-    /**
-     * Render
-     */
-    render(): JSX.Element;
-}
+declare const Histogram: FC<DeepPartial<IHistogramProps>>;
 export default Histogram;

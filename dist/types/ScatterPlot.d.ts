@@ -1,5 +1,4 @@
-import { Component } from 'react';
-import { IChartState } from './Histogram';
+import { FC } from 'react';
 import { DeepPartial } from './utils/types';
 export interface IScatterPlotProps {
     choices: string[];
@@ -19,21 +18,5 @@ export interface IScatterPlotProps {
     split: string;
     width: string | number;
 }
-declare class ScatterPlot extends Component<DeepPartial<IScatterPlotProps>, IChartState> {
-    private chart;
-    private ref;
-    static defaultProps: {
-        height: number;
-        width: string;
-    };
-    constructor(props: IScatterPlotProps);
-    private handleResize;
-    componentDidMount(): void;
-    componentDidUpdate(): void;
-    private getChartState;
-    componentWillReceiveProps(props: DeepPartial<IScatterPlotProps>): void;
-    componentWillUnmount(): void;
-    private getDOMNode;
-    render(): JSX.Element;
-}
+declare const ScatterPlot: FC<DeepPartial<IScatterPlotProps>>;
 export default ScatterPlot;

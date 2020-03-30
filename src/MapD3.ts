@@ -40,7 +40,7 @@ export const mapD3 = ((): IChartAdaptor<IMapProps> => {
         .append<SVGElement>('g')
         .attr('class', 'histogram-container');
 
-      this.update(el, props);
+      this.update(props);
     },
 
     mergeProps(newProps: DeepPartial<IMapProps>) {
@@ -107,7 +107,7 @@ export const mapD3 = ((): IChartAdaptor<IMapProps> => {
     /**
      * Update chart
      */
-    update(el: Element, newProps: DeepPartial<IMapProps>) {
+    update(newProps: DeepPartial<IMapProps>) {
       if (!props.data) {
         return;
       }

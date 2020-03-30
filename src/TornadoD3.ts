@@ -194,12 +194,12 @@ export const tornadoD3 = ((): IChartAdaptor<ITornadoProps> => {
       // Render Axis above bars so that we can see the y axis overlaid
       [xAxisContainer, yAxisContainer, xAxisLabel, yAxisLabel] = makeScales(svg);
 
-      this.update(el, props);
+      this.update(props);
     },
 
     /**
-    * Draw Axes
-    */
+     * Draw Axes
+     */
     drawAxes() {
       const { bar, data, groupLayout, margin, width, height, axis } = props;
       const valuesCount = maxValueCount(data.counts);
@@ -409,7 +409,7 @@ export const tornadoD3 = ((): IChartAdaptor<ITornadoProps> => {
           const h = getBarWidth(0, props.groupLayout, props.bar, innerScaleBand);
           const offset = h / 2;
 
-          // Ensure that percentage labels don't overlap 
+          // Ensure that percentage labels don't overlap
           const verticalOffset = i < 2 ? 0 : 14;
           return offset + verticalOffset;
         })
@@ -463,7 +463,7 @@ export const tornadoD3 = ((): IChartAdaptor<ITornadoProps> => {
     /**
      * Update chart
      */
-    update(el: Element, newProps: DeepPartial<ITornadoProps>) {
+    update(newProps: DeepPartial<ITornadoProps>) {
       if (!props.data) {
         return;
       }

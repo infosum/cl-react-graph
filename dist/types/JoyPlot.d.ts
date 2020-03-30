@@ -1,5 +1,5 @@
-import { Component } from 'react';
-import { IAxes, IChartState, IDomain, IGrid, IHistogramBar, IHistogramData, IMargin, IStroke, TipContentFn } from './Histogram';
+import { FC } from 'react';
+import { IAxes, IDomain, IGrid, IHistogramBar, IHistogramData, IMargin, IStroke, TipContentFn } from './Histogram';
 import { DeepPartial } from './utils/types';
 export interface IJoyPlotProps {
     axis: IAxes;
@@ -22,44 +22,5 @@ export interface IJoyPlotProps {
     };
     width: number | string;
 }
-/**
- * JoyPlot component
- */
-declare class JoyPlot extends Component<DeepPartial<IJoyPlotProps>, IChartState> {
-    private chart;
-    private ref;
-    /**
-     * Constructor
-     */
-    constructor(props: DeepPartial<IJoyPlotProps>);
-    /**
-     * Handle the page resize
-     */
-    private handleResize;
-    /**
-     * Component mounted
-     */
-    componentDidMount(): void;
-    /**
-     * Component updated
-     */
-    componentDidUpdate(): void;
-    /**
-     * Get the chart state
-     */
-    getChartState(): DeepPartial<IJoyPlotProps>;
-    /**
-     * Component will un mount, remove the chart and
-     * any event listeners
-     */
-    componentWillUnmount(): void;
-    /**
-     * Get the chart's dom node
-     */
-    private getDOMNode;
-    /**
-     * Render
-     */
-    render(): JSX.Element;
-}
+declare const JoyPlot: FC<DeepPartial<IJoyPlotProps>>;
 export default JoyPlot;

@@ -160,7 +160,7 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
         .append<SVGElement>('g')
         .attr('class', 'histogram-container');
 
-      this.update(el, newProps);
+      this.update(newProps);
     },
 
     mergeProps(newProps: DeepPartial<IHistogramProps>) {
@@ -483,7 +483,7 @@ export const histogramD3 = ((): IChartAdaptor<IHistogramProps> => {
     /**
      * Update chart
      */
-    update(el: Element, newProps: DeepPartial<IHistogramProps>) {
+    update(newProps: DeepPartial<IHistogramProps>) {
       if (!newProps.data) {
         return;
       }

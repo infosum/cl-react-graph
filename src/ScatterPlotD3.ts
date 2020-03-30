@@ -54,7 +54,8 @@ export const scatterPlotD3 = ((): IChartAdaptor<IScatterPlotProps> => {
      */
     create(el: Element, newProps: DeepPartial<IScatterPlotProps> = props) {
       merge(props, newProps);
-      this.update(el, newProps);
+      this._makeSvg(el, props.data);
+      this.update(newProps);
     },
 
     /**
@@ -236,13 +237,12 @@ export const scatterPlotD3 = ((): IChartAdaptor<IScatterPlotProps> => {
     /**
      * Update chart
      */
-    update(el: Element, newProps: DeepPartial<IScatterPlotProps>) {
+    update(newProps: DeepPartial<IScatterPlotProps>) {
       merge(props, newProps);
       if (!props.data) {
         return;
       }
       const { data, distModels, height, width } = props;
-      this._makeSvg(el, props.data);
       this._drawLegend();
       const traits = data.keys.filter((k) => distModels.indexOf(k) !== -1);
       const xSize = Number(width) / traits.length;
