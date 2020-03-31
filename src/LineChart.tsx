@@ -9,7 +9,6 @@ import React, {
 
 import {
   IAxes,
-  IChartAdaptor,
   IGrid,
   IMargin,
   ISVGLineStyle,
@@ -56,7 +55,7 @@ export interface ISVGPoint extends ISVGLineStyle {
 export interface ILineChartProps<T extends IChartPoint<IChartPointValue, IChartPointValue> = IChartPoint> {
   axis: IAxes;
   className: string;
-  data: Array<ILineChartDataSet<T>>;
+  data: ILineChartDataSet<T>[];
   grid: IGrid;
   height: number | string;
   margin: IMargin;
@@ -66,7 +65,6 @@ export interface ILineChartProps<T extends IChartPoint<IChartPointValue, IChartP
   visible: { [key: string]: boolean };
   width: number | string;
 }
-
 const chart = lineChartD3();
 
 const LineChart: FC<DeepPartial<ILineChartProps>> = ({ children, ...rest }) => {

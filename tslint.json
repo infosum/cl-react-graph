@@ -1,41 +1,30 @@
 {
-    "extends": "tslint:recommended",
-    "rules": {
-        "quotemark": [
-            true,
-            "single",
-            "jsx-double"
-        ],
-        "no-reference": false,
-        "no-unused-variable": [
-            true,
-            {
-                "vars": "all",
-                "args": "after-used",
-                "ignoreRestSiblings": false
-            }
-        ],
-        "ban-types": false,
-        "member-ordering": [
-            true,
-            {
-                "order": [
-                    "static-field",
-                    "private-static-method"
-                ]
-            }
-        ],
-        "no-console": [
-            false
-        ],
-        "no-debugger": false,
-        "space-before-function-paren": [
-            "error",
-            {
-                "anonymous": "always",
-                "named": "never",
-                "asyncArrow": "never"
-            }
+  "extends": "tslint:recommended",
+  "rules": {
+    "indent": [
+      true,
+      "spaces",
+      2
+    ],
+    "quotemark": [
+      true,
+      "single",
+      "jsx-double"
+    ],
+    "no-reference": false,
+    "ban-types": false,
+    "member-ordering": [
+      true,
+      {
+        "order": [
+          "static-field",
+          "private-static-method"
         ]
-    }
+      }
+    ],
+    "no-console": [
+      false
+    ],
+    "no-debugger": false
+  }
 }

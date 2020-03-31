@@ -26,6 +26,7 @@ import {
 } from './grid';
 import { IChartAdaptor } from './Histogram';
 import {
+  IChartPoint,
   ILineChartDataSet,
   ILineChartProps,
   ILineProps,
@@ -55,10 +56,12 @@ const ZERO_SUBSTITUTE: number = 1e-6;
 
 export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
   let svg: TSelection;
-  let tipContainer;
-  let xParseTime;
-  let xFormatTime;
-  let tipContent;
+  let tipContainer: any;
+  let xParseTime: (x: string) => Date | null;
+  let xFormatTime: (v: any) => string;
+  let tipContent: {
+    html: (fn: any) => string,
+  };
 
   const lineProps: ILineProps = {
     curveType: curveCatmullRom,
@@ -113,9 +116,8 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
 
   const curve = (
     dataset: ILineChartDataSet<any>,
-    yAxisWidth: number,
-    x,
-    y,
+    x: (x: number) => number,
+    y: (y: number) => number,
   ) => line()
     .curve(dataset.line.curveType)
     .x((d: any) => x(d.x))
@@ -310,7 +312,7 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
     /**
      * Iterate over data and update lines
      */
-    _drawLines(data: Array<ILineChartDataSet<any>>, oldData: Array<ILineChartDataSet<any>>) {
+    _drawLines(data: ILineChartDataSet<any>[], oldData: ILineChartDataSet<any>[]) {
 
       // Remove old lines
       oldData.forEach((d, i) => {
@@ -338,15 +340,15 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
           .attr('stroke', d.line.stroke)
           .transition()
           .duration(500)
-          .attr('d', curve(d, xOffset(d), xScale, yScale)(d.data as any) as any)
+          .attr('d', curve(d, xScale, yScale)(d.data as any) as any)
           .delay(50);
       });
     },
 
     /**
-       * Iterates ove data and updates area fills
-       */
-    drawAreas(data: Array<ILineChartDataSet<any>>, oldData: Array<ILineChartDataSet<any>>) {
+     * Iterates ove data and updates area fills
+     */
+    drawAreas(data: ILineChartDataSet<any>[], oldData: ILineChartDataSet<any>[]) {
       const h = gridHeight(props);
       const thisArea = (dataset: ILineChartDataSet<any>) => area()
         .curve(dataset.line.curveType as CurveFactory)
@@ -385,8 +387,8 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
     },
 
     /**
-    * Get a max count of values in each data set
-       */
+     * Get a max count of values in each data set
+     */
     valuesCount(data: ILineChartProps['data']): number {
       return data.reduce((a: number, b): number => {
         return b.data.length > a ? b.data.length : a;
@@ -394,7 +396,7 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
     },
 
     /**
-    * Update chart
+     * Update chart
      */
     update(newProps: DeepPartial<ILineChartProps>) {
       if (!newProps.data) {
@@ -412,7 +414,7 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
       data = data.map((datum) => {
         if (props.axis.x.scale === 'TIME') {
           datum.data = datum.data.map((d) => {
-            const newd = {
+            const newd: IChartPoint<any> = {
               ...d,
               x: typeof d.x === 'object'
                 ? d.x
@@ -432,7 +434,7 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
     },
 
     /**
-    * Any necessary clean up
+     * Any necessary clean up
      */
     destroy(el: Element) {
       svg.selectAll('svg > *').remove();

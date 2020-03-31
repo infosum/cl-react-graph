@@ -1,12 +1,24 @@
 {
   "name": "cl-react-graph",
-  "version": "2.0.6",
+  "version": "2.0.7",
   "description": "React D3 Charts",
   "main": "./dist/index.js",
   "types": "./dist/types/index.d.ts",
   "scripts": {
     "build": "export NODE_ENV=production|| set NODE_ENV=production && TS_NODE_PROJECT=\"tsconfig.json\" webpack",
-    "test": "istanbul cover _mocha --recursive -x '**/*.spec.js' -x '**/config/**' -x '**/node_modules/**' -g './{,!(node_modules)/**/}*.spec.js'"
+    "test": "nyc mocha"
+  },
+  "nyc": {
+    "reporter": [
+      "lcov",
+      "text"
+    ],
+    "exclude": [
+      "node_modules",
+      "docs",
+      "docs-src"
+    ],
+    "all": false
   },
   "repository": {
     "type": "git",
@@ -25,12 +37,20 @@
   "homepage": "https://github.com/cognitivelogic/cl-react-graph#readme",
   "devDependencies": {
     "@babel/core": "^7.8.7",
-    "@babel/preset-env": "^7.8.7",
-    "@babel/preset-react": "^7.8.3",
+    "@babel/plugin-proposal-class-properties": "^7.8.3",
+    "@babel/plugin-transform-classes": "^7.9.2",
+    "@babel/preset-env": "^7.9.0",
+    "@babel/preset-react": "^7.9.4",
     "@babel/preset-stage-0": "^7.8.3",
+    "@babel/preset-typescript": "^7.9.0",
+    "@babel/register": "^7.9.0",
+    "@types/chai": "^4.2.11",
     "@types/d3": "^5.7.2",
     "@types/deepmerge": "^2.2.0",
+    "@types/enzyme": "^3.10.5",
+    "@types/enzyme-adapter-react-16": "^1.0.6",
     "@types/lodash": "^4.14.149",
+    "@types/mocha": "^7.0.2",
     "@types/node": "^13.9.1",
     "@types/react": "*",
     "@types/react-dom": "*",
@@ -40,9 +60,16 @@
     "babel-eslint": "^10.1.0",
     "babel-loader": "^8.0.6",
     "chai": "^4.2.0",
+    "d3": "^5.15.0",
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.2",
     "eslint": "^6.8.0",
     "istanbul": "^0.4.5",
-    "mocha": "^7.1.0",
+    "jsdom": "^16.2.2",
+    "mocha": "^7.1.1",
+    "nyc": "^15.0.0",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
     "ts-lint": "^4.5.1",
     "ts-loader": "^6.2.1",
     "ts-node": "^8.6.2",
@@ -52,12 +79,6 @@
     "webpack": "^4.42.0",
     "webpack-bundle-analyzer": "^3.6.1",
     "webpack-cli": "^3.3.11"
-  },
-  "babel": {
-    "presets": [
-      "@babel/preset-env",
-      "@babel/preset-react"
-    ]
   },
   "peerDependencies": {
     "react": "*",

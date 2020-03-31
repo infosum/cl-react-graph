@@ -1,7 +1,6 @@
 import {
   MutableRefObject,
   useEffect,
-  useRef,
 } from 'react';
 import ReactDOM from 'react-dom';
 import mergeRefs from 'react-merge-refs';
@@ -13,10 +12,15 @@ import { IChartAdaptor } from '../Histogram';
 
 const getDOMNode = (ref: MutableRefObject<any>) => {
   const node = ReactDOM.findDOMNode(ref.current);
-  if (node instanceof HTMLElement) {
+  try {
+    if (node instanceof Text) {
+      return undefined;
+    }
     return node;
+  } catch (e) {
+    // instanceof Text not working when running tests - just presume its ok
+    return node as Element;
   }
-  return undefined;
 }
 
 export const useChart = <C, T>(localRef: any, chart: IChartAdaptor<any>, props: any) => {
@@ -31,7 +35,6 @@ export const useChart = <C, T>(localRef: any, chart: IChartAdaptor<any>, props: 
     if (!el) {
       return;
     }
-    console.log('create', props.width === '100%' ? width : 300)
     chart.create(el, {
       ...props,
       width: props.width === '100%' ? width : 300,
@@ -39,7 +42,6 @@ export const useChart = <C, T>(localRef: any, chart: IChartAdaptor<any>, props: 
   }, []);
 
   useEffect(() => {
-    console.log('update', props.width === '100%' ? width : 300);
     chart.update({
       ...props,
       width: props.width === '100%' ? width : 300,
