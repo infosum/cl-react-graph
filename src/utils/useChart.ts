@@ -39,6 +39,7 @@ export const useChart = <C, T>(localRef: any, chart: IChartAdaptor<any>, props: 
       ...props,
       width: props.width === '100%' ? width : 300,
     });
+    return () => chart.destroy();
   }, []);
 
   useEffect(() => {

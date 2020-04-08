@@ -15,7 +15,7 @@ interface ISizeProps {
   className: string;
 }
 
-export const makeSvg = (el: Element, svg: TSelection, svgId?: string): TSelection => {
+export const makeSvg = (el: Element, svg: TSelection | undefined, svgId?: string): TSelection => {
   if (svg) {
     svg.selectAll('svg > *').remove();
     svg.remove();
@@ -33,7 +33,10 @@ export const makeSvg = (el: Element, svg: TSelection, svgId?: string): TSelectio
   return svg;
 }
 
-export const sizeSVG = (svg: TSelection, props: ISizeProps) => {
+export const sizeSVG = (svg: TSelection | undefined, props: ISizeProps) => {
+  if (!svg) {
+    return;
+  }
   const { margin, width, height, className } = props;
   const scale = {
     x: 1 - (margin.left / Number(width)),

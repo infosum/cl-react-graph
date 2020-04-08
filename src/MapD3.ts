@@ -119,7 +119,7 @@ export const mapD3 = ((): IChartAdaptor<IMapProps> => {
     /**
      * Any necessary clean up
      */
-    destroy(el: Element) {
+    destroy() {
       svg.selectAll('svg > *').remove();
     },
   };

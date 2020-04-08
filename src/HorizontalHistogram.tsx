@@ -4,11 +4,11 @@ import React, {
 } from 'react';
 
 import { IHistogramProps } from './Histogram';
-import { horizontalHistogramD3 } from './HorizontalHistogramD3';
+import { HorizontalHistogramD3 } from './HorizontalHistogramD3';
 import { DeepPartial } from './utils/types';
 import { useChart } from './utils/useChart';
 
-const chart = horizontalHistogramD3();
+const chart = new HorizontalHistogramD3();
 
 const HorizontalHistogram: FC<DeepPartial<IHistogramProps>> = ({ children, ...rest }) => {
   const [refs] = useChart(useRef(), chart, rest);

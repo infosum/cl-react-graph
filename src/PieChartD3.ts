@@ -347,7 +347,7 @@ export const pieChartD3 = ((): IChartAdaptor<IPieChartProps> => {
     /**
      * Any necessary clean up
      */
-    destroy(el: Element) {
+    destroy() {
       svg.selectAll('svg > *').remove();
     },
   };

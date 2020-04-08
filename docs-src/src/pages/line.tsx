@@ -233,6 +233,12 @@ const LineExample: FC = () => {
           <Grid item xs={6}>
             <Card>
               <CardContent>
+                <LineChart
+                  axis={state.axis}
+                  grid={state.grid}
+                  data={state.data}
+                  className="line-1"
+                  width="100%" />
                 {chart}
               </CardContent>
             </Card>

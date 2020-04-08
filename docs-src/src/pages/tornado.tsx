@@ -111,6 +111,7 @@ const Tornado = () => {
             <Card>
               <CardContent>
                 {chart}
+                {chart}
               </CardContent>
             </Card>
             <br />

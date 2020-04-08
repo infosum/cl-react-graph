@@ -177,7 +177,7 @@ export const tornadoD3 = ((): IChartAdaptor<ITornadoProps> => {
      */
     create(el: Element, newProps: DeepPartial<ITornadoProps> = {}) {
       merge(props, newProps);
-      svg = makeSvg(el, svg);
+      svg = makeSvg(el, undefined);
       const { margin, width, height, className } = props;
       sizeSVG(svg, { margin, width, height, className });
       const r = makeTip(props.tipContainer, tipContainer);
@@ -501,7 +501,7 @@ export const tornadoD3 = ((): IChartAdaptor<ITornadoProps> => {
     /**
      * Any necessary clean up
      */
-    destroy(el: Element) {
+    destroy() {
       svg.selectAll('svg > *').remove();
     },
   };

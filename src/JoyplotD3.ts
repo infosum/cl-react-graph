@@ -522,7 +522,7 @@ export const joyPlotD3 = ((): IChartAdaptor<IJoyPlotProps> => {
     /**
      * Any necessary clean up
      */
-    destroy(el: Element) {
+    destroy() {
       svg.selectAll('svg > *').remove();
     },
   };
