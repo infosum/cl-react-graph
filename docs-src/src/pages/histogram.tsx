@@ -137,7 +137,7 @@ export function gridReducer<S extends any, A extends any>(state: S, action: A): 
   }
 }
 
-// Unclear why but you can't import a reduced in and have it update state???
+// Unclear why but you can't import a reducer in and have it update state???
 export function axisReducer<S extends any, A extends any>(state: S, action: A): any {
   switch (action.type) {
     case 'setScale':
