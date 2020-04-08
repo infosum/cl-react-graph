@@ -11,7 +11,7 @@ interface IProps {
   bins: string[],
   hover?: Partial<Record<EColorManipulations, number>>,
   colors: ScaleOrdinal<string, string>,
-  tipContentFn: TipContentFn<string>,
+  tipContentFn: TipContentFn<string> | undefined,
   tipContent: any,
   tip: any,
   tipContainer: string,
@@ -36,6 +36,9 @@ export const onMouseOverAxis = (props: IProps) => (d: IGroupDataItem | any, i: n
     tipContainer,
   } = props;
   const ix = bins.findIndex((b) => b === d.label);
+  if (!tipContentFn) {
+    return;
+  }
   tipContent.html(() => tipContentFn(bins, ix, d.value || d));
   tip.fx.in(tipContainer);
 };
@@ -50,7 +53,9 @@ export const onMouseOver = (props: IProps) => (d: IGroupDataItem | any, i: numbe
     tipContainer,
   } = props;
   const ix = bins.findIndex((b) => b === d.label);
-
+  if (!tipContentFn) {
+    return;
+  }
   if (hover) {
     select(nodes[i])
       .attr('fill-opacity', 1)

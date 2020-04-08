@@ -4,7 +4,7 @@ import React, {
 } from 'react';
 
 import {
-  histogramD3,
+  HistogramD3,
   IGroupDataItem,
 } from './HistogramD3';
 import { DeepPartial } from './utils/types';
@@ -13,7 +13,7 @@ import { useChart } from './utils/useChart';
 export interface IChartAdaptor<P> {
   create: (el: Element, props: DeepPartial<P>) => void;
   update: (props: DeepPartial<P>) => void;
-  destroy: (el: Element) => void;
+  destroy: () => void;
 }
 
 export enum EColorManipulations {
@@ -177,7 +177,7 @@ export interface IAxis {
 
 export type TipContentFn<T> = (bins: T[], i: number, d: number, groupTitle?: string) => string;
 
-const chart = histogramD3();
+const chart = new HistogramD3();
 
 const Histogram: FC<DeepPartial<IHistogramProps>> = ({ children, ...rest }) => {
   const [refs] = useChart(useRef(), chart, rest);

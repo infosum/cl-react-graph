@@ -137,7 +137,7 @@ export function gridReducer<S extends any, A extends any>(state: S, action: A): 
   }
 }
 
-// Unclear why but you can't import a reduced in and have it update state??? 
+// Unclear why but you can't import a reducer in and have it update state???
 export function axisReducer<S extends any, A extends any>(state: S, action: A): any {
   switch (action.type) {
     case 'setScale':
@@ -226,7 +226,7 @@ function reducer(state: IInitialState, action: Actions): IInitialState {
       const keys = Object.keys(hover);
       delete hover[''];
       let i: number;
-      // When adding an option its initially keyed to '' - remove those 
+      // When adding an option its initially keyed to '' - remove those
       for (i = keys.length; i >= 0; i--) {
         if (keys[i] === '') {
           delete hover[''];
@@ -310,7 +310,7 @@ const HistogramExample = () => {
     delay={state.delay}
     duration={state.duration}
     visible={visible}
-    colorScheme={["#a9a9a9", "#2a5379"]}
+    colorScheme={['#a9a9a9', '#2a5379']}
     groupLayout={state.groupLayout}
     id="bigHistogram"
     tipContentFn={(bin, i, d) => {
@@ -333,7 +333,7 @@ const HistogramExample = () => {
     delay={state.delay}
     duration={state.duration}
     visible={visible}
-    colorScheme={["#a9a9a9", "#2a5379"]}
+    colorScheme={['#a9a9a9', '#2a5379']}
     groupLayout={state.groupLayout}
     tipContentFn={tipContentFns[0]}
     id="smallHistogram"

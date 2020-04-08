@@ -266,7 +266,7 @@ export const scatterPlotD3 = ((): IChartAdaptor<IScatterPlotProps> => {
     /**
      * Any necessary clean up
      */
-    destroy(el: Element) {
+    destroy() {
       svg.selectAll('svg > *').remove();
     },
   };
