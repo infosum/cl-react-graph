@@ -5,7 +5,7 @@ interface IProps {
     bins: string[];
     hover?: Partial<Record<EColorManipulations, number>>;
     colors: ScaleOrdinal<string, string>;
-    tipContentFn: TipContentFn<string>;
+    tipContentFn: TipContentFn<string> | undefined;
     tipContent: any;
     tip: any;
     tipContainer: string;

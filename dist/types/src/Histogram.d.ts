@@ -4,7 +4,7 @@ import { DeepPartial } from './utils/types';
 export interface IChartAdaptor<P> {
     create: (el: Element, props: DeepPartial<P>) => void;
     update: (props: DeepPartial<P>) => void;
-    destroy: (el: Element) => void;
+    destroy: () => void;
 }
 export declare enum EColorManipulations {
     'negate' = "negate",

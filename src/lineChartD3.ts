@@ -436,7 +436,7 @@ export const lineChartD3 = ((): IChartAdaptor<ILineChartProps> => {
     /**
      * Any necessary clean up
      */
-    destroy(el: Element) {
+    destroy() {
       svg.selectAll('svg > *').remove();
     },
   };
