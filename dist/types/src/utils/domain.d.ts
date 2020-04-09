@@ -1,7 +1,7 @@
 import { Axis } from 'd3';
 import { ScaleLinear } from 'd3-scale';
+import { IGroupData } from '../BaseHistogramD3';
 import { IAxis, IDomain, IHistogramDataSet } from '../Histogram';
-import { IGroupData } from '../HistogramD3';
 import { IGroupedProps } from './bars';
 import { AnyScale } from './scales';
 export declare const isStacked: ({ groupLayout, stacked }: IGroupedProps) => boolean;

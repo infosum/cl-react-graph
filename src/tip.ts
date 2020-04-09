@@ -1,21 +1,32 @@
-import { event } from 'd3-selection';
-import { select } from 'd3-selection';
+import {
+  event,
+  select,
+} from 'd3-selection';
 
 export default {
   fx: {
     in: (container) => {
-      container.style('left', (event.pageX) + 'px')
+      if (typeof container === 'string') {
+        return;
+      }
+      container?.style('left', (event.pageX) + 'px')
         .style('top', (event.pageY - 55) + 'px');
-      container.transition()
+      container?.transition()
         .duration(200)
         .style('opacity', 0.9);
     },
     move: (container) => {
-      container.style('left', (event.pageX) + 'px')
+      if (typeof container === 'string') {
+        return;
+      }
+      container?.style('left', (event.pageX) + 'px')
         .style('top', (event.pageY - 55) + 'px');
     },
     out: (container) => {
-      container.transition()
+      if (typeof container === 'string') {
+        return;
+      }
+      container?.transition()
         .duration(100)
         .style('opacity', 0);
     },

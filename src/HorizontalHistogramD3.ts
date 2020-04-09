@@ -7,14 +7,14 @@ import {
   scaleLinear,
   scaleOrdinal,
 } from 'd3-scale';
-import { Selection } from 'd3-selection';
-import cloneDeep from 'lodash/cloneDeep';
-import merge from 'lodash/merge';
 
-import colorScheme from './colors';
+import {
+  BaseHistogramD3,
+  IGroupData,
+  IGroupDataItem,
+} from './BaseHistogramD3';
 import attrs from './d3/attrs';
 import {
-  drawHorizontalGrid,
   gridHeight,
   gridWidth,
   xAxisHeight,
@@ -23,14 +23,7 @@ import {
 import {
   EGroupedBarLayout,
   IAxis,
-  IChartAdaptor,
-  IHistogramProps,
 } from './Histogram';
-import {
-  IGroupData,
-  IGroupDataItem,
-} from './HistogramD3';
-import tips, { makeTip } from './tip';
 import {
   getBarWidth,
   groupedBarsUseSameXAxisValue,
@@ -39,11 +32,7 @@ import {
   paddingInner,
   paddingOuter,
 } from './utils/bars';
-import {
-  annotationAxisDefaults,
-  axis as defaultAxis,
-  grid as defaultGrid,
-} from './utils/defaults';
+import { annotationAxisDefaults } from './utils/defaults';
 import {
   appendDomainRange,
   formatTick,
@@ -58,105 +47,11 @@ import {
   onMouseOver,
   onMouseOverAxis,
 } from './utils/mouseOver';
-import {
-  makeGrid,
-  makeScales,
-  makeSvg,
-  sizeSVG,
-  TSelection,
-} from './utils/svg';
-import { DeepPartial } from './utils/types';
 
-export class HorizontalHistogramD3 {
-  svg: undefined | Selection<any, any, any, any>;;
-  tipContainer;
-  tipContent;
+export class HorizontalHistogramD3 extends BaseHistogramD3 {
   x = scaleLinear();
   y = scaleBand();
   yAnnotations = scaleBand();
-  innerScaleBand = scaleBand();
-  container: undefined | Selection<SVGElement, any, any, any>;
-  dataSets: IGroupData = [[]];
-  gridX: undefined | TSelection;
-  gridY: undefined | TSelection;
-  yAxisContainer: undefined | TSelection;
-  xAxisContainer: undefined | TSelection;
-  xAxisLabel: undefined | TSelection;
-  yAxisLabel: undefined | TSelection;
-  xAnnotationAxisContainer: undefined | TSelection;
-  yAnnotationAxisContainer: undefined | TSelection;
-  props: IHistogramProps = {
-    axis: cloneDeep(defaultAxis),
-    bar: {
-      grouped: {
-        paddingInner: 0.1,
-        paddingOuter: 0,
-      },
-      paddingInner: 0.1,
-      paddingOuter: 1,
-      overlayMargin: 5,
-    },
-    className: 'histogram-d3',
-    colorScheme,
-    data: {
-      bins: [],
-      colorScheme: [],
-      counts: [],
-    },
-    delay: 0,
-    domain: {
-      max: null,
-      min: null,
-    },
-    duration: 400,
-    grid: defaultGrid,
-    groupLayout: EGroupedBarLayout.GROUPED,
-    height: 200,
-    margin: {
-      bottom: 0,
-      left: 5,
-      right: 0,
-      top: 5,
-    },
-    stacked: false, // Deprecated use groupLayout instead
-    stroke: {
-      color: '#005870',
-      dasharray: '',
-      linecap: 'butt',
-      width: 0,
-    },
-    tip: tips,
-    tipContainer: 'body',
-    tipContentFn: (bins: string[], i: number, d: number): string =>
-      bins[i] + '<br />' + d,
-    visible: {},
-    width: 200,
-  };
-
-  create(el: Element, newProps: DeepPartial<IHistogramProps> = {}) {
-    const { props, tipContainer } = this;
-    merge(props, newProps);
-    const { id, margin, width, height, className } = props;
-    this.svg = makeSvg(el, undefined, id);
-    sizeSVG(this.svg, { margin, width, height, className });
-    const r = makeTip(props.tipContainer, tipContainer);
-    this.tipContent = r.tipContent;
-    this.tipContainer = r.tipContainer;
-    [this.gridX, this.gridY] = makeGrid(this.svg);
-    [
-      this.xAxisContainer,
-      this.yAxisContainer,
-      this.xAxisLabel,
-      this.yAxisLabel,
-      this.xAnnotationAxisContainer,
-      this.yAnnotationAxisContainer,
-    ] = makeScales(this.svg);
-    this.container = this.svg
-      .append<SVGElement>('g')
-      .attr('class', 'histogram-container');
-
-    this.update(newProps);
-  }
 
   /**
    * Draw Axes
@@ -456,64 +351,4 @@ export class HorizontalHistogramD3 {
       .text((d) => d);
   };
 
-  mergeProps(newProps: DeepPartial<IHistogramProps>) {
-    const { props } = this;
-    merge(props, newProps);
-    if (newProps.data) {
-      props.data = newProps.data as IHistogramProps['data'];
-    }
-    if (newProps.colorScheme) {
-      props.colorScheme = newProps.colorScheme;
-    }
-    if (newProps.annotations) {
-      props.annotations = newProps.annotations as IHistogramProps['annotations'];
-    }
-    if (newProps.annotationTextSize) {
-      props.annotationTextSize = newProps.annotationTextSize as IHistogramProps['annotationTextSize'];
-    }
-  };
-
-  /**
-   * Update chart
-   */
-  update(newProps: DeepPartial<IHistogramProps>) {
-    const { props, x, y, gridX, gridY } = this;
-    if (!props.data) {
-      return;
-    }
-    this.mergeProps(newProps);
-    if (!props.data.bins) {
-      return;
-    }
-    const { margin, width, height, className, data, visible } = props;
-    sizeSVG(this.svg, { margin, width, height, className });
-    this.dataSets = [];
-
-    data.counts.forEach((count) => {
-      count.data.forEach((value, i) => {
-        if (!this.dataSets[i]) {
-          this.dataSets[i] = [];
-        }
-        this.dataSets[i].push({
-          groupLabel: count.label,
-          label: data.bins[i],
-          value: visible[data.bins[i]] !== false && visible[count.label] !== false ? value : 0,
-        });
-      });
-    });
-
-    this.drawAxes();
-    if (gridX && gridY) {
-      drawHorizontalGrid({ x, y, gridX, gridY, props, ticks: maxValueCount(data.counts) });
-    }
-    this.updateChart(data.bins, this.dataSets);
-  };
-
-  /**
-   * Any necessary clean up
-   */
-  destroy() {
-    this.svg?.selectAll('svg > *').remove();
-  }
 };
-

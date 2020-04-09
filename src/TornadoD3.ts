@@ -12,12 +12,15 @@ import {
 import { Selection } from 'd3-selection';
 import { timeFormat } from 'd3-time-format';
 import cloneDeep from 'lodash/cloneDeep';
-import merge from 'lodash/merge';
+import mergeWith from 'lodash/mergeWith';
 
+import {
+  IGroupData,
+  IGroupDataItem,
+} from './BaseHistogramD3';
 import colorScheme from './colors';
 import attrs from './d3/attrs';
 import {
-  drawHorizontalGrid,
   gridHeight,
   gridWidth,
   xAxisHeight,
@@ -27,10 +30,6 @@ import {
   EGroupedBarLayout,
   IChartAdaptor,
 } from './Histogram';
-import {
-  IGroupData,
-  IGroupDataItem,
-} from './HistogramD3';
 import tips, { makeTip } from './tip';
 import {
   ITornadoDataSet,
@@ -103,25 +102,26 @@ const calculatePercents = (groupData: IGroupData) => {
 
   });
 }
-export const tornadoD3 = ((): IChartAdaptor<ITornadoProps> => {
-  let svg: Selection<any, any, any, any>;;
-  let tipContainer;
-  let tipContent;
-  const x = scaleLinear();
-  const y = scaleBand();
-  const innerScaleBand = scaleBand();
-  let container: Selection<SVGElement, any, any, any>;
-  let dataSets: IGroupData;
-  let gridX: TSelection;
-  let gridY: TSelection;
-  let yAxisContainer: TSelection;
-  let xAxisContainer: TSelection;
-  let xAxisContainer2: TSelection;
-  let yAxisLabel: TSelection;
-  let xAxisLabel: TSelection;
-  let domain: [number, number];
 
-  const props: ITornadoProps = {
+export class TornadoD3 {
+  svg: undefined | Selection<any, any, any, any>;;
+  tipContainer;
+  tipContent;
+  x = scaleLinear();
+  y = scaleBand();
+  innerScaleBand = scaleBand();
+  container: undefined | Selection<SVGElement, any, any, any>;
+  dataSets: IGroupData = [[]];
+  gridX: undefined | TSelection;
+  gridY: undefined | TSelection;
+  yAxisContainer: undefined | TSelection;
+  xAxisContainer: undefined | TSelection;
+  xAxisContainer2: undefined | TSelection;
+  yAxisLabel: undefined | TSelection;
+  xAxisLabel: undefined | TSelection;
+  domain: [number, number] = [0, 0];
+
+  props: ITornadoProps = {
     axis: cloneDeep(defaultAxis),
     bar: {
       grouped: {
@@ -171,339 +171,352 @@ export const tornadoD3 = ((): IChartAdaptor<ITornadoProps> => {
     width: 200,
   };
 
-  const TornadoD3 = {
-    /**
-     * Initialization
-     */
-    create(el: Element, newProps: DeepPartial<ITornadoProps> = {}) {
-      merge(props, newProps);
-      svg = makeSvg(el, undefined);
-      const { margin, width, height, className } = props;
-      sizeSVG(svg, { margin, width, height, className });
-      const r = makeTip(props.tipContainer, tipContainer);
-      tipContent = r.tipContent;
-      tipContainer = r.tipContainer;
-      [gridX, gridY] = makeGrid(svg);
+  /**
+   * Initialization
+   */
+  create(el: Element, newProps: DeepPartial<ITornadoProps> = {}) {
+    const { props } = this;
+    this.mergeProps(newProps);
+    this.svg = makeSvg(el, undefined);
+    const { margin, width, height, className } = props;
+    sizeSVG(this.svg, { margin, width, height, className });
+    const r = makeTip(props.tipContainer, this.tipContainer);
+    this.tipContent = r.tipContent;
+    this.tipContainer = r.tipContainer;
+    [this.gridX, this.gridY] = makeGrid(this.svg);
 
-      // Used to display the 2 split bin labels
-      xAxisContainer2 = svg.append('g').attr('class', 'xAxisContainer2');
-      container = svg
-        .append<SVGElement>('g')
-        .attr('class', 'histogram-container');
+    // Used to display the 2 split bin labels
+    this.xAxisContainer2 = this.svg.append('g').attr('class', 'xAxisContainer2');
+    this.container = this.svg
+      .append<SVGElement>('g')
+      .attr('class', 'histogram-container');
 
-      // Render Axis above bars so that we can see the y axis overlaid
-      [xAxisContainer, yAxisContainer, xAxisLabel, yAxisLabel] = makeScales(svg);
+    // Render Axis above bars so that we can see the y axis overlaid
+    [this.xAxisContainer, this.yAxisContainer, this.xAxisLabel, this.yAxisLabel] = makeScales(this.svg);
 
-      this.update(props);
-    },
+    this.update(props);
+  }
 
-    /**
-     * Draw Axes
-     */
-    drawAxes() {
-      const { bar, data, groupLayout, margin, width, height, axis } = props;
-      const valuesCount = maxValueCount(data.counts);
-      const w = gridWidth(props);
-      const h = gridHeight(props) - SPLIT_AXIS_HEIGHT;
-      const dataLabels = data.counts.map((c) => c.label);
+  /**
+   * Draw Axes
+   */
+  drawAxes() {
+    const { props, svg, x, y, innerScaleBand, yAxisContainer, domain, xAxisContainer, xAxisContainer2 } = this;
+    const { bar, data, groupLayout, margin, width, height, axis } = props;
+    const valuesCount = maxValueCount(data.counts);
+    const w = gridWidth(props);
+    const h = gridHeight(props) - SPLIT_AXIS_HEIGHT;
+    const dataLabels = data.counts.map((c) => c.label);
 
-      y.domain(data.bins)
-        .rangeRound([h, 0])
-        .paddingInner(groupedPaddingInner(bar));
+    y.domain(data.bins)
+      .rangeRound([h, 0])
+      .paddingInner(groupedPaddingInner(bar));
 
-      innerScaleBand
-        .domain(groupedBarsUseSameXAxisValue({ groupLayout }) ? ['main'] : dataLabels)
-        .rangeRound([0, y.bandwidth()])
-        .paddingInner(paddingInner(props.bar));
+    innerScaleBand
+      .domain(groupedBarsUseSameXAxisValue({ groupLayout }) ? ['main'] : dataLabels)
+      .rangeRound([0, y.bandwidth()])
+      .paddingInner(paddingInner(props.bar));
 
-      const xAxis = axisBottom<number>(x)
-        .tickFormat((v) => {
-          const n = v.toString().replace('-', '');
+    const xAxis = axisBottom<number>(x)
+      .tickFormat((v) => {
+        const n = v.toString().replace('-', '');
 
-          if (shouldFormatTick(axis.x)) {
-            if (axis.x.scale === 'TIME') {
-              return timeFormat(axis.x.dateFormat)(new Date(n));
-            }
-            return isNaN(Number(v)) ? n : format(axis.x.numberFormat)(Number(n))
+        if (shouldFormatTick(axis.x)) {
+          if (axis.x.scale === 'TIME') {
+            return timeFormat(axis.x.dateFormat)(new Date(n));
           }
-          return n;
-        });
-
-      tickSize({
-        axis: xAxis,
-        axisLength: w,
-        scaleBand: x,
-        axisConfig: axis.x,
-        limitByValues: false,
-        valuesCount: 10,
+          return isNaN(Number(v)) ? n : format(axis.x.numberFormat)(Number(n))
+        }
+        return n;
       });
 
-      this.calculateDomain();
+    tickSize({
+      axis: xAxis,
+      axisLength: w,
+      scaleBand: x,
+      axisConfig: axis.x,
+      limitByValues: false,
+      valuesCount: 10,
+    });
 
-      const x2 = scalePoint<any>();
+    this.calculateDomain();
 
-      const xGroupAxis = axisBottom(x2).tickPadding(SPLIT_AXIS_HEIGHT)
-        .tickSize(0)
+    const x2 = scalePoint<any>();
 
-      x2.range([Number(width) / 4, Number(width) * (3 / 4) - (margin.top * 2) - axis.y.width])
-        .domain(props.splitBins);
+    const xGroupAxis = axisBottom(x2).tickPadding(SPLIT_AXIS_HEIGHT)
+      .tickSize(0)
 
-      /** Y-Axis (label axis) set up */
-      const yAxis = axisLeft<string>(y);
-      ticks({
-        axis: yAxis,
-        valuesCount,
-        axisLength: h,
-        axisConfig: axis.y,
-        scaleBand: y,
-        limitByValues: true,
-      });
-      // Move the y axis ticks to the left of the chart
-      yAxis.tickPadding(x(0) + 10)
-      yAxisContainer
-        // Place the y axis in the middle of the chart
-        .attr('transform', 'translate(' + (yAxisWidth(axis) + x(0)) + ', ' + margin.top + ' )')
-        .call(yAxis);
+    x2.range([Number(width) / 4, Number(width) * (3 / 4) - (margin.top * 2) - axis.y.width])
+      .domain(props.splitBins);
 
-      // @TODO - Stacked? (was using appendDomainRange())
-      x.range([0, Number(width) - (margin.top * 2) - axis.y.width])
-        .domain(domain)
-        .nice();
+    /** Y-Axis (label axis) set up */
+    const yAxis = axisLeft<string>(y);
+    ticks({
+      axis: yAxis,
+      valuesCount,
+      axisLength: h,
+      axisConfig: axis.y,
+      scaleBand: y,
+      limitByValues: true,
+    });
+    // Move the y axis ticks to the left of the chart
+    yAxis.tickPadding(x(0) + 10)
+    yAxisContainer
+      // Place the y axis in the middle of the chart
+      ?.attr('transform', 'translate(' + (yAxisWidth(axis) + x(0)) + ', ' + margin.top + ' )')
+      .call(yAxis);
 
-      const xAxisY = height - xAxisHeight(props.axis) - margin.top - SPLIT_AXIS_HEIGHT;
-      xAxisContainer
-        .attr('transform', 'translate(' + yAxisWidth(axis) + ',' +
-          xAxisY + ')')
-        .call(xAxis);
+    // @TODO - Stacked? (was using appendDomainRange())
+    x.range([0, Number(width) - (margin.top * 2) - axis.y.width])
+      .domain(domain)
+      .nice();
 
-      xAxisContainer2
-        .attr('transform', 'translate(' + yAxisWidth(axis) + ',' +
-          (xAxisY) + ')')
-        .call(xGroupAxis);
+    const xAxisY = height - xAxisHeight(props.axis) - margin.top - SPLIT_AXIS_HEIGHT;
+    xAxisContainer
+      ?.attr('transform', 'translate(' + yAxisWidth(axis) + ',' +
+        xAxisY + ')')
+      .call(xAxis);
 
-      attrs(svg.selectAll('.y-axis .domain, .y-axis .tick line'), axis.y.style);
-      attrs(svg.selectAll('.y-axis .tick text'), axis.y.text.style as any);
+    xAxisContainer2
+      ?.attr('transform', 'translate(' + yAxisWidth(axis) + ',' +
+        (xAxisY) + ')')
+      .call(xGroupAxis);
 
-      attrs(svg.selectAll('.x-axis .domain, .x-axis .tick line'), axis.x.style);
-      attrs(svg.selectAll('.x-axis .tick text'), axis.x.text.style as any);
-    },
+    attrs(svg?.selectAll('.y-axis .domain, .y-axis .tick line'), axis.y.style);
+    attrs(svg?.selectAll('.y-axis .tick text'), axis.y.text.style as any);
 
-    calculateDomain() {
-      const { data, center } = props;
-      const leftValues = data.counts.reduce((prev, next) => prev.concat(next.data[0]), [] as number[]);
-      const rightValues = data.counts.reduce((prev, next) => prev.concat(next.data[1]), [] as number[]);
+    attrs(svg?.selectAll('.x-axis .domain, .x-axis .tick line'), axis.x.style);
+    attrs(svg?.selectAll('.x-axis .tick text'), axis.x.text.style as any);
+  }
 
-      // Use applyDomainAffordance to allow space for percentage labels
-      domain = [
-        applyDomainAffordance(-Math.max(...leftValues)),
-        applyDomainAffordance(Math.max(...rightValues)),
-      ];
+  calculateDomain() {
+    const { props } = this;
+    const { data, center } = props;
+    const leftValues = data.counts.reduce((prev, next) => prev.concat(next.data[0]), [] as number[]);
+    const rightValues = data.counts.reduce((prev, next) => prev.concat(next.data[1]), [] as number[]);
 
-      // Center the 0 axis value in the middle of the chart
-      if (center) {
-        const max = Math.max(Math.max(...leftValues), domain[1]);
-        domain = [
-          applyDomainAffordance(-max),
-          applyDomainAffordance(max)];
-      }
-      return domain;
-    },
+    // Use applyDomainAffordance to allow space for percentage labels
+    this.domain = [
+      applyDomainAffordance(-Math.max(...leftValues)),
+      applyDomainAffordance(Math.max(...rightValues)),
+    ];
 
-    /**
-     * Draw a single data set into the chart
-     */
-    updateChart(
-      bins: string[],
-      groupData: IGroupData,
-    ) {
-      const { axis, height, margin, delay, duration, tip, showBinPercentages } = props;
+    // Center the 0 axis value in the middle of the chart
+    if (center) {
+      const max = Math.max(Math.max(...leftValues), this.domain[1]);
+      this.domain = [
+        applyDomainAffordance(-max),
+        applyDomainAffordance(max)];
+    }
+    return this.domain;
+  }
 
-      const percentData = calculatePercents(groupData);
+  /**
+   * Draw a single data set into the chart
+   */
+  updateChart(
+    bins: string[],
+    groupData: IGroupData,
+  ) {
+    const { props, container, tipContainer, yAxisLabel, x, innerScaleBand, tipContent, y } = this;
+    const { axis, height, margin, delay, duration, tip, showBinPercentages } = props;
 
-      const stackedOffset = (d: IGroupDataItem, stackIndex: number) => {
+    const percentData = calculatePercents(groupData);
+
+    const stackedOffset = (d: IGroupDataItem, stackIndex: number) => {
+      const w = d.side === 'left' ? -d.value : d.value;
+      return x(Math.min(0, w));
+    }
+
+    const colors = scaleOrdinal(props.colorScheme);
+    const gWidth = gridWidth(props);
+
+    const g = container
+      ?.selectAll<SVGElement, {}>('g')
+      .data(percentData);
+
+    const bars = g?.enter()
+      .append<SVGElement>('g')
+      .merge(g)
+      .attr('transform', (d: any[]) => {
+        let yd = y(d[0].label);
+        if (yd === undefined) {
+          yd = 0;
+        }
+        const xX = yAxisWidth(axis) + axis.x.style['stroke-width'];
+        return `translate(${xX}, ${margin.top + yd})`;
+      })
+
+      .selectAll<SVGElement, {}>('rect')
+      .data((d) => d);
+
+    bars
+      ?.enter()
+      .append<SVGElement>('rect')
+      .attr('width', 0)
+      .attr('x', (d) => x(0))
+      .attr('class', (d) => `bar ${d.side}`)
+      .on('click', onClick(props.onClick))
+      .on('mouseover', onMouseOver({ bins, hover: props.bar.hover, colors, tipContentFn: props.tipContentFn, tipContent, tip, tipContainer }))
+      .on('mousemove', () => tip.fx.move(tipContainer))
+      .on('mouseout', onMouseOut({ tip, tipContainer, colors }))
+      .merge(bars)
+      .attr('y', (d: IGroupDataItem, i: number) => {
+        const overlay = (props.groupLayout === EGroupedBarLayout.OVERLAID)
+          ? Math.floor(i / 2) * props.bar.overlayMargin
+          : Number(innerScaleBand(String(d.groupLabel)));
+        return overlay;
+      })
+      .attr('height', (d, i) => getBarWidth(Math.floor(i / 2), props.groupLayout, props.bar, innerScaleBand))
+      .attr('fill', (d, i) => colors(String(d.groupLabel)))
+      .transition()
+      .duration(duration)
+      .delay(delay)
+      .attr('x', stackedOffset)
+      .attr('width', (d: IGroupDataItem): number => {
         const w = d.side === 'left' ? -d.value : d.value;
-        return x(Math.min(0, w));
-      }
-
-      const colors = scaleOrdinal(props.colorScheme);
-      const gWidth = gridWidth(props);
-
-      const g = container
-        .selectAll<SVGElement, {}>('g')
-        .data(percentData);
-
-      const bars = g.enter()
-        .append<SVGElement>('g')
-        .merge(g)
-        .attr('transform', (d: any[]) => {
-          let yd = y(d[0].label);
-          if (yd === undefined) {
-            yd = 0;
-          }
-          const x = yAxisWidth(axis) + axis.x.style['stroke-width'];
-          return `translate(${x}, ${margin.top + yd})`;
-        })
-
-        .selectAll<SVGElement, {}>('rect')
-        .data((d) => d);
-
-      bars
-        .enter()
-        .append<SVGElement>('rect')
-        .attr('width', 0)
-        .attr('x', (d) => x(0))
-        .attr('class', (d) => `bar ${d.side}`)
-        .on('click', onClick(props.onClick))
-        .on('mouseover', onMouseOver({ bins, hover: props.bar.hover, colors, tipContentFn: props.tipContentFn, tipContent, tip, tipContainer }))
-        .on('mousemove', () => tip.fx.move(tipContainer))
-        .on('mouseout', onMouseOut({ tip, tipContainer, colors }))
-        .merge(bars)
-        .attr('y', (d: IGroupDataItem, i: number) => {
-          const overlay = (props.groupLayout === EGroupedBarLayout.OVERLAID)
-            ? Math.floor(i / 2) * props.bar.overlayMargin
-            : Number(innerScaleBand(String(d.groupLabel)));
-          return overlay;
-        })
-        .attr('height', (d, i) => getBarWidth(Math.floor(i / 2), props.groupLayout, props.bar, innerScaleBand))
-        .attr('fill', (d, i) => colors(String(d.groupLabel)))
-        .transition()
-        .duration(duration)
-        .delay(delay)
-        .attr('x', stackedOffset)
-        .attr('width', (d: IGroupDataItem): number => {
-          const w = d.side === 'left' ? -d.value : d.value;
-          return Math.abs(x(w) - x(0));
-        });
-
-      const percents = g.enter()
-        .append<SVGElement>('g')
-        .merge(g)
-        .attr('transform', (d: any[]) => {
-          let yd = y(d[0].label);
-          if (yd === undefined) {
-            yd = 0;
-          }
-          const x = yAxisWidth(axis) + axis.x.style['stroke-width'];
-          return `translate(${x}, ${margin.top + yd})`;
-        })
-
-        .selectAll<SVGElement, {}>('text')
-        .data((d) => d);
-
-      percents
-        .enter()
-        .append<SVGElement>('text')
-        .attr('width', 0)
-        .attr('x', (d) => {
-          const w = d.side === 'left' ? -40 : 40;
-          return x(0) + w;
-        })
-        .attr('class', 'percentage-label')
-        .style('text-anchor', 'middle')
-        .style('font-size', '0.675rem')
-        .merge(percents)
-        .text((d, i) => {
-          return showBinPercentages ? `${d.percent}%` : '';
-        })
-        .attr('y', (d: IGroupDataItem, i: number) => {
-          const h = getBarWidth(0, props.groupLayout, props.bar, innerScaleBand);
-          const offset = h / 2;
-
-          // Ensure that percentage labels don't overlap
-          const verticalOffset = i < 2 ? 0 : 14;
-          return offset + verticalOffset;
-        })
-        .attr('fill', (d, i) => colors(String(d.groupLabel)))
-        .transition()
-        .duration(duration)
-        .delay(delay)
-        .attr('x', (d) => {
-          const w = d.side === 'left' ? - 20 : 20;
-          const v = d.side === 'left' ? -d.value : d.value;
-          return x(v) + w;
-        })
-        .attr('width', (d: IGroupDataItem): number => {
-          const w = d.side === 'left' ? -d.value : d.value;
-          return Math.abs(x(w) - x(0));
-        });
-
-      percents.exit().remove();
-
-      bars.exit().remove();
-      g.exit().remove();
-
-      const yText = yAxisLabel
-        .selectAll<any, any>('text')
-        .data([axis.y.label]);
-
-      yText.enter().append('text')
-        .attr('class', 'y-axis-label')
-        .merge(yText)
-        .attr('transform',
-          'translate(' + (Number(height) / 2) + ' ,' +
-          ((height - yAxisWidth(props.axis) - (margin.left * 2)) + axis.x.margin) + ')')
-        .style('text-anchor', 'middle')
-        .text((d) => d);
-
-      const xText = yAxisLabel
-        .selectAll<any, any>('text')
-        .data([axis.x.label]);
-
-      xText.enter().append('text')
-        .attr('class', 'x-axis-label')
-        .merge(xText)
-        .attr('transform', 'rotate(-90)')
-        .attr('y', 0)
-        .attr('x', 0 - (gWidth / 2 - (margin.top * 2)))
-        .attr('dy', '1em')
-        .style('text-anchor', 'middle')
-        .text((d) => d);
-    },
-
-    /**
-     * Update chart
-     */
-    update(newProps: DeepPartial<ITornadoProps>) {
-      if (!props.data) {
-        return;
-      }
-      merge(props, newProps);
-      if (!props.data.bins) {
-        return;
-      }
-      const { margin, width, height, className, data, visible } = props;
-      sizeSVG(svg, { margin, width, height, className });
-      dataSets = [];
-
-      data.counts.forEach((count) => {
-        count.data.forEach((value, genderIndex) => {
-          value.forEach((aValue, rowIndex) => {
-            if (!dataSets[rowIndex]) {
-              dataSets[rowIndex] = [];
-            }
-            dataSets[rowIndex].push({
-              side: genderIndex === 0 ? 'left' : 'right',
-              groupLabel: count.label,
-              colorRef: count.label,
-              label: data.bins[rowIndex],
-              value: visible[data.bins[rowIndex]] !== false && visible[count.label] !== false ? aValue : 0,
-            });
-          })
-
-        });
+        return Math.abs(x(w) - x(0));
       });
-      this.drawAxes();
-      // @TODO add back in,
-      // drawHorizontalGrid<any>({ x, y, gridX, gridY, props, ticks: maxValueCount(data.counts) });
-      this.updateChart(data.bins, dataSets);
-    },
 
-    /**
-     * Any necessary clean up
-     */
-    destroy() {
-      svg.selectAll('svg > *').remove();
-    },
-  };
-  return TornadoD3;
-});
+    const percents = g?.enter()
+      .append<SVGElement>('g')
+      .merge(g)
+      .attr('transform', (d: any[]) => {
+        let yd = y(d[0].label);
+        if (yd === undefined) {
+          yd = 0;
+        }
+        const xX = yAxisWidth(axis) + axis.x.style['stroke-width'];
+        return `translate(${xX}, ${margin.top + yd})`;
+      })
+
+      .selectAll<SVGElement, {}>('text')
+      .data((d) => d);
+
+    percents
+      ?.enter()
+      .append<SVGElement>('text')
+      .attr('width', 0)
+      .attr('x', (d) => {
+        const w = d.side === 'left' ? -40 : 40;
+        return x(0) + w;
+      })
+      .attr('class', 'percentage-label')
+      .style('text-anchor', 'middle')
+      .style('font-size', '0.675rem')
+      .merge(percents)
+      .text((d, i) => {
+        return showBinPercentages ? `${d.percent}%` : '';
+      })
+      .attr('y', (d: IGroupDataItem, i: number) => {
+        const h = getBarWidth(0, props.groupLayout, props.bar, innerScaleBand);
+        const offset = h / 2;
+
+        // Ensure that percentage labels don't overlap
+        const verticalOffset = i < 2 ? 0 : 14;
+        return offset + verticalOffset;
+      })
+      .attr('fill', (d, i) => colors(String(d.groupLabel)))
+      .transition()
+      .duration(duration)
+      .delay(delay)
+      .attr('x', (d) => {
+        const w = d.side === 'left' ? - 20 : 20;
+        const v = d.side === 'left' ? -d.value : d.value;
+        return x(v) + w;
+      })
+      .attr('width', (d: IGroupDataItem): number => {
+        const w = d.side === 'left' ? -d.value : d.value;
+        return Math.abs(x(w) - x(0));
+      });
+
+    percents?.exit().remove();
+
+    bars?.exit().remove();
+    g?.exit().remove();
+
+    const yText = yAxisLabel
+      ?.selectAll<any, any>('text')
+      .data([axis.y.label]);
+
+    yText?.enter().append('text')
+      .attr('class', 'y-axis-label')
+      .merge(yText)
+      .attr('transform',
+        'translate(' + (Number(height) / 2) + ' ,' +
+        ((height - yAxisWidth(props.axis) - (margin.left * 2)) + axis.x.margin) + ')')
+      .style('text-anchor', 'middle')
+      .text((d) => d);
+
+    const xText = yAxisLabel
+      ?.selectAll<any, any>('text')
+      .data([axis.x.label]);
+
+    xText?.enter().append('text')
+      .attr('class', 'x-axis-label')
+      .merge(xText)
+      .attr('transform', 'rotate(-90)')
+      .attr('y', 0)
+      .attr('x', 0 - (gWidth / 2 - (margin.top * 2)))
+      .attr('dy', '1em')
+      .style('text-anchor', 'middle')
+      .text((d) => d);
+  }
+
+  mergeProps(newProps: DeepPartial<ITornadoProps>) {
+    const { props } = this;
+
+    const customerizer = (objValue, srcValue, key, object, source, stack) => {
+      if (['data'].includes(key)) {
+        return srcValue;
+      }
+    }
+    mergeWith(props, newProps, customerizer);
+  }
+
+  /**
+   * Update chart
+   */
+  update(newProps: DeepPartial<ITornadoProps>) {
+    const { props } = this;
+    if (!props.data) {
+      return;
+    }
+    this.mergeProps(newProps);
+    if (!props.data.bins) {
+      return;
+    }
+    const { margin, width, height, className, data, visible } = props;
+    sizeSVG(this.svg, { margin, width, height, className });
+    this.dataSets = [];
+
+    data.counts.forEach((count) => {
+      count.data.forEach((value, genderIndex) => {
+        value.forEach((aValue, rowIndex) => {
+          if (!this.dataSets[rowIndex]) {
+            this.dataSets[rowIndex] = [];
+          }
+          this.dataSets[rowIndex].push({
+            side: genderIndex === 0 ? 'left' : 'right',
+            groupLabel: count.label,
+            colorRef: count.label,
+            label: data.bins[rowIndex],
+            value: visible[data.bins[rowIndex]] !== false && visible[count.label] !== false ? aValue : 0,
+          });
+        })
+
+      });
+    });
+    this.drawAxes();
+    // @TODO add back in,
+    // drawHorizontalGrid<any>({ x, y, gridX, gridY, props, ticks: maxValueCount(data.counts) });
+    this.updateChart(data.bins, this.dataSets);
+  }
+
+  /**
+   * Any necessary clean up
+   */
+  destroy() {
+    this.svg?.selectAll('svg > *').remove();
+  }
+}

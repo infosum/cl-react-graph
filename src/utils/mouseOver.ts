@@ -1,11 +1,11 @@
 import { ScaleOrdinal } from 'd3';
 import { select } from 'd3-selection';
 
+import { IGroupDataItem } from '../BaseHistogramD3';
 import {
   EColorManipulations,
   TipContentFn,
 } from '../Histogram';
-import { IGroupDataItem } from '../HistogramD3';
 
 interface IProps {
   bins: string[],

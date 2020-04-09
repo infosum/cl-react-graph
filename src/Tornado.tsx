@@ -3,6 +3,7 @@ import React, {
   useRef,
 } from 'react';
 
+import { IGroupDataItem } from './BaseHistogramD3';
 import {
   EGroupedBarLayout,
   IAxes,
@@ -13,8 +14,7 @@ import {
   IStroke,
   TipContentFn,
 } from './Histogram';
-import { IGroupDataItem } from './HistogramD3';
-import { tornadoD3 } from './TornadoD3';
+import { TornadoD3 } from './TornadoD3';
 import { DeepPartial } from './utils/types';
 import { useChart } from './utils/useChart';
 
@@ -57,7 +57,7 @@ export interface ITornadoProps {
   width: number | string;
 }
 
-const chart = tornadoD3();
+const chart = new TornadoD3();
 
 const Tornado: FC<DeepPartial<ITornadoProps>> = ({ children, ...rest }) => {
   const [refs] = useChart(useRef(), chart, rest);

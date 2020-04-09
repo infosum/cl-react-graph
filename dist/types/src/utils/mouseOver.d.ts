@@ -1,6 +1,6 @@
 import { ScaleOrdinal } from 'd3';
+import { IGroupDataItem } from '../BaseHistogramD3';
 import { EColorManipulations, TipContentFn } from '../Histogram';
-import { IGroupDataItem } from '../HistogramD3';
 interface IProps {
     bins: string[];
     hover?: Partial<Record<EColorManipulations, number>>;

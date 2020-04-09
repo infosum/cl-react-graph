@@ -47,7 +47,6 @@ import {
   smallAnnotationsData,
   smallData,
   theme,
-  verticalXAxis,
 } from '../data';
 
 const tipContentFns = [
@@ -321,23 +320,7 @@ const HistogramExample = () => {
       return bin[binPos];
     }}
   />;
-  const smallDataChart = <Chart data={smallData}
-    axis={state.axis}
-    bar={state.bar}
-    grid={state.grid}
-    width={state.width}
-    annotations={smallAnnotationsData}
-    showBinPercentages={[true, true]}
-    onClick={(d) => console.log(d)}
-    height={420}
-    delay={state.delay}
-    duration={state.duration}
-    visible={visible}
-    colorScheme={['#a9a9a9', '#2a5379']}
-    groupLayout={state.groupLayout}
-    tipContentFn={tipContentFns[0]}
-    id="smallHistogram"
-  />;
+  const [dataIndex, setDataIndex] = useState(0);
 
   return (
     <Layout>
@@ -377,7 +360,26 @@ const HistogramExample = () => {
                     'blob',
                   )
                 }}>Download</Button>
-                {smallDataChart}
+                <Chart data={dataIndex === 0 ? smallData : data}
+                  axis={state.axis}
+                  bar={state.bar}
+                  grid={state.grid}
+                  width="100%"
+                  annotations={smallAnnotationsData}
+                  showBinPercentages={[true, true]}
+                  onClick={(d) => console.log(d)}
+                  height={420}
+                  delay={state.delay}
+                  duration={state.duration}
+                  visible={visible}
+                  colorScheme={dataIndex === 0 ? ['#a9a9a9', '#2a5379'] : ['#afeeff', 'afbb44']}
+                  groupLayout={state.groupLayout}
+                  tipContentFn={tipContentFns[0]}
+                  id="smallHistogram"
+                />
+                <Button onClick={() => setDataIndex(dataIndex === 1 ? 0 : 1)}>
+                  toggle data
+                </Button>
                 <Legend
                   theme={theme}
                   data={dataLegendData}
