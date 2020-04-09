@@ -107,6 +107,7 @@ const initialState: DeepPartial<ITornadoProps> = {
   duration: 400,
   grid,
   groupLayout: EGroupedBarLayout.OVERLAID,
+  width: '100%',
 }
 
 function reducer(state: ITornadoProps, action: Actions): ITornadoProps {
@@ -125,8 +126,7 @@ const Tornado = () => {
   const [state, dispatch] = useReducer(reducer, initialState as ITornadoProps);
   const [index, setIndex] = useState(0);
   const chart = <TornadoChart
-    {...state}
-    width="600" />;
+    {...state} />;
   return (
     <Layout>
       <SEO title="Line Chart" description="" />

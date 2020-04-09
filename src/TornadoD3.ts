@@ -259,12 +259,7 @@ export class TornadoD3 {
       scaleBand: y,
       limitByValues: true,
     });
-    // Move the y axis ticks to the left of the chart
-    yAxis.tickPadding(x(0) + 10)
-    yAxisContainer
-      // Place the y axis in the middle of the chart
-      ?.attr('transform', 'translate(' + (yAxisWidth(axis) + x(0)) + ', ' + margin.top + ' )')
-      .call(yAxis);
+
 
     // @TODO - Stacked? (was using appendDomainRange())
     x.range([0, Number(width) - (margin.top * 2) - axis.y.width])
@@ -282,6 +277,13 @@ export class TornadoD3 {
         (xAxisY) + ')')
       .call(xGroupAxis);
 
+
+    // Move the y axis ticks to the left of the chart (need to go after the x axis range set up)
+    yAxis.tickPadding(x(0) + 10)
+    yAxisContainer
+      // Place the y axis in the middle of the chart
+      ?.attr('transform', 'translate(' + (yAxisWidth(axis) + x(0)) + ', ' + margin.top + ' )')
+      .call(yAxis);
     attrs(svg?.selectAll('.y-axis .domain, .y-axis .tick line'), axis.y.style);
     attrs(svg?.selectAll('.y-axis .tick text'), axis.y.text.style as any);
 
@@ -443,7 +445,7 @@ export class TornadoD3 {
       .attr('class', 'y-axis-label')
       .merge(yText)
       .attr('transform',
-        'translate(' + (Number(height) / 2) + ' ,' +
+        'translate(' + 0 + ' ,' +
         ((height - yAxisWidth(props.axis) - (margin.left * 2)) + axis.x.margin) + ')')
       .style('text-anchor', 'middle')
       .text((d) => d);
