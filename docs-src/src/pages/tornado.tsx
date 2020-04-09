@@ -1,6 +1,10 @@
-import React, { useReducer } from 'react';
+import React, {
+  useReducer,
+  useState,
+} from 'react';
 
 import {
+  Button,
   Card,
   CardContent,
   FormControlLabel,
@@ -26,7 +30,7 @@ import { grid } from '../data';
 
 const axis: DeepPartial<IAxes> = {
   x: {
-    numberFormat: ".2s",
+    numberFormat: '.2s',
     scale: 'LINEAR',
     ticks: 4,
   },
@@ -36,13 +40,34 @@ const axis: DeepPartial<IAxes> = {
   },
 };
 
+const data2: ITornadoData = {
+  bins: ['Yes', 'No'],
+  // @Todo test with only one count set
+  counts: [
+    {
+      label: 'Background',
+      data: [
+        [0, 260], // Male bin 1, Male bin 2,
+        [0, 210], // Female bin 1, Female bin 2,
+      ],
+    },
+    {
+      label: 'Foreground',
+      data: [
+        [10, 2600], // Male bin 1, Male bin 2,
+        [330, 100], // Female bin 1, Female bin 2,
+      ],
+    },
+
+  ],
+}
 
 type Actions = { type: 'SET_SHOW_PERCENTAGES', show: boolean }
   | { type: 'HERE' };
 
 const initialState: DeepPartial<ITornadoProps> = {
   data: {
-    bins: ["16-18", "18-25", "25-35", "35-50", "50-65", "65-∞"],
+    bins: ['16-18', '18-25', '25-35', '35-50', '50-65', '65-∞'],
     // @Todo test with only one count set
     counts: [
       {
@@ -98,6 +123,7 @@ function reducer(state: ITornadoProps, action: Actions): ITornadoProps {
 
 const Tornado = () => {
   const [state, dispatch] = useReducer(reducer, initialState as ITornadoProps);
+  const [index, setIndex] = useState(0);
   const chart = <TornadoChart
     {...state}
     width="600" />;
@@ -111,7 +137,14 @@ const Tornado = () => {
             <Card>
               <CardContent>
                 {chart}
-                {chart}
+                <TornadoChart
+                  {...state}
+                  data={index === 0 ? state.data : data2}
+                  width="600" />
+                <Button onClick={() => setIndex(index === 0 ? 1 : 0)}>
+                  Toggle Data
+                </Button>
+
               </CardContent>
             </Card>
             <br />
