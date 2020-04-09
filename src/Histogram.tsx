@@ -3,10 +3,8 @@ import React, {
   useRef,
 } from 'react';
 
-import {
-  HistogramD3,
-  IGroupDataItem,
-} from './HistogramD3';
+import { IGroupDataItem } from './BaseHistogramD3';
+import { HistogramD3 } from './HistogramD3';
 import { DeepPartial } from './utils/types';
 import { useChart } from './utils/useChart';
 

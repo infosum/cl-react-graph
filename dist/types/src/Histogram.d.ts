@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { IGroupDataItem } from './HistogramD3';
+import { IGroupDataItem } from './BaseHistogramD3';
 import { DeepPartial } from './utils/types';
 export interface IChartAdaptor<P> {
     create: (el: Element, props: DeepPartial<P>) => void;

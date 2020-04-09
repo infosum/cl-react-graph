@@ -14,10 +14,13 @@ import { timeFormat } from 'd3-time-format';
 import cloneDeep from 'lodash/cloneDeep';
 import merge from 'lodash/merge';
 
+import {
+  IGroupData,
+  IGroupDataItem,
+} from './BaseHistogramD3';
 import colorScheme from './colors';
 import attrs from './d3/attrs';
 import {
-  drawHorizontalGrid,
   gridHeight,
   gridWidth,
   xAxisHeight,
@@ -27,10 +30,6 @@ import {
   EGroupedBarLayout,
   IChartAdaptor,
 } from './Histogram';
-import {
-  IGroupData,
-  IGroupDataItem,
-} from './HistogramD3';
 import tips, { makeTip } from './tip';
 import {
   ITornadoDataSet,

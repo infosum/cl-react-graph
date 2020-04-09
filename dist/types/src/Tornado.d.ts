@@ -1,6 +1,6 @@
 import { FC } from 'react';
+import { IGroupDataItem } from './BaseHistogramD3';
 import { EGroupedBarLayout, IAxes, IDomain, IGrid, IHistogramBar, IMargin, IStroke, TipContentFn } from './Histogram';
-import { IGroupDataItem } from './HistogramD3';
 import { DeepPartial } from './utils/types';
 export interface ITornadoDataSet {
     borderColors?: string[];

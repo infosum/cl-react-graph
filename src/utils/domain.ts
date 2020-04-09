@@ -5,13 +5,13 @@ import { ScaleLinear } from 'd3-scale';
 import { timeFormat } from 'd3-time-format';
 import get from 'lodash/get';
 
+import { IGroupData } from '../BaseHistogramD3';
 import {
   EGroupedBarLayout,
   IAxis,
   IDomain,
   IHistogramDataSet,
 } from '../Histogram';
-import { IGroupData } from '../HistogramD3';
 import { IGroupedProps } from './bars';
 import { AnyScale } from './scales';
 
@@ -28,7 +28,7 @@ interface IAppendDomainRangeProps {
 }
 
 /**
- * Slightly better attempt from applyDomainAffordance, taking into 
+ * Slightly better attempt from applyDomainAffordance, taking into
  * account axis types.
  */
 export const rangeAffordance = (
