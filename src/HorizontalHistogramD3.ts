@@ -49,19 +49,19 @@ import {
 } from './utils/mouseOver';
 
 export class HorizontalHistogramD3 extends BaseHistogramD3 {
-  x = scaleLinear();
-  y = scaleBand();
-  yAnnotations = scaleBand();
+  public x = scaleLinear();
+  public y = scaleBand();
+  public yAnnotations = scaleBand();
 
   /**
    * Draw Axes
    */
-  drawAxes() {
+  public drawAxes() {
     const { props, dataSets, xAxisContainer, svg, innerScaleBand, tipContent,
       y, x, yAxisContainer, tipContainer, yAnnotationAxisContainer, yAnnotations } = this;
-    const { annotations, annotationTextSize, bar, data, domain, groupLayout, stacked, margin, width, height, axis, tip } = props;
+    const { annotations, annotationTextSize, bar, data, domain, groupLayout, stacked,
+      margin, width, height, axis, tip } = props;
     const valuesCount = maxValueCount(data.counts);
-    const w = gridWidth(props);
     const h = gridHeight(props);
     const dataLabels = data.counts.map((c) => c.label);
     const annotationsEnabled = annotations && annotations.length === data.bins.length;
@@ -83,26 +83,26 @@ export class HorizontalHistogramD3 extends BaseHistogramD3 {
     /** Y-Axis (label axis) set up */
     const axisYAnnotationAllowance: IAxis = {
       ...axis.y,
-      tickSize: 30,
       style: {
-        fill: 'none',
-        stroke: 'none',
-        opacity: 0,
+        'fill': 'none',
+        'stroke': 'none',
+        'opacity': 0,
         'shape-rendering': 'none',
         'stroke-opacity': 0,
         'stroke-width': 0,
-        visible: false,
+        'visible': false,
       },
+      tickSize: 30,
       visible: false,
-    }
+    };
 
     ticks({
       axis: yAxis,
-      valuesCount,
-      axisLength: h,
       axisConfig: annotationsEnabled ? axisYAnnotationAllowance : axis.y,
-      scaleBand: y,
+      axisLength: h,
       limitByValues: true,
+      scaleBand: y,
+      valuesCount,
     });
     yAxisContainer
       ?.attr('transform', 'translate(' + yAxisWidth(axis) + ', ' + margin.top + ' )')
@@ -114,18 +114,20 @@ export class HorizontalHistogramD3 extends BaseHistogramD3 {
       yAxisContainer
         ?.selectAll('g.tick')
         .select('text')
-        .on('mouseover', (onMouseOverAxis({ ...props.data, colors, tipContentFn: props.axisLabelTipContentFn, tipContent, tip, tipContainer })))
+        .on('mouseover', (onMouseOverAxis({
+          ...props.data, colors,
+          tipContentFn: props.axisLabelTipContentFn, tipContent, tip, tipContainer,
+        })))
         .on('mousemove', () => tip.fx.move(tipContainer))
-        .on('mouseout', () => tip.fx.out(tipContainer))
+        .on('mouseout', () => tip.fx.out(tipContainer));
     }
-
 
     /** Y-Axis 2 (bottom axis) for annotations if annotations data sent (and match bin length) */
     if (annotations && annotations.length === data.bins.length) {
 
       yAxisContainer
         ?.selectAll('line')
-        .style('opacity', 0)
+        .style('opacity', 0);
 
       yAnnotations.domain(data.bins)
         .rangeRound([0, h])
@@ -136,11 +138,11 @@ export class HorizontalHistogramD3 extends BaseHistogramD3 {
 
       ticks({
         axis: annotationAxis,
-        valuesCount: annotations.length,
-        axisLength: h,
         axisConfig: annotationAxisDefaults,
-        scaleBand: yAnnotations,
+        axisLength: h,
         limitByValues: true,
+        scaleBand: yAnnotations,
+        valuesCount: annotations.length,
       });
       // Override the default axis bin labels with the custom annotations
       annotationAxis.tickFormat((d, i) => annotations[i].value);
@@ -156,7 +158,7 @@ export class HorizontalHistogramD3 extends BaseHistogramD3 {
         .style('fill', (d, i) => annotations[i].color);
 
       // Hide the line for the annotations axis
-      yAnnotationAxisContainer?.call(g => g.select('.domain').remove());
+      yAnnotationAxisContainer?.call((g) => g.select('.domain').remove());
 
     }
 
@@ -166,8 +168,8 @@ export class HorizontalHistogramD3 extends BaseHistogramD3 {
       domain,
       range: [0, Number(width) - (margin.top * 2) - axis.y.width],
       scale: x,
-      stacked: isStacked({ groupLayout, stacked })
-    })
+      stacked: isStacked({ groupLayout, stacked }),
+    });
 
     const xAxisY = height - xAxisHeight(props.axis) - margin.top;
     // Format number axis if format prop provided
@@ -187,12 +189,12 @@ export class HorizontalHistogramD3 extends BaseHistogramD3 {
 
     attrs(svg?.selectAll('.x-axis .domain, .x-axis .tick line'), axis.x.style);
     attrs(svg?.selectAll('.x-axis .tick text'), axis.x.text.style as any);
-  };
+  }
 
   /**
    * Draw a single data set into the chart
    */
-  updateChart(
+  public updateChart(
     bins: string[],
     groupData: IGroupData,
   ) {
@@ -211,17 +213,17 @@ export class HorizontalHistogramD3 extends BaseHistogramD3 {
         ? oSet
         : 0;
       return isItStacked ? this.x(offset) : 0;
-    }
+    };
 
     const calculateYPosition = (d: IGroupDataItem, stackIndex: number, offset: number, counts: number): number => {
       const totalWidth = innerScaleBand.bandwidth();
       const barWidth = getBarWidth(stackIndex, props.groupLayout, props.bar, innerScaleBand);
-      const overlaidYPos = (totalWidth / 2) - (barWidth / 3) + (stackIndex === 1 ? 1 : 0)
+      const overlaidYPos = (totalWidth / 2) - (barWidth / 3) + (stackIndex === 1 ? 1 : 0);
       const finalYPos = (props.groupLayout === EGroupedBarLayout.OVERLAID || counts === 1)
         ? overlaidYPos
         : Number(innerScaleBand(String(d.groupLabel)));
       return offset ? finalYPos + offset : finalYPos;
-    }
+    };
 
     const colors = scaleOrdinal(props.colorScheme);
     const gWidth = gridWidth(props);
@@ -252,7 +254,15 @@ export class HorizontalHistogramD3 extends BaseHistogramD3 {
       .attr('x', stackedOffset)
       .attr('class', 'bar')
       .on('click', onClick(props.onClick))
-      .on('mouseover', onMouseOver({ bins, hover: props.bar.hover, colors, tipContentFn: props.tipContentFn, tipContent, tip, tipContainer }))
+      .on('mouseover', onMouseOver({
+        bins,
+        colors,
+        hover: props.bar.hover,
+        tip,
+        tipContainer,
+        tipContent,
+        tipContentFn: props.tipContentFn,
+      }))
       .on('mousemove', () => tip.fx.move(tipContainer))
       .on('mouseout', onMouseOut({ tip, tipContainer, colors }))
       .merge(bars)
@@ -318,7 +328,7 @@ export class HorizontalHistogramD3 extends BaseHistogramD3 {
           return calculateYPosition(d, i, ((barWidth + overlaidOffset) / 2), props.data.counts.length);
         });
       percents?.exit().remove();
-    };
+    }
 
     bars?.exit().remove();
     g?.exit().remove();
@@ -349,6 +359,6 @@ export class HorizontalHistogramD3 extends BaseHistogramD3 {
       .attr('dy', '1em')
       .style('text-anchor', 'middle')
       .text((d) => d);
-  };
+  }
 
-};
+}

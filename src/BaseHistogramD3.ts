@@ -70,38 +70,38 @@ export interface IGroupDataItem {
 export type IGroupData = IGroupDataItem[][];
 
 export abstract class BaseHistogramD3 {
-  svg: undefined | Selection<any, any, any, any>;
-  tipContainer;
-  tipContent;
-  abstract y;
-  abstract x;
-  xAnnotations = scaleBand();
-  innerScaleBand = scaleBand();
-  container: undefined | Selection<SVGElement, any, any, any>;
-  dataSets: IGroupData = [[]];
-  gridX: undefined | TSelection;
-  gridY: undefined | TSelection;
-  yAxisContainer: undefined | TSelection;
-  xAxisContainer: undefined | TSelection;
-  xAnnotationAxisContainer: undefined | TSelection;
-  yAnnotationAxisContainer: undefined | TSelection;
-  xAxisLabel: any;
-  yAxisLabel: undefined | Selection<SVGElement, any, any, any>;
-  percentBarLabel: any;
-  props: IHistogramProps = {
+  public svg: undefined | Selection<any, any, any, any>;
+  public tipContainer: any;
+  public tipContent: any;
+  public abstract y: any;
+  public abstract x: any;
+  public xAnnotations = scaleBand();
+  public innerScaleBand = scaleBand();
+  public container: undefined | Selection<SVGElement, any, any, any>;
+  public dataSets: IGroupData = [[]];
+  public gridX: undefined | TSelection;
+  public gridY: undefined | TSelection;
+  public yAxisContainer: undefined | TSelection;
+  public xAxisContainer: undefined | TSelection;
+  public xAnnotationAxisContainer: undefined | TSelection;
+  public yAnnotationAxisContainer: undefined | TSelection;
+  public xAxisLabel: any;
+  public yAxisLabel: undefined | Selection<SVGElement, any, any, any>;
+  public percentBarLabel: any;
+  public props: IHistogramProps = {
+    annotations: [],
     axis: cloneDeep(defaultAxis),
     bar: {
       grouped: {
         paddingInner: 0.1,
         paddingOuter: 0,
       },
+      overlayMargin: 5,
       paddingInner: 0,
       paddingOuter: 0,
-      overlayMargin: 5,
     },
     className: 'histogram-d3',
     colorScheme,
-    annotations: [],
     data: {
       bins: [],
       counts: [],
@@ -137,7 +137,7 @@ export abstract class BaseHistogramD3 {
     width: 200,
   };
 
-  create(el: Element, newProps: DeepPartial<IHistogramProps> = {}) {
+  public create(el: Element, newProps: DeepPartial<IHistogramProps> = {}) {
     const { props } = this;
     this.mergeProps(newProps);
     const { id, margin, width, height, className } = props;
@@ -162,22 +162,22 @@ export abstract class BaseHistogramD3 {
     this.update(newProps);
   }
 
-  mergeProps(newProps: DeepPartial<IHistogramProps>) {
+  public mergeProps(newProps: DeepPartial<IHistogramProps>) {
     const { props } = this;
 
-    const customerizer = (objValue, srcValue, key, object, source, stack) => {
+    const customerizer = (objValue: any, srcValue: any, key: any, object: any, source: any, stack: any) => {
       if (['data', 'colorScheme', 'annotations', 'annotationTextSize'].includes(key)) {
         return srcValue;
       }
-    }
+    };
     mergeWith(props, newProps, customerizer);
   }
 
   /**
    * Update chart
    */
-  update(newProps: DeepPartial<IHistogramProps>) {
-    const { props, svg, x, y, gridX, gridY } = this;
+  public update(newProps: DeepPartial<IHistogramProps>) {
+    const { props, svg } = this;
     if (!newProps.data) {
       return;
     }
@@ -207,22 +207,24 @@ export abstract class BaseHistogramD3 {
     this.updateChart(data.bins, this.dataSets);
   }
 
-  drawGrid() {
-    const { props, svg, x, y, gridX, gridY } = this;
-    drawGrid(x, y, gridX, gridY, props, maxValueCount(props.data.counts))
+  public drawGrid() {
+    const { props, x, y, gridX, gridY } = this;
+    if (gridX && gridY) {
+      drawGrid(x, y, gridX, gridY, props, maxValueCount(props.data.counts));
+    }
   }
 
-  abstract updateChart(
+  public abstract updateChart(
     bins: string[],
     groupData: IGroupData,
   ): void;
 
-  abstract drawAxes(): void;
+  public abstract drawAxes(): void;
 
   /**
    * Any necessary clean up
    */
-  destroy() {
+  public destroy() {
     this.svg?.selectAll('svg > *').remove();
   }
 }

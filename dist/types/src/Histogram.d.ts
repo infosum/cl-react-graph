@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { Component } from 'react';
 import { IGroupDataItem } from './BaseHistogramD3';
 import { DeepPartial } from './utils/types';
 export interface IChartAdaptor<P> {
@@ -134,6 +134,9 @@ interface ISVGTextStyle {
     x?: string | number;
     y?: string | number;
 }
+export interface IChartState {
+    parentWidth?: number;
+}
 export interface IAxis {
     dateFormat: string;
     numberFormat: string;
@@ -152,5 +155,44 @@ export interface IAxis {
     visible: boolean;
 }
 export declare type TipContentFn<T> = (bins: T[], i: number, d: number, groupTitle?: string) => string;
-declare const Histogram: FC<DeepPartial<IHistogramProps>>;
+/**
+ * Histogram component
+ */
+declare class Histogram extends Component<DeepPartial<IHistogramProps>, IChartState> {
+    private chart;
+    private ref;
+    /**
+     * Constructor
+     */
+    constructor(props: DeepPartial<IHistogramProps>);
+    /**
+     * Handle the page resize
+     */
+    private handleResize;
+    /**
+     * Component mounted
+     */
+    componentDidMount(): void;
+    /**
+     * Component updated
+     */
+    componentDidUpdate(): void;
+    /**
+     * Get the chart state
+     */
+    getChartState(): DeepPartial<IHistogramProps>;
+    /**
+     * Component will un mount, remove the chart and
+     * any event listeners
+     */
+    componentWillUnmount(): void;
+    /**
+     * Get the chart's dom node
+     */
+    private getDOMNode;
+    /**
+     * Render
+     */
+    render(): JSX.Element;
+}
 export default Histogram;

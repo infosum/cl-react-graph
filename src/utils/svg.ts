@@ -38,16 +38,12 @@ export const sizeSVG = (svg: TSelection | undefined, props: ISizeProps) => {
     return;
   }
   const { margin, width, height, className } = props;
-  const scale = {
-    x: 1 - (margin.left / Number(width)),
-    y: 1 - (margin.top / Number(height)),
-  };
   svg.attr('class', className)
     .attr('width', width)
     .attr('height', height)
     .attr('viewBox', `0 0 ${width} ${height}`)
     .append('g')
-    .attr('transform', `translate(${margin.left},${margin.top}) scale(${scale.x},${scale.y})`);
+    .attr('transform', `translate(${margin.left},${margin.top})`);
 };
 
 export const makeGrid = (svg: TSelection): [TSelection, TSelection] => {

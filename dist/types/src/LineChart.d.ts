@@ -1,7 +1,10 @@
 import { CurveFactory, CurveFactoryLineOnly } from 'd3-shape';
-import { FC } from 'react';
+import React from 'react';
 import { IAxes, IGrid, IMargin, ISVGLineStyle, TipContentFn } from './Histogram';
 import { DeepPartial } from './utils/types';
+interface IState {
+    parentWidth?: number;
+}
 export declare type IChartPointValue = number | string | Date | object;
 export interface IChartPoint<X extends IChartPointValue = Date | number | string, Y extends IChartPointValue = number> {
     x: X;
@@ -51,5 +54,21 @@ export interface ILineChartProps<T extends IChartPoint<IChartPointValue, IChartP
     };
     width: number | string;
 }
-declare const LineChart: FC<DeepPartial<ILineChartProps>>;
+declare class LineChart extends React.Component<DeepPartial<ILineChartProps>, IState> {
+    private chart;
+    private ref;
+    constructor(props: DeepPartial<ILineChartProps>);
+    private handleResize;
+    componentDidMount(): void;
+    componentDidUpdate(): void;
+    /**
+     * Get the chart state. If a histogram has been assigned
+     * to the props, then render this data. Otherwise generate
+     * a random normal dist
+     */
+    getChartState(): DeepPartial<ILineChartProps>;
+    componentWillUnmount(): void;
+    private getDOMNode;
+    render(): JSX.Element;
+}
 export default LineChart;
