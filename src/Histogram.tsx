@@ -269,12 +269,17 @@ class Histogram extends Component<DeepPartial<IHistogramProps>, IChartState> {
   /**
    * Get the chart's dom node
    */
-  private getDOMNode(): Element | undefined {
+  private getDOMNode(): Element | undefined | null {
     const node = ReactDOM.findDOMNode(this.ref);
-    if (node instanceof HTMLElement) {
+    try {
+      if (node instanceof Text) {
+        return undefined;
+      }
       return node;
+    } catch (e) {
+      // instanceof Text not working when running tests - just presume its ok
+      return node as Element;
     }
-    return undefined;
   }
 
   /**

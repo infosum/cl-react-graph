@@ -143,12 +143,17 @@ class LineChart extends React.Component<DeepPartial<ILineChartProps>, IState> {
     this.chart.destroy();
   }
 
-  private getDOMNode(): Element | undefined {
+  private getDOMNode(): Element | undefined | null {
     const node = ReactDOM.findDOMNode(this.ref);
-    if (node instanceof HTMLElement) {
+    try {
+      if (node instanceof Text) {
+        return undefined;
+      }
       return node;
+    } catch (e) {
+      // instanceof Text not working when running tests - just presume its ok
+      return node as Element;
     }
-    return undefined;
   }
 
   public render(): JSX.Element {

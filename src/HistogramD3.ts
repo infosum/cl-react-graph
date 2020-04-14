@@ -56,7 +56,7 @@ export class HistogramD3 extends BaseHistogramD3 {
   /**
    * Draw scales
    */
-  drawAxes() {
+  public drawAxes() {
     const { props, tipContent, x, y, innerScaleBand } = this;
     const { axis, bar, annotations, annotationTextSize, domain, groupLayout,
       stacked, data, margin, height, tip, tipContainer } = props;
@@ -181,10 +181,11 @@ export class HistogramD3 extends BaseHistogramD3 {
     attrs(this.svg?.selectAll('.x-axis .domain, .x-axis .tick line'), axis.x.style);
     attrs(this.svg?.selectAll('.x-axis .tick text'), axis.x.text.style as any);
   }
+
   /**
    * Draw a single data set into the chart
    */
-  updateChart(
+  public updateChart(
     bins: string[],
     groupData: IGroupData,
   ) {
