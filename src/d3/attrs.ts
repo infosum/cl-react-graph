@@ -6,8 +6,8 @@ import { ISVGLineStyle } from '../Histogram';
  * @param {Object} style Css styling
  * @return {Object} selection
  */
-export default (selection, style: ISVGLineStyle) => {
-  Object.keys(style).forEach((k: string) => {
+export default (selection: any, style: ISVGLineStyle) => {
+  (Object.keys(style) as (keyof ISVGLineStyle)[]).forEach((k) => {
     selection.attr(k, style[k]);
   });
   return selection;

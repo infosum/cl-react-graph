@@ -484,10 +484,10 @@ export class TornadoD3 {
     if (!props.data) {
       return;
     }
-    this.mergeProps(newProps);
     if (!props.data.bins) {
       return;
     }
+    this.mergeProps(newProps);
     const { margin, width, height, className, data, visible } = props;
     sizeSVG(this.svg, { margin, width, height, className });
     this.dataSets = [];

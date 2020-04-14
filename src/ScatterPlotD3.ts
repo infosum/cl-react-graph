@@ -220,7 +220,7 @@ export const scatterPlotD3 = ((): IChartAdaptor<IScatterPlotProps> => {
        * // @TODO looks like d3 has its own cross function now...
        */
       function cross(a, b) {
-        const c: Array<{ x: number; i: number; y: number; j: number; }> = [];
+        const c: { x: number; i: number; y: number; j: number; }[] = [];
         const nx = a.length;
         const m = b.length;
         let i: number;
