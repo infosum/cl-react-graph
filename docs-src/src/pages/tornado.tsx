@@ -108,6 +108,7 @@ const initialState: DeepPartial<ITornadoProps> = {
   grid,
   groupLayout: EGroupedBarLayout.OVERLAID,
   width: '100%',
+  id: 'tornado1',
 }
 
 function reducer(state: ITornadoProps, action: Actions): ITornadoProps {
@@ -138,7 +139,7 @@ const Tornado = () => {
               <CardContent>
                 {chart}
                 <TornadoChart
-                  {...state}
+                  id="tornado2"
                   data={index === 0 ? state.data : data2}
                   width="600" />
                 <Button onClick={() => setIndex(index === 0 ? 1 : 0)}>

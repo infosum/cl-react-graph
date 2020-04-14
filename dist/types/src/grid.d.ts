@@ -1,9 +1,10 @@
+import { AxisScale } from 'd3-axis';
 import { IAxes, IHistogramProps } from './Histogram';
 import { AnyScale } from './utils/scales';
 import { TSelection } from './utils/svg';
-export declare const makeYGridLines: (y: any, ticks?: number) => import("d3-axis").Axis<import("d3-axis").AxisDomain>;
+export declare const makeYGridLines: (y: AxisScale<any>, ticks?: number) => import("d3-axis").Axis<any>;
 export declare const makeXGridLines: (x: any, ticks?: number) => import("d3-axis").Axis<import("d3-axis").AxisDomain>;
-export declare const drawGrid: (x: any, y: any, gridX: any, gridY: any, props: any, ticks: any) => void;
+export declare const drawGrid: (x: AxisScale<any>, y: AxisScale<any>, gridX: TSelection, gridY: TSelection, props: any, ticks: number) => void;
 interface IProps<T = IHistogramProps> {
     x: AnyScale;
     y: AnyScale;

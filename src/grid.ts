@@ -1,6 +1,7 @@
 import {
   axisBottom,
   axisLeft,
+  AxisScale,
 } from 'd3-axis';
 import get from 'lodash/get';
 
@@ -13,18 +14,25 @@ import { AnyScale } from './utils/scales';
 import { TSelection } from './utils/svg';
 
 // Grid lines in y axis function
-export const makeYGridLines = (y, ticks: number = 5) => {
+export const makeYGridLines = (y: AxisScale<any>, ticks: number = 5) => {
   return axisLeft(y)
     .ticks(ticks);
 };
 
 // Grid lines in x axis function
-export const makeXGridLines = (x, ticks: number = 5) => {
+export const makeXGridLines = (x: any, ticks: number = 5) => {
   return axisBottom(x)
     .ticks(ticks);
 };
 
-export const drawGrid = (x, y, gridX, gridY, props, ticks) => {
+export const drawGrid = (
+  x: AxisScale<any>,
+  y: AxisScale<any>,
+  gridX: TSelection,
+  gridY: TSelection,
+  props: any,
+  ticks: number,
+) => {
   const { height, width, axis, grid, margin } = props;
   const axisWidth = axis.y.style['stroke-width'];
 
@@ -64,12 +72,12 @@ export const drawGrid = (x, y, gridX, gridY, props, ticks) => {
 };
 
 interface IProps<T = IHistogramProps> {
-  x: AnyScale,
-  y: AnyScale,
-  gridX: TSelection,
-  gridY: TSelection,
-  props: T,
-  ticks: number,
+  x: AnyScale;
+  y: AnyScale;
+  gridX: TSelection;
+  gridY: TSelection;
+  props: T;
+  ticks: number;
 }
 
 export const drawHorizontalGrid: <T extends IHistogramProps>(props: IProps<T>) => void = (args) => {
@@ -112,7 +120,7 @@ export const drawHorizontalGrid: <T extends IHistogramProps>(props: IProps<T>) =
   }
 };
 
-export const gridHeight = (props): number => {
+export const gridHeight = (props: any): number => {
   const { height, margin, axis } = props;
   return height - (margin.top * 2) - xAxisHeight(axis);
 };
@@ -129,7 +137,7 @@ export const xAxisHeight = (axis: IAxes) => {
     : axis.x.height + 30 + get(axis, 'x.margin', 0);
 };
 
-export const gridWidth = (props): number => {
+export const gridWidth = (props: any): number => {
   const { axis, width, margin } = props;
   return width - (margin.left * 2) - yAxisWidth(axis);
 };

@@ -43,7 +43,7 @@ export const sizeSVG = (svg: TSelection | undefined, props: ISizeProps) => {
     .attr('height', height)
     .attr('viewBox', `0 0 ${width} ${height}`)
     .append('g')
-    .attr('transform', `translate(${margin.left},${margin.top}))`);
+    .attr('transform', `translate(${margin.left},${margin.top})`);
 };
 
 export const makeGrid = (svg: TSelection): [TSelection, TSelection] => {
