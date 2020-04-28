@@ -25,6 +25,7 @@ import Histogram, {
   IHistogramBar,
   IHistogramData,
 } from '../../../src/Histogram';
+import HistogramReact from '../../../src/HistogramNativeReact';
 import Legend from '../../../src/Legend';
 import { outputSvg } from '../../../src/utils/outputSvg';
 import { DeepPartial } from '../../../src/utils/types';
@@ -333,6 +334,10 @@ const HistogramExample = () => {
           <Grid item xs={6}>
             <Card>
               <CardContent>
+                <h1>React only</h1>
+                <HistogramReact
+                  data={state.data} />
+                <h1>d3</h1>
                 <Button size="small" color="primary" variant="contained" style={{ marginBottom: '1rem' }} onClick={(e) => {
                   e.preventDefault();
                   outputSvg('bigHistogram', 420, 420, (blobData) => {

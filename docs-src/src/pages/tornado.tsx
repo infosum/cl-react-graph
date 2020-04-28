@@ -22,6 +22,7 @@ import TornadoChart, {
   ITornadoData,
   ITornadoProps,
 } from '../../../src/Tornado';
+import NativeTornado from '../../../src/TornadoNativeReact';
 import { DeepPartial } from '../../../src/utils/types';
 import JSXToString from '../components/JSXToString';
 import Layout from '../components/layout';
@@ -125,6 +126,7 @@ function reducer(state: ITornadoProps, action: Actions): ITornadoProps {
 
 const Tornado = () => {
   const [state, dispatch] = useReducer(reducer, initialState as ITornadoProps);
+  console.log('state', state);
   const [index, setIndex] = useState(0);
   const chart = <TornadoChart
     {...state} />;
@@ -137,6 +139,7 @@ const Tornado = () => {
           <Grid item xs={6}>
             <Card>
               <CardContent>
+                <NativeTornado {...state} width={600} />
                 {chart}
                 <TornadoChart
                   id="tornado2"
