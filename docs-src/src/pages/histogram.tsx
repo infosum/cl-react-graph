@@ -336,7 +336,7 @@ const HistogramExample = () => {
               <CardContent>
                 <h1>React only</h1>
                 <HistogramReact
-                  data={state.data} />
+                  data={smallData} />
                 <h1>d3</h1>
                 <Button size="small" color="primary" variant="contained" style={{ marginBottom: '1rem' }} onClick={(e) => {
                   e.preventDefault();
