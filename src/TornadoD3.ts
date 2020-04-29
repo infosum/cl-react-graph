@@ -263,7 +263,7 @@ export class TornadoD3 {
 
     // @TODO - Stacked? (was using appendDomainRange())
     x.range([0, Number(width) - (margin.top * 2) - axis.y.width])
-      .domain(domain)
+      .domain(this.domain)
       .nice();
 
     const xAxisY = height - xAxisHeight(props.axis) - margin.top - SPLIT_AXIS_HEIGHT;
