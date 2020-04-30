@@ -16,7 +16,6 @@ interface IProps {
 const Histogram: FC<IProps> = ({
   data,
 }) => {
-  console.log('values', data.counts[0].data);
   return (
     <Base
       width={800}
@@ -38,7 +37,7 @@ const Histogram: FC<IProps> = ({
         left={100}
         height={300}
         width={400}
-        groupLayout={EGroupedBarLayout.OVERLAID}
+        groupLayout={EGroupedBarLayout.STACKED}
         values={data.counts}
         bins={data.bins}
         domain={[0, 80000]}

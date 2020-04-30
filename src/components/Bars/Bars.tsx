@@ -97,7 +97,7 @@ const Bars: FC<IProps> = ({
     .align(0.5);
 
   const dataLabels = values.map((c) => c.label);
-  console.log('dataLabels', dataLabels);
+
   // Used to distribute a given bins values 
   const innerScaleBand = scaleBand();
   const innerDomain = groupedBarsUseSameXAxisValue({ groupLayout }) ? ['main'] : dataLabels;

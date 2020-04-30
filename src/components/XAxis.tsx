@@ -28,7 +28,6 @@ const XAxis: FC<XAxis> = (props) => {
     left = 0,
   } = props;
 
-  console.log('x axis values', values);
   const xScale = scale === 'linear'
     ? scaleLinear().domain([Math.min(...values as number[]), Math.max(...values as number[])])
     : scaleBand().domain(values as string[])

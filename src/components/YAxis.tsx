@@ -36,7 +36,6 @@ const defaultPath: SVGAttributes<SVGPathElement> = {
 }
 
 const positionTick = (values: TAxisValue[], position: number, scale: any, axisOffset: number) => {
-  // console.log('values', values, position, values[position], scale(values[position]));
   return `(${axisOffset}, ${scale((values ?? [])[position])})`;
 }
 

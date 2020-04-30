@@ -9,6 +9,10 @@ import {
 } from '../../Histogram';
 import { ExtendedGroupItem } from './Bars';
 
+/**
+ * Depending on the axis group layout we need to take the values and work out what the 
+ * y axis domain bounds need to be.
+ */
 export const getYDomain = (
   groupLayout: EGroupedBarLayout,
   bins: string[],
@@ -38,6 +42,9 @@ export const getYDomain = (
   return [Math.min(...allValues as number[]), Math.max(...allValues as number[])];
 }
 
+/**
+ * Calculate the bar's x position based in the axis layout type.
+ */
 const xPosition = (
   innerScaleBand: ScaleBand<string>,
   innerDomain: string[],
@@ -49,19 +56,26 @@ const xPosition = (
   let bandX = 0;
   switch (groupLayout) {
     case EGroupedBarLayout.OVERLAID:
+      // Move to the right for each subsequent dataset to reveal the previous dataset's bars.
       const overlaidOffset = paddings.overlayMargin * datasetIndex;
       bandX = Number(innerScaleBand(String(innerDomain[0]))) + overlaidOffset;
       break;
     case EGroupedBarLayout.STACKED:
+      // Each bar will be on top of the other, so they should all have the same starting x value
       bandX = Number(innerScaleBand(String(innerDomain[0])));
       break;
     case EGroupedBarLayout.GROUPED:
+      // Position bars next to each other using the x axis inner scale band
       bandX = Number(innerScaleBand(String(groupLabel)));
       break;
   }
 
   return bandX;
 }
+
+/**
+ * Build the from / to spring animation properties to animate the bars.
+ */
 export const buildBarSprings = (props: {
   values: IHistogramDataSet[];
   height: number;
@@ -78,14 +92,14 @@ export const buildBarSprings = (props: {
   const s = dataSets.map((item) => {
     const x = Number(xScale(item.label));
     const x2 = xPosition(innerScaleBand, innerDomain, groupLayout, item.datasetIndex, item.groupLabel ?? 'main', paddings);
-    const y = yOffset(yScale, groupLayout, height, values, item);
+    const y = yOffset(yScale, groupLayout, height, item, dataSets);
     return {
 
       from: {
         height: 0,
         fill: colorScheme[item.datasetIndex],
         x: x2 + x,
-        y: y,
+        y: height,
       },
       to: {
         height: yScale(item.value),
@@ -95,27 +109,26 @@ export const buildBarSprings = (props: {
       }
     }
   });
-  console.log('spring props', s);
   return s;
 }
 
-// @TODO not right!
+/**
+ * If we are using a STACKED group layout the work out the total height
+ * of the bars which should be stacked under the current item.
+ * This should provide us with the finishing location for the bar's y position.
+ */
 export const yOffset = (
   yScale: ScaleLinear<any, any>,
   groupLayout: EGroupedBarLayout,
   height: number,
-  values: IHistogramDataSet[],
   item: ExtendedGroupItem,
+  dataSets: ExtendedGroupItem[],
 ) => {
-  if (groupLayout !== EGroupedBarLayout.STACKED) {
-    return height;
-  }
-  const groupData = values.find((v) => v.label === item.groupLabel);
-  const oSet = groupData ?
-    groupData.data
+  const offSet = groupLayout !== EGroupedBarLayout.STACKED
+    ? 0
+    : dataSets
+      .filter((d) => d.label === item.label)
       .filter((_, i) => i < item.datasetIndex)
-      .reduce((prev, next) => prev + next, 0)
-    : 0;
-  console.log('oSet', oSet, height, yScale(oSet));
-  return height - yScale(oSet) / 2
+      .reduce((p, n) => p + n.value, 0);
+  return height - yScale(offSet);
 }
