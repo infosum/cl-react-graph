@@ -1,13 +1,13 @@
-import React, {
-  createContext,
-  FC,
-} from 'react';
+import React, { FC } from 'react';
 
-import Bars from './components/Bars';
+import Bars from './components/Bars/Bars';
 import Base from './components/Base';
 import XAxis from './components/XAxis';
 import YAxis from './components/YAxis';
-import { IHistogramData } from './Histogram';
+import {
+  EGroupedBarLayout,
+  IHistogramData,
+} from './Histogram';
 
 interface IProps {
   data: IHistogramData;
@@ -24,8 +24,8 @@ const Histogram: FC<IProps> = ({
       <YAxis
         width={100}
         height={300}
-        values={data.counts[0].data}
-        domain={[0, 80000]}
+        values={[0, 45000, 90000]}
+        domain={[0, 150000]}
       />
       <XAxis
         width={400}
@@ -38,7 +38,9 @@ const Histogram: FC<IProps> = ({
         left={100}
         height={300}
         width={400}
+        groupLayout={EGroupedBarLayout.OVERLAID}
         values={data.counts}
+        bins={data.bins}
         domain={[0, 80000]}
       />
     </Base>
