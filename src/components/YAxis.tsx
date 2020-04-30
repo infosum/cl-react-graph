@@ -23,10 +23,6 @@ export interface IAxis {
   domain?: TAxisValue[];
 }
 
-type YAxis = IAxis & {
-  position?: 'left' | 'right' | 'center';
-}
-
 const defaultPath: SVGAttributes<SVGPathElement> = {
   opacity: 1,
   fill: 'none',
@@ -39,12 +35,11 @@ const positionTick = (values: TAxisValue[], position: number, scale: any, axisOf
   return `(${axisOffset}, ${scale((values ?? [])[position])})`;
 }
 
-const YAxis: FC<YAxis> = ({
+const YAxis: FC<IAxis> = ({
   values = [],
   tickSize = 2,
   width,
   height,
-  position = 'left',
   path,
   scale = 'linear',
   top = 0,
@@ -58,9 +53,6 @@ const YAxis: FC<YAxis> = ({
   yScale.rangeRound([height, 0])
 
   const transform = `(${width}, ${top})`;
-  // const chartWidth = width - (textWidth ?? 0) - padding;
-  // const axisOffset = position === 'left' ? 0
-  //   : position === 'center' ? chartWidth / 2 : chartWidth;
   const axisOffset = 0;
 
   const pathD = `M${axisOffset},${height} L${axisOffset},0`;

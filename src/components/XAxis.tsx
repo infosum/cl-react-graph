@@ -11,7 +11,6 @@ import React, { FC } from 'react';
 import { IAxis } from './YAxis';
 
 type XAxis = IAxis & {
-  position?: 'top' | 'middle' | 'bottom';
   left?: number;
 }
 
@@ -21,8 +20,6 @@ const XAxis: FC<XAxis> = (props) => {
     values = [],
     tickSize = 2,
     width,
-    height,
-    position = 'bottom',
     scale = 'band',
     top = 0,
     left = 0,
@@ -72,7 +69,7 @@ const XAxis: FC<XAxis> = (props) => {
               textAnchor="middle"
               transform={`translate${tickOffset}`}>
               <line stroke={stroke}
-                x={0}
+                x1={0}
                 y2={`${tickSize}`}
                 fill="none"
                 opacity="1"
