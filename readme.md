@@ -65,7 +65,6 @@ The docs will be built in `/docs`
 * Styled tooltip on bars
 * Add example of 2nd X axis
 * Add <Points> component which will be used to show the percentage values in the demo dataset
-* Update demo page to use grid props
 * Investigate axis scales and use demo page props on example axis.
 
 

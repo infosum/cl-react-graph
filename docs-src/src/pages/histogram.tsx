@@ -1,4 +1,5 @@
 import merge from 'deepmerge';
+import { stat } from 'fs';
 import fileDownload from 'js-file-download';
 import React, {
   useReducer,
@@ -140,6 +141,7 @@ export function gridReducer<S extends any, A extends any>(state: S, action: A): 
     default:
       return state;
   }
+  state.axis.x['stroke-opacity']
 }
 
 // Unclear why but you can't import a reducer in and have it update state???
@@ -335,7 +337,7 @@ const HistogramExample = () => {
     values: d.counts
   });
 
-  console.log('visible', visible);
+  console.log('state.axis.x.style', state.grid.x);
   return (
     <Layout>
       <SEO title="Histogram" description="" />
@@ -363,10 +365,10 @@ const HistogramExample = () => {
                   <ChartGrid
                     left={100}
                     height={300}
-                    svgProps={{ opacity: 0.2 }}
+                    svgProps={{ ...state.grid.x.style }}
                     lines={{
-                      vertical: 4,
-                      horizontal: 4,
+                      vertical: state.grid.y.ticks,
+                      horizontal: state.grid.x.ticks,
                     }}
                     width={w} />
 
