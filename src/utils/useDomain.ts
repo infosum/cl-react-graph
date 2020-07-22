@@ -78,7 +78,7 @@ export const useDomain: (props: IProps) => [number, number] = ({
     }
     console.log('allValues', allValues);
     setRange([Math.min(...allValues as number[]), Math.max(...allValues as number[])]);
-  }, [data]);
+  }, [data.values]);
   console.log(range);
   return range;
 }

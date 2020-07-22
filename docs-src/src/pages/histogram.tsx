@@ -1,5 +1,4 @@
 import merge from 'deepmerge';
-import { stat } from 'fs';
 import fileDownload from 'js-file-download';
 import React, {
   useReducer,
@@ -337,7 +336,6 @@ const HistogramExample = () => {
       bins: d.bins,
       values: d.counts
     },
-    type: 'bar',
   });
 
   return (

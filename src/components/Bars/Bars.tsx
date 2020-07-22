@@ -8,6 +8,7 @@ import {
   SpringConfig,
   useSprings,
 } from 'react-spring';
+import { Tooltip } from 'react-svg-tooltip';
 
 import { IGroupDataItem } from '../../BaseHistogramD3';
 import {
@@ -22,6 +23,10 @@ import {
   paddingOuter,
 } from '../../utils/bars';
 import { buildBarSprings } from './barHelper';
+import {
+  TipContent,
+  TTipFunc,
+} from './ToolTip';
 
 enum EGroupedBarLayout {
   GROUPED,
@@ -42,6 +47,7 @@ interface IProps {
   colorScheme?: string[],
   config: SpringConfig;
   visible?: Record<string, boolean>;
+  tip?: TTipFunc;
 }
 
 const paddings = {
@@ -74,6 +80,7 @@ const Bars: FC<IProps> = ({
   colorScheme = ['#a9a9a9', '#2a5379'],
   bar = paddings,
   visible = {},
+  tip,
 }) => {
 
   const dataSets: ExtendedGroupItem[] = [];
@@ -86,11 +93,10 @@ const Bars: FC<IProps> = ({
         label: bins[i],
         binIndex: i,
         value: visible[bins[i]] !== false && visible[count.label] !== false ? value : 0,
-        // value,
       });
     });
   });
-  console.log('visbile', visible, dataSets);
+
   const yScale = scaleLinear()
     .domain(domain)
     .rangeRound([0, height]);
@@ -130,24 +136,32 @@ const Bars: FC<IProps> = ({
     config,
   }));
 
+  const ThisTip = tip ?? TipContent;
+  const refs: any[] = [];
   return (
     <>
       <g className="bars"
         transform={`translate${transform}`}>
         {
           springs.map((props: any, i) => {
+            refs[i] = React.createRef<any>();
             return <animated.rect
+              ref={refs[i]}
               key={dataSets[i].groupLabel + dataSets[i].label}
               height={props.height}
               fill={props.fill}
               width={props.width}
               x={props.x as any}
               y={props.y as any}
-            >
-              <title>{dataSets[i].groupLabel}: {dataSets[i].label}<br /> {dataSets[i].value}</title>
-            </animated.rect>
-          }
-          )
+            />
+          })
+        }
+      </g>
+      <g className="tips">
+        {
+          springs.map((_, i) => <Tooltip triggerRef={refs[i]}>
+            <ThisTip item={dataSets[i]} />
+          </Tooltip>)
         }
       </g>
     </>)
