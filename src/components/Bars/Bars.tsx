@@ -5,15 +5,21 @@ import {
 import React, { FC } from 'react';
 import {
   animated,
+  SpringConfig,
   useSprings,
 } from 'react-spring';
 
 import { IGroupDataItem } from '../../BaseHistogramD3';
-import { IHistogramDataSet } from '../../Histogram';
+import {
+  IHistogramBar,
+  IHistogramDataSet,
+} from '../../Histogram';
 import {
   groupedBarsUseSameXAxisValue,
   groupedPaddingInner,
   groupedPaddingOuter,
+  paddingInner,
+  paddingOuter,
 } from '../../utils/bars';
 import { buildBarSprings } from './barHelper';
 
@@ -24,6 +30,7 @@ enum EGroupedBarLayout {
 }
 
 interface IProps {
+  bar?: IHistogramBar;
   values: IHistogramDataSet[];
   domain: number[]
   height: number;
@@ -33,6 +40,7 @@ interface IProps {
   groupLayout?: EGroupedBarLayout;
   bins: string[]
   colorScheme?: string[],
+  config: SpringConfig;
 }
 
 const paddings = {
@@ -59,7 +67,11 @@ const Bars: FC<IProps> = ({
   top = 0,
   groupLayout = EGroupedBarLayout.GROUPED,
   bins,
+  config = {
+    duration: 250,
+  },
   colorScheme = ['#a9a9a9', '#2a5379'],
+  bar = paddings,
 }) => {
 
   const dataSets: ExtendedGroupItem[] = [];
@@ -84,8 +96,8 @@ const Bars: FC<IProps> = ({
   // Distribute the bin values across the x axis
   const xScale = scaleBand().domain(bins);
   xScale.rangeRound([0, width])
-    .paddingInner(0.1)
-    .paddingOuter(0.2)
+    .paddingInner(paddingInner(bar))
+    .paddingOuter(paddingOuter(bar))
     .align(0.5);
 
   const dataLabels = values.map((c) => c.label);
@@ -96,8 +108,8 @@ const Bars: FC<IProps> = ({
   innerScaleBand
     .domain(innerDomain)
     .rangeRound([0, xScale.bandwidth()])
-    .paddingInner(groupedPaddingInner(paddings))
-    .paddingOuter(groupedPaddingOuter(paddings)) // Center the bar distribution around the middle;
+    .paddingInner(groupedPaddingInner(bar))
+    .paddingOuter(groupedPaddingOuter(bar)) // Center the bar distribution around the middle;
 
   const transform = `(${left}, ${top})`;
 
@@ -113,6 +125,7 @@ const Bars: FC<IProps> = ({
     innerScaleBand,
     groupLayout,
     paddings,
+    config,
   }));
 
   return (

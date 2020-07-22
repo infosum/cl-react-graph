@@ -65,12 +65,9 @@ const tipContentFns = [
     bins[i] + '<br />Another tip ' + d.toFixed(2),
 ];
 
-// const now = new Date();
-// data.bins = data.bins.map((d, i) => new Date(new Date().setDate(now.getDate() + i)).toLocaleString());
-
 export interface IInitialState {
   axis: DeepPartial<IAxes>;
-  bar: DeepPartial<IHistogramBar>;
+  bar: IHistogramBar;
   chartType: string;
   data: IHistogramData;
   delay: number;
@@ -376,9 +373,12 @@ const HistogramExample = () => {
                     left={100}
                     height={300}
                     width={w - 100}
-
+                    bar={state.bar}
                     groupLayout={state.groupLayout}
                     values={d.counts}
+                    config={{
+                      duration: state.duration,
+                    }}
                     bins={d.bins}
                     domain={domain}
                   />
