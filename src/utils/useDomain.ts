@@ -19,16 +19,19 @@ interface IProps {
   bins: string[],
   dataSets: ExtendedGroupItem[],
   values: IHistogramDataSet[],
+  clampToZero?: boolean;
 }
 export const useDomain: (props: IProps) => [number, number] = ({
   groupLayout,
   bins,
   dataSets,
   values,
+  clampToZero = true,
 }) => {
   const [range, setRange] = useState<[number, number]>([0, 0]);
   useEffect(() => {
     let allValues: number[] = []
+
     if (groupLayout === EGroupedBarLayout.STACKED) {
       // work out total per bin 
 
@@ -47,8 +50,11 @@ export const useDomain: (props: IProps) => [number, number] = ({
         return prev.concat(dataset.data);
       }, [] as number[]);
     }
+    if (clampToZero) {
+      allValues.push(0);
+    }
     setRange([Math.min(...allValues as number[]), Math.max(...allValues as number[])]);
   }, [groupLayout, bins, values]);
-
+  console.log(range);
   return range;
 }
