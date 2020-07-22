@@ -17,14 +17,12 @@ import {
 interface IProps {
   groupLayout: EGroupedBarLayout,
   bins: string[],
-  dataSets: ExtendedGroupItem[],
   values: IHistogramDataSet[],
   clampToZero?: boolean;
 }
 export const useDomain: (props: IProps) => [number, number] = ({
   groupLayout,
   bins,
-  dataSets,
   values,
   clampToZero = true,
 }) => {
@@ -33,18 +31,9 @@ export const useDomain: (props: IProps) => [number, number] = ({
     let allValues: number[] = []
 
     if (groupLayout === EGroupedBarLayout.STACKED) {
-      // work out total per bin 
-
-      const binTotals: Array<{ bin: string, value: number }> = [];
-      bins.forEach((bin, binIndex) => {
-        const v = dataSets.filter((d) => d.label === bin).reduce((prev, next) => prev + next.value, 0);
-        if (!binTotals[binIndex]) {
-          binTotals[binIndex] = { bin, value: v };
-        } else {
-          binTotals[binIndex].value += v;
-        }
+      allValues = bins.map((bin, binIndex) => {
+        return values.map((dataset) => dataset.data[binIndex]).reduce((p, n) => p + n, 0);
       })
-      allValues = binTotals.map((b) => b.value);
     } else {
       allValues = values.reduce((prev, dataset) => {
         return prev.concat(dataset.data);

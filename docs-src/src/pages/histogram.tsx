@@ -333,7 +333,6 @@ const HistogramExample = () => {
   const domain = useDomain({
     groupLayout: state.groupLayout,
     bins: d.bins,
-    dataSets: [],
     values: d.counts
   });
 
