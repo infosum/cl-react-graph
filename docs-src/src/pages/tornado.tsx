@@ -126,7 +126,6 @@ function reducer(state: ITornadoProps, action: Actions): ITornadoProps {
 
 const Tornado = () => {
   const [state, dispatch] = useReducer(reducer, initialState as ITornadoProps);
-  console.log('state', state);
   const [index, setIndex] = useState(0);
   const chart = <TornadoChart
     {...state} />;
