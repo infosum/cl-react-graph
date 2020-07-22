@@ -1,3 +1,4 @@
+import { extent } from 'd3-array';
 //useDomain is a React hook to calculate a chart domain, used in Axis and Bars
 import {
   useEffect,
@@ -14,71 +15,52 @@ import {
 } from '../Histogram';
 import { ILineChartDataSet } from '../LineChart';
 
-interface IBarData {
-  groupLayout: EGroupedBarLayout,
-  bins: string[],
-  values: IHistogramDataSet[],
-}
-
-interface IProps {
-  data: IBarData | ILineChartDataSet<any>[]
+interface ILIneProps {
+  values: ILineChartDataSet<any>[];
   clampToZero?: boolean;
 }
 
-const isBar = (variableToCheck: any): variableToCheck is IBarData => variableToCheck.bins !== undefined;
-const isLine = (variableToCheck: any): variableToCheck is ILineChartDataSet<any>[] => Array.isArray(variableToCheck);
-export const useDomain: (props: IProps) => [number, number] = ({
-  data,
+interface IProps {
+  groupLayout: EGroupedBarLayout,
+  bins: string[],
+  values: IHistogramDataSet[];
+  clampToZero?: boolean;
+}
+
+// Y Domains only so far....
+export const useHistogramDomain: (props: IProps) => [number, number] = ({
+  groupLayout,
+  bins,
+  values,
   clampToZero = true,
 }) => {
-
-
   const [range, setRange] = useState<[number, number]>([0, 0]);
   useEffect(() => {
     let allValues: number[] = []
-    if (isBar(data)) {
-      const {
-        groupLayout,
-        bins,
-        values
-      } = data;
-      if (groupLayout === EGroupedBarLayout.STACKED) {
-        allValues = bins.map((bin, binIndex) => {
-          return values.map((dataset) => dataset.data[binIndex]).reduce((p, n) => p + n, 0);
-        })
-      } else {
-        allValues = values.reduce((prev, dataset) => {
-          return prev.concat(dataset.data);
-        }, [] as number[]);
-      }
-      if (clampToZero) {
-        allValues.push(0);
-      }
-
+    allValues = (groupLayout === EGroupedBarLayout.STACKED)
+      ? bins.map((bin, binIndex) => values.map((dataset) => dataset.data[binIndex]).reduce((p, n) => p + n, 0))
+      : values.reduce((prev, dataset) => prev.concat(dataset.data), [] as number[]);
+    if (clampToZero) {
+      allValues.push(0);
     }
-    if (isLine(data)) {
-      // const ys: any[] = [];
-      // const xs: any[] = [];
-      // data.forEach((d) => {
-      //   let parsedY = d.y;
-      //   // let parsedX = d.x;
-      //   if (axis.y.scale === 'LOG' && d.y === 0) {
-      //     parsedY = ZERO_SUBSTITUTE;
-      //   }
-      //   if (axis.x.scale === 'LOG' && d.x === 0) {
-      //     parsedX = ZERO_SUBSTITUTE;
-      //   }
-      //   ys.push(parsedY);
-      //   xs.push(parsedX);
-      // });
-
-      allValues = data
-        .reduce((p, n) => p.concat(n.data), [] as any[])
-        .map((d) => d.y);
-    }
-    console.log('allValues', allValues);
-    setRange([Math.min(...allValues as number[]), Math.max(...allValues as number[])]);
-  }, [data.values]);
-  console.log(range);
+    setRange(extent(allValues) as [number, number]);
+  }, [bins, groupLayout, values]);
   return range;
 }
+
+export const useLineDomain: (props: ILIneProps) => [number, number] = ({
+  values,
+  clampToZero,
+}) => {
+  const [range, setRange] = useState<[number, number]>([0, 0]);
+  useEffect(() => {
+    const allValues = values.reduce((prev, value) => {
+      return prev.concat(value.data.map((d) => d.y))
+    }, [] as number[])
+    if (clampToZero) {
+      allValues.push(0);
+    }
+    setRange(extent(allValues) as [number, number]);
+  }, [values]);
+  return range;
+};

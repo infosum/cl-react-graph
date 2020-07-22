@@ -34,7 +34,7 @@ import HistogramReact from '../../../src/HistogramNativeReact';
 import Legend from '../../../src/Legend';
 import { outputSvg } from '../../../src/utils/outputSvg';
 import { DeepPartial } from '../../../src/utils/types';
-import { useDomain } from '../../../src/utils/useDomain';
+import { useHistogramDomain } from '../../../src/utils/useDomain';
 import { useWidth } from '../../../src/utils/useWidth';
 import {
   AxisActions,
@@ -330,12 +330,10 @@ const HistogramExample = () => {
   />;
   const [dataIndex, setDataIndex] = useState(0);
   const d = dataIndex === 0 ? smallData : data;
-  const domain = useDomain({
-    data: {
-      groupLayout: state.groupLayout,
-      bins: d.bins,
-      values: d.counts
-    },
+  const domain = useHistogramDomain({
+    groupLayout: state.groupLayout,
+    bins: d.bins,
+    values: d.counts
   });
 
   return (
@@ -370,7 +368,7 @@ const HistogramExample = () => {
                       vertical: state.grid.y.ticks,
                       horizontal: state.grid.x.ticks,
                     }}
-                    width={w} />
+                    width={w - 100} />
 
                   <Bars
                     left={100}

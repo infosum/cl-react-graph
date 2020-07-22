@@ -35,8 +35,8 @@ export const defaultPath: SVGAttributes<SVGPathElement> = {
   strokeWidth: '1',
 }
 
-const positionTick = (values: TAxisValue[], position: number, scale: any, axisOffset: number) => {
-  return `(${axisOffset}, ${scale((values ?? [])[position])})`;
+const positionTick = (value: TAxisValue, scale: any, axisOffset: number) => {
+  return `(${axisOffset}, ${scale(value)})`;
 }
 
 const YAxis: FC<IAxis> = ({
@@ -49,7 +49,6 @@ const YAxis: FC<IAxis> = ({
   top = 0,
   domain,
 }) => {
-
   const yScale = scale === 'linear'
     ? scaleLinear().domain(domain as number[] || [Math.min(...values as number[]), Math.max(...values as number[])])
     : scaleBand().domain(values as string[])
@@ -82,7 +81,7 @@ const YAxis: FC<IAxis> = ({
 
       {
         values.map((v, i) => {
-          const tickOffset = positionTick(values, i, yScale, axisOffset);
+          const tickOffset = positionTick(values[i], yScale, axisOffset);
           return (
             <g key={v} className="tick" opacity="1" transform={`translate${tickOffset}`}>
               <line stroke={stroke}

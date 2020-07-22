@@ -40,7 +40,7 @@ import XAxis from '../../../src/components/XAxis';
 import YAxis from '../../../src/components/YAxis';
 import { Scale } from '../../../src/Histogram';
 import { DeepPartial } from '../../../src/utils/types';
-import { useDomain } from '../../../src/utils/useDomain';
+import { useLineDomain } from '../../../src/utils/useDomain';
 import { useWidth } from '../../../src/utils/useWidth';
 import { data3 } from '../../../test/fixtures';
 import { AxisActions } from '../components/AxisOptions';
@@ -227,8 +227,8 @@ const LineExample: FC = () => {
     const x = typeof (point.x) === 'object' ? point.x.toDateString() : point.x;
     return [{ value: x }, { value: Number(point.y) }];
   });
-  const domain = useDomain({
-    data: state.data,
+  const domain = useLineDomain({
+    values: state.data,
   });
   const chart = <LineChart
     axis={state.axis}

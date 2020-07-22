@@ -2,7 +2,10 @@ import {
   scaleBand,
   scaleLinear,
 } from 'd3';
-import React, { FC } from 'react';
+import React, {
+  FC,
+  useState,
+} from 'react';
 import {
   animated,
   SpringConfig,
@@ -45,6 +48,7 @@ interface IProps {
   groupLayout?: EGroupedBarLayout;
   bins: string[]
   colorScheme?: string[],
+  hoverColorScheme?: string[];
   config: SpringConfig;
   visible?: Record<string, boolean>;
   tip?: TTipFunc;
@@ -78,11 +82,14 @@ const Bars: FC<IProps> = ({
     duration: 250,
   },
   colorScheme = ['#a9a9a9', '#2a5379'],
+  hoverColorScheme = ['#a9a9FF', '#2a53FF'],
   bar = paddings,
   visible = {},
   tip,
 }) => {
-
+  if (width === 0) {
+    return null;
+  }
   const dataSets: ExtendedGroupItem[] = [];
 
   values.forEach((count, datasetIndex) => {
@@ -121,7 +128,7 @@ const Bars: FC<IProps> = ({
 
   const transform = `(${left}, ${top})`;
 
-
+  const [hover, setHover] = useState(-1);
   const springs = useSprings(dataSets.length, buildBarSprings({
     values,
     height,
@@ -131,6 +138,7 @@ const Bars: FC<IProps> = ({
     colorScheme,
     innerDomain,
     innerScaleBand,
+    hoverColorScheme,
     groupLayout,
     paddings,
     config,
@@ -147,9 +155,11 @@ const Bars: FC<IProps> = ({
             refs[i] = React.createRef<any>();
             return <animated.rect
               ref={refs[i]}
+              onMouseEnter={() => setHover(i)}
+              onMouseLeave={() => setHover(-1)}
               key={dataSets[i].groupLabel + dataSets[i].label}
               height={props.height}
-              fill={props.fill}
+              fill={hover == i ? props.hoverFill : props.fill}
               width={props.width}
               x={props.x as any}
               y={props.y as any}

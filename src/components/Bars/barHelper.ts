@@ -52,14 +52,15 @@ export const buildBarSprings = (props: {
   dataSets: ExtendedGroupItem[];
   yScale: ScaleLinear<any, any>;
   xScale: ScaleBand<string>;
-  colorScheme: string[]
+  colorScheme: string[];
+  hoverColorScheme?: string[];
   innerDomain: string[];
   innerScaleBand: ScaleBand<string>;
   groupLayout: EGroupedBarLayout;
   paddings: IHistogramBar,
   config: SpringConfig,
 }) => {
-  const { config, values, height, dataSets, yScale, xScale, colorScheme, innerDomain, innerScaleBand, groupLayout, paddings } = props;
+  const { config, values, height, dataSets, yScale, xScale, colorScheme, innerDomain, innerScaleBand, groupLayout, paddings, hoverColorScheme } = props;
   const s = dataSets.map((item) => {
     const x = Number(xScale(item.label));
     const x2 = xPosition(innerScaleBand, innerDomain, groupLayout, item.datasetIndex, item.groupLabel ?? 'main', paddings);
@@ -71,6 +72,7 @@ export const buildBarSprings = (props: {
       from: {
         height: 0,
         fill: colorScheme[item.datasetIndex],
+        hoverFill: hoverColorScheme?.[item.datasetIndex] ?? colorScheme[item.datasetIndex],
         x: x2 + x,
         y: height,
         width: itemWidth,
@@ -78,6 +80,7 @@ export const buildBarSprings = (props: {
       to: {
         height: itemHeight,
         fill: colorScheme[item.datasetIndex],
+        hoverFill: hoverColorScheme?.[item.datasetIndex] ?? colorScheme[item.datasetIndex],
         x: x2 + x,
         y: y,
         width: itemWidth,

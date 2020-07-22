@@ -41,7 +41,6 @@ const Axis: FC<IAxis> = (props) => {
     scale = scaleBand();
     scale.domain(values as string[])
       .rangeRound([height, 0]);
-    values.forEach((v) => console.log(v, scale(v as string)));
   } else {
     scale = scaleLinear();
   }

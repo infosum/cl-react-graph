@@ -69,7 +69,6 @@ export const useMakeLine: (props: IProps) => string = ({
     ) => line()
       .curve(curveType)
       .x((d: any) => {
-        console.log('x', d.x, x(d.x));
         return x(d.x);
       })
       .y((d: any) => y(d.y));
