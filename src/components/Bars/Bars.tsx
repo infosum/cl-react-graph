@@ -11,15 +11,11 @@ import {
 import { IGroupDataItem } from '../../BaseHistogramD3';
 import { IHistogramDataSet } from '../../Histogram';
 import {
-  getBarWidth,
   groupedBarsUseSameXAxisValue,
   groupedPaddingInner,
   groupedPaddingOuter,
 } from '../../utils/bars';
-import {
-  buildBarSprings,
-  getYDomain,
-} from './barHelper';
+import { buildBarSprings } from './barHelper';
 
 enum EGroupedBarLayout {
   GROUPED,
@@ -29,7 +25,7 @@ enum EGroupedBarLayout {
 
 interface IProps {
   values: IHistogramDataSet[];
-  domain?: number[]
+  domain: number[]
   height: number;
   width: number;
   left?: number;
@@ -81,13 +77,9 @@ const Bars: FC<IProps> = ({
     });
   });
 
-  const yScale = scaleLinear().domain(domain || getYDomain(
-    groupLayout,
-    bins,
-    dataSets,
-    values,
-  ));
-  yScale.rangeRound([0, height]);
+  const yScale = scaleLinear()
+    .domain(domain)
+    .rangeRound([0, height]);
 
   // Distribute the bin values across the x axis
   const xScale = scaleBand().domain(bins);
@@ -128,14 +120,17 @@ const Bars: FC<IProps> = ({
       <g className="bars"
         transform={`translate${transform}`}>
         {
-          springs.map((props, i) => <animated.rect
-            key={dataSets[i].groupLabel + dataSets[i].label}
-            height={props.height}
-            fill={props.fill}
-            width={getBarWidth(dataSets[i].datasetIndex, groupLayout, paddings, innerScaleBand)}
-            x={props.x as any}
-            y={props.y as any}
-          />)
+          springs.map((props, i) => {
+            return <animated.rect
+              key={dataSets[i].groupLabel + dataSets[i].label}
+              height={props.height}
+              fill={props.fill}
+              width={props.width}
+              x={props.x as any}
+              y={props.y as any}
+            />
+          }
+          )
         }
       </g>
     </>)

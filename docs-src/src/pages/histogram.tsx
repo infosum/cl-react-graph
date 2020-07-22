@@ -18,6 +18,11 @@ import {
 } from '@material-ui/core';
 
 import { HorizontalHistogram } from '../../../src';
+import Bars from '../../../src/components/Bars/Bars';
+import Base from '../../../src/components/Base';
+import ChartGrid from '../../../src/components/Grid';
+import XAxis from '../../../src/components/XAxis';
+import YAxis from '../../../src/components/YAxis';
 import Histogram, {
   EGroupedBarLayout,
   IAxes,
@@ -29,6 +34,7 @@ import HistogramReact from '../../../src/HistogramNativeReact';
 import Legend from '../../../src/Legend';
 import { outputSvg } from '../../../src/utils/outputSvg';
 import { DeepPartial } from '../../../src/utils/types';
+import { useDomain } from '../../../src/utils/useDomain';
 import {
   AxisActions,
   AxisOptionsFactory,
@@ -47,6 +53,7 @@ import {
   grid,
   smallAnnotationsData,
   smallData,
+  smallData2,
   theme,
 } from '../data';
 
@@ -322,6 +329,13 @@ const HistogramExample = () => {
     }}
   />;
   const [dataIndex, setDataIndex] = useState(0);
+  const d = dataIndex === 0 ? smallData : data;
+  const domain = useDomain({
+    groupLayout: state.groupLayout,
+    bins: d.bins,
+    dataSets: [],
+    values: d.counts
+  });
 
   return (
     <Layout>
@@ -335,8 +349,53 @@ const HistogramExample = () => {
             <Card>
               <CardContent>
                 <h1>React only</h1>
-                <HistogramReact
-                  data={smallData} />
+                {/* <HistogramReact
+                  data={d}
+                /> */}
+
+                <Button onClick={() => setDataIndex(dataIndex === 1 ? 0 : 1)}>
+                  toggle data
+                </Button>
+
+                <Base
+                  width={800}
+                  height={400}>
+
+                  <ChartGrid
+                    left={100}
+                    height={300}
+                    svgProps={{ opacity: 0.2 }}
+                    lines={{
+                      vertical: 4,
+                      horizontal: 4,
+                    }}
+                    width={400} />
+
+                  <Bars
+                    left={100}
+                    height={300}
+                    width={400}
+
+                    groupLayout={state.groupLayout}
+                    values={d.counts}
+                    bins={d.bins}
+                    domain={domain}
+                  />
+                  <YAxis
+                    width={100}
+                    height={300}
+                    values={[0, 45000, 90000]}
+                    domain={domain}
+                  />
+                  <XAxis
+                    width={400}
+                    height={40}
+                    top={300}
+                    left={100}
+                    values={d.bins} />
+
+                </Base>
+
                 <h1>d3</h1>
                 <Button size="small" color="primary" variant="contained" style={{ marginBottom: '1rem' }} onClick={(e) => {
                   e.preventDefault();
@@ -382,9 +441,7 @@ const HistogramExample = () => {
                   tipContentFn={tipContentFns[0]}
                   id="smallHistogram"
                 />
-                <Button onClick={() => setDataIndex(dataIndex === 1 ? 0 : 1)}>
-                  toggle data
-                </Button>
+
                 <Legend
                   theme={theme}
                   data={dataLegendData}

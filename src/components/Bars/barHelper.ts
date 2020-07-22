@@ -7,40 +7,8 @@ import {
   EGroupedBarLayout,
   IHistogramDataSet,
 } from '../../Histogram';
+import { getBarWidth } from '../../utils/bars';
 import { ExtendedGroupItem } from './Bars';
-
-/**
- * Depending on the axis group layout we need to take the values and work out what the 
- * y axis domain bounds need to be.
- */
-export const getYDomain = (
-  groupLayout: EGroupedBarLayout,
-  bins: string[],
-  dataSets: ExtendedGroupItem[],
-  values: IHistogramDataSet[],
-) => {
-
-  let allValues: number[] = []
-  if (groupLayout === EGroupedBarLayout.STACKED) {
-    // work out total per bin 
-
-    const binTotals: Array<{ bin: string, value: number }> = [];
-    bins.forEach((bin, binIndex) => {
-      const v = dataSets.filter((d) => d.label === bin).reduce((prev, next) => prev + next.value, 0);
-      if (!binTotals[binIndex]) {
-        binTotals[binIndex] = { bin, value: v };
-      } else {
-        binTotals[binIndex].value += v;
-      }
-    })
-    allValues = binTotals.map((b) => b.value);
-  } else {
-    allValues = values.reduce((prev, dataset) => {
-      return prev.concat(dataset.data);
-    }, [] as number[]);
-  }
-  return [Math.min(...allValues as number[]), Math.max(...allValues as number[])];
-}
 
 /**
  * Calculate the bar's x position based in the axis layout type.
@@ -93,6 +61,8 @@ export const buildBarSprings = (props: {
     const x = Number(xScale(item.label));
     const x2 = xPosition(innerScaleBand, innerDomain, groupLayout, item.datasetIndex, item.groupLabel ?? 'main', paddings);
     const y = yOffset(yScale, groupLayout, height, item, dataSets);
+    const itemWidth = getBarWidth(item.datasetIndex, groupLayout, paddings, innerScaleBand);
+    const itemHeight = yScale(item.value);
     return {
 
       from: {
@@ -100,13 +70,16 @@ export const buildBarSprings = (props: {
         fill: colorScheme[item.datasetIndex],
         x: x2 + x,
         y: height,
+        width: itemWidth,
       },
       to: {
-        height: yScale(item.value),
+        height: itemHeight,
         fill: colorScheme[item.datasetIndex],
         x: x2 + x,
-        y: y - yScale(item.value),
-      }
+        y: height - itemHeight,
+        width: itemWidth,
+      },
+      config: { duration: 1250 }
     }
   });
   return s;

@@ -20,13 +20,13 @@ import {
   FormGroup,
   Grid,
   MenuItem,
+  Slider,
   Switch,
   Tab,
   Tabs,
   Typography,
 } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
-import Slider from '@material-ui/lab/Slider';
 
 import {
   ILineChartDataSet,

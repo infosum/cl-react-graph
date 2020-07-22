@@ -6,10 +6,10 @@ import {
   CardContent,
   FormGroup,
   Grid,
+  Slider,
   TextField,
   Typography,
 } from '@material-ui/core';
-import Slider from '@material-ui/lab/Slider';
 
 interface IProps<D, S> {
   dispatch: D;
