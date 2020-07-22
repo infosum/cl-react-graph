@@ -8,7 +8,6 @@ import {
  * Depending on the axis group layout we need to take the values and work out what the 
  * y axis domain bounds need to be.
  * */
-import { ExtendedGroupItem } from '../components/Bars/Bars';
 import {
   EGroupedBarLayout,
   IHistogramDataSet,

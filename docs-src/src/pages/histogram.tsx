@@ -35,6 +35,7 @@ import Legend from '../../../src/Legend';
 import { outputSvg } from '../../../src/utils/outputSvg';
 import { DeepPartial } from '../../../src/utils/types';
 import { useDomain } from '../../../src/utils/useDomain';
+import { useWidth } from '../../../src/utils/useWidth';
 import {
   AxisActions,
   AxisOptionsFactory,
@@ -294,6 +295,7 @@ const watermarkSvg = require('../../../src/assets/Powered-By-InfoSum_DARK.svg') 
 const HistogramExample = () => {
   const [tab, setTab] = useState(0);
   const [state, dispatch] = useReducer(reducer, initialSate);
+  const [ref, w] = useWidth(state.width);
   const [visible, setVisible] = useState({});
   const spreadSheetData = dataToSpreadSheet(state.data);
   const dataLegendData = {
@@ -346,7 +348,7 @@ const HistogramExample = () => {
         <Grid container spacing={10}>
           <Grid item xs={6}>
             <Card>
-              <CardContent>
+              <CardContent ref={ref}>
                 <h1>React only</h1>
                 {/* <HistogramReact
                   data={d}
@@ -357,7 +359,7 @@ const HistogramExample = () => {
                 </Button>
 
                 <Base
-                  width={800}
+                  width={w}
                   height={400}>
 
                   <ChartGrid
@@ -368,12 +370,12 @@ const HistogramExample = () => {
                       vertical: 4,
                       horizontal: 4,
                     }}
-                    width={400} />
+                    width={w} />
 
                   <Bars
                     left={100}
                     height={300}
-                    width={400}
+                    width={w - 100}
 
                     groupLayout={state.groupLayout}
                     values={d.counts}
@@ -387,7 +389,7 @@ const HistogramExample = () => {
                     domain={domain}
                   />
                   <XAxis
-                    width={400}
+                    width={w - 100}
                     height={40}
                     top={300}
                     left={100}
