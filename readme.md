@@ -61,7 +61,6 @@ The docs will be built in `/docs`
 
 ## Horizontal histogram
 
-* Hover fx on bars
 * Add example of 2nd X axis
 * Add <Points> component which will be used to show the percentage values in the demo dataset
 * Investigate axis scales and use demo page props on example axis.

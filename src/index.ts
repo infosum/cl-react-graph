@@ -26,6 +26,14 @@ export { default as filterRange } from './colors/filterRange';
 export { default as TornadoChart } from './Tornado';
 export { outputSvg } from './utils/outputSvg';
 
+// Experimental v3 components...
+
+export { default as Bars } from './components/Bars/Bars';
+export { default as Base } from './components/Base';
+export { default as Grid } from './components/Grid';
+export { default as XAxis } from './components/XAxis';
+export { default as YAxis } from './components/YAxis';
+
 export {
   axis as defaultAxis,
   lineStyle as defaultLineStyle,
