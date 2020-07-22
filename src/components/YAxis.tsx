@@ -1,6 +1,6 @@
 import {
-  scaleBand,
   ScaleBand,
+  scaleBand,
   ScaleLinear,
   scaleLinear,
 } from 'd3-scale';
@@ -21,9 +21,10 @@ export interface IAxis {
   scale?: 'linear' | 'band';
   top?: number;
   domain?: TAxisValue[];
+  left?: number;
 }
 
-const defaultPath: SVGAttributes<SVGPathElement> = {
+export const defaultPath: SVGAttributes<SVGPathElement> = {
   opacity: 1,
   fill: 'none',
   stroke: '#666',

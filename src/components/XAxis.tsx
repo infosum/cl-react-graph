@@ -1,55 +1,60 @@
 import {
-  scaleBand,
-  scaleLinear,
-} from 'd3';
-import {
   ScaleBand,
+  scaleBand,
   ScaleLinear,
+  scaleLinear,
 } from 'd3-scale';
-import React, { FC } from 'react';
+import React, {
+  FC,
+  SVGAttributes,
+} from 'react';
 
-import { IAxis } from './YAxis';
+import {
+  defaultPath,
+  IAxis,
+} from './YAxis';
 
-type XAxis = IAxis & {
-  left?: number;
-}
-
-const XAxis: FC<XAxis> = (props) => {
-  const {
-    stroke = '#666',
-    values = [],
-    tickSize = 2,
-    width,
-    scale = 'band',
-    top = 0,
-    left = 0,
-  } = props;
+const XAxis: FC<IAxis> = ({
+  values = [],
+  tickSize = 2,
+  width,
+  height,
+  path,
+  top = 0,
+  left = 0,
+  scale = 'band',
+  domain,
+}) => {
 
   const xScale = scale === 'linear'
-    ? scaleLinear().domain([Math.min(...values as number[]), Math.max(...values as number[])])
+    ? scaleLinear().domain(domain as number[] || [Math.min(...values as number[]), Math.max(...values as number[])])
     : scaleBand().domain(values as string[])
       .paddingInner(0.1)
       .paddingOuter(0.2)
       .align(0.5)
   xScale.rangeRound([0, width])
 
-  const path = `M0,0 L${width},0`;
+  const transform = `${left}, ${top}`;
+
+  const pathD = `M0,0 L${width},0`;
+  const axisPath = { ...defaultPath, ...(path ?? {}) };
+  const { fill, opacity, stroke, strokeOpacity, strokeWidth } = axisPath;
 
   return (
     <g className="x-axis"
-      transform={`translate(${left}, ${top})`}
+      transform={`translate(${transform})`}
       fill="none"
       fontSize="10"
       fontFamily="sans-serif"
       textAnchor="middle">
       <path className="domain"
         stroke={stroke}
-        d={path}
-        fill="none"
-        opacity="1"
+        d={pathD}
+        fill={fill}
+        opacity={opacity}
         shapeRendering="auto"
-        strokeOpacity="1"
-        strokeWidth="1"
+        strokeOpacity={strokeOpacity}
+        strokeWidth={strokeWidth}
       ></path>
 
       {

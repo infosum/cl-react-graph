@@ -332,12 +332,14 @@ const HistogramExample = () => {
   const [dataIndex, setDataIndex] = useState(0);
   const d = dataIndex === 0 ? smallData : data;
   const domain = useDomain({
-    groupLayout: state.groupLayout,
-    bins: d.bins,
-    values: d.counts
+    data: {
+      groupLayout: state.groupLayout,
+      bins: d.bins,
+      values: d.counts
+    },
+    type: 'bar',
   });
 
-  console.log('state.axis.x.style', state.grid.x);
   return (
     <Layout>
       <SEO title="Histogram" description="" />
