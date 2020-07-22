@@ -11,6 +11,11 @@ const Base: FC<IProps> = ({
   height,
   padding = 15,
 }) => {
+  // Could be measuring a % width in which case wait else animations start off from 
+  // the wrong position
+  if (width === 0) {
+    return null;
+  }
   return <svg
     width={width}
     height={height}

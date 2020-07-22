@@ -41,6 +41,7 @@ interface IProps {
   bins: string[]
   colorScheme?: string[],
   config: SpringConfig;
+  visible?: Record<string, boolean>;
 }
 
 const paddings = {
@@ -72,6 +73,7 @@ const Bars: FC<IProps> = ({
   },
   colorScheme = ['#a9a9a9', '#2a5379'],
   bar = paddings,
+  visible = {},
 }) => {
 
   const dataSets: ExtendedGroupItem[] = [];
@@ -83,12 +85,12 @@ const Bars: FC<IProps> = ({
         datasetIndex,
         label: bins[i],
         binIndex: i,
-        // value: visible[data.bins[i]] !== false && visible[count.label] !== false ? value : 0,
-        value,
+        value: visible[bins[i]] !== false && visible[count.label] !== false ? value : 0,
+        // value,
       });
     });
   });
-
+  console.log('visbile', visible, dataSets);
   const yScale = scaleLinear()
     .domain(domain)
     .rangeRound([0, height]);

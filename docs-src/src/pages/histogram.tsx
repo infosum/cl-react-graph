@@ -335,6 +335,7 @@ const HistogramExample = () => {
     values: d.counts
   });
 
+  console.log('visible', visible);
   return (
     <Layout>
       <SEO title="Histogram" description="" />
@@ -381,6 +382,7 @@ const HistogramExample = () => {
                     }}
                     bins={d.bins}
                     domain={domain}
+                    visible={visible}
                   />
                   <YAxis
                     width={100}
@@ -396,6 +398,15 @@ const HistogramExample = () => {
                     values={d.bins} />
 
                 </Base>
+
+                <Legend
+                  theme={theme}
+                  data={dataLegendData}
+                  onSelect={(key) => {
+                    setVisible({ ...visible, [key]: visible.hasOwnProperty(key) ? !visible[key] : false });
+                  }}
+                  visible={visible}
+                />
 
                 <h1>d3</h1>
                 <Button size="small" color="primary" variant="contained" style={{ marginBottom: '1rem' }} onClick={(e) => {
@@ -443,14 +454,7 @@ const HistogramExample = () => {
                   id="smallHistogram"
                 />
 
-                <Legend
-                  theme={theme}
-                  data={dataLegendData}
-                  onSelect={(key) => {
-                    setVisible({ ...visible, [key]: visible.hasOwnProperty(key) ? !visible[key] : false });
-                  }}
-                  visible={visible}
-                />
+
               </CardContent>
             </Card>
             <br />
