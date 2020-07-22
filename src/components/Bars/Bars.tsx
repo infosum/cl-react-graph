@@ -120,7 +120,7 @@ const Bars: FC<IProps> = ({
       <g className="bars"
         transform={`translate${transform}`}>
         {
-          springs.map((props, i) => {
+          springs.map((props: any, i) => {
             return <animated.rect
               key={dataSets[i].groupLabel + dataSets[i].label}
               height={props.height}
@@ -128,7 +128,9 @@ const Bars: FC<IProps> = ({
               width={props.width}
               x={props.x as any}
               y={props.y as any}
-            />
+            >
+              <title>{dataSets[i].groupLabel}: {dataSets[i].label}<br /> {dataSets[i].value}</title>
+            </animated.rect>
           }
           )
         }

@@ -76,10 +76,10 @@ export const buildBarSprings = (props: {
         height: itemHeight,
         fill: colorScheme[item.datasetIndex],
         x: x2 + x,
-        y: height - itemHeight,
+        y: y,
         width: itemWidth,
       },
-      config: { duration: 1250 }
+      config: { duration: 450 },
     }
   });
   return s;
@@ -97,11 +97,13 @@ export const yOffset = (
   item: ExtendedGroupItem,
   dataSets: ExtendedGroupItem[],
 ) => {
-  const offSet = groupLayout !== EGroupedBarLayout.STACKED
-    ? 0
-    : dataSets
-      .filter((d) => d.label === item.label)
-      .filter((_, i) => i < item.datasetIndex)
-      .reduce((p, n) => p + n.value, 0);
+  if (groupLayout !== EGroupedBarLayout.STACKED) {
+    return height - yScale(item.value);
+  }
+
+  const offSet = dataSets
+    .filter((d) => d.label === item.label)
+    .filter((_, i) => i <= item.datasetIndex)
+    .reduce((p, n) => p + n.value, 0);
   return height - yScale(offSet);
 }
