@@ -19,7 +19,7 @@ const Base: FC<IProps> = ({
   return <svg
     width={width}
     height={height}
-    style={{ border: '1px solid red' }}
+    style={{ overflow: 'visible' }}
     viewBox={`0 0 ${width} ${height}`}>
     <g transform={`translate(${padding},${padding})`}
       style={{ overflow: 'visible', border: '1px solid red' }}

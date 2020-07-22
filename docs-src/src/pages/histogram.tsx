@@ -359,7 +359,7 @@ const HistogramExample = () => {
                 </Button>
 
                 <Base
-                  width={w}
+                  width={w + 30} // @TODO work out why without this the bars exceed the chart
                   height={400}>
 
                   <ChartGrid
@@ -396,6 +396,7 @@ const HistogramExample = () => {
                     width={w - 100}
                     height={40}
                     top={300}
+                    padding={state.bar}
                     left={100}
                     values={d.bins} />
 

@@ -9,6 +9,8 @@ import React, {
   SVGAttributes,
 } from 'react';
 
+import { IHistogramBar } from '../Histogram';
+
 export type TAxisValue = string | number;
 
 export interface IAxis {
@@ -22,6 +24,7 @@ export interface IAxis {
   top?: number;
   domain?: TAxisValue[];
   left?: number;
+  padding?: IHistogramBar;
 }
 
 export const defaultPath: SVGAttributes<SVGPathElement> = {

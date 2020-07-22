@@ -10,6 +10,10 @@ import React, {
 } from 'react';
 
 import {
+  paddingInner,
+  paddingOuter,
+} from '../utils/bars';
+import {
   defaultPath,
   IAxis,
 } from './YAxis';
@@ -24,13 +28,14 @@ const XAxis: FC<IAxis> = ({
   left = 0,
   scale = 'band',
   domain,
+  padding,
 }) => {
 
   const xScale = scale === 'linear'
     ? scaleLinear().domain(domain as number[] || [Math.min(...values as number[]), Math.max(...values as number[])])
     : scaleBand().domain(values as string[])
-      .paddingInner(0.1)
-      .paddingOuter(0.2)
+      .paddingInner(padding ? paddingInner(padding) : 0.1)
+      .paddingOuter(padding ? paddingOuter(padding) : 0.2)
       .align(0.5)
   xScale.rangeRound([0, width])
 
