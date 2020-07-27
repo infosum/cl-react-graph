@@ -11,12 +11,12 @@ import {
   FormControlLabel,
   FormGroup,
   Grid,
+  Slider,
   Switch,
   Tab,
   Tabs,
   Typography,
 } from '@material-ui/core';
-import Slider from '@material-ui/lab/Slider';
 
 import Legend from '../../../src/Legend';
 import PieChart, { IPieChartProps } from '../../../src/PieChart';

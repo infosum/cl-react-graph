@@ -43,6 +43,20 @@ export const smallData: IHistogramData = {
   ]
 }
 
+export const smallData2: IHistogramData = {
+  bins: ['Female', 'Male', 'Other'],
+  counts: [
+    {
+      data: [89200, 12400, 33300],
+      label: 'Baseline',
+    },
+    {
+      data: [70000, 24230, 40000],
+      label: 'Filtered',
+    },
+  ]
+}
+
 export const data: IHistogramData = {
   bins: ['Female', 'Male', 'Other', 'sdfdfg', 'dagdsg', 'sfsd', 'ds34fsdf', 'dfsfsd', 'sdfs34dfs', 'ghf34hfg', 'fd33gag', 'jg343hj', 'a343wes', 'ye343ye', 'fd343gjs', 'sdfd343fg', '34', 'sfsd', '433', '45245', '745'],
   counts: [

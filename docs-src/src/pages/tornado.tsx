@@ -22,6 +22,7 @@ import TornadoChart, {
   ITornadoData,
   ITornadoProps,
 } from '../../../src/Tornado';
+import NativeTornado from '../../../src/TornadoNativeReact';
 import { DeepPartial } from '../../../src/utils/types';
 import JSXToString from '../components/JSXToString';
 import Layout from '../components/layout';
@@ -137,6 +138,7 @@ const Tornado = () => {
           <Grid item xs={6}>
             <Card>
               <CardContent>
+                <NativeTornado {...state} width={600} />
                 {chart}
                 <TornadoChart
                   id="tornado2"

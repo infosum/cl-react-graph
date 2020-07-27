@@ -20,21 +20,30 @@ import {
   FormGroup,
   Grid,
   MenuItem,
+  Slider,
   Switch,
   Tab,
   Tabs,
   Typography,
 } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
-import Slider from '@material-ui/lab/Slider';
 
 import {
   ILineChartDataSet,
   ILineChartProps,
   LineChart,
 } from '../../../src';
+import AreaFill from '../../../src/components/AreaFill';
+import Base from '../../../src/components/Base';
+import ChartGrid from '../../../src/components/Grid';
+import Line from '../../../src/components/Line';
+import Points from '../../../src/components/Points';
+import XAxis from '../../../src/components/XAxis';
+import YAxis from '../../../src/components/YAxis';
 import { Scale } from '../../../src/Histogram';
 import { DeepPartial } from '../../../src/utils/types';
+import { useLineDomain } from '../../../src/utils/useDomain';
+import { useWidth } from '../../../src/utils/useWidth';
 import { data3 } from '../../../test/fixtures';
 import { AxisActions } from '../components/AxisOptions';
 import { CurveSelector } from '../components/CurveSelector';
@@ -214,10 +223,14 @@ export interface IGridElement extends ReactDataSheet.Cell<IGridElement, number |
 }
 const LineExample: FC = () => {
   const [state, dispatch] = useReducer(reducer, initialState as ILineChartProps);
+  const [ref, w] = useWidth(state.width);
   const [tab, setTab] = useState(0);
   const gridData: Cell[][] = state.data[0].data.map((point) => {
     const x = typeof (point.x) === 'object' ? point.x.toDateString() : point.x;
     return [{ value: x }, { value: Number(point.y) }];
+  });
+  const domain = useLineDomain({
+    values: state.data,
   });
   const chart = <LineChart
     axis={state.axis}
@@ -233,6 +246,59 @@ const LineExample: FC = () => {
           <Grid item xs={6}>
             <Card>
               <CardContent>
+                <h1>React native version</h1>
+                <Base
+                  width={800}
+                  height={400}>
+
+                  <ChartGrid
+                    left={100}
+                    height={300}
+                    svgProps={{ ...state.grid.x.style }}
+                    lines={{
+                      vertical: state.grid.y.ticks,
+                      horizontal: state.grid.x.ticks,
+                    }}
+                    width={800} />
+                  {
+                    state.data.map((data) => <> <Line
+                      axis={state.axis}
+                      key={data.label}
+                      width={700}
+                      left={100}
+                      height={300}
+                      data={data} />
+                      <Points axis={state.axis}
+                        key={data.label}
+                        width={700}
+                        left={100}
+                        height={300}
+                        data={data} />
+                      <AreaFill
+                        axis={state.axis}
+                        key={data.label}
+                        width={700}
+                        left={100}
+                        height={300}
+                        data={data} />
+
+                    </>)}
+
+                  <YAxis
+                    width={100}
+                    height={300}
+                    values={[0, 1000, 2000]}
+                    domain={domain}
+                  />
+
+                  <XAxis
+                    width={700}
+                    height={40}
+                    top={300}
+                    left={100} />
+
+                </Base>
+
                 <LineChart
                   axis={state.axis}
                   grid={state.grid}

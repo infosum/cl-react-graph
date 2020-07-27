@@ -55,3 +55,29 @@ npm run build
 ```
 
 The docs will be built in `/docs`
+
+# Version 3 TODO:
+
+
+## Horizontal histogram
+
+* Add example of 2nd X axis
+* Add <Points> component which will be used to show the percentage values in the demo dataset
+* Investigate axis scales and use demo page props on example axis.
+
+
+## Vertical histogram
+
+* TODO
+
+## Line Chart
+
+* TODO
+
+## Pie Chart
+
+* TODO
+
+## Tornado
+
+* Check all props can be used

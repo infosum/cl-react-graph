@@ -18,6 +18,11 @@ import {
 } from '@material-ui/core';
 
 import { HorizontalHistogram } from '../../../src';
+import Bars from '../../../src/components/Bars/Bars';
+import Base from '../../../src/components/Base';
+import ChartGrid from '../../../src/components/Grid';
+import XAxis from '../../../src/components/XAxis';
+import YAxis from '../../../src/components/YAxis';
 import Histogram, {
   EGroupedBarLayout,
   IAxes,
@@ -25,9 +30,12 @@ import Histogram, {
   IHistogramBar,
   IHistogramData,
 } from '../../../src/Histogram';
+import HistogramReact from '../../../src/HistogramNativeReact';
 import Legend from '../../../src/Legend';
 import { outputSvg } from '../../../src/utils/outputSvg';
 import { DeepPartial } from '../../../src/utils/types';
+import { useHistogramDomain } from '../../../src/utils/useDomain';
+import { useWidth } from '../../../src/utils/useWidth';
 import {
   AxisActions,
   AxisOptionsFactory,
@@ -46,6 +54,7 @@ import {
   grid,
   smallAnnotationsData,
   smallData,
+  smallData2,
   theme,
 } from '../data';
 
@@ -56,12 +65,9 @@ const tipContentFns = [
     bins[i] + '<br />Another tip ' + d.toFixed(2),
 ];
 
-// const now = new Date();
-// data.bins = data.bins.map((d, i) => new Date(new Date().setDate(now.getDate() + i)).toLocaleString());
-
 export interface IInitialState {
   axis: DeepPartial<IAxes>;
-  bar: DeepPartial<IHistogramBar>;
+  bar: IHistogramBar;
   chartType: string;
   data: IHistogramData;
   delay: number;
@@ -134,6 +140,7 @@ export function gridReducer<S extends any, A extends any>(state: S, action: A): 
     default:
       return state;
   }
+  state.axis.x['stroke-opacity']
 }
 
 // Unclear why but you can't import a reducer in and have it update state???
@@ -286,6 +293,7 @@ const watermarkSvg = require('../../../src/assets/Powered-By-InfoSum_DARK.svg') 
 const HistogramExample = () => {
   const [tab, setTab] = useState(0);
   const [state, dispatch] = useReducer(reducer, initialSate);
+  const [ref, w] = useWidth(state.width);
   const [visible, setVisible] = useState({});
   const spreadSheetData = dataToSpreadSheet(state.data);
   const dataLegendData = {
@@ -321,6 +329,12 @@ const HistogramExample = () => {
     }}
   />;
   const [dataIndex, setDataIndex] = useState(0);
+  const d = dataIndex === 0 ? smallData : data;
+  const domain = useHistogramDomain({
+    groupLayout: state.groupLayout,
+    bins: d.bins,
+    values: d.counts
+  });
 
   return (
     <Layout>
@@ -332,7 +346,70 @@ const HistogramExample = () => {
         <Grid container spacing={10}>
           <Grid item xs={6}>
             <Card>
-              <CardContent>
+              <CardContent ref={ref}>
+                <h1>React only</h1>
+                {/* <HistogramReact
+                  data={d}
+                /> */}
+
+                <Button onClick={() => setDataIndex(dataIndex === 1 ? 0 : 1)}>
+                  toggle data
+                </Button>
+
+                <Base
+                  width={w + 30} // @TODO work out why without this the bars exceed the chart
+                  height={400}>
+
+                  <ChartGrid
+                    left={100}
+                    height={300}
+                    svgProps={{ ...state.grid.x.style }}
+                    lines={{
+                      vertical: state.grid.y.ticks,
+                      horizontal: state.grid.x.ticks,
+                    }}
+                    width={w - 100} />
+
+                  <Bars
+                    left={100}
+                    height={300}
+                    width={w - 100}
+                    bar={state.bar}
+                    groupLayout={state.groupLayout}
+                    values={d.counts}
+                    config={{
+                      duration: state.duration,
+                    }}
+                    bins={d.bins}
+                    domain={domain}
+                    visible={visible}
+                  />
+                  <YAxis
+                    width={100}
+                    height={300}
+                    values={[0, 45000, 90000]}
+                    domain={domain}
+                  />
+                  <XAxis
+                    width={w - 100}
+                    height={40}
+                    top={300}
+                    padding={state.bar}
+                    left={100}
+                    values={d.bins} />
+
+                </Base>
+
+                <Legend
+                  theme={theme}
+                  data={dataLegendData}
+                  onSelect={(key) => {
+                    setVisible({ ...visible, [key]: visible.hasOwnProperty(key) ? !visible[key] : false });
+                  }}
+                  visible={visible}
+                />
+
+                <h1>d3</h1>
                 <Button size="small" color="primary" variant="contained" style={{ marginBottom: '1rem' }} onClick={(e) => {
                   e.preventDefault();
                   outputSvg('bigHistogram', 420, 420, (blobData) => {
@@ -377,17 +454,8 @@ const HistogramExample = () => {
                   tipContentFn={tipContentFns[0]}
                   id="smallHistogram"
                 />
-                <Button onClick={() => setDataIndex(dataIndex === 1 ? 0 : 1)}>
-                  toggle data
-                </Button>
-                <Legend
-                  theme={theme}
-                  data={dataLegendData}
-                  onSelect={(key) => {
-                    setVisible({ ...visible, [key]: visible.hasOwnProperty(key) ? !visible[key] : false });
-                  }}
-                  visible={visible}
-                />
+
+
               </CardContent>
             </Card>
             <br />
