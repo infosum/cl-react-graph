@@ -17,7 +17,6 @@ export {
 } from './LineChart';
 
 export { default as Legend } from './Legend';
-export { default as JoyPlot } from './JoyPlot';
 // import Map from './Map';
 export { default as PieChart, IPieChartProps } from './PieChart';
 export { default as ScatterPlot } from './ScatterPlot';
@@ -33,6 +32,7 @@ export { default as Base } from './components/Base';
 export { default as Grid } from './components/Grid';
 export { default as XAxis } from './components/XAxis';
 export { default as YAxis } from './components/YAxis';
+export { default as JoyPlot } from './JoyPlot';
 
 export {
   axis as defaultAxis,

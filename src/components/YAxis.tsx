@@ -1,3 +1,4 @@
+import { extent } from 'd3-array';
 import {
   ScaleBand,
   scaleBand,
@@ -50,9 +51,8 @@ const YAxis: FC<IAxis> = ({
   domain,
 }) => {
   const yScale = scale === 'linear'
-    ? scaleLinear().domain(domain as number[] || [Math.min(...values as number[]), Math.max(...values as number[])])
+    ? scaleLinear().domain(extent([0, ...domain as Numeric[]]) || extent(values))
     : scaleBand().domain(values as string[])
-
   yScale.rangeRound([height, 0])
 
   const transform = `(${width}, ${top})`;
@@ -62,6 +62,9 @@ const YAxis: FC<IAxis> = ({
 
   const axisPath = { ...defaultPath, ...(path ?? {}) };
   const { fill, opacity, stroke, strokeOpacity, strokeWidth } = axisPath;
+  const ticks: any[] = (values.length === 0 && scale === 'linear')
+    ? yScale.domain()
+    : values;
   return (
     <g className="y-axis"
       transform={`translate${transform}`}
@@ -80,8 +83,8 @@ const YAxis: FC<IAxis> = ({
       ></path>
 
       {
-        values.map((v, i) => {
-          const tickOffset = positionTick(values[i], yScale, axisOffset);
+        ticks.map((v, i) => {
+          const tickOffset = positionTick(ticks[i], yScale, axisOffset);
           return (
             <g key={v} className="tick" opacity="1" transform={`translate${tickOffset}`}>
               <line stroke={stroke}
@@ -93,7 +96,12 @@ const YAxis: FC<IAxis> = ({
                 strokeWidth="1">
               </line>
 
-              <text fill={stroke} x={`-${tickSize}`} dy="0.32em">{v}</text>
+              <text
+                fill={stroke}
+                x={`-${tickSize + 10}`}
+                dy="0.32em">
+                {v}
+              </text>
             </g>
           )
         })

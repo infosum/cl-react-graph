@@ -49,7 +49,7 @@ interface IProps {
   bins: string[]
   colorScheme?: string[],
   hoverColorScheme?: string[];
-  config: SpringConfig;
+  config?: SpringConfig;
   visible?: Record<string, boolean>;
   tip?: TTipFunc;
 }
