@@ -34,15 +34,14 @@ export interface IProps<T extends IChartPoint<IChartPointValue, IChartPointValue
 }
 
 
-export const useMakeLine: (props: IProps) => string = ({
+export const useScales: (props: IProps) => { xScale: any, yScale: any } = ({
   data,
   width,
   height,
-  curveType = curveCatmullRom,
   axis,
   left = 0,
 }) => {
-  const [d, setD] = useState('');
+  const [scales, setScales] = useState<{ xScale: any, yScale: any }>({ xScale: null, yScale: null });
   useEffect(() => {
     const [xScale, yScale] = buildScales(axis);
 
@@ -62,18 +61,35 @@ export const useMakeLine: (props: IProps) => string = ({
       .rangeRound([left, width + left]);
     (yScale as any).domain(yDomain)
       .range([height, 0]);
+    setScales({ xScale, yScale })
 
-    const curve = (
-      x: AnyScale,
-      y: AnyScale,
-    ) => line()
-      .curve(curveType)
-      .x((d: any) => {
-        return x(d.x);
-      })
-      .y((d: any) => y(d.y));
-    setD(String(curve(xScale, yScale)(data.data as any)));
-  })
+  }, [])
+
+  return scales;
+}
+
+
+export const useMakeLine: (props: IProps) => string = (props) => {
+  const [d, setD] = useState('');
+
+
+  const { xScale, yScale } = useScales(props);
+  useEffect(() => {
+    const { curveType = curveCatmullRom, data } = props;
+    if (yScale !== null) {
+      const curve = (
+        x: AnyScale,
+        y: AnyScale,
+      ) => line()
+        .curve(curveType)
+        .x((d: any) => {
+          return x(d.x);
+        })
+        .y((d: any) => y(d.y));
+      setD(String(curve(xScale, yScale)(data.data as any)));
+    }
+
+  }, [xScale, yScale])
 
   return d;
 }

@@ -36,6 +36,7 @@ import {
 import Base from '../../../src/components/Base';
 import ChartGrid from '../../../src/components/Grid';
 import Line from '../../../src/components/Line';
+import Points from '../../../src/components/Points';
 import XAxis from '../../../src/components/XAxis';
 import YAxis from '../../../src/components/YAxis';
 import { Scale } from '../../../src/Histogram';
@@ -265,7 +266,14 @@ const LineExample: FC = () => {
                     left={100}
                     height={300}
                     data={data} />)}
-
+                  {state.data.map((data) =>
+                    <Points axis={state.axis}
+                      key={data.label}
+                      width={700}
+                      left={100}
+                      height={300}
+                      data={data} />
+                  )}
                   <YAxis
                     width={100}
                     height={300}
