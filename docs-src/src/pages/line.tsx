@@ -33,6 +33,7 @@ import {
   ILineChartProps,
   LineChart,
 } from '../../../src';
+import AreaFill from '../../../src/components/AreaFill';
 import Base from '../../../src/components/Base';
 import ChartGrid from '../../../src/components/Grid';
 import Line from '../../../src/components/Line';
@@ -259,21 +260,30 @@ const LineExample: FC = () => {
                       horizontal: state.grid.x.ticks,
                     }}
                     width={800} />
-                  {state.data.map((data) => <Line
-                    axis={state.axis}
-                    key={data.label}
-                    width={700}
-                    left={100}
-                    height={300}
-                    data={data} />)}
-                  {state.data.map((data) =>
-                    <Points axis={state.axis}
+                  {
+                    state.data.map((data) => <> <Line
+                      axis={state.axis}
                       key={data.label}
                       width={700}
                       left={100}
                       height={300}
                       data={data} />
-                  )}
+                      <Points axis={state.axis}
+                        key={data.label}
+                        width={700}
+                        left={100}
+                        height={300}
+                        data={data} />
+                      <AreaFill
+                        axis={state.axis}
+                        key={data.label}
+                        width={700}
+                        left={100}
+                        height={300}
+                        data={data} />
+
+                    </>)}
+
                   <YAxis
                     width={100}
                     height={300}
