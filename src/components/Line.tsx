@@ -1,23 +1,47 @@
-import React, { FC } from 'react';
+import { interpolate } from 'd3-interpolate';
+import React, {
+  FC,
+  useLayoutEffect,
+  useRef,
+} from 'react';
+import {
+  animated,
+  useSpring,
+} from 'react-spring';
 
 import {
   IProps,
   useMakeLine,
 } from '../utils/useMakeLine';
 
-const Line: FC<IProps> = (props) => {
-  const { data } = props;
-  const className = `line-${data.label.replace(/[^a-z]/gi, '')}`;
-  const d = useMakeLine(props);
+const Line: FC<IProps & { label: string }> = (props) => {
+  const { label = '', line } = props;
+  const className = `line-${label.replace(/[^a-z]/gi, '')}`;
+  const { previous, current } = useMakeLine(props);
+
+  const spring = useSpring<any>({
+    from: { t: 0 },
+    to: { t: 1 },
+    reset: true,
+    delay: 0
+  });
+
+  const getInterpolator = () => interpolate(previous, current);
+
+  const interpolator = useRef(getInterpolator());
+  useLayoutEffect(() => {
+    interpolator.current = getInterpolator();
+  });
+
   return (
     <>
-      <path
+      <animated.path
         className={className}
         fill="none"
-        stroke-dashoffset={data.line.strokeDashOffset}
-        stroke-dasharray={data.line.strokeDashOffset}
-        stroke={data.line.stroke}
-        d={d}
+        strokeDashoffset={line.strokeDashOffset}
+        strokeDasharray={line.strokeDashArray}
+        stroke={line.stroke}
+        d={spring.t.interpolate((t) => interpolator.current(t))}
       />
     </>
   )

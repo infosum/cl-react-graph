@@ -141,7 +141,7 @@ const initialState: TInitialState = {
       ticks: 5,
     },
   },
-  data: data3,
+  data: [data3[0]],
   width: '100%',
   grid,
 };
@@ -259,35 +259,48 @@ const LineExample: FC = () => {
                       vertical: state.grid.y.ticks,
                       horizontal: state.grid.x.ticks,
                     }}
-                    width={800} />
+                    width={700} />
                   {
                     state.data.map((data) => <> <Line
                       axis={state.axis}
                       key={data.label}
+                      label={data.label}
+                      line={data.line}
                       width={700}
                       left={100}
                       height={300}
-                      data={data} />
-                      <Points axis={state.axis}
-                        key={data.label}
-                        width={700}
-                        left={100}
-                        height={300}
-                        data={data} />
-                      <AreaFill
-                        axis={state.axis}
-                        key={data.label}
-                        width={700}
-                        left={100}
-                        height={300}
-                        data={data} />
+                      data={data.data} />
+                      {
 
+                        data.point.show &&
+                        <Points axis={state.axis}
+                          key={data.label}
+                          width={700}
+                          left={100}
+                          height={300}
+                          radius={data.point.radius}
+                          fill={data.point.fill}
+                          stroke={data.point.stroke}
+                          data={data.data} />
+                      }
+
+                      {
+                        data.line.fill.show && <AreaFill
+                          axis={state.axis}
+                          key={data.label}
+                          width={700}
+                          left={100}
+                          height={300}
+                          line={data.line}
+                          data={data.data} />
+                      }
                     </>)}
 
                   <YAxis
                     width={100}
                     height={300}
                     values={[0, 1000, 2000]}
+                    scale="linear"
                     domain={domain}
                   />
 
@@ -406,62 +419,60 @@ const LineExample: FC = () => {
                       </CardContent>
                     </Card>
                     <br />
-                    <Card elevation={3}>
-                      <CardContent>
-                        <Typography variant="h6" gutterBottom>Point</Typography>
-                        <Grid container spacing={10}>
-                          <Grid item xs={6}>
-                            <FormControlLabel
-                              control={
-                                <Switch
-                                  checked={state.data[0].point.show}
-                                  color="primary"
-                                  onChange={(_, value) => {
-                                    dispatch({ type: 'pointShow', show: value, index: 0 });
-                                  }}
-                                />
-                              }
-                              label="Show points"
+
+                    <Typography variant="h6" gutterBottom>Point</Typography>
+                    <Grid container spacing={10}>
+                      <Grid item xs={6}>
+                        <FormControlLabel
+                          control={
+                            <Switch
+                              checked={state.data[0].point.show}
+                              color="primary"
+                              onChange={(_, value) => {
+                                dispatch({ type: 'pointShow', show: value, index: 0 });
+                              }}
                             />
-                          </Grid>
-                          <Grid item xs={6}>
-                            <FormGroup>
-                              <Typography>Radius <small>({state.data[0].point.radius})</small></Typography>
-                              <Slider
-                                value={state.data[0].point.radius}
-                                aria-labelledby="label"
-                                step={1}
-                                onChange={(_, value) => dispatch({
-                                  index: 0,
-                                  radius: Number(value),
-                                  type: 'pointRadius',
-                                })}
-                              />
-                            </FormGroup>
-                          </Grid>
-                          <Grid item xs={6}>
-                            <FormGroup>
-                              <ColorPicker
-                                id="pointFill"
-                                value={state.data[0].point.fill}
-                                label="Fill"
-                                onChange={(color) => dispatch({ type: 'pointFill', fill: color, index: 0 })}
-                              />
-                            </FormGroup>
-                          </Grid>
-                          <Grid item xs={6}>
-                            <FormGroup>
-                              <ColorPicker
-                                id="pointStroke"
-                                value={state.data[0].point.stroke}
-                                label="Stroke color"
-                                onChange={(color) => dispatch({ type: 'pointStroke', fill: color, index: 0 })}
-                              />
-                            </FormGroup>
-                          </Grid>
-                        </Grid>
-                      </CardContent>
-                    </Card>
+                          }
+                          label="Show points"
+                        />
+                      </Grid>
+                      <Grid item xs={6}>
+                        <FormGroup>
+                          <Typography>Radius <small>({state.data[0].point.radius})</small></Typography>
+                          <Slider
+                            value={state.data[0].point.radius}
+                            aria-labelledby="label"
+                            step={1}
+                            onChange={(_, value) => dispatch({
+                              index: 0,
+                              radius: Number(value),
+                              type: 'pointRadius',
+                            })}
+                          />
+                        </FormGroup>
+                      </Grid>
+                      <Grid item xs={6}>
+                        <FormGroup>
+                          <ColorPicker
+                            id="pointFill"
+                            value={state.data[0].point.fill}
+                            label="Fill"
+                            onChange={(color) => dispatch({ type: 'pointFill', fill: color, index: 0 })}
+                          />
+                        </FormGroup>
+                      </Grid>
+                      <Grid item xs={6}>
+                        <FormGroup>
+                          <ColorPicker
+                            id="pointStroke"
+                            value={state.data[0].point.stroke}
+                            label="Stroke color"
+                            onChange={(color) => dispatch({ type: 'pointStroke', fill: color, index: 0 })}
+                          />
+                        </FormGroup>
+                      </Grid>
+                    </Grid>
+
                     <br />
                     <Card>
                       <CardContent>

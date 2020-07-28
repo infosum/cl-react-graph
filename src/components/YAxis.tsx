@@ -45,7 +45,9 @@ const positionTick = (value: TAxisValue, scale: any, height: number) => {
   const offset = isOfType<ScaleBand<any>>(scale, 'paddingInner')
     ? Math.floor(scale.bandwidth() / 2)
     : 0;
-  const v = height - (scale(value) + offset);
+  const v = isOfType<ScaleBand<any>>(scale, 'paddingInner')
+    ? height - (Number(scale(value)) + offset)
+    : scale(value);
   return `(0, ${v})`
 }
 

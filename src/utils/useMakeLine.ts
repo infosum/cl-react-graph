@@ -15,7 +15,7 @@ import { IAxes } from '../Histogram';
 import {
   IChartPoint,
   IChartPointValue,
-  ILineChartDataSet,
+  ILineProps,
 } from '../LineChart';
 import { rangeAffordance } from './domain';
 import {
@@ -26,16 +26,16 @@ import {
 const ZERO_SUBSTITUTE: number = 1e-6;
 
 export interface IProps<T extends IChartPoint<IChartPointValue, IChartPointValue> = IChartPoint> {
-  data: ILineChartDataSet<T>;
+  data: T[];
   axis: IAxes;
+  line: ILineProps;
   curveType?: CurveFactory | CurveFactoryLineOnly;
   width: number;
   left?: number;
   height: number;
 }
 
-
-export const useScales: (props: IProps) => { xScale: any, yScale: any } = ({
+export const useScales: (props: Omit<IProps, 'line'>) => { xScale: any, yScale: any } = ({
   data,
   width,
   height,
@@ -48,7 +48,7 @@ export const useScales: (props: IProps) => { xScale: any, yScale: any } = ({
 
     const ys: any[] = [];
     const xs: any[] = [];
-    data.data.forEach((d) => {
+    data.forEach((d) => {
       let parsedY = axis.y.scale === 'LOG' && d.y === 0 ? ZERO_SUBSTITUTE : d.y;
       let parsedX = axis.x.scale === 'LOG' && d.x === 0 ? ZERO_SUBSTITUTE : d.x;
       ys.push(parsedY);
@@ -70,11 +70,13 @@ export const useScales: (props: IProps) => { xScale: any, yScale: any } = ({
 }
 
 
-export const useMakeLine: (props: IProps) => string = (props) => {
-  const [d, setD] = useState('');
+export const useMakeLine: (props: IProps) => { previous: string, current: string } = (props) => {
+  const [current, setCurrent] = useState('');
+  const [previous, setPrevious] = useState('');
   const { xScale, yScale } = useScales(props);
   useEffect(() => {
-    const { curveType = curveCatmullRom, data } = props;
+    const { data } = props;
+    const { curveType = curveCatmullRom } = props.line;
     if (yScale !== null) {
       const curve = (
         x: AnyScale,
@@ -85,28 +87,37 @@ export const useMakeLine: (props: IProps) => string = (props) => {
           return x(d.x);
         })
         .y((d: any) => y(d.y));
-      setD(String(curve(xScale, yScale)(data.data as any)));
+      const next = String(curve(xScale, yScale)(data as any))
+      if (next !== current) {
+        setPrevious(current);
+        setCurrent(next);
+      }
     }
 
-  }, [xScale, yScale])
+  }, [xScale, yScale, props.data])
 
-  return d;
+  return { previous, current };
 }
 
-export const useMakeArea: (props: IProps) => string = (props) => {
-  const [d, setD] = useState('');
+export const useMakeArea: (props: IProps) => { previous: string, current: string } = (props) => {
+  const [current, setCurrent] = useState('');
+  const [previous, setPrevious] = useState('');
   const { xScale, yScale } = useScales(props);
   useEffect(() => {
-    const { curveType = curveCatmullRom, data, height } = props;
+    const { data, height } = props;
+    const { curveType = curveCatmullRom } = props.line;
     if (yScale !== null) {
       const thisArea = () => area()
         .curve(curveType as CurveFactory)
         .x((d: any) => xScale(d.x))
         .y0((d) => height)
         .y1((d: any) => yScale(d.y));
-
-      setD(String(thisArea()(data.data as any)));
+      const next = String(thisArea()(data as any));
+      if (next !== current) {
+        setPrevious(current);
+        setCurrent(next);
+      }
     }
-  }, [xScale, yScale]);
-  return d;
+  }, [xScale, yScale, props.data]);
+  return { previous, current };
 }
