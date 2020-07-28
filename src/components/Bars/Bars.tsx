@@ -1,7 +1,7 @@
 import {
   scaleBand,
   scaleLinear,
-} from 'd3';
+} from 'd3-scale';
 import React, {
   FC,
   useState,

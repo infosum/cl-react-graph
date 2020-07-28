@@ -16,6 +16,6 @@ interface IProps<T = IHistogramProps> {
 export declare const drawHorizontalGrid: <T extends IHistogramProps>(props: IProps<T>) => void;
 export declare const gridHeight: (props: any) => number;
 export declare const yAxisWidth: (axis: IAxes) => number;
-export declare const xAxisHeight: (axis: IAxes) => any;
+export declare const xAxisHeight: (axis: IAxes) => number;
 export declare const gridWidth: (props: any) => number;
 export {};

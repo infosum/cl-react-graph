@@ -13,7 +13,6 @@ import {
   PieArcDatum,
 } from 'd3-shape';
 import cloneDeep from 'lodash/cloneDeep';
-import get from 'lodash/get';
 import merge from 'lodash/merge';
 
 import colorScheme from './colors';
@@ -186,7 +185,7 @@ export const pieChartD3 = ((): IChartAdaptor<IPieChartProps> => {
       });
 
       dataSets.forEach((dataSet, i) => {
-        const theme = get(data.counts[i], 'colors', props.colorScheme);
+        const theme = data.counts[i]?.colors ?? props.colorScheme;
         this.drawChart(dataSet, i, data.bins, theme);
         this.drawLabels(dataSet, i, data.bins, theme);
       });

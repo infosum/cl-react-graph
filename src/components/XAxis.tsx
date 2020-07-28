@@ -46,8 +46,10 @@ const XAxis: FC<IAxis> = ({
   if (scale === 'band' && !padding) {
     console.warn('band scale provided without padding settings');
   }
+
+
   const Scale = scale === 'linear'
-    ? scaleLinear().domain(extent([0, ...domain as number[]]) || extent(values))
+    ? scaleLinear().domain(extent(domain ? [0, ...domain as number[]] : values as number[]) as any)
     : scaleBand().domain(values as string[])
 
   if (isOfType<ScaleBand<any>>(Scale, 'paddingInner')) {

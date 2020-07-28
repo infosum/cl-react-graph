@@ -2,7 +2,7 @@ import {
   scaleBand,
   scaleLinear,
   scalePoint,
-} from 'd3';
+} from 'd3-scale';
 import React, { FC } from 'react';
 
 // import Bar from './components/Bar';

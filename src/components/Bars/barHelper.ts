@@ -1,7 +1,7 @@
 import {
   ScaleBand,
   ScaleLinear,
-} from 'd3';
+} from 'd3-scale';
 import { SpringConfig } from 'react-spring';
 
 import {

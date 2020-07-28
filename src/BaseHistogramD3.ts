@@ -1,8 +1,4 @@
 import {
-  Axis,
-  axisBottom,
-} from 'd3';
-import {
   scaleBand,
   ScaleBand,
   scaleLinear,

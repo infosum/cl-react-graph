@@ -1,5 +1,4 @@
 import { ScaleBand } from 'd3-scale';
-import get from 'lodash/get';
 
 import {
   EGroupedBarLayout,
@@ -18,7 +17,7 @@ export const groupedBarsUseSameXAxisValue = ({ groupLayout, stacked }: IGroupedP
  *This is the inner padding between each grouped dataset or single datasetes.
  */
 export const paddingInner = (bar: IHistogramBar): number => {
-  const m = get(bar, 'paddingInner', 0);
+  const m = bar?.paddingInner ?? 0;
   return m >= 0 && m <= 1
     ? m
     : 0.1;
@@ -29,7 +28,7 @@ export const paddingInner = (bar: IHistogramBar): number => {
  * 
  */
 export const paddingOuter = (bar: IHistogramBar): number => {
-  const m = get(bar, 'paddingOuter', 0);
+  const m = bar?.paddingOuter ?? 0;
   return m >= 0 && m <= 1
     ? m
     : 0.1;
@@ -58,7 +57,7 @@ export const getBarWidth = (
  * When grouping data this is the spacing between the group's bars.
  */
 export const groupedPaddingInner = (bar: IHistogramBar): number => {
-  const m = get(bar, 'grouped.paddingInner', 0.1);
+  const m = bar?.grouped?.paddingInner ?? 0.1;
   return m >= 0 && m <= 1
     ? m
     : 0.1;
@@ -68,7 +67,7 @@ export const groupedPaddingInner = (bar: IHistogramBar): number => {
  * When grouping data this is the spacing to the left of the first and the right of the last bar.
  */
 export const groupedPaddingOuter = (bar: IHistogramBar): number => {
-  const m = get(bar, 'grouped.paddingOuter', 0.1);
+  const m = bar?.grouped?.paddingOuter ?? 0.1;
   return m >= 0 && m <= 1
     ? m
     : 0.1;

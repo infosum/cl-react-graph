@@ -69,7 +69,7 @@ const YAxis: FC<IAxis> = ({
     console.warn('band scale provided without padding settings');
   }
   const Scale = scale === 'linear'
-    ? scaleLinear().domain(values ? extent([0, ...domain as number[]]) : extent(values))
+    ? scaleLinear().domain(domain ? extent([0, ...domain as number[]]) : extent(values as number[]) as any)
     : scaleBand().domain(values as string[])
 
   if (isOfType<ScaleBand<any>>(Scale, 'paddingInner')) {
