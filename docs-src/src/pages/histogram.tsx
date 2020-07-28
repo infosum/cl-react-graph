@@ -329,7 +329,7 @@ const HistogramExample = () => {
     bins: d.bins,
     values: d.counts
   });
-  console.log('state', state.chartType);
+
   return (
     <Layout>
       <SEO title="Histogram" description="" />
