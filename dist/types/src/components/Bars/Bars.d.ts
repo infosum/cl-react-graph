@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { SpringConfig } from 'react-spring';
 import { IGroupDataItem } from '../../BaseHistogramD3';
 import { IHistogramBar, IHistogramDataSet } from '../../Histogram';
-import { EChartDirection } from '../../HistogramNativeReact';
+import { EChartDirection } from '../../v3/Histogram';
 import { TTipFunc } from './ToolTip';
 declare enum EGroupedBarLayout {
     GROUPED = 0,

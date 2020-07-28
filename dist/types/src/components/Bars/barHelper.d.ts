@@ -1,7 +1,7 @@
 import { ScaleBand, ScaleLinear } from 'd3-scale';
 import { SpringConfig } from 'react-spring';
 import { EGroupedBarLayout, IHistogramBar, IHistogramDataSet } from '../../Histogram';
-import { EChartDirection } from '../../HistogramNativeReact';
+import { EChartDirection } from '../../v3/Histogram';
 import { ExtendedGroupItem } from './Bars';
 interface IBarSpringProps {
     values: IHistogramDataSet[];
