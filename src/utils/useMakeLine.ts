@@ -1,5 +1,6 @@
 import { extent } from 'd3-array';
 import {
+  area,
   curveCatmullRom,
   CurveFactory,
   CurveFactoryLineOnly,
@@ -71,8 +72,6 @@ export const useScales: (props: IProps) => { xScale: any, yScale: any } = ({
 
 export const useMakeLine: (props: IProps) => string = (props) => {
   const [d, setD] = useState('');
-
-
   const { xScale, yScale } = useScales(props);
   useEffect(() => {
     const { curveType = curveCatmullRom, data } = props;
@@ -91,5 +90,23 @@ export const useMakeLine: (props: IProps) => string = (props) => {
 
   }, [xScale, yScale])
 
+  return d;
+}
+
+export const useMakeArea: (props: IProps) => string = (props) => {
+  const [d, setD] = useState('');
+  const { xScale, yScale } = useScales(props);
+  useEffect(() => {
+    const { curveType = curveCatmullRom, data, height } = props;
+    if (yScale !== null) {
+      const thisArea = () => area()
+        .curve(curveType as CurveFactory)
+        .x((d: any) => xScale(d.x))
+        .y0((d) => height)
+        .y1((d: any) => yScale(d.y));
+
+      setD(String(thisArea()(data.data as any)));
+    }
+  }, [xScale, yScale]);
   return d;
 }

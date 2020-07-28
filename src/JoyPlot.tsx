@@ -1,153 +1,72 @@
-import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
+import React, {
+  FC,
+  Fragment,
+} from 'react';
 
+import Bars from './components/Bars/Bars';
+import Base from './components/Base';
+import XAxis from './components/XAxis';
+import YAxis from './components/YAxis';
 import {
-  IAxes,
-  IChartAdaptor,
-  IChartState,
-  IDomain,
-  IGrid,
-  IHistogramBar,
+  EGroupedBarLayout,
   IHistogramData,
-  IMargin,
-  IStroke,
-  TipContentFn,
 } from './Histogram';
-import { joyPlotD3 } from './JoyplotD3';
-import { DeepPartial } from './utils/types';
+import { useJoyPlot } from './utils/useJoyPlot';
 
-export interface IJoyPlotProps {
-  axis: IAxes;
-  bar: IHistogramBar;
-  className: string;
+export interface IProps {
   data: IHistogramData[];
-  delay: number;
-  duration: number;
-  colorScheme: string[];
-  domain: IDomain;
-  grid: IGrid;
   height: number;
-  margin: IMargin;
-  stroke: IStroke;
-  tip: any;
-  tipContainer: string;
-  tipContentFn: TipContentFn<string>;
-  visible: { [key: string]: boolean };
-  width: number | string;
+  width: number;
 }
 
 /**
  * JoyPlot component
  */
-class JoyPlot extends Component<DeepPartial<IJoyPlotProps>, IChartState> {
+const JoyPlot: FC<IProps> = ({
+  width,
+  height,
+  data,
+}) => {
+  const {
+    chartHeight,
+    bins,
+    domain,
+    values
+  } = useJoyPlot({
+    data,
+    height,
+  })
+  return (
+    <Base
+      width={width}
+      height={height}>
 
-  private chart: IChartAdaptor<IJoyPlotProps>;
-  private ref: HTMLDivElement | null = null;
+      {values.map((d, i) => <Fragment key={`plot-${i}`}>
+        <YAxis
+          width={100}
+          height={300}
+          top={chartHeight * i}
+          domain={domain}
+        />
+        <XAxis
+          width={400}
+          height={40}
+          top={((chartHeight) * (i + 1)) - 100}
+          left={100}
+          values={bins} />
 
-  /**
-   * Constructor
-   */
-  constructor(props: DeepPartial<IJoyPlotProps>) {
-    super(props);
-    this.chart = joyPlotD3();
-    this.state = {
-      parentWidth: 300,
-    };
-  }
-
-  /**
-   * Handle the page resize
-   */
-  private handleResize() {
-    const el = this.getDOMNode();
-    if (!el) {
-      return;
-    }
-    const width = (this.ref && this.ref.offsetWidth) ? this.ref.offsetWidth : 0;
-
-    this.setState({
-      parentWidth: width,
-    }, () => this.chart.update(this.getChartState()));
-  }
-
-  /**
-   * Component mounted
-   */
-  public componentDidMount() {
-    const el = this.getDOMNode();
-    if (!el) {
-      return;
-    }
-    this.chart.create(el, this.getChartState());
-    if (this.props.width === '100%') {
-      window.addEventListener('resize', (e) => this.handleResize());
-      this.handleResize();
-    }
-  }
-
-  /**
-   * Component updated
-   */
-  public componentDidUpdate() {
-    const el = this.getDOMNode();
-    if (!el) {
-      return;
-    }
-    this.chart.update(this.getChartState());
-  }
-
-  /**
-   * Get the chart state
-   */
-  public getChartState(): DeepPartial<IJoyPlotProps> {
-    let { width } = this.props;
-    const { children, ...rest } = this.props;
-    if (width === '100%') {
-      width = this.state.parentWidth || 300;
-    }
-    return {
-      ...rest,
-      width,
-    };
-  }
-
-  /**
-   * Component will un mount, remove the chart and
-   * any event listeners
-   */
-  public componentWillUnmount() {
-    const el = this.getDOMNode();
-    if (!el) {
-      return;
-    }
-    if (this.props.width === '100%') {
-      window.removeEventListener('resize', this.handleResize);
-    }
-    this.chart.destroy();
-  }
-
-  /**
-   * Get the chart's dom node
-   */
-  private getDOMNode(): Element | undefined | null {
-    const node = ReactDOM.findDOMNode(this.ref);
-    try {
-      if (node instanceof Text) {
-        return undefined;
-      }
-      return node;
-    } catch (e) {
-      // instanceof Text not working when running tests - just presume its ok
-      return node as Element;
-    }
-  }
-
-  /**
-   * Render
-   */
-  public render(): JSX.Element {
-    return (<div ref={(ref) => this.ref = ref} className="histogram-chart-container"></div>);
-  }
+        <Bars
+          left={100}
+          height={300}
+          width={400}
+          groupLayout={EGroupedBarLayout.STACKED}
+          values={values[i].counts}
+          bins={bins}
+          top={chartHeight * i}
+          domain={domain}
+        />
+      </Fragment>)}
+    </Base>
+  )
 }
-
 export default JoyPlot;

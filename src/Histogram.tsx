@@ -33,6 +33,7 @@ export interface IHistogramBar {
   // Padding for the outside of grouped datasets or single datasets
   paddingOuter: number;
   paddingInner: number;
+  // @deprecated in 3.0
   hover?: Partial<Record<EColorManipulations, number>>,
   overlayMargin: number; // When bars are rendered as EGroupedBarLayout.OVERLAID (offset between the two overlaid bars)
 }

@@ -1,3 +1,4 @@
+import { extent } from 'd3-array';
 import {
   ScaleBand,
   scaleBand,
@@ -10,6 +11,11 @@ import React, {
 } from 'react';
 
 import { IHistogramBar } from '../Histogram';
+import {
+  paddingInner,
+  paddingOuter,
+} from '../utils/bars';
+import { isOfType } from '../utils/isOfType';
 
 export type TAxisValue = string | number;
 
@@ -17,7 +23,7 @@ export interface IAxis {
   stroke?: string;
   height: number;
   width: number;
-  values?: TAxisValue[];
+  values?: string[] | number[];
   tickSize?: number;
   path?: SVGAttributes<SVGPathElement>;
   scale?: 'linear' | 'band';
@@ -35,8 +41,12 @@ export const defaultPath: SVGAttributes<SVGPathElement> = {
   strokeWidth: '1',
 }
 
-const positionTick = (value: TAxisValue, scale: any, axisOffset: number) => {
-  return `(${axisOffset}, ${scale(value)})`;
+const positionTick = (value: TAxisValue, scale: any, height: number) => {
+  const offset = isOfType<ScaleBand<any>>(scale, 'paddingInner')
+    ? Math.floor(scale.bandwidth() / 2)
+    : 0;
+  const v = height - (scale(value) + offset);
+  return `(0, ${v})`
 }
 
 const YAxis: FC<IAxis> = ({
@@ -48,20 +58,34 @@ const YAxis: FC<IAxis> = ({
   scale = 'linear',
   top = 0,
   domain,
+  padding,
 }) => {
-  const yScale = scale === 'linear'
-    ? scaleLinear().domain(domain as number[] || [Math.min(...values as number[]), Math.max(...values as number[])])
+  if (scale === 'linear' && typeof values[0] === 'string') {
+    throw new Error('Linear axis can not accept string values');
+  }
+  if (scale === 'band' && !padding) {
+    console.warn('band scale provided without padding settings');
+  }
+  const Scale = scale === 'linear'
+    ? scaleLinear().domain(values ? extent([0, ...domain as number[]]) : extent(values))
     : scaleBand().domain(values as string[])
 
-  yScale.rangeRound([height, 0])
+  if (isOfType<ScaleBand<any>>(Scale, 'paddingInner')) {
+    Scale.paddingInner(padding ? paddingInner(padding) : 0.1)
+      .paddingOuter(padding ? paddingOuter(padding) : 0.2)
+      .align(0.5)
+  }
+  Scale.rangeRound([height, 0])
 
   const transform = `(${width}, ${top})`;
-  const axisOffset = 0;
 
-  const pathD = `M${axisOffset},${height} L${axisOffset},0`;
+  const pathD = `M0,${height} L0,0`;
 
   const axisPath = { ...defaultPath, ...(path ?? {}) };
   const { fill, opacity, stroke, strokeOpacity, strokeWidth } = axisPath;
+  const ticks: any[] = (values.length === 0 && scale === 'linear')
+    ? Scale.domain()
+    : values;
   return (
     <g className="y-axis"
       transform={`translate${transform}`}
@@ -80,10 +104,14 @@ const YAxis: FC<IAxis> = ({
       ></path>
 
       {
-        values.map((v, i) => {
-          const tickOffset = positionTick(values[i], yScale, axisOffset);
+        ticks.map((v, i) => {
+          const tickOffset = positionTick(v, Scale, height);
           return (
-            <g key={v} className="tick" opacity="1" transform={`translate${tickOffset}`}>
+            <g
+              key={v}
+              className="tick"
+              opacity="1"
+              transform={`translate${tickOffset}`}>
               <line stroke={stroke}
                 x2={`-${tickSize}`}
                 fill="none"
@@ -93,7 +121,12 @@ const YAxis: FC<IAxis> = ({
                 strokeWidth="1">
               </line>
 
-              <text fill={stroke} x={`-${tickSize}`} dy="0.32em">{v}</text>
+              <text
+                fill={stroke}
+                x={`-${tickSize + 10}`}
+                dy="0.32em">
+                {v}
+              </text>
             </g>
           )
         })

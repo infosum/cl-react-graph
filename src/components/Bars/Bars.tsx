@@ -18,6 +18,7 @@ import {
   IHistogramBar,
   IHistogramDataSet,
 } from '../../Histogram';
+import { EChartDirection } from '../../HistogramNativeReact';
 import {
   groupedBarsUseSameXAxisValue,
   groupedPaddingInner,
@@ -38,7 +39,7 @@ enum EGroupedBarLayout {
 }
 
 interface IProps {
-  bar?: IHistogramBar;
+  padding?: IHistogramBar;
   values: IHistogramDataSet[];
   domain: number[]
   height: number;
@@ -49,9 +50,10 @@ interface IProps {
   bins: string[]
   colorScheme?: string[],
   hoverColorScheme?: string[];
-  config: SpringConfig;
+  config?: SpringConfig;
   visible?: Record<string, boolean>;
   tip?: TTipFunc;
+  direction?: EChartDirection;
 }
 
 const paddings = {
@@ -83,9 +85,10 @@ const Bars: FC<IProps> = ({
   },
   colorScheme = ['#a9a9a9', '#2a5379'],
   hoverColorScheme = ['#a9a9FF', '#2a53FF'],
-  bar = paddings,
+  padding = paddings,
   visible = {},
   tip,
+  direction = EChartDirection.horizontal,
 }) => {
   if (width === 0) {
     return null;
@@ -104,15 +107,15 @@ const Bars: FC<IProps> = ({
     });
   });
 
-  const yScale = scaleLinear()
+  const numericScale = scaleLinear()
     .domain(domain)
-    .rangeRound([0, height]);
+    .rangeRound([0, direction === EChartDirection.horizontal ? width : height]);
 
   // Distribute the bin values across the x axis
-  const xScale = scaleBand().domain(bins);
-  xScale.rangeRound([0, width])
-    .paddingInner(paddingInner(bar))
-    .paddingOuter(paddingOuter(bar))
+  const bandScale = scaleBand().domain(bins);
+  bandScale.rangeRound([0, direction === EChartDirection.horizontal ? height : width])
+    .paddingInner(paddingInner(padding))
+    .paddingOuter(paddingOuter(padding))
     .align(0.5);
 
   const dataLabels = values.map((c) => c.label);
@@ -122,9 +125,9 @@ const Bars: FC<IProps> = ({
   const innerDomain = groupedBarsUseSameXAxisValue({ groupLayout }) ? ['main'] : dataLabels;
   innerScaleBand
     .domain(innerDomain)
-    .rangeRound([0, xScale.bandwidth()])
-    .paddingInner(groupedPaddingInner(bar))
-    .paddingOuter(groupedPaddingOuter(bar)) // Center the bar distribution around the middle;
+    .rangeRound([0, bandScale.bandwidth()])
+    .paddingInner(groupedPaddingInner(padding))
+    .paddingOuter(groupedPaddingOuter(padding)) // Center the bar distribution around the middle;
 
   const transform = `(${left}, ${top})`;
 
@@ -132,9 +135,10 @@ const Bars: FC<IProps> = ({
   const springs = useSprings(dataSets.length, buildBarSprings({
     values,
     height,
+    width,
     dataSets,
-    yScale,
-    xScale,
+    numericScale,
+    bandScale,
     colorScheme,
     innerDomain,
     innerScaleBand,
@@ -142,6 +146,7 @@ const Bars: FC<IProps> = ({
     groupLayout,
     paddings,
     config,
+    direction,
   }));
 
   const ThisTip = tip ?? TipContent;

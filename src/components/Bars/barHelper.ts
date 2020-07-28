@@ -9,25 +9,27 @@ import {
   IHistogramBar,
   IHistogramDataSet,
 } from '../../Histogram';
+import { EChartDirection } from '../../HistogramNativeReact';
 import { getBarWidth } from '../../utils/bars';
 import { ExtendedGroupItem } from './Bars';
 
 /**
- * Calculate the bar's x position based in the axis layout type.
+ * Calculate the bar's band position based in the axis layout type.
+ * This is the offset applied depending on the group layout setting.
+ * x for vertical
+ * y for horizontal
  */
-const xPosition = (
-  innerScaleBand: ScaleBand<string>,
-  innerDomain: string[],
-  groupLayout: EGroupedBarLayout,
-  datasetIndex: number,
-  groupLabel: string,
-  paddings,
+const getBandPosition = (
+  item: ExtendedGroupItem,
+  props: IBarSpringProps,
 ) => {
+  const { innerScaleBand, innerDomain, groupLayout, paddings } = props;
+  const groupLabel = item.groupLabel ?? 'main';
   let bandX = 0;
   switch (groupLayout) {
     case EGroupedBarLayout.OVERLAID:
       // Move to the right for each subsequent dataset to reveal the previous dataset's bars.
-      const overlaidOffset = paddings.overlayMargin * datasetIndex;
+      const overlaidOffset = paddings.overlayMargin * item.datasetIndex;
       bandX = Number(innerScaleBand(String(innerDomain[0]))) + overlaidOffset;
       break;
     case EGroupedBarLayout.STACKED:
@@ -43,15 +45,13 @@ const xPosition = (
   return bandX;
 }
 
-/**
- * Build the from / to spring animation properties to animate the bars.
- */
-export const buildBarSprings = (props: {
+interface IBarSpringProps {
   values: IHistogramDataSet[];
   height: number;
+  width: number;
   dataSets: ExtendedGroupItem[];
-  yScale: ScaleLinear<any, any>;
-  xScale: ScaleBand<string>;
+  numericScale: ScaleLinear<any, any>;
+  bandScale: ScaleBand<string>;
   colorScheme: string[];
   hoverColorScheme?: string[];
   innerDomain: string[];
@@ -59,21 +59,47 @@ export const buildBarSprings = (props: {
   groupLayout: EGroupedBarLayout;
   paddings: IHistogramBar,
   config: SpringConfig,
-}) => {
-  const { config, values, height, dataSets, yScale, xScale, colorScheme, innerDomain, innerScaleBand, groupLayout, paddings, hoverColorScheme } = props;
+  direction: EChartDirection;
+}
+/**
+ * Build the from / to spring animation properties to animate the bars.
+ */
+export const buildBarSprings = (props: IBarSpringProps) => {
+  const { direction, width, config, values, height, dataSets, numericScale, bandScale, colorScheme, innerDomain, innerScaleBand, groupLayout, paddings, hoverColorScheme } = props;
   const s = dataSets.map((item) => {
-    const x = Number(xScale(item.label));
-    const x2 = xPosition(innerScaleBand, innerDomain, groupLayout, item.datasetIndex, item.groupLabel ?? 'main', paddings);
-    const y = yOffset(yScale, groupLayout, height, item, dataSets);
+    const bandValue = Number(bandScale(item.label));
+    const bandPosition = getBandPosition(item, props);
+    const valueOffset = getValueOffset(item, props);
     const itemWidth = getBarWidth(item.datasetIndex, groupLayout, paddings, innerScaleBand);
-    const itemHeight = yScale(item.value);
+    const itemHeight = numericScale(item.value);
+    if (direction === EChartDirection.horizontal) {
+      return {
+        from: {
+          width: 0,
+          fill: colorScheme[item.datasetIndex],
+          hoverFill: hoverColorScheme?.[item.datasetIndex] ?? colorScheme[item.datasetIndex],
+          x: 0,
+          y: bandPosition + bandValue,
+          height: itemWidth,
+        },
+        to: {
+          width: itemHeight,
+          fill: colorScheme[item.datasetIndex],
+          hoverFill: hoverColorScheme?.[item.datasetIndex] ?? colorScheme[item.datasetIndex],
+          x: valueOffset,
+          y: bandPosition + bandValue,
+          height: itemWidth,
+        },
+        config,
+      }
+    }
     return {
 
       from: {
         height: 0,
         fill: colorScheme[item.datasetIndex],
         hoverFill: hoverColorScheme?.[item.datasetIndex] ?? colorScheme[item.datasetIndex],
-        x: x2 + x,
+        x: bandPosition + bandValue,
         y: height,
         width: itemWidth,
       },
@@ -81,8 +107,8 @@ export const buildBarSprings = (props: {
         height: itemHeight,
         fill: colorScheme[item.datasetIndex],
         hoverFill: hoverColorScheme?.[item.datasetIndex] ?? colorScheme[item.datasetIndex],
-        x: x2 + x,
-        y: y,
+        x: bandPosition + bandValue,
+        y: valueOffset,
         width: itemWidth,
       },
       config,
@@ -96,20 +122,26 @@ export const buildBarSprings = (props: {
  * of the bars which should be stacked under the current item.
  * This should provide us with the finishing location for the bar's y position.
  */
-export const yOffset = (
-  yScale: ScaleLinear<any, any>,
-  groupLayout: EGroupedBarLayout,
-  height: number,
+export const getValueOffset = (
   item: ExtendedGroupItem,
-  dataSets: ExtendedGroupItem[],
+  props: IBarSpringProps,
 ) => {
-  if (groupLayout !== EGroupedBarLayout.STACKED) {
-    return height - yScale(item.value);
-  }
-
+  const { direction, numericScale, groupLayout, height, dataSets } = props;
   const offSet = dataSets
     .filter((d) => d.label === item.label)
-    .filter((_, i) => i <= item.datasetIndex)
+    .filter((_, i) => direction === EChartDirection.horizontal ? i < item.datasetIndex : i <= item.datasetIndex)
     .reduce((p, n) => p + n.value, 0);
-  return height - yScale(offSet);
+
+  if (direction === EChartDirection.horizontal) {
+    if (groupLayout !== EGroupedBarLayout.STACKED) {
+      return 0;
+    }
+    return numericScale(offSet);
+  }
+
+  if (groupLayout !== EGroupedBarLayout.STACKED) {
+    return height - numericScale(item.value);
+  }
+
+  return height - numericScale(offSet);
 }

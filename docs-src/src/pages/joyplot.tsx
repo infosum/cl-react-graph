@@ -7,6 +7,7 @@ import {
   Typography,
 } from '@material-ui/core';
 
+import { IHistogramData } from '../../../src';
 import JoyPlot from '../../../src/JoyPlot';
 import Layout from '../components/layout';
 import SEO from '../components/seo';
@@ -14,13 +15,15 @@ import { data2 } from '../data';
 
 const data3 = {
   ...data2,
+  bins: ['Value 2', 'bin 1', 'bin 2', 'bin 3 with a long name', 'bin 4', 'bin 5', 'bin 6', 'bin 7'],
   counts: [{
     ...data2.counts[0],
-    data: [7, 6, 5, 4, 3, 2, 1],
+    data: [2, 15, 6, 6, 4, 3, 2, 1],
     label: 'Data 2',
   }],
   title: 'Plot 2',
 };
+const allData: IHistogramData[] = [data2, data3];
 
 const JoyPlotExample = () => {
   return (
@@ -28,15 +31,14 @@ const JoyPlotExample = () => {
       <SEO title="Joy Plot" description="" />
       <Typography variant="h2">Joy Plot</Typography>
       <div>
-        <Grid container spacing={24}>
+        <Grid container spacing={10}>
           <Grid item xs={6}>
             <Card>
               <CardContent>
                 <JoyPlot
                   data={[data2, data3]}
-                  colorScheme={['rgba(0, 0, 0, 0.5)', '#666']}
-                  width={400} 
-                  height={400} />
+                  width={800}
+                  height={800} />
               </CardContent>
             </Card>
           </Grid>
