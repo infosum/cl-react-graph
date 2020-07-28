@@ -22,8 +22,8 @@ import TornadoChart, {
   ITornadoData,
   ITornadoProps,
 } from '../../../src/Tornado';
-import NativeTornado from '../../../src/TornadoNativeReact';
 import { DeepPartial } from '../../../src/utils/types';
+import NativeTornado from '../../../src/v3/Tornado';
 import JSXToString from '../components/JSXToString';
 import Layout from '../components/layout';
 import SEO from '../components/seo';

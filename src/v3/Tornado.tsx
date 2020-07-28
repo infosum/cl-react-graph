@@ -6,10 +6,10 @@ import {
 import React, { FC } from 'react';
 
 // import Bar from './components/Bar';
-import Base from './components/Base';
-import XAxis from './components/XAxis';
-import YAxis from './components/YAxis';
-import { ITornadoData } from './Tornado';
+import Base from '../components/Base';
+import XAxis from '../components/XAxis';
+import YAxis from '../components/YAxis';
+import { ITornadoData } from '../Tornado';
 
 interface IProps {
   data: ITornadoData;

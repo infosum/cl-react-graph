@@ -14,6 +14,7 @@ import {
   useMakeLine,
 } from '../utils/useMakeLine';
 
+// @TODO look at using https://github.com/pbeshai/d3-interpolate-path instead 
 const Line: FC<IProps & { label: string }> = (props) => {
   const { label = '', line } = props;
   const className = `line-${label.replace(/[^a-z]/gi, '')}`;

@@ -1,18 +1,18 @@
 import React, { FC } from 'react';
 import { SpringConfig } from 'react-spring';
 
-import Bars from './components/Bars/Bars';
-import Base from './components/Base';
-import Grid from './components/Grid';
-import XAxis from './components/XAxis';
-import YAxis from './components/YAxis';
+import Bars from '../components/Bars/Bars';
+import Base from '../components/Base';
+import Grid from '../components/Grid';
+import XAxis from '../components/XAxis';
+import YAxis from '../components/YAxis';
 import {
   EGroupedBarLayout,
   IGrid,
   IHistogramBar,
   IHistogramData,
-} from './Histogram';
-import { useHistogramDomain } from './utils/useDomain';
+} from '../Histogram';
+import { useHistogramDomain } from '../utils/useDomain';
 
 export enum EChartDirection {
   'horizontal',

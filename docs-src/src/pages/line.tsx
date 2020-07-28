@@ -44,6 +44,7 @@ import { Scale } from '../../../src/Histogram';
 import { DeepPartial } from '../../../src/utils/types';
 import { useLineDomain } from '../../../src/utils/useDomain';
 import { useWidth } from '../../../src/utils/useWidth';
+import LineChart2 from '../../../src/v3/LineChart';
 import { data3 } from '../../../test/fixtures';
 import { AxisActions } from '../components/AxisOptions';
 import { CurveSelector } from '../components/CurveSelector';
@@ -247,70 +248,13 @@ const LineExample: FC = () => {
             <Card>
               <CardContent>
                 <h1>React native version</h1>
-                <Base
+                <LineChart2
                   width={800}
-                  height={400}>
-
-                  <ChartGrid
-                    left={100}
-                    height={300}
-                    svgProps={{ ...state.grid.x.style }}
-                    lines={{
-                      vertical: state.grid.y.ticks,
-                      horizontal: state.grid.x.ticks,
-                    }}
-                    width={700} />
-                  {
-                    state.data.map((data) => <> <Line
-                      axis={state.axis}
-                      key={data.label}
-                      label={data.label}
-                      line={data.line}
-                      width={700}
-                      left={100}
-                      height={300}
-                      data={data.data} />
-                      {
-
-                        data.point.show &&
-                        <Points axis={state.axis}
-                          key={data.label}
-                          width={700}
-                          left={100}
-                          height={300}
-                          radius={data.point.radius}
-                          fill={data.point.fill}
-                          stroke={data.point.stroke}
-                          data={data.data} />
-                      }
-
-                      {
-                        data.line.fill.show && <AreaFill
-                          axis={state.axis}
-                          key={data.label}
-                          width={700}
-                          left={100}
-                          height={300}
-                          line={data.line}
-                          data={data.data} />
-                      }
-                    </>)}
-
-                  <YAxis
-                    width={100}
-                    height={300}
-                    values={[0, 1000, 2000]}
-                    scale="linear"
-                    domain={domain}
-                  />
-
-                  <XAxis
-                    width={700}
-                    height={40}
-                    top={300}
-                    left={100} />
-
-                </Base>
+                  height={300}
+                  grid={state.grid}
+                  axis={state.axis}
+                  data={state.data}
+                />
 
                 <LineChart
                   axis={state.axis}
@@ -380,44 +324,42 @@ const LineExample: FC = () => {
                 }
                 {
                   tab === 1 && <TabContainer>
-                    <Card>
-                      <CardContent>
-                        <Typography variant="h6" gutterBottom>Line</Typography>
-                        <Grid container spacing={10}>
-                          <Grid item xs={6}>
-                            <CurveSelector
-                              value={'curveCatmullRom'}
-                              onChange={(curve) => dispatch({ type: 'setCurve', curve, index: 0 })} />
-                          </Grid>
-                          <Grid item xs={6}>
-                            <ColorPicker
-                              value={state.data[0].line.stroke}
-                              label="Stroke color"
-                              onChange={(color) => dispatch({ type: 'setStroke', stroke: color, index: 0 })} />
-                          </Grid>
-                          <Grid item xs={6}>
-                            <TextField
-                              id="strokeDashArray"
-                              value={state.data[0].line.strokeDashArray}
-                              label="Stroke dash array"
-                              onChange={(e) => dispatch({ type: 'setStrokeDashArray', index: 0, dash: e.target.value })}
-                            />
-                          </Grid>
-                          <Grid item xs={6}>
-                            <TextField
-                              id="strokeDashOffset"
-                              value={state.data[0].line.strokeDashOffset}
-                              label="Stroke dash offset"
-                              onChange={(e) => dispatch({
-                                index: 0,
-                                offset: Number(e.target.value),
-                                type: 'strokeDashOffset',
-                              })}
-                            />
-                          </Grid>
-                        </Grid>
-                      </CardContent>
-                    </Card>
+
+                    <Typography variant="h6" gutterBottom>Line</Typography>
+                    <Grid container spacing={10}>
+                      <Grid item xs={6}>
+                        <CurveSelector
+                          value={'curveCatmullRom'}
+                          onChange={(curve) => dispatch({ type: 'setCurve', curve, index: 0 })} />
+                      </Grid>
+                      <Grid item xs={6}>
+                        <ColorPicker
+                          value={state.data[0].line.stroke}
+                          label="Stroke color"
+                          onChange={(color) => dispatch({ type: 'setStroke', stroke: color, index: 0 })} />
+                      </Grid>
+                      <Grid item xs={6}>
+                        <TextField
+                          id="strokeDashArray"
+                          value={state.data[0].line.strokeDashArray}
+                          label="Stroke dash array"
+                          onChange={(e) => dispatch({ type: 'setStrokeDashArray', index: 0, dash: e.target.value })}
+                        />
+                      </Grid>
+                      <Grid item xs={6}>
+                        <TextField
+                          id="strokeDashOffset"
+                          value={state.data[0].line.strokeDashOffset}
+                          label="Stroke dash offset"
+                          onChange={(e) => dispatch({
+                            index: 0,
+                            offset: Number(e.target.value),
+                            type: 'strokeDashOffset',
+                          })}
+                        />
+                      </Grid>
+                    </Grid>
+
                     <br />
 
                     <Typography variant="h6" gutterBottom>Point</Typography>
@@ -474,38 +416,36 @@ const LineExample: FC = () => {
                     </Grid>
 
                     <br />
-                    <Card>
-                      <CardContent>
 
-                        <Typography variant="h6" gutterBottom>Fill</Typography>
-                        <Grid container spacing={10}>
-                          <Grid item xs={6}>
-                            <FormControlLabel
-                              control={
-                                <Switch
-                                  checked={state.data[0].line.fill.show}
-                                  color="primary"
-                                  onChange={(_, value) => {
-                                    dispatch({ type: 'lineFillShow', show: value, index: 0 });
-                                  }}
-                                />
-                              }
-                              label="Fill under line"
+
+                    <Typography variant="h6" gutterBottom>Fill</Typography>
+                    <Grid container spacing={10}>
+                      <Grid item xs={6}>
+                        <FormControlLabel
+                          control={
+                            <Switch
+                              checked={state.data[0].line.fill.show}
+                              color="primary"
+                              onChange={(_, value) => {
+                                dispatch({ type: 'lineFillShow', show: value, index: 0 });
+                              }}
                             />
-                          </Grid>
-                          <Grid item xs={6}>
-                            <FormGroup>
-                              <ColorPicker
-                                id="lineFillColor"
-                                value={state.data[0].line.fill.fill}
-                                label="Fill Color"
-                                onChange={(color) => dispatch({ type: 'lineFillColor', fill: color, index: 0 })}
-                              />
-                            </FormGroup>
-                          </Grid>
-                        </Grid>
-                      </CardContent>
-                    </Card>
+                          }
+                          label="Fill under line"
+                        />
+                      </Grid>
+                      <Grid item xs={6}>
+                        <FormGroup>
+                          <ColorPicker
+                            id="lineFillColor"
+                            value={state.data[0].line.fill.fill}
+                            label="Fill Color"
+                            onChange={(color) => dispatch({ type: 'lineFillColor', fill: color, index: 0 })}
+                          />
+                        </FormGroup>
+                      </Grid>
+                    </Grid>
+
                   </TabContainer>
                 }
                 {

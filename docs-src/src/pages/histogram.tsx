@@ -25,12 +25,12 @@ import Histogram, {
   IHistogramBar,
   IHistogramData,
 } from '../../../src/Histogram';
-import HistogramReact, { EChartDirection } from '../../../src/HistogramNativeReact';
 import Legend from '../../../src/Legend';
 import { outputSvg } from '../../../src/utils/outputSvg';
 import { DeepPartial } from '../../../src/utils/types';
 import { useHistogramDomain } from '../../../src/utils/useDomain';
 import { useWidth } from '../../../src/utils/useWidth';
+import HistogramReact, { EChartDirection } from '../../../src/v3/Histogram';
 import {
   AxisActions,
   AxisOptionsFactory,
