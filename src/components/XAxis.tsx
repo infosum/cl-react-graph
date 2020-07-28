@@ -1,3 +1,4 @@
+import { extent } from 'd3-array';
 import {
   ScaleBand,
   scaleBand,
@@ -13,10 +14,19 @@ import {
   paddingInner,
   paddingOuter,
 } from '../utils/bars';
+import { isOfType } from '../utils/isOfType';
 import {
   defaultPath,
   IAxis,
+  TAxisValue,
 } from './YAxis';
+
+const positionTick = (value: TAxisValue, scale: any) => {
+  const offset = isOfType<ScaleBand<any>>(scale, 'paddingInner')
+    ? scale.bandwidth() / 2
+    : 0;
+  return `(${scale(value) + offset}, 0)`
+}
 
 const XAxis: FC<IAxis> = ({
   values = [],
@@ -30,20 +40,32 @@ const XAxis: FC<IAxis> = ({
   domain,
   padding,
 }) => {
-
-  const xScale = scale === 'linear'
-    ? scaleLinear().domain(domain as number[] || [Math.min(...values as number[]), Math.max(...values as number[])])
+  if (scale === 'linear' && typeof values[0] === 'string') {
+    throw new Error('Linear axis can not accept string values');
+  }
+  if (scale === 'band' && !padding) {
+    console.warn('band scale provided without padding settings');
+  }
+  const Scale = scale === 'linear'
+    ? scaleLinear().domain(extent([0, ...domain as number[]]) || extent(values))
     : scaleBand().domain(values as string[])
-      .paddingInner(padding ? paddingInner(padding) : 0.1)
+
+  if (isOfType<ScaleBand<any>>(Scale, 'paddingInner')) {
+    Scale.paddingInner(padding ? paddingInner(padding) : 0.1)
       .paddingOuter(padding ? paddingOuter(padding) : 0.2)
       .align(0.5)
-  xScale.rangeRound([0, width])
+  }
+  Scale.rangeRound([0, width])
 
   const transform = `${left}, ${top}`;
 
   const pathD = `M0,0 L${width},0`;
   const axisPath = { ...defaultPath, ...(path ?? {}) };
   const { fill, opacity, stroke, strokeOpacity, strokeWidth } = axisPath;
+
+  const ticks: any[] = (values.length === 0 && scale === 'linear')
+    ? Scale.domain()
+    : values;
 
   return (
     <g className="x-axis"
@@ -63,14 +85,9 @@ const XAxis: FC<IAxis> = ({
       ></path>
 
       {
-        values.map((v, i) => {
-          const x = scale === 'linear'
-            ? (xScale as ScaleLinear<any, any>)(Number(v))
-            : (xScale as ScaleBand<any>)(String(v));
-          const offset = scale === 'linear'
-            ? 0
-            : (xScale as ScaleBand<any>).bandwidth() / 2;
-          const tickOffset = `(${x + offset}, 0)`
+        ticks.map((v, i) => {
+          const tickOffset = positionTick(v, Scale);
+
           return (
             <g
               key={v}
@@ -88,7 +105,11 @@ const XAxis: FC<IAxis> = ({
                 strokeWidth="1">
               </line>
 
-              <text fill={stroke} dy="1em">{v}</text>
+              <text
+                fill={stroke}
+                dy="1em">
+                {v}
+              </text>
             </g>
           )
         })

@@ -36,7 +36,6 @@ const JoyPlot: FC<IProps> = ({
     data,
     height,
   })
-  console.log('domain', domain);
   return (
     <Base
       width={width}

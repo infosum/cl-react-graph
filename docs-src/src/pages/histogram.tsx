@@ -18,11 +18,6 @@ import {
 } from '@material-ui/core';
 
 import { HorizontalHistogram } from '../../../src';
-import Bars from '../../../src/components/Bars/Bars';
-import Base from '../../../src/components/Base';
-import ChartGrid from '../../../src/components/Grid';
-import XAxis from '../../../src/components/XAxis';
-import YAxis from '../../../src/components/YAxis';
 import Histogram, {
   EGroupedBarLayout,
   IAxes,
@@ -30,7 +25,7 @@ import Histogram, {
   IHistogramBar,
   IHistogramData,
 } from '../../../src/Histogram';
-import HistogramReact from '../../../src/HistogramNativeReact';
+import HistogramReact, { EChartDirection } from '../../../src/HistogramNativeReact';
 import Legend from '../../../src/Legend';
 import { outputSvg } from '../../../src/utils/outputSvg';
 import { DeepPartial } from '../../../src/utils/types';
@@ -140,7 +135,6 @@ export function gridReducer<S extends any, A extends any>(state: S, action: A): 
     default:
       return state;
   }
-  state.axis.x['stroke-opacity']
 }
 
 // Unclear why but you can't import a reducer in and have it update state???
@@ -335,7 +329,7 @@ const HistogramExample = () => {
     bins: d.bins,
     values: d.counts
   });
-
+  console.log('state', state.chartType);
   return (
     <Layout>
       <SEO title="Histogram" description="" />
@@ -348,57 +342,21 @@ const HistogramExample = () => {
             <Card>
               <CardContent ref={ref}>
                 <h1>React only</h1>
-                {/* <HistogramReact
+                <HistogramReact
+                  animation={{
+                    duration: state.duration,
+                  }}
+                  direction={state.chartType === 'HorizontalHistogram' ? EChartDirection.horizontal : EChartDirection.vertical}
                   data={d}
-                /> */}
+                  height={400}
+                  grid={state.grid}
+                  groupLayout={state.groupLayout}
+                  width={w}
+                />
 
                 <Button onClick={() => setDataIndex(dataIndex === 1 ? 0 : 1)}>
                   toggle data
                 </Button>
-
-                <Base
-                  width={w + 30} // @TODO work out why without this the bars exceed the chart
-                  height={400}>
-
-                  <ChartGrid
-                    left={100}
-                    height={300}
-                    svgProps={{ ...state.grid.x.style }}
-                    lines={{
-                      vertical: state.grid.y.ticks,
-                      horizontal: state.grid.x.ticks,
-                    }}
-                    width={w - 100} />
-
-                  <Bars
-                    left={100}
-                    height={300}
-                    width={w - 100}
-                    bar={state.bar}
-                    groupLayout={state.groupLayout}
-                    values={d.counts}
-                    config={{
-                      duration: state.duration,
-                    }}
-                    bins={d.bins}
-                    domain={domain}
-                    visible={visible}
-                  />
-                  <YAxis
-                    width={100}
-                    height={300}
-                    values={[0, 45000, 90000]}
-                    domain={domain}
-                  />
-                  <XAxis
-                    width={w - 100}
-                    height={40}
-                    top={300}
-                    padding={state.bar}
-                    left={100}
-                    values={d.bins} />
-
-                </Base>
 
                 <Legend
                   theme={theme}

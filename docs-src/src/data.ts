@@ -25,7 +25,7 @@ export const grid: IGrid = {
       'stroke': '#ccc',
       'stroke-opacity': 0.4,
     },
-    ticks: 5,
+    ticks: 6,
   },
 };
 

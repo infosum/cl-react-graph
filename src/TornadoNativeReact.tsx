@@ -69,7 +69,6 @@ const Tornado: FC<IProps> = ({
   //       scale={xScale} />
   //     {
   //       data.counts.map((count) => {
-  //         console.log('count', count);
   //         const bars = count.data[0].map((d, i) => {
   //           return <Bar key={d}
   //             width={d}
