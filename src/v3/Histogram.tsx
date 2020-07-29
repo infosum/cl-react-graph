@@ -63,9 +63,16 @@ const Histogram: FC<IProps> = ({
   tip,
   visible,
   width,
-  xAxisHeight = 60,
-  yAxisWidth = 100,
+  xAxisHeight,
+  yAxisWidth,
 }) => {
+  if (!yAxisWidth) {
+    yAxisWidth = direction === EChartDirection.vertical ? 40 : 100;
+  }
+  if (!xAxisHeight) {
+    xAxisHeight = direction === EChartDirection.vertical ? 100 : 40;
+  }
+
   // TODO - do we want a chart context to contain the bounding x/y axis. 
   // Once we've build up standard components it would be good to asses this.
   if (width === 0) {
