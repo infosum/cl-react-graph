@@ -30,7 +30,7 @@ const positionTick = (value: TAxisValue, scale: any) => {
 }
 
 const XAxis: FC<IAxis> = ({
-  binLabelFormat,
+  labelFormat,
   values = [],
   tickSize = 2,
   width,
@@ -113,7 +113,7 @@ const XAxis: FC<IAxis> = ({
               <text
                 fill={tickFormat.stroke}
                 dy="1em">
-                {binLabelFormat ? binLabelFormat('x', v, i) : v}
+                {labelFormat ? labelFormat('x', v, i) : v}
               </text>
             </g>
           )

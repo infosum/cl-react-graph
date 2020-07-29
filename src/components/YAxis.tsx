@@ -18,6 +18,7 @@ import {
 import { isOfType } from '../utils/isOfType';
 
 export type TAxisValue = string | number;
+export type TAxisLabelFormat = (axis: 'x' | 'y', bin: string, i: number) => string;
 
 export interface IAxis {
   stroke?: string;
@@ -31,7 +32,7 @@ export interface IAxis {
   domain?: TAxisValue[];
   left?: number;
   padding?: IHistogramBar;
-  binLabelFormat?: (axis: 'x' | 'y', bin: string, i: number) => string;
+  labelFormat?: TAxisLabelFormat;
   tickFormat?: {
     stroke: string;
   }
@@ -44,7 +45,7 @@ export const defaultTickFormat = {
 export const defaultPath: SVGAttributes<SVGPathElement> = {
   opacity: 1,
   fill: 'none',
-  stroke: '#666',
+  stroke: '#a9a9a9',
   strokeOpacity: '1',
   strokeWidth: '1',
 }
@@ -60,7 +61,7 @@ const positionTick = (value: TAxisValue, scale: any, height: number) => {
 }
 
 const YAxis: FC<IAxis> = ({
-  binLabelFormat,
+  labelFormat,
   values = [],
   tickSize = 2,
   width,
@@ -137,7 +138,7 @@ const YAxis: FC<IAxis> = ({
                 fill={tickFormat.stroke}
                 x={`-${tickSize + 10}`}
                 dy="0.32em">
-                {binLabelFormat ? binLabelFormat('y', v, i) : v}
+                {labelFormat ? labelFormat('y', v, i) : v}
               </text>
             </g>
           )

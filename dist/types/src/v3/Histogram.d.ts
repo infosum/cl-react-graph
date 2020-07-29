@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import { SpringConfig } from 'react-spring';
 import { TTipFunc } from '../components/ToolTip';
+import { TAxisLabelFormat } from '../components/YAxis';
 import { EGroupedBarLayout, IGrid, IHistogramBar, IHistogramData } from '../Histogram';
 export declare enum EChartDirection {
     'horizontal' = 0,
@@ -8,7 +9,7 @@ export declare enum EChartDirection {
 }
 interface IProps {
     animation?: SpringConfig;
-    binLabelFormat?: (bin: string) => string;
+    axisLabelFormat?: TAxisLabelFormat;
     colorScheme?: string[];
     data: IHistogramData;
     direction?: EChartDirection;

@@ -7,7 +7,7 @@ import Base from '../components/Base';
 import Grid from '../components/Grid';
 import { TTipFunc } from '../components/ToolTip';
 import XAxis from '../components/XAxis';
-import YAxis from '../components/YAxis';
+import YAxis, { TAxisLabelFormat } from '../components/YAxis';
 import {
   EGroupedBarLayout,
   IGrid,
@@ -35,7 +35,7 @@ const defaultPadding: IHistogramBar = {
 
 interface IProps {
   animation?: SpringConfig;
-  binLabelFormat?: (bin: string) => string;
+  axisLabelFormat?: TAxisLabelFormat;
   colorScheme?: string[];
   data: IHistogramData;
   direction?: EChartDirection;
@@ -52,7 +52,7 @@ interface IProps {
 
 const Histogram: FC<IProps> = ({
   animation,
-  binLabelFormat,
+  axisLabelFormat,
   colorScheme = schemeSet3,
   data,
   direction = EChartDirection.vertical,
@@ -68,7 +68,9 @@ const Histogram: FC<IProps> = ({
 }) => {
   // TODO - do we want a chart context to contain the bounding x/y axis. 
   // Once we've build up standard components it would be good to asses this.
-
+  if (width === 0) {
+    return null;
+  }
   const domain = useHistogramDomain({
     groupLayout: groupLayout,
     bins: data.bins,
@@ -111,7 +113,7 @@ const Histogram: FC<IProps> = ({
       <YAxis
         width={yAxisWidth}
         height={height - xAxisHeight}
-        binLabelFormat={binLabelFormat}
+        labelFormat={axisLabelFormat}
         scale={direction === EChartDirection.horizontal ? 'band' : 'linear'}
         values={direction === EChartDirection.horizontal ? data.bins : undefined}
         domain={direction === EChartDirection.horizontal ? undefined : domain}
@@ -125,7 +127,7 @@ const Histogram: FC<IProps> = ({
         top={height - xAxisHeight}
         padding={padding}
         left={yAxisWidth}
-        binLabelFormat={binLabelFormat}
+        labelFormat={axisLabelFormat}
         scale={direction === EChartDirection.horizontal ? 'linear' : 'band'}
         values={direction === EChartDirection.horizontal ? undefined : data.bins}
         domain={direction === EChartDirection.horizontal ? domain : undefined}

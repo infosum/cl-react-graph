@@ -153,7 +153,6 @@ const Bars: FC<IProps> = ({
     direction,
   }));
 
-  console.log('Bars 2 -> tip', tip);
   const ThisTip = tip ?? TipContent;
   const refs: any[] = [];
   return (

@@ -1,6 +1,7 @@
 import { FC, SVGAttributes } from 'react';
 import { IHistogramBar } from '../Histogram';
 export declare type TAxisValue = string | number;
+export declare type TAxisLabelFormat = (axis: 'x' | 'y', bin: string, i: number) => string;
 export interface IAxis {
     stroke?: string;
     height: number;
@@ -13,7 +14,7 @@ export interface IAxis {
     domain?: TAxisValue[];
     left?: number;
     padding?: IHistogramBar;
-    binLabelFormat?: (bin: string, i: number) => string;
+    labelFormat?: TAxisLabelFormat;
     tickFormat?: {
         stroke: string;
     };
