@@ -31,7 +31,7 @@ export interface IAxis {
   domain?: TAxisValue[];
   left?: number;
   padding?: IHistogramBar;
-  binLabelFormat?: (bin: string, i: number) => string;
+  binLabelFormat?: (axis: 'x' | 'y', bin: string, i: number) => string;
   tickFormat?: {
     stroke: string;
   }
@@ -137,7 +137,7 @@ const YAxis: FC<IAxis> = ({
                 fill={tickFormat.stroke}
                 x={`-${tickSize + 10}`}
                 dy="0.32em">
-                {binLabelFormat ? binLabelFormat(v, i) : v}
+                {binLabelFormat ? binLabelFormat('y', v, i) : v}
               </text>
             </g>
           )

@@ -13,7 +13,14 @@ export interface IAxis {
     domain?: TAxisValue[];
     left?: number;
     padding?: IHistogramBar;
+    binLabelFormat?: (bin: string, i: number) => string;
+    tickFormat?: {
+        stroke: string;
+    };
 }
+export declare const defaultTickFormat: {
+    stroke: string;
+};
 export declare const defaultPath: SVGAttributes<SVGPathElement>;
 declare const YAxis: FC<IAxis>;
 export default YAxis;

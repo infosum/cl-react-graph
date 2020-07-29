@@ -113,7 +113,7 @@ const XAxis: FC<IAxis> = ({
               <text
                 fill={tickFormat.stroke}
                 dy="1em">
-                {binLabelFormat ? binLabelFormat(v, i) : v}
+                {binLabelFormat ? binLabelFormat('x', v, i) : v}
               </text>
             </g>
           )
