@@ -31,6 +31,14 @@ export interface IAxis {
   domain?: TAxisValue[];
   left?: number;
   padding?: IHistogramBar;
+  binLabelFormat?: (bin: string, i: number) => string;
+  tickFormat?: {
+    stroke: string;
+  }
+}
+
+export const defaultTickFormat = {
+  stroke: '#a9a9a9',
 }
 
 export const defaultPath: SVGAttributes<SVGPathElement> = {
@@ -52,6 +60,7 @@ const positionTick = (value: TAxisValue, scale: any, height: number) => {
 }
 
 const YAxis: FC<IAxis> = ({
+  binLabelFormat,
   values = [],
   tickSize = 2,
   width,
@@ -61,6 +70,7 @@ const YAxis: FC<IAxis> = ({
   top = 0,
   domain,
   padding,
+  tickFormat = defaultTickFormat,
 }) => {
   if (scale === 'linear' && typeof values[0] === 'string') {
     throw new Error('Linear axis can not accept string values');
@@ -124,10 +134,10 @@ const YAxis: FC<IAxis> = ({
               </line>
 
               <text
-                fill={stroke}
+                fill={tickFormat.stroke}
                 x={`-${tickSize + 10}`}
                 dy="0.32em">
-                {v}
+                {binLabelFormat ? binLabelFormat(v, i) : v}
               </text>
             </g>
           )

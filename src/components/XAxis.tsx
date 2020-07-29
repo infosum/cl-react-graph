@@ -17,6 +17,7 @@ import {
 import { isOfType } from '../utils/isOfType';
 import {
   defaultPath,
+  defaultTickFormat,
   IAxis,
   TAxisValue,
 } from './YAxis';
@@ -29,6 +30,7 @@ const positionTick = (value: TAxisValue, scale: any) => {
 }
 
 const XAxis: FC<IAxis> = ({
+  binLabelFormat,
   values = [],
   tickSize = 2,
   width,
@@ -39,6 +41,7 @@ const XAxis: FC<IAxis> = ({
   scale = 'band',
   domain,
   padding,
+  tickFormat = defaultTickFormat,
 }) => {
   if (scale === 'linear' && typeof values[0] === 'string') {
     throw new Error('Linear axis can not accept string values');
@@ -108,9 +111,9 @@ const XAxis: FC<IAxis> = ({
               </line>
 
               <text
-                fill={stroke}
+                fill={tickFormat.stroke}
                 dy="1em">
-                {v}
+                {binLabelFormat ? binLabelFormat(v, i) : v}
               </text>
             </g>
           )
