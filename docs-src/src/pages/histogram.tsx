@@ -17,7 +17,10 @@ import {
   Typography,
 } from '@material-ui/core';
 
-import { HorizontalHistogram } from '../../../src';
+import {
+  HorizontalHistogram,
+  TTipFunc,
+} from '../../../src';
 import Histogram, {
   EGroupedBarLayout,
   IAxes,
@@ -28,9 +31,8 @@ import Histogram, {
 import Legend from '../../../src/Legend';
 import { outputSvg } from '../../../src/utils/outputSvg';
 import { DeepPartial } from '../../../src/utils/types';
-import { useHistogramDomain } from '../../../src/utils/useDomain';
 import { useWidth } from '../../../src/utils/useWidth';
-import HistogramReact, { EChartDirection } from '../../../src/v3/Histogram';
+import Histogram2, { EChartDirection } from '../../../src/v3/Histogram';
 import {
   AxisActions,
   AxisOptionsFactory,
@@ -49,7 +51,6 @@ import {
   grid,
   smallAnnotationsData,
   smallData,
-  smallData2,
   theme,
 } from '../data';
 
@@ -260,6 +261,22 @@ function reducer(state: IInitialState, action: Actions): IInitialState {
   }
 }
 
+const CustomTipContent: TTipFunc = ({ item }) => <>
+  <rect x={12} y={-12} width={150} height={50} rx={3} ry={3} fill='#fff'>
+  </rect>
+  <foreignObject x="12" y="-12" width="160" height="65">
+    <div xmlns="http://www.w3.org/1999/xhtml" style={{ paddingLeft: '10px', marginTop: '10px', height: '45px' }}>
+      {item.groupLabel}: {item.label}<br /> {item.value}
+    </div>
+  </foreignObject>
+</>
+
+/**
+ * 
+ * @param datum  <strong>CUSTOM</strong>
+        
+ */
+
 export const dataToSpreadSheet = (datum: IHistogramData): any => {
   const spreadSheetData: any = [];
 
@@ -324,11 +341,6 @@ const HistogramExample = () => {
   />;
   const [dataIndex, setDataIndex] = useState(0);
   const d = dataIndex === 0 ? smallData : data;
-  const domain = useHistogramDomain({
-    groupLayout: state.groupLayout,
-    bins: d.bins,
-    values: d.counts
-  });
 
   return (
     <Layout>
@@ -342,7 +354,7 @@ const HistogramExample = () => {
             <Card>
               <CardContent ref={ref}>
                 <h1>React only</h1>
-                <HistogramReact
+                <Histogram2
                   animation={{
                     duration: state.duration,
                   }}
@@ -352,6 +364,8 @@ const HistogramExample = () => {
                   grid={state.grid}
                   groupLayout={state.groupLayout}
                   width={w}
+
+                  tip={CustomTipContent}
                 />
 
                 <Button onClick={() => setDataIndex(dataIndex === 1 ? 0 : 1)}>

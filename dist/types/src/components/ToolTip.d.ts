@@ -1,5 +1,5 @@
 /// <reference types="react" />
-import { ExtendedGroupItem } from './Bars';
+import { ExtendedGroupItem } from './Bars/Bars';
 export declare type TTipFunc = (props: {
     item: ExtendedGroupItem;
 }) => JSX.Element;

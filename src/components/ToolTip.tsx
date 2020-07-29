@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { ExtendedGroupItem } from './Bars';
+import { ExtendedGroupItem } from './Bars/Bars';
 
 export type TTipFunc = (props: {
   item: ExtendedGroupItem,

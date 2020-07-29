@@ -52,8 +52,8 @@ interface IBarSpringProps {
   dataSets: ExtendedGroupItem[];
   numericScale: ScaleLinear<any, any>;
   bandScale: ScaleBand<string>;
-  colorScheme: string[];
-  hoverColorScheme?: string[];
+  colorScheme: readonly string[];
+  hoverColorScheme?: readonly string[];
   innerDomain: string[];
   innerScaleBand: ScaleBand<string>;
   groupLayout: EGroupedBarLayout;

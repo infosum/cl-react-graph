@@ -1,3 +1,4 @@
+import { color } from 'd3-color';
 import {
   scaleBand,
   scaleLinear,
@@ -26,11 +27,11 @@ import {
   paddingOuter,
 } from '../../utils/bars';
 import { EChartDirection } from '../../v3/Histogram';
-import { buildBarSprings } from './barHelper';
 import {
   TipContent,
   TTipFunc,
-} from './ToolTip';
+} from '../ToolTip';
+import { buildBarSprings } from './barHelper';
 
 enum EGroupedBarLayout {
   GROUPED,
@@ -48,8 +49,8 @@ interface IProps {
   top?: number;
   groupLayout?: EGroupedBarLayout;
   bins: string[]
-  colorScheme?: string[],
-  hoverColorScheme?: string[];
+  colorScheme?: readonly string[],
+  hoverColorScheme?: readonly string[];
   config?: SpringConfig;
   visible?: Record<string, boolean>;
   tip?: TTipFunc;
@@ -84,7 +85,7 @@ const Bars: FC<IProps> = ({
     duration: 250,
   },
   colorScheme = ['#a9a9a9', '#2a5379'],
-  hoverColorScheme = ['#a9a9FF', '#2a53FF'],
+  hoverColorScheme,
   padding = paddings,
   visible = {},
   tip,
@@ -92,6 +93,9 @@ const Bars: FC<IProps> = ({
 }) => {
   if (width === 0) {
     return null;
+  }
+  if (!hoverColorScheme) {
+    hoverColorScheme = colorScheme.map((c) => color(c)?.brighter(0.1).toString()) as readonly string[];
   }
   const dataSets: ExtendedGroupItem[] = [];
 
@@ -149,6 +153,7 @@ const Bars: FC<IProps> = ({
     direction,
   }));
 
+  console.log('Bars 2 -> tip', tip);
   const ThisTip = tip ?? TipContent;
   const refs: any[] = [];
   return (

@@ -1,9 +1,11 @@
+import { schemeSet3 } from 'd3-scale-chromatic';
 import React, { FC } from 'react';
 import { SpringConfig } from 'react-spring';
 
 import Bars from '../components/Bars/Bars';
 import Base from '../components/Base';
 import Grid from '../components/Grid';
+import { TTipFunc } from '../components/ToolTip';
 import XAxis from '../components/XAxis';
 import YAxis from '../components/YAxis';
 import {
@@ -33,12 +35,14 @@ const defaultPadding: IHistogramBar = {
 
 interface IProps {
   animation?: SpringConfig;
+  colorScheme?: string[];
   data: IHistogramData;
   direction?: EChartDirection;
   grid?: IGrid;
   groupLayout?: EGroupedBarLayout;
   height: number;
   padding?: IHistogramBar;
+  tip?: TTipFunc;
   visible?: Record<string, boolean>;
   width: number;
   xAxisHeight?: number;
@@ -46,15 +50,17 @@ interface IProps {
 }
 
 const Histogram: FC<IProps> = ({
+  animation,
+  colorScheme = schemeSet3,
   data,
   direction = EChartDirection.horizontal,
   grid,
   groupLayout = EGroupedBarLayout.GROUPED,
   height,
-  width,
-  animation,
   padding = defaultPadding,
+  tip,
   visible,
+  width,
   xAxisHeight = 60,
   yAxisWidth = 100,
 }) => {
@@ -85,6 +91,7 @@ const Histogram: FC<IProps> = ({
       }
 
       <Bars
+        colorScheme={colorScheme}
         left={yAxisWidth}
         height={height - xAxisHeight}
         width={width - yAxisWidth}
@@ -95,6 +102,7 @@ const Histogram: FC<IProps> = ({
         bins={data.bins}
         direction={direction}
         domain={domain}
+        tip={tip}
         visible={visible}
       />
 
