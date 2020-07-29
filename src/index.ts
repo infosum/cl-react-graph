@@ -33,7 +33,7 @@ export { default as Grid } from './components/Grid';
 export { default as XAxis } from './components/XAxis';
 export { default as YAxis } from './components/YAxis';
 export { default as JoyPlot } from './JoyPlot';
-export { default as Histogram2 } from './v3/Histogram';
+export { default as Histogram2, EChartDirection } from './v3/Histogram';
 export { default as LineChart2 } from './v3/LineChart';
 export { useWidth } from './utils/useWidth';
 export { useMakeLine } from './utils/useMakeLine';

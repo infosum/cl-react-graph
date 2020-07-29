@@ -8,6 +8,7 @@ export declare enum EChartDirection {
 }
 interface IProps {
     animation?: SpringConfig;
+    binLabelFormat?: (bin: string) => string;
     colorScheme?: string[];
     data: IHistogramData;
     direction?: EChartDirection;

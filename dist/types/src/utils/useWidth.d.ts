@@ -1,1 +1,1 @@
-export declare const useWidth: (origWidth: string | number) => any;
+export declare const useWidth: (origWidth: string | number) => any[];

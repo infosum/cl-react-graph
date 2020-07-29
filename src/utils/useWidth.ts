@@ -12,14 +12,14 @@ export const useWidth = (origWidth: string | number) => {
     debounce: 20,
     polyfill: ResizeObserver,
   });
-  const [r, setR] = useState<any>([ref, width]);
+  const [r, setR] = useState<any>(width);
   useEffect(() => {
     const w = typeof origWidth === 'number'
       ? origWidth
       : origWidth.includes('%')
         ? width * (parseInt(origWidth, 10) / 100)
         : parseInt(origWidth, 10);
-    setR([ref, w]);
-  }, [origWidth]);
-  return r;
+    setR(w);
+  }, [origWidth, width]);
+  return [ref, r];
 }

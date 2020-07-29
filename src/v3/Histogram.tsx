@@ -35,6 +35,7 @@ const defaultPadding: IHistogramBar = {
 
 interface IProps {
   animation?: SpringConfig;
+  binLabelFormat?: (bin: string) => string;
   colorScheme?: string[];
   data: IHistogramData;
   direction?: EChartDirection;
@@ -51,9 +52,10 @@ interface IProps {
 
 const Histogram: FC<IProps> = ({
   animation,
+  binLabelFormat,
   colorScheme = schemeSet3,
   data,
-  direction = EChartDirection.horizontal,
+  direction = EChartDirection.vertical,
   grid,
   groupLayout = EGroupedBarLayout.GROUPED,
   height,
@@ -64,6 +66,9 @@ const Histogram: FC<IProps> = ({
   xAxisHeight = 60,
   yAxisWidth = 100,
 }) => {
+  const binLabels = binLabelFormat
+    ? data.bins.map((b) => binLabelFormat(b))
+    : data.bins;
   // TODO - do we want a chart context to contain the bounding x/y axis. 
   // Once we've build up standard components it would be good to asses this.
 
@@ -110,7 +115,7 @@ const Histogram: FC<IProps> = ({
         width={yAxisWidth}
         height={height - xAxisHeight}
         scale={direction === EChartDirection.horizontal ? 'band' : 'linear'}
-        values={direction === EChartDirection.horizontal ? data.bins : undefined}
+        values={direction === EChartDirection.horizontal ? binLabels : undefined}
         domain={direction === EChartDirection.horizontal ? undefined : domain}
 
         padding={padding}
@@ -123,7 +128,7 @@ const Histogram: FC<IProps> = ({
         padding={padding}
         left={yAxisWidth}
         scale={direction === EChartDirection.horizontal ? 'linear' : 'band'}
-        values={direction === EChartDirection.horizontal ? undefined : data.bins}
+        values={direction === EChartDirection.horizontal ? undefined : binLabels}
         domain={direction === EChartDirection.horizontal ? domain : undefined}
       />
 
