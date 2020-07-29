@@ -1,4 +1,4 @@
-import { ScaleOrdinal } from 'd3';
+import { ScaleOrdinal } from 'd3-scale';
 import { select } from 'd3-selection';
 
 import { IGroupDataItem } from '../BaseHistogramD3';

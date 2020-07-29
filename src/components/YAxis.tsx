@@ -18,6 +18,7 @@ import {
 import { isOfType } from '../utils/isOfType';
 
 export type TAxisValue = string | number;
+export type TAxisLabelFormat = (axis: 'x' | 'y', bin: string, i: number) => string;
 
 export interface IAxis {
   stroke?: string;
@@ -31,12 +32,20 @@ export interface IAxis {
   domain?: TAxisValue[];
   left?: number;
   padding?: IHistogramBar;
+  labelFormat?: TAxisLabelFormat;
+  tickFormat?: {
+    stroke: string;
+  }
+}
+
+export const defaultTickFormat = {
+  stroke: '#a9a9a9',
 }
 
 export const defaultPath: SVGAttributes<SVGPathElement> = {
   opacity: 1,
   fill: 'none',
-  stroke: '#666',
+  stroke: '#a9a9a9',
   strokeOpacity: '1',
   strokeWidth: '1',
 }
@@ -45,11 +54,14 @@ const positionTick = (value: TAxisValue, scale: any, height: number) => {
   const offset = isOfType<ScaleBand<any>>(scale, 'paddingInner')
     ? Math.floor(scale.bandwidth() / 2)
     : 0;
-  const v = height - (scale(value) + offset);
+  const v = isOfType<ScaleBand<any>>(scale, 'paddingInner')
+    ? height - (Number(scale(value)) + offset)
+    : scale(value);
   return `(0, ${v})`
 }
 
 const YAxis: FC<IAxis> = ({
+  labelFormat,
   values = [],
   tickSize = 2,
   width,
@@ -59,6 +71,7 @@ const YAxis: FC<IAxis> = ({
   top = 0,
   domain,
   padding,
+  tickFormat = defaultTickFormat,
 }) => {
   if (scale === 'linear' && typeof values[0] === 'string') {
     throw new Error('Linear axis can not accept string values');
@@ -67,7 +80,7 @@ const YAxis: FC<IAxis> = ({
     console.warn('band scale provided without padding settings');
   }
   const Scale = scale === 'linear'
-    ? scaleLinear().domain(values ? extent([0, ...domain as number[]]) : extent(values))
+    ? scaleLinear().domain(domain ? extent([0, ...domain as number[]]) : extent(values as number[]) as any)
     : scaleBand().domain(values as string[])
 
   if (isOfType<ScaleBand<any>>(Scale, 'paddingInner')) {
@@ -122,10 +135,10 @@ const YAxis: FC<IAxis> = ({
               </line>
 
               <text
-                fill={stroke}
+                fill={tickFormat.stroke}
                 x={`-${tickSize + 10}`}
                 dy="0.32em">
-                {v}
+                {labelFormat ? labelFormat('y', v, i) : v}
               </text>
             </g>
           )

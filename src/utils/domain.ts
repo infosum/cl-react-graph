@@ -1,9 +1,8 @@
-import { Axis } from 'd3';
 import { extent } from 'd3-array';
+import { Axis } from 'd3-axis';
 import { format } from 'd3-format';
 import { ScaleLinear } from 'd3-scale';
 import { timeFormat } from 'd3-time-format';
-import get from 'lodash/get';
 
 import { IGroupData } from '../BaseHistogramD3';
 import {
@@ -131,8 +130,8 @@ export const tickSize = ({
   scaleBand,
   valuesCount,
 }: ITickProps) => {
-  const tickSize = get(axisConfig, 'tickSize', undefined);
-  const ticks = get(axisConfig, 'ticks', undefined);
+  const tickSize = axisConfig?.tickSize ?? undefined;
+  const ticks = axisConfig?.ticks ?? undefined;
   if (tickSize !== undefined) {
     axis.tickSize(tickSize);
   }

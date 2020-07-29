@@ -1,18 +1,20 @@
+import { schemeSet3 } from 'd3-scale-chromatic';
 import React, { FC } from 'react';
 import { SpringConfig } from 'react-spring';
 
-import Bars from './components/Bars/Bars';
-import Base from './components/Base';
-import Grid from './components/Grid';
-import XAxis from './components/XAxis';
-import YAxis from './components/YAxis';
+import Bars from '../components/Bars/Bars';
+import Base from '../components/Base';
+import Grid from '../components/Grid';
+import { TTipFunc } from '../components/ToolTip';
+import XAxis from '../components/XAxis';
+import YAxis, { TAxisLabelFormat } from '../components/YAxis';
 import {
   EGroupedBarLayout,
   IGrid,
   IHistogramBar,
   IHistogramData,
-} from './Histogram';
-import { useHistogramDomain } from './utils/useDomain';
+} from '../Histogram';
+import { useHistogramDomain } from '../utils/useDomain';
 
 export enum EChartDirection {
   'horizontal',
@@ -33,12 +35,15 @@ const defaultPadding: IHistogramBar = {
 
 interface IProps {
   animation?: SpringConfig;
+  axisLabelFormat?: TAxisLabelFormat;
+  colorScheme?: string[];
   data: IHistogramData;
   direction?: EChartDirection;
   grid?: IGrid;
   groupLayout?: EGroupedBarLayout;
   height: number;
   padding?: IHistogramBar;
+  tip?: TTipFunc;
   visible?: Record<string, boolean>;
   width: number;
   xAxisHeight?: number;
@@ -46,21 +51,33 @@ interface IProps {
 }
 
 const Histogram: FC<IProps> = ({
+  animation,
+  axisLabelFormat,
+  colorScheme = schemeSet3,
   data,
-  direction = EChartDirection.horizontal,
+  direction = EChartDirection.vertical,
   grid,
   groupLayout = EGroupedBarLayout.GROUPED,
   height,
-  width,
-  animation,
   padding = defaultPadding,
+  tip,
   visible,
-  xAxisHeight = 60,
-  yAxisWidth = 100,
+  width,
+  xAxisHeight,
+  yAxisWidth,
 }) => {
+  if (!yAxisWidth) {
+    yAxisWidth = direction === EChartDirection.vertical ? 40 : 100;
+  }
+  if (!xAxisHeight) {
+    xAxisHeight = direction === EChartDirection.vertical ? 100 : 40;
+  }
+
   // TODO - do we want a chart context to contain the bounding x/y axis. 
   // Once we've build up standard components it would be good to asses this.
-
+  if (width === 0) {
+    return null;
+  }
   const domain = useHistogramDomain({
     groupLayout: groupLayout,
     bins: data.bins,
@@ -85,6 +102,7 @@ const Histogram: FC<IProps> = ({
       }
 
       <Bars
+        colorScheme={colorScheme}
         left={yAxisWidth}
         height={height - xAxisHeight}
         width={width - yAxisWidth}
@@ -95,12 +113,14 @@ const Histogram: FC<IProps> = ({
         bins={data.bins}
         direction={direction}
         domain={domain}
+        tip={tip}
         visible={visible}
       />
 
       <YAxis
         width={yAxisWidth}
         height={height - xAxisHeight}
+        labelFormat={axisLabelFormat}
         scale={direction === EChartDirection.horizontal ? 'band' : 'linear'}
         values={direction === EChartDirection.horizontal ? data.bins : undefined}
         domain={direction === EChartDirection.horizontal ? undefined : domain}
@@ -114,6 +134,7 @@ const Histogram: FC<IProps> = ({
         top={height - xAxisHeight}
         padding={padding}
         left={yAxisWidth}
+        labelFormat={axisLabelFormat}
         scale={direction === EChartDirection.horizontal ? 'linear' : 'band'}
         values={direction === EChartDirection.horizontal ? undefined : data.bins}
         domain={direction === EChartDirection.horizontal ? domain : undefined}

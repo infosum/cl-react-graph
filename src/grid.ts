@@ -3,7 +3,6 @@ import {
   axisLeft,
   AxisScale,
 } from 'd3-axis';
-import get from 'lodash/get';
 
 import attrs from './d3/attrs';
 import {
@@ -45,7 +44,7 @@ export const drawGrid = (
     // Add the X grid lines
     gridX.attr('transform', `translate(${offset.x}, ${offset.y})`)
       .transition()
-      .call(makeXGridLines(x, get(grid, 'x.ticks', ticks))
+      .call(makeXGridLines(x, grid?.x?.ticks ?? ticks)
         .tickSize(-height + xAxisHeight(props.axis) + (margin.top * 2))
         .tickFormat(() => ''));
 
@@ -57,7 +56,7 @@ export const drawGrid = (
     // add the Y grid lines
     gridY.attr('transform', `translate(${offset.x}, 0)`)
       .transition()
-      .call(makeYGridLines(y, get(grid, 'y.ticks', ticks))
+      .call(makeYGridLines(y, grid?.y?.ticks ?? ticks)
         .tickSize(-width + (margin.left * 2) + yAxisWidth(axis))
         .tickFormat(() => ''),
       );
@@ -94,7 +93,7 @@ export const drawHorizontalGrid: <T extends IHistogramProps>(props: IProps<T>) =
     // Add the X grid lines
     gridX.attr('transform', `translate(${offset.x}, ${offset.y})`)
       .transition()
-      .call(makeXGridLines(x, get(grid, 'x.ticks', ticks))
+      .call(makeXGridLines(x, grid?.x?.ticks ?? ticks)
         .tickSize(-height + xAxisHeight(props.axis) + (margin.top * 2))
         .tickFormat(() => ''));
 
@@ -106,7 +105,7 @@ export const drawHorizontalGrid: <T extends IHistogramProps>(props: IProps<T>) =
     // add the Y grid lines
     gridY.attr('transform', 'translate(' + (yAxisWidth(axis) + axisWidth) + ', 0)')
       .transition()
-      .call(makeYGridLines(y, get(grid, 'y.ticks', ticks))
+      .call(makeYGridLines(y, grid?.y?.ticks ?? ticks)
         .tickSize(-width + (margin.left * 2) + yAxisWidth(axis))
         .tickFormat(() => ''),
       );
@@ -134,7 +133,7 @@ export const yAxisWidth = (axis: IAxes) => {
 export const xAxisHeight = (axis: IAxes) => {
   return axis.x.label === ''
     ? axis.x.height
-    : axis.x.height + 30 + get(axis, 'x.margin', 0);
+    : axis.x.height + 30 + axis?.x?.margin ?? 0;
 };
 
 export const gridWidth = (props: any): number => {

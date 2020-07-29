@@ -1,4 +1,4 @@
-import { Axis } from 'd3';
+import { Axis } from 'd3-axis';
 import { ScaleLinear } from 'd3-scale';
 import { IGroupData } from '../BaseHistogramD3';
 import { IAxis, IDomain, IHistogramDataSet } from '../Histogram';

@@ -1,4 +1,4 @@
-import { ScaleOrdinal } from 'd3';
+import { ScaleOrdinal } from 'd3-scale';
 import { IGroupDataItem } from '../BaseHistogramD3';
 import { EColorManipulations, TipContentFn } from '../Histogram';
 interface IProps {
@@ -18,8 +18,8 @@ interface IMouseOutTipProps {
 interface IMouseOutProps extends IMouseOutTipProps {
     colors: ScaleOrdinal<string, string>;
 }
-export declare const onMouseOverAxis: (props: IProps) => (d: any, i: number, nodes: any) => void;
-export declare const onMouseOver: (props: IProps) => (d: any, i: number, nodes: any) => void;
-export declare const onMouseOut: (props: IMouseOutProps) => (d: number | IGroupDataItem, i: number, nodes: any) => void;
-export declare const onClick: (onClick?: ((v: any) => void) | undefined) => (d: number | IGroupDataItem) => void;
+export declare const onMouseOverAxis: (props: IProps) => (d: IGroupDataItem | any, i: number, nodes: any) => void;
+export declare const onMouseOver: (props: IProps) => (d: IGroupDataItem | any, i: number, nodes: any) => void;
+export declare const onMouseOut: (props: IMouseOutProps) => (d: IGroupDataItem | number, i: number, nodes: any) => void;
+export declare const onClick: (onClick?: ((v: any) => void) | undefined) => (d: IGroupDataItem | number) => void;
 export {};
