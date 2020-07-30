@@ -1,6 +1,4 @@
-import React, {
-  FC,
-} from 'react';
+import React, { FC } from 'react';
 
 import {
   Card,
@@ -11,9 +9,8 @@ import {
   Typography,
 } from '@material-ui/core';
 
-import {
-  Scale,
-} from '../../../src/Histogram';
+import { ELabelOrientation } from '../../../src/components/YAxis';
+import { Scale } from '../../../src/Histogram';
 
 interface IProps<D, S> {
   dispatch: D;
@@ -22,16 +19,33 @@ interface IProps<D, S> {
 
 export type AxisActions = { type: 'setScale'; axis: 'x' | 'y'; value: Scale; };
 
-
 export const AxisOptionsFactory = <D extends any, S extends any>(): FC<IProps<D, S>> => ({ dispatch, state }) => {
   return (
     <>
       <Card elevation={3}>
         <CardContent>
           <Typography variant="h6" gutterBottom>X Axis</Typography>
-          <Grid container spacing={24}>
+          <Grid container spacing={2}>
             <Grid item xs={6}>
 
+              <TextField
+                label="X Axis label direction"
+                select
+                defaultValue={state.axis.x.labelOrientation}
+                onChange={(e) => {
+                  dispatch({ type: 'setLabelOrientation', axis: 'x', value: e.target.value });
+                }}
+              >
+                <MenuItem value={ELabelOrientation.horizontal}>
+                  horizontal
+                </MenuItem>
+                <MenuItem value={ELabelOrientation.vertical}>
+                  vertical
+                </MenuItem>
+
+              </TextField>
+            </Grid>
+            <Grid item xs={6}>
               <TextField
                 label="X Axis Scale"
                 select
@@ -46,9 +60,6 @@ export const AxisOptionsFactory = <D extends any, S extends any>(): FC<IProps<D,
                 <MenuItem value="LOG">
                   Log
                 </MenuItem>
-                <MenuItem value="TIME">
-                  Time
-                </MenuItem>
               </TextField>
             </Grid>
 
@@ -61,7 +72,7 @@ export const AxisOptionsFactory = <D extends any, S extends any>(): FC<IProps<D,
           <Typography variant="h6" gutterBottom>
             Y Axis
           </Typography>
-          <Grid container spacing={24}>
+          <Grid container spacing={2}>
             <Grid item xs={6}>
               <p>Not yet working on histograms</p>
               <TextField
@@ -75,9 +86,6 @@ export const AxisOptionsFactory = <D extends any, S extends any>(): FC<IProps<D,
                 </MenuItem>
                 <MenuItem value="LOG">
                   Log
-                </MenuItem>
-                <MenuItem value="TIME">
-                  Time
                 </MenuItem>
               </TextField>
             </Grid>

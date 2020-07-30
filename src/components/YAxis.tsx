@@ -4,6 +4,7 @@ import {
   scaleBand,
   ScaleLinear,
   scaleLinear,
+  scalePoint,
 } from 'd3-scale';
 import React, {
   FC,
@@ -16,10 +17,14 @@ import {
   paddingOuter,
 } from '../utils/bars';
 import { isOfType } from '../utils/isOfType';
+import { AnyScale } from '../utils/scales';
 
 export type TAxisValue = string | number;
 export type TAxisLabelFormat = (axis: 'x' | 'y', bin: string, i: number) => string;
-
+export enum ELabelOrientation {
+  'horizontal',
+  'vertical',
+}
 export interface IAxis {
   stroke?: string;
   height: number;
@@ -27,7 +32,7 @@ export interface IAxis {
   values?: string[] | number[];
   tickSize?: number;
   path?: SVGAttributes<SVGPathElement>;
-  scale?: 'linear' | 'band';
+  scale?: 'linear' | 'band' | 'point';
   top?: number;
   domain?: TAxisValue[];
   left?: number;
@@ -36,6 +41,7 @@ export interface IAxis {
   tickFormat?: {
     stroke: string;
   }
+  labelOrientation?: ELabelOrientation,
 }
 
 export const defaultTickFormat = {
@@ -61,17 +67,18 @@ const positionTick = (value: TAxisValue, scale: any, height: number) => {
 }
 
 const YAxis: FC<IAxis> = ({
-  labelFormat,
-  values = [],
-  tickSize = 2,
-  width,
-  height,
-  path,
-  scale = 'linear',
-  top = 0,
   domain,
+  labelFormat,
+  height,
+  left = 0,
+  path,
   padding,
+  scale = 'linear',
+  tickSize = 2,
   tickFormat = defaultTickFormat,
+  top = 0,
+  values = [],
+  width,
 }) => {
   if (scale === 'linear' && typeof values[0] === 'string') {
     throw new Error('Linear axis can not accept string values');
@@ -79,18 +86,31 @@ const YAxis: FC<IAxis> = ({
   if (scale === 'band' && !padding) {
     console.warn('band scale provided without padding settings');
   }
-  const Scale = scale === 'linear'
-    ? scaleLinear().domain(domain ? extent([0, ...domain as number[]]) : extent(values as number[]) as any)
-    : scaleBand().domain(values as string[])
 
-  if (isOfType<ScaleBand<any>>(Scale, 'paddingInner')) {
-    Scale.paddingInner(padding ? paddingInner(padding) : 0.1)
-      .paddingOuter(padding ? paddingOuter(padding) : 0.2)
-      .align(0.5)
+  let Scale: AnyScale;
+  switch (scale) {
+    case 'linear':
+      Scale = scaleLinear()
+        .domain(extent(domain ? [0, ...domain as number[]] : values as number[]) as any)
+        .rangeRound([height, 0]);
+      break;
+    case 'band':
+      Scale = scaleBand().domain(values as string[])
+        .paddingInner(padding ? paddingInner(padding) : 0.1)
+        .paddingOuter(padding ? paddingOuter(padding) : 0.2)
+        .align(0.5)
+        .rangeRound([height, 0]);
+
+      break;
+    case 'point':
+      Scale = scalePoint()
+        .range([Number(height) / 4, Number(height) * (3 / 4)])
+        .domain(values as string[]);
+      break;
   }
-  Scale.rangeRound([height, 0])
 
-  const transform = `(${width}, ${top})`;
+
+  const transform = `(${width + left}, ${top})`;
 
   const pathD = `M0,${height} L0,0`;
 

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 
 import { IGroupDataItem } from './BaseHistogramD3';
+import { ELabelOrientation } from './components/YAxis';
 import { HistogramD3 } from './HistogramD3';
 import { DeepPartial } from './utils/types';
 
@@ -168,6 +169,7 @@ export interface IAxis {
   text: {
     style: ISVGTextStyle;
   };
+  labelOrientation?: ELabelOrientation;
   width: number;
   tickSize: number;
   tickValues: null | number[];
