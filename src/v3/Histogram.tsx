@@ -7,7 +7,10 @@ import Base from '../components/Base';
 import Grid from '../components/Grid';
 import { TTipFunc } from '../components/ToolTip';
 import XAxis from '../components/XAxis';
-import YAxis, { TAxisLabelFormat } from '../components/YAxis';
+import YAxis, {
+  ELabelOrientation,
+  TAxisLabelFormat,
+} from '../components/YAxis';
 import {
   EGroupedBarLayout,
   IGrid,
@@ -47,6 +50,7 @@ interface IProps {
   visible?: Record<string, boolean>;
   width: number;
   xAxisHeight?: number;
+  xAxisLabelOrientation?: ELabelOrientation;
   yAxisWidth?: number;
 }
 
@@ -64,6 +68,7 @@ const Histogram: FC<IProps> = ({
   visible,
   width,
   xAxisHeight,
+  xAxisLabelOrientation = ELabelOrientation.horizontal,
   yAxisWidth,
 }) => {
   if (!yAxisWidth) {
@@ -135,6 +140,7 @@ const Histogram: FC<IProps> = ({
         padding={padding}
         left={yAxisWidth}
         labelFormat={axisLabelFormat}
+        labelOrientation={xAxisLabelOrientation}
         scale={direction === EChartDirection.horizontal ? 'linear' : 'band'}
         values={direction === EChartDirection.horizontal ? undefined : data.bins}
         domain={direction === EChartDirection.horizontal ? domain : undefined}

@@ -21,6 +21,7 @@ import {
   HorizontalHistogram,
   TTipFunc,
 } from '../../../src';
+import { ELabelOrientation } from '../../../src/components/YAxis';
 import Histogram, {
   EGroupedBarLayout,
   IAxes,
@@ -113,6 +114,7 @@ export type Actions = { type: 'setChartType'; chartType: string }
   | { type: 'removeHoverModifier'; index: number; }
   | { type: 'setPaddingInner'; padding: number; }
   | { type: 'setPaddingOuter'; padding: number; }
+  | { type: 'setLabelOrientation', value: ELabelOrientation, axis: 'x' | 'y' }
   | GridActions
   | AxisActions
   ;
@@ -146,6 +148,15 @@ export function axisReducer<S extends any, A extends any>(state: S, action: A): 
         axis: {
           [action.axis]: {
             scale: action.value,
+          },
+        }
+      })
+    case 'setLabelOrientation':
+      console.log('setLabelOrientation', action);
+      return merge(state, {
+        axis: {
+          [action.axis]: {
+            labelOrientation: action.value,
           },
         }
       })
@@ -265,9 +276,13 @@ const CustomTipContent: TTipFunc = ({ item }) => <>
   <rect x={12} y={-12} width={150} height={50} rx={3} ry={3} fill='#fff'>
   </rect>
   <foreignObject x="12" y="-12" width="160" height="65">
-    <div xmlns="http://www.w3.org/1999/xhtml" style={{ paddingLeft: '10px', marginTop: '10px', height: '45px' }}>
-      {item.groupLabel}: {item.label}<br /> {item.value}
-    </div>
+    {
+      // @ts-ignore
+      <div xmlns="http://www.w3.org/1999/xhtml" style={{ paddingLeft: '10px', marginTop: '10px', height: '45px' }}>
+        {item.groupLabel}: {item.label}<br /> {item.value}
+      </div>
+    }
+
   </foreignObject>
 </>
 
@@ -363,6 +378,7 @@ const HistogramExample = () => {
                   height={400}
                   grid={state.grid}
                   groupLayout={state.groupLayout}
+                  xAxisLabelOrientation={state.axis.x.labelOrientation}
                   width={w}
 
                   tip={CustomTipContent}

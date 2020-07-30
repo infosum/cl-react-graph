@@ -3,6 +3,7 @@ import {
   IHistogramData,
 } from '../../src';
 import filterRange from '../../src/colors/filterRange';
+import { ELabelOrientation } from '../../src/components/YAxis';
 import {
   IAnnotation,
   IGrid,
@@ -30,7 +31,7 @@ export const grid: IGrid = {
 };
 
 export const smallData: IHistogramData = {
-  bins: ['Female', 'Male', 'Other'],
+  bins: ['Female long label test', 'Male', 'Other'],
   counts: [
     {
       data: [79200, 52400, 13300],
@@ -120,11 +121,13 @@ export const analyticsAxis: DeepPartial<IAxes> = {
   x: {
     scale: 'ORDINAL',
     numberFormat: '.2s',
+    labelOrientation: ELabelOrientation.horizontal,
   },
   y: {
     // ...defaultAxis.y,
     ticks: 3,
     numberFormat: '.2s',
+    labelOrientation: ELabelOrientation.horizontal,
   },
 };
 

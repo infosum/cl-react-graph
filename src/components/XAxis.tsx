@@ -4,6 +4,7 @@ import {
   scaleBand,
   ScaleLinear,
   scaleLinear,
+  scalePoint,
 } from 'd3-scale';
 import React, {
   FC,
@@ -15,9 +16,11 @@ import {
   paddingOuter,
 } from '../utils/bars';
 import { isOfType } from '../utils/isOfType';
+import { AnyScale } from '../utils/scales';
 import {
   defaultPath,
   defaultTickFormat,
+  ELabelOrientation,
   IAxis,
   TAxisValue,
 } from './YAxis';
@@ -42,6 +45,7 @@ const XAxis: FC<IAxis> = ({
   domain,
   padding,
   tickFormat = defaultTickFormat,
+  labelOrientation = ELabelOrientation.horizontal,
 }) => {
   if (scale === 'linear' && typeof values[0] === 'string') {
     throw new Error('Linear axis can not accept string values');
@@ -50,17 +54,27 @@ const XAxis: FC<IAxis> = ({
     console.warn('band scale provided without padding settings');
   }
 
+  let Scale: AnyScale;
+  switch (scale) {
+    case 'linear':
+      Scale = scaleLinear()
+        .domain(extent(domain ? [0, ...domain as number[]] : values as number[]) as any)
+        .rangeRound([0, width]);
+      break;
+    case 'band':
+      Scale = scaleBand().domain(values as string[])
+        .paddingInner(padding ? paddingInner(padding) : 0.1)
+        .paddingOuter(padding ? paddingOuter(padding) : 0.2)
+        .align(0.5)
+        .rangeRound([0, width]);
 
-  const Scale = scale === 'linear'
-    ? scaleLinear().domain(extent(domain ? [0, ...domain as number[]] : values as number[]) as any)
-    : scaleBand().domain(values as string[])
-
-  if (isOfType<ScaleBand<any>>(Scale, 'paddingInner')) {
-    Scale.paddingInner(padding ? paddingInner(padding) : 0.1)
-      .paddingOuter(padding ? paddingOuter(padding) : 0.2)
-      .align(0.5)
+      break;
+    case 'point':
+      Scale = scalePoint()
+        .range([Number(width) / 4, Number(width) * (3 / 4)])
+        .domain(values as string[]);
+      break;
   }
-  Scale.rangeRound([0, width])
 
   const transform = `${left}, ${top}`;
 
@@ -112,7 +126,10 @@ const XAxis: FC<IAxis> = ({
 
               <text
                 fill={tickFormat.stroke}
-                dy="1em">
+                text-anchor={labelOrientation === ELabelOrientation.horizontal ? 'middle' : 'start'}
+                writing-mode={labelOrientation === ELabelOrientation.horizontal ? 'horizontal-tb' : 'vertical-lr'}
+                height={height}
+                dy={labelOrientation === ELabelOrientation.horizontal ? '1em' : '20'}>
                 {labelFormat ? labelFormat('x', v, i) : v}
               </text>
             </g>
