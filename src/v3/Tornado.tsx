@@ -60,12 +60,6 @@ const Tornado: FC<IProps> = ({
     padding: 15,
   }
 
-  // const domain = useHistogramDomain({
-  //   groupLayout: groupLayout,
-  //   bins: data.bins,
-  //   values: data.counts[0]
-  // });
-  console.log('data', data);
 
   const dataSets: any[] = []
   data.counts.forEach((count) => {
@@ -85,7 +79,6 @@ const Tornado: FC<IProps> = ({
 
     });
   });
-  console.log('dataSets, ', dataSets);
 
   const left: IBarChartDataSet[] = [
     {
