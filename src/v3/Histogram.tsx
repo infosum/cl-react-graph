@@ -18,7 +18,7 @@ import {
 } from '../Histogram';
 import { EChartDirection } from './BarChart';
 
-interface IProps {
+export interface IHistogramProps {
   animation?: SpringConfig;
   axisLabelFormat?: TAxisLabelFormat;
   colorScheme?: string[];
@@ -37,7 +37,7 @@ interface IProps {
 /**
  * A Histogram renders continuous data and thus use a ScaleLinear x & y axis 
  */
-const Histogram: FC<IProps> = ({
+const Histogram: FC<IHistogramProps> = ({
   animation,
   axisLabelFormat,
   colorScheme = schemeSet3,

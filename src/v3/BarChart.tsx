@@ -54,7 +54,7 @@ interface IProps {
   yAxisWidth?: number;
 }
 
-const Histogram: FC<IProps> = ({
+const BarChart: FC<IProps> = ({
   animation,
   axisLabelFormat,
   colorScheme = schemeSet3,
@@ -152,4 +152,4 @@ const Histogram: FC<IProps> = ({
 
 }
 
-export default Histogram;
+export default BarChart;

@@ -70,6 +70,5 @@ export const buildHistogramSprings = (props: IHistogramSpringProps) => {
       config,
     }
   });
-  console.log('spring', s);
   return s;
 }
