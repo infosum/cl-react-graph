@@ -3,9 +3,9 @@ import ReactDOM from 'react-dom';
 
 import {
   EColorManipulations,
+  IBarChartDataSet,
   IChartAdaptor,
   IChartState,
-  IHistogramDataSet,
   IMargin,
   TipContentFn,
 } from './Histogram';
@@ -26,7 +26,7 @@ export interface IPieDataItem {
 export interface IPieChartProps {
   data: {
     bins: string[],
-    counts: IHistogramDataSet[];
+    counts: IBarChartDataSet[];
   };
   backgroundColor: string;
   className: string;

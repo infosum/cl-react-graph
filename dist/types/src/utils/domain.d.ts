@@ -1,7 +1,7 @@
 import { Axis } from 'd3-axis';
 import { ScaleLinear } from 'd3-scale';
 import { IGroupData } from '../BaseHistogramD3';
-import { IAxis, IDomain, IHistogramDataSet } from '../Histogram';
+import { IAxis, IBarChartDataSet, IDomain } from '../Histogram';
 import { IGroupedProps } from './bars';
 import { AnyScale } from './scales';
 export declare const isStacked: ({ groupLayout, stacked }: IGroupedProps) => boolean;
@@ -37,5 +37,5 @@ interface ITickProps {
 }
 export declare const ticks: (props: ITickProps) => void;
 export declare const tickSize: ({ axis, axisConfig, axisLength, limitByValues, scaleBand, valuesCount, }: ITickProps) => void;
-export declare const maxValueCount: (counts: IHistogramDataSet[]) => number;
+export declare const maxValueCount: (counts: IBarChartDataSet[]) => number;
 export {};

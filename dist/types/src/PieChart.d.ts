@@ -1,5 +1,5 @@
 import { Component } from 'react';
-import { EColorManipulations, IChartState, IHistogramDataSet, IMargin, TipContentFn } from './Histogram';
+import { EColorManipulations, IBarChartDataSet, IChartState, IMargin, TipContentFn } from './Histogram';
 import { DeepPartial } from './utils/types';
 interface ILabels {
     display: boolean;
@@ -13,7 +13,7 @@ export interface IPieDataItem {
 export interface IPieChartProps {
     data: {
         bins: string[];
-        counts: IHistogramDataSet[];
+        counts: IBarChartDataSet[];
     };
     backgroundColor: string;
     className: string;

@@ -4,26 +4,26 @@ import {
   useState,
 } from 'react';
 
-import { IHistogramData } from '../Histogram';
+import { IBarChartData } from '../Histogram';
 
 export const useJoyPlot = ({
   data,
   height,
 }: {
-  data: IHistogramData[];
+  data: IBarChartData[];
   height: number;
 }) => {
   const chartHeight = height / (data.length);
   const [bins, setBins] = useState<string[]>([]);
   const [domain, setDomain] = useState<[number, number]>([0, 0]);
-  const [values, setValues] = useState<IHistogramData[]>([]);
+  const [values, setValues] = useState<IBarChartData[]>([]);
   useEffect(() => {
     const allBins = data.reduce((p, n) => {
       return Array.from(new Set([...p, ...n.bins]));
     }, [] as string[])
       .sort((a, b) => a < b ? 1 : -1);
     setBins(allBins);
-    const allValues: IHistogramData[] = data.map((d) => {
+    const allValues: IBarChartData[] = data.map((d) => {
       const counts = d.counts.map((count) => {
         const data = new Array(allBins.length).fill(0);
         count.data.forEach((c, countIndex) => {

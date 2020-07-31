@@ -7,7 +7,7 @@ import ReactDataSheet from 'react-datasheet';
 
 import { Button } from '@material-ui/core';
 
-import { IHistogramData } from '../../../src';
+import { IBarChartData } from '../../../src';
 import { IInitialState } from '../pages/histogram';
 
 interface IProps<A, S> {

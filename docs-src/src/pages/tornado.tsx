@@ -138,9 +138,11 @@ const Tornado = () => {
           <Grid item xs={6}>
             <Card>
               <CardContent>
-                <NativeTornado {...state} width={600} />
+                <NativeTornado {...state}
+                  width={800}
+                  height={500} />
                 {chart}
-                <TornadoChart
+                < TornadoChart
                   id="tornado2"
                   data={index === 0 ? state.data : data2}
                   width="600" />

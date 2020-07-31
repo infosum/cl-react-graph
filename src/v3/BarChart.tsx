@@ -1,9 +1,8 @@
-import { extent } from 'd3-array';
 import { schemeSet3 } from 'd3-scale-chromatic';
 import React, { FC } from 'react';
 import { SpringConfig } from 'react-spring';
 
-import HistogramBars from '../components/Bars/HistogramBars';
+import Bars from '../components/Bars/Bars';
 import Base from '../components/Base';
 import Grid from '../components/Grid';
 import { TTipFunc } from '../components/ToolTip';
@@ -13,19 +12,40 @@ import YAxis, {
   TAxisLabelFormat,
 } from '../components/YAxis';
 import {
+  EGroupedBarLayout,
+  IBarChartData,
   IGrid,
-  IHistogramData,
+  IHistogramBar,
 } from '../Histogram';
-import { EChartDirection } from './BarChart';
+import { useHistogramDomain } from '../utils/useDomain';
+
+export enum EChartDirection {
+  'horizontal',
+  'vertical',
+}
+const defaultPadding: IHistogramBar = {
+  grouped: {
+    paddingInner: 0.1,
+    paddingOuter: 0,
+  },
+  paddingInner: 0.1,
+  paddingOuter: 0,
+  overlayMargin: 5,
+  hover: {
+    lighten: 0.1,
+  },
+}
 
 interface IProps {
   animation?: SpringConfig;
   axisLabelFormat?: TAxisLabelFormat;
   colorScheme?: string[];
-  data: IHistogramData;
+  data: IBarChartData;
   direction?: EChartDirection;
   grid?: IGrid;
+  groupLayout?: EGroupedBarLayout;
   height: number;
+  padding?: IHistogramBar;
   tip?: TTipFunc;
   visible?: Record<string, boolean>;
   width: number;
@@ -34,9 +54,6 @@ interface IProps {
   yAxisWidth?: number;
 }
 
-/**
- * A Histogram renders continuous data and thus use a ScaleLinear x & y axis 
- */
 const Histogram: FC<IProps> = ({
   animation,
   axisLabelFormat,
@@ -44,7 +61,9 @@ const Histogram: FC<IProps> = ({
   data,
   direction = EChartDirection.vertical,
   grid,
+  groupLayout = EGroupedBarLayout.GROUPED,
   height,
+  padding = defaultPadding,
   tip,
   visible,
   width,
@@ -59,13 +78,18 @@ const Histogram: FC<IProps> = ({
     xAxisHeight = direction === EChartDirection.vertical ? 100 : 40;
   }
 
+  // TODO - do we want a chart context to contain the bounding x/y axis. 
+  // Once we've build up standard components it would be good to asses this.
   if (width === 0) {
     return null;
   }
 
-  const bins = data.bins.reduce((p, n) => p.concat(Array.isArray(n) ? n : [n]), [] as number[]);
-  const continuousDomain = extent(bins) as [number, number];
-  const domain = extent([0].concat(data.counts.reduce((p, n) => p.concat(n.data), [] as number[]))) as [number, number];
+  const domain = useHistogramDomain({
+    groupLayout: groupLayout,
+    bins: data.bins,
+    values: data.counts
+  });
+
   return (
     <Base
       width={width + 30} // @TODO work out why without this the bars exceed the chart
@@ -83,17 +107,18 @@ const Histogram: FC<IProps> = ({
           width={width - yAxisWidth} />
       }
 
-      <HistogramBars
+      <Bars
         colorScheme={colorScheme}
         left={yAxisWidth}
         height={height - xAxisHeight}
         width={width - yAxisWidth}
+        padding={padding}
+        groupLayout={groupLayout}
         values={data.counts}
         config={animation}
         bins={data.bins}
         direction={direction}
         domain={domain}
-        continuousDomain={continuousDomain}
         tip={tip}
         visible={visible}
       />
@@ -102,19 +127,24 @@ const Histogram: FC<IProps> = ({
         width={yAxisWidth}
         height={height - xAxisHeight}
         labelFormat={axisLabelFormat}
-        scale="linear"
-        domain={direction === EChartDirection.horizontal ? continuousDomain : domain}
+        scale={direction === EChartDirection.horizontal ? 'band' : 'linear'}
+        values={direction === EChartDirection.horizontal ? data.bins : undefined}
+        domain={direction === EChartDirection.horizontal ? undefined : domain}
+
+        padding={padding}
       />
 
       <XAxis
         width={width - yAxisWidth}
         height={xAxisHeight}
         top={height - xAxisHeight}
+        padding={padding}
         left={yAxisWidth}
         labelFormat={axisLabelFormat}
         labelOrientation={xAxisLabelOrientation}
-        scale="linear"
-        domain={direction === EChartDirection.horizontal ? domain : continuousDomain}
+        scale={direction === EChartDirection.horizontal ? 'linear' : 'band'}
+        values={direction === EChartDirection.horizontal ? undefined : data.bins}
+        domain={direction === EChartDirection.horizontal ? domain : undefined}
       />
 
     </Base>

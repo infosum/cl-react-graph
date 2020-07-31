@@ -1,4 +1,4 @@
-import { EGroupedBarLayout, IHistogramDataSet } from '../Histogram';
+import { EGroupedBarLayout, IBarChartDataSet } from '../Histogram';
 import { ILineChartDataSet } from '../LineChart';
 interface ILIneProps {
     values: ILineChartDataSet<any>[];
@@ -7,7 +7,7 @@ interface ILIneProps {
 interface IProps {
     groupLayout: EGroupedBarLayout;
     bins: string[];
-    values: IHistogramDataSet[];
+    values: IBarChartDataSet[];
     clampToZero?: boolean;
 }
 export declare const useHistogramDomain: (props: IProps) => [number, number];

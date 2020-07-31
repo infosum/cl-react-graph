@@ -18,6 +18,8 @@ import {
 } from '@material-ui/core';
 
 import {
+  BarChart,
+  EChartDirection,
   HorizontalHistogram,
   TTipFunc,
 } from '../../../src';
@@ -25,15 +27,15 @@ import { ELabelOrientation } from '../../../src/components/YAxis';
 import Histogram, {
   EGroupedBarLayout,
   IAxes,
+  IBarChartData,
   IGrid,
   IHistogramBar,
-  IHistogramData,
 } from '../../../src/Histogram';
 import Legend from '../../../src/Legend';
 import { outputSvg } from '../../../src/utils/outputSvg';
 import { DeepPartial } from '../../../src/utils/types';
 import { useWidth } from '../../../src/utils/useWidth';
-import Histogram2, { EChartDirection } from '../../../src/v3/Histogram';
+import Histogram2 from '../../../src/v3/Histogram';
 import {
   AxisActions,
   AxisOptionsFactory,
@@ -52,6 +54,7 @@ import {
   grid,
   smallAnnotationsData,
   smallData,
+  smallDataContinuous,
   theme,
 } from '../data';
 
@@ -66,7 +69,7 @@ export interface IInitialState {
   axis: DeepPartial<IAxes>;
   bar: IHistogramBar;
   chartType: string;
-  data: IHistogramData;
+  data: IBarChartData;
   delay: number;
   duration: number;
   grid: IGrid;
@@ -102,7 +105,7 @@ export type GridActions = { type: 'setGridTicks', ticks: number, axis: 'x' | 'y'
   | { type: 'setGridStrokeOpacity', opacity: number, axis: 'x' | 'y' };
 
 export type Actions = { type: 'setChartType'; chartType: string }
-  | { type: 'setData'; data: IHistogramData }
+  | { type: 'setData'; data: IBarChartData }
   | { type: 'setDuration'; duration: number }
   | { type: 'setDelay'; delay: number }
   | { type: 'setGroupedBarLayout'; layout: EGroupedBarLayout; }
@@ -152,7 +155,6 @@ export function axisReducer<S extends any, A extends any>(state: S, action: A): 
         }
       })
     case 'setLabelOrientation':
-      console.log('setLabelOrientation', action);
       return merge(state, {
         axis: {
           [action.axis]: {
@@ -292,7 +294,7 @@ const CustomTipContent: TTipFunc = ({ item }) => <>
         
  */
 
-export const dataToSpreadSheet = (datum: IHistogramData): any => {
+export const dataToSpreadSheet = (datum: IBarChartData): any => {
   const spreadSheetData: any = [];
 
   datum.bins.forEach((b, i) => {
@@ -368,8 +370,9 @@ const HistogramExample = () => {
           <Grid item xs={6}>
             <Card>
               <CardContent ref={ref}>
-                <h1>React only</h1>
-                <Histogram2
+                <h1>V3</h1>
+                <h2>Bar Chart</h2>
+                <BarChart
                   animation={{
                     duration: state.duration,
                   }}
@@ -380,8 +383,23 @@ const HistogramExample = () => {
                   groupLayout={state.groupLayout}
                   xAxisLabelOrientation={state.axis.x.labelOrientation}
                   width={w}
-
+                  visible={visible}
                   tip={CustomTipContent}
+                />
+
+                <h3>Histogram</h3>
+
+                <Histogram2
+                  animation={{
+                    duration: state.duration,
+                  }}
+                  direction={state.chartType === 'HorizontalHistogram' ? EChartDirection.horizontal : EChartDirection.vertical}
+                  data={smallDataContinuous}
+                  height={400}
+                  grid={state.grid}
+                  xAxisLabelOrientation={state.axis.x.labelOrientation}
+                  width={w}
+                  visible={visible}
                 />
 
                 <Button onClick={() => setDataIndex(dataIndex === 1 ? 0 : 1)}>

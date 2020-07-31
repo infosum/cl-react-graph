@@ -4,6 +4,7 @@ import { ExtendedGroupItem } from './Bars/Bars';
 
 export type TTipFunc = (props: {
   item: ExtendedGroupItem,
+  bin?: string | [number, number];
 }) => JSX.Element;
 
 export const TipContent: TTipFunc = ({ item }) => <>

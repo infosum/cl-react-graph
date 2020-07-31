@@ -4,6 +4,7 @@ import {
   ScaleLinear,
   scaleLog,
   ScaleLogarithmic,
+  ScalePoint,
   scaleTime,
   ScaleTime,
 } from 'd3-scale';
@@ -13,7 +14,8 @@ import { IAxes } from '../';
 export type AnyScale = ScaleLinear<number, number>
   | ScaleTime<any, any>
   | ScaleLogarithmic<any, any>
-  | ScaleBand<string>;
+  | ScaleBand<string>
+  | ScalePoint<string>;
 
 export const buildScales = (axis: IAxes) => {
   let x: AnyScale;

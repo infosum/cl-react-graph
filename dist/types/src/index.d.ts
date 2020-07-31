@@ -1,4 +1,4 @@
-export { default as Histogram, EGroupedBarLayout, IAxes, IHistogramBar, IHistogramData, IHistogramDataSet, IHistogramProps, IStroke, } from './Histogram';
+export { default as Histogram, EGroupedBarLayout, IAxes, IHistogramBar, IBarChartData, IBarChartDataSet, IHistogramProps, IStroke, } from './Histogram';
 export { default as LineChart, IChartPoint, ILineChartDataSet, ILineChartProps, } from './LineChart';
 export { default as Legend } from './Legend';
 export { default as PieChart, IPieChartProps } from './PieChart';
@@ -13,7 +13,8 @@ export { default as Grid } from './components/Grid';
 export { default as XAxis } from './components/XAxis';
 export { default as YAxis } from './components/YAxis';
 export { default as JoyPlot } from './JoyPlot';
-export { default as Histogram2, EChartDirection } from './v3/Histogram';
+export { default as BarChart, EChartDirection } from './v3/BarChart';
+export { default as Histogram2 } from './v3/Histogram';
 export { default as LineChart2 } from './v3/LineChart';
 export { useWidth } from './utils/useWidth';
 export { useMakeLine } from './utils/useMakeLine';

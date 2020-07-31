@@ -11,7 +11,7 @@ import {
  * */
 import {
   EGroupedBarLayout,
-  IHistogramDataSet,
+  IBarChartDataSet,
 } from '../Histogram';
 import { ILineChartDataSet } from '../LineChart';
 
@@ -23,7 +23,7 @@ interface ILIneProps {
 interface IProps {
   groupLayout: EGroupedBarLayout,
   bins: string[],
-  values: IHistogramDataSet[];
+  values: IBarChartDataSet[];
   clampToZero?: boolean;
 }
 

@@ -9,12 +9,12 @@ import XAxis from './components/XAxis';
 import YAxis from './components/YAxis';
 import {
   EGroupedBarLayout,
-  IHistogramData,
+  IBarChartData,
 } from './Histogram';
 import { useJoyPlot } from './utils/useJoyPlot';
 
 export interface IProps {
-  data: IHistogramData[];
+  data: IBarChartData[];
   height: number;
   width: number;
 }

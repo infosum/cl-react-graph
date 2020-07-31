@@ -2,14 +2,14 @@ import { scaleOrdinal } from 'd3-scale';
 import React, { FC } from 'react';
 
 import colorScheme from './colors';
-import { IHistogramDataSet } from './Histogram';
+import { IBarChartDataSet } from './Histogram';
 
 interface IProps {
   className?: string;
   theme?: string[];
   data: {
     bins: string[],
-    counts: IHistogramDataSet[];
+    counts: IBarChartDataSet[];
   };
   onSelect: (label: string) => void;
   visible: { [key: string]: boolean };

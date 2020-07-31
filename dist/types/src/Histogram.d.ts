@@ -1,5 +1,6 @@
 import { Component } from 'react';
 import { IGroupDataItem } from './BaseHistogramD3';
+import { ELabelOrientation } from './components/YAxis';
 import { DeepPartial } from './utils/types';
 export interface IChartAdaptor<P> {
     create: (el: Element, props: DeepPartial<P>) => void;
@@ -51,15 +52,21 @@ export interface IAxes {
     y: IAxis;
     x: IAxis;
 }
-export interface IHistogramDataSet {
+export interface IBarChartDataSet {
     borderColors?: string[];
     colors?: string[];
     label: string;
     data: number[];
 }
-export interface IHistogramData {
+export interface IBarChartData {
     bins: string[];
-    counts: IHistogramDataSet[];
+    counts: IBarChartDataSet[];
+    colorScheme?: string[];
+    title?: string;
+}
+export interface IHistogramData {
+    bins: [number, number][];
+    counts: IBarChartDataSet[];
     colorScheme?: string[];
     title?: string;
 }
@@ -87,7 +94,7 @@ export interface IHistogramProps {
     bar: IHistogramBar;
     className: string;
     annotations?: IAnnotation[];
-    data: IHistogramData;
+    data: IBarChartData;
     delay: number;
     duration: number;
     colorScheme: string[];
@@ -149,6 +156,7 @@ export interface IAxis {
     text: {
         style: ISVGTextStyle;
     };
+    labelOrientation?: ELabelOrientation;
     width: number;
     tickSize: number;
     tickValues: null | number[];

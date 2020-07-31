@@ -1,2 +1,2 @@
-import { IHistogramData } from './Histogram';
-export declare const data: IHistogramData;
+import { IBarChartData } from './Histogram';
+export declare const data: IBarChartData;
