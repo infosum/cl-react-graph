@@ -104,6 +104,15 @@ const Histogram: FC<IHistogramProps> = ({
         labelFormat={axisLabelFormat}
         scale="linear"
         domain={direction === EChartDirection.horizontal ? continuousDomain : domain}
+        values={direction === EChartDirection.horizontal
+          ? [
+            continuousDomain[0],
+            ((continuousDomain[1] - continuousDomain[0]) * 1) / 3,
+            ((continuousDomain[1] - continuousDomain[0]) * 2) / 3,
+            continuousDomain[1],
+          ]
+          : domain
+        }
       />
 
       <XAxis
@@ -115,6 +124,14 @@ const Histogram: FC<IHistogramProps> = ({
         labelOrientation={xAxisLabelOrientation}
         scale="linear"
         domain={direction === EChartDirection.horizontal ? domain : continuousDomain}
+        values={direction === EChartDirection.horizontal
+          ? domain
+          : [
+            continuousDomain[0],
+            ((continuousDomain[1] - continuousDomain[0]) * 1) / 3,
+            ((continuousDomain[1] - continuousDomain[0]) * 2) / 3,
+            continuousDomain[1],
+          ]}
       />
 
     </Base>
