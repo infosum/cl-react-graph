@@ -35,7 +35,7 @@ export const buildHistogramSprings = (props: IHistogramSpringProps) => {
           fill: colorScheme[item.datasetIndex],
           hoverFill: hoverColorScheme?.[item.datasetIndex] ?? colorScheme[item.datasetIndex],
           x: 0,
-          y: bandPosition,
+          y: height - itemWidth - bandPosition,
           height: itemWidth,
         },
         to: {
@@ -43,7 +43,7 @@ export const buildHistogramSprings = (props: IHistogramSpringProps) => {
           fill: colorScheme[item.datasetIndex],
           hoverFill: hoverColorScheme?.[item.datasetIndex] ?? colorScheme[item.datasetIndex],
           x: 0,
-          y: bandPosition,
+          y: height - itemWidth - bandPosition,
           height: itemWidth,
         },
         config,
