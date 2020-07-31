@@ -1,8 +1,8 @@
 import { FC } from 'react';
 import { SpringConfig } from 'react-spring';
 import { IGroupDataItem } from '../../BaseHistogramD3';
-import { IHistogramBar, IHistogramDataSet } from '../../Histogram';
-import { EChartDirection } from '../../v3/Histogram';
+import { IBarChartDataSet, IHistogramBar } from '../../Histogram';
+import { EChartDirection } from '../../v3/BarChart';
 import { TTipFunc } from '../ToolTip';
 declare enum EGroupedBarLayout {
     GROUPED = 0,
@@ -10,21 +10,21 @@ declare enum EGroupedBarLayout {
     OVERLAID = 2
 }
 interface IProps {
-    padding?: IHistogramBar;
-    values: IHistogramDataSet[];
-    domain: number[];
-    height: number;
-    width: number;
-    left?: number;
-    top?: number;
-    groupLayout?: EGroupedBarLayout;
-    bins: string[];
-    colorScheme?: readonly string[];
-    hoverColorScheme?: readonly string[];
+    bins: (string | [number, number])[];
     config?: SpringConfig;
-    visible?: Record<string, boolean>;
-    tip?: TTipFunc;
+    colorScheme?: readonly string[];
+    domain: number[];
     direction?: EChartDirection;
+    groupLayout?: EGroupedBarLayout;
+    height: number;
+    hoverColorScheme?: readonly string[];
+    left?: number;
+    padding?: IHistogramBar;
+    top?: number;
+    tip?: TTipFunc;
+    values: IBarChartDataSet[];
+    visible?: Record<string, boolean>;
+    width: number;
 }
 export declare type ExtendedGroupItem = IGroupDataItem & {
     datasetIndex: number;

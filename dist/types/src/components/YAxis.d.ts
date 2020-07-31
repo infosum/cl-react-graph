@@ -2,6 +2,10 @@ import { FC, SVGAttributes } from 'react';
 import { IHistogramBar } from '../Histogram';
 export declare type TAxisValue = string | number;
 export declare type TAxisLabelFormat = (axis: 'x' | 'y', bin: string, i: number) => string;
+export declare enum ELabelOrientation {
+    'horizontal' = 0,
+    'vertical' = 1
+}
 export interface IAxis {
     stroke?: string;
     height: number;
@@ -9,7 +13,7 @@ export interface IAxis {
     values?: string[] | number[];
     tickSize?: number;
     path?: SVGAttributes<SVGPathElement>;
-    scale?: 'linear' | 'band';
+    scale?: 'linear' | 'band' | 'point';
     top?: number;
     domain?: TAxisValue[];
     left?: number;
@@ -18,6 +22,7 @@ export interface IAxis {
     tickFormat?: {
         stroke: string;
     };
+    labelOrientation?: ELabelOrientation;
 }
 export declare const defaultTickFormat: {
     stroke: string;

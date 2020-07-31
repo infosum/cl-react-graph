@@ -1,8 +1,5 @@
 import { color } from 'd3-color';
-import {
-  scaleBand,
-  scaleLinear,
-} from 'd3-scale';
+import { scaleLinear } from 'd3-scale';
 import React, {
   FC,
   useState,
@@ -14,42 +11,37 @@ import {
 } from 'react-spring';
 import { Tooltip } from 'react-svg-tooltip';
 
-import { IGroupDataItem } from '../../BaseHistogramD3';
-import {
-  IBarChartDataSet,
-  IHistogramBar,
-} from '../../Histogram';
-import {
-  groupedBarsUseSameXAxisValue,
-  groupedPaddingInner,
-  groupedPaddingOuter,
-  paddingInner,
-  paddingOuter,
-} from '../../utils/bars';
+import { IBarChartDataSet } from '../../Histogram';
 import { EChartDirection } from '../../v3/BarChart';
-import {
-  TipContent,
-  TTipFunc,
-} from '../ToolTip';
-import { buildBarSprings } from './barHelper';
+import { TTipFunc } from '../ToolTip';
+import { ExtendedGroupItem } from './Bars';
+import { buildHistogramSprings } from './histogramHelper';
 
-enum EGroupedBarLayout {
-  GROUPED,
-  STACKED,
-  OVERLAID,
-}
+const TipContent: TTipFunc = ({ item, bin }) => <>
+  <rect x={12} y={-12} width={150} height={65} rx={3} ry={3} fill='#fff' />
+  <foreignObject x="0" y="0" width="160" height="65">
+    {
+      // @ts-ignore
+      <div xmlns="http://www.w3.org/1999/xhtml" style={{ paddingLeft: '10px', textAlign: 'center', height: '65px' }}>
+        {bin?.[0]} to {bin?.[1]}<br />
+        Count: {item.value}
+      </div>
+    }
+  </foreignObject>
+</>
+
 
 interface IProps {
-  bins: (string | [number, number])[]
+  bins: [number, number][];
   config?: SpringConfig;
   colorScheme?: readonly string[],
-  domain: number[];
+  continuousDomain: [number, number];
   direction?: EChartDirection;
-  groupLayout?: EGroupedBarLayout;
+  domain: [number, number];
   height: number;
   hoverColorScheme?: readonly string[];
   left?: number;
-  padding?: IHistogramBar;
+  stroke?: string;
   top?: number;
   tip?: TTipFunc;
   values: IBarChartDataSet[];
@@ -57,43 +49,29 @@ interface IProps {
   width: number;
 }
 
-const paddings = {
-  grouped: {
-    paddingInner: 0.1,
-    paddingOuter: 0,
-  },
-  overlayMargin: 5,
-  paddingInner: 0,
-  paddingOuter: 0,
-};
-
-export type ExtendedGroupItem = IGroupDataItem & {
-  datasetIndex: number;
-  binIndex: number;
-}
-
-const Bars: FC<IProps> = ({
-  values,
-  domain,
-  height,
-  width,
-  left = 0,
-  top = 0,
-  groupLayout = EGroupedBarLayout.GROUPED,
+const HistogramBars: FC<IProps> = ({
   bins,
   config = {
     duration: 250,
   },
   colorScheme = ['#a9a9a9', '#2a5379'],
-  hoverColorScheme,
-  padding = paddings,
-  visible = {},
-  tip,
+  continuousDomain,
   direction = EChartDirection.horizontal,
+  domain,
+  height,
+  hoverColorScheme,
+  left = 0,
+  stroke = "#FFF",
+  top = 0,
+  tip,
+  values,
+  visible = {},
+  width,
 }) => {
   if (width === 0) {
     return null;
   }
+
   if (!hoverColorScheme) {
     hoverColorScheme = colorScheme.map((c) => color(c)?.brighter(0.1).toString()) as readonly string[];
   }
@@ -118,38 +96,23 @@ const Bars: FC<IProps> = ({
     .rangeRound([0, direction === EChartDirection.horizontal ? width : height]);
 
   // Distribute the bin values across the x axis
-  const bandScale = scaleBand().domain(binLabels as string[])
-    .rangeRound([0, direction === EChartDirection.horizontal ? height : width])
-    .paddingInner(paddingInner(padding))
-    .paddingOuter(paddingOuter(padding))
-    .align(0.5);
-
-  const dataLabels = values.map((c) => c.label);
-
-  // Used to distribute a given bins values 
-  const innerDomain = groupedBarsUseSameXAxisValue({ groupLayout }) ? ['main'] : dataLabels;
-  const innerScaleBand = scaleBand()
-    .domain(innerDomain)
-    .rangeRound([0, bandScale.bandwidth()])
-    .paddingInner(groupedPaddingInner(padding))
-    .paddingOuter(groupedPaddingOuter(padding)) // Center the bar distribution around the middle;
+  const continuousScale = scaleLinear()
+    .domain(continuousDomain)
+    .rangeRound([0, direction === EChartDirection.vertical ? width : height]);
 
   const transform = `(${left}, ${top})`;
 
   const [hover, setHover] = useState(-1);
-  const springs = useSprings(dataSets.length, buildBarSprings({
+  const springs = useSprings(dataSets.length, buildHistogramSprings({
+    bins,
     values,
     height,
     width,
     dataSets,
+    continuousScale,
     numericScale,
-    bandScale,
     colorScheme,
-    innerDomain,
-    innerScaleBand,
     hoverColorScheme,
-    groupLayout,
-    paddings,
     config,
     direction,
   }));
@@ -165,6 +128,7 @@ const Bars: FC<IProps> = ({
             refs[i] = React.createRef<any>();
             return <animated.rect
               ref={refs[i]}
+              stroke={stroke}
               onMouseEnter={() => setHover(i)}
               onMouseLeave={() => setHover(-1)}
               key={dataSets[i].groupLabel + dataSets[i].label}
@@ -180,7 +144,7 @@ const Bars: FC<IProps> = ({
       <g className="tips">
         {
           springs.map((_, i) => <Tooltip triggerRef={refs[i]}>
-            <ThisTip item={dataSets[i]} />
+            <ThisTip item={dataSets[i]} bin={bins[i]} />
           </Tooltip>)
         }
       </g>
@@ -188,4 +152,4 @@ const Bars: FC<IProps> = ({
 }
 
 
-export default Bars;
+export default HistogramBars;

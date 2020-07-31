@@ -6,11 +6,11 @@ import { SpringConfig } from 'react-spring';
 
 import {
   EGroupedBarLayout,
+  IBarChartDataSet,
   IHistogramBar,
-  IHistogramDataSet,
 } from '../../Histogram';
 import { getBarWidth } from '../../utils/bars';
-import { EChartDirection } from '../../v3/Histogram';
+import { EChartDirection } from '../../v3/BarChart';
 import { ExtendedGroupItem } from './Bars';
 
 /**
@@ -46,7 +46,7 @@ const getBandPosition = (
 }
 
 interface IBarSpringProps {
-  values: IHistogramDataSet[];
+  values: IBarChartDataSet[];
   height: number;
   width: number;
   dataSets: ExtendedGroupItem[];
@@ -65,7 +65,7 @@ interface IBarSpringProps {
  * Build the from / to spring animation properties to animate the bars.
  */
 export const buildBarSprings = (props: IBarSpringProps) => {
-  const { direction, width, config, values, height, dataSets, numericScale, bandScale, colorScheme, innerDomain, innerScaleBand, groupLayout, paddings, hoverColorScheme } = props;
+  const { direction, config, height, dataSets, numericScale, bandScale, colorScheme, innerScaleBand, groupLayout, paddings, hoverColorScheme } = props;
   const s = dataSets.map((item) => {
     const bandValue = Number(bandScale(item.label));
     const bandPosition = getBandPosition(item, props);

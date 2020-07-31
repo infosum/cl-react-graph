@@ -1,7 +1,7 @@
 import { FC } from 'react';
-import { IHistogramData } from './Histogram';
+import { IBarChartData } from './Histogram';
 export interface IProps {
-    data: IHistogramData[];
+    data: IBarChartData[];
     height: number;
     width: number;
 }

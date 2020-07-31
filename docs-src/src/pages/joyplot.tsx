@@ -7,7 +7,7 @@ import {
   Typography,
 } from '@material-ui/core';
 
-import { IHistogramData } from '../../../src';
+import { IBarChartData } from '../../../src';
 import JoyPlot from '../../../src/JoyPlot';
 import Layout from '../components/layout';
 import SEO from '../components/seo';
@@ -23,7 +23,7 @@ const data3 = {
   }],
   title: 'Plot 2',
 };
-const allData: IHistogramData[] = [data2, data3];
+const allData: IBarChartData[] = [data2, data3];
 
 const JoyPlotExample = () => {
   return (

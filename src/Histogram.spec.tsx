@@ -7,14 +7,14 @@ import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 
 import Histogram, {
-  IHistogramData,
+  IBarChartData,
   IHistogramProps,
 } from './Histogram';
 
 Enzyme.configure({ adapter: new Adapter() });
 let component: ReactWrapper;
 
-export const data: IHistogramData = {
+export const data: IBarChartData = {
   bins: ['Female', 'Male', 'Other', 'sdfdfg', 'dagdsg', 'sfsd', 'ds34fsdf', 'dfsfsd', 'sdfs34dfs', 'ghf34hfg', 'fd33gag', 'jg343hj', 'a343wes', 'ye343ye', 'fd343gjs', 'sdfd343fg', '34', 'sfsd', '433', '45245', '745'],
   counts: [
     {

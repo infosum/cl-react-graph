@@ -1,11 +1,11 @@
 import { FC } from 'react';
-import { IHistogramDataSet } from './Histogram';
+import { IBarChartDataSet } from './Histogram';
 interface IProps {
     className?: string;
     theme?: string[];
     data: {
         bins: string[];
-        counts: IHistogramDataSet[];
+        counts: IBarChartDataSet[];
     };
     onSelect: (label: string) => void;
     visible: {

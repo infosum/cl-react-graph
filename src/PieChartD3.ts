@@ -17,8 +17,8 @@ import merge from 'lodash/merge';
 
 import colorScheme from './colors';
 import {
+  IBarChartDataSet,
   IChartAdaptor,
-  IHistogramDataSet,
 } from './Histogram';
 import {
   IPieChartProps,
@@ -112,7 +112,7 @@ export const pieChartD3 = ((): IChartAdaptor<IPieChartProps> => {
 
     create(el: Element, newProps: DeepPartial<IPieChartProps> = {}) {
       merge(props, newProps);
-      previousData = props.data.counts.map((set: IHistogramDataSet, setIndex: number) => {
+      previousData = props.data.counts.map((set: IBarChartDataSet, setIndex: number) => {
         return set.data
           .map((count, i) => ({
             count,
@@ -175,7 +175,7 @@ export const pieChartD3 = ((): IChartAdaptor<IPieChartProps> => {
 
     drawCharts() {
       const { data, visible } = props;
-      dataSets = data.counts.map((set: IHistogramDataSet) => {
+      dataSets = data.counts.map((set: IBarChartDataSet) => {
         return set.data
           .map((count, i) => ({
             count: visible[data.bins[i]] !== false ? count : 0,

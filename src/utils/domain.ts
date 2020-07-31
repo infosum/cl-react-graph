@@ -8,8 +8,8 @@ import { IGroupData } from '../BaseHistogramD3';
 import {
   EGroupedBarLayout,
   IAxis,
+  IBarChartDataSet,
   IDomain,
-  IHistogramDataSet,
 } from '../Histogram';
 import { IGroupedProps } from './bars';
 import { AnyScale } from './scales';
@@ -145,8 +145,8 @@ export const tickSize = ({
   }
 }
 
-export const maxValueCount = (counts: IHistogramDataSet[]): number => {
-  return counts.reduce((a: number, b: IHistogramDataSet): number => {
+export const maxValueCount = (counts: IBarChartDataSet[]): number => {
+  return counts.reduce((a: number, b: IBarChartDataSet): number => {
     return b.data.length > a ? b.data.length : a;
   }, 0);
 };

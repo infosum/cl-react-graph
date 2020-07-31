@@ -47,7 +47,7 @@ const XAxis: FC<IAxis> = ({
   tickFormat = defaultTickFormat,
   labelOrientation = ELabelOrientation.horizontal,
 }) => {
-  if (scale === 'linear' && typeof values[0] === 'string') {
+  if (scale === 'linear' && values.length > 0 && typeof values[0] === 'string') {
     throw new Error('Linear axis can not accept string values');
   }
   if (scale === 'band' && !padding) {

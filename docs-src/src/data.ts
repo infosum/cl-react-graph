@@ -1,12 +1,13 @@
 import {
   IAxes,
-  IHistogramData,
+  IBarChartData,
 } from '../../src';
 import filterRange from '../../src/colors/filterRange';
 import { ELabelOrientation } from '../../src/components/YAxis';
 import {
   IAnnotation,
   IGrid,
+  IHistogramData,
 } from '../../src/Histogram';
 import { lineStyle } from '../../src/utils/defaults';
 import { DeepPartial } from '../../src/utils/types';
@@ -30,7 +31,7 @@ export const grid: IGrid = {
   },
 };
 
-export const smallData: IHistogramData = {
+export const smallData: IBarChartData = {
   bins: ['Female long label test', 'Male', 'Other'],
   counts: [
     {
@@ -44,7 +45,7 @@ export const smallData: IHistogramData = {
   ]
 }
 
-export const smallData2: IHistogramData = {
+export const smallData2: IBarChartData = {
   bins: ['Female', 'Male', 'Other'],
   counts: [
     {
@@ -58,7 +59,17 @@ export const smallData2: IHistogramData = {
   ]
 }
 
-export const data: IHistogramData = {
+export const smallDataContinuous: IHistogramData = {
+  bins: [[0, 50], [50, 150], [150, 300]],
+  counts: [
+    {
+      data: [500, 2000, 1500],
+      label: 'Baseline',
+    },
+  ]
+}
+
+export const data: IBarChartData = {
   bins: ['Female', 'Male', 'Other', 'sdfdfg', 'dagdsg', 'sfsd', 'ds34fsdf', 'dfsfsd', 'sdfs34dfs', 'ghf34hfg', 'fd33gag', 'jg343hj', 'a343wes', 'ye343ye', 'fd343gjs', 'sdfd343fg', '34', 'sfsd', '433', '45245', '745'],
   counts: [
     {
@@ -102,7 +113,7 @@ export const smallAnnotationsData: IAnnotation[] = [
   { color: 'red', value: '-5%' },
 ]
 /*
-export const data: IHistogramData = {
+export const data: IBarChartData = {
   bins: ['Data 1', 'Data 6', 'Data 3', 'Dat 4'],
   counts: [
     {

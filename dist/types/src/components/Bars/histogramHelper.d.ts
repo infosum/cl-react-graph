@@ -1,43 +1,40 @@
-import { ScaleBand, ScaleLinear } from 'd3-scale';
+import { ScaleLinear } from 'd3-scale';
 import { SpringConfig } from 'react-spring';
-import { EGroupedBarLayout, IBarChartDataSet, IHistogramBar } from '../../Histogram';
+import { IBarChartDataSet } from '../../Histogram';
 import { EChartDirection } from '../../v3/BarChart';
 import { ExtendedGroupItem } from './Bars';
-interface IBarSpringProps {
+interface IHistogramSpringProps {
+    bins: [number, number][];
     values: IBarChartDataSet[];
     height: number;
     width: number;
     dataSets: ExtendedGroupItem[];
     numericScale: ScaleLinear<any, any>;
-    bandScale: ScaleBand<string>;
+    continuousScale: ScaleLinear<any, any>;
     colorScheme: readonly string[];
     hoverColorScheme?: readonly string[];
-    innerDomain: string[];
-    innerScaleBand: ScaleBand<string>;
-    groupLayout: EGroupedBarLayout;
-    paddings: IHistogramBar;
     config: SpringConfig;
     direction: EChartDirection;
 }
 /**
  * Build the from / to spring animation properties to animate the bars.
  */
-export declare const buildBarSprings: (props: IBarSpringProps) => ({
+export declare const buildHistogramSprings: (props: IHistogramSpringProps) => ({
     from: {
         width: number;
         fill: string;
         hoverFill: string;
         x: number;
-        y: number;
-        height: number;
+        y: any;
+        height: any;
     };
     to: {
         width: any;
         fill: string;
         hoverFill: string;
-        x: any;
-        y: number;
-        height: number;
+        x: number;
+        y: any;
+        height: any;
     };
     config: SpringConfig;
 } | {
@@ -45,24 +42,18 @@ export declare const buildBarSprings: (props: IBarSpringProps) => ({
         height: number;
         fill: string;
         hoverFill: string;
-        x: number;
+        x: any;
         y: number;
-        width: number;
+        width: any;
     };
     to: {
         height: any;
         fill: string;
         hoverFill: string;
-        x: number;
-        y: any;
-        width: number;
+        x: any;
+        y: number;
+        width: any;
     };
     config: SpringConfig;
 })[];
-/**
- * If we are using a STACKED group layout the work out the total height
- * of the bars which should be stacked under the current item.
- * This should provide us with the finishing location for the bar's y position.
- */
-export declare const getValueOffset: (item: ExtendedGroupItem, props: IBarSpringProps) => any;
 export {};

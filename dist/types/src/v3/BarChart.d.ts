@@ -2,16 +2,21 @@ import { FC } from 'react';
 import { SpringConfig } from 'react-spring';
 import { TTipFunc } from '../components/ToolTip';
 import { ELabelOrientation, TAxisLabelFormat } from '../components/YAxis';
-import { IGrid, IHistogramData } from '../Histogram';
-import { EChartDirection } from './BarChart';
+import { EGroupedBarLayout, IBarChartData, IGrid, IHistogramBar } from '../Histogram';
+export declare enum EChartDirection {
+    'horizontal' = 0,
+    'vertical' = 1
+}
 interface IProps {
     animation?: SpringConfig;
     axisLabelFormat?: TAxisLabelFormat;
     colorScheme?: string[];
-    data: IHistogramData;
+    data: IBarChartData;
     direction?: EChartDirection;
     grid?: IGrid;
+    groupLayout?: EGroupedBarLayout;
     height: number;
+    padding?: IHistogramBar;
     tip?: TTipFunc;
     visible?: Record<string, boolean>;
     width: number;
@@ -19,8 +24,5 @@ interface IProps {
     xAxisLabelOrientation?: ELabelOrientation;
     yAxisWidth?: number;
 }
-/**
- * A Histogram renders continuous data and thus use a ScaleLinear x & y axis
- */
 declare const Histogram: FC<IProps>;
 export default Histogram;
