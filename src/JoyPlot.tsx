@@ -15,6 +15,7 @@ import { useJoyPlot } from './utils/useJoyPlot';
 import { EChartDirection } from './v3/BarChart';
 
 export interface IProps {
+  colorScheme?: string[];
   data: IBarChartData[];
   direction?: EChartDirection;
   height: number;
@@ -27,6 +28,7 @@ export interface IProps {
  * JoyPlot component
  */
 const JoyPlot: FC<IProps> = ({
+  colorScheme,
   direction = EChartDirection.vertical,
   height,
   data,
@@ -76,6 +78,7 @@ const JoyPlot: FC<IProps> = ({
             <Bars
               left={yAxisWidth}
               height={plotHeight}
+              colorScheme={colorScheme}
               width={width - Number(yAxisWidth)}
               groupLayout={EGroupedBarLayout.STACKED}
               values={values[i].counts}
