@@ -274,20 +274,6 @@ function reducer(state: IInitialState, action: Actions): IInitialState {
   }
 }
 
-const CustomTipContent: TTipFunc = ({ item }) => <>
-  <rect x={12} y={-12} width={150} height={50} rx={3} ry={3} fill='#fff'>
-  </rect>
-  <foreignObject x="12" y="-12" width="160" height="65">
-    {
-      // @ts-ignore
-      <div xmlns="http://www.w3.org/1999/xhtml" style={{ paddingLeft: '10px', marginTop: '10px', height: '45px' }}>
-        {item.groupLabel}: {item.label}<br /> {item.value}
-      </div>
-    }
-
-  </foreignObject>
-</>
-
 /**
  * 
  * @param datum  <strong>CUSTOM</strong>
@@ -384,7 +370,6 @@ const HistogramExample = () => {
                   xAxisLabelOrientation={state.axis.x.labelOrientation}
                   width={w}
                   visible={visible}
-                  tip={CustomTipContent}
                 />
 
                 <h3>Histogram</h3>

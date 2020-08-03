@@ -70,6 +70,7 @@ const paddings = {
 export type ExtendedGroupItem = IGroupDataItem & {
   datasetIndex: number;
   binIndex: number;
+  percentage: string;
 }
 
 const Bars: FC<IProps> = ({
@@ -102,12 +103,14 @@ const Bars: FC<IProps> = ({
   const binLabels = bins.reduce((p, n) => p.concat(Array.isArray(n) ? n : [n]), [] as (number | string)[]);
 
   values.forEach((count, datasetIndex) => {
+    const total = count.data.reduce((p, n) => p + n, 0);
     count.data.forEach((value, i) => {
       dataSets.push({
         groupLabel: count.label,
         datasetIndex,
         label: String(binLabels[i]),
         binIndex: i,
+        percentage: total === 0 ? '0' : ((value / total) * 100).toFixed(2),
         value: visible[binLabels[i]] !== false && visible[count.label] !== false ? value : 0,
       });
     });
@@ -180,7 +183,8 @@ const Bars: FC<IProps> = ({
       <g className="tips">
         {
           springs.map((_, i) => <Tooltip triggerRef={refs[i]}>
-            <ThisTip item={dataSets[i]} />
+            <ThisTip item={dataSets[i]}
+              bin={bins[i]} />
           </Tooltip>)
         }
       </g>
