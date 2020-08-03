@@ -26,6 +26,7 @@ export interface IHistogramProps {
   direction?: EChartDirection;
   grid?: IGrid;
   height: number;
+  hoverColorScheme?: string[];
   tip?: TTipFunc;
   visible?: Record<string, boolean>;
   width: number;
@@ -45,6 +46,7 @@ const Histogram: FC<IHistogramProps> = ({
   direction = EChartDirection.vertical,
   grid,
   height,
+  hoverColorScheme,
   tip,
   visible,
   width,
@@ -85,6 +87,7 @@ const Histogram: FC<IHistogramProps> = ({
 
       <HistogramBars
         colorScheme={colorScheme}
+        hoverColorScheme={hoverColorScheme}
         left={yAxisWidth}
         height={height - xAxisHeight}
         width={width - yAxisWidth}

@@ -6,7 +6,7 @@ import React, {
 import Bars from './components/Bars/Bars';
 import Base from './components/Base';
 import XAxis from './components/XAxis';
-import YAxis from './components/YAxis';
+import YAxis, { ELabelOrientation } from './components/YAxis';
 import {
   EGroupedBarLayout,
   IBarChartData,
@@ -62,6 +62,23 @@ const JoyPlot: FC<IProps> = ({
       {
         values.map((d, i) => {
           return (<Fragment key={`plot-${i}`}>
+
+            <YAxis
+              width={0}
+              height={plotHeight}
+              scale="band"
+              top={chartHeight * i}
+              path={{
+                opacity: 0,
+              }}
+              labelOrientation={ELabelOrientation.vertical}
+              tickFormat={{
+                fontSize: '12px',
+                stroke: '#333',
+              }}
+              values={[String(d.title)]}
+            />
+
             <YAxis
               width={Number(yAxisWidth)}
               height={plotHeight}

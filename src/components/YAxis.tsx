@@ -40,12 +40,14 @@ export interface IAxis {
   labelFormat?: TAxisLabelFormat;
   tickFormat?: {
     stroke: string;
+    fontSize?: string;
   }
   labelOrientation?: ELabelOrientation,
 }
 
 export const defaultTickFormat = {
   stroke: '#a9a9a9',
+  fontSize: '10px',
 }
 
 export const defaultPath: SVGAttributes<SVGPathElement> = {
@@ -79,6 +81,7 @@ const YAxis: FC<IAxis> = ({
   top = 0,
   values = [],
   width,
+  labelOrientation = ELabelOrientation.horizontal,
 }) => {
   if (scale === 'linear' && typeof values[0] === 'string') {
     throw new Error('Linear axis can not accept string values');
@@ -156,10 +159,16 @@ const YAxis: FC<IAxis> = ({
 
               <text
                 fill={tickFormat.stroke}
+                text-anchor={labelOrientation === ELabelOrientation.horizontal ? 'middle' : 'start'}
+                writing-mode={labelOrientation === ELabelOrientation.horizontal ? 'horizontal-tb' : 'vertical-rl'}
+                transform={labelOrientation === ELabelOrientation.horizontal ? 'rotate(0)' : 'rotate(180)'}
+                height={height}
+                fontSize={tickFormat.fontSize}
                 x={`-${tickSize + 10}`}
-                dy="0.32em">
+                dy={labelOrientation === ELabelOrientation.horizontal ? '0.32em' : '20'}>
                 {labelFormat ? labelFormat('y', v, i) : v}
               </text>
+
             </g>
           )
         })
