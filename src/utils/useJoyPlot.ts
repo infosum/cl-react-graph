@@ -40,7 +40,7 @@ export const useJoyPlot = ({
     });
     setValues(allValues);
 
-    const eachValue = values.reduce((prev, next) => {
+    const eachValue = allValues.reduce((prev, next) => {
       const values = next.counts.reduce((p, n) => [...p, ...n.data], [] as number[]);
       return [...values, ...prev];
     }, [] as number[]);
