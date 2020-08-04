@@ -97,8 +97,8 @@ const JoyPlot: FC<IProps> = ({
             />
             <XAxis
               width={width - Number(yAxisWidth)}
-              height={40}
-              top={((chartHeight) * (i + 1)) - 100}
+              height={Number(xAxisHeight)}
+              top={((chartHeight) * (i + 1)) - Number(xAxisHeight)}
               left={yAxisWidth}
               labelFormat={axisLabelFormat}
               values={bins} />
