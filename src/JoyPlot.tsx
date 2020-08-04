@@ -6,7 +6,10 @@ import React, {
 import Bars from './components/Bars/Bars';
 import Base from './components/Base';
 import XAxis from './components/XAxis';
-import YAxis, { ELabelOrientation } from './components/YAxis';
+import YAxis, {
+  ELabelOrientation,
+  TAxisLabelFormat,
+} from './components/YAxis';
 import {
   EGroupedBarLayout,
   IBarChartData,
@@ -15,6 +18,7 @@ import { useJoyPlot } from './utils/useJoyPlot';
 import { EChartDirection } from './v3/BarChart';
 
 export interface IProps {
+  axisLabelFormat?: TAxisLabelFormat;
   colorScheme?: string[];
   data: IBarChartData[];
   direction?: EChartDirection;
@@ -28,10 +32,11 @@ export interface IProps {
  * JoyPlot component
  */
 const JoyPlot: FC<IProps> = ({
+  axisLabelFormat,
   colorScheme,
+  data,
   direction = EChartDirection.vertical,
   height,
-  data,
   width,
   xAxisHeight,
   yAxisWidth,
@@ -68,6 +73,7 @@ const JoyPlot: FC<IProps> = ({
               height={plotHeight}
               scale="band"
               top={chartHeight * i}
+              labelFormat={axisLabelFormat}
               path={{
                 opacity: 0,
               }}
@@ -81,6 +87,7 @@ const JoyPlot: FC<IProps> = ({
 
             <YAxis
               width={Number(yAxisWidth)}
+              labelFormat={axisLabelFormat}
               height={plotHeight}
               top={chartHeight * i}
               domain={domain}
@@ -90,6 +97,7 @@ const JoyPlot: FC<IProps> = ({
               height={40}
               top={((chartHeight) * (i + 1)) - 100}
               left={yAxisWidth}
+              labelFormat={axisLabelFormat}
               values={bins} />
 
             <Bars
