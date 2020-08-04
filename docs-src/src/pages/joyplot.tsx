@@ -37,6 +37,7 @@ const JoyPlotExample = () => {
               <CardContent>
                 <JoyPlot
                   data={[data2, data3]}
+                  xAxisHeight={20}
                   width={800}
                   height={400} />
               </CardContent>
