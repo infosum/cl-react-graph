@@ -5,6 +5,7 @@ import React, {
 
 import Bars from './components/Bars/Bars';
 import Base from './components/Base';
+import { TTipFunc } from './components/ToolTip';
 import XAxis from './components/XAxis';
 import YAxis, {
   ELabelOrientation,
@@ -23,6 +24,7 @@ export interface IProps {
   data: IBarChartData[];
   direction?: EChartDirection;
   height: number;
+  tip?: TTipFunc;
   width: number;
   xAxisHeight?: number;
   yAxisWidth?: number;
@@ -37,6 +39,7 @@ const JoyPlot: FC<IProps> = ({
   data,
   direction = EChartDirection.vertical,
   height,
+  tip,
   width,
   xAxisHeight,
   yAxisWidth,
@@ -104,13 +107,14 @@ const JoyPlot: FC<IProps> = ({
               left={yAxisWidth}
               height={plotHeight}
               colorScheme={colorScheme}
-              width={width - Number(yAxisWidth)}
               groupLayout={EGroupedBarLayout.STACKED}
               values={values[i].counts}
               bins={bins}
               top={chartHeight * i}
               domain={domain}
               direction={direction}
+              tip={tip}
+              width={width - Number(yAxisWidth)}
             />
           </Fragment>);
         })}
