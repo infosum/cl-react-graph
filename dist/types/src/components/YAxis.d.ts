@@ -21,11 +21,13 @@ export interface IAxis {
     labelFormat?: TAxisLabelFormat;
     tickFormat?: {
         stroke: string;
+        fontSize?: string;
     };
     labelOrientation?: ELabelOrientation;
 }
 export declare const defaultTickFormat: {
     stroke: string;
+    fontSize: string;
 };
 export declare const defaultPath: SVGAttributes<SVGPathElement>;
 declare const YAxis: FC<IAxis>;

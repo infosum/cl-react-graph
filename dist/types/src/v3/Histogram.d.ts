@@ -4,7 +4,7 @@ import { TTipFunc } from '../components/ToolTip';
 import { ELabelOrientation, TAxisLabelFormat } from '../components/YAxis';
 import { IGrid, IHistogramData } from '../Histogram';
 import { EChartDirection } from './BarChart';
-interface IProps {
+export interface IHistogramProps {
     animation?: SpringConfig;
     axisLabelFormat?: TAxisLabelFormat;
     colorScheme?: string[];
@@ -12,6 +12,7 @@ interface IProps {
     direction?: EChartDirection;
     grid?: IGrid;
     height: number;
+    hoverColorScheme?: string[];
     tip?: TTipFunc;
     visible?: Record<string, boolean>;
     width: number;
@@ -22,5 +23,5 @@ interface IProps {
 /**
  * A Histogram renders continuous data and thus use a ScaleLinear x & y axis
  */
-declare const Histogram: FC<IProps>;
+declare const Histogram: FC<IHistogramProps>;
 export default Histogram;

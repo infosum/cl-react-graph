@@ -25,7 +25,7 @@ export declare const buildHistogramSprings: (props: IHistogramSpringProps) => ({
         fill: string;
         hoverFill: string;
         x: number;
-        y: any;
+        y: number;
         height: any;
     };
     to: {
@@ -33,7 +33,7 @@ export declare const buildHistogramSprings: (props: IHistogramSpringProps) => ({
         fill: string;
         hoverFill: string;
         x: number;
-        y: any;
+        y: number;
         height: any;
     };
     config: SpringConfig;

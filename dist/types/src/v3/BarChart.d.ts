@@ -24,5 +24,5 @@ interface IProps {
     xAxisLabelOrientation?: ELabelOrientation;
     yAxisWidth?: number;
 }
-declare const Histogram: FC<IProps>;
-export default Histogram;
+declare const BarChart: FC<IProps>;
+export default BarChart;

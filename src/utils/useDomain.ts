@@ -43,7 +43,11 @@ export const useHistogramDomain: (props: IProps) => [number, number] = ({
     if (clampToZero) {
       allValues.push(0);
     }
-    setRange(extent(allValues) as [number, number]);
+    const e = extent(allValues) as [number, number];
+    if (e[0] === e[1]) {
+      e[1]++;
+    }
+    setRange(e);
   }, [bins, groupLayout, values]);
   return range;
 }
@@ -60,7 +64,11 @@ export const useLineDomain: (props: ILIneProps) => [number, number] = ({
     if (clampToZero) {
       allValues.push(0);
     }
-    setRange(extent(allValues) as [number, number]);
+    const e = extent(allValues) as [number, number];
+    if (e[0] === e[1]) {
+      e[1]++;
+    }
+    setRange(e);
   }, [values]);
   return range;
 };
