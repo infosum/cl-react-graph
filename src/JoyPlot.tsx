@@ -69,7 +69,7 @@ const JoyPlot: FC<IProps> = ({
 
       {
         values.map((d, i) => {
-          return (<Fragment key={`plot-${i}`}>
+          return (<Fragment key={`plot-${d.title}`}>
 
             <YAxis
               width={0}

@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import {
+  Button,
   Card,
   CardContent,
   Grid,
@@ -23,9 +24,24 @@ const data3 = {
   }],
   title: 'Plot 2',
 };
+
+const data4 = {
+  ...data2,
+  bins: ['Value 2', 'bin 1',],
+  counts: [{
+    ...data2.counts[0],
+    data: [2, 15],
+    label: 'Data 2',
+  }],
+  title: 'Plot 2',
+}
+
 const allData: IBarChartData[] = [data2, data3];
+const allData2: IBarChartData[] = [data2, data4, data3];
 
 const JoyPlotExample = () => {
+  const [dataIndex, setDataIndex] = useState(0);
+  const d = dataIndex === 0 ? allData : allData2;
   return (
     <Layout>
       <SEO title="Joy Plot" description="" />
@@ -36,10 +52,19 @@ const JoyPlotExample = () => {
             <Card>
               <CardContent>
                 <JoyPlot
-                  data={[data2, data3]}
+                  data={d}
                   xAxisHeight={20}
                   width={800}
-                  height={400} />
+                  height={d.length * 150} />
+              </CardContent>
+            </Card>
+          </Grid>
+          <Grid item xs={6}>
+            <Card>
+              <CardContent>
+                <Button onClick={() => setDataIndex(dataIndex === 1 ? 0 : 1)}>
+                  toggle data
+                </Button>
               </CardContent>
             </Card>
           </Grid>
