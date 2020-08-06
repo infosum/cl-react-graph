@@ -182,7 +182,9 @@ const Bars: FC<IProps> = ({
       </g>
       <g className="tips">
         {
-          springs.map((_, i) => <Tooltip triggerRef={refs[i]}>
+          springs.map((_, i) => <Tooltip
+            key={dataSets[i].groupLabel + dataSets[i].label}
+            triggerRef={refs[i]}>
             <ThisTip item={dataSets[i]}
               bin={bins[i]} />
           </Tooltip>)

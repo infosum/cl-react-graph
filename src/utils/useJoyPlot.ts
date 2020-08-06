@@ -44,7 +44,11 @@ export const useJoyPlot = ({
       const values = next.counts.reduce((p, n) => [...p, ...n.data], [] as number[]);
       return [...values, ...prev];
     }, [] as number[]);
-    setDomain(extent(eachValue) as [number, number]);
+    const e = extent(eachValue) as [number, number];
+    if (e[0] == e[1]) {
+      e[1]++;
+    }
+    setDomain(e);
 
   }, [data])
   return ({
