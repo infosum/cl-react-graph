@@ -29,6 +29,7 @@ interface IProps {
 export declare type ExtendedGroupItem = IGroupDataItem & {
     datasetIndex: number;
     binIndex: number;
+    percentage: string;
 };
 declare const Bars: FC<IProps>;
 export default Bars;

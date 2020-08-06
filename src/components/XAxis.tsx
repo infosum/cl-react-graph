@@ -126,8 +126,8 @@ const XAxis: FC<IAxis> = ({
 
               <text
                 fill={tickFormat.stroke}
-                text-anchor={labelOrientation === ELabelOrientation.horizontal ? 'middle' : 'start'}
-                writing-mode={labelOrientation === ELabelOrientation.horizontal ? 'horizontal-tb' : 'vertical-lr'}
+                textAnchor={labelOrientation === ELabelOrientation.horizontal ? 'middle' : 'start'}
+                writingMode={labelOrientation === ELabelOrientation.horizontal ? 'horizontal-tb' : 'vertical-lr'}
                 height={height}
                 dy={labelOrientation === ELabelOrientation.horizontal ? '1em' : '20'}>
                 {labelFormat ? labelFormat('x', v, i) : v}

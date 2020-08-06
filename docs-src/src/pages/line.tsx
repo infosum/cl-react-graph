@@ -3,14 +3,14 @@ import 'react-datasheet/lib/react-datasheet.css';
 
 import { curveCatmullRom } from 'd3-shape';
 import { timeFormat } from 'd3-time-format';
-import merge from 'deepmerge';
+import { Draft } from 'immer';
 import ColorPicker from 'material-ui-color-picker';
 import React, {
   FC,
-  useReducer,
   useState,
 } from 'react';
 import ReactDataSheet, { Cell } from 'react-datasheet';
+import { useImmerReducer } from 'use-immer';
 
 import {
   Button,
@@ -33,13 +33,7 @@ import {
   ILineChartProps,
   LineChart,
 } from '../../../src';
-import AreaFill from '../../../src/components/AreaFill';
-import Base from '../../../src/components/Base';
-import ChartGrid from '../../../src/components/Grid';
-import Line from '../../../src/components/Line';
-import Points from '../../../src/components/Points';
-import XAxis from '../../../src/components/XAxis';
-import YAxis from '../../../src/components/YAxis';
+import { ELabelOrientation } from '../../../src/components/YAxis';
 import { Scale } from '../../../src/Histogram';
 import { DeepPartial } from '../../../src/utils/types';
 import { useLineDomain } from '../../../src/utils/useDomain';
@@ -54,13 +48,9 @@ import Layout from '../components/layout';
 import SEO from '../components/seo';
 import { TabContainer } from '../components/TabContainer';
 import { grid } from '../data';
-import {
-  axisReducer,
-  GridActions,
-  gridReducer,
-} from './histogram';
+import { GridActions } from './histogram';
 
-type TInitialState = DeepPartial<ILineChartProps<{ x: number | string | Date, y: number }>>;
+type TInitialState = ILineChartProps<{ x: number | string | Date, y: number }>;
 type TData = ILineChartDataSet<{ x: string | number | Date, y: number }>;
 
 const dateFormat = '%d-%b-%y';
@@ -160,60 +150,73 @@ type Actions = { type: 'applyChanges', index: 0, changes: any }
   | { type: 'lineFillColor', fill: string, index: number }
   | { type: 'addRow', row: TData; }
   | { type: 'toggleRow'; }
+  | { type: 'setLabelOrientation', value: ELabelOrientation, axis: 'x' | 'y' }
   | AxisActions
   | GridActions
   ;
 
-function reducer(state: ILineChartProps, action: Actions) {
-  state = gridReducer(state, action);
-  state = axisReducer(state, action);
+function reducer(draft: Draft<TInitialState>, action: Actions) {
   switch (action.type) {
-    case 'addRow': {
-      state.data.push(action.row);
-      return state;
-    }
+    case 'setGridTicks':
+      draft.axis[action.axis].ticks = action.ticks;
+      return;
+    case 'setGridStroke':
+      draft.axis[action.axis].style.stroke = action.color;
+      return;
+    case 'setGridStrokeOpacity':
+      draft.axis[action.axis].style['stroke-opacity'] = action.opacity;
+      return;
+    case 'setScale':
+      draft.axis[action.axis].scale = action.value;
+      return;
+    case 'setLabelOrientation':
+      draft.axis[action.axis].labelOrientation = action.value;
+      return;
+    case 'addRow':
+      draft.data = [...draft.data, action.row];
+      return;
+
     case 'applyChanges':
-      const newData: any = state.data[action.index].data.map((row) => ({ ...row }));
+      const newData: any = draft.data[action.index].data.map((row) => ({ ...row }));
       action.changes.forEach(({ cell, row, col, value }) => {
         const key = col === 0 ? 'x' : 'y';
         newData[row] = { ...newData[row], [key]: Number(value) };
       });
-      state.data[action.index].data = newData;
-      return { ...state };
+      draft.data[action.index].data = newData;
+      return;
     case 'setCurve':
-      state.data[action.index] = merge(state.data[action.index], { line: { curveType: action.curve } });
-      return { ...state };
+      draft.data[action.index].line.curveType = action.curve;
+      return;
     case 'setStroke':
-      state.data[action.index] = merge(state.data[action.index], { line: { stroke: action.stroke } });
-      return { ...state };
+      draft.data[action.index].line.stroke = action.stroke;
+      return;
     case 'setStrokeDashArray':
-      state.data[action.index] = merge(state.data[action.index], { line: { strokeDashArray: action.dash } });
-      return { ...state };
+      draft.data[action.index].line.strokeDashArray = action.dash
+      return;
     case 'strokeDashOffset':
-      state.data[action.index] = merge(state.data[action.index], { line: { strokeDashOffset: action.offset } });
-      return { ...state };
+      draft.data[action.index].line.strokeDashOffset = action.offset;;
+      return;
     case 'pointFill':
-      state.data[action.index] = merge(state.data[action.index], { point: { fill: action.fill } });
-      return { ...state };
+      draft.data[action.index].point.fill = action.fill;
+      return;
     case 'pointRadius':
-      state.data[action.index] = merge(state.data[action.index], { point: { radius: action.radius } });
-      return { ...state };
+      draft.data[action.index].point.radius = action.radius;
+      return;
     case 'pointStroke':
-      state.data[action.index] = merge(state.data[action.index], { point: { stroke: action.fill } });
-      return { ...state };
+      draft.data[action.index].point.stroke = action.fill;
+      return;
     case 'pointShow':
-      state.data[action.index] = merge(state.data[action.index], { point: { show: action.show } });
-      return { ...state };
+      draft.data[action.index].point.show = action.show;
+      return;
     case 'lineFillShow':
-      state.data[action.index] = merge(state.data[action.index], { line: { fill: { show: action.show } } });
-      return { ...state };
+      draft.data[action.index].line.fill.show = action.show;
+      return;
     case 'lineFillColor':
-      state.data[action.index] = merge(state.data[action.index], { line: { fill: { fill: action.fill } } });
-      return { ...state };
+      draft.data[action.index].line.fill.fill = action.fill;
+      return;
     case 'toggleRow':
-      return { ...state, data: state.data.length === 2 ? [data2] : [data, data2] };
-    default:
-      return state;
+      draft.data = draft.data.length === 2 ? [data2] : [data, data2];
+      return;
   }
 }
 
@@ -222,8 +225,9 @@ const GridOptions = GridOptionsFactory<(action: Actions) => void, ILineChartProp
 export interface IGridElement extends ReactDataSheet.Cell<IGridElement, number | string> {
   value: number | null | string;
 }
+
 const LineExample: FC = () => {
-  const [state, dispatch] = useReducer(reducer, initialState as ILineChartProps);
+  const [state, dispatch] = useImmerReducer(reducer, initialState);
   const [ref, w] = useWidth(state.width);
   const [tab, setTab] = useState(0);
   const gridData: Cell[][] = state.data[0].data.map((point) => {

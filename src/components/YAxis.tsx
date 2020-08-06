@@ -159,8 +159,8 @@ const YAxis: FC<IAxis> = ({
 
               <text
                 fill={tickFormat.stroke}
-                text-anchor={labelOrientation === ELabelOrientation.horizontal ? 'right' : 'center'}
-                writing-mode={labelOrientation === ELabelOrientation.horizontal ? 'horizontal-tb' : 'vertical-rl'}
+                textAnchor={labelOrientation === ELabelOrientation.horizontal ? 'right' : 'center'}
+                writingMode={labelOrientation === ELabelOrientation.horizontal ? 'horizontal-tb' : 'vertical-rl'}
                 transform={labelOrientation === ELabelOrientation.horizontal ? 'rotate(0)' : 'rotate(180)'}
                 height={height}
                 fontSize={tickFormat.fontSize}

@@ -1,9 +1,7 @@
-import merge from 'deepmerge';
+import { Draft } from 'immer';
 import fileDownload from 'js-file-download';
-import React, {
-  useReducer,
-  useState,
-} from 'react';
+import React, { useState } from 'react';
+import { useImmerReducer } from 'use-immer';
 
 import {
   Button,
@@ -21,7 +19,6 @@ import {
   BarChart,
   EChartDirection,
   HorizontalHistogram,
-  TTipFunc,
 } from '../../../src';
 import { ELabelOrientation } from '../../../src/components/YAxis';
 import Histogram, {
@@ -40,9 +37,9 @@ import {
   AxisActions,
   AxisOptionsFactory,
 } from '../components/AxisOptions';
-import ColorModifierFields from '../components/ColorModifierFields';
 import DataGroup from '../components/DataGroup';
 import { GridOptionsFactory } from '../components/GridOptions';
+import { Styling } from '../components/histogram/Styling';
 import JSXToString from '../components/JSXToString';
 import Layout from '../components/layout';
 import SEO from '../components/seo';
@@ -77,7 +74,7 @@ export interface IInitialState {
   width: number | string;
 }
 
-const initialSate: IInitialState = {
+const initialState: IInitialState = {
   axis: analyticsAxis,
   bar: {
     grouped: {
@@ -122,121 +119,58 @@ export type Actions = { type: 'setChartType'; chartType: string }
   | AxisActions
   ;
 
-export function gridReducer<S extends any, A extends any>(state: S, action: A): any {
+function reducer(draft: Draft<IInitialState>, action: Actions) {
   switch (action.type) {
-    case 'setChartType':
-      return { ...state, chartType: action.chartType };
-    case 'setData':
-      return { ...state, data: action.data };
-    case 'setDuration':
-      return { ...state, duration: action.duration };
-    case 'setDelay':
-      return { ...state, delay: action.delay };
     case 'setGridTicks':
-      return merge(state, { axis: { [action.axis]: { ticks: action.ticks } } })
+      draft.axis[action.axis].ticks = action.ticks;
+      return;
     case 'setGridStroke':
-      return merge(state, { grid: { [action.axis]: { style: { stroke: action.color } } } });
+      draft.axis[action.axis].style.stroke = action.color;
+      return;
     case 'setGridStrokeOpacity':
-      return merge(state, { grid: { [action.axis]: { style: { 'stroke-opacity': action.opacity } } } });
-    default:
-      return state;
-  }
-}
-
-// Unclear why but you can't import a reducer in and have it update state???
-export function axisReducer<S extends any, A extends any>(state: S, action: A): any {
-  switch (action.type) {
+      draft.axis[action.axis].style['stroke-opacity'] = action.opacity;
+      return;
     case 'setScale':
-      return merge(state, {
-        axis: {
-          [action.axis]: {
-            scale: action.value,
-          },
-        }
-      })
+      draft.axis[action.axis].scale = action.value;
+      return;
     case 'setLabelOrientation':
-      return merge(state, {
-        axis: {
-          [action.axis]: {
-            labelOrientation: action.value,
-          },
-        }
-      })
-    default:
-      return state;
-  }
-}
-
-function reducer(state: IInitialState, action: Actions): IInitialState {
-  state = gridReducer(state, action);
-  state = axisReducer(state, action);
-  switch (action.type) {
+      draft.axis[action.axis].labelOrientation = action.value;
+      return;
     case 'setChartType':
-      return { ...state, chartType: action.chartType };
+      draft.chartType = action.chartType;
+      return;
     case 'setData':
-      return { ...state, data: action.data };
+      draft.data = action.data;
+      return;
     case 'setDuration':
-      return { ...state, duration: action.duration };
+      draft.duration = action.duration;
+      return;
     case 'setDelay':
-      return { ...state, delay: action.delay };
+      draft.delay = action.delay;
+      return;
     case 'setWidth':
-      return { ...state, width: action.width };
-    case 'setGridTicks':
-      return merge(state, { grid: { [action.axis]: { ticks: action.ticks } } });
-    case 'setGridStroke':
-      return merge(state, { grid: { [action.axis]: { style: { stroke: action.color } } } });
-    case 'setGridStrokeOpacity':
-      return merge(state, { grid: { [action.axis]: { style: { 'stroke-opacity': action.opacity } } } });
+      draft.width = action.width;
+      return;
     case 'setGroupedBarLayout':
-      return { ...state, groupLayout: action.layout };
+      draft.groupLayout = action.layout;
+      return;
     case 'setOverlayMargin':
-      return {
-        ...state,
-        bar: {
-          ...state.bar,
-          overlayMargin: action.margin,
-        },
-      }
+      draft.bar.overlayMargin = action.margin;
+      return;
     case 'setGroupedPaddingInner':
-      return {
-        ...state,
-        bar: {
-          ...state.bar,
-          grouped: {
-            ...state.bar.grouped,
-            paddingInner: action.padding,
-          }
-        },
-      }
+      draft.bar.grouped.paddingInner = action.padding;
+      return;
     case 'setGroupedPaddingOuter':
-      return {
-        ...state,
-        bar: {
-          ...state.bar,
-          grouped: {
-            ...state.bar.grouped,
-            paddingOuter: action.padding,
-          }
-        },
-      }
+      draft.bar.grouped.paddingOuter = action.padding;
+      return;
     case 'setPaddingInner':
-      return {
-        ...state,
-        bar: {
-          ...state.bar,
-          paddingInner: action.padding,
-        },
-      };
+      draft.bar.paddingInner = action.padding;
+      return;
     case 'setPaddingOuter':
-      return {
-        ...state,
-        bar: {
-          ...state.bar,
-          paddingOuter: action.padding,
-        },
-      };
+      draft.bar.paddingOuter = action.padding;
+      return;
     case 'setHoverModifier': {
-      const hover = { ...state.bar.hover };
+      const hover = { ...draft.bar.hover };
       const keys = Object.keys(hover);
       delete hover[''];
       let i: number;
@@ -249,36 +183,18 @@ function reducer(state: IInitialState, action: Actions): IInitialState {
       const k = Object.keys(hover)[action.index];
       delete hover[k];
       hover[action.key] = action.value;
-      return {
-        ...state,
-        bar: {
-          ...state.bar,
-          hover,
-        }
-      }
+      draft.bar.hover = hover;
+      return;
     }
     case 'removeHoverModifier': {
-      const hover = { ...state.bar.hover };
+      const hover = { ...draft.bar.hover };
       const k = Object.keys(hover)[action.index];
       delete hover[k];
-      return {
-        ...state,
-        bar: {
-          ...state.bar,
-          hover,
-        }
-      }
+      draft.bar.hover = hover;
+      return
     }
-    default:
-      return state;
   }
 }
-
-/**
- * 
- * @param datum  <strong>CUSTOM</strong>
-        
- */
 
 export const dataToSpreadSheet = (datum: IBarChartData): any => {
   const spreadSheetData: any = [];
@@ -306,7 +222,7 @@ const watermarkSvg = require('../../../src/assets/Powered-By-InfoSum_DARK.svg') 
 
 const HistogramExample = () => {
   const [tab, setTab] = useState(0);
-  const [state, dispatch] = useReducer(reducer, initialSate);
+  const [state, dispatch] = useImmerReducer(reducer, initialState);
   const [ref, w] = useWidth(state.width);
   const [visible, setVisible] = useState({});
   const spreadSheetData = dataToSpreadSheet(state.data);
@@ -401,19 +317,7 @@ const HistogramExample = () => {
                 />
 
                 <h1>d3</h1>
-                <Button size="small" color="primary" variant="contained" style={{ marginBottom: '1rem' }} onClick={(e) => {
-                  e.preventDefault();
-                  outputSvg('bigHistogram', 420, 420, (blobData) => {
-                    fileDownload(blobData, 'big_chart.png');
-                  },
-                    {
-                      svg: watermarkSvg,
-                      width: 200,
-                      height: 62,
-                    },
-                    'blob',
-                  )
-                }}>Download</Button>
+
                 {chart}
                 <Button size="small" color="primary" variant="contained" style={{ marginBottom: '1rem' }} onClick={(e) => {
                   e.preventDefault();
@@ -513,127 +417,9 @@ const HistogramExample = () => {
                   </TabContainer>
                 }
                 {
-                  tab === 1 && <TabContainer>
-                    <Grid container spacing={10}>
-                      <Grid item xs={6}>
-                        <TextField
-                          select
-                          label="Group Layout"
-                          value={state.groupLayout}
-                          onChange={(e) => {
-                            dispatch({ type: 'setGroupedBarLayout', layout: Number(e.target.value) })
-                          }}>
-                          <MenuItem value={EGroupedBarLayout.GROUPED}>Grouped</MenuItem>
-                          <MenuItem value={EGroupedBarLayout.OVERLAID}>Overlaid</MenuItem>
-                          <MenuItem value={EGroupedBarLayout.STACKED}>Stacked</MenuItem>
-                        </TextField>
-                      </Grid>
-                      <Grid item xs={6}>
-                        <TextField
-                          label="Chart width"
-                          value={state.width}
-                          onChange={(e) => {
-                            dispatch(({ type: 'setWidth', width: e.target.value }))
-                          }}
-                        />
-                      </Grid>
-                      <Grid item xs={6}>
-                        <label>
-                          Grouped padding inner (0 - 1)
-                        </label>
-                        <input
-                          type="number"
-                          min={0}
-                          max={1}
-                          step={0.1}
-                          value={state.bar.grouped.paddingInner.toString()}
-                          onChange={(e: any) => {
-                            dispatch(({ type: 'setGroupedPaddingInner', padding: parseFloat(e.target.value) }))
-                          }}
-                        />
-                        <div><small>
-                          When rendered as grouped, this is the relative spacing between each bar in the group
-                        </small>
-                        </div>
-                      </Grid>
-                      <Grid item xs={6}>
-                        <label>
-                          Grouped padding outer (0 - 1)
-                        </label>
-                        <input
-                          type="number"
-                          min={0}
-                          step={0.1}
-                          max={1}
-                          value={state.bar.grouped.paddingOuter.toString()}
-                          onChange={(e: any) => {
-                            dispatch(({ type: 'setGroupedPaddingOuter', padding: parseFloat(e.target.value) }))
-                          }}
-                        />
-                        <div>
-                          <small>
-                            When rendered as grouped, this is the relative spacing at the start  and end of the group's bars
-                        </small>
-                        </div>
-                      </Grid>
-
-                      <Grid item xs={6}>
-                        <label>
-                          Padding inner (0 - 1)
-                        </label>
-                        <input
-                          type="number"
-                          min={0}
-                          max={1}
-                          step={0.1}
-                          value={state.bar.paddingInner.toString()}
-                          onChange={(e: any) => {
-                            dispatch(({ type: 'setPaddingInner', padding: parseFloat(e.target.value) }))
-                          }}
-                        />
-                        <div>
-                          <small>
-                            This is the relative padding for the inside of grouped datasets or single datasets
-                        </small>
-                        </div>
-                      </Grid>
-                      <Grid item xs={6}>
-                        <label>
-                          Padding outer (0 - 1)
-                        </label>
-                        <input
-                          type="number"
-                          min={0}
-                          step={0.1}
-                          max={1}
-                          value={state.bar.paddingOuter.toString()}
-                          onChange={(e: any) => {
-                            dispatch(({ type: 'setPaddingOuter', padding: parseFloat(e.target.value) }))
-                          }}
-                        />
-                        <small>
-                          This is the relative padding for the outside of grouped datasets or single datasets
-                        </small>
-                      </Grid>
-
-                      {
-                        state.groupLayout === EGroupedBarLayout.OVERLAID &&
-                        <Grid item xs={6}>
-                          <TextField
-                            helperText="When rendered as overlaid, this is the space between the overlaid bars"
-                            label="Overlay margin (px)"
-                            value={state.bar.overlayMargin}
-                            onChange={(e) => {
-                              dispatch(({ type: 'setOverlayMargin', margin: Number(e.target.value) }))
-                            }}
-                          />
-                        </Grid>
-                      }
-                      <ColorModifierFields
-                        values={state.bar.hover}
-                        dispatch={dispatch} />
-                    </Grid>
-                  </TabContainer>
+                  tab === 1 && <Styling
+                    dispatch={dispatch}
+                    state={state} />
                 }
                 {
                   tab === 2 && <TabContainer>

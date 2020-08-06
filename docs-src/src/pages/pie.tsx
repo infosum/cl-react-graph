@@ -1,9 +1,7 @@
-import merge from 'deepmerge';
-import React, {
-  useReducer,
-  useState,
-} from 'react';
-import ReactDataSheet, { Cell } from 'react-datasheet';
+import { Draft } from 'immer';
+import React, { useState } from 'react';
+import ReactDataSheet from 'react-datasheet';
+import { useImmerReducer } from 'use-immer';
 
 import {
   Card,
@@ -20,7 +18,6 @@ import {
 
 import Legend from '../../../src/Legend';
 import PieChart, { IPieChartProps } from '../../../src/PieChart';
-import { DeepPartial } from '../../../src/utils/types';
 import JSXToString from '../components/JSXToString';
 import Layout from '../components/layout';
 import SEO from '../components/seo';
@@ -31,11 +28,14 @@ import {
 } from '../data';
 import { dataToSpreadSheet } from './histogram';
 
-const initialSate: DeepPartial<IPieChartProps> = {
+type IInitialState = Pick<IPieChartProps, 'data' | 'donutWidth' | 'height' | 'labels' | 'visible' | 'width'>;
+
+const initialState: IInitialState = {
   data: data2,
   donutWidth: 0,
   height: 200,
   labels: {
+    displayFn: () => '',
     display: false,
   },
   visible: {},
@@ -43,36 +43,34 @@ const initialSate: DeepPartial<IPieChartProps> = {
 };
 
 type Actions = { type: 'toggleVisible'; key: string }
-  | { type: 'setData', data: IPieChartProps['data'] }
+  | { type: 'setData', data: IInitialState['data'] }
   | { type: 'setDonutWidth', width: number }
   | { type: 'showLabels', show: boolean };
 
-function reducer(state: IPieChartProps, action: Actions) {
+function reducer(draft: Draft<IInitialState>, action: Actions) {
   switch (action.type) {
     case 'toggleVisible':
-      const visible = {
-        ...state.visible,
-        [action.key]: state.visible.hasOwnProperty(action.key)
-          ? !state.visible[action.key]
-          : false,
-      };
-      return { ...state, visible };
+      draft.visible[action.key] = draft.visible.hasOwnProperty(action.key)
+        ? !draft.visible[action.key]
+        : false;
+      return;
     case 'setData':
-      return { ...state, data: action.data };
+      draft.data = action.data;
+      return;
     case 'setDonutWidth':
-      return { ...state, donutWidth: action.width };
+      draft.donutWidth = action.width;
+      return;
     case 'showLabels':
-      return merge(state, { labels: { display: action.show } });
-    default:
-      throw new Error();
+      draft.labels.display = action.show;
+      return;
   }
 }
 
 const PieExample = () => {
   const [tab, setTab] = useState(0);
-  const [state, dispatch] = useReducer(reducer, initialSate as IPieChartProps);
+  const [state, dispatch] = useImmerReducer(reducer, initialState);
 
-  const speadSheetData = dataToSpreadSheet(state.data);
+  const spreadSheetData = dataToSpreadSheet(state.data);
   const chart = <PieChart
     width={state.width}
     height={state.height}
@@ -115,7 +113,7 @@ const PieExample = () => {
                 </Tabs>
                 {
                   tab === 0 && <TabContainer>
-                    <ReactDataSheet data={speadSheetData}
+                    <ReactDataSheet data={spreadSheetData}
                       valueRenderer={(cell) => cell.value}
                       sheetRenderer={(props) => (
                         <table className={props.className + ' my-awesome-extra-class'}>
@@ -180,7 +178,6 @@ const PieExample = () => {
               </CardContent>
             </Card>
           </Grid>
-
         </Grid>
       </div>
     </Layout>
