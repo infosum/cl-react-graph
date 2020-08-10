@@ -27,6 +27,7 @@ export { outputSvg } from './utils/outputSvg';
 // Experimental v3 components...
 
 export { default as Bars } from './components/Bars/Bars';
+export { default as HistogramBars } from './components/Bars/HistogramBars';
 export { default as Base } from './components/Base';
 export { default as Grid } from './components/Grid';
 export { default as XAxis } from './components/XAxis';
