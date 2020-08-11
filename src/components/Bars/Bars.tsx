@@ -90,7 +90,7 @@ const Bars: FC<IProps> = ({
   padding = paddings,
   visible = {},
   tip,
-  direction = EChartDirection.horizontal,
+  direction = EChartDirection.HORIZONTAL,
 }) => {
   if (width === 0) {
     return null;
@@ -118,11 +118,11 @@ const Bars: FC<IProps> = ({
 
   const numericScale = scaleLinear()
     .domain(domain)
-    .rangeRound([0, direction === EChartDirection.horizontal ? width : height]);
+    .rangeRound([0, direction === EChartDirection.HORIZONTAL ? width : height]);
 
   // Distribute the bin values across the x axis
   const bandScale = scaleBand().domain(binLabels as string[])
-    .rangeRound([0, direction === EChartDirection.horizontal ? height : width])
+    .rangeRound([0, direction === EChartDirection.HORIZONTAL ? height : width])
     .paddingInner(paddingInner(padding))
     .paddingOuter(paddingOuter(padding))
     .align(0.5);

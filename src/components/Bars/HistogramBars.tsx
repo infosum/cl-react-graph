@@ -63,7 +63,7 @@ const HistogramBars: FC<IProps> = ({
   },
   colorScheme = ['#a9a9a9', '#2a5379'],
   continuousDomain,
-  direction = EChartDirection.horizontal,
+  direction = EChartDirection.HORIZONTAL,
   domain,
   height,
   hoverColorScheme,
@@ -102,12 +102,12 @@ const HistogramBars: FC<IProps> = ({
 
   const numericScale = scaleLinear()
     .domain(domain)
-    .rangeRound([0, direction === EChartDirection.horizontal ? width : height]);
+    .rangeRound([0, direction === EChartDirection.HORIZONTAL ? width : height]);
 
   // Distribute the bin values across the x axis
   const continuousScale = scaleLinear()
     .domain(continuousDomain)
-    .rangeRound([0, direction === EChartDirection.vertical ? width : height]);
+    .rangeRound([0, direction === EChartDirection.VERTICAL ? width : height]);
 
   const transform = `(${left}, ${top})`;
 

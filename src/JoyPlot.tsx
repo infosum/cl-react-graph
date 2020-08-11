@@ -37,7 +37,7 @@ const JoyPlot: FC<IProps> = ({
   axisLabelFormat,
   colorScheme,
   data,
-  direction = EChartDirection.vertical,
+  direction = EChartDirection.VERTICAL,
   height,
   tip,
   width,
@@ -54,10 +54,10 @@ const JoyPlot: FC<IProps> = ({
     height,
   })
   if (!yAxisWidth) {
-    yAxisWidth = direction === EChartDirection.vertical ? 40 : 100;
+    yAxisWidth = direction === EChartDirection.VERTICAL ? 40 : 100;
   }
   if (!xAxisHeight) {
-    xAxisHeight = direction === EChartDirection.vertical ? 100 : 40;
+    xAxisHeight = direction === EChartDirection.VERTICAL ? 100 : 40;
   }
 
   const plotHeight = chartHeight - xAxisHeight;
@@ -80,7 +80,7 @@ const JoyPlot: FC<IProps> = ({
               path={{
                 opacity: 0,
               }}
-              labelOrientation={ELabelOrientation.vertical}
+              labelOrientation={ELabelOrientation.VERTICAL}
               tickFormat={{
                 fontSize: '12px',
                 stroke: '#333',

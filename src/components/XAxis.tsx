@@ -45,7 +45,7 @@ const XAxis: FC<IAxis> = ({
   domain,
   padding,
   tickFormat = defaultTickFormat,
-  labelOrientation = ELabelOrientation.horizontal,
+  labelOrientation = ELabelOrientation.HORIZONTAL,
 }) => {
   if (scale === 'linear' && values.length > 0 && typeof values[0] === 'string') {
     throw new Error('Linear axis can not accept string values');
@@ -126,10 +126,10 @@ const XAxis: FC<IAxis> = ({
 
               <text
                 fill={tickFormat.stroke}
-                textAnchor={labelOrientation === ELabelOrientation.horizontal ? 'middle' : 'start'}
-                writingMode={labelOrientation === ELabelOrientation.horizontal ? 'horizontal-tb' : 'vertical-lr'}
+                textAnchor={labelOrientation === ELabelOrientation.HORIZONTAL ? 'middle' : 'start'}
+                writingMode={labelOrientation === ELabelOrientation.HORIZONTAL ? 'horizontal-tb' : 'vertical-lr'}
                 height={height}
-                dy={labelOrientation === ELabelOrientation.horizontal ? '1em' : '20'}>
+                dy={labelOrientation === ELabelOrientation.HORIZONTAL ? '1em' : '20'}>
                 {labelFormat ? labelFormat('x', v, i) : v}
               </text>
             </g>

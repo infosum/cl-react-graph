@@ -278,7 +278,7 @@ const HistogramExample = () => {
                   animation={{
                     duration: state.duration,
                   }}
-                  direction={state.chartType === 'HorizontalHistogram' ? EChartDirection.horizontal : EChartDirection.vertical}
+                  direction={state.chartType === 'HorizontalHistogram' ? EChartDirection.HORIZONTAL : EChartDirection.VERTICAL}
                   data={d}
                   height={400}
                   grid={state.grid}
@@ -294,7 +294,7 @@ const HistogramExample = () => {
                   animation={{
                     duration: state.duration,
                   }}
-                  direction={state.chartType === 'HorizontalHistogram' ? EChartDirection.horizontal : EChartDirection.vertical}
+                  direction={state.chartType === 'HorizontalHistogram' ? EChartDirection.HORIZONTAL : EChartDirection.VERTICAL}
                   data={smallDataContinuous}
                   height={400}
                   grid={state.grid}
