@@ -31,7 +31,7 @@ export { default as HistogramBars } from './components/Bars/HistogramBars';
 export { default as Base } from './components/Base';
 export { default as Grid } from './components/Grid';
 export { default as XAxis } from './components/XAxis';
-export { default as YAxis } from './components/YAxis';
+export { default as YAxis, ELabelOrientation } from './components/YAxis';
 export { default as JoyPlot } from './JoyPlot';
 export { default as BarChart, EChartDirection } from './v3/BarChart';
 export { default as Histogram2, IHistogramProps } from './v3/Histogram';
