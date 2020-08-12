@@ -36,10 +36,10 @@ export const AxisOptionsFactory = <D extends any, S extends any>(): FC<IProps<D,
                   dispatch({ type: 'setLabelOrientation', axis: 'x', value: e.target.value });
                 }}
               >
-                <MenuItem value={ELabelOrientation.horizontal}>
+                <MenuItem value={ELabelOrientation.HORIZONTAL}>
                   horizontal
                 </MenuItem>
-                <MenuItem value={ELabelOrientation.vertical}>
+                <MenuItem value={ELabelOrientation.VERTICAL}>
                   vertical
                 </MenuItem>
 

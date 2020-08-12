@@ -28,7 +28,7 @@ export const buildHistogramSprings = (props: IHistogramSpringProps) => {
     const itemWidth = continuousScale(bins[index][1] - bins[index][0]);
     const itemHeight = numericScale(item.value);
 
-    if (direction === EChartDirection.horizontal) {
+    if (direction === EChartDirection.HORIZONTAL) {
       return {
         from: {
           width: 0,

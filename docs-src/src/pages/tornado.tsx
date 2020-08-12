@@ -142,7 +142,7 @@ const Tornado = () => {
                   width={800}
                   height={500} />
                 {chart}
-                < TornadoChart
+                <TornadoChart
                   id="tornado2"
                   data={index === 0 ? state.data : data2}
                   width="600" />

@@ -15,7 +15,6 @@ import {
 } from '../Histogram';
 import { ITornadoData } from '../Tornado';
 import { applyDomainAffordance } from '../utils/domain';
-import { useHistogramDomain } from '../utils/useDomain';
 import { EChartDirection } from './BarChart';
 
 interface IProps {
@@ -33,7 +32,7 @@ interface IProps {
 
 const Tornado: FC<IProps> = ({
   data,
-  direction = EChartDirection.horizontal,
+  direction = EChartDirection.HORIZONTAL,
   groupLayout = EGroupedBarLayout.GROUPED,
   height,
   splitBins = ['Left', 'Right'],
@@ -44,13 +43,13 @@ const Tornado: FC<IProps> = ({
   yAxisWidth,
 }) => {
   if (!yAxisWidth) {
-    yAxisWidth = direction === EChartDirection.vertical ? 40 : 100;
+    yAxisWidth = direction === EChartDirection.VERTICAL ? 40 : 100;
   }
   if (!xAxisHeight) {
-    xAxisHeight = direction === EChartDirection.vertical ? 100 : 40;
+    xAxisHeight = direction === EChartDirection.VERTICAL ? 100 : 40;
   }
   if (!splitAxisHeight) {
-    splitAxisHeight = direction === EChartDirection.vertical ? 100 : 40;
+    splitAxisHeight = direction === EChartDirection.VERTICAL ? 100 : 40;
   }
 
   const domain = calculateDomain(data, true);
@@ -59,7 +58,6 @@ const Tornado: FC<IProps> = ({
     height,
     padding: 15,
   }
-
 
   const dataSets: any[] = []
   data.counts.forEach((count) => {
@@ -85,7 +83,6 @@ const Tornado: FC<IProps> = ({
       label: splitBins[0],
       data: data.counts[0].data[0].map((d) => d * -1),
     }
-
   ]
 
   return (
@@ -96,13 +93,9 @@ const Tornado: FC<IProps> = ({
         left={(width + yAxisWidth) / 2}
         height={height - xAxisHeight - splitAxisHeight}
         width={(width - yAxisWidth) / 2}
-
         groupLayout={groupLayout}
-
         bins={data.bins}
-
         domain={domain}
-
       />
       {
         // Left hand axis
@@ -113,7 +106,7 @@ const Tornado: FC<IProps> = ({
         scale="band"
         path={{ opacity: 0 }}
         tickSize={0}
-        values={direction === EChartDirection.horizontal ? data.bins : undefined}
+        values={direction === EChartDirection.HORIZONTAL ? data.bins : undefined}
       />
 
       {
@@ -124,7 +117,7 @@ const Tornado: FC<IProps> = ({
         height={height - xAxisHeight - splitAxisHeight}
         left={(width - yAxisWidth) / 2}
         labelFormat={() => ''}
-        values={direction === EChartDirection.horizontal ? data.bins : undefined}
+        values={direction === EChartDirection.HORIZONTAL ? data.bins : undefined}
         scale="band"
       />
 
@@ -142,7 +135,7 @@ const Tornado: FC<IProps> = ({
 
       {
         // Bottom split bin axis (grouped labels)
-        direction === EChartDirection.horizontal && <XAxis
+        direction === EChartDirection.HORIZONTAL && <XAxis
           height={40}
           left={yAxisWidth}
           top={height - xAxisHeight}

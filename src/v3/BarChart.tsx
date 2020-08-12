@@ -2,9 +2,10 @@ import { schemeSet3 } from 'd3-scale-chromatic';
 import React, { FC } from 'react';
 import { SpringConfig } from 'react-spring';
 
-import Bars from '../components/Bars/Bars';
+import Bars, { ExtendedGroupItem } from '../components/Bars/Bars';
 import Base from '../components/Base';
 import Grid from '../components/Grid';
+import { TLabelComponent } from '../components/Label';
 import { TTipFunc } from '../components/ToolTip';
 import XAxis from '../components/XAxis';
 import YAxis, {
@@ -20,8 +21,8 @@ import {
 import { useHistogramDomain } from '../utils/useDomain';
 
 export enum EChartDirection {
-  'horizontal',
-  'vertical',
+  HORIZONTAL = 'HORIZONTAL',
+  VERTICAL = 'VERTICAL',
 }
 const defaultPadding: IHistogramBar = {
   grouped: {
@@ -45,6 +46,7 @@ interface IProps {
   grid?: IGrid;
   groupLayout?: EGroupedBarLayout;
   height: number;
+  LabelComponent?: TLabelComponent;
   padding?: IHistogramBar;
   tip?: TTipFunc;
   visible?: Record<string, boolean>;
@@ -59,23 +61,24 @@ const BarChart: FC<IProps> = ({
   axisLabelFormat,
   colorScheme = schemeSet3,
   data,
-  direction = EChartDirection.vertical,
+  direction = EChartDirection.VERTICAL,
   grid,
   groupLayout = EGroupedBarLayout.GROUPED,
   height,
+  LabelComponent,
   padding = defaultPadding,
   tip,
   visible,
   width,
   xAxisHeight,
-  xAxisLabelOrientation = ELabelOrientation.horizontal,
+  xAxisLabelOrientation = ELabelOrientation.HORIZONTAL,
   yAxisWidth,
 }) => {
   if (!yAxisWidth) {
-    yAxisWidth = direction === EChartDirection.vertical ? 40 : 100;
+    yAxisWidth = direction === EChartDirection.VERTICAL ? 40 : 100;
   }
   if (!xAxisHeight) {
-    xAxisHeight = direction === EChartDirection.vertical ? 100 : 40;
+    xAxisHeight = direction === EChartDirection.VERTICAL ? 100 : 40;
   }
 
   // TODO - do we want a chart context to contain the bounding x/y axis. 
@@ -114,6 +117,7 @@ const BarChart: FC<IProps> = ({
         width={width - yAxisWidth}
         padding={padding}
         groupLayout={groupLayout}
+        LabelComponent={LabelComponent}
         values={data.counts}
         config={animation}
         bins={data.bins}
@@ -127,9 +131,9 @@ const BarChart: FC<IProps> = ({
         width={yAxisWidth}
         height={height - xAxisHeight}
         labelFormat={axisLabelFormat}
-        scale={direction === EChartDirection.horizontal ? 'band' : 'linear'}
-        values={direction === EChartDirection.horizontal ? data.bins : undefined}
-        domain={direction === EChartDirection.horizontal ? undefined : domain}
+        scale={direction === EChartDirection.HORIZONTAL ? 'band' : 'linear'}
+        values={direction === EChartDirection.HORIZONTAL ? data.bins : undefined}
+        domain={direction === EChartDirection.HORIZONTAL ? undefined : domain}
 
         padding={padding}
       />
@@ -142,9 +146,9 @@ const BarChart: FC<IProps> = ({
         left={yAxisWidth}
         labelFormat={axisLabelFormat}
         labelOrientation={xAxisLabelOrientation}
-        scale={direction === EChartDirection.horizontal ? 'linear' : 'band'}
-        values={direction === EChartDirection.horizontal ? undefined : data.bins}
-        domain={direction === EChartDirection.horizontal ? domain : undefined}
+        scale={direction === EChartDirection.HORIZONTAL ? 'linear' : 'band'}
+        values={direction === EChartDirection.HORIZONTAL ? undefined : data.bins}
+        domain={direction === EChartDirection.HORIZONTAL ? domain : undefined}
       />
 
     </Base>

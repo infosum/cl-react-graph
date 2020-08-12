@@ -6,6 +6,7 @@ import { SpringConfig } from 'react-spring';
 import HistogramBars from '../components/Bars/HistogramBars';
 import Base from '../components/Base';
 import Grid from '../components/Grid';
+import { TLabelComponent } from '../components/Label';
 import { TTipFunc } from '../components/ToolTip';
 import XAxis from '../components/XAxis';
 import YAxis, {
@@ -26,7 +27,9 @@ export interface IHistogramProps {
   direction?: EChartDirection;
   grid?: IGrid;
   height: number;
+  LabelComponent?: TLabelComponent;
   hoverColorScheme?: string[];
+  showLabels?: boolean;
   tip?: TTipFunc;
   visible?: Record<string, boolean>;
   width: number;
@@ -43,22 +46,24 @@ const Histogram: FC<IHistogramProps> = ({
   axisLabelFormat,
   colorScheme = schemeSet3,
   data,
-  direction = EChartDirection.vertical,
+  direction = EChartDirection.VERTICAL,
   grid,
   height,
   hoverColorScheme,
+  LabelComponent,
+  showLabels = false,
   tip,
   visible,
   width,
   xAxisHeight,
-  xAxisLabelOrientation = ELabelOrientation.horizontal,
+  xAxisLabelOrientation = ELabelOrientation.HORIZONTAL,
   yAxisWidth,
 }) => {
   if (!yAxisWidth) {
-    yAxisWidth = direction === EChartDirection.vertical ? 40 : 100;
+    yAxisWidth = direction === EChartDirection.VERTICAL ? 40 : 100;
   }
   if (!xAxisHeight) {
-    xAxisHeight = direction === EChartDirection.vertical ? 100 : 40;
+    xAxisHeight = direction === EChartDirection.VERTICAL ? 100 : 40;
   }
 
   if (width === 0) {
@@ -94,7 +99,9 @@ const Histogram: FC<IHistogramProps> = ({
         values={data.counts}
         config={animation}
         bins={data.bins}
+        showLabels={showLabels}
         direction={direction}
+        LabelComponent={LabelComponent}
         domain={domain}
         continuousDomain={continuousDomain}
         tip={tip}
@@ -106,8 +113,8 @@ const Histogram: FC<IHistogramProps> = ({
         height={height - xAxisHeight}
         labelFormat={axisLabelFormat}
         scale="linear"
-        domain={direction === EChartDirection.horizontal ? continuousDomain : domain}
-        values={direction === EChartDirection.horizontal
+        domain={direction === EChartDirection.HORIZONTAL ? continuousDomain : domain}
+        values={direction === EChartDirection.HORIZONTAL
           ? [
             continuousDomain[0],
             ((continuousDomain[1] - continuousDomain[0]) * 1) / 3,
@@ -126,8 +133,8 @@ const Histogram: FC<IHistogramProps> = ({
         labelFormat={axisLabelFormat}
         labelOrientation={xAxisLabelOrientation}
         scale="linear"
-        domain={direction === EChartDirection.horizontal ? domain : continuousDomain}
-        values={direction === EChartDirection.horizontal
+        domain={direction === EChartDirection.HORIZONTAL ? domain : continuousDomain}
+        values={direction === EChartDirection.HORIZONTAL
           ? domain
           : [
             continuousDomain[0],

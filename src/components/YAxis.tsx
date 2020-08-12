@@ -21,10 +21,12 @@ import { AnyScale } from '../utils/scales';
 
 export type TAxisValue = string | number;
 export type TAxisLabelFormat = (axis: 'x' | 'y', bin: string, i: number) => string;
+
 export enum ELabelOrientation {
-  'horizontal',
-  'vertical',
+  HORIZONTAL = 'HORIZONTAL',
+  VERTICAL = 'VERTICAL',
 }
+
 export interface IAxis {
   stroke?: string;
   height: number;
@@ -81,7 +83,7 @@ const YAxis: FC<IAxis> = ({
   top = 0,
   values = [],
   width,
-  labelOrientation = ELabelOrientation.horizontal,
+  labelOrientation = ELabelOrientation.HORIZONTAL,
 }) => {
   if (scale === 'linear' && typeof values[0] === 'string') {
     throw new Error('Linear axis can not accept string values');
@@ -144,6 +146,8 @@ const YAxis: FC<IAxis> = ({
           const tickOffset = positionTick(v, Scale, height);
           return (
             <g
+              aria-hidden={scale !== 'band'}
+              role={scale === 'band' ? 'row' : ''}
               key={v}
               className="tick"
               opacity="1"
@@ -151,21 +155,22 @@ const YAxis: FC<IAxis> = ({
               <line stroke={stroke}
                 x2={`-${tickSize}`}
                 fill="none"
-                opacity="1"
+                opacity={opacity}
                 shapeRendering="auto"
                 strokeOpacity="1"
                 strokeWidth="1">
               </line>
 
               <text
+                role={scale === 'band' ? 'columnheader' : ''}
                 fill={tickFormat.stroke}
-                textAnchor={labelOrientation === ELabelOrientation.horizontal ? 'right' : 'center'}
-                writingMode={labelOrientation === ELabelOrientation.horizontal ? 'horizontal-tb' : 'vertical-rl'}
-                transform={labelOrientation === ELabelOrientation.horizontal ? 'rotate(0)' : 'rotate(180)'}
+                textAnchor={labelOrientation === ELabelOrientation.HORIZONTAL ? 'right' : 'center'}
+                writingMode={labelOrientation === ELabelOrientation.HORIZONTAL ? 'horizontal-tb' : 'vertical-rl'}
+                transform={labelOrientation === ELabelOrientation.HORIZONTAL ? 'rotate(0)' : 'rotate(180)'}
                 height={height}
                 fontSize={tickFormat.fontSize}
                 x={`-${tickSize + 10}`}
-                dy={labelOrientation === ELabelOrientation.horizontal ? '0.32em' : '20'}>
+                dy={labelOrientation === ELabelOrientation.HORIZONTAL ? '0.32em' : '20'}>
                 {labelFormat ? labelFormat('y', v, i) : v}
               </text>
 

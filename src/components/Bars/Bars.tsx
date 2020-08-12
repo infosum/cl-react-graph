@@ -5,6 +5,7 @@ import {
 } from 'd3-scale';
 import React, {
   FC,
+  RefObject,
   useState,
 } from 'react';
 import {
@@ -12,7 +13,6 @@ import {
   SpringConfig,
   useSprings,
 } from 'react-spring';
-import { Tooltip } from 'react-svg-tooltip';
 
 import { IGroupDataItem } from '../../BaseHistogramD3';
 import {
@@ -27,10 +27,10 @@ import {
   paddingOuter,
 } from '../../utils/bars';
 import { EChartDirection } from '../../v3/BarChart';
-import {
-  TipContent,
-  TTipFunc,
-} from '../ToolTip';
+import { TLabelComponent } from '../Label';
+import { Labels } from '../Labels';
+import { TTipFunc } from '../ToolTip';
+import { ToolTips } from '../ToolTips';
 import { buildBarSprings } from './barHelper';
 
 enum EGroupedBarLayout {
@@ -48,10 +48,13 @@ interface IProps {
   groupLayout?: EGroupedBarLayout;
   height: number;
   hoverColorScheme?: readonly string[];
+  LabelComponent?: TLabelComponent;
+  labels?: string[];
   left?: number;
   padding?: IHistogramBar;
   top?: number;
   tip?: TTipFunc;
+  showLabels?: boolean;
   values: IBarChartDataSet[];
   visible?: Record<string, boolean>;
   width: number;
@@ -74,23 +77,26 @@ export type ExtendedGroupItem = IGroupDataItem & {
 }
 
 const Bars: FC<IProps> = ({
-  values,
-  domain,
-  height,
-  width,
-  left = 0,
-  top = 0,
-  groupLayout = EGroupedBarLayout.GROUPED,
   bins,
+  colorScheme = ['#a9a9a9', '#2a5379'],
   config = {
     duration: 250,
   },
-  colorScheme = ['#a9a9a9', '#2a5379'],
+  direction = EChartDirection.HORIZONTAL,
+  domain,
+  groupLayout = EGroupedBarLayout.GROUPED,
+  height,
   hoverColorScheme,
+  LabelComponent,
+  labels,
+  left = 0,
   padding = paddings,
-  visible = {},
+  showLabels = false,
   tip,
-  direction = EChartDirection.horizontal,
+  top = 0,
+  values,
+  visible = {},
+  width,
 }) => {
   if (width === 0) {
     return null;
@@ -115,14 +121,14 @@ const Bars: FC<IProps> = ({
       });
     });
   });
-
+  console.log('visible', visible);
   const numericScale = scaleLinear()
     .domain(domain)
-    .rangeRound([0, direction === EChartDirection.horizontal ? width : height]);
+    .rangeRound([0, direction === EChartDirection.HORIZONTAL ? width : height]);
 
   // Distribute the bin values across the x axis
   const bandScale = scaleBand().domain(binLabels as string[])
-    .rangeRound([0, direction === EChartDirection.horizontal ? height : width])
+    .rangeRound([0, direction === EChartDirection.HORIZONTAL ? height : width])
     .paddingInner(paddingInner(padding))
     .paddingOuter(paddingOuter(padding))
     .align(0.5);
@@ -157,20 +163,21 @@ const Bars: FC<IProps> = ({
     direction,
   }));
 
-  const ThisTip = tip ?? TipContent;
-  const refs: any[] = [];
+  const refs: RefObject<any>[] = [];
   return (
     <>
       <g className="bars"
+        role="row"
         transform={`translate${transform}`}>
         {
           springs.map((props: any, i) => {
             refs[i] = React.createRef<any>();
             return <animated.rect
               ref={refs[i]}
+              role="cell"
               onMouseEnter={() => setHover(i)}
               onMouseLeave={() => setHover(-1)}
-              key={dataSets[i].groupLabel + dataSets[i].label}
+              key={`bar-${dataSets[i].groupLabel}.${dataSets[i].label}`}
               height={props.height}
               fill={hover == i ? props.hoverFill : props.fill}
               width={props.width}
@@ -179,17 +186,24 @@ const Bars: FC<IProps> = ({
             />
           })
         }
-      </g>
-      <g className="tips">
         {
-          springs.map((_, i) => <Tooltip
-            key={dataSets[i].groupLabel + dataSets[i].label}
-            triggerRef={refs[i]}>
-            <ThisTip item={dataSets[i]}
-              bin={bins[i]} />
-          </Tooltip>)
+          showLabels && <Labels
+            springs={springs}
+            items={dataSets}
+            direction={direction}
+            labels={labels}
+            visible={visible}
+            LabelComponent={LabelComponent} />
         }
+
       </g>
+
+      <ToolTips
+        springs={springs}
+        refs={refs}
+        bins={bins}
+        tip={tip}
+        items={dataSets} />
     </>)
 }
 

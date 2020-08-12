@@ -72,7 +72,7 @@ export const buildBarSprings = (props: IBarSpringProps) => {
     const valueOffset = getValueOffset(item, props);
     const itemWidth = getBarWidth(item.datasetIndex, groupLayout, paddings, innerScaleBand);
     const itemHeight = numericScale(item.value);
-    if (direction === EChartDirection.horizontal) {
+    if (direction === EChartDirection.HORIZONTAL) {
       return {
         from: {
           width: 0,
@@ -129,10 +129,10 @@ export const getValueOffset = (
   const { direction, numericScale, groupLayout, height, dataSets } = props;
   const offSet = dataSets
     .filter((d) => d.label === item.label)
-    .filter((_, i) => direction === EChartDirection.horizontal ? i < item.datasetIndex : i <= item.datasetIndex)
+    .filter((_, i) => direction === EChartDirection.HORIZONTAL ? i < item.datasetIndex : i <= item.datasetIndex)
     .reduce((p, n) => p + n.value, 0);
 
-  if (direction === EChartDirection.horizontal) {
+  if (direction === EChartDirection.HORIZONTAL) {
     if (groupLayout !== EGroupedBarLayout.STACKED) {
       return 0;
     }
