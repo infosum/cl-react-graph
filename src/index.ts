@@ -37,7 +37,7 @@ export { default as BarChart, EChartDirection } from './v3/BarChart';
 export { default as Histogram2, IHistogramProps } from './v3/Histogram';
 export { default as LineChart2 } from './v3/LineChart';
 export { useWidth } from './utils/useWidth';
-export { useMakeLine } from './utils/useMakeLine';
+export { useMakeLine, useScales } from './utils/useMakeLine';
 export { useHistogramDomain, useLineDomain } from './utils/useDomain';
 export { TTipFunc } from './components/ToolTip';
 
