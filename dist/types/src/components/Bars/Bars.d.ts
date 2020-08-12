@@ -3,6 +3,7 @@ import { SpringConfig } from 'react-spring';
 import { IGroupDataItem } from '../../BaseHistogramD3';
 import { IBarChartDataSet, IHistogramBar } from '../../Histogram';
 import { EChartDirection } from '../../v3/BarChart';
+import { TLabelComponent } from '../Label';
 import { TTipFunc } from '../ToolTip';
 declare enum EGroupedBarLayout {
     GROUPED = 0,
@@ -18,10 +19,13 @@ interface IProps {
     groupLayout?: EGroupedBarLayout;
     height: number;
     hoverColorScheme?: readonly string[];
+    LabelComponent?: TLabelComponent;
+    labels?: string[];
     left?: number;
     padding?: IHistogramBar;
     top?: number;
     tip?: TTipFunc;
+    showLabels?: boolean;
     values: IBarChartDataSet[];
     visible?: Record<string, boolean>;
     width: number;

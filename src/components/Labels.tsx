@@ -20,6 +20,7 @@ interface IProps {
   direction: EChartDirection;
   labels?: string[];
   LabelComponent?: TLabelComponent;
+  showLabels?: boolean[];
   visible?: Record<string, boolean>;
 }
 export const Labels: FC<IProps> = ({
@@ -28,6 +29,7 @@ export const Labels: FC<IProps> = ({
   direction,
   labels,
   LabelComponent,
+  showLabels = [],
   visible,
 }) => {
   const refs: RefObject<any>[] = [];
@@ -36,10 +38,11 @@ export const Labels: FC<IProps> = ({
       springs
         .filter((_, i) => {
           const k = String(items[i].groupLabel);
-          if (visible?.[k] === false) {
-            return false;
-          }
-          return true;
+          return visible?.[k] === false ? false : true;
+        })
+        .filter((_, i) => {
+          const index = items[i].datasetIndex;
+          return showLabels[index] ?? false;
         }).map((props: any, i) => {
 
           const item = items[i];

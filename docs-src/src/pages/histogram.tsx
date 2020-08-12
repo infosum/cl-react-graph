@@ -282,6 +282,7 @@ const HistogramExample = () => {
                   animation={{
                     duration: state.duration,
                   }}
+                  showLabels={[false, true]}
                   direction={state.chartType === 'HorizontalHistogram' ? EChartDirection.HORIZONTAL : EChartDirection.VERTICAL}
                   data={d}
                   height={400}
@@ -298,7 +299,7 @@ const HistogramExample = () => {
                   animation={{
                     duration: state.duration,
                   }}
-                  showLabels
+                  showLabels={[true, true]}
                   LabelComponent={({ item }) => {
                     const ref = createRef<any>();
                     return <g transform="translate(0, -10)"><g

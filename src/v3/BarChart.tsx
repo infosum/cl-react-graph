@@ -49,6 +49,7 @@ interface IProps {
   height: number;
   LabelComponent?: TLabelComponent;
   padding?: IHistogramBar;
+  showLabels?: boolean[]
   tip?: TTipFunc;
   visible?: Record<string, boolean>;
   width: number;
@@ -68,6 +69,7 @@ const BarChart: FC<IProps> = ({
   height,
   LabelComponent,
   padding = defaultPadding,
+  showLabels = [],
   tip,
   visible,
   width,
@@ -112,20 +114,21 @@ const BarChart: FC<IProps> = ({
       }
 
       <Bars
-        colorScheme={colorScheme}
-        left={yAxisWidth}
-        height={height - xAxisHeight}
-        width={width - yAxisWidth}
-        padding={padding}
-        groupLayout={groupLayout}
-        LabelComponent={LabelComponent}
-        values={data.counts}
-        config={animation}
         bins={data.bins}
+        colorScheme={colorScheme}
+        config={animation}
         direction={direction}
         domain={domain}
+        groupLayout={groupLayout}
+        height={height - xAxisHeight}
+        LabelComponent={LabelComponent}
+        left={yAxisWidth}
+        padding={padding}
+        showLabels={showLabels}
         tip={tip}
+        values={data.counts}
         visible={visible}
+        width={width - yAxisWidth}
       />
 
       <YAxis

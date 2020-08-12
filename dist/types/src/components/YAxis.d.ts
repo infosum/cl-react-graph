@@ -3,8 +3,8 @@ import { IHistogramBar } from '../Histogram';
 export declare type TAxisValue = string | number;
 export declare type TAxisLabelFormat = (axis: 'x' | 'y', bin: string, i: number) => string;
 export declare enum ELabelOrientation {
-    'horizontal' = 0,
-    'vertical' = 1
+    HORIZONTAL = "HORIZONTAL",
+    VERTICAL = "VERTICAL"
 }
 export interface IAxis {
     stroke?: string;

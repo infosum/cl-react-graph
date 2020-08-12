@@ -1,12 +1,14 @@
 import { FC } from 'react';
 import { SpringConfig } from 'react-spring';
+import { TLabelComponent } from '../components/Label';
 import { TTipFunc } from '../components/ToolTip';
 import { ELabelOrientation, TAxisLabelFormat } from '../components/YAxis';
 import { EGroupedBarLayout, IBarChartData, IGrid, IHistogramBar } from '../Histogram';
 export declare enum EChartDirection {
-    'horizontal' = 0,
-    'vertical' = 1
+    HORIZONTAL = "HORIZONTAL",
+    VERTICAL = "VERTICAL"
 }
+export declare const defaultPadding: IHistogramBar;
 interface IProps {
     animation?: SpringConfig;
     axisLabelFormat?: TAxisLabelFormat;
@@ -16,6 +18,7 @@ interface IProps {
     grid?: IGrid;
     groupLayout?: EGroupedBarLayout;
     height: number;
+    LabelComponent?: TLabelComponent;
     padding?: IHistogramBar;
     tip?: TTipFunc;
     visible?: Record<string, boolean>;

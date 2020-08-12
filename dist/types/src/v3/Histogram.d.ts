@@ -1,5 +1,6 @@
 import { FC } from 'react';
 import { SpringConfig } from 'react-spring';
+import { TLabelComponent } from '../components/Label';
 import { TTipFunc } from '../components/ToolTip';
 import { ELabelOrientation, TAxisLabelFormat } from '../components/YAxis';
 import { IGrid, IHistogramData } from '../Histogram';
@@ -12,7 +13,9 @@ export interface IHistogramProps {
     direction?: EChartDirection;
     grid?: IGrid;
     height: number;
+    LabelComponent?: TLabelComponent;
     hoverColorScheme?: string[];
+    showLabels?: boolean;
     tip?: TTipFunc;
     visible?: Record<string, boolean>;
     width: number;
