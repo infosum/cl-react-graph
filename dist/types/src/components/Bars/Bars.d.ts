@@ -25,7 +25,7 @@ interface IProps {
     padding?: IHistogramBar;
     top?: number;
     tip?: TTipFunc;
-    showLabels?: boolean;
+    showLabels?: boolean[];
     values: IBarChartDataSet[];
     visible?: Record<string, boolean>;
     width: number;

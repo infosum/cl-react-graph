@@ -287,6 +287,7 @@ const HistogramExample = () => {
                   data={d}
                   height={400}
                   grid={state.grid}
+                  colorScheme={['#aaa', '#aa0000']}
                   groupLayout={state.groupLayout}
                   xAxisLabelOrientation={state.axis.x.labelOrientation}
                   width={w}

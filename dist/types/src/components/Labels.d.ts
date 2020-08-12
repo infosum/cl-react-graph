@@ -8,6 +8,7 @@ interface IProps {
     direction: EChartDirection;
     labels?: string[];
     LabelComponent?: TLabelComponent;
+    showLabels?: boolean[];
     visible?: Record<string, boolean>;
 }
 export declare const Labels: FC<IProps>;

@@ -141,6 +141,7 @@ const HistogramBars: FC<IProps> = ({
           })
         }
         <Labels
+          colorScheme={colorScheme}
           springs={springs}
           showLabels={showLabels}
           items={dataSets}

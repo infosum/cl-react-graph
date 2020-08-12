@@ -20,6 +20,7 @@ interface IProps {
     height: number;
     LabelComponent?: TLabelComponent;
     padding?: IHistogramBar;
+    showLabels?: boolean[];
     tip?: TTipFunc;
     visible?: Record<string, boolean>;
     width: number;

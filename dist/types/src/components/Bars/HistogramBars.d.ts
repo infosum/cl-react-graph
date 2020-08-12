@@ -15,7 +15,7 @@ interface IProps {
     hoverColorScheme?: readonly string[];
     labels?: string[];
     left?: number;
-    showLabels?: boolean;
+    showLabels?: boolean[];
     LabelComponent?: TLabelComponent;
     stroke?: string;
     top?: number;

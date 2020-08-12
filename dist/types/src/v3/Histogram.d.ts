@@ -15,7 +15,7 @@ export interface IHistogramProps {
     height: number;
     LabelComponent?: TLabelComponent;
     hoverColorScheme?: string[];
-    showLabels?: boolean;
+    showLabels?: boolean[];
     tip?: TTipFunc;
     visible?: Record<string, boolean>;
     width: number;
