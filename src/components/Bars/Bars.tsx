@@ -121,7 +121,6 @@ const Bars: FC<IProps> = ({
       });
     });
   });
-  console.log('visible', visible);
   const numericScale = scaleLinear()
     .domain(domain)
     .rangeRound([0, direction === EChartDirection.HORIZONTAL ? width : height]);
