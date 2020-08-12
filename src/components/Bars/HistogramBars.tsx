@@ -2,6 +2,7 @@ import { color } from 'd3-color';
 import { scaleLinear } from 'd3-scale';
 import React, {
   FC,
+  RefObject,
   useState,
 } from 'react';
 import {
@@ -9,34 +10,17 @@ import {
   SpringConfig,
   useSprings,
 } from 'react-spring';
-import { Tooltip } from 'react-svg-tooltip';
 
 import { IBarChartDataSet } from '../../Histogram';
 import { EChartDirection } from '../../v3/BarChart';
+import { TLabelComponent } from '../Label';
+import { Labels } from '../Labels';
 import { TTipFunc } from '../ToolTip';
+import { ToolTips } from '../ToolTips';
 import { ExtendedGroupItem } from './Bars';
 import { buildHistogramSprings } from './histogramHelper';
 
 const binWidth = (bin: [number, number]) => bin[1] - bin[0];
-
-const TipContent: TTipFunc = ({ item, bin }) => <>
-  <rect x={12} y={-12} width={150} height={65} rx={3} ry={3} fill='#fff' />
-  <foreignObject x="0" y="0" width="160" height="65">
-    {
-      // @ts-ignore
-      <div xmlns="http://www.w3.org/1999/xhtml" style={{ paddingLeft: '10px', textAlign: 'center', height: '65px' }}>
-        <strong>{bin[0]} to {bin[1]}</strong>
-        <div>
-          <strong>Count:</strong> {item.value}
-        </div>
-        <div>
-          <strong>Percent:</strong> {item.percentage}%
-          </div>
-      </div>
-    }
-  </foreignObject>
-</>
-
 
 interface IProps {
   bins: [number, number][];
@@ -47,7 +31,10 @@ interface IProps {
   domain: [number, number];
   height: number;
   hoverColorScheme?: readonly string[];
+  labels?: string[];
   left?: number;
+  showLabels?: boolean;
+  LabelComponent?: TLabelComponent;
   stroke?: string;
   top?: number;
   tip?: TTipFunc;
@@ -67,7 +54,10 @@ const HistogramBars: FC<IProps> = ({
   domain,
   height,
   hoverColorScheme,
+  LabelComponent,
+  labels,
   left = 0,
+  showLabels = false,
   stroke = "#FFF",
   top = 0,
   tip,
@@ -126,21 +116,22 @@ const HistogramBars: FC<IProps> = ({
     direction,
   }));
 
-  const ThisTip = tip ?? TipContent;
-  const refs: any[] = [];
+  const refs: RefObject<any>[] = [];
   return (
     <>
       <g className="bars"
         transform={`translate${transform}`}>
         {
           springs.map((props: any, i) => {
+            const item = dataSets[i];
             refs[i] = React.createRef<any>();
             return <animated.rect
               ref={refs[i]}
               stroke={stroke}
+              className="chart-bar"
               onMouseEnter={() => setHover(i)}
               onMouseLeave={() => setHover(-1)}
-              key={dataSets[i].groupLabel + dataSets[i].label}
+              key={`bar-${item.groupLabel}.${item.label}.${item.value}`}
               height={props.height}
               fill={hover == i ? props.hoverFill : props.fill}
               width={props.width}
@@ -149,15 +140,24 @@ const HistogramBars: FC<IProps> = ({
             />
           })
         }
-      </g>
-      <g className="tips">
         {
-          springs.map((_, i) => <Tooltip triggerRef={refs[i]}>
-            <ThisTip item={dataSets[i]}
-              bin={bins[i]} />
-          </Tooltip>)
+          showLabels &&
+          <Labels
+            springs={springs}
+            items={dataSets}
+            direction={direction}
+            labels={labels}
+            LabelComponent={LabelComponent} />
         }
       </g>
+
+      <ToolTips
+        springs={springs}
+        refs={refs}
+        bins={bins}
+        tip={tip}
+        items={dataSets} />
+
     </>)
 }
 

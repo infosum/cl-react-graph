@@ -7,20 +7,27 @@ export type TTipFunc = (props: {
   bin: string | [number, number];
 }) => JSX.Element;
 
-export const TipContent: TTipFunc = ({ item, bin }) => <>
-  <rect x={12} y={-12} width={150} height={65} rx={3} ry={3} fill='#fff' />
-  <foreignObject x="0" y="0" width="160" height="65">
-    {
-      // @ts-ignore
-      <div xmlns="http://www.w3.org/1999/xhtml" style={{ paddingLeft: '10px', textAlign: 'center', height: '65px' }}>
-        <strong>{item.groupLabel}</strong>
-        <div>
-          <strong>Count:</strong> {item.value}
-        </div>
-        <div>
-          <strong>Percent:</strong> {item.percentage}%
+export const TipContent: TTipFunc = ({ item, bin }) => {
+  return <>
+    <rect
+      role="tooltip"
+      x={12} y={-12} width={150} height={85} rx={3} ry={3} fill='#fff' />
+    <foreignObject x="0" y="0" width="160" height="85">
+      {
+        // @ts-ignore
+        <div xmlns="http://www.w3.org/1999/xhtml" style={{ paddingLeft: '10px', textAlign: 'center', height: '85px' }}>
+          <strong>{item.groupLabel}</strong>
+          <div data-testid="bin">
+            {Array.isArray(bin) ? `${bin[0]} - ${bin[1]}` : bin}
           </div>
-      </div>
-    }
-  </foreignObject>
-</>
+          <div data-testid="count">
+            <strong>Count:</strong> {item.value}
+          </div>
+          <div>
+            <strong>Percent:</strong> {item.percentage}%
+          </div>
+        </div>
+      }
+    </foreignObject>
+  </>
+}

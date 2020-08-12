@@ -1,6 +1,10 @@
 import { Draft } from 'immer';
 import fileDownload from 'js-file-download';
-import React, { useState } from 'react';
+import React, {
+  createRef,
+  useState,
+} from 'react';
+import { Tooltip } from 'react-svg-tooltip';
 import { useImmerReducer } from 'use-immer';
 
 import {
@@ -293,6 +297,23 @@ const HistogramExample = () => {
                 <Histogram2
                   animation={{
                     duration: state.duration,
+                  }}
+                  showLabels
+                  LabelComponent={({ item }) => {
+                    const ref = createRef<any>();
+                    return <g transform="translate(0, -10)"><g
+                      ref={ref}>
+                      <circle dy={10} r={4} fill="red"></circle>
+                      <text dx="10">{item.percentage}</text></g>
+
+                      <Tooltip
+                        key={`label-tip-${item.groupLabel}.${item.label}`}
+                        triggerRef={ref}>
+                        <g transform="translate(20, -10)">
+                          <text className="label-tip-text">custom test tip test</text>
+                        </g>
+                      </Tooltip>
+                    </g>;
                   }}
                   direction={state.chartType === 'HorizontalHistogram' ? EChartDirection.HORIZONTAL : EChartDirection.VERTICAL}
                   data={smallDataContinuous}

@@ -146,6 +146,8 @@ const YAxis: FC<IAxis> = ({
           const tickOffset = positionTick(v, Scale, height);
           return (
             <g
+              aria-hidden={scale !== 'band'}
+              role={scale === 'band' ? 'row' : ''}
               key={v}
               className="tick"
               opacity="1"
@@ -160,6 +162,7 @@ const YAxis: FC<IAxis> = ({
               </line>
 
               <text
+                role={scale === 'band' ? 'columnheader' : ''}
                 fill={tickFormat.stroke}
                 textAnchor={labelOrientation === ELabelOrientation.HORIZONTAL ? 'right' : 'center'}
                 writingMode={labelOrientation === ELabelOrientation.HORIZONTAL ? 'horizontal-tb' : 'vertical-rl'}

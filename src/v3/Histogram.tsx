@@ -6,6 +6,7 @@ import { SpringConfig } from 'react-spring';
 import HistogramBars from '../components/Bars/HistogramBars';
 import Base from '../components/Base';
 import Grid from '../components/Grid';
+import { TLabelComponent } from '../components/Label';
 import { TTipFunc } from '../components/ToolTip';
 import XAxis from '../components/XAxis';
 import YAxis, {
@@ -26,7 +27,9 @@ export interface IHistogramProps {
   direction?: EChartDirection;
   grid?: IGrid;
   height: number;
+  LabelComponent?: TLabelComponent;
   hoverColorScheme?: string[];
+  showLabels?: boolean;
   tip?: TTipFunc;
   visible?: Record<string, boolean>;
   width: number;
@@ -47,6 +50,8 @@ const Histogram: FC<IHistogramProps> = ({
   grid,
   height,
   hoverColorScheme,
+  LabelComponent,
+  showLabels = false,
   tip,
   visible,
   width,
@@ -94,7 +99,9 @@ const Histogram: FC<IHistogramProps> = ({
         values={data.counts}
         config={animation}
         bins={data.bins}
+        showLabels={showLabels}
         direction={direction}
+        LabelComponent={LabelComponent}
         domain={domain}
         continuousDomain={continuousDomain}
         tip={tip}

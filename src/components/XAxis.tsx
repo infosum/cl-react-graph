@@ -109,6 +109,8 @@ const XAxis: FC<IAxis> = ({
 
           return (
             <g
+              aria-hidden={scale !== 'band'}
+              role={scale === 'band' ? 'row' : ''}
               key={v}
               className="tick"
               opacity="1"
@@ -125,6 +127,7 @@ const XAxis: FC<IAxis> = ({
               </line>
 
               <text
+                role={scale === 'band' ? 'columnheader' : ''}
                 fill={tickFormat.stroke}
                 textAnchor={labelOrientation === ELabelOrientation.HORIZONTAL ? 'middle' : 'start'}
                 writingMode={labelOrientation === ELabelOrientation.HORIZONTAL ? 'horizontal-tb' : 'vertical-lr'}

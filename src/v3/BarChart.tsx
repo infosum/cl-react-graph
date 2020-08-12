@@ -2,9 +2,10 @@ import { schemeSet3 } from 'd3-scale-chromatic';
 import React, { FC } from 'react';
 import { SpringConfig } from 'react-spring';
 
-import Bars from '../components/Bars/Bars';
+import Bars, { ExtendedGroupItem } from '../components/Bars/Bars';
 import Base from '../components/Base';
 import Grid from '../components/Grid';
+import { TLabelComponent } from '../components/Label';
 import { TTipFunc } from '../components/ToolTip';
 import XAxis from '../components/XAxis';
 import YAxis, {
@@ -45,6 +46,7 @@ interface IProps {
   grid?: IGrid;
   groupLayout?: EGroupedBarLayout;
   height: number;
+  LabelComponent?: TLabelComponent;
   padding?: IHistogramBar;
   tip?: TTipFunc;
   visible?: Record<string, boolean>;
@@ -63,6 +65,7 @@ const BarChart: FC<IProps> = ({
   grid,
   groupLayout = EGroupedBarLayout.GROUPED,
   height,
+  LabelComponent,
   padding = defaultPadding,
   tip,
   visible,
@@ -114,6 +117,7 @@ const BarChart: FC<IProps> = ({
         width={width - yAxisWidth}
         padding={padding}
         groupLayout={groupLayout}
+        LabelComponent={LabelComponent}
         values={data.counts}
         config={animation}
         bins={data.bins}
