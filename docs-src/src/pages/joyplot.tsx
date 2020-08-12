@@ -8,40 +8,84 @@ import {
   Typography,
 } from '@material-ui/core';
 
-import { IBarChartData } from '../../../src';
 import JoyPlot from '../../../src/JoyPlot';
 import Layout from '../components/layout';
 import SEO from '../components/seo';
-import { data2 } from '../data';
 
-const data3 = {
-  ...data2,
-  bins: ['Value 2', 'bin 1', 'bin 2', 'bin 3 with a long name', 'bin 4', 'bin 5', 'bin 6', 'bin 7'],
-  counts: [{
-    ...data2.counts[0],
-    data: [2, 15, 6, 6, 4, 3, 2, 1],
-    label: 'Data 2',
-  }],
-  title: 'Plot 2',
-};
+const data1 = [
+  {
+    "bins": [
+      "[0, 2500)",
+      "[2500, 5000)",
+      "[100000, 9223372036854775807)"
+    ],
+    "counts": [
+      {
+        "label": "in market for car: No",
+        "data": [
+          500,
+          400,
+          4000
+        ]
+      }
+    ],
+    "title": "No"
+  },
+  {
+    "bins": [
+      "[0, 2500)",
+      "[2500, 5000)",
+      "[100000, 9223372036854775807)"
+    ],
+    "counts": [
+      {
+        "label": "in market for car: Yes",
+        "data": [
+          300,
+          300,
+          2800
+        ]
+      }
+    ],
+    "title": "Yes"
+  }
+]
 
-const data4 = {
-  ...data2,
-  bins: ['Value 2', 'bin 1',],
-  counts: [{
-    ...data2.counts[0],
-    data: [2, 15],
-    label: 'Data 2',
-  }],
-  title: 'Plot 2',
-}
-
-const allData: IBarChartData[] = [data2, data3];
-const allData2: IBarChartData[] = [data2, data4, data3];
-
+const data2 = [
+  {
+    "bins": [
+      "No",
+      "Yes"
+    ],
+    "counts": [
+      {
+        "label": "in market for car: No",
+        "data": [
+          1000, 500
+        ]
+      }
+    ],
+    "title": "No"
+  },
+  {
+    "bins": [
+      "No",
+      "Yes"
+    ],
+    "counts": [
+      {
+        "label": "in market for car: Yes",
+        "data": [
+          800, 400
+        ]
+      }
+    ],
+    "title": "Yes"
+  }
+]
 const JoyPlotExample = () => {
   const [dataIndex, setDataIndex] = useState(0);
-  const d = dataIndex === 0 ? allData : allData2;
+  const d = dataIndex === 0 ? data1 : data2;
   return (
     <Layout>
       <SEO title="Joy Plot" description="" />

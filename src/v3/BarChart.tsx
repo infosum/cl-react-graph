@@ -24,7 +24,8 @@ export enum EChartDirection {
   HORIZONTAL = 'HORIZONTAL',
   VERTICAL = 'VERTICAL',
 }
-const defaultPadding: IHistogramBar = {
+
+export const defaultPadding: IHistogramBar = {
   grouped: {
     paddingInner: 0.1,
     paddingOuter: 0,

@@ -14,9 +14,13 @@ import YAxis, {
 import {
   EGroupedBarLayout,
   IBarChartData,
+  IHistogramBar,
 } from './Histogram';
 import { useJoyPlot } from './utils/useJoyPlot';
-import { EChartDirection } from './v3/BarChart';
+import {
+  defaultPadding,
+  EChartDirection,
+} from './v3/BarChart';
 
 export interface IProps {
   axisLabelFormat?: TAxisLabelFormat;
@@ -24,6 +28,7 @@ export interface IProps {
   data: IBarChartData[];
   direction?: EChartDirection;
   height: number;
+  padding?: IHistogramBar;
   tip?: TTipFunc;
   width: number;
   xAxisHeight?: number;
@@ -42,6 +47,7 @@ const JoyPlot: FC<IProps> = ({
   tip,
   width,
   xAxisHeight,
+  padding = defaultPadding,
   yAxisWidth,
 }) => {
   const {
@@ -69,6 +75,7 @@ const JoyPlot: FC<IProps> = ({
 
       {
         values.map((d, i) => {
+          const xWidth = width - Number(yAxisWidth);
           return (<Fragment key={`plot-${d.title}`}>
 
             <YAxis
@@ -96,11 +103,12 @@ const JoyPlot: FC<IProps> = ({
               domain={domain}
             />
             <XAxis
-              width={width - Number(yAxisWidth)}
+              width={xWidth}
               height={Number(xAxisHeight)}
               top={((chartHeight) * (i + 1)) - Number(xAxisHeight)}
               left={yAxisWidth}
               labelFormat={axisLabelFormat}
+              padding={padding}
               values={bins} />
 
             <Bars
@@ -112,9 +120,10 @@ const JoyPlot: FC<IProps> = ({
               bins={bins}
               top={chartHeight * i}
               domain={domain}
+              padding={padding}
               direction={direction}
               tip={tip}
-              width={width - Number(yAxisWidth)}
+              width={xWidth}
             />
           </Fragment>);
         })}
