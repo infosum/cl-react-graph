@@ -9,9 +9,11 @@ import { IBarChartData } from '../Histogram';
 export const useJoyPlot = ({
   data,
   height,
+  clampToZero = true,
 }: {
   data: IBarChartData[];
   height: number;
+  clampToZero?: boolean;
 }) => {
   const chartHeight = height / (data.length);
   const [bins, setBins] = useState<string[]>([]);
@@ -21,7 +23,6 @@ export const useJoyPlot = ({
     const allBins = data.reduce((p, n) => {
       return Array.from(new Set([...p, ...n.bins]));
     }, [] as string[])
-      .sort((a, b) => a < b ? 1 : -1);
     setBins(allBins);
     const allValues: IBarChartData[] = data.map((d) => {
       const counts = d.counts.map((count) => {
@@ -44,10 +45,14 @@ export const useJoyPlot = ({
       const values = next.counts.reduce((p, n) => [...p, ...n.data], [] as number[]);
       return [...values, ...prev];
     }, [] as number[]);
+    if (clampToZero) {
+      eachValue.push(0);
+    }
     const e = extent(eachValue) as [number, number];
     if (e[0] == e[1]) {
       e[1]++;
     }
+
     setDomain(e);
 
   }, [data])
