@@ -1,15 +1,21 @@
-import React, { FC } from 'react';
+import React, {
+  FC,
+  HTMLAttributes,
+} from 'react';
 
 interface IProps {
   width: number;
   height: number;
   padding?: number;
 }
-const Base: FC<IProps> = ({
+const Base: FC<IProps & HTMLAttributes<SVGElement> = ({
   children,
   width,
   height,
   padding = 15,
+  id,
+  className,
+  style,
 }) => {
   // Could be measuring a % width in which case wait else animations start off from 
   // the wrong position
@@ -17,9 +23,11 @@ const Base: FC<IProps> = ({
     return null;
   }
   return <svg
+    id={id}
+    className={className}
     width={width}
     height={height}
-    style={{ overflow: 'visible' }}
+    style={{ overflow: 'visible', ...style }}
     viewBox={`0 0 ${width} ${height}`}>
     <g transform={`translate(${padding},${padding})`}
       role="table"
