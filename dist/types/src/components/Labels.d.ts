@@ -3,12 +3,13 @@ import { EChartDirection } from '../v3/BarChart';
 import { ExtendedGroupItem } from './Bars/Bars';
 import { TLabelComponent } from './Label';
 interface IProps {
-    springs: any[];
-    items: ExtendedGroupItem[];
+    colorScheme?: readonly string[];
     direction: EChartDirection;
-    labels?: string[];
+    items: ExtendedGroupItem[];
     LabelComponent?: TLabelComponent;
+    labels?: string[];
     showLabels?: boolean[];
+    springs: any[];
     visible?: Record<string, boolean>;
 }
 export declare const Labels: FC<IProps>;
