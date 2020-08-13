@@ -2,14 +2,10 @@ import { extent } from 'd3-array';
 import {
   ScaleBand,
   scaleBand,
-  ScaleLinear,
   scaleLinear,
   scalePoint,
 } from 'd3-scale';
-import React, {
-  FC,
-  SVGAttributes,
-} from 'react';
+import React, { FC } from 'react';
 
 import {
   paddingInner,
@@ -111,7 +107,8 @@ const XAxis: FC<IAxis> = ({
       {
         ticks.map((v, i) => {
           const tickOffset = positionTick(v, Scale, i);
-          const label = scale === 'band' ? values[i] : v;
+          const label = scale === 'band' ? String(values[i]) : String(v);
+          const thisFormat = typeof tickFormat === 'function' ? tickFormat(label, i) : tickFormat;
           return (
             <g
               aria-hidden={scale !== 'band'}
@@ -133,7 +130,8 @@ const XAxis: FC<IAxis> = ({
 
               <text
                 role={scale === 'band' ? 'columnheader' : ''}
-                fill={tickFormat.stroke}
+                fill={thisFormat.stroke}
+                fontSize={thisFormat.fontSize}
                 textAnchor={labelOrientation === ELabelOrientation.HORIZONTAL ? 'middle' : 'start'}
                 writingMode={labelOrientation === ELabelOrientation.HORIZONTAL ? 'horizontal-tb' : 'vertical-lr'}
                 height={height}
