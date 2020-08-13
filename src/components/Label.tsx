@@ -30,7 +30,7 @@ export const Label: FC<IProps> = ({
       <text textAnchor={textAnchor}
         fill={fill}
         fontSize="0.675rem">{
-          label ?? `${item.percentage}%`}
+          label ?? `${Math.round(Number(item.percentage))}%`}
       </text>
     </g>
   )

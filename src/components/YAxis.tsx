@@ -27,6 +27,11 @@ export enum ELabelOrientation {
   VERTICAL = 'VERTICAL',
 }
 
+type TTickFormat = (label: string, i: number) => {
+  stroke: string;
+  fontSize?: string;
+};
+
 export interface IAxis {
   stroke?: string;
   height: number;
@@ -43,7 +48,7 @@ export interface IAxis {
   tickFormat?: {
     stroke: string;
     fontSize?: string;
-  }
+  } | TTickFormat;
   labelOrientation?: ELabelOrientation,
 }
 
@@ -145,7 +150,8 @@ const YAxis: FC<IAxis> = ({
       {
         ticks.map((v, i) => {
           const tickOffset = positionTick(v, Scale, height, i);
-          const label = scale === 'band' ? values[i] : v;
+          const label = scale === 'band' ? String(values[i]) : String(v);
+          const thisFormat = typeof tickFormat === 'function' ? tickFormat(label, i) : tickFormat;
           return (
             <g
               aria-hidden={scale !== 'band'}
@@ -165,12 +171,12 @@ const YAxis: FC<IAxis> = ({
 
               <text
                 role={scale === 'band' ? 'columnheader' : ''}
-                fill={tickFormat.stroke}
+                fill={thisFormat.stroke}
+                fontSize={thisFormat.fontSize}
                 textAnchor={labelOrientation === ELabelOrientation.HORIZONTAL ? 'right' : 'center'}
                 writingMode={labelOrientation === ELabelOrientation.HORIZONTAL ? 'horizontal-tb' : 'vertical-rl'}
                 transform={labelOrientation === ELabelOrientation.HORIZONTAL ? 'rotate(0)' : 'rotate(180)'}
                 height={height}
-                fontSize={tickFormat.fontSize}
                 x={`-${tickSize + 10}`}
                 dy={labelOrientation === ELabelOrientation.HORIZONTAL ? '0.32em' : '20'}>
                 {labelFormat ? labelFormat('y', label, i) : label}
