@@ -62,7 +62,7 @@ const Axis: FC<IAxis> = (props) => {
       <path className="domain"
         stroke={stroke}
         d={path}
-        fill="none" opacity="1" shape-rendering="auto" stroke-opacity="1" stroke-width="1"
+        fill="none" opacity="1" shapeRendering="auto" stroke-Opacity="1" strokeWidth="1"
       ></path>
 
       {

@@ -282,10 +282,12 @@ const HistogramExample = () => {
                   animation={{
                     duration: state.duration,
                   }}
+                  showLabels={[false, true]}
                   direction={state.chartType === 'HorizontalHistogram' ? EChartDirection.HORIZONTAL : EChartDirection.VERTICAL}
                   data={d}
                   height={400}
                   grid={state.grid}
+                  colorScheme={['#aaa', '#aa0000']}
                   groupLayout={state.groupLayout}
                   xAxisLabelOrientation={state.axis.x.labelOrientation}
                   width={w}
@@ -298,7 +300,7 @@ const HistogramExample = () => {
                   animation={{
                     duration: state.duration,
                   }}
-                  showLabels
+                  showLabels={[true, true]}
                   LabelComponent={({ item }) => {
                     const ref = createRef<any>();
                     return <g transform="translate(0, -10)"><g
@@ -307,7 +309,7 @@ const HistogramExample = () => {
                       <text dx="10">{item.percentage}</text></g>
 
                       <Tooltip
-                        key={`label-tip-${item.groupLabel}.${item.label}`}
+                        key={`label-tip-${item.datasetIndex}.${item.label}.${item.value}`}
                         triggerRef={ref}>
                         <g transform="translate(20, -10)">
                           <text className="label-tip-text">custom test tip test</text>

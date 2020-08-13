@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { TTipFunc } from './components/ToolTip';
 import { TAxisLabelFormat } from './components/YAxis';
-import { IBarChartData } from './Histogram';
+import { IBarChartData, IHistogramBar } from './Histogram';
 import { EChartDirection } from './v3/BarChart';
 export interface IProps {
     axisLabelFormat?: TAxisLabelFormat;
@@ -9,6 +9,7 @@ export interface IProps {
     data: IBarChartData[];
     direction?: EChartDirection;
     height: number;
+    padding?: IHistogramBar;
     tip?: TTipFunc;
     width: number;
     xAxisHeight?: number;

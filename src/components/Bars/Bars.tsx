@@ -54,7 +54,7 @@ interface IProps {
   padding?: IHistogramBar;
   top?: number;
   tip?: TTipFunc;
-  showLabels?: boolean;
+  showLabels?: boolean[];
   values: IBarChartDataSet[];
   visible?: Record<string, boolean>;
   width: number;
@@ -91,7 +91,7 @@ const Bars: FC<IProps> = ({
   labels,
   left = 0,
   padding = paddings,
-  showLabels = false,
+  showLabels = [],
   tip,
   top = 0,
   values,
@@ -121,7 +121,6 @@ const Bars: FC<IProps> = ({
       });
     });
   });
-  console.log('visible', visible);
   const numericScale = scaleLinear()
     .domain(domain)
     .rangeRound([0, direction === EChartDirection.HORIZONTAL ? width : height]);
@@ -187,8 +186,10 @@ const Bars: FC<IProps> = ({
           })
         }
         {
-          showLabels && <Labels
+          <Labels
+            colorScheme={colorScheme}
             springs={springs}
+            showLabels={showLabels}
             items={dataSets}
             direction={direction}
             labels={labels}

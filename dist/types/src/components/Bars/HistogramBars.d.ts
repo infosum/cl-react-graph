@@ -2,6 +2,7 @@ import { FC } from 'react';
 import { SpringConfig } from 'react-spring';
 import { IBarChartDataSet } from '../../Histogram';
 import { EChartDirection } from '../../v3/BarChart';
+import { TLabelComponent } from '../Label';
 import { TTipFunc } from '../ToolTip';
 interface IProps {
     bins: [number, number][];
@@ -12,7 +13,10 @@ interface IProps {
     domain: [number, number];
     height: number;
     hoverColorScheme?: readonly string[];
+    labels?: string[];
     left?: number;
+    showLabels?: boolean[];
+    LabelComponent?: TLabelComponent;
     stroke?: string;
     top?: number;
     tip?: TTipFunc;

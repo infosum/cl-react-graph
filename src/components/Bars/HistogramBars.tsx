@@ -33,7 +33,7 @@ interface IProps {
   hoverColorScheme?: readonly string[];
   labels?: string[];
   left?: number;
-  showLabels?: boolean;
+  showLabels?: boolean[];
   LabelComponent?: TLabelComponent;
   stroke?: string;
   top?: number;
@@ -57,7 +57,7 @@ const HistogramBars: FC<IProps> = ({
   LabelComponent,
   labels,
   left = 0,
-  showLabels = false,
+  showLabels = [],
   stroke = "#FFF",
   top = 0,
   tip,
@@ -140,15 +140,14 @@ const HistogramBars: FC<IProps> = ({
             />
           })
         }
-        {
-          showLabels &&
-          <Labels
-            springs={springs}
-            items={dataSets}
-            direction={direction}
-            labels={labels}
-            LabelComponent={LabelComponent} />
-        }
+        <Labels
+          colorScheme={colorScheme}
+          springs={springs}
+          showLabels={showLabels}
+          items={dataSets}
+          direction={direction}
+          labels={labels}
+          LabelComponent={LabelComponent} />
       </g>
 
       <ToolTips

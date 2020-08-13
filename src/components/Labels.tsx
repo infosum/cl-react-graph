@@ -15,19 +15,23 @@ import {
 } from './Label';
 
 interface IProps {
-  springs: any[];
-  items: ExtendedGroupItem[];
+  colorScheme?: readonly string[];
   direction: EChartDirection;
-  labels?: string[];
+  items: ExtendedGroupItem[];
   LabelComponent?: TLabelComponent;
+  labels?: string[];
+  showLabels?: boolean[];
+  springs: any[];
   visible?: Record<string, boolean>;
 }
 export const Labels: FC<IProps> = ({
+  colorScheme = ['#a9a9a9', '#2a5379'],
   springs,
   items,
   direction,
   labels,
   LabelComponent,
+  showLabels = [],
   visible,
 }) => {
   const refs: RefObject<any>[] = [];
@@ -36,15 +40,16 @@ export const Labels: FC<IProps> = ({
       springs
         .filter((_, i) => {
           const k = String(items[i].groupLabel);
-          if (visible?.[k] === false) {
-            return false;
-          }
-          return true;
-        }).map((props: any, i) => {
+          return visible?.[k] === false ? false : true;
+        })
+        .map((props: any, i) => {
 
           const item = items[i];
+          if (!showLabels[item.datasetIndex]) {
+            return null;
+          }
           return <animated.g
-            key={`label-${item.groupLabel}.${item.label}`}
+            key={`label-${item.datasetIndex}.${item.label}.${item.value}`}
             className="chart-label"
             transform={interpolate([props.x, props.y, props.width, props.height], (x, y, w, h) => {
               return direction === EChartDirection.VERTICAL
@@ -57,6 +62,7 @@ export const Labels: FC<IProps> = ({
                 <LabelComponent item={item}
                   direction={direction} />
                 : <Label
+                  fill={colorScheme[item.datasetIndex]}
                   direction={direction}
                   label={labels?.[i]}
                   item={item} />

@@ -25,11 +25,15 @@ import {
   TAxisValue,
 } from './YAxis';
 
-const positionTick = (value: TAxisValue, scale: any) => {
+const positionTick = (value: TAxisValue, scale: any, i: number) => {
   const offset = isOfType<ScaleBand<any>>(scale, 'paddingInner')
     ? scale.bandwidth() / 2
     : 0;
-  return `(${scale(value) + offset}, 0)`
+
+  const v = isOfType<ScaleBand<any>>(scale, 'paddingInner')
+    ? Number(scale(String(i))) + offset
+    : scale(value);
+  return `(${v}, 0)`
 }
 
 const XAxis: FC<IAxis> = ({
@@ -62,7 +66,8 @@ const XAxis: FC<IAxis> = ({
         .rangeRound([0, width]);
       break;
     case 'band':
-      Scale = scaleBand().domain(values as string[])
+      const steps = new Array(values.length).fill('').map((_, i) => String(i))
+      Scale = scaleBand().domain(steps)
         .paddingInner(padding ? paddingInner(padding) : 0.1)
         .paddingOuter(padding ? paddingOuter(padding) : 0.2)
         .align(0.5)
@@ -105,13 +110,13 @@ const XAxis: FC<IAxis> = ({
 
       {
         ticks.map((v, i) => {
-          const tickOffset = positionTick(v, Scale);
-
+          const tickOffset = positionTick(v, Scale, i);
+          const label = scale === 'band' ? values[i] : v;
           return (
             <g
               aria-hidden={scale !== 'band'}
               role={scale === 'band' ? 'row' : ''}
-              key={v}
+              key={`x-axis-${v}.${label}.${i}`}
               className="tick"
               opacity="1"
               textAnchor="middle"
@@ -133,7 +138,7 @@ const XAxis: FC<IAxis> = ({
                 writingMode={labelOrientation === ELabelOrientation.HORIZONTAL ? 'horizontal-tb' : 'vertical-lr'}
                 height={height}
                 dy={labelOrientation === ELabelOrientation.HORIZONTAL ? '1em' : '20'}>
-                {labelFormat ? labelFormat('x', v, i) : v}
+                {labelFormat ? labelFormat('x', label, i) : label}
               </text>
             </g>
           )
