@@ -60,12 +60,13 @@ export const defaultPath: SVGAttributes<SVGPathElement> = {
   strokeWidth: '1',
 }
 
-const positionTick = (value: TAxisValue, scale: any, height: number) => {
+const positionTick = (value: TAxisValue, scale: any, height: number, i: number) => {
   const offset = isOfType<ScaleBand<any>>(scale, 'paddingInner')
     ? Math.floor(scale.bandwidth() / 2)
     : 0;
+
   const v = isOfType<ScaleBand<any>>(scale, 'paddingInner')
-    ? height - (Number(scale(value)) + offset)
+    ? height - (Number(scale(String(i))) + offset)
     : scale(value);
   return `(0, ${v})`
 }
@@ -100,7 +101,8 @@ const YAxis: FC<IAxis> = ({
         .rangeRound([height, 0]);
       break;
     case 'band':
-      Scale = scaleBand().domain(values as string[])
+      const steps = new Array(values.length).fill('').map((_, i) => String(i))
+      Scale = scaleBand().domain(steps)
         .paddingInner(padding ? paddingInner(padding) : 0.1)
         .paddingOuter(padding ? paddingOuter(padding) : 0.2)
         .align(0.5)
@@ -113,7 +115,6 @@ const YAxis: FC<IAxis> = ({
         .domain(values as string[]);
       break;
   }
-
 
   const transform = `(${width + left}, ${top})`;
 
@@ -143,12 +144,13 @@ const YAxis: FC<IAxis> = ({
 
       {
         ticks.map((v, i) => {
-          const tickOffset = positionTick(v, Scale, height);
+          const tickOffset = positionTick(v, Scale, height, i);
+          const label = scale === 'band' ? values[i] : v;
           return (
             <g
               aria-hidden={scale !== 'band'}
               role={scale === 'band' ? 'row' : ''}
-              key={v}
+              key={`x-axis-${v}.${label}.${i}`}
               className="tick"
               opacity="1"
               transform={`translate${tickOffset}`}>
@@ -171,7 +173,7 @@ const YAxis: FC<IAxis> = ({
                 fontSize={tickFormat.fontSize}
                 x={`-${tickSize + 10}`}
                 dy={labelOrientation === ELabelOrientation.HORIZONTAL ? '0.32em' : '20'}>
-                {labelFormat ? labelFormat('y', v, i) : v}
+                {labelFormat ? labelFormat('y', label, i) : label}
               </text>
 
             </g>

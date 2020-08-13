@@ -49,7 +49,7 @@ export const Labels: FC<IProps> = ({
             return null;
           }
           return <animated.g
-            key={`label-${item.groupLabel}.${item.label}`}
+            key={`label-${item.datasetIndex}.${item.label}.${item.value}`}
             className="chart-label"
             transform={interpolate([props.x, props.y, props.width, props.height], (x, y, w, h) => {
               return direction === EChartDirection.VERTICAL

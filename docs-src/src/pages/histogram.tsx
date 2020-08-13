@@ -309,7 +309,7 @@ const HistogramExample = () => {
                       <text dx="10">{item.percentage}</text></g>
 
                       <Tooltip
-                        key={`label-tip-${item.groupLabel}.${item.label}`}
+                        key={`label-tip-${item.datasetIndex}.${item.label}.${item.value}`}
                         triggerRef={ref}>
                         <g transform="translate(20, -10)">
                           <text className="label-tip-text">custom test tip test</text>
