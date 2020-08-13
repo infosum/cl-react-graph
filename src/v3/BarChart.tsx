@@ -96,6 +96,97 @@ const BarChart: FC<IProps> = ({
     values: data.counts
   });
 
+  const annotations = [
+    {
+      "color": "#333",
+      "value": "0% "
+    },
+    {
+      "color": "#333",
+      "value": "0% "
+    },
+    {
+      "color": "#333",
+      "value": "0% "
+    },
+    {
+      "color": "#333",
+      "value": "0% "
+    },
+    {
+      "color": "#333",
+      "value": "0% "
+    },
+    {
+      "color": "#333",
+      "value": "0% "
+    },
+    {
+      "color": "#333",
+      "value": "0% "
+    },
+    {
+      "color": "#333",
+      "value": "0% "
+    },
+    {
+      "color": "#333",
+      "value": "0% "
+    },
+    {
+      "color": "#333",
+      "value": "0% "
+    },
+    {
+      "color": "#333",
+      "value": "0% "
+    },
+    {
+      "color": "#333",
+      "value": "0% "
+    },
+    {
+      "color": "#333",
+      "value": "0% "
+    },
+    {
+      "color": "#333",
+      "value": "0% "
+    },
+    {
+      "color": "#333",
+      "value": "0% "
+    },
+    {
+      "color": "#333",
+      "value": "0% "
+    },
+    {
+      "color": "#333",
+      "value": "0% "
+    },
+    {
+      "color": "#333",
+      "value": "0% "
+    },
+    {
+      "color": "#333",
+      "value": "0% "
+    },
+    {
+      "color": "#333",
+      "value": "0% "
+    },
+    {
+      "color": "#333",
+      "value": "0% "
+    },
+    {
+      "color": "#333",
+      "value": "0% "
+    }
+  ];
+
   return (
     <Base
       width={width + 30} // @TODO work out why without this the bars exceed the chart
@@ -140,6 +231,33 @@ const BarChart: FC<IProps> = ({
         domain={direction === EChartDirection.HORIZONTAL ? undefined : domain}
 
         padding={padding}
+      />
+
+      {/* <YAxis
+        width={yAxisWidth}
+        height={height - xAxisHeight}
+        labelFormat={axisLabelFormat}
+        scale={direction === EChartDirection.HORIZONTAL ? 'band' : 'linear'}
+        values={direction === EChartDirection.HORIZONTAL ? ['0', '0', '0'] : undefined}
+        domain={direction === EChartDirection.HORIZONTAL ? undefined : domain}
+        tickFormat={(label, i) => ({
+          stroke: label === '0' ? 'red' : 'blue',
+          fontSize: '1.65rem',
+        })}
+        padding={padding}
+      /> */}
+
+      <YAxis
+        width={yAxisWidth / 2}
+        path={{ opacity: 0 }}
+        height={height - xAxisHeight}
+        scale="band"
+        left={0}
+        tickFormat={(label, i) => ({
+          stroke: annotations[i].color,
+        })}
+        values={annotations
+          .map((a) => a.value)}
       />
 
       <XAxis
