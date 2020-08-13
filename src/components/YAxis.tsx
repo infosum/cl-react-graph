@@ -18,6 +18,7 @@ import {
 } from '../utils/bars';
 import { isOfType } from '../utils/isOfType';
 import { AnyScale } from '../utils/scales';
+import { defaultPadding } from '../v3/BarChart';
 
 export type TAxisValue = string | number;
 export type TAxisLabelFormat = (axis: 'x' | 'y', bin: string, i: number) => string;
@@ -82,7 +83,7 @@ const YAxis: FC<IAxis> = ({
   height,
   left = 0,
   path,
-  padding,
+  padding = defaultPadding,
   scale = 'linear',
   tickSize = 2,
   tickFormat = defaultTickFormat,
@@ -127,8 +128,9 @@ const YAxis: FC<IAxis> = ({
 
   const axisPath = { ...defaultPath, ...(path ?? {}) };
   const { fill, opacity, stroke, strokeOpacity, strokeWidth } = axisPath;
+  const d = Scale.domain() as [number, number];
   const ticks: any[] = (values.length === 0 && scale === 'linear')
-    ? Scale.domain()
+    ? [d[0], d[1] - d[0], [d[1]]]
     : values;
   return (
     <g className="y-axis"

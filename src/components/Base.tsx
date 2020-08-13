@@ -8,7 +8,7 @@ interface IProps {
   height: number;
   padding?: number;
 }
-const Base: FC<IProps & HTMLAttributes<SVGElement> = ({
+const Base: FC<IProps & HTMLAttributes<SVGElement>> = ({
   children,
   width,
   height,
