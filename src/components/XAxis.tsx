@@ -13,6 +13,7 @@ import {
 } from '../utils/bars';
 import { isOfType } from '../utils/isOfType';
 import { AnyScale } from '../utils/scales';
+import { defaultPadding } from '../v3/BarChart';
 import {
   defaultPath,
   defaultTickFormat,
@@ -43,7 +44,7 @@ const XAxis: FC<IAxis> = ({
   left = 0,
   scale = 'band',
   domain,
-  padding,
+  padding = defaultPadding,
   tickFormat = defaultTickFormat,
   labelOrientation = ELabelOrientation.HORIZONTAL,
 }) => {
@@ -82,9 +83,9 @@ const XAxis: FC<IAxis> = ({
   const pathD = `M0,0 L${width},0`;
   const axisPath = { ...defaultPath, ...(path ?? {}) };
   const { fill, opacity, stroke, strokeOpacity, strokeWidth } = axisPath;
-
+  const d = Scale.domain() as [number, number];
   const ticks: any[] = (values.length === 0 && scale === 'linear')
-    ? Scale.domain()
+    ? [d[0], d[1] - d[0], [d[1]]]
     : values;
 
   return (
