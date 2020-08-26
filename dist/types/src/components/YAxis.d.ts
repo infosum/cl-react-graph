@@ -6,6 +6,10 @@ export declare enum ELabelOrientation {
     HORIZONTAL = "HORIZONTAL",
     VERTICAL = "VERTICAL"
 }
+declare type TTickFormat = (label: string, i: number) => {
+    stroke: string;
+    fontSize?: string;
+};
 export interface IAxis {
     stroke?: string;
     height: number;
@@ -22,7 +26,7 @@ export interface IAxis {
     tickFormat?: {
         stroke: string;
         fontSize?: string;
-    };
+    } | TTickFormat;
     labelOrientation?: ELabelOrientation;
 }
 export declare const defaultTickFormat: {
