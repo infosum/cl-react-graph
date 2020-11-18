@@ -59,7 +59,7 @@ const XAxis: FC<IAxis> = ({
   switch (scale) {
     case 'linear':
       Scale = scaleLinear()
-        .domain(extent(domain ? [0, ...domain as number[]] : values as number[]) as any)
+        .domain(extent(domain ? [...domain as number[]] : values as number[]) as any)
         .rangeRound([0, width]);
       break;
     case 'band':

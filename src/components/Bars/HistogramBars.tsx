@@ -1,3 +1,4 @@
+import { extent } from 'd3';
 import { color } from 'd3-color';
 import { scaleLinear } from 'd3-scale';
 import React, {
@@ -90,8 +91,10 @@ const HistogramBars: FC<IProps> = ({
     });
   });
 
+  // Numeric scale should try to start at 0 otherwise bar heights are incorrect when domain = [x, x]
+  const scaleDomain = extent([0, ...domain]) as [number, number];
   const numericScale = scaleLinear()
-    .domain(domain)
+    .domain(scaleDomain)
     .rangeRound([0, direction === EChartDirection.HORIZONTAL ? width : height]);
 
   // Distribute the bin values across the x axis

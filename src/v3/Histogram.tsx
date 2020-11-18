@@ -71,8 +71,9 @@ const Histogram: FC<IHistogramProps> = ({
   }
 
   const bins = data.bins.reduce((p, n) => p.concat(Array.isArray(n) ? n : [n]), [] as number[]);
-  const continuousDomain = extent([0, ...bins]) as [number, number];
-  const domain = extent([0].concat(data.counts.reduce((p, n) => p.concat(n.data), [] as number[]))) as [number, number];
+  const continuousDomain = extent(bins) as [number, number];
+  const domain = extent(data.counts.reduce((p, n) => p.concat(n.data), [] as number[])) as [number, number];
+
   return (
     <Base
       width={width + 30} // @TODO work out why without this the bars exceed the chart

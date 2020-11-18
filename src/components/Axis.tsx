@@ -73,8 +73,8 @@ const Axis: FC<IAxis> = (props) => {
               <line stroke={stroke}
                 x2={`-${tickSize}`}
                 fill="none" opacity="1"
-                shape-rendering="auto"
-                stroke-opacity="1"
+                shapeRendering="auto"
+                strokeOpacity="1"
                 stroke-width="1">
               </line>
 
