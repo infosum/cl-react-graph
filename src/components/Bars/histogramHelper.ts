@@ -25,7 +25,12 @@ export const buildHistogramSprings = (props: IHistogramSpringProps) => {
   const { bins, direction, config, height, dataSets, numericScale, continuousScale, colorScheme, hoverColorScheme } = props;
   const s = dataSets.map((item, index) => {
     const bandPosition = continuousScale(bins[index][0]);
-    const itemWidth = continuousScale(bins[index][1] - bins[index][0]);
+
+    // Ensure that if we have bins that don't start at 0 our bars will still have the correct width
+    const startValue = bins[0][0];
+    const binWidth = bins[index][1] - bins[index][0];
+    const itemWidth = continuousScale(binWidth + startValue);
+
     const itemHeight = numericScale(item.value);
 
     if (direction === EChartDirection.HORIZONTAL) {
@@ -64,7 +69,7 @@ export const buildHistogramSprings = (props: IHistogramSpringProps) => {
         fill: colorScheme[item.datasetIndex],
         hoverFill: hoverColorScheme?.[item.datasetIndex] ?? colorScheme[item.datasetIndex],
         x: bandPosition,
-        y: height - numericScale(item.value),
+        y: height - itemHeight,
         width: itemWidth,
       },
       config,
