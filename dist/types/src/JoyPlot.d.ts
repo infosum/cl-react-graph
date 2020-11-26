@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { TTipFunc } from './components/ToolTip';
-import { TAxisLabelFormat } from './components/YAxis';
+import { ELabelOrientation, TAxisLabelFormat } from './components/YAxis';
 import { IBarChartData, IHistogramBar } from './Histogram';
 import { EChartDirection } from './v3/BarChart';
 export interface IProps {
@@ -14,6 +14,8 @@ export interface IProps {
     width: number;
     xAxisHeight?: number;
     yAxisWidth?: number;
+    titleHeight?: number;
+    titleLayout?: ELabelOrientation;
 }
 /**
  * JoyPlot component
