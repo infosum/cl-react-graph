@@ -132,13 +132,13 @@ export const analyticsAxis: DeepPartial<IAxes> = {
   x: {
     scale: 'ORDINAL',
     numberFormat: '.2s',
-    labelOrientation: ELabelOrientation.horizontal,
+    labelOrientation: ELabelOrientation.HORIZONTAL,
   },
   y: {
     // ...defaultAxis.y,
     ticks: 3,
     numberFormat: '.2s',
-    labelOrientation: ELabelOrientation.horizontal,
+    labelOrientation: ELabelOrientation.HORIZONTAL,
   },
 };
 
