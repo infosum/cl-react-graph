@@ -6,6 +6,7 @@ import {
   scalePoint,
 } from 'd3-scale';
 import React, { FC } from 'react';
+import textWrap from 'svg-text-wrap';
 
 import {
   paddingInner,
@@ -110,6 +111,9 @@ const XAxis: FC<IAxis> = ({
           const tickOffset = positionTick(v, Scale, i);
           const label = scale === 'band' ? String(values[i]) : String(v);
           const thisFormat = typeof tickFormat === 'function' ? tickFormat(label, i) : tickFormat;
+          const tickLabel = labelFormat ? labelFormat('x', label, i) : label
+          const textArray: string[] = textWrap(tickLabel, height, { 'font-size': thisFormat.fontSize });
+
           return (
             <g
               aria-hidden={scale !== 'band'}
@@ -128,17 +132,23 @@ const XAxis: FC<IAxis> = ({
                 strokeOpacity="1"
                 strokeWidth="1">
               </line>
-
-              <text
-                role={scale === 'band' ? 'columnheader' : ''}
-                fill={thisFormat.stroke}
-                fontSize={thisFormat.fontSize}
-                textAnchor={labelOrientation === ELabelOrientation.HORIZONTAL ? 'middle' : 'start'}
-                writingMode={labelOrientation === ELabelOrientation.HORIZONTAL ? 'horizontal-tb' : 'vertical-lr'}
-                height={height}
-                dy={labelOrientation === ELabelOrientation.HORIZONTAL ? '1em' : '20'}>
-                {labelFormat ? labelFormat('x', label, i) : label}
-              </text>
+              { textArray.map((txt, j) => {
+                const dx = textArray.length === 1 ? 0 : (textArray.length / 2 * 20) - (20 * j) - 10;
+                const dy = textArray.length === 1 ? 20 : (20 * j) + 20;
+                return <g key={j}>
+                  <text
+                    role={scale === 'band' ? 'columnheader' : ''}
+                    fill={thisFormat.stroke}
+                    fontSize={thisFormat.fontSize}
+                    textAnchor={labelOrientation === ELabelOrientation.HORIZONTAL ? 'middle' : 'start'}
+                    writingMode={labelOrientation === ELabelOrientation.HORIZONTAL ? 'horizontal-tb' : 'vertical-lr'}
+                    height={height}
+                    dy={labelOrientation === ELabelOrientation.HORIZONTAL ? dy : '20'}
+                    dx={labelOrientation === ELabelOrientation.HORIZONTAL ? '0' : dx}>
+                    {txt}
+                  </text>
+                </g>
+              })}
             </g>
           )
         })
