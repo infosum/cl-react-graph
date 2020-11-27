@@ -1,5 +1,3 @@
-import { SVGAttributes } from 'react';
-
 const ns = 'http://www.w3.org/2000/svg';
 const makeSvgNode = (name: 'text' | 'tspan' | 'svg', doc: Document) => doc.createElementNS(ns, name);
 
