@@ -6,7 +6,6 @@ import {
   scalePoint,
 } from 'd3-scale';
 import React, { FC } from 'react';
-import textWrap from 'svg-text-wrap';
 
 import {
   paddingInner,
@@ -14,6 +13,7 @@ import {
 } from '../utils/bars';
 import { isOfType } from '../utils/isOfType';
 import { AnyScale } from '../utils/scales';
+import textWrap from '../utils/svgTextWrap';
 import { defaultPadding } from '../v3/BarChart';
 import {
   defaultPath,
