@@ -1,17 +1,33 @@
-import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
+import { extent } from 'd3-array';
+import { schemeSet3 } from 'd3-scale-chromatic';
+import React, { FC } from 'react';
+import { SpringConfig } from 'react-spring';
 
-import { IGroupDataItem } from './BaseHistogramD3';
-import { ELabelOrientation } from './components/YAxis';
-import { HistogramD3 } from './HistogramD3';
-import { DeepPartial } from './utils/types';
+import { EChartDirection } from './BarChart';
+import HistogramBars from './components/Bars/HistogramBars';
+import Base from './components/Base';
+import Grid from './components/Grid';
+import { TLabelComponent } from './components/Label';
+import { TTipFunc } from './components/ToolTip';
+import XAxis from './components/XAxis';
+import YAxis, {
+  ELabelOrientation,
+  TAxisLabelFormat,
+} from './components/YAxis';
+import { ISVGLineStyle } from './legacy/types';
 
-export interface IChartAdaptor<P> {
-  create: (el: Element, props: DeepPartial<P>) => void;
-  update: (props: DeepPartial<P>) => void;
-  destroy: () => void;
+export enum EGroupedBarLayout {
+  GROUPED,
+  STACKED,
+  OVERLAID,
 }
 
+export interface IBarChartDataSet {
+  borderColors?: string[];
+  colors?: string[];
+  label: string;
+  data: number[];
+}
 export enum EColorManipulations {
   'negate' = 'negate',
   'lighten' = 'lighten',
@@ -25,6 +41,14 @@ export enum EColorManipulations {
   'rotate' = 'rotate',
 };
 
+export interface IGroupDataItem {
+  label: string;
+  groupLabel?: string;
+  colorRef?: string; // String which can be used to return same colour value
+  value: number;
+  side?: 'left' | 'right'; // For Tornados
+}
+
 export interface IHistogramBar {
   // Padding for the inside of grouped datasets
   grouped: {
@@ -37,6 +61,22 @@ export interface IHistogramBar {
   // @deprecated in 3.0
   hover?: Partial<Record<EColorManipulations, number>>,
   overlayMargin: number; // When bars are rendered as EGroupedBarLayout.OVERLAID (offset between the two overlaid bars)
+}
+
+export interface IHistogramData {
+  bins: [number, number][];
+  counts: IBarChartDataSet[];
+  colorScheme?: string[];
+  title?: string;
+}
+export type IGroupData = IGroupDataItem[][];
+
+
+export interface IBarChartData {
+  bins: string[];
+  counts: IBarChartDataSet[];
+  colorScheme?: string[];
+  title?: string;
 }
 
 export interface IGrid {
@@ -53,251 +93,136 @@ export interface IGrid {
   };
 }
 
-export interface IStroke {
-  color: ((d, i: number, colors: (i: number) => string) => string) | string;
-  dasharray: string;
-  linecap: 'butt' | 'round' | 'square';
-  width: number;
-}
 
-export interface IAxes {
-  y: IAxis;
-  x: IAxis;
-}
-export interface IBarChartDataSet {
-  borderColors?: string[];
-  colors?: string[];
-  label: string;
-  data: number[];
-}
-
-export interface IBarChartData {
-  bins: string[];
-  counts: IBarChartDataSet[];
-  colorScheme?: string[];
-  title?: string;
-}
-
-export interface IHistogramData {
-  bins: [number, number][];
-  counts: IBarChartDataSet[];
-  colorScheme?: string[];
-  title?: string;
-}
-
-export interface IDomain {
-  max: number | null;
-  min: number | null;
-}
-
-export interface IMargin {
-  top: number;
-  left: number;
-  right: number;
-  bottom: number;
-}
-
-export interface IAnnotation {
-  color: string;
-  value: string;
-}
-
-export enum EGroupedBarLayout {
-  GROUPED,
-  STACKED,
-  OVERLAID,
-}
 export interface IHistogramProps {
-  axis: IAxes;
-  bar: IHistogramBar;
-  className: string;
-  annotations?: IAnnotation[];
-  data: IBarChartData;
-  delay: number;
-  duration: number;
-  colorScheme: string[];
-  domain: IDomain;
-  id?: string;
-  grid: IGrid;
+  animation?: SpringConfig;
+  axisLabelFormat?: TAxisLabelFormat;
+  colorScheme?: string[];
+  data: IHistogramData;
+  direction?: EChartDirection;
+  grid?: IGrid;
   height: number;
-  margin: IMargin;
-  showBinPercentages?: boolean[];
-  annotationTextSize?: string;
-  /**
-   *  @deprecated
-   */
-  stacked?: boolean;
-  groupLayout: EGroupedBarLayout;
-  onClick?: (bar: IGroupDataItem) => void;
-  stroke: IStroke;
-  tip: any;
-  tipContainer: string;
-  tipContentFn: TipContentFn<string>;
-  axisLabelTipContentFn?: TipContentFn<string>;
-  visible: { [key: string]: boolean };
-  width: number | string;
-}
-
-export type Scale = 'LINEAR' | 'TIME' | 'LOG' | 'ORDINAL';
-
-export interface ISVGLineStyle {
-  'stroke': string;
-  'fill': string;
-  'opacity': number;
-  'stroke-width': number;
-  'stroke-opacity': number;
-  'shape-rendering': string;
-  'visible': boolean;
-}
-
-interface ISVGTextStyle {
-  fill?: string;
-  'font-size'?: string;
-  dy?: string | number;
-  'stroke-opacity'?: number;
-  'text-anchor'?: string;
-  transform?: string;
-  x?: string | number;
-  y?: string | number;
-}
-
-export interface IChartState {
-  parentWidth?: number;
-}
-export interface IAxis {
-  dateFormat: string;
-  numberFormat: string;
-  ticks: number;
-  height: number;
-  label: string;
-  margin: number;
-  scale: Scale;
-  style: ISVGLineStyle;
-  text: {
-    style: ISVGTextStyle;
-  };
-  labelOrientation?: ELabelOrientation;
+  LabelComponent?: TLabelComponent;
+  hoverColorScheme?: string[];
+  showLabels?: boolean[];
+  tip?: TTipFunc;
+  visible?: Record<string, boolean>;
   width: number;
-  tickSize: number;
-  tickValues: null | number[];
-  visible: boolean;
+  xAxisHeight?: number;
+  xAxisLabelOrientation?: ELabelOrientation;
+  yAxisWidth?: number;
 }
-
-export type TipContentFn<T> = (bins: T[], i: number, d: number, groupTitle?: string) => string;
 
 /**
- * Histogram component
+ * A Histogram renders continuous data and thus use a ScaleLinear x & y axis 
  */
-class Histogram extends Component<DeepPartial<IHistogramProps>, IChartState> {
-
-  private chart: IChartAdaptor<IHistogramProps>;
-  private ref: HTMLDivElement | null = null;
-
-  /**
-   * Constructor
-   */
-  constructor(props: DeepPartial<IHistogramProps>) {
-    super(props);
-    this.chart = new HistogramD3();
-    this.state = {
-      parentWidth: 300,
-    };
+const Histogram: FC<IHistogramProps> = ({
+  animation,
+  axisLabelFormat,
+  colorScheme = schemeSet3,
+  data,
+  direction = EChartDirection.VERTICAL,
+  grid,
+  height,
+  hoverColorScheme,
+  LabelComponent,
+  showLabels = [],
+  tip,
+  visible,
+  width,
+  xAxisHeight,
+  xAxisLabelOrientation = ELabelOrientation.HORIZONTAL,
+  yAxisWidth,
+}) => {
+  if (!yAxisWidth) {
+    yAxisWidth = direction === EChartDirection.VERTICAL ? 40 : 100;
+  }
+  if (!xAxisHeight) {
+    xAxisHeight = direction === EChartDirection.VERTICAL ? 100 : 40;
   }
 
-  /**
-   * Handle the page resize
-   */
-  private handleResize() {
-    const el = this.getDOMNode();
-    if (!el) {
-      return;
-    }
-    const width = (this.ref && this.ref.offsetWidth) ? this.ref.offsetWidth : 0;
-
-    this.setState({
-      parentWidth: width,
-    }, () => this.chart.update(this.getChartState()));
+  if (width === 0) {
+    return null;
   }
 
-  /**
-   * Component mounted
-   */
-  public componentDidMount() {
-    const el = this.getDOMNode();
-    if (!el) {
-      return;
-    }
-    this.chart.create(el, this.getChartState());
-    if (this.props.width === '100%') {
-      window.addEventListener('resize', (e) => this.handleResize());
-      this.handleResize();
-    }
-  }
+  const bins = data.bins.reduce((p, n) => p.concat(Array.isArray(n) ? n : [n]), [] as number[]);
+  const continuousDomain = extent(bins) as [number, number];
+  const domain = extent(data.counts.reduce((p, n) => p.concat(n.data), [] as number[])) as [number, number];
 
-  /**
-   * Component updated
-   */
-  public componentDidUpdate() {
-    const el = this.getDOMNode();
-    if (!el) {
-      return;
-    }
-    this.chart.update(this.getChartState());
-  }
+  return (
+    <Base
+      width={width + 30} // @TODO work out why without this the bars exceed the chart
+      height={height}>
 
-  /**
-   * Get the chart state
-   */
-  public getChartState(): DeepPartial<IHistogramProps> {
-    let { width } = this.props;
-    const { children, ...rest } = this.props;
-    if (width === '100%') {
-      width = this.state.parentWidth || 300;
-    }
-
-    return {
-      ...rest,
-      width,
-    };
-  }
-
-  /**
-   * Component will un mount, remove the chart and
-   * any event listeners
-   */
-  public componentWillUnmount() {
-    const el = this.getDOMNode();
-    if (!el) {
-      return;
-    }
-    if (this.props.width === '100%') {
-      window.removeEventListener('resize', this.handleResize);
-    }
-    this.chart.destroy();
-  }
-
-  /**
-   * Get the chart's dom node
-   */
-  private getDOMNode(): Element | undefined | null {
-    const node = ReactDOM.findDOMNode(this.ref);
-    try {
-      if (node instanceof Text) {
-        return undefined;
+      {
+        grid && <Grid
+          left={yAxisWidth}
+          height={height - xAxisHeight}
+          svgProps={{ ...grid.x.style }}
+          lines={{
+            vertical: grid.y.ticks,
+            horizontal: grid.x.ticks,
+          }}
+          width={width - yAxisWidth} />
       }
-      return node;
-    } catch (e) {
-      // instanceof Text not working when running tests - just presume its ok
-      return node as Element;
-    }
-  }
 
-  /**
-   * Render
-   */
-  public render(): JSX.Element {
-    return (<div ref={(ref) => this.ref = ref} className="histogram-chart-container"></div>);
-  }
+      <HistogramBars
+        colorScheme={colorScheme}
+        hoverColorScheme={hoverColorScheme}
+        left={yAxisWidth}
+        height={height - xAxisHeight}
+        width={width - yAxisWidth}
+        values={data.counts}
+        config={animation}
+        bins={data.bins}
+        showLabels={showLabels}
+        direction={direction}
+        LabelComponent={LabelComponent}
+        domain={domain}
+        continuousDomain={continuousDomain}
+        tip={tip}
+        visible={visible}
+      />
+
+      <YAxis
+        width={yAxisWidth}
+        height={height - xAxisHeight}
+        labelFormat={axisLabelFormat}
+        scale="linear"
+        domain={direction === EChartDirection.HORIZONTAL ? continuousDomain : domain}
+        values={direction === EChartDirection.HORIZONTAL
+          ? [
+            continuousDomain[0],
+            ((continuousDomain[1] - continuousDomain[0]) * 1) / 3,
+            ((continuousDomain[1] - continuousDomain[0]) * 2) / 3,
+            continuousDomain[1],
+          ]
+          : domain
+        }
+      />
+
+      <XAxis
+        width={width - yAxisWidth}
+        height={xAxisHeight}
+        top={height - xAxisHeight}
+        left={yAxisWidth}
+        labelFormat={axisLabelFormat}
+        labelOrientation={xAxisLabelOrientation}
+        scale="linear"
+        domain={direction === EChartDirection.HORIZONTAL ? domain : continuousDomain}
+        values={direction === EChartDirection.HORIZONTAL
+          ? domain
+          : [
+            continuousDomain[0],
+            ((continuousDomain[1] - continuousDomain[0]) * 1) / 3,
+            ((continuousDomain[1] - continuousDomain[0]) * 2) / 3,
+            continuousDomain[1],
+          ]}
+      />
+
+    </Base>
+  )
+
 }
 
 export default Histogram;

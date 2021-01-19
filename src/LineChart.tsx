@@ -2,29 +2,25 @@ import {
   CurveFactory,
   CurveFactoryLineOnly,
 } from 'd3-shape';
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React, { FC } from 'react';
 
-import {
-  IAxes,
-  IChartAdaptor,
-  IGrid,
-  IMargin,
-  ISVGLineStyle,
-  TipContentFn,
-} from './Histogram';
-import { lineChartD3 } from './lineChartD3';
-import { DeepPartial } from './utils/types';
-
-interface IState {
-  parentWidth?: number;
-}
+import AreaFill from './components/AreaFill';
+import Base from './components/Base';
+import Grid from './components/Grid';
+import Line from './components/Line';
+import Points from './components/Points';
+import XAxis from './components/XAxis';
+import YAxis from './components/YAxis';
+import { IGrid } from './Histogram';
+import { IAxes } from './legacy/types';
+import { useLineDomain } from './utils/useDomain';
 
 export type IChartPointValue = number | string | Date | object;
 export interface IChartPoint<X extends IChartPointValue = Date | number | string, Y extends IChartPointValue = number> {
   x: X;
   y: Y;
 }
+
 export interface ILineProps {
   show: boolean;
   fill: {
@@ -49,116 +45,95 @@ export interface ILineChartDataSet<T> {
   data: T[];
 }
 
-export interface ISVGPoint extends ISVGLineStyle {
-  radius?: 4;
-  show: boolean;
-}
-
-export interface ILineChartProps<T extends IChartPoint<IChartPointValue, IChartPointValue> = IChartPoint> {
+export interface IProps<T extends IChartPoint<IChartPointValue, IChartPointValue> = IChartPoint> {
   axis: IAxes;
-  className: string;
   data: ILineChartDataSet<T>[];
   grid: IGrid;
-  height: number | string;
-  margin: IMargin;
-  tip: any;
-  tipContainer?: string;
-  tipContentFn: TipContentFn<{ x: string | number, y: string | number }>;
-  visible: { [key: string]: boolean };
-  width: number | string;
+  height: number;
+  width: number;
+  xAxisHeight?: number;
+  yAxisWidth?: number;
 }
 
-class LineChart extends React.Component<DeepPartial<ILineChartProps>, IState> {
+const LineChart: FC<IProps> = ({
+  axis,
+  data,
+  grid,
+  height,
+  width,
+  xAxisHeight = 60,
+  yAxisWidth = 100,
+}) => {
+  const domain = useLineDomain({
+    values: data,
+  });
+  return (
+    <Base
+      width={width}
+      height={height}>
 
-  private chart: IChartAdaptor<ILineChartProps>;
-  private ref: HTMLDivElement | null = null;
+      <Grid
+        left={yAxisWidth}
+        height={height - xAxisHeight}
+        svgProps={{ ...grid.x.style }}
+        lines={{
+          vertical: grid.y.ticks,
+          horizontal: grid.x.ticks,
+        }}
+        width={width - yAxisWidth} />
+      {
+        data.map((item) => <> <Line
+          axis={axis}
+          key={item.label}
+          label={item.label}
+          line={item.line}
+          width={width - yAxisWidth}
+          left={yAxisWidth}
+          height={height - xAxisHeight}
+          data={item.data} />
+          {
 
-  constructor(props: DeepPartial<ILineChartProps>) {
-    super(props);
-    this.chart = lineChartD3();
-    this.state = {
-      parentWidth: 300,
-    };
-  }
+            item.point.show &&
+            <Points
+              axis={axis}
+              key={item.label}
+              width={width - yAxisWidth}
+              left={yAxisWidth}
+              height={height - xAxisHeight}
+              radius={item.point.radius}
+              fill={item.point.fill}
+              stroke={item.point.stroke}
+              data={item.data} />
+          }
 
-  private handleResize() {
-    const el = this.getDOMNode();
-    if (!el) {
-      return;
-    }
-    const width = (this.ref && this.ref.offsetWidth) ? this.ref.offsetWidth : 0;
+          {
+            item.line.fill.show && <AreaFill
+              axis={axis}
+              key={item.label}
+              width={width - yAxisWidth}
+              left={yAxisWidth}
+              height={height - xAxisHeight}
+              line={item.line}
+              data={item.data} />
+          }
+        </>)}
 
-    this.setState({
-      parentWidth: width,
-    }, () => this.chart.update(this.getChartState()));
+      <YAxis
+        width={yAxisWidth}
+        height={height - xAxisHeight}
+        // values={[0, 1000, 2000]}
+        scale="linear"
+        domain={domain}
+      />
 
-  }
+      <XAxis
+        width={width - yAxisWidth}
+        height={xAxisHeight}
+        top={height - xAxisHeight}
+        left={yAxisWidth} />
 
-  public componentDidMount() {
-    const el = this.getDOMNode();
-    if (!el) {
-      return;
-    }
-    this.chart.create(el, this.getChartState());
-    if (this.props.width === '100%') {
-      window.addEventListener('resize', (e) => this.handleResize());
-      this.handleResize();
-    }
-  }
-
-  public componentDidUpdate() {
-    const el = this.getDOMNode();
-    if (!el) {
-      return;
-    }
-    this.chart.update(this.getChartState());
-  }
-
-  /**
-   * Get the chart state. If a histogram has been assigned
-   * to the props, then render this data. Otherwise generate
-   * a random normal dist
-   */
-  public getChartState(): DeepPartial<ILineChartProps> {
-    let { width } = this.props;
-    const { children, ...rest } = this.props;
-
-    if (width === '100%') {
-      width = this.state.parentWidth || 300;
-    }
-    return {
-      ...rest,
-      width,
-    };
-  }
-
-  public componentWillUnmount() {
-    if (this.props.width === '100%') {
-      window.removeEventListener('resize', this.handleResize);
-    }
-    const el = this.getDOMNode();
-    if (!el) {
-      return;
-    }
-    this.chart.destroy();
-  }
-
-  private getDOMNode(): Element | undefined | null {
-    const node = ReactDOM.findDOMNode(this.ref);
-    try {
-      if (node instanceof Text) {
-        return undefined;
-      }
-      return node;
-    } catch (e) {
-      // instanceof Text not working when running tests - just presume its ok
-      return node as Element;
-    }
-  }
-
-  public render(): JSX.Element {
-    return <div ref={(ref) => this.ref = ref} className="chart-container"></div>;
-  }
+    </Base>
+  )
 }
 
 export default LineChart;

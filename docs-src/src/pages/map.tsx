@@ -5,7 +5,7 @@ import React, {
   useState,
 } from 'react';
 
-import { Map } from '../../../src';
+import Map from '../../../src/legacy/Map';
 import Layout from '../components/layout';
 import SEO from '../components/seo';
 import { data } from '../data';
@@ -31,7 +31,7 @@ const MapExample = () => {
       <h1>Map</h1>
       <div>
         <Map
-          data={data}
+          data={data as any}
           geojson={geojson}
           height={400}
           width={400} />

@@ -14,7 +14,10 @@ import {
   Typography,
 } from '@material-ui/core';
 
-import { Base } from '../../../src';
+import {
+  Base,
+  IAxes,
+} from '../../../src';
 import Brush from '../../../src/components/Brush';
 import Line from '../../../src/components/Line';
 import { data3 } from '../../../test/fixtures';
@@ -23,22 +26,19 @@ import SEO from '../components/seo';
 
 const dateFormat = '%d-%b-%y';
 
-const axis: any = {
+const axis: IAxes = {
   x: {
     dateFormat,
-    scale: 'TIME',
-    ticks: 2,
+    scale: 'time',
+    width: 800,
+    height: 20,
   },
   y: {
     label: 'TAB_VIEW_CREDITS',
     numberFormat: 'd',
-    scale: 'LOG',
-    text: {
-      style: {
-        'font-size': '.7rem',
-      },
-    },
-    ticks: 5,
+    scale: 'log',
+    height: 200,
+    width: 20,
   },
 };
 

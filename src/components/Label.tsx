@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 
-import { EChartDirection } from '../v3/BarChart';
+import { EChartDirection } from '../BarChart';
 import { ExtendedGroupItem } from './Bars/Bars';
 
 interface IProps {

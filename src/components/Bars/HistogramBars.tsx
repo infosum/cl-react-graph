@@ -12,8 +12,8 @@ import {
   useSprings,
 } from 'react-spring';
 
+import { EChartDirection } from '../../BarChart';
 import { IBarChartDataSet } from '../../Histogram';
-import { EChartDirection } from '../../v3/BarChart';
 import { TLabelComponent } from '../Label';
 import { Labels } from '../Labels';
 import { TTipFunc } from '../ToolTip';

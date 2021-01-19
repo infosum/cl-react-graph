@@ -3,6 +3,10 @@ import React, {
   Fragment,
 } from 'react';
 
+import {
+  defaultPadding,
+  EChartDirection,
+} from './BarChart';
 import Bars from './components/Bars/Bars';
 import Base from './components/Base';
 import { TTipFunc } from './components/ToolTip';
@@ -18,10 +22,6 @@ import {
   IHistogramBar,
 } from './Histogram';
 import { useJoyPlot } from './utils/useJoyPlot';
-import {
-  defaultPadding,
-  EChartDirection,
-} from './v3/BarChart';
 
 export interface IProps {
   axisLabelFormat?: TAxisLabelFormat;

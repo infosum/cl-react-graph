@@ -1,127 +1,134 @@
-import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
+// import { extent } from 'd3-array';
+// import { schemeSet3 } from 'd3-scale-chromatic';
+// import React, { FC } from 'react';
+// import { SpringConfig } from 'react-spring';
 
-import {
-  IChartAdaptor,
-  IChartState,
-} from './Histogram';
-import { scatterPlotD3 } from './ScatterPlotD3';
-import { DeepPartial } from './utils/types';
+// import HistogramBars from '../components/Bars/HistogramBars';
+// import Base from '../components/Base';
+// import Grid from '../components/Grid';
+// import Points, { TPointsProps } from '../components/Points';
+// import { TTipFunc } from '../components/ToolTip';
+// import XAxis from '../components/XAxis';
+// import YAxis, {
+//   ELabelOrientation,
+//   TAxisLabelFormat,
+// } from '../components/YAxis';
+// import {
+//   IGrid,
+//   IHistogramData,
+// } from '../Histogram';
+// import { EChartDirection } from './BarChart';
 
-export interface IScatterPlotProps {
-  choices: string[];
-  className: string;
-  data: {
-    keys: string[],
-    values: any[];
-  };
-  delay: number;
-  distModels: string[];
-  duration: number;
-  height: number;
-  legendWidth: number;
-  colorScheme: string[];
-  padding: number;
-  radius: number;
-  split: string;
-  width: string | number;
-}
-class ScatterPlot extends Component<DeepPartial<IScatterPlotProps>, IChartState> {
+// export interface IScatterPlotProps {
+//   animation?: SpringConfig;
+//   axisLabelFormat?: TAxisLabelFormat;
+//   colorScheme?: string[];
+//   data: TPointsProps<number>[];
+//   direction?: EChartDirection;
+//   grid?: IGrid;
+//   height: number;
+//   hoverColorScheme?: string[];
+//   tip?: TTipFunc;
+//   visible?: Record<string, boolean>;
+//   width: number;
+//   xAxisHeight?: number;
+//   xAxisLabelOrientation?: ELabelOrientation;
+//   yAxisWidth?: number;
+// }
 
-  private chart: IChartAdaptor<IScatterPlotProps>;
-  private ref: HTMLDivElement | null = null;
+// /**
+//  * A Histogram renders continuous data and thus use a ScaleLinear x & y axis 
+//  */
+// const ScatterPlot: FC<IScatterPlotProps> = ({
+//   animation,
+//   axisLabelFormat,
+//   colorScheme = schemeSet3,
+//   data,
+//   direction = EChartDirection.VERTICAL,
+//   grid,
+//   height,
+//   hoverColorScheme,
+//   tip,
+//   visible,
+//   width,
+//   xAxisHeight,
+//   xAxisLabelOrientation = ELabelOrientation.horizontal,
+//   yAxisWidth,
+// }) => {
+//   if (!yAxisWidth) {
+//     yAxisWidth = direction === EChartDirection.VERTICAL ? 40 : 100;
+//   }
+//   if (!xAxisHeight) {
+//     xAxisHeight = direction === EChartDirection.VERTICAL ? 100 : 40;
+//   }
 
-  public static defaultProps = {
-    height: 400,
-    width: '100%',
-  };
+//   if (width === 0) {
+//     return null;
+//   }
 
-  constructor(props: IScatterPlotProps) {
-    super(props);
-    this.chart = scatterPlotD3();
-    this.state = {
-      parentWidth: 300,
-    };
-  }
+//   const xDomain = data.reduce((p, n) => p.concat(n.data), [] as number[]);
 
-  private handleResize() {
-    const el = this.getDOMNode();
-    if (el) {
-      const width = (this.ref && this.ref.offsetWidth) ? this.ref.offsetWidth : 0;
+//   const bins = data.bins.reduce((p, n) => p.concat(Array.isArray(n) ? n : [n]), [] as number[]);
+//   const continuousDomain = extent(bins) as [number, number];
+//   const domain = extent([0].concat(data.counts.reduce((p, n) => p.concat(n.data), [] as number[]))) as [number, number];
+//   return (
+//     <Base
+//       width={width + 30} // @TODO work out why without this the bars exceed the chart
+//       height={height}>
 
-      this.setState({
-        parentWidth: width,
-      }, () => this.chart.update(this.getChartState()));
-    }
-  }
+//       {
+//         grid && <Grid
+//           left={yAxisWidth}
+//           height={height - xAxisHeight}
+//           svgProps={{ ...grid.x.style }}
+//           lines={{
+//             vertical: grid.y.ticks,
+//             horizontal: grid.x.ticks,
+//           }}
+//           width={width - yAxisWidth} />
+//       }
 
-  public componentDidMount() {
-    const el = this.getDOMNode();
-    if (!el) {
-      return;
-    }
-    this.chart.create(el, this.getChartState());
-    const { width } = this.props;
-    if (typeof width === 'string' && width === '100%') {
-      window.addEventListener('resize', (e) => this.handleResize());
-      this.handleResize();
-    }
-  }
+//       <Points data={data} />
 
-  public componentDidUpdate() {
-    const el = this.getDOMNode();
-    if (!el) {
-      return;
-    }
-    this.chart.update(this.getChartState());
-  }
+//       <YAxis
+//         width={yAxisWidth}
+//         height={height - xAxisHeight}
+//         labelFormat={axisLabelFormat}
+//         scale="linear"
+//         domain={direction === EChartDirection.HORIZONTAL ? continuousDomain : domain}
+//         values={direction === EChartDirection.HORIZONTAL
+//           ? [
+//             continuousDomain[0],
+//             ((continuousDomain[1] - continuousDomain[0]) * 1) / 3,
+//             ((continuousDomain[1] - continuousDomain[0]) * 2) / 3,
+//             continuousDomain[1],
+//           ]
+//           : domain
+//         }
+//       />
 
-  private getChartState(): DeepPartial<IScatterPlotProps> {
-    let { width } = this.props;
-    const { children, ...rest } = this.props;
-    if (typeof width === 'string' && width === '100%') {
-      width = this.state.parentWidth || 300;
-    }
+//       <XAxis
+//         width={width - yAxisWidth}
+//         height={xAxisHeight}
+//         top={height - xAxisHeight}
+//         left={yAxisWidth}
+//         labelFormat={axisLabelFormat}
+//         labelOrientation={xAxisLabelOrientation}
+//         scale="linear"
+//         domain={direction === EChartDirection.HORIZONTAL ? domain : continuousDomain}
+//         values={direction === EChartDirection.HORIZONTAL
+//           ? domain
+//           : [
+//             continuousDomain[0],
+//             ((continuousDomain[1] - continuousDomain[0]) * 1) / 3,
+//             ((continuousDomain[1] - continuousDomain[0]) * 2) / 3,
+//             continuousDomain[1],
+//           ]}
+//       />
 
-    return {
-      ...rest,
-      width,
-    };
-  }
+//     </Base>
+//   )
 
-  public componentWillReceiveProps(props: DeepPartial<IScatterPlotProps>) {
-    const el = this.getDOMNode();
-    if (!el) {
-      return;
-    }
-    this.chart.update(this.getChartState());
-  }
+// }
 
-  public componentWillUnmount() {
-    const { width } = this.props;
-    if (typeof width === 'string' && width === '100%') {
-      window.removeEventListener('resize', this.handleResize);
-    }
-    const el = this.getDOMNode();
-    this.chart.destroy();
-  }
-
-  private getDOMNode(): Element | undefined | null {
-    const node = ReactDOM.findDOMNode(this.ref);
-    try {
-      if (node instanceof Text) {
-        return undefined;
-      }
-      return node;
-    } catch (e) {
-      // instanceof Text not working when running tests - just presume its ok
-      return node as Element;
-    }
-  }
-
-  public render() {
-    return <div ref={(ref) => this.ref = ref} className="scatterplot-chart-container"></div>;
-  }
-}
-
-export default ScatterPlot;
+// export default ScatterPlot;

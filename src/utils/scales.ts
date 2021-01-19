@@ -20,11 +20,12 @@ export type AnyScale = ScaleLinear<number, number>
 export const buildScales = (axis: IAxes) => {
   let x: AnyScale;
   let y: AnyScale;
+
   switch (axis.x.scale) {
-    case 'LOG':
+    case 'log':
       x = scaleLog().clamp(true); // clamp values below 1 to be equal to 0
       break;
-    case 'TIME':
+    case 'time':
       x = scaleTime();
       break;
     default:
@@ -33,10 +34,10 @@ export const buildScales = (axis: IAxes) => {
   }
 
   switch (axis.y.scale) {
-    case 'LOG':
+    case 'log':
       y = scaleLog().clamp(true); // clamp values below 1 to be equal to 0
       break;
-    case 'TIME':
+    case 'time':
       y = scaleTime();
       break;
     default:

@@ -17,13 +17,12 @@ import {
   EGroupedBarLayout,
   IAxes,
 } from '../../../src';
-import { EColorManipulations } from '../../../src/Histogram';
 import TornadoChart, {
   ITornadoData,
   ITornadoProps,
-} from '../../../src/Tornado';
+} from '../../../src/legacy/Tornado';
+import NativeTornado from '../../../src/Tornado';
 import { DeepPartial } from '../../../src/utils/types';
-import NativeTornado from '../../../src/v3/Tornado';
 import JSXToString from '../components/JSXToString';
 import Layout from '../components/layout';
 import SEO from '../components/seo';
@@ -32,12 +31,9 @@ import { grid } from '../data';
 const axis: DeepPartial<IAxes> = {
   x: {
     numberFormat: '.2s',
-    scale: 'LINEAR',
-    ticks: 4,
+    scale: 'linear',
   },
   y: {
-    ticks: 3,
-    tickSize: 0,
   },
 };
 
@@ -109,7 +105,6 @@ const initialState: DeepPartial<ITornadoProps> = {
   grid,
   groupLayout: EGroupedBarLayout.OVERLAID,
   width: '100%',
-  id: 'tornado1',
 }
 
 function reducer(state: ITornadoProps, action: Actions): ITornadoProps {
@@ -143,7 +138,6 @@ const Tornado = () => {
                   height={500} />
                 {chart}
                 <TornadoChart
-                  id="tornado2"
                   data={index === 0 ? state.data : data2}
                   width="600" />
                 <Button onClick={() => setIndex(index === 0 ? 1 : 0)}>

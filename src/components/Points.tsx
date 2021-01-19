@@ -16,7 +16,6 @@ const Points: FC<Omit<IProps, 'line'> & {
   if (yScale === null) {
     return null;
   }
-
   return <>
     {
       data.map((d) => {

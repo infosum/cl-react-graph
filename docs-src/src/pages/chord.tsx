@@ -7,7 +7,7 @@ import {
   Typography,
 } from '@material-ui/core';
 
-import Chord from '../../../src/v3/Chord';
+import Chord from '../../../src/Chord';
 import Layout from '../components/layout';
 import SEO from '../components/seo';
 

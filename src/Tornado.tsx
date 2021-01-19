@@ -1,174 +1,174 @@
-import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
+import {
+  scaleBand,
+  scalePoint,
+} from 'd3-scale';
+import React, { FC } from 'react';
 
-import { IGroupDataItem } from './BaseHistogramD3';
+import { EChartDirection } from './BarChart';
+import Bars from './components/Bars/Bars';
+import Base from './components/Base';
+import XAxis from './components/XAxis';
+import YAxis from './components/YAxis';
 import {
   EGroupedBarLayout,
-  IAxes,
-  IChartAdaptor,
-  IChartState,
-  IDomain,
-  IGrid,
-  IHistogramBar,
-  IMargin,
-  IStroke,
-  TipContentFn,
+  IBarChartDataSet,
 } from './Histogram';
-import { TornadoD3 } from './TornadoD3';
-import { DeepPartial } from './utils/types';
+import { ITornadoData } from './legacy/Tornado';
+import { applyDomainAffordance } from './utils/domain';
 
-export interface ITornadoDataSet {
-  borderColors?: string[];
-  colors?: string[];
-  label: string;
-  data: [number[], number[]];
-}
-
-export interface ITornadoData {
-  bins: string[];
-  counts: ITornadoDataSet[];
-  colorScheme?: string[];
-  title?: string;
-}
-
-export interface ITornadoProps {
-  axis: IAxes;
-  bar: IHistogramBar;
-  center: boolean;
-  className: string;
+interface IProps {
   data: ITornadoData;
-  delay: number;
-  duration: number;
-  colorScheme: string[];
-  domain: IDomain;
-  grid: IGrid;
-  height: number;
-  margin: IMargin;
+  direction?: EChartDirection;
   groupLayout: EGroupedBarLayout;
-  onClick?: (bar: IGroupDataItem) => void;
-  showBinPercentages: boolean;
+  height: number;
+  splitAxisHeight?: number;
   splitBins: [string, string];
-  stroke: IStroke;
-  tip: any;
-  tipContainer: string;
-  tipContentFn: TipContentFn<string>;
-  visible: { [key: string]: boolean };
-  width: number | string;
+  visible?: Record<string, boolean>;
+  xAxisHeight?: number;
+  yAxisWidth?: number;
+  width: number;
 }
 
-/**
- * Tornado component
- */
-class Tornado extends Component<DeepPartial<ITornadoProps>, IChartState> {
-
-  private chart: IChartAdaptor<ITornadoProps>;
-  private ref: HTMLDivElement | null = null;
-
-  /**
-   * Constructor
-   */
-  constructor(props: DeepPartial<ITornadoProps>) {
-    super(props);
-    this.chart = new TornadoD3();
-    this.state = {
-      parentWidth: 300,
-    };
+const Tornado: FC<IProps> = ({
+  data,
+  direction = EChartDirection.HORIZONTAL,
+  groupLayout = EGroupedBarLayout.GROUPED,
+  height,
+  splitBins = ['Left', 'Right'],
+  width,
+  visible = {},
+  xAxisHeight,
+  splitAxisHeight,
+  yAxisWidth,
+}) => {
+  if (!yAxisWidth) {
+    yAxisWidth = direction === EChartDirection.VERTICAL ? 40 : 100;
+  }
+  if (!xAxisHeight) {
+    xAxisHeight = direction === EChartDirection.VERTICAL ? 100 : 40;
+  }
+  if (!splitAxisHeight) {
+    splitAxisHeight = direction === EChartDirection.VERTICAL ? 100 : 40;
   }
 
-  /**
-   * Handle the page resize
-   */
-  private handleResize() {
-    const el = this.getDOMNode();
-    if (!el) {
-      return;
-    }
-    const width = (this.ref && this.ref.offsetWidth) ? this.ref.offsetWidth : 0;
-
-    this.setState({
-      parentWidth: width,
-    }, () => this.chart.update(this.getChartState()));
+  const domain = calculateDomain(data, true);
+  const baseProps = {
+    width,
+    height,
+    padding: 15,
   }
 
-  /**
-   * Component mounted
-   */
-  public componentDidMount() {
-    const el = this.getDOMNode();
-    if (!el) {
-      return;
-    }
-    this.chart.create(el, this.getChartState());
-    if (this.props.width === '100%') {
-      window.addEventListener('resize', (e) => this.handleResize());
-      this.handleResize();
-    }
-  }
+  const dataSets: any[] = []
+  data.counts.forEach((count) => {
+    count.data.forEach((value, genderIndex) => {
+      value.forEach((aValue, rowIndex) => {
+        if (!dataSets[rowIndex]) {
+          dataSets[rowIndex] = [];
+        }
+        dataSets[rowIndex].push({
+          side: genderIndex === 0 ? 'left' : 'right',
+          groupLabel: count.label,
+          colorRef: count.label,
+          label: data.bins[rowIndex],
+          value: visible[data.bins[rowIndex]] !== false && visible[count.label] !== false ? aValue : 0,
+        });
+      })
 
-  /**
-   * Component updated
-   */
-  public componentDidUpdate() {
-    const el = this.getDOMNode();
-    if (!el) {
-      return;
-    }
-    this.chart.update(this.getChartState());
-  }
+    });
+  });
 
-  /**
-   * Get the chart state
-   */
-  public getChartState(): DeepPartial<ITornadoProps> {
-    let { width } = this.props;
-    const { children, ...rest } = this.props;
-    if (width === '100%') {
-      width = this.state.parentWidth || 300;
+  const left: IBarChartDataSet[] = [
+    {
+      label: splitBins[0],
+      data: data.counts[0].data[0].map((d) => d * -1),
     }
+  ]
 
-    return {
-      ...rest,
-      width,
-    };
-  }
-
-  /**
-   * Component will un mount, remove the chart and
-   * any event listeners
-   */
-  public componentWillUnmount() {
-    const el = this.getDOMNode();
-    if (!el) {
-      return;
-    }
-    if (this.props.width === '100%') {
-      window.removeEventListener('resize', this.handleResize);
-    }
-    this.chart.destroy();
-  }
-
-  /**
-   * Get the chart's dom node
-   */
-  private getDOMNode(): Element | undefined | null {
-    const node = ReactDOM.findDOMNode(this.ref);
-    try {
-      if (node instanceof Text) {
-        return undefined;
+  return (
+    <Base {...baseProps}
+      width={width + 30}
+    >
+      <Bars values={left}
+        left={(width + yAxisWidth) / 2}
+        height={height - xAxisHeight - splitAxisHeight}
+        width={(width - yAxisWidth) / 2}
+        groupLayout={groupLayout}
+        bins={data.bins}
+        domain={domain}
+      />
+      {
+        // Left hand axis
       }
-      return node;
-    } catch (e) {
-      // instanceof Text not working when running tests - just presume its ok
-      return node as Element;
-    }
-  }
+      <YAxis
+        width={yAxisWidth}
+        height={height - xAxisHeight - splitAxisHeight}
+        scale="band"
+        path={{ opacity: 0 }}
+        tickSize={0}
+        values={direction === EChartDirection.HORIZONTAL ? data.bins : undefined}
+      />
 
-  /**
-   * Render
-   */
-  public render(): JSX.Element {
-    return (<div ref={(ref) => this.ref = ref} className="tornado-chart-container"></div>);
-  }
+      {
+        // Middle y axis
+      }
+      <YAxis
+        width={yAxisWidth}
+        height={height - xAxisHeight - splitAxisHeight}
+        left={(width - yAxisWidth) / 2}
+        labelFormat={() => ''}
+        values={direction === EChartDirection.HORIZONTAL ? data.bins : undefined}
+        scale="band"
+      />
+
+      {
+        // Bottom values axis
+      }
+      <XAxis
+        width={width - yAxisWidth}
+        height={xAxisHeight}
+        top={height - xAxisHeight - splitAxisHeight}
+        left={yAxisWidth}
+        scale="linear"
+        domain={domain}
+      />
+
+      {
+        // Bottom split bin axis (grouped labels)
+        direction === EChartDirection.HORIZONTAL && <XAxis
+          height={40}
+          left={yAxisWidth}
+          top={height - xAxisHeight}
+          width={baseProps.width - yAxisWidth}
+          values={splitBins}
+          path={{ opacity: 0 }}
+          scale='point'
+        />
+      }
+
+    </Base>
+
+  )
 }
 
 export default Tornado;
+
+const calculateDomain = (data: ITornadoData, center = true) => {
+  const leftValues = data.counts.reduce((prev, next) => prev.concat(next.data[0]), [] as number[]);
+  const rightValues = data.counts.reduce((prev, next) => prev.concat(next.data[1]), [] as number[]);
+
+  // Use applyDomainAffordance to allow space for percentage labels
+  let domain = [
+    applyDomainAffordance(-Math.max(...leftValues)),
+    applyDomainAffordance(Math.max(...rightValues)),
+  ];
+
+  // Center the 0 axis value in the middle of the chart
+  if (center) {
+    const max = Math.max(Math.max(...leftValues), domain[1]);
+    domain = [
+      applyDomainAffordance(-max),
+      applyDomainAffordance(max),
+    ];
+  }
+  return domain;
+}

@@ -1,29 +1,27 @@
 export {
   default as Histogram,
   EGroupedBarLayout,
-  IAxes,
+
   IHistogramBar,
   IBarChartData,
   IBarChartDataSet,
-  IStroke,
+
 } from './Histogram';
 
 export {
-  default as LineChart,
-  IChartPoint,
-  ILineChartDataSet,
-  ILineChartProps,
-} from './LineChart';
+  IAxes,
+  IStroke,
+} from './legacy/types';
 
 export { default as Legend } from './Legend';
 // import Map from './Map';
 
 // HIstorical V2 components....
-export { default as PieChart, IPieChartProps } from './PieChart';
-export { default as ScatterPlot } from './ScatterPlot';
-export { default as HorizontalHistogram } from './HorizontalHistogram';
+export { default as PieChart, IPieChartProps } from './legacy/PieChart';
+export { default as ScatterPlot } from './legacy/ScatterPlot';
+// export { default as HorizontalHistogram } from './HorizontalHistogram';
 export { default as filterRange } from './colors/filterRange';
-export { default as TornadoChart } from './Tornado';
+export { default as TornadoChart } from './legacy/Tornado';
 export { outputSvg } from './utils/outputSvg';
 
 // V3 components...
@@ -35,9 +33,9 @@ export { default as Grid } from './components/Grid';
 export { default as XAxis } from './components/XAxis';
 export { default as YAxis, ELabelOrientation } from './components/YAxis';
 export { default as JoyPlot } from './JoyPlot';
-export { default as BarChart, EChartDirection } from './v3/BarChart';
-export { default as Histogram2, IHistogramProps } from './v3/Histogram';
-export { default as LineChart2 } from './v3/LineChart';
+export { default as BarChart, EChartDirection } from './BarChart';
+export { default as Histogram2, IHistogramProps } from './Histogram';
+export { default as LineChart, IChartPoint, ILineChartDataSet } from './LineChart';
 export { useWidth } from './utils/useWidth';
 export { useMakeLine, useScales } from './utils/useMakeLine';
 export { useHistogramDomain, useLineDomain } from './utils/useDomain';

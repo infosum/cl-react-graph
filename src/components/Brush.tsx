@@ -47,12 +47,11 @@ const Brush: FC<IProps> = ({
     : { x: 0, y: 0, w: brushWidth };
 
   const [{ x, y, w }, set] = useState(start);
-  console.log('w', w);
+
   // Set the drag hook and define component movement based on gesture data
   const bounds = { top: 0, bottom: height, left: 0, right: width - w };
 
   const bind = useDrag(({ movement: [mx, my] }) => {
-    console.log('us drag');
     onChange && onChange({ start: mx, end: mx + w })
     set({ x: mx, y: 0, w })
   },

@@ -14,7 +14,7 @@ export const groupedBarsUseSameXAxisValue = ({ groupLayout, stacked }: IGroupedP
 };
 
 /**
- *This is the inner padding between each grouped dataset or single datasetes.
+ *This is the inner padding between each grouped dataset or single datasets.
  */
 export const paddingInner = (bar: IHistogramBar): number => {
   const m = bar?.paddingInner ?? 0;
