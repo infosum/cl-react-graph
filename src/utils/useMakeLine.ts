@@ -64,7 +64,7 @@ export const useScales: (props: Omit<IProps, 'line'>) => { xScale: any, yScale: 
       .range([height, 0]);
     setScales({ xScale, yScale })
 
-  }, [])
+  }, [data])
 
   return scales;
 }
