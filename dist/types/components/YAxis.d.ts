@@ -1,5 +1,6 @@
 import { FC, SVGAttributes } from 'react';
 import { IHistogramBar } from '../Histogram';
+import { ISVGLineStyle, ISVGTextStyle } from '../legacy/types';
 export declare type TAxisValue = string | number;
 export declare type TAxisLabelFormat = (axis: 'x' | 'y', bin: string, i: number) => string;
 export declare enum ELabelOrientation {
@@ -33,6 +34,10 @@ export interface IAxis {
     dateFormat?: string;
     label?: string;
     margin?: number;
+    text?: {
+        style: ISVGTextStyle;
+    };
+    style?: ISVGLineStyle;
 }
 export declare const defaultTickFormat: {
     stroke: string;

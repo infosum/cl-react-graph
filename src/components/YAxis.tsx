@@ -15,6 +15,10 @@ import React, {
 import { defaultPadding } from '../BarChart';
 import { IHistogramBar } from '../Histogram';
 import {
+  ISVGLineStyle,
+  ISVGTextStyle,
+} from '../legacy/types';
+import {
   paddingInner,
   paddingOuter,
 } from '../utils/bars';
@@ -58,7 +62,11 @@ export interface IAxis {
   numberFormat?: string;
   dateFormat?: string;
   label?: string;
-  margin?: number;
+  margin?: number
+  text?: {
+    style: ISVGTextStyle;
+  }
+  style?: ISVGLineStyle;
 }
 
 export const defaultTickFormat = {

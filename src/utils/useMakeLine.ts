@@ -12,7 +12,6 @@ import {
 } from 'react';
 
 import { IAxes } from '../legacy/types';
-// import { IAxes } from '../components/YAxis';
 import {
   IChartPoint,
   IChartPointValue,

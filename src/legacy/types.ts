@@ -29,7 +29,7 @@ export interface IStroke {
   width: number;
 }
 
-interface ISVGTextStyle {
+export interface ISVGTextStyle {
   fill?: string;
   'font-size'?: string;
   dy?: string | number;

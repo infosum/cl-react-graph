@@ -21,6 +21,16 @@ export interface IStroke {
     linecap: 'butt' | 'round' | 'square';
     width: number;
 }
+export interface ISVGTextStyle {
+    fill?: string;
+    'font-size'?: string;
+    dy?: string | number;
+    'stroke-opacity'?: number;
+    'text-anchor'?: string;
+    transform?: string;
+    x?: string | number;
+    y?: string | number;
+}
 export declare type Scale = 'LINEAR' | 'TIME' | 'LOG' | 'ORDINAL';
 export interface IAxes {
     y: IAxis;

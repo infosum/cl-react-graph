@@ -15,6 +15,7 @@ import cloneDeep from 'lodash/cloneDeep';
 import mergeWith from 'lodash/mergeWith';
 
 import colorScheme from '../colors';
+import attrs from '../d3/attrs';
 import {
   gridHeight,
   gridWidth,
@@ -280,11 +281,11 @@ export class TornadoD3 {
       // Place the y axis in the middle of the chart
       ?.attr('transform', 'translate(' + (yAxisWidth(axis) + x(0)) + ', ' + margin.top + ' )')
       .call(yAxis);
-    // attrs(svg?.selectAll('.y-axis .domain, .y-axis .tick line'), axis.y.style);
-    // attrs(svg?.selectAll('.y-axis .tick text'), axis.y.text.style as any);
+    attrs(svg?.selectAll('.y-axis .domain, .y-axis .tick line'), axis.y?.style ?? {} as any);
+    attrs(svg?.selectAll('.y-axis .tick text'), axis.y?.text?.style ?? {} as any);
 
-    // attrs(svg?.selectAll('.x-axis .domain, .x-axis .tick line'), axis.x.style);
-    // attrs(svg?.selectAll('.x-axis .tick text'), axis.x.text.style as any);
+    attrs(svg?.selectAll('.x-axis .domain, .x-axis .tick line'), axis.x?.style ?? {} as any);
+    attrs(svg?.selectAll('.x-axis .tick text'), axis.x?.text?.style ?? {} as any);
   }
 
   calculateDomain() {
