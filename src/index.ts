@@ -17,6 +17,8 @@ export {
 
 export { default as Legend } from './Legend';
 // import Map from './Map';
+
+// HIstorical V2 components....
 export { default as PieChart, IPieChartProps } from './PieChart';
 export { default as ScatterPlot } from './ScatterPlot';
 export { default as HorizontalHistogram } from './HorizontalHistogram';
@@ -24,7 +26,7 @@ export { default as filterRange } from './colors/filterRange';
 export { default as TornadoChart } from './Tornado';
 export { outputSvg } from './utils/outputSvg';
 
-// Experimental v3 components...
+// V3 components...
 
 export { default as Bars } from './components/Bars/Bars';
 export { default as HistogramBars } from './components/Bars/HistogramBars';
