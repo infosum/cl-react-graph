@@ -12,14 +12,13 @@ import React, {
 
 import Base from '../components/Base';
 
-interface IProps {
+export interface IProps {
   width: number;
   height: number;
   padding?: number;
-  data: number[][];
-  labels: string[];
+  data: Record<string, number[]>;
   colorScheme?: string[];
-  inactive: {
+  inactive?: {
     stroke: string;
     fill: string;
   }
@@ -35,11 +34,13 @@ const Chord: FC<IProps> = ({
     stroke: '#ddd',
     fill: '#eee',
   },
-  labels,
 }) => {
 
   const outerRadius = Math.min(width - padding, height - padding) * 0.5
   const innerRadius = outerRadius - 10;
+
+  const labels = Object.keys(data);
+  const matrix = Object.values(data);
 
   const thisArc = arc<any, any>()
     .innerRadius(innerRadius)
@@ -48,7 +49,7 @@ const Chord: FC<IProps> = ({
   const chords = chord()
     .sortSubgroups(descending)
     .sortChords(descending)
-    .padAngle(10 / innerRadius)(data);
+    .padAngle(10 / innerRadius)(matrix);
 
   const rPath = ribbon().radius((width - padding) / 2 - 10);
 
@@ -63,10 +64,12 @@ const Chord: FC<IProps> = ({
               stroke={inactive.stroke}
 
               style={{
-                opacity: active === m.source.index ? 1 : 0.5,
+                opacity: [m.source.index, m.target.index].includes(active as number) ? 1 : 0.5,
                 mixBlendMode: "multiply",
               }}
-              fill={active === m.source.index ? colorScheme[m.source.index] : inactive.fill}
+              fill={active === m.source.index ? colorScheme[m.source.index] :
+                active === m.target.index ? colorScheme[m.target.index]
+                  : inactive.fill}
               d={`${rPath({
                 source: {
                   ...m.source,
@@ -115,3 +118,5 @@ const Chord: FC<IProps> = ({
     </Base>
   )
 }
+
+export default Chord;

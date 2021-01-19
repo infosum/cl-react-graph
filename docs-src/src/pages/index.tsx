@@ -14,6 +14,7 @@ const IndexPage = () => (
       <li><Link to="/joyplot">Joy Plot</Link></li>
       <li><Link to="/tornado">Tornado</Link></li>
       <li><Link to="/brush">Brush</Link></li>
+      <li><Link to="/chord">Chord</Link></li>
       <li><Link to="/map">Map</Link></li>
     </ul>
   </Layout>

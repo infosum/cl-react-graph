@@ -22,6 +22,8 @@ const Header = ({ siteTitle }) => (
       <Button><Link to="/tornado">Tornado Chart</Link></Button>
       <Button><Link to="/joyplot">Joy Plot</Link></Button>
       <Button><Link to="/brush">Brush</Link></Button>
+      <Button><Link to="/chord">Chord</Link></Button>
+
       {/* <Button><Link to="/map">Map</Link></Button> */}
     </Toolbar>
   </AppBar>
