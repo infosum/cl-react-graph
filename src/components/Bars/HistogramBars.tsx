@@ -1,4 +1,4 @@
-import { extent } from 'd3';
+import { extent } from 'd3-array';
 import { color } from 'd3-color';
 import { scaleLinear } from 'd3-scale';
 import React, {

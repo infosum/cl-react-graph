@@ -4,11 +4,8 @@ import {
   IAxes,
   IStroke,
 } from '../';
-import {
-  IAxis,
-  IGrid,
-  ISVGLineStyle,
-} from '../Histogram';
+import { IGrid } from '../Histogram';
+import { ISVGLineStyle } from '../legacy/types';
 import { ILineProps } from '../LineChart';
 
 export const lineStyle: ISVGLineStyle = {
@@ -40,32 +37,6 @@ export const line: ILineProps = {
   strokeDashOffset: 0,
 };
 
-export const annotationAxisDefaults: IAxis = {
-  dateFormat: '',
-  height: 20,
-  label: '',
-  margin: 20,
-  numberFormat: '',
-  scale: 'ORDINAL',
-  style: {
-    ...lineStyle,
-    'stroke': 'transparent',
-    'stroke-opacity': 0,
-    'stroke-width': 0,
-    'visible': false,
-    'opacity': 0,
-  },
-  text: {
-    style: {
-      dy: '.35em',
-    },
-  },
-  tickSize: 5,
-  ticks: 3,
-  tickValues: null,
-  visible: true,
-  width: 30,
-};
 
 export const axis: IAxes = {
   x: {
@@ -74,24 +45,8 @@ export const axis: IAxes = {
     label: '',
     margin: 20,
     numberFormat: '',
-    scale: 'LINEAR',
-    style: {
-      ...lineStyle,
-      fill: 'none',
-      stroke: '#666',
-    },
-    text: {
-      style: {
-        dy: '.35em',
-        transform: 'rotate(0)',
-        x: 0,
-        y: 10,
-      },
-    },
+    scale: 'linear',
     tickSize: 0,
-    ticks: 3,
-    tickValues: null,
-    visible: true,
     width: 50,
   },
   y: {
@@ -100,21 +55,8 @@ export const axis: IAxes = {
     label: '',
     margin: 20,
     numberFormat: '',
-    scale: 'LINEAR',
-    style: {
-      ...lineStyle,
-      fill: 'none',
-      stroke: '#666',
-    },
-    text: {
-      style: {
-        fill: '#666',
-      },
-    },
+    scale: 'linear',
     tickSize: 20,
-    ticks: 3,
-    tickValues: null,
-    visible: true,
     width: 50,
   },
 };

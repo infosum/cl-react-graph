@@ -9,7 +9,7 @@ import {
   useSpring,
 } from 'react-spring';
 
-import { IAxes } from '../Histogram';
+import { IAxes } from '../legacy/types';
 import {
   IChartPoint,
   IChartPointValue,

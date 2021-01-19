@@ -1,11 +1,11 @@
 import { ScaleOrdinal } from 'd3-scale';
 import { select } from 'd3-selection';
 
-import { IGroupDataItem } from '../BaseHistogramD3';
 import {
   EColorManipulations,
-  TipContentFn,
+  IGroupDataItem,
 } from '../Histogram';
+import { TipContentFn } from '../legacy/types';
 
 interface IProps {
   bins: string[],
@@ -27,21 +27,6 @@ interface IMouseOutProps extends IMouseOutTipProps {
   colors: ScaleOrdinal<string, string>,
 }
 
-export const onMouseOverAxis = (props: IProps) => (d: IGroupDataItem | any, i: number, nodes: any) => {
-  const {
-    bins,
-    tipContentFn,
-    tipContent,
-    tip,
-    tipContainer,
-  } = props;
-  const ix = bins.findIndex((b) => b === d.label);
-  if (!tipContentFn) {
-    return;
-  }
-  tipContent.html(() => tipContentFn(bins, ix, d.value || d));
-  tip.fx.in(tipContainer);
-};
 
 export const onMouseOver = (props: IProps) => (d: IGroupDataItem | any, i: number, nodes: any) => {
   const {
