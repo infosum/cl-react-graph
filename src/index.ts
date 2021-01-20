@@ -24,7 +24,6 @@ export { default as TornadoChart } from './legacy/Tornado';
 export { outputSvg } from './utils/outputSvg';
 
 // V3 components...
-
 export { default as Bars } from './components/Bars/Bars';
 export { default as HistogramBars } from './components/Bars/HistogramBars';
 export { default as Base } from './components/Base';
@@ -39,6 +38,7 @@ export { useWidth } from './utils/useWidth';
 export { useMakeLine, useScales } from './utils/useMakeLine';
 export { useHistogramDomain, useLineDomain } from './utils/useDomain';
 export { default as UpsetChart, IProps as IUpsetChartProps } from './UpsetChart';
+export { default as Chord, IProps as IChordProps } from './Chord';
 export { TTipFunc } from './components/ToolTip';
 
 export {

@@ -102,13 +102,17 @@ const UpsetChart: FC<IProps> = ({
   const left = (setSize.dimensions.chartWidth + setSize.dimensions.axisWidth);
   const h = height - setSize.dimensions.height;
 
-  const bins = useMemo(() => (Array.from(data.reduce((prev, next) => union<string>(new Set<string>(next.keys), prev), new Set<string>()))), [data]);
-
-  const setBandScale = scaleBand().domain(bins as string[])
-    .rangeRound([0, setSize.dimensions.height - axisSpace - axisSpace])
-    .paddingInner(paddingInner(defaultPadding))
-    .paddingOuter(paddingOuter(defaultPadding))
-    .align(0.5);
+  const { bins, setBandScale } = useMemo(() => {
+    const bins = Array.from(data.reduce((prev, next) => {
+      return union<string>(new Set<string>(next.keys), prev);
+    }, new Set<string>()));
+    const setBandScale = scaleBand().domain(bins as string[])
+      .rangeRound([0, setSize.dimensions.height - axisSpace - axisSpace])
+      .paddingInner(paddingInner(defaultPadding))
+      .paddingOuter(paddingOuter(defaultPadding))
+      .align(0.5);
+    return { bins, setBandScale };
+  }, [data]);
 
   return <Base
     width={width}
@@ -185,7 +189,6 @@ const ActiveCircles: FC<IActiveCirclesProps> = ({
   left,
   width,
   top,
-  height,
   radius,
   colors = {
     active: '#000',
@@ -330,7 +333,7 @@ const SetSizeBars: FC<TBarProps & { setBandScale: ScaleBand<string>, bins: strin
     values,
   });
   return (
-    <g transform={`translate(${0},${top})`}>
+    <g className="size-bars" transform={`translate(${0},${top})`}>
       <Bars
         bins={bins}
         colorScheme={colorScheme}
