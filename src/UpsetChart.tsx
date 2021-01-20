@@ -299,7 +299,6 @@ const SetSizeBars: FC<TBarProps & { setBandScale: ScaleBand<string>, bins: strin
   width,
   height,
   colorScheme,
-  LabelComponent,
   data,
   top,
   axisSpace,
@@ -339,7 +338,6 @@ const SetSizeBars: FC<TBarProps & { setBandScale: ScaleBand<string>, bins: strin
         domain={domain}
         groupLayout={EGroupedBarLayout.GROUPED}
         height={height - axisSpace}
-        LabelComponent={LabelComponent}
         inverse={true}
         showLabels={[true]}
         padding={defaultPadding}
