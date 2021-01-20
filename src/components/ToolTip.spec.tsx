@@ -24,8 +24,7 @@ test('displays bin label', () => {
 
   </svg>
   )
-  screen.debug();
   expect(screen.getByRole('tooltip')).toBeInTheDocument();
-  expect(screen.getByTestId('bin')).toHaveTextContent('bin1');
+  expect(screen.getByTestId('bin').textContent).toEqual('bin1');
 
 })

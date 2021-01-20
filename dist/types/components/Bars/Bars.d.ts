@@ -4,7 +4,7 @@ import { EChartDirection } from '../../BarChart';
 import { EGroupedBarLayout, IBarChartDataSet, IGroupDataItem, IHistogramBar } from '../../Histogram';
 import { TLabelComponent } from '../Label';
 import { TTipFunc } from '../ToolTip';
-interface IProps {
+export interface IProps {
     bins: (string | [number, number])[];
     config?: SpringConfig;
     colorScheme?: readonly string[];
@@ -23,6 +23,7 @@ interface IProps {
     values: IBarChartDataSet[];
     visible?: Record<string, boolean>;
     width: number;
+    inverse?: boolean;
 }
 export declare type ExtendedGroupItem = IGroupDataItem & {
     datasetIndex: number;

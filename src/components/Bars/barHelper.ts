@@ -60,12 +60,19 @@ interface IBarSpringProps {
   paddings: IHistogramBar,
   config: SpringConfig,
   direction: EChartDirection;
+  /** @description - inverse the bars e.g if direction = horizontal run the bars from right to left */
+  inverse?: boolean;
 }
 /**
  * Build the from / to spring animation properties to animate the bars.
  */
 export const buildBarSprings = (props: IBarSpringProps) => {
-  const { direction, config, height, dataSets, numericScale, bandScale, colorScheme, innerScaleBand, groupLayout, paddings, hoverColorScheme } = props;
+  const { direction, config, height, dataSets, numericScale, bandScale, colorScheme,
+    innerScaleBand, groupLayout, paddings, hoverColorScheme,
+    inverse = false,
+  } = props;
+  const [_, width] = numericScale.range();
+
   const s = dataSets.map((item) => {
     const bandValue = Number(bandScale(item.label));
     const bandPosition = getBandPosition(item, props);
@@ -78,7 +85,7 @@ export const buildBarSprings = (props: IBarSpringProps) => {
           width: 0,
           fill: colorScheme[item.datasetIndex],
           hoverFill: hoverColorScheme?.[item.datasetIndex] ?? colorScheme[item.datasetIndex],
-          x: 0,
+          x: inverse ? width : 0,
           y: bandPosition + bandValue,
           height: itemWidth,
         },
@@ -86,7 +93,7 @@ export const buildBarSprings = (props: IBarSpringProps) => {
           width: itemHeight,
           fill: colorScheme[item.datasetIndex],
           hoverFill: hoverColorScheme?.[item.datasetIndex] ?? colorScheme[item.datasetIndex],
-          x: valueOffset,
+          x: inverse ? width - itemHeight - valueOffset : valueOffset,
           y: bandPosition + bandValue,
           height: itemWidth,
         },
@@ -100,7 +107,7 @@ export const buildBarSprings = (props: IBarSpringProps) => {
         fill: colorScheme[item.datasetIndex],
         hoverFill: hoverColorScheme?.[item.datasetIndex] ?? colorScheme[item.datasetIndex],
         x: bandPosition + bandValue,
-        y: height,
+        y: inverse ? 0 : height,
         width: itemWidth,
       },
       to: {
@@ -108,7 +115,7 @@ export const buildBarSprings = (props: IBarSpringProps) => {
         fill: colorScheme[item.datasetIndex],
         hoverFill: hoverColorScheme?.[item.datasetIndex] ?? colorScheme[item.datasetIndex],
         x: bandPosition + bandValue,
-        y: valueOffset,
+        y: inverse ? 0 : valueOffset,
         width: itemWidth,
       },
       config,

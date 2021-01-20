@@ -1,5 +1,3 @@
-console.log('set up mocha ......');
-
 const { JSDOM } = require('jsdom');
 const d3 = require('d3');
 // Have to set a url to avoid security

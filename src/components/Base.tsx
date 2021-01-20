@@ -7,6 +7,7 @@ interface IProps {
   width: number;
   height: number;
   padding?: number;
+  description?: string;
 }
 const Base: FC<IProps & HTMLAttributes<SVGElement>> = ({
   children,
@@ -16,6 +17,8 @@ const Base: FC<IProps & HTMLAttributes<SVGElement>> = ({
   id,
   className,
   style,
+  title,
+  description,
 }) => {
   // Could be measuring a % width in which case wait else animations start off from 
   // the wrong position
@@ -29,6 +32,10 @@ const Base: FC<IProps & HTMLAttributes<SVGElement>> = ({
     height={height}
     style={{ overflow: 'visible', ...style }}
     viewBox={`0 0 ${width} ${height}`}>
+    <title>{title}</title>
+    {
+      description && <desc>{description}</desc>
+    }
     <g transform={`translate(${padding},${padding})`}
       role="table"
       width={width - (padding * 2)}

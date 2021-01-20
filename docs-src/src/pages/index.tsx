@@ -16,6 +16,7 @@ const IndexPage = () => (
       <li><Link to="/brush">Brush</Link></li>
       <li><Link to="/chord">Chord</Link></li>
       <li><Link to="/map">Map</Link></li>
+      <li><Link to="/upset">Upset</Link></li>
     </ul>
   </Layout>
 );

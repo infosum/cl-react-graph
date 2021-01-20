@@ -34,7 +34,7 @@ import { TTipFunc } from '../ToolTip';
 import { ToolTips } from '../ToolTips';
 import { buildBarSprings } from './barHelper';
 
-interface IProps {
+export interface IProps {
   bins: (string | [number, number])[]
   config?: SpringConfig;
   colorScheme?: readonly string[],
@@ -53,6 +53,7 @@ interface IProps {
   values: IBarChartDataSet[];
   visible?: Record<string, boolean>;
   width: number;
+  inverse?: boolean;
 }
 
 const paddings = {
@@ -92,6 +93,7 @@ const Bars: FC<IProps> = ({
   values,
   visible = {},
   width,
+  inverse = false,
 }) => {
   if (width === 0) {
     return null;
@@ -155,6 +157,7 @@ const Bars: FC<IProps> = ({
     paddings,
     config,
     direction,
+    inverse,
   }));
 
   const refs: RefObject<any>[] = [];

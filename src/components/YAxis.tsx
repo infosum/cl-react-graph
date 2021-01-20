@@ -51,6 +51,8 @@ export interface IAxis {
   left?: number;
   padding?: IHistogramBar;
   labelFormat?: TAxisLabelFormat;
+  /** @description make the axis ticks display in the opposite direction */
+  inverse?: boolean;
 
   tickFormat?: {
     stroke: string;

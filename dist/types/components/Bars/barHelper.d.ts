@@ -18,6 +18,8 @@ interface IBarSpringProps {
     paddings: IHistogramBar;
     config: SpringConfig;
     direction: EChartDirection;
+    /** @description - inverse the bars e.g if direction = horizontal run the bars from right to left */
+    inverse?: boolean;
 }
 /**
  * Build the from / to spring animation properties to animate the bars.
@@ -27,7 +29,7 @@ export declare const buildBarSprings: (props: IBarSpringProps) => ({
         width: number;
         fill: string;
         hoverFill: string;
-        x: number;
+        x: any;
         y: number;
         height: number;
     };

@@ -23,14 +23,18 @@ import {
   TAxisValue,
 } from './YAxis';
 
-const positionTick = (value: TAxisValue, scale: any, i: number) => {
+const positionTick = (value: TAxisValue, scale: any, i: number, inverse: boolean = false, width = 10) => {
   const offset = isOfType<ScaleBand<any>>(scale, 'paddingInner')
     ? scale.bandwidth() / 2
     : 0;
 
-  const v = isOfType<ScaleBand<any>>(scale, 'paddingInner')
+  let v = isOfType<ScaleBand<any>>(scale, 'paddingInner')
     ? Number(scale(String(i))) + offset
     : scale(value);
+
+  if (inverse) {
+    v = 100 - v;
+  }
   return `(${v}, 0)`
 }
 
@@ -48,6 +52,7 @@ const XAxis: FC<IAxis> = ({
   padding = defaultPadding,
   tickFormat = defaultTickFormat,
   labelOrientation = ELabelOrientation.HORIZONTAL,
+  inverse = false,
 }) => {
   if (scale === 'linear' && values.length > 0 && typeof values[0] === 'string') {
     throw new Error('Linear axis can not accept string values');
@@ -109,7 +114,7 @@ const XAxis: FC<IAxis> = ({
 
       {
         ticks.map((v, i) => {
-          const tickOffset = positionTick(v, Scale, i);
+          const tickOffset = positionTick(v, Scale, i, inverse, width);
           const label = scale === 'band' ? String(values[i]) : String(v);
           const thisFormat = typeof tickFormat === 'function' ? tickFormat(label, i) : tickFormat;
           const tickLabel = labelFormat ? labelFormat('x', label, i) : label
