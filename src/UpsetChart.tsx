@@ -135,6 +135,7 @@ const UpsetChart: FC<IProps> = ({
       textFill={textFill}
       setBandScale={setBandScale}
       bins={bins}
+      left={0}
       label={setSize.label ?? 'Set size'}
     />
 
@@ -144,6 +145,7 @@ const UpsetChart: FC<IProps> = ({
       colorScheme={distribution.colorScheme}
       left={left}
       data={data}
+      top={0}
       axisSpace={axisSpace}
       textFill={textFill}
     />
