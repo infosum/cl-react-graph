@@ -15,18 +15,18 @@ import Layout from '../components/layout';
 import SEO from '../components/seo';
 
 const data: TUpsetData = [
-  { keys: ['Another label'], value: 10 },
-  { keys: ['Another label', 'B'], value: 14 },
-  { keys: ['Another label', 'B', 'C'], value: 1 },
-  { keys: ['B'], value: 10 },
-  { keys: ['Another label', 'C'], value: 14 },
-  { keys: ['C'], value: 12 },
+  { keys: ['Email'], value: 10 },
+  { keys: ['Email', 'MAID'], value: 14 },
+  { keys: ['Email', 'MAID', 'Postcode'], value: 1 },
+  { keys: ['MAID'], value: 10 },
+  { keys: ['Email', 'Postcode'], value: 14 },
+  { keys: ['Postcode'], value: 12 },
 ];
 
 const UpsetExample: FC = () => {
   return (
     <Layout>
-      <SEO title="Line Chart" description="" />
+      <SEO title="Upset Chart" description="" />
       <Typography variant="h2">Upset</Typography>
       <div>
         <Grid container spacing={10}>

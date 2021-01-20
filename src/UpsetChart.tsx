@@ -39,7 +39,7 @@ type TBarProps = Pick<IBarProps, 'width' | 'height' | 'top' | 'left' | 'colorSch
   textFill?: string;
 };
 
-interface IProps {
+export interface IProps {
   colorScheme?: string[];
   data: TUpsetData;
   height: number;
@@ -135,6 +135,7 @@ const UpsetChart: FC<IProps> = ({
       textFill={textFill}
       setBandScale={setBandScale}
       bins={bins}
+      left={0}
       label={setSize.label ?? 'Set size'}
     />
 
@@ -144,6 +145,7 @@ const UpsetChart: FC<IProps> = ({
       colorScheme={distribution.colorScheme}
       left={left}
       data={data}
+      top={0}
       axisSpace={axisSpace}
       textFill={textFill}
     />
@@ -297,7 +299,6 @@ const SetSizeBars: FC<TBarProps & { setBandScale: ScaleBand<string>, bins: strin
   width,
   height,
   colorScheme,
-  LabelComponent,
   data,
   top,
   axisSpace,
@@ -337,7 +338,6 @@ const SetSizeBars: FC<TBarProps & { setBandScale: ScaleBand<string>, bins: strin
         domain={domain}
         groupLayout={EGroupedBarLayout.GROUPED}
         height={height - axisSpace}
-        LabelComponent={LabelComponent}
         inverse={true}
         showLabels={[true]}
         padding={defaultPadding}

@@ -19,7 +19,6 @@ export { default as Legend } from './Legend';
 // HIstorical V2 components....
 export { default as PieChart, IPieChartProps } from './legacy/PieChart';
 export { default as ScatterPlot } from './legacy/ScatterPlot';
-// export { default as HorizontalHistogram } from './HorizontalHistogram';
 export { default as filterRange } from './colors/filterRange';
 export { default as TornadoChart } from './legacy/Tornado';
 export { outputSvg } from './utils/outputSvg';
@@ -39,6 +38,7 @@ export { default as LineChart, IChartPoint, ILineChartDataSet } from './LineChar
 export { useWidth } from './utils/useWidth';
 export { useMakeLine, useScales } from './utils/useMakeLine';
 export { useHistogramDomain, useLineDomain } from './utils/useDomain';
+export { default as UpsetChart, IProps as IUpsetChartProps } from './UpsetChart';
 export { TTipFunc } from './components/ToolTip';
 
 export {

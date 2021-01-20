@@ -111,6 +111,8 @@ export interface IHistogramProps {
   xAxisHeight?: number;
   xAxisLabelOrientation?: ELabelOrientation;
   yAxisWidth?: number;
+  title?: string;
+  description?: string;
 }
 
 /**
@@ -133,6 +135,8 @@ const Histogram: FC<IHistogramProps> = ({
   xAxisHeight,
   xAxisLabelOrientation = ELabelOrientation.HORIZONTAL,
   yAxisWidth,
+  title,
+  description,
 }) => {
   if (!yAxisWidth) {
     yAxisWidth = direction === EChartDirection.VERTICAL ? 40 : 100;
@@ -152,6 +156,8 @@ const Histogram: FC<IHistogramProps> = ({
   return (
     <Base
       width={width + 30} // @TODO work out why without this the bars exceed the chart
+      title={title}
+      description={description}
       height={height}>
 
       {

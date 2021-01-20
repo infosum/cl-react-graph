@@ -1,9 +1,9 @@
 {
   "name": "cl-react-graph",
-  "version": "3.1.0",
+  "version": "3.1.5",
   "description": "React D3 Charts",
   "main": "./dist/index.js",
-  "types": "./dist/types/src/index.d.ts",
+  "types": "./dist/types/index.d.ts",
   "scripts": {
     "build": "export NODE_ENV=production|| set NODE_ENV=production && TS_NODE_PROJECT=\"tsconfig.json\" webpack",
     "test": "jest"

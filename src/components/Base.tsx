@@ -32,7 +32,7 @@ const Base: FC<IProps & HTMLAttributes<SVGElement>> = ({
     height={height}
     style={{ overflow: 'visible', ...style }}
     viewBox={`0 0 ${width} ${height}`}>
-    <title>{title}</title>
+    <title style={{ pointerEvents: 'none' }}>{title}</title>
     {
       description && <desc>{description}</desc>
     }

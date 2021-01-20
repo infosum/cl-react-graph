@@ -37,6 +37,8 @@ export interface IProps<T extends IChartPoint<IChartPointValue, IChartPointValue
     width: number;
     xAxisHeight?: number;
     yAxisWidth?: number;
+    title?: string;
+    description?: string;
 }
 declare const LineChart: FC<IProps>;
 export default LineChart;
