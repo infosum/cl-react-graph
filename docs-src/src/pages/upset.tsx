@@ -26,7 +26,7 @@ const data: TUpsetData = [
 const UpsetExample: FC = () => {
   return (
     <Layout>
-      <SEO title="Line Chart" description="" />
+      <SEO title="Upset Chart" description="" />
       <Typography variant="h2">Upset</Typography>
       <div>
         <Grid container spacing={10}>

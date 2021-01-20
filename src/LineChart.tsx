@@ -53,6 +53,8 @@ export interface IProps<T extends IChartPoint<IChartPointValue, IChartPointValue
   width: number;
   xAxisHeight?: number;
   yAxisWidth?: number;
+  title?: string;
+  description?: string;
 }
 
 const LineChart: FC<IProps> = ({
@@ -63,6 +65,8 @@ const LineChart: FC<IProps> = ({
   width,
   xAxisHeight = 60,
   yAxisWidth = 100,
+  title,
+  description,
 }) => {
   const domain = useLineDomain({
     values: data,
@@ -70,7 +74,9 @@ const LineChart: FC<IProps> = ({
   return (
     <Base
       width={width}
-      height={height}>
+      height={height}
+      title={title}
+      description={description}>
 
       <Grid
         left={yAxisWidth}

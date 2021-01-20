@@ -39,7 +39,7 @@ type TBarProps = Pick<IBarProps, 'width' | 'height' | 'top' | 'left' | 'colorSch
   textFill?: string;
 };
 
-interface IProps {
+export interface IProps {
   colorScheme?: string[];
   data: TUpsetData;
   height: number;

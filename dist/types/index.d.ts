@@ -19,5 +19,6 @@ export { default as LineChart, IChartPoint, ILineChartDataSet } from './LineChar
 export { useWidth } from './utils/useWidth';
 export { useMakeLine, useScales } from './utils/useMakeLine';
 export { useHistogramDomain, useLineDomain } from './utils/useDomain';
+export { default as UpsetChart, IProps as IUpsetChartProps } from './UpsetChart';
 export { TTipFunc } from './components/ToolTip';
 export { axis as defaultAxis, lineStyle as defaultLineStyle, stroke as defaultStroke, line as defaultLine, grid as defaultGrid, } from './utils/defaults';

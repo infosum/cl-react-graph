@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="ie=edge"/><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/><style data-href="/cl-react-graph/styles.169cdf4a7470e25b1486.css" id="gatsby-global-css">span.data-grid-container,span.data-grid-container:focus{outline:none}.data-grid-container .data-grid{table-layout:fixed;border-collapse:collapse}.data-grid-container .data-grid .cell.updated{background-color:rgba(0,145,253,.16);transition:background-color 0ms ease}.data-grid-container .data-grid .cell{height:17px;user-select:none;-moz-user-select:none;-webkit-user-select:none;-ms-user-select:none;cursor:cell;background-color:unset;transition:background-color .5s ease;vertical-align:middle;text-align:right;border:1px solid #ddd;padding:0}.data-grid-container .data-grid .cell.selected{border:1px double #2185d0;transition:none;box-shadow:inset 0 -100px 0 rgba(33,133,208,.15)}.data-grid-container .data-grid .cell.read-only{background:#f5f5f5;color:#999;text-align:center}.data-grid-container .data-grid .cell>.text{padding:2px 5px;text-overflow:ellipsis;overflow:hidden}.data-grid-container .data-grid .cell>input{outline:none!important;border:2px solid #2185d0;text-align:right;width:calc(100% - 6px);height:11px;background:none;display:block}.data-grid-container .data-grid .cell{vertical-align:bottom}.data-grid-container .data-grid .cell,.data-grid-container .data-grid .cell.wrap,.data-grid-container .data-grid.clip .cell.wrap,.data-grid-container .data-grid.nowrap .cell.wrap,.data-grid-container .data-grid.wrap .cell,.data-grid-container .data-grid.wrap .cell.wrap{white-space:normal}.data-grid-container .data-grid .cell.nowrap,.data-grid-container .data-grid.clip .cell.nowrap,.data-grid-container .data-grid.nowrap .cell,.data-grid-container .data-grid.nowrap .cell.nowrap,.data-grid-container .data-grid.wrap .cell.nowrap{white-space:nowrap;overflow-x:visible}.data-grid-container .data-grid .cell.clip,.data-grid-container .data-grid.clip .cell,.data-grid-container .data-grid.clip .cell.clip,.data-grid-container .data-grid.nowrap .cell.clip,.data-grid-container .data-grid.wrap .cell.clip{white-space:nowrap;overflow-x:hidden}.data-grid-container .data-grid .cell .data-editor,.data-grid-container .data-grid .cell .value-viewer{display:block}body,html{height:100vh}body{background-color:#f2f2f2;font-family:Roboto,Helvetica,Arial,sans-serif;font-size:.9rem}#___gatsby,#___gatsby>div{display:flex;flex-direction:column;height:100vh;justify-content:space-between}main{margin-top:1rem}.tooltip{position:absolute;background:#fff;color:#27626a;font-size:.8rem;border:1px solid rgba(39,98,106,.47843137254901963);padding:.25rem}footer{background:#27626a;text-align:center;padding:.5rem}footer,footer a{color:hsla(0,0%,100%,.9)}table.data-grid{width:100%}th.action-cell{background:#f2f2f2;border:1px solid #d2d2d2}.MuiTypography-h2{font-size:1.3rem;line-height:1.3rem;margin-bottom:.75rem}.MuiToolbar-root a{text-decoration:none;color:#fff}.data-grid-container .data-grid .cell>input{height:21px!important}pre code{background-color:#eee;border:1px solid #999;display:block;padding:20px}</style><meta name="generator" content="Gatsby 2.29.1"/><title data-react-helmet="true">Line Chart | Infosum Charts</title><meta data-react-helmet="true" content="Infosum charts." name="description"/><meta data-react-helmet="true" content="Line Chart" property="og:title"/><meta data-react-helmet="true" content="Infosum charts." property="og:description"/><meta data-react-helmet="true" content="website" property="og:type"/><meta data-react-helmet="true" content="summary" name="twitter:card"/><meta data-react-helmet="true" content="@infosum" name="twitter:creator"/><meta data-react-helmet="true" content="Line Chart" name="twitter:title"/><meta data-react-helmet="true" content="Infosum charts." name="twitter:description"/><link rel="icon" href="/cl-react-graph/favicon-32x32.png?v=4a9773549091c227cd2eb82ccd9c5e3a" type="image/png"/><link rel="manifest" href="/cl-react-graph/manifest.webmanifest" crossorigin="anonymous"/><meta name="theme-color" content="#56b4bf"/><link rel="apple-touch-icon" sizes="48x48" href="/cl-react-graph/icons/icon-48x48.png?v=4a9773549091c227cd2eb82ccd9c5e3a"/><link rel="apple-touch-icon" sizes="72x72" href="/cl-react-graph/icons/icon-72x72.png?v=4a9773549091c227cd2eb82ccd9c5e3a"/><link rel="apple-touch-icon" sizes="96x96" href="/cl-react-graph/icons/icon-96x96.png?v=4a9773549091c227cd2eb82ccd9c5e3a"/><link rel="apple-touch-icon" sizes="144x144" href="/cl-react-graph/icons/icon-144x144.png?v=4a9773549091c227cd2eb82ccd9c5e3a"/><link rel="apple-touch-icon" sizes="192x192" href="/cl-react-graph/icons/icon-192x192.png?v=4a9773549091c227cd2eb82ccd9c5e3a"/><link rel="apple-touch-icon" sizes="256x256" href="/cl-react-graph/icons/icon-256x256.png?v=4a9773549091c227cd2eb82ccd9c5e3a"/><link rel="apple-touch-icon" sizes="384x384" href="/cl-react-graph/icons/icon-384x384.png?v=4a9773549091c227cd2eb82ccd9c5e3a"/><link rel="apple-touch-icon" sizes="512x512" href="/cl-react-graph/icons/icon-512x512.png?v=4a9773549091c227cd2eb82ccd9c5e3a"/><style id="jss-server-side"></style><link as="script" rel="preload" href="/cl-react-graph/webpack-runtime-7de7f2d4f70d9410be85.js"/><link as="script" rel="preload" href="/cl-react-graph/framework-72b1aff9075a5b04c3c5.js"/><link as="script" rel="preload" href="/cl-react-graph/app-b25a84ae6d09d3a46cb2.js"/><link as="script" rel="preload" href="/cl-react-graph/styles-e9d24b1846c7d6eb9685.js"/><link as="script" rel="preload" href="/cl-react-graph/commons-becd17edd8e2e7942f03.js"/><link as="script" rel="preload" href="/cl-react-graph/17c018643475e7f3de028b545693df6ac0992596-3b0c09ce9682ebe1d5f8.js"/><link as="script" rel="preload" href="/cl-react-graph/9aae87d98cb6afcce6c5af48dbc5bd3db492a710-2549e68eed14aced8070.js"/><link as="script" rel="preload" href="/cl-react-graph/71d6acb6f502235e55caee1c977644ee9804b11f-c56353b05400f72fc613.js"/><link as="script" rel="preload" href="/cl-react-graph/a88fac06d1f44d5f8da251460513aee811a9b9c2-a2da311c8a6290fdabcf.js"/><link as="script" rel="preload" href="/cl-react-graph/4709a03248156ba2ea5942a00ad13417d5eb3e62-e4d380441db0033de3e3.js"/><link as="script" rel="preload" href="/cl-react-graph/component---src-pages-line-tsx-6844ef901ffb907bc017.js"/><link as="fetch" rel="preload" href="/cl-react-graph/page-data/line/page-data.json" crossorigin="anonymous"/><link as="fetch" rel="preload" href="/cl-react-graph/page-data/sq/d/3649515864.json" crossorigin="anonymous"/><link as="fetch" rel="preload" href="/cl-react-graph/page-data/sq/d/63159454.json" crossorigin="anonymous"/><link as="fetch" rel="preload" href="/cl-react-graph/page-data/app-data.json" crossorigin="anonymous"/></head><body><div id="___gatsby"><div style="outline:none" tabindex="-1" id="gatsby-focus-wrapper"><header class="MuiPaper-root MuiAppBar-root MuiAppBar-positionStatic MuiAppBar-colorPrimary MuiPaper-elevation4"><div class="MuiToolbar-root MuiToolbar-regular MuiToolbar-gutters"><h6 class="MuiTypography-root MuiTypography-h6 MuiTypography-colorInherit"><a href="/cl-react-graph/">Infosum Charts</a></h6><button class="MuiButtonBase-root MuiButton-root MuiButton-text" tabindex="0" type="button"><span class="MuiButton-label"><a href="/cl-react-graph/histogram">Histogram</a></span></button><button class="MuiButtonBase-root MuiButton-root MuiButton-text" tabindex="0" type="button"><span class="MuiButton-label"><a href="/cl-react-graph/line">Line Chart</a></span></button><button class="MuiButtonBase-root MuiButton-root MuiButton-text" tabindex="0" type="button"><span class="MuiButton-label"><a href="/cl-react-graph/pie">Pie Chart</a></span></button><button class="MuiButtonBase-root MuiButton-root MuiButton-text" tabindex="0" type="button"><span class="MuiButton-label"><a href="/cl-react-graph/tornado">Tornado Chart</a></span></button><button class="MuiButtonBase-root MuiButton-root MuiButton-text" tabindex="0" type="button"><span class="MuiButton-label"><a href="/cl-react-graph/joyplot">Joy Plot</a></span></button><button class="MuiButtonBase-root MuiButton-root MuiButton-text" tabindex="0" type="button"><span class="MuiButton-label"><a href="/cl-react-graph/brush">Brush</a></span></button><button class="MuiButtonBase-root MuiButton-root MuiButton-text" tabindex="0" type="button"><span class="MuiButton-label"><a href="/cl-react-graph/chord">Chord</a></span></button><button class="MuiButtonBase-root MuiButton-root MuiButton-text" tabindex="0" type="button"><span class="MuiButton-label"><a href="/cl-react-graph/upset">Upset</a></span></button></div></header><div style="flex-grow:2;margin:0 auto;padding:0px 1.0875rem 1.45rem;padding-top:0;width:100%"><main><h2 class="MuiTypography-root MuiTypography-h2">Line Chart</h2><div><div class="MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-10"><div class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6"><div class="MuiPaper-root MuiCard-root MuiPaper-elevation1 MuiPaper-rounded"><div class="MuiCardContent-root"><svg width="800" height="300" style="overflow:visible" viewBox="0 0 800 300"><title></title><g transform="translate(15,15)" role="table" width="770" height="270"><g class="grid" transform="translate(100, 0)"><line stroke="#ccc" x1="116.66666666666666" x2="116.66666666666666" y2="240" fill="#000" opacity="1" shape-rendering="auto" stroke-opacity="1" stroke-width="1" shape-rendering="auto" stroke-opacity="0.4" stroke-width="1"></line><line stroke="#ccc" x1="233.33333333333331" x2="233.33333333333331" y2="240" fill="#000" opacity="1" shape-rendering="auto" stroke-opacity="1" stroke-width="1" shape-rendering="auto" stroke-opacity="0.4" stroke-width="1"></line><line stroke="#ccc" x1="350" x2="350" y2="240" fill="#000" opacity="1" shape-rendering="auto" stroke-opacity="1" stroke-width="1" shape-rendering="auto" stroke-opacity="0.4" stroke-width="1"></line><line stroke="#ccc" x1="466.66666666666663" x2="466.66666666666663" y2="240" fill="#000" opacity="1" shape-rendering="auto" stroke-opacity="1" stroke-width="1" shape-rendering="auto" stroke-opacity="0.4" stroke-width="1"></line><line stroke="#ccc" x1="583.3333333333334" x2="583.3333333333334" y2="240" fill="#000" opacity="1" shape-rendering="auto" stroke-opacity="1" stroke-width="1" shape-rendering="auto" stroke-opacity="0.4" stroke-width="1"></line><line stroke="#ccc" x1="700" x2="700" y2="240" fill="#000" opacity="1" shape-rendering="auto" stroke-opacity="1" stroke-width="1" shape-rendering="auto" stroke-opacity="0.4" stroke-width="1"></line><line stroke="#ccc" y1="0" y2="0" x2="700" fill="#000" opacity="1" shape-rendering="auto" stroke-opacity="1" stroke-width="1" shape-rendering="auto" stroke-opacity="0.4" stroke-width="1"></line><line stroke="#ccc" y1="48" y2="48" x2="700" fill="#000" opacity="1" shape-rendering="auto" stroke-opacity="1" stroke-width="1" shape-rendering="auto" stroke-opacity="0.4" stroke-width="1"></line><line stroke="#ccc" y1="96" y2="96" x2="700" fill="#000" opacity="1" shape-rendering="auto" stroke-opacity="1" stroke-width="1" shape-rendering="auto" stroke-opacity="0.4" stroke-width="1"></line><line stroke="#ccc" y1="144" y2="144" x2="700" fill="#000" opacity="1" shape-rendering="auto" stroke-opacity="1" stroke-width="1" shape-rendering="auto" stroke-opacity="0.4" stroke-width="1"></line><line stroke="#ccc" y1="192" y2="192" x2="700" fill="#000" opacity="1" shape-rendering="auto" stroke-opacity="1" stroke-width="1" shape-rendering="auto" stroke-opacity="0.4" stroke-width="1"></line></g> <path class="line-robAllocation" fill="none" stroke-dashoffset="0" stroke-dasharray="0" stroke="rgb(11, 85, 167)" d=""></path><path class="area-" fill="rgba(11, 85, 167, 0.2)" d=""></path><g class="y-axis" transform="translate(100, 0)" fill="none" font-size="10" font-family="sans-serif" text-anchor="end"><path class="domain" stroke="#a9a9a9" d="M0,240 L0,0" fill="none" opacity="1" shape-rendering="auto" stroke-opacity="1" stroke-width="1"></path><g aria-hidden="true" role="" class="tick" opacity="1" transform="translate(0, 120)"><line stroke="#a9a9a9" x2="-2" fill="none" opacity="1" shape-rendering="auto" stroke-opacity="1" stroke-width="1"></line><text role="" fill="#a9a9a9" font-size="10px" text-anchor="right" writing-mode="horizontal-tb" transform="rotate(0)" height="240" x="-12" dy="0.32em">0</text></g><g aria-hidden="true" role="" class="tick" opacity="1" transform="translate(0, 120)"><line stroke="#a9a9a9" x2="-2" fill="none" opacity="1" shape-rendering="auto" stroke-opacity="1" stroke-width="1"></line><text role="" fill="#a9a9a9" font-size="10px" text-anchor="right" writing-mode="horizontal-tb" transform="rotate(0)" height="240" x="-12" dy="0.32em">0</text></g><g aria-hidden="true" role="" class="tick" opacity="1" transform="translate(0, 120)"><line stroke="#a9a9a9" x2="-2" fill="none" opacity="1" shape-rendering="auto" stroke-opacity="1" stroke-width="1"></line><text role="" fill="#a9a9a9" font-size="10px" text-anchor="right" writing-mode="horizontal-tb" transform="rotate(0)" height="240" x="-12" dy="0.32em">0</text></g></g><g class="x-axis" transform="translate(100, 240)" fill="none" font-size="10" font-family="sans-serif" text-anchor="middle"><path class="domain" stroke="#a9a9a9" d="M0,0 L700,0" fill="none" opacity="1" shape-rendering="auto" stroke-opacity="1" stroke-width="1"></path></g></g></svg></div></div><br/><div class="MuiPaper-root MuiCard-root MuiPaper-elevation1 MuiPaper-rounded"><div class="MuiCardContent-root"><h6 class="MuiTypography-root MuiTypography-h6">JSX</h6><pre style="background-color:#303030;color:#eee;padding:1rem">&lt;LineChart
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="ie=edge"/><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/><style data-href="/cl-react-graph/styles.169cdf4a7470e25b1486.css" id="gatsby-global-css">span.data-grid-container,span.data-grid-container:focus{outline:none}.data-grid-container .data-grid{table-layout:fixed;border-collapse:collapse}.data-grid-container .data-grid .cell.updated{background-color:rgba(0,145,253,.16);transition:background-color 0ms ease}.data-grid-container .data-grid .cell{height:17px;user-select:none;-moz-user-select:none;-webkit-user-select:none;-ms-user-select:none;cursor:cell;background-color:unset;transition:background-color .5s ease;vertical-align:middle;text-align:right;border:1px solid #ddd;padding:0}.data-grid-container .data-grid .cell.selected{border:1px double #2185d0;transition:none;box-shadow:inset 0 -100px 0 rgba(33,133,208,.15)}.data-grid-container .data-grid .cell.read-only{background:#f5f5f5;color:#999;text-align:center}.data-grid-container .data-grid .cell>.text{padding:2px 5px;text-overflow:ellipsis;overflow:hidden}.data-grid-container .data-grid .cell>input{outline:none!important;border:2px solid #2185d0;text-align:right;width:calc(100% - 6px);height:11px;background:none;display:block}.data-grid-container .data-grid .cell{vertical-align:bottom}.data-grid-container .data-grid .cell,.data-grid-container .data-grid .cell.wrap,.data-grid-container .data-grid.clip .cell.wrap,.data-grid-container .data-grid.nowrap .cell.wrap,.data-grid-container .data-grid.wrap .cell,.data-grid-container .data-grid.wrap .cell.wrap{white-space:normal}.data-grid-container .data-grid .cell.nowrap,.data-grid-container .data-grid.clip .cell.nowrap,.data-grid-container .data-grid.nowrap .cell,.data-grid-container .data-grid.nowrap .cell.nowrap,.data-grid-container .data-grid.wrap .cell.nowrap{white-space:nowrap;overflow-x:visible}.data-grid-container .data-grid .cell.clip,.data-grid-container .data-grid.clip .cell,.data-grid-container .data-grid.clip .cell.clip,.data-grid-container .data-grid.nowrap .cell.clip,.data-grid-container .data-grid.wrap .cell.clip{white-space:nowrap;overflow-x:hidden}.data-grid-container .data-grid .cell .data-editor,.data-grid-container .data-grid .cell .value-viewer{display:block}body,html{height:100vh}body{background-color:#f2f2f2;font-family:Roboto,Helvetica,Arial,sans-serif;font-size:.9rem}#___gatsby,#___gatsby>div{display:flex;flex-direction:column;height:100vh;justify-content:space-between}main{margin-top:1rem}.tooltip{position:absolute;background:#fff;color:#27626a;font-size:.8rem;border:1px solid rgba(39,98,106,.47843137254901963);padding:.25rem}footer{background:#27626a;text-align:center;padding:.5rem}footer,footer a{color:hsla(0,0%,100%,.9)}table.data-grid{width:100%}th.action-cell{background:#f2f2f2;border:1px solid #d2d2d2}.MuiTypography-h2{font-size:1.3rem;line-height:1.3rem;margin-bottom:.75rem}.MuiToolbar-root a{text-decoration:none;color:#fff}.data-grid-container .data-grid .cell>input{height:21px!important}pre code{background-color:#eee;border:1px solid #999;display:block;padding:20px}</style><meta name="generator" content="Gatsby 2.31.0"/><title data-react-helmet="true">Line Chart | Infosum Charts</title><meta data-react-helmet="true" content="Infosum charts." name="description"/><meta data-react-helmet="true" content="Line Chart" property="og:title"/><meta data-react-helmet="true" content="Infosum charts." property="og:description"/><meta data-react-helmet="true" content="website" property="og:type"/><meta data-react-helmet="true" content="summary" name="twitter:card"/><meta data-react-helmet="true" content="@infosum" name="twitter:creator"/><meta data-react-helmet="true" content="Line Chart" name="twitter:title"/><meta data-react-helmet="true" content="Infosum charts." name="twitter:description"/><link rel="icon" href="/cl-react-graph/favicon-32x32.png?v=4a9773549091c227cd2eb82ccd9c5e3a" type="image/png"/><link rel="manifest" href="/cl-react-graph/manifest.webmanifest" crossorigin="anonymous"/><meta name="theme-color" content="#56b4bf"/><link rel="apple-touch-icon" sizes="48x48" href="/cl-react-graph/icons/icon-48x48.png?v=4a9773549091c227cd2eb82ccd9c5e3a"/><link rel="apple-touch-icon" sizes="72x72" href="/cl-react-graph/icons/icon-72x72.png?v=4a9773549091c227cd2eb82ccd9c5e3a"/><link rel="apple-touch-icon" sizes="96x96" href="/cl-react-graph/icons/icon-96x96.png?v=4a9773549091c227cd2eb82ccd9c5e3a"/><link rel="apple-touch-icon" sizes="144x144" href="/cl-react-graph/icons/icon-144x144.png?v=4a9773549091c227cd2eb82ccd9c5e3a"/><link rel="apple-touch-icon" sizes="192x192" href="/cl-react-graph/icons/icon-192x192.png?v=4a9773549091c227cd2eb82ccd9c5e3a"/><link rel="apple-touch-icon" sizes="256x256" href="/cl-react-graph/icons/icon-256x256.png?v=4a9773549091c227cd2eb82ccd9c5e3a"/><link rel="apple-touch-icon" sizes="384x384" href="/cl-react-graph/icons/icon-384x384.png?v=4a9773549091c227cd2eb82ccd9c5e3a"/><link rel="apple-touch-icon" sizes="512x512" href="/cl-react-graph/icons/icon-512x512.png?v=4a9773549091c227cd2eb82ccd9c5e3a"/><style id="jss-server-side"></style><link as="script" rel="preload" href="/cl-react-graph/webpack-runtime-798da9efa2e243279e08.js"/><link as="script" rel="preload" href="/cl-react-graph/framework-b81b2f9333458e1f85b8.js"/><link as="script" rel="preload" href="/cl-react-graph/app-8e97e865a560e8a2c253.js"/><link as="script" rel="preload" href="/cl-react-graph/styles-e9d24b1846c7d6eb9685.js"/><link as="script" rel="preload" href="/cl-react-graph/commons-becd17edd8e2e7942f03.js"/><link as="script" rel="preload" href="/cl-react-graph/17c018643475e7f3de028b545693df6ac0992596-f0bf3f683e3b4f9d791e.js"/><link as="script" rel="preload" href="/cl-react-graph/9aae87d98cb6afcce6c5af48dbc5bd3db492a710-2549e68eed14aced8070.js"/><link as="script" rel="preload" href="/cl-react-graph/71d6acb6f502235e55caee1c977644ee9804b11f-19ef8cccad37532d101b.js"/><link as="script" rel="preload" href="/cl-react-graph/a88fac06d1f44d5f8da251460513aee811a9b9c2-e5c958f3331bf90da81f.js"/><link as="script" rel="preload" href="/cl-react-graph/4709a03248156ba2ea5942a00ad13417d5eb3e62-989fbbf3046e64516975.js"/><link as="script" rel="preload" href="/cl-react-graph/component---src-pages-line-tsx-6844ef901ffb907bc017.js"/><link as="fetch" rel="preload" href="/cl-react-graph/page-data/line/page-data.json" crossorigin="anonymous"/><link as="fetch" rel="preload" href="/cl-react-graph/page-data/sq/d/3649515864.json" crossorigin="anonymous"/><link as="fetch" rel="preload" href="/cl-react-graph/page-data/sq/d/63159454.json" crossorigin="anonymous"/><link as="fetch" rel="preload" href="/cl-react-graph/page-data/app-data.json" crossorigin="anonymous"/></head><body><div id="___gatsby"><div style="outline:none" tabindex="-1" id="gatsby-focus-wrapper"><header class="MuiPaper-root MuiAppBar-root MuiAppBar-positionStatic MuiAppBar-colorPrimary MuiPaper-elevation4"><div class="MuiToolbar-root MuiToolbar-regular MuiToolbar-gutters"><h6 class="MuiTypography-root MuiTypography-h6 MuiTypography-colorInherit"><a href="/cl-react-graph/">Infosum Charts</a></h6><button class="MuiButtonBase-root MuiButton-root MuiButton-text" tabindex="0" type="button"><span class="MuiButton-label"><a href="/cl-react-graph/histogram">Histogram</a></span></button><button class="MuiButtonBase-root MuiButton-root MuiButton-text" tabindex="0" type="button"><span class="MuiButton-label"><a href="/cl-react-graph/line">Line Chart</a></span></button><button class="MuiButtonBase-root MuiButton-root MuiButton-text" tabindex="0" type="button"><span class="MuiButton-label"><a href="/cl-react-graph/pie">Pie Chart</a></span></button><button class="MuiButtonBase-root MuiButton-root MuiButton-text" tabindex="0" type="button"><span class="MuiButton-label"><a href="/cl-react-graph/tornado">Tornado Chart</a></span></button><button class="MuiButtonBase-root MuiButton-root MuiButton-text" tabindex="0" type="button"><span class="MuiButton-label"><a href="/cl-react-graph/joyplot">Joy Plot</a></span></button><button class="MuiButtonBase-root MuiButton-root MuiButton-text" tabindex="0" type="button"><span class="MuiButton-label"><a href="/cl-react-graph/brush">Brush</a></span></button><button class="MuiButtonBase-root MuiButton-root MuiButton-text" tabindex="0" type="button"><span class="MuiButton-label"><a href="/cl-react-graph/chord">Chord</a></span></button><button class="MuiButtonBase-root MuiButton-root MuiButton-text" tabindex="0" type="button"><span class="MuiButton-label"><a href="/cl-react-graph/upset">Upset</a></span></button></div></header><div style="flex-grow:2;margin:0 auto;padding:0px 1.0875rem 1.45rem;padding-top:0;width:100%"><main><h2 class="MuiTypography-root MuiTypography-h2">Line Chart</h2><div><div class="MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-10"><div class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6"><div class="MuiPaper-root MuiCard-root MuiPaper-elevation1 MuiPaper-rounded"><div class="MuiCardContent-root"><svg width="800" height="300" style="overflow:visible" viewBox="0 0 800 300"><title style="pointer-events:none"></title><g transform="translate(15,15)" role="table" width="770" height="270"><g class="grid" transform="translate(100, 0)"><line stroke="#ccc" x1="116.66666666666666" x2="116.66666666666666" y2="240" fill="#000" opacity="1" shape-rendering="auto" stroke-opacity="1" stroke-width="1" shape-rendering="auto" stroke-opacity="0.4" stroke-width="1"></line><line stroke="#ccc" x1="233.33333333333331" x2="233.33333333333331" y2="240" fill="#000" opacity="1" shape-rendering="auto" stroke-opacity="1" stroke-width="1" shape-rendering="auto" stroke-opacity="0.4" stroke-width="1"></line><line stroke="#ccc" x1="350" x2="350" y2="240" fill="#000" opacity="1" shape-rendering="auto" stroke-opacity="1" stroke-width="1" shape-rendering="auto" stroke-opacity="0.4" stroke-width="1"></line><line stroke="#ccc" x1="466.66666666666663" x2="466.66666666666663" y2="240" fill="#000" opacity="1" shape-rendering="auto" stroke-opacity="1" stroke-width="1" shape-rendering="auto" stroke-opacity="0.4" stroke-width="1"></line><line stroke="#ccc" x1="583.3333333333334" x2="583.3333333333334" y2="240" fill="#000" opacity="1" shape-rendering="auto" stroke-opacity="1" stroke-width="1" shape-rendering="auto" stroke-opacity="0.4" stroke-width="1"></line><line stroke="#ccc" x1="700" x2="700" y2="240" fill="#000" opacity="1" shape-rendering="auto" stroke-opacity="1" stroke-width="1" shape-rendering="auto" stroke-opacity="0.4" stroke-width="1"></line><line stroke="#ccc" y1="0" y2="0" x2="700" fill="#000" opacity="1" shape-rendering="auto" stroke-opacity="1" stroke-width="1" shape-rendering="auto" stroke-opacity="0.4" stroke-width="1"></line><line stroke="#ccc" y1="48" y2="48" x2="700" fill="#000" opacity="1" shape-rendering="auto" stroke-opacity="1" stroke-width="1" shape-rendering="auto" stroke-opacity="0.4" stroke-width="1"></line><line stroke="#ccc" y1="96" y2="96" x2="700" fill="#000" opacity="1" shape-rendering="auto" stroke-opacity="1" stroke-width="1" shape-rendering="auto" stroke-opacity="0.4" stroke-width="1"></line><line stroke="#ccc" y1="144" y2="144" x2="700" fill="#000" opacity="1" shape-rendering="auto" stroke-opacity="1" stroke-width="1" shape-rendering="auto" stroke-opacity="0.4" stroke-width="1"></line><line stroke="#ccc" y1="192" y2="192" x2="700" fill="#000" opacity="1" shape-rendering="auto" stroke-opacity="1" stroke-width="1" shape-rendering="auto" stroke-opacity="0.4" stroke-width="1"></line></g> <path class="line-robAllocation" fill="none" stroke-dashoffset="0" stroke-dasharray="0" stroke="rgb(11, 85, 167)" d=""></path><path class="area-" fill="rgba(11, 85, 167, 0.2)" d=""></path><g class="y-axis" transform="translate(100, 0)" fill="none" font-size="10" font-family="sans-serif" text-anchor="end"><path class="domain" stroke="#a9a9a9" d="M0,240 L0,0" fill="none" opacity="1" shape-rendering="auto" stroke-opacity="1" stroke-width="1"></path><g aria-hidden="true" role="" class="tick" opacity="1" transform="translate(0, 120)"><line stroke="#a9a9a9" x2="-2" fill="none" opacity="1" shape-rendering="auto" stroke-opacity="1" stroke-width="1"></line><text role="" fill="#a9a9a9" font-size="10px" text-anchor="right" writing-mode="horizontal-tb" transform="rotate(0)" height="240" x="-12" dy="0.32em">0</text></g><g aria-hidden="true" role="" class="tick" opacity="1" transform="translate(0, 120)"><line stroke="#a9a9a9" x2="-2" fill="none" opacity="1" shape-rendering="auto" stroke-opacity="1" stroke-width="1"></line><text role="" fill="#a9a9a9" font-size="10px" text-anchor="right" writing-mode="horizontal-tb" transform="rotate(0)" height="240" x="-12" dy="0.32em">0</text></g><g aria-hidden="true" role="" class="tick" opacity="1" transform="translate(0, 120)"><line stroke="#a9a9a9" x2="-2" fill="none" opacity="1" shape-rendering="auto" stroke-opacity="1" stroke-width="1"></line><text role="" fill="#a9a9a9" font-size="10px" text-anchor="right" writing-mode="horizontal-tb" transform="rotate(0)" height="240" x="-12" dy="0.32em">0</text></g></g><g class="x-axis" transform="translate(100, 240)" fill="none" font-size="10" font-family="sans-serif" text-anchor="middle"><path class="domain" stroke="#a9a9a9" d="M0,0 L700,0" fill="none" opacity="1" shape-rendering="auto" stroke-opacity="1" stroke-width="1"></path></g></g></svg></div></div><br/><div class="MuiPaper-root MuiCard-root MuiPaper-elevation1 MuiPaper-rounded"><div class="MuiCardContent-root"><h6 class="MuiTypography-root MuiTypography-h6">JSX</h6><pre style="background-color:#303030;color:#eee;padding:1rem">&lt;LineChart
   axis={{
     x: {
       height: 20,
@@ -14,404 +14,404 @@
     {
       data: [
         {
-          x: new Date(&#x27;2021-01-20T14:59:56.588Z&#x27;),
-          y: 815.2369906962253
+          x: new Date(&#x27;2021-01-20T15:54:22.886Z&#x27;),
+          y: 286.19151693446975
         },
         {
-          x: new Date(&#x27;2021-01-21T14:59:56.588Z&#x27;),
-          y: 824.721004234984
+          x: new Date(&#x27;2021-01-21T15:54:22.886Z&#x27;),
+          y: 998.1180154763538
         },
         {
-          x: new Date(&#x27;2021-01-22T14:59:56.588Z&#x27;),
-          y: 681.2895154494771
+          x: new Date(&#x27;2021-01-22T15:54:22.886Z&#x27;),
+          y: 229.2203364941454
         },
         {
-          x: new Date(&#x27;2021-01-23T14:59:56.588Z&#x27;),
-          y: 103.81190844648414
+          x: new Date(&#x27;2021-01-23T15:54:22.886Z&#x27;),
+          y: 735.7805340852293
         },
         {
-          x: new Date(&#x27;2021-01-24T14:59:56.588Z&#x27;),
-          y: 357.6708954853713
+          x: new Date(&#x27;2021-01-24T15:54:22.886Z&#x27;),
+          y: 490.9764506206875
         },
         {
-          x: new Date(&#x27;2021-01-25T14:59:56.588Z&#x27;),
-          y: 988.9402073608052
+          x: new Date(&#x27;2021-01-25T15:54:22.886Z&#x27;),
+          y: 366.6321766636913
         },
         {
-          x: new Date(&#x27;2021-01-26T14:59:56.588Z&#x27;),
-          y: 373.93295439184857
+          x: new Date(&#x27;2021-01-26T15:54:22.886Z&#x27;),
+          y: 668.8073330403765
         },
         {
-          x: new Date(&#x27;2021-01-27T14:59:56.588Z&#x27;),
-          y: 571.7096555945295
+          x: new Date(&#x27;2021-01-27T15:54:22.886Z&#x27;),
+          y: 856.7322705636908
         },
         {
-          x: new Date(&#x27;2021-01-28T14:59:56.588Z&#x27;),
-          y: 340.7291895052853
+          x: new Date(&#x27;2021-01-28T15:54:22.886Z&#x27;),
+          y: 479.8553039796569
         },
         {
-          x: new Date(&#x27;2021-01-29T14:59:56.588Z&#x27;),
-          y: 558.9079011504294
+          x: new Date(&#x27;2021-01-29T15:54:22.886Z&#x27;),
+          y: 326.39478987364214
         },
         {
-          x: new Date(&#x27;2021-01-30T14:59:56.588Z&#x27;),
-          y: 299.1147733922952
+          x: new Date(&#x27;2021-01-30T15:54:22.886Z&#x27;),
+          y: 3.6928847753692207
         },
         {
-          x: new Date(&#x27;2021-01-31T14:59:56.588Z&#x27;),
-          y: 243.42989821040507
+          x: new Date(&#x27;2021-01-31T15:54:22.886Z&#x27;),
+          y: 0.7702500130097878
         },
         {
-          x: new Date(&#x27;2021-02-01T14:59:56.588Z&#x27;),
-          y: 92.20461796419555
+          x: new Date(&#x27;2021-02-01T15:54:22.886Z&#x27;),
+          y: 522.0088387761848
         },
         {
-          x: new Date(&#x27;2021-02-02T14:59:56.588Z&#x27;),
-          y: 120.17932118003016
+          x: new Date(&#x27;2021-02-02T15:54:22.886Z&#x27;),
+          y: 936.0857504420293
         },
         {
-          x: new Date(&#x27;2021-02-03T14:59:56.588Z&#x27;),
-          y: 767.4995423957936
+          x: new Date(&#x27;2021-02-03T15:54:22.886Z&#x27;),
+          y: 657.9894732872544
         },
         {
-          x: new Date(&#x27;2021-02-04T14:59:56.588Z&#x27;),
-          y: 350.6198541665497
+          x: new Date(&#x27;2021-02-04T15:54:22.886Z&#x27;),
+          y: 960.4705209856799
         },
         {
-          x: new Date(&#x27;2021-02-05T14:59:56.588Z&#x27;),
-          y: 941.9377355852314
+          x: new Date(&#x27;2021-02-05T15:54:22.886Z&#x27;),
+          y: 995.1735303384717
         },
         {
-          x: new Date(&#x27;2021-02-06T14:59:56.588Z&#x27;),
-          y: 867.3307257301664
+          x: new Date(&#x27;2021-02-06T15:54:22.886Z&#x27;),
+          y: 31.83221957619886
         },
         {
-          x: new Date(&#x27;2021-02-07T14:59:56.588Z&#x27;),
-          y: 893.5857768695428
+          x: new Date(&#x27;2021-02-07T15:54:22.886Z&#x27;),
+          y: 34.34133445163767
         },
         {
-          x: new Date(&#x27;2021-02-08T14:59:56.588Z&#x27;),
-          y: 867.8482644613432
+          x: new Date(&#x27;2021-02-08T15:54:22.886Z&#x27;),
+          y: 361.2024023231952
         },
         {
-          x: new Date(&#x27;2021-02-09T14:59:56.588Z&#x27;),
-          y: 223.97446806869746
+          x: new Date(&#x27;2021-02-09T15:54:22.886Z&#x27;),
+          y: 115.31523299381941
         },
         {
-          x: new Date(&#x27;2021-02-10T14:59:56.588Z&#x27;),
-          y: 165.96314916721067
+          x: new Date(&#x27;2021-02-10T15:54:22.886Z&#x27;),
+          y: 96.22554169722531
         },
         {
-          x: new Date(&#x27;2021-02-11T14:59:56.588Z&#x27;),
-          y: 776.2810986327627
+          x: new Date(&#x27;2021-02-11T15:54:22.886Z&#x27;),
+          y: 750.156017568395
         },
         {
-          x: new Date(&#x27;2021-02-12T14:59:56.588Z&#x27;),
-          y: 229.7075791443588
+          x: new Date(&#x27;2021-02-12T15:54:22.886Z&#x27;),
+          y: 858.3469405217083
         },
         {
-          x: new Date(&#x27;2021-02-13T14:59:56.588Z&#x27;),
-          y: 498.90047487094466
+          x: new Date(&#x27;2021-02-13T15:54:22.886Z&#x27;),
+          y: 136.773731888852
         },
         {
-          x: new Date(&#x27;2021-02-14T14:59:56.588Z&#x27;),
-          y: 246.68913817512083
+          x: new Date(&#x27;2021-02-14T15:54:22.886Z&#x27;),
+          y: 932.0522649900058
         },
         {
-          x: new Date(&#x27;2021-02-15T14:59:56.588Z&#x27;),
-          y: 635.3890757164779
+          x: new Date(&#x27;2021-02-15T15:54:22.886Z&#x27;),
+          y: 455.65041584728647
         },
         {
-          x: new Date(&#x27;2021-02-16T14:59:56.588Z&#x27;),
-          y: 490.5010313357827
+          x: new Date(&#x27;2021-02-16T15:54:22.886Z&#x27;),
+          y: 848.9519671636348
         },
         {
-          x: new Date(&#x27;2021-02-17T14:59:56.588Z&#x27;),
-          y: 306.79924120278645
+          x: new Date(&#x27;2021-02-17T15:54:22.886Z&#x27;),
+          y: 332.42737916731915
         },
         {
-          x: new Date(&#x27;2021-02-18T14:59:56.588Z&#x27;),
-          y: 177.148237014217
+          x: new Date(&#x27;2021-02-18T15:54:22.886Z&#x27;),
+          y: 891.7447812932236
         },
         {
-          x: new Date(&#x27;2021-02-19T14:59:56.588Z&#x27;),
-          y: 151.2368048510555
+          x: new Date(&#x27;2021-02-19T15:54:22.886Z&#x27;),
+          y: 992.7175414967675
         },
         {
-          x: new Date(&#x27;2021-02-20T14:59:56.588Z&#x27;),
-          y: 431.59477672106664
+          x: new Date(&#x27;2021-02-20T15:54:22.886Z&#x27;),
+          y: 738.8742749118225
         },
         {
-          x: new Date(&#x27;2021-02-21T14:59:56.588Z&#x27;),
-          y: 707.2993506922085
+          x: new Date(&#x27;2021-02-21T15:54:22.886Z&#x27;),
+          y: 600.2155368405068
         },
         {
-          x: new Date(&#x27;2021-02-22T14:59:56.588Z&#x27;),
-          y: 843.7650219675465
+          x: new Date(&#x27;2021-02-22T15:54:22.886Z&#x27;),
+          y: 693.7380531338113
         },
         {
-          x: new Date(&#x27;2021-02-23T14:59:56.588Z&#x27;),
-          y: 750.2683014623564
+          x: new Date(&#x27;2021-02-23T15:54:22.886Z&#x27;),
+          y: 776.9710937735641
         },
         {
-          x: new Date(&#x27;2021-02-24T14:59:56.588Z&#x27;),
-          y: 157.09676600473443
+          x: new Date(&#x27;2021-02-24T15:54:22.886Z&#x27;),
+          y: 646.6997652048921
         },
         {
-          x: new Date(&#x27;2021-02-25T14:59:56.588Z&#x27;),
-          y: 440.07379960056926
+          x: new Date(&#x27;2021-02-25T15:54:22.886Z&#x27;),
+          y: 127.20194644124217
         },
         {
-          x: new Date(&#x27;2021-02-26T14:59:56.588Z&#x27;),
-          y: 818.0276797897652
+          x: new Date(&#x27;2021-02-26T15:54:22.886Z&#x27;),
+          y: 779.2723487954527
         },
         {
-          x: new Date(&#x27;2021-02-27T14:59:56.588Z&#x27;),
-          y: 81.61958547085813
+          x: new Date(&#x27;2021-02-27T15:54:22.886Z&#x27;),
+          y: 831.0070276833815
         },
         {
-          x: new Date(&#x27;2021-02-28T14:59:56.588Z&#x27;),
-          y: 410.76167517265014
+          x: new Date(&#x27;2021-02-28T15:54:22.886Z&#x27;),
+          y: 56.237234572314996
         },
         {
-          x: new Date(&#x27;2021-03-01T14:59:56.588Z&#x27;),
-          y: 938.314623184779
+          x: new Date(&#x27;2021-03-01T15:54:22.886Z&#x27;),
+          y: 283.5468735131177
         },
         {
-          x: new Date(&#x27;2021-03-02T14:59:56.588Z&#x27;),
-          y: 210.34141480491297
+          x: new Date(&#x27;2021-03-02T15:54:22.886Z&#x27;),
+          y: 57.86124255390401
         },
         {
-          x: new Date(&#x27;2021-03-03T14:59:56.588Z&#x27;),
-          y: 425.9303402580763
+          x: new Date(&#x27;2021-03-03T15:54:22.886Z&#x27;),
+          y: 892.9874462838387
         },
         {
-          x: new Date(&#x27;2021-03-04T14:59:56.588Z&#x27;),
-          y: 377.21863028195935
+          x: new Date(&#x27;2021-03-04T15:54:22.886Z&#x27;),
+          y: 931.7808173880791
         },
         {
-          x: new Date(&#x27;2021-03-05T14:59:56.588Z&#x27;),
-          y: 774.8832459439709
+          x: new Date(&#x27;2021-03-05T15:54:22.886Z&#x27;),
+          y: 440.20074356211956
         },
         {
-          x: new Date(&#x27;2021-03-06T14:59:56.588Z&#x27;),
-          y: 93.98719610181972
+          x: new Date(&#x27;2021-03-06T15:54:22.886Z&#x27;),
+          y: 184.85745108649064
         },
         {
-          x: new Date(&#x27;2021-03-07T14:59:56.588Z&#x27;),
-          y: 783.8211166560704
+          x: new Date(&#x27;2021-03-07T15:54:22.886Z&#x27;),
+          y: 863.6632575563212
         },
         {
-          x: new Date(&#x27;2021-03-08T14:59:56.588Z&#x27;),
-          y: 395.66263087413023
+          x: new Date(&#x27;2021-03-08T15:54:22.886Z&#x27;),
+          y: 582.9737668216645
         },
         {
-          x: new Date(&#x27;2021-03-09T14:59:56.588Z&#x27;),
-          y: 209.52231821447208
+          x: new Date(&#x27;2021-03-09T15:54:22.886Z&#x27;),
+          y: 89.90494866324106
         },
         {
-          x: new Date(&#x27;2021-03-10T14:59:56.588Z&#x27;),
-          y: 383.1496476183549
+          x: new Date(&#x27;2021-03-10T15:54:22.886Z&#x27;),
+          y: 329.6253487275518
         },
         {
-          x: new Date(&#x27;2021-03-11T14:59:56.588Z&#x27;),
-          y: 119.60521767286991
+          x: new Date(&#x27;2021-03-11T15:54:22.886Z&#x27;),
+          y: 479.1894228153009
         },
         {
-          x: new Date(&#x27;2021-03-12T14:59:56.588Z&#x27;),
-          y: 664.7512720182298
+          x: new Date(&#x27;2021-03-12T15:54:22.886Z&#x27;),
+          y: 173.05064318384655
         },
         {
-          x: new Date(&#x27;2021-03-13T14:59:56.588Z&#x27;),
-          y: 140.91176569081944
+          x: new Date(&#x27;2021-03-13T15:54:22.886Z&#x27;),
+          y: 510.15982985127994
         },
         {
-          x: new Date(&#x27;2021-03-14T14:59:56.588Z&#x27;),
-          y: 62.92195531574851
+          x: new Date(&#x27;2021-03-14T15:54:22.886Z&#x27;),
+          y: 399.31056319205595
         },
         {
-          x: new Date(&#x27;2021-03-15T14:59:56.588Z&#x27;),
-          y: 602.4444914378026
+          x: new Date(&#x27;2021-03-15T15:54:22.886Z&#x27;),
+          y: 319.336498797562
         },
         {
-          x: new Date(&#x27;2021-03-16T14:59:56.588Z&#x27;),
-          y: 943.499622712122
+          x: new Date(&#x27;2021-03-16T15:54:22.886Z&#x27;),
+          y: 381.8397923485415
         },
         {
-          x: new Date(&#x27;2021-03-17T14:59:56.588Z&#x27;),
-          y: 835.4736260686279
+          x: new Date(&#x27;2021-03-17T15:54:22.886Z&#x27;),
+          y: 351.5903251273118
         },
         {
-          x: new Date(&#x27;2021-03-18T14:59:56.588Z&#x27;),
-          y: 395.8647554970798
+          x: new Date(&#x27;2021-03-18T15:54:22.886Z&#x27;),
+          y: 304.2669846436139
         },
         {
-          x: new Date(&#x27;2021-03-19T14:59:56.588Z&#x27;),
-          y: 625.5135613447294
+          x: new Date(&#x27;2021-03-19T15:54:22.886Z&#x27;),
+          y: 989.1422888572665
         },
         {
-          x: new Date(&#x27;2021-03-20T14:59:56.588Z&#x27;),
-          y: 78.43814109613989
+          x: new Date(&#x27;2021-03-20T15:54:22.886Z&#x27;),
+          y: 489.30606880353577
         },
         {
-          x: new Date(&#x27;2021-03-21T14:59:56.588Z&#x27;),
-          y: 676.6418335265716
+          x: new Date(&#x27;2021-03-21T15:54:22.886Z&#x27;),
+          y: 855.1150982163367
         },
         {
-          x: new Date(&#x27;2021-03-22T14:59:56.588Z&#x27;),
-          y: 919.3040516606568
+          x: new Date(&#x27;2021-03-22T15:54:22.886Z&#x27;),
+          y: 319.57602053457725
         },
         {
-          x: new Date(&#x27;2021-03-23T14:59:56.588Z&#x27;),
-          y: 786.0220146094043
+          x: new Date(&#x27;2021-03-23T15:54:22.886Z&#x27;),
+          y: 450.0603930036464
         },
         {
-          x: new Date(&#x27;2021-03-24T14:59:56.588Z&#x27;),
-          y: 535.7324184952658
+          x: new Date(&#x27;2021-03-24T15:54:22.886Z&#x27;),
+          y: 51.62928800337107
         },
         {
-          x: new Date(&#x27;2021-03-25T14:59:56.588Z&#x27;),
-          y: 872.9986443726038
+          x: new Date(&#x27;2021-03-25T15:54:22.886Z&#x27;),
+          y: 684.5699331015387
         },
         {
-          x: new Date(&#x27;2021-03-26T14:59:56.588Z&#x27;),
-          y: 171.3574517183054
+          x: new Date(&#x27;2021-03-26T15:54:22.886Z&#x27;),
+          y: 406.30671849712496
         },
         {
-          x: new Date(&#x27;2021-03-27T14:59:56.588Z&#x27;),
-          y: 76.30370890930548
+          x: new Date(&#x27;2021-03-27T15:54:22.886Z&#x27;),
+          y: 758.9610840503533
         },
         {
-          x: new Date(&#x27;2021-03-28T13:59:56.588Z&#x27;),
-          y: 825.4095218592481
+          x: new Date(&#x27;2021-03-28T14:54:22.886Z&#x27;),
+          y: 265.53403292687494
         },
         {
-          x: new Date(&#x27;2021-03-29T13:59:56.588Z&#x27;),
-          y: 221.2582791156288
+          x: new Date(&#x27;2021-03-29T14:54:22.886Z&#x27;),
+          y: 854.6188303612583
         },
         {
-          x: new Date(&#x27;2021-03-30T13:59:56.588Z&#x27;),
-          y: 99.9479230889777
+          x: new Date(&#x27;2021-03-30T14:54:22.886Z&#x27;),
+          y: 547.956238247635
         },
         {
-          x: new Date(&#x27;2021-03-31T13:59:56.588Z&#x27;),
-          y: 215.44076040571713
+          x: new Date(&#x27;2021-03-31T14:54:22.886Z&#x27;),
+          y: 253.95251417231046
         },
         {
-          x: new Date(&#x27;2021-04-01T13:59:56.588Z&#x27;),
-          y: 622.5676172499559
+          x: new Date(&#x27;2021-04-01T14:54:22.886Z&#x27;),
+          y: 885.3965028773339
         },
         {
-          x: new Date(&#x27;2021-04-02T13:59:56.588Z&#x27;),
-          y: 637.0402627270646
+          x: new Date(&#x27;2021-04-02T14:54:22.886Z&#x27;),
+          y: 851.9528478856657
         },
         {
-          x: new Date(&#x27;2021-04-03T13:59:56.588Z&#x27;),
-          y: 120.1380652869739
+          x: new Date(&#x27;2021-04-03T14:54:22.886Z&#x27;),
+          y: 624.747115827159
         },
         {
-          x: new Date(&#x27;2021-04-04T13:59:56.588Z&#x27;),
-          y: 967.3635114180581
+          x: new Date(&#x27;2021-04-04T14:54:22.886Z&#x27;),
+          y: 472.8550002834957
         },
         {
-          x: new Date(&#x27;2021-04-05T13:59:56.588Z&#x27;),
-          y: 655.0377974427217
+          x: new Date(&#x27;2021-04-05T14:54:22.886Z&#x27;),
+          y: 904.7859913009002
         },
         {
-          x: new Date(&#x27;2021-04-06T13:59:56.588Z&#x27;),
-          y: 581.9498025506223
+          x: new Date(&#x27;2021-04-06T14:54:22.886Z&#x27;),
+          y: 822.3843929200679
         },
         {
-          x: new Date(&#x27;2021-04-07T13:59:56.588Z&#x27;),
-          y: 855.7151445895332
+          x: new Date(&#x27;2021-04-07T14:54:22.886Z&#x27;),
+          y: 979.5143380300689
         },
         {
-          x: new Date(&#x27;2021-04-08T13:59:56.588Z&#x27;),
-          y: 950.2868338883337
+          x: new Date(&#x27;2021-04-08T14:54:22.886Z&#x27;),
+          y: 767.2257331110526
         },
         {
-          x: new Date(&#x27;2021-04-09T13:59:56.588Z&#x27;),
-          y: 656.6515566366868
+          x: new Date(&#x27;2021-04-09T14:54:22.886Z&#x27;),
+          y: 171.87453309897927
         },
         {
-          x: new Date(&#x27;2021-04-10T13:59:56.588Z&#x27;),
-          y: 609.2832985568639
+          x: new Date(&#x27;2021-04-10T14:54:22.886Z&#x27;),
+          y: 902.1396680723806
         },
         {
-          x: new Date(&#x27;2021-04-11T13:59:56.588Z&#x27;),
-          y: 497.7263568603958
+          x: new Date(&#x27;2021-04-11T14:54:22.886Z&#x27;),
+          y: 952.5327975062437
         },
         {
-          x: new Date(&#x27;2021-04-12T13:59:56.588Z&#x27;),
-          y: 706.1429397849246
+          x: new Date(&#x27;2021-04-12T14:54:22.886Z&#x27;),
+          y: 839.955062686963
         },
         {
-          x: new Date(&#x27;2021-04-13T13:59:56.588Z&#x27;),
-          y: 829.6303897186303
+          x: new Date(&#x27;2021-04-13T14:54:22.886Z&#x27;),
+          y: 945.2051916862134
         },
         {
-          x: new Date(&#x27;2021-04-14T13:59:56.588Z&#x27;),
-          y: 649.4365664660324
+          x: new Date(&#x27;2021-04-14T14:54:22.886Z&#x27;),
+          y: 970.7511507377462
         },
         {
-          x: new Date(&#x27;2021-04-15T13:59:56.588Z&#x27;),
-          y: 679.3589441979235
+          x: new Date(&#x27;2021-04-15T14:54:22.886Z&#x27;),
+          y: 859.2531469254623
         },
         {
-          x: new Date(&#x27;2021-04-16T13:59:56.588Z&#x27;),
-          y: 136.5585519789334
+          x: new Date(&#x27;2021-04-16T14:54:22.886Z&#x27;),
+          y: 451.5083212995363
         },
         {
-          x: new Date(&#x27;2021-04-17T13:59:56.588Z&#x27;),
-          y: 639.1686409465236
+          x: new Date(&#x27;2021-04-17T14:54:22.886Z&#x27;),
+          y: 89.30584727730428
         },
         {
-          x: new Date(&#x27;2021-04-18T13:59:56.588Z&#x27;),
-          y: 777.6036589716995
+          x: new Date(&#x27;2021-04-18T14:54:22.886Z&#x27;),
+          y: 82.60481824816846
         },
         {
-          x: new Date(&#x27;2021-04-19T13:59:56.588Z&#x27;),
-          y: 203.24722711249942
+          x: new Date(&#x27;2021-04-19T14:54:22.886Z&#x27;),
+          y: 204.63087763999988
         },
         {
-          x: new Date(&#x27;2021-04-20T13:59:56.588Z&#x27;),
-          y: 544.5428455684247
+          x: new Date(&#x27;2021-04-20T14:54:22.886Z&#x27;),
+          y: 819.1933561785287
         },
         {
-          x: new Date(&#x27;2021-04-21T13:59:56.588Z&#x27;),
-          y: 934.006490025193
+          x: new Date(&#x27;2021-04-21T14:54:22.886Z&#x27;),
+          y: 777.369277009321
         },
         {
-          x: new Date(&#x27;2021-04-22T13:59:56.588Z&#x27;),
-          y: 140.4953336088315
+          x: new Date(&#x27;2021-04-22T14:54:22.886Z&#x27;),
+          y: 117.84160538422017
         },
         {
-          x: new Date(&#x27;2021-04-23T13:59:56.588Z&#x27;),
-          y: 113.79442447886801
+          x: new Date(&#x27;2021-04-23T14:54:22.886Z&#x27;),
+          y: 424.87927802720304
         },
         {
-          x: new Date(&#x27;2021-04-24T13:59:56.588Z&#x27;),
-          y: 546.097243719893
+          x: new Date(&#x27;2021-04-24T14:54:22.886Z&#x27;),
+          y: 175.4531106061752
         },
         {
-          x: new Date(&#x27;2021-04-25T13:59:56.588Z&#x27;),
-          y: 906.1103393800456
+          x: new Date(&#x27;2021-04-25T14:54:22.886Z&#x27;),
+          y: 732.7237109374936
         },
         {
-          x: new Date(&#x27;2021-04-26T13:59:56.588Z&#x27;),
-          y: 623.2122125533997
+          x: new Date(&#x27;2021-04-26T14:54:22.886Z&#x27;),
+          y: 883.8079521534481
         },
         {
-          x: new Date(&#x27;2021-04-27T13:59:56.588Z&#x27;),
-          y: 655.8097450162323
+          x: new Date(&#x27;2021-04-27T14:54:22.886Z&#x27;),
+          y: 910.1328482731834
         },
         {
-          x: new Date(&#x27;2021-04-28T13:59:56.588Z&#x27;),
-          y: 621.4857881138657
+          x: new Date(&#x27;2021-04-28T14:54:22.886Z&#x27;),
+          y: 947.7513991889388
         },
         {
-          x: new Date(&#x27;2021-04-29T13:59:56.588Z&#x27;),
-          y: 774.4082206719818
+          x: new Date(&#x27;2021-04-29T14:54:22.886Z&#x27;),
+          y: 620.9149978056314
         }
       ],
       label: &#x27;rob Allocation&#x27;,
@@ -465,4 +465,4 @@
   }}
   height={300}
   width={800}
-/&gt;</pre></div></div></div><div class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6"><div class="MuiPaper-root MuiCard-root MuiPaper-elevation1 MuiPaper-rounded"><div class="MuiCardContent-root"><div class="MuiTabs-root"><div class="MuiTabs-scroller MuiTabs-fixed" style="overflow:hidden"><div class="MuiTabs-flexContainer" role="tablist"><button class="MuiButtonBase-root MuiTab-root MuiTab-textColorInherit Mui-selected" tabindex="0" type="button" role="tab" aria-selected="true"><span class="MuiTab-wrapper">Data</span><span class="jss1 jss3 MuiTabs-indicator"></span></button><button class="MuiButtonBase-root MuiTab-root MuiTab-textColorInherit" tabindex="-1" type="button" role="tab" aria-selected="false"><span class="MuiTab-wrapper">Styling</span></button><button class="MuiButtonBase-root MuiTab-root MuiTab-textColorInherit" tabindex="-1" type="button" role="tab" aria-selected="false"><span class="MuiTab-wrapper">Grid</span></button></div></div></div><div class="MuiTypography-root MuiTypography-body1" style="padding:24px"><span tabindex="0" class="data-grid-container"><table class="data-grid my-awesome-extra-class"><thead><tr><th class="action-cell">x</th><th class="action-cell">y</th></tr></thead><tbody><tr><td class="cell"><span class="value-viewer">Wed Jan 20 2021</span></td><td class="cell"><span class="value-viewer">815.2369906962253</span></td></tr><tr><td class="cell"><span class="value-viewer">Thu Jan 21 2021</span></td><td class="cell"><span class="value-viewer">824.721004234984</span></td></tr><tr><td class="cell"><span class="value-viewer">Fri Jan 22 2021</span></td><td class="cell"><span class="value-viewer">681.2895154494771</span></td></tr><tr><td class="cell"><span class="value-viewer">Sat Jan 23 2021</span></td><td class="cell"><span class="value-viewer">103.81190844648414</span></td></tr><tr><td class="cell"><span class="value-viewer">Sun Jan 24 2021</span></td><td class="cell"><span class="value-viewer">357.6708954853713</span></td></tr><tr><td class="cell"><span class="value-viewer">Mon Jan 25 2021</span></td><td class="cell"><span class="value-viewer">988.9402073608052</span></td></tr><tr><td class="cell"><span class="value-viewer">Tue Jan 26 2021</span></td><td class="cell"><span class="value-viewer">373.93295439184857</span></td></tr><tr><td class="cell"><span class="value-viewer">Wed Jan 27 2021</span></td><td class="cell"><span class="value-viewer">571.7096555945295</span></td></tr><tr><td class="cell"><span class="value-viewer">Thu Jan 28 2021</span></td><td class="cell"><span class="value-viewer">340.7291895052853</span></td></tr><tr><td class="cell"><span class="value-viewer">Fri Jan 29 2021</span></td><td class="cell"><span class="value-viewer">558.9079011504294</span></td></tr><tr><td class="cell"><span class="value-viewer">Sat Jan 30 2021</span></td><td class="cell"><span class="value-viewer">299.1147733922952</span></td></tr><tr><td class="cell"><span class="value-viewer">Sun Jan 31 2021</span></td><td class="cell"><span class="value-viewer">243.42989821040507</span></td></tr><tr><td class="cell"><span class="value-viewer">Mon Feb 01 2021</span></td><td class="cell"><span class="value-viewer">92.20461796419555</span></td></tr><tr><td class="cell"><span class="value-viewer">Tue Feb 02 2021</span></td><td class="cell"><span class="value-viewer">120.17932118003016</span></td></tr><tr><td class="cell"><span class="value-viewer">Wed Feb 03 2021</span></td><td class="cell"><span class="value-viewer">767.4995423957936</span></td></tr><tr><td class="cell"><span class="value-viewer">Thu Feb 04 2021</span></td><td class="cell"><span class="value-viewer">350.6198541665497</span></td></tr><tr><td class="cell"><span class="value-viewer">Fri Feb 05 2021</span></td><td class="cell"><span class="value-viewer">941.9377355852314</span></td></tr><tr><td class="cell"><span class="value-viewer">Sat Feb 06 2021</span></td><td class="cell"><span class="value-viewer">867.3307257301664</span></td></tr><tr><td class="cell"><span class="value-viewer">Sun Feb 07 2021</span></td><td class="cell"><span class="value-viewer">893.5857768695428</span></td></tr><tr><td class="cell"><span class="value-viewer">Mon Feb 08 2021</span></td><td class="cell"><span class="value-viewer">867.8482644613432</span></td></tr><tr><td class="cell"><span class="value-viewer">Tue Feb 09 2021</span></td><td class="cell"><span class="value-viewer">223.97446806869746</span></td></tr><tr><td class="cell"><span class="value-viewer">Wed Feb 10 2021</span></td><td class="cell"><span class="value-viewer">165.96314916721067</span></td></tr><tr><td class="cell"><span class="value-viewer">Thu Feb 11 2021</span></td><td class="cell"><span class="value-viewer">776.2810986327627</span></td></tr><tr><td class="cell"><span class="value-viewer">Fri Feb 12 2021</span></td><td class="cell"><span class="value-viewer">229.7075791443588</span></td></tr><tr><td class="cell"><span class="value-viewer">Sat Feb 13 2021</span></td><td class="cell"><span class="value-viewer">498.90047487094466</span></td></tr><tr><td class="cell"><span class="value-viewer">Sun Feb 14 2021</span></td><td class="cell"><span class="value-viewer">246.68913817512083</span></td></tr><tr><td class="cell"><span class="value-viewer">Mon Feb 15 2021</span></td><td class="cell"><span class="value-viewer">635.3890757164779</span></td></tr><tr><td class="cell"><span class="value-viewer">Tue Feb 16 2021</span></td><td class="cell"><span class="value-viewer">490.5010313357827</span></td></tr><tr><td class="cell"><span class="value-viewer">Wed Feb 17 2021</span></td><td class="cell"><span class="value-viewer">306.79924120278645</span></td></tr><tr><td class="cell"><span class="value-viewer">Thu Feb 18 2021</span></td><td class="cell"><span class="value-viewer">177.148237014217</span></td></tr><tr><td class="cell"><span class="value-viewer">Fri Feb 19 2021</span></td><td class="cell"><span class="value-viewer">151.2368048510555</span></td></tr><tr><td class="cell"><span class="value-viewer">Sat Feb 20 2021</span></td><td class="cell"><span class="value-viewer">431.59477672106664</span></td></tr><tr><td class="cell"><span class="value-viewer">Sun Feb 21 2021</span></td><td class="cell"><span class="value-viewer">707.2993506922085</span></td></tr><tr><td class="cell"><span class="value-viewer">Mon Feb 22 2021</span></td><td class="cell"><span class="value-viewer">843.7650219675465</span></td></tr><tr><td class="cell"><span class="value-viewer">Tue Feb 23 2021</span></td><td class="cell"><span class="value-viewer">750.2683014623564</span></td></tr><tr><td class="cell"><span class="value-viewer">Wed Feb 24 2021</span></td><td class="cell"><span class="value-viewer">157.09676600473443</span></td></tr><tr><td class="cell"><span class="value-viewer">Thu Feb 25 2021</span></td><td class="cell"><span class="value-viewer">440.07379960056926</span></td></tr><tr><td class="cell"><span class="value-viewer">Fri Feb 26 2021</span></td><td class="cell"><span class="value-viewer">818.0276797897652</span></td></tr><tr><td class="cell"><span class="value-viewer">Sat Feb 27 2021</span></td><td class="cell"><span class="value-viewer">81.61958547085813</span></td></tr><tr><td class="cell"><span class="value-viewer">Sun Feb 28 2021</span></td><td class="cell"><span class="value-viewer">410.76167517265014</span></td></tr><tr><td class="cell"><span class="value-viewer">Mon Mar 01 2021</span></td><td class="cell"><span class="value-viewer">938.314623184779</span></td></tr><tr><td class="cell"><span class="value-viewer">Tue Mar 02 2021</span></td><td class="cell"><span class="value-viewer">210.34141480491297</span></td></tr><tr><td class="cell"><span class="value-viewer">Wed Mar 03 2021</span></td><td class="cell"><span class="value-viewer">425.9303402580763</span></td></tr><tr><td class="cell"><span class="value-viewer">Thu Mar 04 2021</span></td><td class="cell"><span class="value-viewer">377.21863028195935</span></td></tr><tr><td class="cell"><span class="value-viewer">Fri Mar 05 2021</span></td><td class="cell"><span class="value-viewer">774.8832459439709</span></td></tr><tr><td class="cell"><span class="value-viewer">Sat Mar 06 2021</span></td><td class="cell"><span class="value-viewer">93.98719610181972</span></td></tr><tr><td class="cell"><span class="value-viewer">Sun Mar 07 2021</span></td><td class="cell"><span class="value-viewer">783.8211166560704</span></td></tr><tr><td class="cell"><span class="value-viewer">Mon Mar 08 2021</span></td><td class="cell"><span class="value-viewer">395.66263087413023</span></td></tr><tr><td class="cell"><span class="value-viewer">Tue Mar 09 2021</span></td><td class="cell"><span class="value-viewer">209.52231821447208</span></td></tr><tr><td class="cell"><span class="value-viewer">Wed Mar 10 2021</span></td><td class="cell"><span class="value-viewer">383.1496476183549</span></td></tr><tr><td class="cell"><span class="value-viewer">Thu Mar 11 2021</span></td><td class="cell"><span class="value-viewer">119.60521767286991</span></td></tr><tr><td class="cell"><span class="value-viewer">Fri Mar 12 2021</span></td><td class="cell"><span class="value-viewer">664.7512720182298</span></td></tr><tr><td class="cell"><span class="value-viewer">Sat Mar 13 2021</span></td><td class="cell"><span class="value-viewer">140.91176569081944</span></td></tr><tr><td class="cell"><span class="value-viewer">Sun Mar 14 2021</span></td><td class="cell"><span class="value-viewer">62.92195531574851</span></td></tr><tr><td class="cell"><span class="value-viewer">Mon Mar 15 2021</span></td><td class="cell"><span class="value-viewer">602.4444914378026</span></td></tr><tr><td class="cell"><span class="value-viewer">Tue Mar 16 2021</span></td><td class="cell"><span class="value-viewer">943.499622712122</span></td></tr><tr><td class="cell"><span class="value-viewer">Wed Mar 17 2021</span></td><td class="cell"><span class="value-viewer">835.4736260686279</span></td></tr><tr><td class="cell"><span class="value-viewer">Thu Mar 18 2021</span></td><td class="cell"><span class="value-viewer">395.8647554970798</span></td></tr><tr><td class="cell"><span class="value-viewer">Fri Mar 19 2021</span></td><td class="cell"><span class="value-viewer">625.5135613447294</span></td></tr><tr><td class="cell"><span class="value-viewer">Sat Mar 20 2021</span></td><td class="cell"><span class="value-viewer">78.43814109613989</span></td></tr><tr><td class="cell"><span class="value-viewer">Sun Mar 21 2021</span></td><td class="cell"><span class="value-viewer">676.6418335265716</span></td></tr><tr><td class="cell"><span class="value-viewer">Mon Mar 22 2021</span></td><td class="cell"><span class="value-viewer">919.3040516606568</span></td></tr><tr><td class="cell"><span class="value-viewer">Tue Mar 23 2021</span></td><td class="cell"><span class="value-viewer">786.0220146094043</span></td></tr><tr><td class="cell"><span class="value-viewer">Wed Mar 24 2021</span></td><td class="cell"><span class="value-viewer">535.7324184952658</span></td></tr><tr><td class="cell"><span class="value-viewer">Thu Mar 25 2021</span></td><td class="cell"><span class="value-viewer">872.9986443726038</span></td></tr><tr><td class="cell"><span class="value-viewer">Fri Mar 26 2021</span></td><td class="cell"><span class="value-viewer">171.3574517183054</span></td></tr><tr><td class="cell"><span class="value-viewer">Sat Mar 27 2021</span></td><td class="cell"><span class="value-viewer">76.30370890930548</span></td></tr><tr><td class="cell"><span class="value-viewer">Sun Mar 28 2021</span></td><td class="cell"><span class="value-viewer">825.4095218592481</span></td></tr><tr><td class="cell"><span class="value-viewer">Mon Mar 29 2021</span></td><td class="cell"><span class="value-viewer">221.2582791156288</span></td></tr><tr><td class="cell"><span class="value-viewer">Tue Mar 30 2021</span></td><td class="cell"><span class="value-viewer">99.9479230889777</span></td></tr><tr><td class="cell"><span class="value-viewer">Wed Mar 31 2021</span></td><td class="cell"><span class="value-viewer">215.44076040571713</span></td></tr><tr><td class="cell"><span class="value-viewer">Thu Apr 01 2021</span></td><td class="cell"><span class="value-viewer">622.5676172499559</span></td></tr><tr><td class="cell"><span class="value-viewer">Fri Apr 02 2021</span></td><td class="cell"><span class="value-viewer">637.0402627270646</span></td></tr><tr><td class="cell"><span class="value-viewer">Sat Apr 03 2021</span></td><td class="cell"><span class="value-viewer">120.1380652869739</span></td></tr><tr><td class="cell"><span class="value-viewer">Sun Apr 04 2021</span></td><td class="cell"><span class="value-viewer">967.3635114180581</span></td></tr><tr><td class="cell"><span class="value-viewer">Mon Apr 05 2021</span></td><td class="cell"><span class="value-viewer">655.0377974427217</span></td></tr><tr><td class="cell"><span class="value-viewer">Tue Apr 06 2021</span></td><td class="cell"><span class="value-viewer">581.9498025506223</span></td></tr><tr><td class="cell"><span class="value-viewer">Wed Apr 07 2021</span></td><td class="cell"><span class="value-viewer">855.7151445895332</span></td></tr><tr><td class="cell"><span class="value-viewer">Thu Apr 08 2021</span></td><td class="cell"><span class="value-viewer">950.2868338883337</span></td></tr><tr><td class="cell"><span class="value-viewer">Fri Apr 09 2021</span></td><td class="cell"><span class="value-viewer">656.6515566366868</span></td></tr><tr><td class="cell"><span class="value-viewer">Sat Apr 10 2021</span></td><td class="cell"><span class="value-viewer">609.2832985568639</span></td></tr><tr><td class="cell"><span class="value-viewer">Sun Apr 11 2021</span></td><td class="cell"><span class="value-viewer">497.7263568603958</span></td></tr><tr><td class="cell"><span class="value-viewer">Mon Apr 12 2021</span></td><td class="cell"><span class="value-viewer">706.1429397849246</span></td></tr><tr><td class="cell"><span class="value-viewer">Tue Apr 13 2021</span></td><td class="cell"><span class="value-viewer">829.6303897186303</span></td></tr><tr><td class="cell"><span class="value-viewer">Wed Apr 14 2021</span></td><td class="cell"><span class="value-viewer">649.4365664660324</span></td></tr><tr><td class="cell"><span class="value-viewer">Thu Apr 15 2021</span></td><td class="cell"><span class="value-viewer">679.3589441979235</span></td></tr><tr><td class="cell"><span class="value-viewer">Fri Apr 16 2021</span></td><td class="cell"><span class="value-viewer">136.5585519789334</span></td></tr><tr><td class="cell"><span class="value-viewer">Sat Apr 17 2021</span></td><td class="cell"><span class="value-viewer">639.1686409465236</span></td></tr><tr><td class="cell"><span class="value-viewer">Sun Apr 18 2021</span></td><td class="cell"><span class="value-viewer">777.6036589716995</span></td></tr><tr><td class="cell"><span class="value-viewer">Mon Apr 19 2021</span></td><td class="cell"><span class="value-viewer">203.24722711249942</span></td></tr><tr><td class="cell"><span class="value-viewer">Tue Apr 20 2021</span></td><td class="cell"><span class="value-viewer">544.5428455684247</span></td></tr><tr><td class="cell"><span class="value-viewer">Wed Apr 21 2021</span></td><td class="cell"><span class="value-viewer">934.006490025193</span></td></tr><tr><td class="cell"><span class="value-viewer">Thu Apr 22 2021</span></td><td class="cell"><span class="value-viewer">140.4953336088315</span></td></tr><tr><td class="cell"><span class="value-viewer">Fri Apr 23 2021</span></td><td class="cell"><span class="value-viewer">113.79442447886801</span></td></tr><tr><td class="cell"><span class="value-viewer">Sat Apr 24 2021</span></td><td class="cell"><span class="value-viewer">546.097243719893</span></td></tr><tr><td class="cell"><span class="value-viewer">Sun Apr 25 2021</span></td><td class="cell"><span class="value-viewer">906.1103393800456</span></td></tr><tr><td class="cell"><span class="value-viewer">Mon Apr 26 2021</span></td><td class="cell"><span class="value-viewer">623.2122125533997</span></td></tr><tr><td class="cell"><span class="value-viewer">Tue Apr 27 2021</span></td><td class="cell"><span class="value-viewer">655.8097450162323</span></td></tr><tr><td class="cell"><span class="value-viewer">Wed Apr 28 2021</span></td><td class="cell"><span class="value-viewer">621.4857881138657</span></td></tr><tr><td class="cell"><span class="value-viewer">Thu Apr 29 2021</span></td><td class="cell"><span class="value-viewer">774.4082206719818</span></td></tr></tbody></table></span><button class="MuiButtonBase-root MuiButton-root MuiButton-text" tabindex="0" type="button"><span class="MuiButton-label">Toggle Row</span></button><div class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6"><div class="MuiFormControl-root MuiTextField-root"><label class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated" data-shrink="false">Y Axis Scale</label><div class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-formControl MuiInput-formControl"><div class="MuiSelect-root MuiSelect-select MuiSelect-selectMenu MuiInputBase-input MuiInput-input" tabindex="0" role="button" aria-haspopup="listbox"><span>&#8203;</span></div><input aria-hidden="true" tabindex="-1" class="MuiSelect-nativeInput"/><svg class="MuiSvgIcon-root MuiSelect-icon" focusable="false" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 10l5 5 5-5z"></path></svg></div></div></div></div></div></div></div></div></div></main></div><footer>© <!-- -->2021<!-- -->, Built by<!-- --> <a href="https://www.infosum.com">InfoSum</a></footer></div><div id="gatsby-announcer" style="position:absolute;top:0;width:1px;height:1px;padding:0;overflow:hidden;clip:rect(0, 0, 0, 0);white-space:nowrap;border:0" aria-live="assertive" aria-atomic="true"></div></div><script id="gatsby-script-loader">/*<![CDATA[*/window.pagePath="/line/";/*]]>*/</script><script id="gatsby-chunk-mapping">/*<![CDATA[*/window.___chunkMapping={"polyfill":["/polyfill-b295808f5d5f072a60a3.js"],"app":["/app-b25a84ae6d09d3a46cb2.js"],"component---src-pages-404-js":["/component---src-pages-404-js-527d70e9ad1a78542386.js"],"component---src-pages-brush-tsx":["/component---src-pages-brush-tsx-a44029a0dafcad3af2b8.js"],"component---src-pages-chord-tsx":["/component---src-pages-chord-tsx-c7e9f439b0eb35f1ec9a.js"],"component---src-pages-histogram-tsx":["/component---src-pages-histogram-tsx-2b267f0a5ffb8452bf59.js"],"component---src-pages-index-tsx":["/component---src-pages-index-tsx-c1f924177cb3a6727878.js"],"component---src-pages-joyplot-tsx":["/component---src-pages-joyplot-tsx-059312e2c08f8e80d2a6.js"],"component---src-pages-line-tsx":["/component---src-pages-line-tsx-6844ef901ffb907bc017.js"],"component---src-pages-map-tsx":["/component---src-pages-map-tsx-ce1c2f08d169c4d11058.js"],"component---src-pages-pie-tsx":["/component---src-pages-pie-tsx-74d216a25e8b32f5cc29.js"],"component---src-pages-tornado-tsx":["/component---src-pages-tornado-tsx-d6f85fee2c489c82d199.js"],"component---src-pages-upset-tsx":["/component---src-pages-upset-tsx-68994f59cd7618175fca.js"]};/*]]>*/</script><script src="/cl-react-graph/polyfill-b295808f5d5f072a60a3.js" nomodule=""></script><script src="/cl-react-graph/component---src-pages-line-tsx-6844ef901ffb907bc017.js" async=""></script><script src="/cl-react-graph/4709a03248156ba2ea5942a00ad13417d5eb3e62-e4d380441db0033de3e3.js" async=""></script><script src="/cl-react-graph/a88fac06d1f44d5f8da251460513aee811a9b9c2-a2da311c8a6290fdabcf.js" async=""></script><script src="/cl-react-graph/71d6acb6f502235e55caee1c977644ee9804b11f-c56353b05400f72fc613.js" async=""></script><script src="/cl-react-graph/9aae87d98cb6afcce6c5af48dbc5bd3db492a710-2549e68eed14aced8070.js" async=""></script><script src="/cl-react-graph/17c018643475e7f3de028b545693df6ac0992596-3b0c09ce9682ebe1d5f8.js" async=""></script><script src="/cl-react-graph/commons-becd17edd8e2e7942f03.js" async=""></script><script src="/cl-react-graph/styles-e9d24b1846c7d6eb9685.js" async=""></script><script src="/cl-react-graph/app-b25a84ae6d09d3a46cb2.js" async=""></script><script src="/cl-react-graph/framework-72b1aff9075a5b04c3c5.js" async=""></script><script src="/cl-react-graph/webpack-runtime-7de7f2d4f70d9410be85.js" async=""></script></body></html>
+/&gt;</pre></div></div></div><div class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6"><div class="MuiPaper-root MuiCard-root MuiPaper-elevation1 MuiPaper-rounded"><div class="MuiCardContent-root"><div class="MuiTabs-root"><div class="MuiTabs-scroller MuiTabs-fixed" style="overflow:hidden"><div class="MuiTabs-flexContainer" role="tablist"><button class="MuiButtonBase-root MuiTab-root MuiTab-textColorInherit Mui-selected" tabindex="0" type="button" role="tab" aria-selected="true"><span class="MuiTab-wrapper">Data</span><span class="jss1 jss3 MuiTabs-indicator"></span></button><button class="MuiButtonBase-root MuiTab-root MuiTab-textColorInherit" tabindex="-1" type="button" role="tab" aria-selected="false"><span class="MuiTab-wrapper">Styling</span></button><button class="MuiButtonBase-root MuiTab-root MuiTab-textColorInherit" tabindex="-1" type="button" role="tab" aria-selected="false"><span class="MuiTab-wrapper">Grid</span></button></div></div></div><div class="MuiTypography-root MuiTypography-body1" style="padding:24px"><span tabindex="0" class="data-grid-container"><table class="data-grid my-awesome-extra-class"><thead><tr><th class="action-cell">x</th><th class="action-cell">y</th></tr></thead><tbody><tr><td class="cell"><span class="value-viewer">Wed Jan 20 2021</span></td><td class="cell"><span class="value-viewer">286.19151693446975</span></td></tr><tr><td class="cell"><span class="value-viewer">Thu Jan 21 2021</span></td><td class="cell"><span class="value-viewer">998.1180154763538</span></td></tr><tr><td class="cell"><span class="value-viewer">Fri Jan 22 2021</span></td><td class="cell"><span class="value-viewer">229.2203364941454</span></td></tr><tr><td class="cell"><span class="value-viewer">Sat Jan 23 2021</span></td><td class="cell"><span class="value-viewer">735.7805340852293</span></td></tr><tr><td class="cell"><span class="value-viewer">Sun Jan 24 2021</span></td><td class="cell"><span class="value-viewer">490.9764506206875</span></td></tr><tr><td class="cell"><span class="value-viewer">Mon Jan 25 2021</span></td><td class="cell"><span class="value-viewer">366.6321766636913</span></td></tr><tr><td class="cell"><span class="value-viewer">Tue Jan 26 2021</span></td><td class="cell"><span class="value-viewer">668.8073330403765</span></td></tr><tr><td class="cell"><span class="value-viewer">Wed Jan 27 2021</span></td><td class="cell"><span class="value-viewer">856.7322705636908</span></td></tr><tr><td class="cell"><span class="value-viewer">Thu Jan 28 2021</span></td><td class="cell"><span class="value-viewer">479.8553039796569</span></td></tr><tr><td class="cell"><span class="value-viewer">Fri Jan 29 2021</span></td><td class="cell"><span class="value-viewer">326.39478987364214</span></td></tr><tr><td class="cell"><span class="value-viewer">Sat Jan 30 2021</span></td><td class="cell"><span class="value-viewer">3.6928847753692207</span></td></tr><tr><td class="cell"><span class="value-viewer">Sun Jan 31 2021</span></td><td class="cell"><span class="value-viewer">0.7702500130097878</span></td></tr><tr><td class="cell"><span class="value-viewer">Mon Feb 01 2021</span></td><td class="cell"><span class="value-viewer">522.0088387761848</span></td></tr><tr><td class="cell"><span class="value-viewer">Tue Feb 02 2021</span></td><td class="cell"><span class="value-viewer">936.0857504420293</span></td></tr><tr><td class="cell"><span class="value-viewer">Wed Feb 03 2021</span></td><td class="cell"><span class="value-viewer">657.9894732872544</span></td></tr><tr><td class="cell"><span class="value-viewer">Thu Feb 04 2021</span></td><td class="cell"><span class="value-viewer">960.4705209856799</span></td></tr><tr><td class="cell"><span class="value-viewer">Fri Feb 05 2021</span></td><td class="cell"><span class="value-viewer">995.1735303384717</span></td></tr><tr><td class="cell"><span class="value-viewer">Sat Feb 06 2021</span></td><td class="cell"><span class="value-viewer">31.83221957619886</span></td></tr><tr><td class="cell"><span class="value-viewer">Sun Feb 07 2021</span></td><td class="cell"><span class="value-viewer">34.34133445163767</span></td></tr><tr><td class="cell"><span class="value-viewer">Mon Feb 08 2021</span></td><td class="cell"><span class="value-viewer">361.2024023231952</span></td></tr><tr><td class="cell"><span class="value-viewer">Tue Feb 09 2021</span></td><td class="cell"><span class="value-viewer">115.31523299381941</span></td></tr><tr><td class="cell"><span class="value-viewer">Wed Feb 10 2021</span></td><td class="cell"><span class="value-viewer">96.22554169722531</span></td></tr><tr><td class="cell"><span class="value-viewer">Thu Feb 11 2021</span></td><td class="cell"><span class="value-viewer">750.156017568395</span></td></tr><tr><td class="cell"><span class="value-viewer">Fri Feb 12 2021</span></td><td class="cell"><span class="value-viewer">858.3469405217083</span></td></tr><tr><td class="cell"><span class="value-viewer">Sat Feb 13 2021</span></td><td class="cell"><span class="value-viewer">136.773731888852</span></td></tr><tr><td class="cell"><span class="value-viewer">Sun Feb 14 2021</span></td><td class="cell"><span class="value-viewer">932.0522649900058</span></td></tr><tr><td class="cell"><span class="value-viewer">Mon Feb 15 2021</span></td><td class="cell"><span class="value-viewer">455.65041584728647</span></td></tr><tr><td class="cell"><span class="value-viewer">Tue Feb 16 2021</span></td><td class="cell"><span class="value-viewer">848.9519671636348</span></td></tr><tr><td class="cell"><span class="value-viewer">Wed Feb 17 2021</span></td><td class="cell"><span class="value-viewer">332.42737916731915</span></td></tr><tr><td class="cell"><span class="value-viewer">Thu Feb 18 2021</span></td><td class="cell"><span class="value-viewer">891.7447812932236</span></td></tr><tr><td class="cell"><span class="value-viewer">Fri Feb 19 2021</span></td><td class="cell"><span class="value-viewer">992.7175414967675</span></td></tr><tr><td class="cell"><span class="value-viewer">Sat Feb 20 2021</span></td><td class="cell"><span class="value-viewer">738.8742749118225</span></td></tr><tr><td class="cell"><span class="value-viewer">Sun Feb 21 2021</span></td><td class="cell"><span class="value-viewer">600.2155368405068</span></td></tr><tr><td class="cell"><span class="value-viewer">Mon Feb 22 2021</span></td><td class="cell"><span class="value-viewer">693.7380531338113</span></td></tr><tr><td class="cell"><span class="value-viewer">Tue Feb 23 2021</span></td><td class="cell"><span class="value-viewer">776.9710937735641</span></td></tr><tr><td class="cell"><span class="value-viewer">Wed Feb 24 2021</span></td><td class="cell"><span class="value-viewer">646.6997652048921</span></td></tr><tr><td class="cell"><span class="value-viewer">Thu Feb 25 2021</span></td><td class="cell"><span class="value-viewer">127.20194644124217</span></td></tr><tr><td class="cell"><span class="value-viewer">Fri Feb 26 2021</span></td><td class="cell"><span class="value-viewer">779.2723487954527</span></td></tr><tr><td class="cell"><span class="value-viewer">Sat Feb 27 2021</span></td><td class="cell"><span class="value-viewer">831.0070276833815</span></td></tr><tr><td class="cell"><span class="value-viewer">Sun Feb 28 2021</span></td><td class="cell"><span class="value-viewer">56.237234572314996</span></td></tr><tr><td class="cell"><span class="value-viewer">Mon Mar 01 2021</span></td><td class="cell"><span class="value-viewer">283.5468735131177</span></td></tr><tr><td class="cell"><span class="value-viewer">Tue Mar 02 2021</span></td><td class="cell"><span class="value-viewer">57.86124255390401</span></td></tr><tr><td class="cell"><span class="value-viewer">Wed Mar 03 2021</span></td><td class="cell"><span class="value-viewer">892.9874462838387</span></td></tr><tr><td class="cell"><span class="value-viewer">Thu Mar 04 2021</span></td><td class="cell"><span class="value-viewer">931.7808173880791</span></td></tr><tr><td class="cell"><span class="value-viewer">Fri Mar 05 2021</span></td><td class="cell"><span class="value-viewer">440.20074356211956</span></td></tr><tr><td class="cell"><span class="value-viewer">Sat Mar 06 2021</span></td><td class="cell"><span class="value-viewer">184.85745108649064</span></td></tr><tr><td class="cell"><span class="value-viewer">Sun Mar 07 2021</span></td><td class="cell"><span class="value-viewer">863.6632575563212</span></td></tr><tr><td class="cell"><span class="value-viewer">Mon Mar 08 2021</span></td><td class="cell"><span class="value-viewer">582.9737668216645</span></td></tr><tr><td class="cell"><span class="value-viewer">Tue Mar 09 2021</span></td><td class="cell"><span class="value-viewer">89.90494866324106</span></td></tr><tr><td class="cell"><span class="value-viewer">Wed Mar 10 2021</span></td><td class="cell"><span class="value-viewer">329.6253487275518</span></td></tr><tr><td class="cell"><span class="value-viewer">Thu Mar 11 2021</span></td><td class="cell"><span class="value-viewer">479.1894228153009</span></td></tr><tr><td class="cell"><span class="value-viewer">Fri Mar 12 2021</span></td><td class="cell"><span class="value-viewer">173.05064318384655</span></td></tr><tr><td class="cell"><span class="value-viewer">Sat Mar 13 2021</span></td><td class="cell"><span class="value-viewer">510.15982985127994</span></td></tr><tr><td class="cell"><span class="value-viewer">Sun Mar 14 2021</span></td><td class="cell"><span class="value-viewer">399.31056319205595</span></td></tr><tr><td class="cell"><span class="value-viewer">Mon Mar 15 2021</span></td><td class="cell"><span class="value-viewer">319.336498797562</span></td></tr><tr><td class="cell"><span class="value-viewer">Tue Mar 16 2021</span></td><td class="cell"><span class="value-viewer">381.8397923485415</span></td></tr><tr><td class="cell"><span class="value-viewer">Wed Mar 17 2021</span></td><td class="cell"><span class="value-viewer">351.5903251273118</span></td></tr><tr><td class="cell"><span class="value-viewer">Thu Mar 18 2021</span></td><td class="cell"><span class="value-viewer">304.2669846436139</span></td></tr><tr><td class="cell"><span class="value-viewer">Fri Mar 19 2021</span></td><td class="cell"><span class="value-viewer">989.1422888572665</span></td></tr><tr><td class="cell"><span class="value-viewer">Sat Mar 20 2021</span></td><td class="cell"><span class="value-viewer">489.30606880353577</span></td></tr><tr><td class="cell"><span class="value-viewer">Sun Mar 21 2021</span></td><td class="cell"><span class="value-viewer">855.1150982163367</span></td></tr><tr><td class="cell"><span class="value-viewer">Mon Mar 22 2021</span></td><td class="cell"><span class="value-viewer">319.57602053457725</span></td></tr><tr><td class="cell"><span class="value-viewer">Tue Mar 23 2021</span></td><td class="cell"><span class="value-viewer">450.0603930036464</span></td></tr><tr><td class="cell"><span class="value-viewer">Wed Mar 24 2021</span></td><td class="cell"><span class="value-viewer">51.62928800337107</span></td></tr><tr><td class="cell"><span class="value-viewer">Thu Mar 25 2021</span></td><td class="cell"><span class="value-viewer">684.5699331015387</span></td></tr><tr><td class="cell"><span class="value-viewer">Fri Mar 26 2021</span></td><td class="cell"><span class="value-viewer">406.30671849712496</span></td></tr><tr><td class="cell"><span class="value-viewer">Sat Mar 27 2021</span></td><td class="cell"><span class="value-viewer">758.9610840503533</span></td></tr><tr><td class="cell"><span class="value-viewer">Sun Mar 28 2021</span></td><td class="cell"><span class="value-viewer">265.53403292687494</span></td></tr><tr><td class="cell"><span class="value-viewer">Mon Mar 29 2021</span></td><td class="cell"><span class="value-viewer">854.6188303612583</span></td></tr><tr><td class="cell"><span class="value-viewer">Tue Mar 30 2021</span></td><td class="cell"><span class="value-viewer">547.956238247635</span></td></tr><tr><td class="cell"><span class="value-viewer">Wed Mar 31 2021</span></td><td class="cell"><span class="value-viewer">253.95251417231046</span></td></tr><tr><td class="cell"><span class="value-viewer">Thu Apr 01 2021</span></td><td class="cell"><span class="value-viewer">885.3965028773339</span></td></tr><tr><td class="cell"><span class="value-viewer">Fri Apr 02 2021</span></td><td class="cell"><span class="value-viewer">851.9528478856657</span></td></tr><tr><td class="cell"><span class="value-viewer">Sat Apr 03 2021</span></td><td class="cell"><span class="value-viewer">624.747115827159</span></td></tr><tr><td class="cell"><span class="value-viewer">Sun Apr 04 2021</span></td><td class="cell"><span class="value-viewer">472.8550002834957</span></td></tr><tr><td class="cell"><span class="value-viewer">Mon Apr 05 2021</span></td><td class="cell"><span class="value-viewer">904.7859913009002</span></td></tr><tr><td class="cell"><span class="value-viewer">Tue Apr 06 2021</span></td><td class="cell"><span class="value-viewer">822.3843929200679</span></td></tr><tr><td class="cell"><span class="value-viewer">Wed Apr 07 2021</span></td><td class="cell"><span class="value-viewer">979.5143380300689</span></td></tr><tr><td class="cell"><span class="value-viewer">Thu Apr 08 2021</span></td><td class="cell"><span class="value-viewer">767.2257331110526</span></td></tr><tr><td class="cell"><span class="value-viewer">Fri Apr 09 2021</span></td><td class="cell"><span class="value-viewer">171.87453309897927</span></td></tr><tr><td class="cell"><span class="value-viewer">Sat Apr 10 2021</span></td><td class="cell"><span class="value-viewer">902.1396680723806</span></td></tr><tr><td class="cell"><span class="value-viewer">Sun Apr 11 2021</span></td><td class="cell"><span class="value-viewer">952.5327975062437</span></td></tr><tr><td class="cell"><span class="value-viewer">Mon Apr 12 2021</span></td><td class="cell"><span class="value-viewer">839.955062686963</span></td></tr><tr><td class="cell"><span class="value-viewer">Tue Apr 13 2021</span></td><td class="cell"><span class="value-viewer">945.2051916862134</span></td></tr><tr><td class="cell"><span class="value-viewer">Wed Apr 14 2021</span></td><td class="cell"><span class="value-viewer">970.7511507377462</span></td></tr><tr><td class="cell"><span class="value-viewer">Thu Apr 15 2021</span></td><td class="cell"><span class="value-viewer">859.2531469254623</span></td></tr><tr><td class="cell"><span class="value-viewer">Fri Apr 16 2021</span></td><td class="cell"><span class="value-viewer">451.5083212995363</span></td></tr><tr><td class="cell"><span class="value-viewer">Sat Apr 17 2021</span></td><td class="cell"><span class="value-viewer">89.30584727730428</span></td></tr><tr><td class="cell"><span class="value-viewer">Sun Apr 18 2021</span></td><td class="cell"><span class="value-viewer">82.60481824816846</span></td></tr><tr><td class="cell"><span class="value-viewer">Mon Apr 19 2021</span></td><td class="cell"><span class="value-viewer">204.63087763999988</span></td></tr><tr><td class="cell"><span class="value-viewer">Tue Apr 20 2021</span></td><td class="cell"><span class="value-viewer">819.1933561785287</span></td></tr><tr><td class="cell"><span class="value-viewer">Wed Apr 21 2021</span></td><td class="cell"><span class="value-viewer">777.369277009321</span></td></tr><tr><td class="cell"><span class="value-viewer">Thu Apr 22 2021</span></td><td class="cell"><span class="value-viewer">117.84160538422017</span></td></tr><tr><td class="cell"><span class="value-viewer">Fri Apr 23 2021</span></td><td class="cell"><span class="value-viewer">424.87927802720304</span></td></tr><tr><td class="cell"><span class="value-viewer">Sat Apr 24 2021</span></td><td class="cell"><span class="value-viewer">175.4531106061752</span></td></tr><tr><td class="cell"><span class="value-viewer">Sun Apr 25 2021</span></td><td class="cell"><span class="value-viewer">732.7237109374936</span></td></tr><tr><td class="cell"><span class="value-viewer">Mon Apr 26 2021</span></td><td class="cell"><span class="value-viewer">883.8079521534481</span></td></tr><tr><td class="cell"><span class="value-viewer">Tue Apr 27 2021</span></td><td class="cell"><span class="value-viewer">910.1328482731834</span></td></tr><tr><td class="cell"><span class="value-viewer">Wed Apr 28 2021</span></td><td class="cell"><span class="value-viewer">947.7513991889388</span></td></tr><tr><td class="cell"><span class="value-viewer">Thu Apr 29 2021</span></td><td class="cell"><span class="value-viewer">620.9149978056314</span></td></tr></tbody></table></span><button class="MuiButtonBase-root MuiButton-root MuiButton-text" tabindex="0" type="button"><span class="MuiButton-label">Toggle Row</span></button><div class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6"><div class="MuiFormControl-root MuiTextField-root"><label class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated" data-shrink="false">Y Axis Scale</label><div class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-formControl MuiInput-formControl"><div class="MuiSelect-root MuiSelect-select MuiSelect-selectMenu MuiInputBase-input MuiInput-input" tabindex="0" role="button" aria-haspopup="listbox"><span>&#8203;</span></div><input aria-hidden="true" tabindex="-1" class="MuiSelect-nativeInput"/><svg class="MuiSvgIcon-root MuiSelect-icon" focusable="false" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 10l5 5 5-5z"></path></svg></div></div></div></div></div></div></div></div></div></main></div><footer>© <!-- -->2021<!-- -->, Built by<!-- --> <a href="https://www.infosum.com">InfoSum</a></footer></div><div id="gatsby-announcer" style="position:absolute;top:0;width:1px;height:1px;padding:0;overflow:hidden;clip:rect(0, 0, 0, 0);white-space:nowrap;border:0" aria-live="assertive" aria-atomic="true"></div></div><script id="gatsby-script-loader">/*<![CDATA[*/window.pagePath="/line/";/*]]>*/</script><script id="gatsby-chunk-mapping">/*<![CDATA[*/window.___chunkMapping={"polyfill":["/polyfill-a7af17f51201c6ca05bf.js"],"app":["/app-8e97e865a560e8a2c253.js"],"component---src-pages-404-js":["/component---src-pages-404-js-527d70e9ad1a78542386.js"],"component---src-pages-brush-tsx":["/component---src-pages-brush-tsx-f68752ae4a67ec24d12b.js"],"component---src-pages-chord-tsx":["/component---src-pages-chord-tsx-fa0fe71b04397179bb09.js"],"component---src-pages-histogram-tsx":["/component---src-pages-histogram-tsx-2b267f0a5ffb8452bf59.js"],"component---src-pages-index-tsx":["/component---src-pages-index-tsx-c1f924177cb3a6727878.js"],"component---src-pages-joyplot-tsx":["/component---src-pages-joyplot-tsx-059312e2c08f8e80d2a6.js"],"component---src-pages-line-tsx":["/component---src-pages-line-tsx-6844ef901ffb907bc017.js"],"component---src-pages-map-tsx":["/component---src-pages-map-tsx-ce1c2f08d169c4d11058.js"],"component---src-pages-pie-tsx":["/component---src-pages-pie-tsx-74d216a25e8b32f5cc29.js"],"component---src-pages-tornado-tsx":["/component---src-pages-tornado-tsx-d6f85fee2c489c82d199.js"],"component---src-pages-upset-tsx":["/component---src-pages-upset-tsx-bd90b274b9c7b8336f92.js"]};/*]]>*/</script><script src="/cl-react-graph/polyfill-a7af17f51201c6ca05bf.js" nomodule=""></script><script src="/cl-react-graph/component---src-pages-line-tsx-6844ef901ffb907bc017.js" async=""></script><script src="/cl-react-graph/4709a03248156ba2ea5942a00ad13417d5eb3e62-989fbbf3046e64516975.js" async=""></script><script src="/cl-react-graph/a88fac06d1f44d5f8da251460513aee811a9b9c2-e5c958f3331bf90da81f.js" async=""></script><script src="/cl-react-graph/71d6acb6f502235e55caee1c977644ee9804b11f-19ef8cccad37532d101b.js" async=""></script><script src="/cl-react-graph/9aae87d98cb6afcce6c5af48dbc5bd3db492a710-2549e68eed14aced8070.js" async=""></script><script src="/cl-react-graph/17c018643475e7f3de028b545693df6ac0992596-f0bf3f683e3b4f9d791e.js" async=""></script><script src="/cl-react-graph/commons-becd17edd8e2e7942f03.js" async=""></script><script src="/cl-react-graph/styles-e9d24b1846c7d6eb9685.js" async=""></script><script src="/cl-react-graph/app-8e97e865a560e8a2c253.js" async=""></script><script src="/cl-react-graph/framework-b81b2f9333458e1f85b8.js" async=""></script><script src="/cl-react-graph/webpack-runtime-798da9efa2e243279e08.js" async=""></script></body></html>

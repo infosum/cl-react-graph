@@ -88,6 +88,8 @@ export interface IHistogramProps {
     xAxisHeight?: number;
     xAxisLabelOrientation?: ELabelOrientation;
     yAxisWidth?: number;
+    title?: string;
+    description?: string;
 }
 /**
  * A Histogram renders continuous data and thus use a ScaleLinear x & y axis

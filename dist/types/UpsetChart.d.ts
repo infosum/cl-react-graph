@@ -4,7 +4,7 @@ export declare type TUpsetData = {
     keys: string[];
     value: number;
 }[];
-interface IProps {
+export interface IProps {
     colorScheme?: string[];
     data: TUpsetData;
     height: number;
