@@ -14,8 +14,14 @@ import {
   useMakeLine,
 } from '../utils/useMakeLine';
 
+type Props = {
+  animate?: boolean;
+  label: string;
+
+} & IProps;
+
 // @TODO look at using https://github.com/pbeshai/d3-interpolate-path instead 
-const Line: FC<IProps & { label: string }> = (props) => {
+const Line: FC<Props> = (props) => {
   const { label = '', line } = props;
   const className = `line-${label.replace(/[^a-z]/gi, '')}`;
   const { previous, current } = useMakeLine(props);
@@ -42,7 +48,9 @@ const Line: FC<IProps & { label: string }> = (props) => {
         strokeDashoffset={line.strokeDashOffset}
         strokeDasharray={line.strokeDashArray}
         stroke={line.stroke}
-        d={spring.t.interpolate((t) => interpolator.current(t))}
+        d={props.animate
+          ? spring.t.interpolate((t) => interpolator.current(Number(t)))
+          : current}
       />
     </>
   )

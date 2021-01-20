@@ -7,6 +7,7 @@ import {
 } from 'd3-scale';
 import React, { FC } from 'react';
 
+import { defaultPadding } from '../BarChart';
 import {
   paddingInner,
   paddingOuter,
@@ -14,7 +15,6 @@ import {
 import { isOfType } from '../utils/isOfType';
 import { AnyScale } from '../utils/scales';
 import textWrap from '../utils/svgTextWrap';
-import { defaultPadding } from '../v3/BarChart';
 import {
   defaultPath,
   defaultTickFormat,
@@ -72,6 +72,7 @@ const XAxis: FC<IAxis> = ({
         .rangeRound([0, width]);
 
       break;
+    default:
     case 'point':
       Scale = scalePoint()
         .range([Number(width) / 4, Number(width) * (3 / 4)])

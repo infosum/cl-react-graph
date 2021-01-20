@@ -2,23 +2,28 @@ import { extent } from 'd3-array';
 import {
   ScaleBand,
   scaleBand,
-  ScaleLinear,
   scaleLinear,
+  scaleLog,
   scalePoint,
+  scaleTime,
 } from 'd3-scale';
 import React, {
   FC,
   SVGAttributes,
 } from 'react';
 
+import { defaultPadding } from '../BarChart';
 import { IHistogramBar } from '../Histogram';
+import {
+  ISVGLineStyle,
+  ISVGTextStyle,
+} from '../legacy/types';
 import {
   paddingInner,
   paddingOuter,
 } from '../utils/bars';
 import { isOfType } from '../utils/isOfType';
 import { AnyScale } from '../utils/scales';
-import { defaultPadding } from '../v3/BarChart';
 
 export type TAxisValue = string | number;
 export type TAxisLabelFormat = (axis: 'x' | 'y', bin: string, i: number) => string;
@@ -40,17 +45,28 @@ export interface IAxis {
   values?: string[] | number[];
   tickSize?: number;
   path?: SVGAttributes<SVGPathElement>;
-  scale?: 'linear' | 'band' | 'point';
+  scale?: 'linear' | 'band' | 'point' | 'log' | 'time';
   top?: number;
   domain?: TAxisValue[];
   left?: number;
   padding?: IHistogramBar;
   labelFormat?: TAxisLabelFormat;
+
   tickFormat?: {
     stroke: string;
     fontSize?: string;
   } | TTickFormat;
   labelOrientation?: ELabelOrientation,
+
+  /** @deprecated used for backwards compat with legacy v2 components */
+  numberFormat?: string;
+  dateFormat?: string;
+  label?: string;
+  margin?: number
+  text?: {
+    style: ISVGTextStyle;
+  }
+  style?: ISVGLineStyle;
 }
 
 export const defaultTickFormat = {
@@ -119,7 +135,16 @@ const YAxis: FC<IAxis> = ({
       Scale = scalePoint()
         .range([Number(height) / 4, Number(height) * (3 / 4)])
         .domain(values as string[]);
+    case 'log':
+      Scale = scaleLog()
+      scaleLog().clamp(true)// clamp values below 1 to be equal to 0
+        .domain(extent(domain ? [0, ...domain as number[]] : values as number[]) as any)
+        .rangeRound([height, 0]);
       break;
+    case 'time':
+      Scale = scaleTime()
+        .domain(extent(domain ? [0, ...domain as number[]] : values as number[]) as any)
+        .rangeRound([height, 0]);
   }
 
   const transform = `(${width + left}, ${top})`;

@@ -14,9 +14,11 @@ import {
   useSprings,
 } from 'react-spring';
 
-import { IGroupDataItem } from '../../BaseHistogramD3';
+import { EChartDirection } from '../../BarChart';
 import {
+  EGroupedBarLayout,
   IBarChartDataSet,
+  IGroupDataItem,
   IHistogramBar,
 } from '../../Histogram';
 import {
@@ -26,18 +28,11 @@ import {
   paddingInner,
   paddingOuter,
 } from '../../utils/bars';
-import { EChartDirection } from '../../v3/BarChart';
 import { TLabelComponent } from '../Label';
 import { Labels } from '../Labels';
 import { TTipFunc } from '../ToolTip';
 import { ToolTips } from '../ToolTips';
 import { buildBarSprings } from './barHelper';
-
-enum EGroupedBarLayout {
-  GROUPED,
-  STACKED,
-  OVERLAID,
-}
 
 interface IProps {
   bins: (string | [number, number])[]

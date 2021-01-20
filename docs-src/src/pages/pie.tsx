@@ -16,8 +16,8 @@ import {
   Typography,
 } from '@material-ui/core';
 
+import PieChart, { IPieChartProps } from '../../../src/legacy/PieChart';
 import Legend from '../../../src/Legend';
-import PieChart, { IPieChartProps } from '../../../src/PieChart';
 import JSXToString from '../components/JSXToString';
 import Layout from '../components/layout';
 import SEO from '../components/seo';

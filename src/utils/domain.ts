@@ -4,16 +4,19 @@ import { format } from 'd3-format';
 import { ScaleLinear } from 'd3-scale';
 import { timeFormat } from 'd3-time-format';
 
-import { IGroupData } from '../BaseHistogramD3';
+import { IAxis } from '../components/YAxis';
 import {
   EGroupedBarLayout,
-  IAxis,
   IBarChartDataSet,
-  IDomain,
+  IGroupData,
 } from '../Histogram';
 import { IGroupedProps } from './bars';
 import { AnyScale } from './scales';
 
+export interface IDomain {
+  max: number | null;
+  min: number | null;
+}
 export const isStacked = ({ groupLayout, stacked }: IGroupedProps) => {
   return stacked || groupLayout === EGroupedBarLayout.STACKED;
 };
@@ -39,16 +42,16 @@ export const rangeAffordance = (
     return [0, 0];
   }
   try {
-    const first = axis.scale === 'TIME' ? range[0].getTime() : range[0];
-    const last = axis.scale === 'TIME' ? range[1].getTime() : range[1];
+    const first = axis.scale === 'time' ? range[0].getTime() : range[0];
+    const last = axis.scale === 'time' ? range[1].getTime() : range[1];
     const diff = last - first;
-    const percentIncrement = axis.scale === 'LOG' ? 100 : 5;
+    const percentIncrement = axis.scale === 'log' ? 100 : 5;
 
     const incremental = applyDomainAffordance(diff, inc, percentIncrement);
 
     const newLast = last + (incremental - diff);
 
-    if (axis.scale === 'TIME') {
+    if (axis.scale === 'time') {
       return [range[0], new Date(newLast)];
     }
     // Only apply affordance at the end as line should start from origin.
@@ -94,15 +97,15 @@ export const appendDomainRange = (props: IAppendDomainRangeProps): void => {
 }
 
 export const shouldFormatTick = (axis: IAxis): boolean => {
-  return (axis.scale === 'TIME' && axis.hasOwnProperty('dateFormat'))
+  return (axis.scale === 'time' && axis.hasOwnProperty('dateFormat'))
     || axis.hasOwnProperty('numberFormat');
 }
 
 export const formatTick = (axis: IAxis) => (v: string | number) => {
-  if (axis.scale === 'TIME') {
-    return timeFormat(axis.dateFormat)(new Date(v));
+  if (axis.scale === 'time') {
+    return timeFormat(axis.dateFormat ?? '%B %d, %Y')(new Date(v));
   }
-  return isNaN(Number(v)) ? v : format(axis.numberFormat)(Number(v))
+  return isNaN(Number(v)) ? v : format(axis.numberFormat ?? ".2s")(Number(v))
 };
 
 interface ITickProps {
@@ -131,7 +134,7 @@ export const tickSize = ({
   valuesCount,
 }: ITickProps) => {
   const tickSize = axisConfig?.tickSize ?? undefined;
-  const ticks = axisConfig?.ticks ?? undefined;
+  const ticks = undefined;
   if (tickSize !== undefined) {
     axis.tickSize(tickSize);
   }

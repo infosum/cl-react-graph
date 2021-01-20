@@ -15,6 +15,12 @@ interface IAxis {
   axis: TAxis,
   values: TAxisValue[];
   tickSize?: number;
+  scale?: string,
+}
+
+export interface IAxes {
+  y: IAxis;
+  x: IAxis;
 }
 
 const positionTick = (a: IAxis, position: number, scale: any) => {

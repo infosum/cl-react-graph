@@ -7,7 +7,7 @@ import {
   interpolate,
 } from 'react-spring';
 
-import { EChartDirection } from '../v3/BarChart';
+import { EChartDirection } from '../BarChart';
 import { ExtendedGroupItem } from './Bars/Bars';
 import {
   Label,

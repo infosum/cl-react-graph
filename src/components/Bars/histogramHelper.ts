@@ -1,8 +1,8 @@
 import { ScaleLinear } from 'd3-scale';
 import { SpringConfig } from 'react-spring';
 
+import { EChartDirection } from '../../BarChart';
 import { IBarChartDataSet } from '../../Histogram';
-import { EChartDirection } from '../../v3/BarChart';
 import { ExtendedGroupItem } from './Bars';
 
 interface IHistogramSpringProps {

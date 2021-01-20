@@ -3,7 +3,7 @@ import {
   Selection,
 } from 'd3-selection';
 
-import { IMargin } from '../Histogram';
+import { IMargin } from '../legacy/types';
 
 export type TSelection = Selection<any, any, any, any>;
 export type TTextSelection = Selection<SVGTextElement, any, any, any>;

@@ -5,18 +5,19 @@ import {
   useScales,
 } from '../utils/useMakeLine';
 
-const Points: FC<Omit<IProps, 'line'> & {
+export type TPoints = Omit<IProps, 'line'> & {
   radius?: number;
   fill?: string;
   stroke?: string;
-}> = (props) => {
+}
+
+const Points: FC<TPoints> = (props) => {
   const { data, radius = 5, fill = '#000', stroke = '#000' } = props;
   const { xScale, yScale } = useScales(props);
 
   if (yScale === null) {
     return null;
   }
-
   return <>
     {
       data.map((d) => {

@@ -12,7 +12,7 @@ export const outputSvg = (
   svgId: string,
   width: number,
   height: number,
-  callback: (outpuData: string | Blob | null) => void,
+  callback: (outputData: string | Blob | null) => void,
   watermark: IWatermark,
   type: TOutputType = 'blob',
 ) => {

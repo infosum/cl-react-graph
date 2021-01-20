@@ -11,7 +11,7 @@ import {
   useState,
 } from 'react';
 
-import { IAxes } from '../Histogram';
+import { IAxes } from '../legacy/types';
 import {
   IChartPoint,
   IChartPointValue,
@@ -49,14 +49,15 @@ export const useScales: (props: Omit<IProps, 'line'>) => { xScale: any, yScale: 
     const ys: any[] = [];
     const xs: any[] = [];
     data.forEach((d) => {
-      let parsedY = axis.y.scale === 'LOG' && d.y === 0 ? ZERO_SUBSTITUTE : d.y;
-      let parsedX = axis.x.scale === 'LOG' && d.x === 0 ? ZERO_SUBSTITUTE : d.x;
+      let parsedY = axis.y.scale === 'log' && d.y === 0 ? ZERO_SUBSTITUTE : d.y;
+      let parsedX = axis.x.scale === 'log' && d.x === 0 ? ZERO_SUBSTITUTE : d.x;
       ys.push(parsedY);
       xs.push(parsedX);
     });
 
     const yDomain = rangeAffordance(extent(ys), axis.y);
     const xDomain = rangeAffordance(extent(xs), axis.x);
+
     (xScale as any)
       .domain(xDomain)
       .rangeRound([left, width + left]);
@@ -64,7 +65,7 @@ export const useScales: (props: Omit<IProps, 'line'>) => { xScale: any, yScale: 
       .range([height, 0]);
     setScales({ xScale, yScale })
 
-  }, [])
+  }, [data])
 
   return scales;
 }

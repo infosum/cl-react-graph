@@ -5,7 +5,6 @@ import {
 import filterRange from '../../src/colors/filterRange';
 import { ELabelOrientation } from '../../src/components/YAxis';
 import {
-  IAnnotation,
   IGrid,
   IHistogramData,
 } from '../../src/Histogram';
@@ -14,6 +13,8 @@ import { DeepPartial } from '../../src/utils/types';
 
 export const grid: IGrid = {
   x: {
+    height: 100,
+    visible: true,
     style: {
       ...lineStyle,
       'stroke': '#ccc',
@@ -22,6 +23,7 @@ export const grid: IGrid = {
     ticks: 5,
   },
   y: {
+    visible: true,
     style: {
       ...lineStyle,
       'stroke': '#ccc',
@@ -83,60 +85,14 @@ export const data: IBarChartData = {
   ]
 }
 
-export const annotationsData: IAnnotation[] = [
-  { color: 'grey', value: '0%' },
-  { color: 'grey', value: '0%' },
-  { color: 'red', value: '-50%' },
-  { color: 'grey', value: '-1%' },
-  { color: 'red', value: '-56%' },
-  { color: 'grey', value: '-99%' },
-  { color: 'grey', value: '-100%' },
-  { color: 'red', value: '-5%' },
-  { color: 'grey', value: '0%' },
-  { color: 'red', value: '-5%' },
-  { color: 'grey', value: '0%' },
-  { color: 'grey', value: '0%' },
-  { color: 'red', value: '-5%' },
-  { color: 'grey', value: '0%' },
-  { color: 'red', value: '-50%' },
-  { color: 'grey', value: '-67%' },
-  { color: 'red', value: '-5%' },
-  { color: 'grey', value: '0%' },
-  { color: 'red', value: '-100%' },
-  { color: 'grey', value: '-70%' },
-  { color: 'grey', value: '-99%' },
-];
-
-export const smallAnnotationsData: IAnnotation[] = [
-  { color: 'grey', value: '0%' },
-  { color: 'grey', value: '0%' },
-  { color: 'red', value: '-5%' },
-]
-/*
-export const data: IBarChartData = {
-  bins: ['Data 1', 'Data 6', 'Data 3', 'Dat 4'],
-  counts: [
-    {
-      data: [10, 40, 300, 1200],
-      label: 'DataSet 1',
-    },
-    {
-      data: [5, 10, 15, 50],
-      label: 'DataSet 2',
-    },
-  ],
-};
-*/
 
 export const analyticsAxis: DeepPartial<IAxes> = {
   x: {
-    scale: 'ORDINAL',
+    scale: 'linear',
     numberFormat: '.2s',
     labelOrientation: ELabelOrientation.HORIZONTAL,
   },
   y: {
-    // ...defaultAxis.y,
-    ticks: 3,
     numberFormat: '.2s',
     labelOrientation: ELabelOrientation.HORIZONTAL,
   },
@@ -144,32 +100,18 @@ export const analyticsAxis: DeepPartial<IAxes> = {
 
 export const verticalXAxis: DeepPartial<IAxes> = {
   x: {
-    scale: 'ORDINAL',
-    text: {
-      style: {
-        'dy': '.35em',
-        'font-size': '0.1rem',
-        'stroke-opacity': 0,
-        'text-anchor': 'start',
-        'transform': 'rotate(90)',
-      },
-    }
+    scale: 'linear',
   },
   y: {
-    // ...defaultAxis.y,
-    ticks: 3,
   },
 }
 
 export const axis: DeepPartial<IAxes> = {
   x: {
-    // ...defaultAxis.x,
     dateFormat: '%d-%b-%y',
-    scale: 'TIME',
+    scale: 'time',
   },
   y: {
-    // ...defaultAxis.y,
-    ticks: 3,
   },
 };
 

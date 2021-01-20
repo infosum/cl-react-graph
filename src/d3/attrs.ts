@@ -1,4 +1,4 @@
-import { ISVGLineStyle } from '../Histogram';
+import { ISVGLineStyle } from '../legacy/types';
 
 /**
  * Apply style object to a d3 selection

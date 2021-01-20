@@ -28,21 +28,14 @@ import {
 } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 
-import {
-  ILineChartDataSet,
-  ILineChartProps,
-  LineChart,
-} from '../../../src';
+import { ILineChartDataSet } from '../../../src';
 import { ELabelOrientation } from '../../../src/components/YAxis';
-import { Scale } from '../../../src/Histogram';
-import { DeepPartial } from '../../../src/utils/types';
+import LineChart, { IProps } from '../../../src/LineChart';
 import { useLineDomain } from '../../../src/utils/useDomain';
 import { useWidth } from '../../../src/utils/useWidth';
-import LineChart2 from '../../../src/v3/LineChart';
 import { data3 } from '../../../test/fixtures';
 import { AxisActions } from '../components/AxisOptions';
 import { CurveSelector } from '../components/CurveSelector';
-import { GridOptionsFactory } from '../components/GridOptions';
 import JSXToString from '../components/JSXToString';
 import Layout from '../components/layout';
 import SEO from '../components/seo';
@@ -50,7 +43,7 @@ import { TabContainer } from '../components/TabContainer';
 import { grid } from '../data';
 import { GridActions } from './histogram';
 
-type TInitialState = ILineChartProps<{ x: number | string | Date, y: number }>;
+type TInitialState = IProps<{ x: number | string | Date, y: number }>;
 type TData = ILineChartDataSet<{ x: string | number | Date, y: number }>;
 
 const dateFormat = '%d-%b-%y';
@@ -116,24 +109,18 @@ const data2 = {
 const initialState: TInitialState = {
   axis: {
     x: {
-      dateFormat,
-      scale: 'TIME',
-      ticks: 2,
+      height: 20,
+      width: 400,
+      scale: 'time',
     },
     y: {
-      label: 'TAB_VIEW_CREDITS',
-      numberFormat: 'd',
-      scale: 'LOG',
-      text: {
-        style: {
-          'font-size': '.7rem',
-        },
-      },
-      ticks: 5,
+      width: 20,
+      height: 400,
     },
   },
+  height: 400,
   data: [data3[0]],
-  width: '100%',
+  width: 400,
   grid,
 };
 
@@ -152,20 +139,10 @@ type Actions = { type: 'applyChanges', index: 0, changes: any }
   | { type: 'toggleRow'; }
   | { type: 'setLabelOrientation', value: ELabelOrientation, axis: 'x' | 'y' }
   | AxisActions
-  | GridActions
   ;
 
 function reducer(draft: Draft<TInitialState>, action: Actions) {
   switch (action.type) {
-    case 'setGridTicks':
-      draft.axis[action.axis].ticks = action.ticks;
-      return;
-    case 'setGridStroke':
-      draft.axis[action.axis].style.stroke = action.color;
-      return;
-    case 'setGridStrokeOpacity':
-      draft.axis[action.axis].style['stroke-opacity'] = action.opacity;
-      return;
     case 'setScale':
       draft.axis[action.axis].scale = action.value;
       return;
@@ -220,12 +197,6 @@ function reducer(draft: Draft<TInitialState>, action: Actions) {
   }
 }
 
-const GridOptions = GridOptionsFactory<(action: Actions) => void, ILineChartProps>();
-
-export interface IGridElement extends ReactDataSheet.Cell<IGridElement, number | string> {
-  value: number | null | string;
-}
-
 const LineExample: FC = () => {
   const [state, dispatch] = useImmerReducer(reducer, initialState);
   const [ref, w] = useWidth(state.width);
@@ -238,10 +209,12 @@ const LineExample: FC = () => {
     values: state.data,
   });
   const chart = <LineChart
-    axis={state.axis}
+    width={800}
+    height={300}
     grid={state.grid}
+    axis={state.axis}
     data={state.data}
-    width="100%" />;
+  />
   return (
     <Layout>
       <SEO title="Line Chart" description="" />
@@ -251,21 +224,6 @@ const LineExample: FC = () => {
           <Grid item xs={6}>
             <Card>
               <CardContent>
-                <h1>React native version</h1>
-                <LineChart2
-                  width={800}
-                  height={300}
-                  grid={state.grid}
-                  axis={state.axis}
-                  data={state.data}
-                />
-
-                <LineChart
-                  axis={state.axis}
-                  grid={state.grid}
-                  data={state.data}
-                  className="line-1"
-                  width="100%" />
                 {chart}
               </CardContent>
             </Card>
@@ -452,13 +410,7 @@ const LineExample: FC = () => {
 
                   </TabContainer>
                 }
-                {
-                  tab === 2 && <TabContainer>
-                    <GridOptions
-                      dispatch={dispatch}
-                      state={state} />
-                  </TabContainer>
-                }
+
               </CardContent>
             </Card>
           </Grid>

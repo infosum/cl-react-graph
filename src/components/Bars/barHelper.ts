@@ -4,13 +4,13 @@ import {
 } from 'd3-scale';
 import { SpringConfig } from 'react-spring';
 
+import { EChartDirection } from '../../BarChart';
 import {
   EGroupedBarLayout,
   IBarChartDataSet,
   IHistogramBar,
 } from '../../Histogram';
 import { getBarWidth } from '../../utils/bars';
-import { EChartDirection } from '../../v3/BarChart';
 import { ExtendedGroupItem } from './Bars';
 
 /**

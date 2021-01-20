@@ -1,5 +1,4 @@
 import { Draft } from 'immer';
-import fileDownload from 'js-file-download';
 import React, {
   createRef,
   useState,
@@ -22,21 +21,18 @@ import {
 import {
   BarChart,
   EChartDirection,
-  HorizontalHistogram,
+  IAxes,
 } from '../../../src';
 import { ELabelOrientation } from '../../../src/components/YAxis';
 import Histogram, {
   EGroupedBarLayout,
-  IAxes,
   IBarChartData,
   IGrid,
   IHistogramBar,
 } from '../../../src/Histogram';
 import Legend from '../../../src/Legend';
-import { outputSvg } from '../../../src/utils/outputSvg';
 import { DeepPartial } from '../../../src/utils/types';
 import { useWidth } from '../../../src/utils/useWidth';
-import Histogram2 from '../../../src/v3/Histogram';
 import {
   AxisActions,
   AxisOptionsFactory,
@@ -44,27 +40,17 @@ import {
 import DataGroup from '../components/DataGroup';
 import { GridOptionsFactory } from '../components/GridOptions';
 import { Styling } from '../components/histogram/Styling';
-import JSXToString from '../components/JSXToString';
 import Layout from '../components/layout';
 import SEO from '../components/seo';
 import { TabContainer } from '../components/TabContainer';
 import {
   analyticsAxis,
-  annotationsData,
   data,
   grid,
-  smallAnnotationsData,
   smallData,
   smallDataContinuous,
   theme,
 } from '../data';
-
-const tipContentFns = [
-  (bins, i, d) =>
-    bins[i] + '<br />HI There ' + d.toFixed(2),
-  (bins, i, d) =>
-    bins[i] + '<br />Another tip ' + d.toFixed(2),
-];
 
 export interface IInitialState {
   axis: DeepPartial<IAxes>;
@@ -125,21 +111,7 @@ export type Actions = { type: 'setChartType'; chartType: string }
 
 function reducer(draft: Draft<IInitialState>, action: Actions) {
   switch (action.type) {
-    case 'setGridTicks':
-      draft.axis[action.axis].ticks = action.ticks;
-      return;
-    case 'setGridStroke':
-      draft.axis[action.axis].style.stroke = action.color;
-      return;
-    case 'setGridStrokeOpacity':
-      draft.axis[action.axis].style['stroke-opacity'] = action.opacity;
-      return;
-    case 'setScale':
-      draft.axis[action.axis].scale = action.value;
-      return;
-    case 'setLabelOrientation':
-      draft.axis[action.axis].labelOrientation = action.value;
-      return;
+
     case 'setChartType':
       draft.chartType = action.chartType;
       return;
@@ -222,7 +194,6 @@ export const dataToSpreadSheet = (datum: IBarChartData): any => {
 
 const GridOptions = GridOptionsFactory<(action: Actions) => void, IInitialState>();
 const AxisOptions = AxisOptionsFactory<(action: Actions) => void, IInitialState>();
-const watermarkSvg = require('../../../src/assets/Powered-By-InfoSum_DARK.svg') as string;
 
 const HistogramExample = () => {
   const [tab, setTab] = useState(0);
@@ -237,31 +208,7 @@ const HistogramExample = () => {
       label: '',
     }],
   };
-  const Chart = state.chartType === 'Histogram' ? Histogram : HorizontalHistogram;
-  const chart = <Chart data={state.data}
-    axis={state.axis}
-    bar={state.bar}
-    grid={state.grid}
-    width={state.width}
-    annotations={annotationsData}
-    annotationTextSize={'0.5rem'}
-    showBinPercentages={[true, true]}
-    onClick={(d) => console.log(d)}
-    height={420}
-    delay={state.delay}
-    duration={state.duration}
-    visible={visible}
-    colorScheme={['#a9a9a9', '#2a5379']}
-    groupLayout={state.groupLayout}
-    id="bigHistogram"
-    tipContentFn={(bin, i, d) => {
-      return 'ABC12345' + '<br />' + d.toFixed(2);
-    }}
-    axisLabelTipContentFn={(bin, i, d) => {
-      const binPos = bin.findIndex((b) => b === d);
-      return bin[binPos];
-    }}
-  />;
+
   const [dataIndex, setDataIndex] = useState(0);
   const d = dataIndex === 0 ? smallData : data;
 
@@ -276,7 +223,6 @@ const HistogramExample = () => {
           <Grid item xs={6}>
             <Card>
               <CardContent ref={ref}>
-                <h1>V3</h1>
                 <h2>Bar Chart</h2>
                 <BarChart
                   animation={{
@@ -296,7 +242,7 @@ const HistogramExample = () => {
 
                 <h3>Histogram</h3>
 
-                <Histogram2
+                <Histogram
                   animation={{
                     duration: state.duration,
                   }}
@@ -339,49 +285,11 @@ const HistogramExample = () => {
                   visible={visible}
                 />
 
-                <h1>d3</h1>
-
-                {chart}
-                <Button size="small" color="primary" variant="contained" style={{ marginBottom: '1rem' }} onClick={(e) => {
-                  e.preventDefault();
-                  outputSvg('smallHistogram', 420, 420, (blobData) => {
-                    fileDownload(blobData, 'small_chart.png');
-                  },
-                    {
-                      svg: watermarkSvg,
-                      width: 120,
-                      height: 37,
-                    },
-                    'blob',
-                  )
-                }}>Download</Button>
-                <Chart data={dataIndex === 0 ? smallData : data}
-                  axis={state.axis}
-                  bar={state.bar}
-                  grid={state.grid}
-                  width="100%"
-                  annotations={smallAnnotationsData}
-                  showBinPercentages={[true, true]}
-                  onClick={(d) => console.log(d)}
-                  height={420}
-                  delay={state.delay}
-                  duration={state.duration}
-                  visible={visible}
-                  colorScheme={dataIndex === 0 ? ['#a9a9a9', '#2a5379'] : ['#afeeff', 'afbb44']}
-                  groupLayout={state.groupLayout}
-                  tipContentFn={tipContentFns[0]}
-                  id="smallHistogram"
-                />
 
 
               </CardContent>
             </Card>
-            <br />
-            <Card>
-              <CardContent>
-                <JSXToString component={chart} />
-              </CardContent>
-            </Card>
+
           </Grid>
           <Grid item xs={6}>
             <Card>

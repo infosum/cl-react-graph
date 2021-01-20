@@ -8,7 +8,7 @@ import {
   screen,
 } from '@testing-library/react';
 
-import { EChartDirection } from '../v3/BarChart';
+import { EChartDirection } from '../BarChart';
 import { Label } from './Label';
 
 test('displays percentage', () => {
