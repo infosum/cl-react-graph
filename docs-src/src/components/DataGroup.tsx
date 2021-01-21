@@ -1,14 +1,10 @@
 import React, {
   Dispatch,
-  FC,
   ReactNode,
 } from 'react';
 import ReactDataSheet from 'react-datasheet';
 
 import { Button } from '@material-ui/core';
-
-import { IBarChartData } from '../../../src';
-import { IInitialState } from '../pages/histogram';
 
 interface IProps<A, S> {
   dispatch: Dispatch<A>;
@@ -18,8 +14,6 @@ interface IProps<A, S> {
   onDeleteData: (i: number) => void;
   spreadSheetData: any[][];
 }
-
-
 
 const DataGroup = <A extends any, S extends any>(props: IProps<A, S> & { children?: ReactNode }) => {
   const { dispatch, headings, state, onDeleteData, onAddData, spreadSheetData } = props;
@@ -36,7 +30,7 @@ const DataGroup = <A extends any, S extends any>(props: IProps<A, S> & { childre
       <ReactDataSheet<any, any> data={spreadSheetData}
         valueRenderer={(cell) => cell.value}
         sheetRenderer={(props) => (
-          <table className={props.className + ' my-awesome-extra-class'}>
+          <table className={props.className}>
             <thead>
               <tr>
                 <th className="action-cell">Bin</th>

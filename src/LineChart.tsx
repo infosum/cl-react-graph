@@ -127,7 +127,6 @@ const LineChart: FC<IProps> = ({
       <YAxis
         width={yAxisWidth}
         height={height - xAxisHeight}
-        // values={[0, 1000, 2000]}
         scale="linear"
         domain={domain}
       />

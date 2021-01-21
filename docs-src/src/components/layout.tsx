@@ -11,8 +11,12 @@ import {
   StaticQuery,
 } from 'gatsby';
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, {
+  FC,
+  useState,
+} from 'react';
 
+import { DrawerComponent } from './Drawer';
 import Header from './header';
 
 const Layout = ({ children }) => (
@@ -26,28 +30,7 @@ const Layout = ({ children }) => (
         }
       }
     `}
-    render={(data) => (
-      <>
-        <Header siteTitle={data.site.siteMetadata.title} />
-        <div
-          style={{
-            flexGrow: 2,
-            margin: `0 auto`,
-            padding: `0px 1.0875rem 1.45rem`,
-            paddingTop: 0,
-            width: '100%',
-          }}
-        >
-          <main>{children}</main>
-
-        </div>
-        <footer>
-          © {new Date().getFullYear()}, Built by
-            {` `}
-          <a href="https://www.infosum.com">InfoSum</a>
-        </footer>
-      </>
-    )}
+    render={(data) => <App data={data}>{children}</App>}
   />
 );
 
@@ -56,3 +39,38 @@ Layout.propTypes = {
 };
 
 export default Layout;
+
+const App: FC<{ data: any }> = ({
+  data,
+  children,
+}) => {
+  const [isOpen, setOpen] = useState(false);
+  return (
+    <>
+      <Header siteTitle={data.site.siteMetadata.title}
+        openDrawerHandler={() => {
+          setOpen(true);
+        }} />
+      <div
+        style={{
+          flexGrow: 2,
+          margin: `0 auto`,
+
+          paddingTop: 0,
+          width: '100%',
+        }}
+      >
+        <main>{children}</main>
+
+      </div>
+      <footer>
+        © {new Date().getFullYear()}, Built by
+        {` `}
+        <a href="https://www.infosum.com">InfoSum</a>
+      </footer>
+      <DrawerComponent
+        isOpen={isOpen}
+        toggleDrawerHandler={() => setOpen(!isOpen)} />
+    </>
+  )
+}

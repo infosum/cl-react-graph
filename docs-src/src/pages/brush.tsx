@@ -17,6 +17,7 @@ import {
 import {
   Base,
   IAxes,
+  useWidth,
 } from '../../../src';
 import Brush from '../../../src/components/Brush';
 import Line from '../../../src/components/Line';
@@ -48,10 +49,9 @@ const filterData = (scale: any, pos: { start: number, end: number }) => (data: a
 }
 
 const { line, data } = data3[0];
-const width = 800;
 
 const LineExample: FC = () => {
-
+  const [ref, width] = useWidth('90%');
   const initialPosition = { start: 100, end: 200 };
   const scale = scaleTime()
     .domain([data[0].x, data[data.length - 1].x])
@@ -65,13 +65,13 @@ const LineExample: FC = () => {
   }
   return (
     <Layout>
-      <SEO title="Line Chart" description="" />
+      <SEO title="Brush for Line Chart" description="" />
       <Typography variant="h2">Brush</Typography>
       <div>
-        <Grid container spacing={10}>
-          <Grid item xs={6}>
+        <Grid container spacing={5} className="wrapper">
+          <Grid item xs={12} md={6}>
             <Card>
-              <CardContent>
+              <CardContent ref={ref}>
                 <Base
                   width={width}
                   height={400}>

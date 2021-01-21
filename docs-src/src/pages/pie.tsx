@@ -84,8 +84,8 @@ const PieExample = () => {
       <SEO title="Histogram" description="" />
       <Typography variant="h2">Pie Chart</Typography>
       <div>
-        <Grid container>
-          <Grid item xs={6}>
+        <Grid container spacing={5} className="wrapper">
+          <Grid item xs={12} md={6}>
             <Card>
               <CardContent>
                 {chart}
@@ -104,7 +104,7 @@ const PieExample = () => {
               </CardContent>
             </Card>
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={12} md={6}>
             <Card>
               <CardContent>
                 <Tabs value={tab} onChange={(e, v) => setTab(v)}>
@@ -116,7 +116,7 @@ const PieExample = () => {
                     <ReactDataSheet data={spreadSheetData}
                       valueRenderer={(cell) => cell.value}
                       sheetRenderer={(props) => (
-                        <table className={props.className + ' my-awesome-extra-class'}>
+                        <table className={props.className}>
                           <thead>
                             <tr>
                               <th className="action-cell">Bin</th>
@@ -147,7 +147,7 @@ const PieExample = () => {
                 {
                   tab === 1 && <TabContainer>
                     <Grid container>
-                      <Grid item xs={6}>
+                      <Grid item xs={12} md={6}>
                         <FormGroup>
                           <Typography>Donut <small>({state.donutWidth})</small></Typography>
                           <Slider
