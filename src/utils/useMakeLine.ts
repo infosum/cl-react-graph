@@ -45,7 +45,6 @@ export const useScales: (props: Omit<IProps, 'line'>) => { xScale: any, yScale: 
   const [scales, setScales] = useState<{ xScale: any, yScale: any }>({ xScale: null, yScale: null });
   useEffect(() => {
     const [xScale, yScale] = buildScales(axis);
-
     const ys: any[] = [];
     const xs: any[] = [];
     data.forEach((d) => {
@@ -65,7 +64,7 @@ export const useScales: (props: Omit<IProps, 'line'>) => { xScale: any, yScale: 
       .range([height, 0]);
     setScales({ xScale, yScale })
 
-  }, [data])
+  }, [data, width, height, left])
 
   return scales;
 }
@@ -95,7 +94,7 @@ export const useMakeLine: (props: IProps) => { previous: string, current: string
       }
     }
 
-  }, [xScale, yScale, props.data])
+  }, [xScale, yScale, props.data, props.width, props.line])
 
   return { previous, current };
 }

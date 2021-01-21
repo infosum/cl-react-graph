@@ -129,8 +129,8 @@ const Tornado = () => {
       <SEO title="Line Chart" description="" />
       <Typography variant="h2">Tornado Chart</Typography>
       <div>
-        <Grid container spacing={10}>
-          <Grid item xs={6}>
+        <Grid container spacing={5} className="wrapper">
+          <Grid item xs={12} md={6}>
             <Card>
               <CardContent>
                 <NativeTornado {...state}
@@ -153,7 +153,7 @@ const Tornado = () => {
               </CardContent>
             </Card>
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={12} md={6}>
             <FormControlLabel
               control={
                 <Switch
@@ -168,7 +168,7 @@ const Tornado = () => {
             />
           </Grid>
 
-          <Grid item xs={6}>
+          <Grid item xs={12} md={6}>
 
           </Grid>
         </Grid>

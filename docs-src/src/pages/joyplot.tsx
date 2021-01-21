@@ -8,6 +8,7 @@ import {
   Typography,
 } from '@material-ui/core';
 
+import { useWidth } from '../../../src';
 import JoyPlot from '../../../src/JoyPlot';
 import Layout from '../components/layout';
 import SEO from '../components/seo';
@@ -86,24 +87,27 @@ const data2 = [
 const JoyPlotExample = () => {
   const [dataIndex, setDataIndex] = useState(0);
   const d = dataIndex === 0 ? data1 : data2;
+  const [ref, w] = useWidth('90%');
   return (
     <Layout>
       <SEO title="Joy Plot" description="" />
       <Typography variant="h2">Joy Plot</Typography>
       <div>
-        <Grid container spacing={10}>
-          <Grid item xs={6}>
+        <Grid container spacing={5} className="wrapper">
+          <Grid item xs={12} md={6}>
             <Card>
               <CardContent>
-                <JoyPlot
-                  data={d}
-                  xAxisHeight={20}
-                  width={800}
-                  height={d.length * 150} />
+                <div ref={ref}>
+                  <JoyPlot
+                    data={d}
+                    xAxisHeight={20}
+                    width={w}
+                    height={d.length * 150} />
+                </div>
               </CardContent>
             </Card>
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={12} md={6}>
             <Card>
               <CardContent>
                 <Button onClick={() => setDataIndex(dataIndex === 1 ? 0 : 1)}>

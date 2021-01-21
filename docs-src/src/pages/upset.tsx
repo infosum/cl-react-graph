@@ -10,6 +10,7 @@ import {
   Typography,
 } from '@material-ui/core';
 
+import { useWidth } from '../../../src';
 import UpsetChart, { TUpsetData } from '../../../src/UpsetChart';
 import Layout from '../components/layout';
 import SEO from '../components/seo';
@@ -24,32 +25,35 @@ const data: TUpsetData = [
 ];
 
 const UpsetExample: FC = () => {
+  const [ref, w] = useWidth('90%');
   return (
     <Layout>
       <SEO title="Upset Chart" description="" />
       <Typography variant="h2">Upset</Typography>
       <div>
-        <Grid container spacing={10}>
-          <Grid item xs={6}>
+        <Grid container spacing={5} className="wrapper">
+          <Grid item xs={12}>
             <Card>
               <CardContent>
-                <UpsetChart
-                  title="example upset chart"
-                  description="more info for accessibility"
-                  width={600}
-                  height={400}
-                  distribution={{
-                    colorScheme: ['rgb(154, 187, 218)'],
-                    fill: {
-                      active: 'rgb(154, 187, 218)',
-                      inactive: '#ddd',
-                    },
-                  }}
-                  setSize={{
-                    dimensions: { chartWidth: 100, axisWidth: 120, height: 150 },
-                    colorScheme: ['rgb(154, 218, 172)'],
-                  }}
-                  data={data} />
+                <div ref={ref}>
+                  <UpsetChart
+                    title="example upset chart"
+                    description="more info for accessibility"
+                    width={w}
+                    height={400}
+                    distribution={{
+                      colorScheme: ['rgb(154, 187, 218)'],
+                      fill: {
+                        active: 'rgb(154, 187, 218)',
+                        inactive: '#ddd',
+                      },
+                    }}
+                    setSize={{
+                      dimensions: { chartWidth: w / 6, axisWidth: 120, height: 150 },
+                      colorScheme: ['rgb(154, 218, 172)'],
+                    }}
+                    data={data} />
+                </div>
               </CardContent>
             </Card>
           </Grid>

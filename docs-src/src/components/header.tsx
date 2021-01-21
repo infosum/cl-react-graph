@@ -4,30 +4,31 @@ import React from 'react';
 
 import {
   AppBar,
-  Button,
+  IconButton,
   Toolbar,
   Typography,
 } from '@material-ui/core';
+import MenuIcon from '@material-ui/icons/Menu';
 
-const Header = ({ siteTitle }) => (
+const Header = ({ siteTitle, openDrawerHandler }) => (
   <AppBar position="static">
     <Toolbar>
+      <IconButton
+        edge="start"
+        color="inherit"
+        aria-label="open drawer"
+        onClick={() => {
+          openDrawerHandler();
+        }}
+      >
+        <MenuIcon />
+      </IconButton>
       <Typography variant="h6" color="inherit" >
         <Link to="/">{siteTitle}</Link>
       </Typography>
 
-      <Button><Link to="/histogram">Histogram</Link></Button>
-      <Button><Link to="/line">Line Chart</Link></Button>
-      <Button><Link to="/pie">Pie Chart</Link></Button>
-      <Button><Link to="/tornado">Tornado Chart</Link></Button>
-      <Button><Link to="/joyplot">Joy Plot</Link></Button>
-      <Button><Link to="/brush">Brush</Link></Button>
-      <Button><Link to="/chord">Chord</Link></Button>
-      <Button><Link to="/upset">Upset</Link></Button>
-
-      {/* <Button><Link to="/map">Map</Link></Button> */}
     </Toolbar>
-  </AppBar>
+  </AppBar >
 );
 
 Header.propTypes = {

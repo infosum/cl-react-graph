@@ -20,7 +20,7 @@ export const Styling: FC<IProps> = ({
 }) => {
   return (
     <TabContainer>
-      <Grid container spacing={10}>
+      <Grid container spacing={5}>
         <Grid item xs={6}>
           <TextField
             select

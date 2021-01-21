@@ -198,7 +198,7 @@ const AxisOptions = AxisOptionsFactory<(action: Actions) => void, IInitialState>
 const HistogramExample = () => {
   const [tab, setTab] = useState(0);
   const [state, dispatch] = useImmerReducer(reducer, initialState);
-  const [ref, w] = useWidth(state.width);
+  const [ref, w] = useWidth('90%');
   const [visible, setVisible] = useState({});
   const spreadSheetData = dataToSpreadSheet(state.data);
   const dataLegendData = {
@@ -219,27 +219,28 @@ const HistogramExample = () => {
         Histogram
       </Typography>
       <div>
-        <Grid container spacing={10}>
-          <Grid item xs={6}>
+        <Grid container spacing={5} className="wrapper">
+          <Grid item xs={12} md={6} >
             <Card>
-              <CardContent ref={ref}>
+              <CardContent >
                 <h2>Bar Chart</h2>
-                <BarChart
-                  animation={{
-                    duration: state.duration,
-                  }}
-                  showLabels={[false, true]}
-                  direction={state.chartType === 'HorizontalHistogram' ? EChartDirection.HORIZONTAL : EChartDirection.VERTICAL}
-                  data={d}
-                  height={400}
-                  grid={state.grid}
-                  colorScheme={['#aaa', '#aa0000']}
-                  groupLayout={state.groupLayout}
-                  xAxisLabelOrientation={state.axis.x.labelOrientation}
-                  width={w}
-                  visible={visible}
-                />
-
+                <div ref={ref}>
+                  <BarChart
+                    animation={{
+                      duration: state.duration,
+                    }}
+                    showLabels={[false, true]}
+                    direction={state.chartType === 'HorizontalHistogram' ? EChartDirection.HORIZONTAL : EChartDirection.VERTICAL}
+                    data={d}
+                    height={400}
+                    grid={state.grid}
+                    colorScheme={['#aaa', '#aa0000']}
+                    groupLayout={state.groupLayout}
+                    xAxisLabelOrientation={state.axis.x.labelOrientation}
+                    width={w}
+                    visible={visible}
+                  />
+                </div>
                 <h3>Histogram</h3>
 
                 <Histogram
@@ -291,7 +292,7 @@ const HistogramExample = () => {
             </Card>
 
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={12} md={6}>
             <Card>
               <CardContent>
                 <Tabs value={tab} onChange={(e, v) => setTab(v)}>
@@ -303,8 +304,8 @@ const HistogramExample = () => {
                 </Tabs>
                 {
                   tab === 0 && <TabContainer>
-                    <Grid container spacing={10}>
-                      <Grid item xs={6}>
+                    <Grid container spacing={5}>
+                      <Grid item xs={12} md={6}>
                         <TextField
                           select
                           label="Chart direction"
@@ -354,8 +355,8 @@ const HistogramExample = () => {
                 }
                 {
                   tab === 2 && <TabContainer>
-                    <Grid container spacing={10}>
-                      <Grid item xs={6}>
+                    <Grid container spacing={5}>
+                      <Grid item xs={12} md={6}>
                         <TextField
                           id="animationDuration"
                           value={state.duration}
@@ -363,7 +364,7 @@ const HistogramExample = () => {
                           onChange={(e) => dispatch({ type: 'setDuration', duration: Number(e.target.value) })}
                         />
                       </Grid>
-                      <Grid item xs={6}>
+                      <Grid item xs={12} md={6}>
                         <TextField
                           id="animationDelay"
                           value={state.delay}

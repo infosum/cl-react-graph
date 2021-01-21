@@ -18,8 +18,8 @@ const ChordDemo = () => {
       <SEO title="Chord" description="" />
       <Typography variant="h2">Chord</Typography>
       <div>
-        <Grid container spacing={10}>
-          <Grid item xs={6}>
+        <Grid container spacing={5} className="wrapper">
+          <Grid item xs={12} md={6}>
             <Card>
               <CardContent>
                 <Chord
@@ -47,7 +47,7 @@ const ChordDemo = () => {
           </Grid>
         </Grid>
       </div>
-    </Layout>
+    </Layout >
   )
 }
 

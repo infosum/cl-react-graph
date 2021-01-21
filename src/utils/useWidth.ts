@@ -1,5 +1,5 @@
 import {
-  useEffect,
+  useLayoutEffect,
   useState,
 } from 'react';
 import useMeasure from 'react-use-measure';
@@ -13,7 +13,7 @@ export const useWidth = (origWidth: string | number) => {
     polyfill: ResizeObserver,
   });
   const [r, setR] = useState<any>(width);
-  useEffect(() => {
+  useLayoutEffect(() => {
     const w = typeof origWidth === 'number'
       ? origWidth
       : origWidth.includes('%')
