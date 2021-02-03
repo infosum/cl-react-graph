@@ -1,7 +1,11 @@
 import { curveCatmullRom } from 'd3-shape';
 import { timeFormat } from 'd3-time-format';
 
-import { ILineChartDataSet } from '../src';
+import {
+  IBarChartData,
+  ILineChartDataSet,
+} from '../src';
+import { IHistogramData } from '../src/Histogram';
 
 const dateFormat = '%d-%b-%y';
 const now = new Date();
@@ -9,6 +13,30 @@ const xs = new Array(100).fill('').map((_, i) => new Date(new Date().setDate(now
 const dateValues = xs.map((v) => ({
   x: v, y: Math.random() * 1000,
 }));
+
+export const histogramData: IHistogramData = {
+  bins: [[0, 50], [50, 150], [150, 300]],
+  counts: [
+    {
+      data: [500, 2000, 1500],
+      label: 'Baseline',
+    },
+  ]
+}
+
+export const barChartData: IBarChartData = {
+  bins: ['Female', 'Male', 'Other', 'sdfdfg', 'dagdsg', 'sfsd', 'ds34fsdf', 'dfsfsd', 'sdfs34dfs', 'ghf34hfg', 'fd33gag', 'jg343hj', 'a343wes', 'ye343ye', 'fd343gjs', 'sdfd343fg', '34', 'sfsd', '433', '45245', '745'],
+  counts: [
+    {
+      data: [58483, 52400, 13300, 79200, 52400, 13300, 79200, 52400, 13300, 79200, 52400, 13300, 79200, 52400, 13300, 79200, 52400, 13300, 79200, 52400, 13300],
+      label: 'Baseline',
+    },
+    {
+      data: [54932, 34230, 10000, 60000, 34230, 10000, 60000, 34230, 10000, 60000, 34230, 10000, 60000, 34230, 10000, 60000, 34230, 10000, 60000, 34230, 10000],
+      label: 'Filtered',
+    },
+  ]
+}
 
 export const data3: ILineChartDataSet<any>[] = [{
   'label': 'rob Allocation',

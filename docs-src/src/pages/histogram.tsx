@@ -73,7 +73,7 @@ const initialState: IInitialState = {
     },
     paddingInner: 0.1,
     paddingOuter: 0,
-    overlayMargin: 5,
+    overlayMargin: 0.5,
     hover: {
       lighten: 0.1,
     },
@@ -98,7 +98,6 @@ export type Actions = { type: 'setChartType'; chartType: string }
   | { type: 'setGroupedBarLayout'; layout: EGroupedBarLayout; }
   | { type: 'setGroupedPaddingInner'; padding: number; }
   | { type: 'setGroupedPaddingOuter'; padding: number; }
-  | { type: 'setOverlayMargin'; margin: number; }
   | { type: 'setWidth', width: string; }
   | { type: 'setHoverModifier'; value: number; key: string; index: number; }
   | { type: 'removeHoverModifier'; index: number; }
@@ -129,9 +128,6 @@ function reducer(draft: Draft<IInitialState>, action: Actions) {
       return;
     case 'setGroupedBarLayout':
       draft.groupLayout = action.layout;
-      return;
-    case 'setOverlayMargin':
-      draft.bar.overlayMargin = action.margin;
       return;
     case 'setGroupedPaddingInner':
       draft.bar.grouped.paddingInner = action.padding;

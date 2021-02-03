@@ -121,20 +121,6 @@ export const Styling: FC<IProps> = ({
             This is the relative padding for the outside of grouped datasets or single datasets
         </small>
         </Grid>
-
-        {
-          state.groupLayout === EGroupedBarLayout.OVERLAID &&
-          <Grid item xs={6}>
-            <TextField
-              helperText="When rendered as overlaid, this is the space between the overlaid bars"
-              label="Overlay margin (px)"
-              value={state.bar.overlayMargin}
-              onChange={(e) => {
-                dispatch(({ type: 'setOverlayMargin', margin: Number(e.target.value) }))
-              }}
-            />
-          </Grid>
-        }
         <ColorModifierFields
           values={state.bar.hover}
           dispatch={dispatch} />

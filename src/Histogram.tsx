@@ -60,7 +60,11 @@ export interface IHistogramBar {
   paddingInner: number;
   // @deprecated in 3.0
   hover?: Partial<Record<EColorManipulations, number>>,
-  overlayMargin: number; // When bars are rendered as EGroupedBarLayout.OVERLAID (offset between the two overlaid bars)
+  /**  
+   * @description When bars are rendered as EGroupedBarLayout.OVERLAID (offset between the two overlaid bars)
+   * If < 1 then use it as a percentage offset of the bar width otherwise use as a pixel offset
+   */
+  overlayMargin: number;
 }
 
 export interface IHistogramData {
@@ -92,7 +96,6 @@ export interface IGrid {
     visible: boolean;
   };
 }
-
 
 export interface IHistogramProps {
   animation?: SpringConfig;

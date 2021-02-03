@@ -22,6 +22,8 @@ import {
   IHistogramBar,
 } from '../../Histogram';
 import {
+  buildBarDatasets,
+  getBarWidth,
   groupedBarsUseSameXAxisValue,
   groupedPaddingInner,
   groupedPaddingOuter,
@@ -61,7 +63,7 @@ const paddings = {
     paddingInner: 0.1,
     paddingOuter: 0,
   },
-  overlayMargin: 5,
+  overlayMargin: 0.5,
   paddingInner: 0,
   paddingOuter: 0,
 };
@@ -101,23 +103,8 @@ const Bars: FC<IProps> = ({
   if (!hoverColorScheme) {
     hoverColorScheme = colorScheme.map((c) => color(c)?.brighter(0.1).toString()) as readonly string[];
   }
-  const dataSets: ExtendedGroupItem[] = [];
+  const { dataSets, binLabels } = buildBarDatasets({ values, bins, visible });
 
-  const binLabels = bins.reduce((p, n) => p.concat(Array.isArray(n) ? n : [n]), [] as (number | string)[]);
-
-  values.forEach((count, datasetIndex) => {
-    const total = count.data.reduce((p, n) => p + n, 0);
-    count.data.forEach((value, i) => {
-      dataSets.push({
-        groupLabel: count.label,
-        datasetIndex,
-        label: String(binLabels[i]),
-        binIndex: i,
-        percentage: total === 0 ? '0' : ((value / total) * 100).toFixed(2),
-        value: visible[binLabels[i]] !== false && visible[count.label] !== false ? value : 0,
-      });
-    });
-  });
   const numericScale = scaleLinear()
     .domain(domain)
     .rangeRound([0, direction === EChartDirection.HORIZONTAL ? width : height]);
@@ -141,23 +128,31 @@ const Bars: FC<IProps> = ({
 
   const transform = `(${left}, ${top})`;
 
+
+  const itemWidths = Array.from(dataSets.reduce((prev, next) => prev.add(next.datasetIndex), new Set<number>()))
+    .map((i) => {
+      const itemWidth = getBarWidth(i, groupLayout, paddings, innerScaleBand);
+      return itemWidth;
+    });
+
   const [hover, setHover] = useState(-1);
   const springs = useSprings(dataSets.length, buildBarSprings({
-    values,
-    height,
-    width,
-    dataSets,
-    numericScale,
     bandScale,
     colorScheme,
+    config,
+    dataSets,
+    direction,
+    groupLayout,
+    height,
+    hoverColorScheme,
     innerDomain,
     innerScaleBand,
-    hoverColorScheme,
-    groupLayout,
-    paddings,
-    config,
-    direction,
     inverse,
+    itemWidths,
+    numericScale,
+    paddings,
+    values,
+    width,
   }));
 
   const refs: RefObject<any>[] = [];
@@ -172,6 +167,7 @@ const Bars: FC<IProps> = ({
             return <animated.rect
               ref={refs[i]}
               role="cell"
+              data-testid={`chart-bar-${i}`}
               onMouseEnter={() => setHover(i)}
               onMouseLeave={() => setHover(-1)}
               key={`bar-${dataSets[i].groupLabel}.${dataSets[i].label}`}

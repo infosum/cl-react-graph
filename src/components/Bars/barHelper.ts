@@ -10,7 +10,6 @@ import {
   IBarChartDataSet,
   IHistogramBar,
 } from '../../Histogram';
-import { getBarWidth } from '../../utils/bars';
 import { ExtendedGroupItem } from './Bars';
 
 /**
@@ -22,6 +21,7 @@ import { ExtendedGroupItem } from './Bars';
 const getBandPosition = (
   item: ExtendedGroupItem,
   props: IBarSpringProps,
+  itemWidths: number[],
 ) => {
   const { innerScaleBand, innerDomain, groupLayout, paddings } = props;
   const groupLabel = item.groupLabel ?? 'main';
@@ -29,7 +29,10 @@ const getBandPosition = (
   switch (groupLayout) {
     case EGroupedBarLayout.OVERLAID:
       // Move to the right for each subsequent dataset to reveal the previous dataset's bars.
-      const overlaidOffset = paddings.overlayMargin * item.datasetIndex;
+      const overlaidOffset = item.datasetIndex == 0
+        ? 0
+        : Math.floor((itemWidths[item.datasetIndex - 1] - itemWidths[item.datasetIndex]) / 2)
+
       bandX = Number(innerScaleBand(String(innerDomain[0]))) + overlaidOffset;
       break;
     case EGroupedBarLayout.STACKED:
@@ -45,7 +48,7 @@ const getBandPosition = (
   return bandX;
 }
 
-interface IBarSpringProps {
+export interface IBarSpringProps {
   values: IBarChartDataSet[];
   height: number;
   width: number;
@@ -62,22 +65,24 @@ interface IBarSpringProps {
   direction: EChartDirection;
   /** @description - inverse the bars e.g if direction = horizontal run the bars from right to left */
   inverse?: boolean;
+  itemWidths: number[];
 }
 /**
  * Build the from / to spring animation properties to animate the bars.
  */
 export const buildBarSprings = (props: IBarSpringProps) => {
   const { direction, config, height, dataSets, numericScale, bandScale, colorScheme,
-    innerScaleBand, groupLayout, paddings, hoverColorScheme,
+    hoverColorScheme,
     inverse = false,
+    itemWidths,
   } = props;
   const [_, width] = numericScale.range();
 
   const s = dataSets.map((item) => {
     const bandValue = Number(bandScale(item.label));
-    const bandPosition = getBandPosition(item, props);
+    const bandPosition = getBandPosition(item, props, itemWidths);
     const valueOffset = getValueOffset(item, props);
-    const itemWidth = getBarWidth(item.datasetIndex, groupLayout, paddings, innerScaleBand);
+    const itemWidth = itemWidths[item.datasetIndex];
     const itemHeight = numericScale(item.value);
     if (direction === EChartDirection.HORIZONTAL) {
       return {
