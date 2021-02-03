@@ -93,7 +93,7 @@ const initialState: DeepPartial<ITornadoProps> = {
     },
     paddingInner: 0.1,
     paddingOuter: 0,
-    overlayMargin: 10,
+    overlayMargin: 0.2,
     hover: {
       lighten: 0.1,
     },

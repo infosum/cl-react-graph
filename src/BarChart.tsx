@@ -32,7 +32,7 @@ export const defaultPadding: IHistogramBar = {
   },
   paddingInner: 0.1,
   paddingOuter: 0,
-  overlayMargin: 5,
+  overlayMargin: 0.5,
   hover: {
     lighten: 0.1,
   },

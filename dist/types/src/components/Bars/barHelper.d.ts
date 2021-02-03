@@ -3,7 +3,7 @@ import { SpringConfig } from 'react-spring';
 import { EChartDirection } from '../../BarChart';
 import { EGroupedBarLayout, IBarChartDataSet, IHistogramBar } from '../../Histogram';
 import { ExtendedGroupItem } from './Bars';
-interface IBarSpringProps {
+export interface IBarSpringProps {
     values: IBarChartDataSet[];
     height: number;
     width: number;
@@ -20,6 +20,7 @@ interface IBarSpringProps {
     direction: EChartDirection;
     /** @description - inverse the bars e.g if direction = horizontal run the bars from right to left */
     inverse?: boolean;
+    itemWidths: number[];
 }
 /**
  * Build the from / to spring animation properties to animate the bars.
@@ -67,4 +68,3 @@ export declare const buildBarSprings: (props: IBarSpringProps) => ({
  * This should provide us with the finishing location for the bar's y position.
  */
 export declare const getValueOffset: (item: ExtendedGroupItem, props: IBarSpringProps) => any;
-export {};

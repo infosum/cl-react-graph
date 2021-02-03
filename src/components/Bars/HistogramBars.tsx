@@ -132,6 +132,8 @@ const HistogramBars: FC<IProps> = ({
               ref={refs[i]}
               stroke={stroke}
               className="chart-bar"
+              role="cell"
+              data-testid={`chart-bar-${i}`}
               onMouseEnter={() => setHover(i)}
               onMouseLeave={() => setHover(-1)}
               key={`bar-${item.groupLabel}.${item.label}.${item.value}`}

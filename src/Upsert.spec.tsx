@@ -24,7 +24,7 @@ beforeEach(() => {
   (SVGElement.prototype as any).getBBox = (): any => {
     return { x: 0, y: 0, width: 0, heigh: 0, bottom: 0, left: 0 };
   }
-});;
+});
 
 test('displays percentage', () => {
   render(<UpsetChart

@@ -127,7 +127,7 @@ export class TornadoD3 {
       },
       paddingInner: 0.1,
       paddingOuter: 0,
-      overlayMargin: 5,
+      overlayMargin: 0.1,
     },
     className: 'torando-d3',
     colorScheme,
