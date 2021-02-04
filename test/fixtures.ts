@@ -1,4 +1,7 @@
-import { curveCatmullRom } from 'd3-shape';
+import {
+  curveCatmullRom,
+  curveStepBefore,
+} from 'd3-shape';
 import { timeFormat } from 'd3-time-format';
 
 import {
@@ -7,12 +10,35 @@ import {
 } from '../src';
 import { IHistogramData } from '../src/Histogram';
 
-const dateFormat = '%d-%b-%y';
 const now = new Date();
 const xs = new Array(100).fill('').map((_, i) => new Date(new Date().setDate(now.getDate() + i)))
-const dateValues = xs.map((v) => ({
-  x: v, y: Math.random() * 1000,
+const dateValues = xs.map((v, i) => ({
+  x: v, y: i * 1000,
 }));
+
+export const lineChartData: ILineChartDataSet<any>[] = [
+  {
+    "label": "cdd7c30f-4d9b-433c-a5d4-12bb39df89c6 usage",
+    "line": {
+      "fill": {
+        "fill": "rgba(11, 85, 167, 0.7)",
+        "show": true
+      },
+      "show": true,
+      "stroke": "#000",
+      "strokeDashArray": "0",
+      "strokeDashOffset": 0,
+      curveType: curveStepBefore,
+    },
+    "point": {
+      "fill": "#000",
+      "radius": 2,
+      "show": true,
+      "stroke": "#000"
+    },
+    "data": dateValues
+  }
+]
 
 export const histogramData: IHistogramData = {
   bins: [[0, 50], [50, 150], [150, 300]],

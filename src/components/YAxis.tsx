@@ -3,8 +3,8 @@ import {
   ScaleBand,
   scaleBand,
   scaleLinear,
-  scaleLog,
   scalePoint,
+  scaleSymlog,
   scaleTime,
 } from 'd3-scale';
 import React, {
@@ -18,6 +18,7 @@ import {
   ISVGLineStyle,
   ISVGTextStyle,
 } from '../legacy/types';
+import { buildTicks } from '../utils/axis';
 import {
   paddingInner,
   paddingOuter,
@@ -137,9 +138,10 @@ const YAxis: FC<IAxis> = ({
       Scale = scalePoint()
         .range([Number(height) / 4, Number(height) * (3 / 4)])
         .domain(values as string[]);
+      break;
     case 'log':
-      Scale = scaleLog()
-      scaleLog().clamp(true)// clamp values below 1 to be equal to 0
+      Scale = scaleSymlog()
+        .clamp(true)// clamp values below 1 to be equal to 0
         .domain(extent(domain ? [0, ...domain as number[]] : values as number[]) as any)
         .rangeRound([height, 0]);
       break;
@@ -147,6 +149,7 @@ const YAxis: FC<IAxis> = ({
       Scale = scaleTime()
         .domain(extent(domain ? [0, ...domain as number[]] : values as number[]) as any)
         .rangeRound([height, 0]);
+      break;
   }
 
   const transform = `(${width + left}, ${top})`;
@@ -156,9 +159,9 @@ const YAxis: FC<IAxis> = ({
   const axisPath = { ...defaultPath, ...(path ?? {}) };
   const { fill, opacity, stroke, strokeOpacity, strokeWidth } = axisPath;
   const d = Scale.domain() as [number, number];
-  const ticks: any[] = (values.length === 0 && scale === 'linear')
-    ? [d[0], d[1] - d[0], [d[1]]]
-    : values;
+
+  const ticks = buildTicks(scale, values, d);
+
   return (
     <g className="y-axis"
       transform={`translate${transform}`}

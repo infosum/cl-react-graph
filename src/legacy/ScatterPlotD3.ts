@@ -200,8 +200,8 @@ export const scatterPlotD3 = ((): IChartAdaptor<IScatterPlotProps> => {
           .data(data.values)
           .enter().append('circle')
           .attr('r', (d) => radius)
-          .attr('cx', (d) => xScale(d[Number(p.x)]))
-          .attr('cy', (d) => yScale(d[Number(p.y)]))
+          .attr('cx', (d) => Number(xScale(d[Number(p.x)])))
+          .attr('cy', (d) => Number(yScale(d[Number(p.y)])))
           .style('fill', (d) => {
             if (d[split]) {
               const i = choices.findIndex((c) => c === d[split]);

@@ -43,6 +43,7 @@ const Line: FC<Props> = (props) => {
   return (
     <>
       <animated.path
+        data-testid={className}
         className={className}
         fill="none"
         strokeDashoffset={line.strokeDashOffset}

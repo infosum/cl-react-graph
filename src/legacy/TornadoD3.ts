@@ -276,10 +276,10 @@ export class TornadoD3 {
 
 
     // Move the y axis ticks to the left of the chart (need to go after the x axis range set up)
-    yAxis.tickPadding(x(0) + 10)
+    yAxis.tickPadding(Number(x(0)) + 10)
     yAxisContainer
       // Place the y axis in the middle of the chart
-      ?.attr('transform', 'translate(' + (yAxisWidth(axis) + x(0)) + ', ' + margin.top + ' )')
+      ?.attr('transform', 'translate(' + (yAxisWidth(axis) + Number(x(0))) + ', ' + margin.top + ' )')
       .call(yAxis);
     attrs(svg?.selectAll('.y-axis .domain, .y-axis .tick line'), axis.y?.style ?? {} as any);
     attrs(svg?.selectAll('.y-axis .tick text'), axis.y?.text?.style ?? {} as any);
@@ -353,7 +353,7 @@ export class TornadoD3 {
       ?.enter()
       .append<SVGElement>('rect')
       .attr('width', 0)
-      .attr('x', (d) => x(0))
+      .attr('x', (d) => Number(x(0)))
       .attr('class', (d) => `bar ${d.side}`)
       .on('click', onClick(props.onClick))
       .on('mouseover', onMouseOver({ bins, hover: props.bar.hover, colors, tipContentFn: props.tipContentFn, tipContent, tip, tipContainer }))
@@ -371,10 +371,10 @@ export class TornadoD3 {
       .transition()
       .duration(duration)
       .delay(delay)
-      .attr('x', stackedOffset)
+      .attr('x', Number(stackedOffset))
       .attr('width', (d: IGroupDataItem): number => {
         const w = d.side === 'left' ? -d.value : d.value;
-        return Math.abs(x(w) - x(0));
+        return Math.abs(Number(x(w)) - Number(x(0)));
       });
 
     const percents = g?.enter()
@@ -398,7 +398,7 @@ export class TornadoD3 {
       .attr('width', 0)
       .attr('x', (d) => {
         const w = d.side === 'left' ? -40 : 40;
-        return x(0) + w;
+        return Number(x(0)) + w;
       })
       .attr('class', 'percentage-label')
       .style('text-anchor', 'middle')
@@ -422,11 +422,11 @@ export class TornadoD3 {
       .attr('x', (d) => {
         const w = d.side === 'left' ? - 20 : 20;
         const v = d.side === 'left' ? -d.value : d.value;
-        return x(v) + w;
+        return Number(x(v)) + w;
       })
       .attr('width', (d: IGroupDataItem): number => {
         const w = d.side === 'left' ? -d.value : d.value;
-        return Math.abs(x(w) - x(0));
+        return Math.abs(Number(x(w)) - Number(x(0)));
       });
 
     percents?.exit().remove();
