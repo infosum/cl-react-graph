@@ -31,9 +31,11 @@ import TextField from '@material-ui/core/TextField';
 import { ILineChartDataSet } from '../../../src';
 import { ELabelOrientation } from '../../../src/components/YAxis';
 import LineChart, { IProps } from '../../../src/LineChart';
-import { useLineDomain } from '../../../src/utils/useDomain';
 import { useWidth } from '../../../src/utils/useWidth';
-import { data3 } from '../../../test/fixtures';
+import {
+  data3,
+  lineChartData,
+} from '../../../test/fixtures';
 import { AxisActions } from '../components/AxisOptions';
 import { CurveSelector } from '../components/CurveSelector';
 import JSXToString from '../components/JSXToString';
@@ -45,19 +47,15 @@ import { grid } from '../data';
 type TInitialState = IProps<{ x: number | string | Date, y: number }>;
 type TData = ILineChartDataSet<{ x: string | number | Date, y: number }>;
 
-const dateFormat = '%d-%b-%y';
-const formatTime = timeFormat(dateFormat);
 const now = new Date();
-const xs = [1, 2, 4, 5, 6, 8, 10].map((i) => formatTime(new Date(new Date().setDate(now.getDate() + i))))
-const dateValues = [
-  { x: xs[0], y: 1500000 },
-  { x: xs[1], y: 12 },
-  { x: xs[2], y: 3 },
-  { x: xs[3], y: 4 },
-];
+const xs = new Array(15).fill('').map((_, i) => new Date(new Date().setDate(now.getDate() + i)))
+
+const dateValues = xs.map((v) => ({
+  x: v, y: Math.random() * 1000,
+}));
 
 const data = {
-  data: dateValues,
+  data: lineChartData[0].data,
   label: 'test data',
   line: {
     curveType: curveCatmullRom,
@@ -72,28 +70,23 @@ const data = {
   },
   point: {
     fill: '#08697F',
-    radius: 10,
+    radius: 1,
     show: true,
     stroke: '#483A3A',
   },
 };
 
 const data2 = {
-  data: [
-    { x: 13, y: 1 },
-    { x: 23, y: 12 },
-    { x: 32, y: 3 },
-    { x: 41, y: 4 },
-  ],
+  data: dateValues,
   label: 'test data 2',
   line: {
     curveType: curveCatmullRom,
     fill: {
-      fill: 'rgba(54, 174, 141, 0.28)',
+      fill: 'rgba(154, 74, 141, 0.28)',
       show: true,
     },
     show: true,
-    stroke: '#08697F',
+    stroke: '#000',
     strokeDashArray: '10 5',
     strokeDashOffset: 0,
   },
@@ -101,7 +94,7 @@ const data2 = {
     fill: '#00a97b',
     radius: 10,
     show: true,
-    stroke: '#483A3A',
+    stroke: '#0000',
   },
 };
 
@@ -115,6 +108,7 @@ const initialState: TInitialState = {
     y: {
       width: 20,
       height: 400,
+      scale: 'log',
     },
   },
   height: 400,
@@ -205,13 +199,15 @@ const LineExample: FC = () => {
     const x = typeof (point.x) === 'object' ? point.x.toDateString() : point.x;
     return [{ value: x }, { value: Number(point.y) }];
   });
-  const domain = useLineDomain({
-    values: state.data,
-  });
+
   const chart = <LineChart
     width={w}
     height={300}
     grid={state.grid}
+    axisLabelFormat={(axis, bin, i) => axis === 'x' ?
+      timeFormat('%d-%b-%y')(new Date(bin))
+      : bin
+    }
     axis={state.axis}
     data={state.data}
   />
@@ -247,6 +243,7 @@ const LineExample: FC = () => {
               </Tabs>
               {
                 tab === 0 && <TabContainer>
+                  <Button onClick={() => dispatch({ type: 'toggleRow' })}>Toggle Row</Button>
                   <ReactDataSheet
                     data={gridData}
                     valueRenderer={(cell) => cell.value}
@@ -265,7 +262,6 @@ const LineExample: FC = () => {
                     onCellsChanged={(changes) => {
                       dispatch({ type: 'applyChanges', index: 0, changes });
                     }} />
-                  <Button onClick={() => dispatch({ type: 'toggleRow' })}>Toggle Row</Button>
                   <Grid item md={6} xs={12}>
                     <TextField
                       label="Y Axis Scale"

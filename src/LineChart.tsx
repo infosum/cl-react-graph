@@ -2,7 +2,10 @@ import {
   CurveFactory,
   CurveFactoryLineOnly,
 } from 'd3-shape';
-import React, { FC } from 'react';
+import React, {
+  FC,
+  Fragment,
+} from 'react';
 
 import AreaFill from './components/AreaFill';
 import Base from './components/Base';
@@ -10,7 +13,7 @@ import Grid from './components/Grid';
 import Line from './components/Line';
 import Points from './components/Points';
 import XAxis from './components/XAxis';
-import YAxis from './components/YAxis';
+import YAxis, { TAxisLabelFormat } from './components/YAxis';
 import { IGrid } from './Histogram';
 import { IAxes } from './legacy/types';
 import { useLineDomain } from './utils/useDomain';
@@ -40,6 +43,7 @@ export interface ILineChartDataSet<T> {
     stroke: string;
     fill: string;
     show: boolean;
+    showTitle?: boolean;
   };
   line: ILineProps;
   data: T[];
@@ -48,17 +52,23 @@ export interface ILineChartDataSet<T> {
 export interface IProps<T extends IChartPoint<IChartPointValue, IChartPointValue> = IChartPoint> {
   axis: IAxes;
   data: ILineChartDataSet<T>[];
-  grid: IGrid;
+  grid?: IGrid;
   height: number;
   width: number;
   xAxisHeight?: number;
   yAxisWidth?: number;
   title?: string;
   description?: string;
+  /**
+   * @description if true then adds a 0 to the data domain. Useful if you don't want your lowest value to appear on top of the x axis
+   */
+  clampToZero?: boolean;
+  axisLabelFormat?: TAxisLabelFormat;
 }
 
 const LineChart: FC<IProps> = ({
   axis,
+  clampToZero = true,
   data,
   grid,
   height,
@@ -67,10 +77,14 @@ const LineChart: FC<IProps> = ({
   yAxisWidth = 100,
   title,
   description,
+  axisLabelFormat,
 }) => {
   const domain = useLineDomain({
     values: data,
+    clampToZero,
   });
+  const values = data.reduce((prev, next) => prev.concat(next.data.map((d) => d.x)), [] as any[])
+
   return (
     <Base
       width={width}
@@ -78,17 +92,19 @@ const LineChart: FC<IProps> = ({
       title={title}
       description={description}>
 
-      <Grid
-        left={yAxisWidth}
-        height={height - xAxisHeight}
-        svgProps={{ ...grid.x.style }}
-        lines={{
-          vertical: grid.y.ticks,
-          horizontal: grid.x.ticks,
-        }}
-        width={width - yAxisWidth} />
       {
-        data.map((item) => <> <Line
+        grid && <Grid
+          left={yAxisWidth}
+          height={height - xAxisHeight}
+          svgProps={{ ...grid.x.style }}
+          lines={{
+            vertical: grid.y.ticks,
+            horizontal: grid.x.ticks,
+          }}
+          width={width - yAxisWidth} />
+      }
+      {
+        data.map((item) => <Fragment key={item.label}> <Line
           axis={axis}
           key={item.label}
           label={item.label}
@@ -102,12 +118,14 @@ const LineChart: FC<IProps> = ({
             item.point.show &&
             <Points
               axis={axis}
+              label={item.label}
               key={item.label}
               width={width - yAxisWidth}
               left={yAxisWidth}
               height={height - xAxisHeight}
               radius={item.point.radius}
               fill={item.point.fill}
+              showTitle={item.point.showTitle}
               stroke={item.point.stroke}
               data={item.data} />
           }
@@ -115,6 +133,7 @@ const LineChart: FC<IProps> = ({
           {
             item.line.fill.show && <AreaFill
               axis={axis}
+              label={item.label}
               key={item.label}
               width={width - yAxisWidth}
               left={yAxisWidth}
@@ -122,20 +141,31 @@ const LineChart: FC<IProps> = ({
               line={item.line}
               data={item.data} />
           }
-        </>)}
+        </Fragment>)
+      }
 
       <YAxis
         width={yAxisWidth}
         height={height - xAxisHeight}
-        scale="linear"
+        scale={axis.y.scale ?? 'linear'}
         domain={domain}
       />
 
       <XAxis
         width={width - yAxisWidth}
         height={xAxisHeight}
+        labelFormat={axisLabelFormat}
+        scale={axis.x.scale ?? 'band'}
         top={height - xAxisHeight}
-        left={yAxisWidth} />
+        left={yAxisWidth}
+        values={
+          values.length > 4
+            ? [values[0], values[Math.floor(values.length / 4)],
+            values[Math.floor(values.length / 2)],
+            values[Math.floor(values.length * (3 / 4))],
+            ] as number[]
+            : values}
+      />
 
     </Base>
   )

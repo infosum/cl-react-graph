@@ -4,10 +4,12 @@ import {
   scaleBand,
   scaleLinear,
   scalePoint,
+  scaleTime,
 } from 'd3-scale';
 import React, { FC } from 'react';
 
 import { defaultPadding } from '../BarChart';
+import { buildTicks } from '../utils/axis';
 import {
   paddingInner,
   paddingOuter,
@@ -83,6 +85,12 @@ const XAxis: FC<IAxis> = ({
         .range([Number(width) / 4, Number(width) * (3 / 4)])
         .domain(values as string[]);
       break;
+    case 'time':
+      const ex = extent(domain ? [0, ...domain as number[]] : values as any[]) as any;
+      Scale = scaleTime()
+        .domain(ex)
+        .rangeRound([0, width]);
+      break;
   }
 
   const transform = `${left}, ${top}`;
@@ -91,9 +99,7 @@ const XAxis: FC<IAxis> = ({
   const axisPath = { ...defaultPath, ...(path ?? {}) };
   const { fill, opacity, stroke, strokeOpacity, strokeWidth } = axisPath;
   const d = Scale.domain() as [number, number];
-  const ticks: any[] = (values.length === 0 && scale === 'linear')
-    ? [d[0], d[1] - d[0], [d[1]]]
-    : values;
+  const ticks = buildTicks(scale, values, d);
 
   return (
     <g className="x-axis"

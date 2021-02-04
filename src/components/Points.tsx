@@ -8,13 +8,21 @@ import {
 export type TPoints = Omit<IProps, 'line'> & {
   radius?: number;
   fill?: string;
+  label?: string;
   stroke?: string;
+  showTitle?: boolean;
 }
 
 const Points: FC<TPoints> = (props) => {
-  const { data, radius = 5, fill = '#000', stroke = '#000' } = props;
+  const {
+    data,
+    radius = 5,
+    fill = '#000',
+    stroke = '#000',
+    showTitle = true,
+  } = props;
   const { xScale, yScale } = useScales(props);
-
+  const className = `point-${(props.label ?? '').replace(/[^a-z]/gi, '')}`;
   if (yScale === null) {
     return null;
   }
@@ -26,14 +34,19 @@ const Points: FC<TPoints> = (props) => {
         const xValue = xScale(x);
         return <circle
           key={`point-${xValue}-${yValue}`}
-          className={`point-${xValue}-${yValue}`}
+          className={`${className}-${xValue}-${yValue}`}
+          data-testid={`${className}-${xValue}-${yValue}`}
           r={radius}
           cy={yValue}
           cx={xValue}
           fill={fill}
           stroke={stroke}
           {...rest}
-        />
+        >
+          {
+            showTitle && <title>{`${x}, ${y}`}</title>
+          }
+        </circle>
       })
     }
   </>

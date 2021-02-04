@@ -87,7 +87,7 @@ export const useMakeLine: (props: IProps) => { previous: string, current: string
           return x(d.x);
         })
         .y((d: any) => y(d.y));
-      const next = String(curve(xScale, yScale)(data as any))
+      const next = String(curve(xScale, yScale)(data as any));
       if (next !== current) {
         setPrevious(current);
         setCurrent(next);

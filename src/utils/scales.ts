@@ -2,9 +2,10 @@ import {
   ScaleBand,
   scaleLinear,
   ScaleLinear,
-  scaleLog,
   ScaleLogarithmic,
   ScalePoint,
+  ScaleSymLog,
+  scaleSymlog,
   scaleTime,
   ScaleTime,
 } from 'd3-scale';
@@ -14,6 +15,7 @@ import { IAxes } from '../';
 export type AnyScale = ScaleLinear<number, number>
   | ScaleTime<any, any>
   | ScaleLogarithmic<any, any>
+  | ScaleSymLog<any, any>
   | ScaleBand<string>
   | ScalePoint<string>;
 
@@ -23,7 +25,7 @@ export const buildScales = (axis: IAxes) => {
 
   switch (axis.x.scale) {
     case 'log':
-      x = scaleLog().clamp(true); // clamp values below 1 to be equal to 0
+      x = scaleSymlog().clamp(true); // clamp values below 1 to be equal to 0
       break;
     case 'time':
       x = scaleTime();
@@ -35,7 +37,7 @@ export const buildScales = (axis: IAxes) => {
 
   switch (axis.y.scale) {
     case 'log':
-      y = scaleLog().clamp(true); // clamp values below 1 to be equal to 0
+      y = scaleSymlog().clamp(true); // clamp values below 1 to be equal to 0
       break;
     case 'time':
       y = scaleTime();
