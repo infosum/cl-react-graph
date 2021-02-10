@@ -4,7 +4,6 @@ import { EGroupedBarLayout } from './Histogram';
 import { ITornadoData } from './legacy/Tornado';
 interface IProps {
     data: ITornadoData;
-    /** @todo - this is not yet implemented */
     direction?: EChartDirection;
     groupLayout: EGroupedBarLayout;
     height: number;

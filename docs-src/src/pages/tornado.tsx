@@ -14,10 +14,11 @@ import {
 } from '@material-ui/core';
 
 import {
+  EChartDirection,
   EGroupedBarLayout,
   IAxes,
 } from '../../../src';
-import TornadoChart, {
+import {
   ITornadoData,
   ITornadoProps,
 } from '../../../src/legacy/Tornado';
@@ -70,15 +71,15 @@ const initialState: DeepPartial<ITornadoProps> = {
       {
         label: 'Background',
         data: [
-          [0, 2600, 5100, 9700, 8400, 6700], // Male bin 1, Male bin 2,
-          [0, 2100, 4700, 8700, 4900, 1400], // Female bin 1, Female bin 2,
+          [200, 2600, 5100, 9700, 8400, 6700], // Male bin 1, Male bin 2,
+          [2002, 2100, 4700, 8700, 4900, 1400], // Female bin 1, Female bin 2,
         ],
       },
       {
         label: 'Foreground',
         data: [
-          [0, 260, 510, 970, 840, 670], // Male bin 1, Male bin 2,
-          [0, 5500, 470, 870, 490, 140], // Female bin 1, Female bin 2,
+          [100, 260, 510, 970, 840, 670], // Male bin 1, Male bin 2,
+          [1000, 5500, 470, 870, 490, 140], // Female bin 1, Female bin 2,
         ],
       },
 
@@ -122,8 +123,14 @@ function reducer(state: ITornadoProps, action: Actions): ITornadoProps {
 const Tornado = () => {
   const [state, dispatch] = useReducer(reducer, initialState as ITornadoProps);
   const [index, setIndex] = useState(0);
-  const chart = <TornadoChart
-    {...state} />;
+  const [direction, setDIrection] = useState(EChartDirection.VERTICAL);
+  const chart = <NativeTornado {...state}
+    width={600}
+    direction={direction}
+    xAxisHeight={20}
+    showBinPercentages={state.showBinPercentages}
+    splitAxisHeight={50}
+    height={500} />
   return (
     <Layout>
       <SEO title="Line Chart" description="" />
@@ -133,16 +140,7 @@ const Tornado = () => {
           <Grid item xs={12} md={6}>
             <Card>
               <CardContent>
-                <NativeTornado {...state}
-                  width={600}
-                  xAxisHeight={20}
-                  showBinPercentages={state.showBinPercentages}
-                  splitAxisHeight={20}
-                  height={500} />
                 {chart}
-                <TornadoChart
-                  data={index === 0 ? state.data : data2}
-                  width="600" />
                 <Button onClick={() => setIndex(index === 0 ? 1 : 0)}>
                   Toggle Data
                 </Button>
@@ -168,6 +166,18 @@ const Tornado = () => {
                 />
               }
               label="Show points"
+            />
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={direction === EChartDirection.VERTICAL}
+                  color="primary"
+                  onChange={(_, value) => {
+                    setDIrection(direction === EChartDirection.VERTICAL ? EChartDirection.HORIZONTAL : EChartDirection.VERTICAL)
+                  }}
+                />
+              }
+              label={`Direction ${direction}`}
             />
           </Grid>
 

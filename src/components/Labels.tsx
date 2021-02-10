@@ -57,9 +57,8 @@ export const Labels: FC<IProps> = ({
             className="chart-label"
             transform={interpolate([props.x, props.y, props.width, props.height], (x, y, w, h) => {
               if (inverse) {
-                console.log(x, w, h);
                 return direction === EChartDirection.VERTICAL
-                  ? `translate(0,${y})`
+                  ? `translate(${x + (w / 2)},${h + (w / 2)})`
                   : `translate(${width - w}, ${y + (h / 2)})`;
               }
               return direction === EChartDirection.VERTICAL
