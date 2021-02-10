@@ -161,26 +161,29 @@ const Bars: FC<IProps> = ({
       <g className="bars"
         role="row"
         transform={`translate${transform}`}>
-        {
-          springs.map((props: any, i) => {
-            refs[i] = React.createRef<any>();
-            return <animated.rect
-              ref={refs[i]}
-              role="cell"
-              data-testid={`chart-bar-${i}`}
-              onMouseEnter={() => setHover(i)}
-              onMouseLeave={() => setHover(-1)}
-              key={`bar-${dataSets[i].groupLabel}.${dataSets[i].label}`}
-              height={props.height}
-              fill={hover == i ? props.hoverFill : props.fill}
-              width={props.width}
-              x={props.x as any}
-              y={props.y as any}
-            />
-          })
-        }
+        <g className="bar-lines">
+          {
+            springs.map((props: any, i) => {
+              refs[i] = React.createRef<any>();
+              return <animated.rect
+                ref={refs[i]}
+                role="cell"
+                data-testid={`chart-bar-${i}`}
+                onMouseEnter={() => setHover(i)}
+                onMouseLeave={() => setHover(-1)}
+                key={`bar-${dataSets[i].groupLabel}.${dataSets[i].label}`}
+                height={props.height}
+                fill={hover == i ? props.hoverFill : props.fill}
+                width={props.width}
+                x={props.x as any}
+                y={props.y as any}
+              />
+            })
+          }
+        </g>
         {
           <Labels
+            inverse={inverse}
             colorScheme={colorScheme}
             springs={springs}
             showLabels={showLabels}
@@ -188,6 +191,7 @@ const Bars: FC<IProps> = ({
             direction={direction}
             labels={labels}
             visible={visible}
+            width={width}
             LabelComponent={LabelComponent} />
         }
 

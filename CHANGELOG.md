@@ -1,3 +1,5 @@
+[3.1.14]
+  * Fixed rendering of new tornado chart (horizontal layout only so far).
 [3.1.13]
   * Add: Points add showTitle prop.
   * Add: LineChart add clampToZero prop. If true then adds a 0 to the data domain. Useful if you don't want your lowest value to appear on top of the x axis

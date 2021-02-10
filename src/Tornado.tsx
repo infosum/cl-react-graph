@@ -1,7 +1,3 @@
-import {
-  scaleBand,
-  scalePoint,
-} from 'd3-scale';
 import React, { FC } from 'react';
 
 import { EChartDirection } from './BarChart';
@@ -18,15 +14,20 @@ import { applyDomainAffordance } from './utils/domain';
 
 interface IProps {
   data: ITornadoData;
+  /** @todo - this is not yet implemented */
   direction?: EChartDirection;
   groupLayout: EGroupedBarLayout;
   height: number;
+  /** @description Height in px of the axis which labels the left/right values */
   splitAxisHeight?: number;
+  /** @description labels for the left/right split axis  */
   splitBins: [string, string];
   visible?: Record<string, boolean>;
   xAxisHeight?: number;
   yAxisWidth?: number;
   width: number;
+  padding?: number;
+  showBinPercentages: boolean;
 }
 
 const Tornado: FC<IProps> = ({
@@ -40,7 +41,10 @@ const Tornado: FC<IProps> = ({
   xAxisHeight,
   splitAxisHeight,
   yAxisWidth,
+  padding = 15,
+  showBinPercentages = false,
 }) => {
+  console.log('tornadoCharts', data);
   if (!yAxisWidth) {
     yAxisWidth = direction === EChartDirection.VERTICAL ? 40 : 100;
   }
@@ -55,7 +59,7 @@ const Tornado: FC<IProps> = ({
   const baseProps = {
     width,
     height,
-    padding: 15,
+    padding,
   }
 
   const dataSets: any[] = []
@@ -77,35 +81,61 @@ const Tornado: FC<IProps> = ({
     });
   });
 
-  const left: IBarChartDataSet[] = [
-    {
-      label: splitBins[0],
-      data: data.counts[0].data[0].map((d) => d * -1),
-    }
-  ]
+  const left: IBarChartDataSet[] = data.counts.map((counts, i) => {
 
+    return {
+      label: splitBins[0] + ' ' + counts.label,
+      data: [...counts.data[0]].reverse(),
+    }
+  })
+
+  const right: IBarChartDataSet[] = data.counts.map((counts, i) => {
+    return {
+      label: splitBins[1] + ' ' + counts.label,
+      data: [...counts.data[1]].reverse(),
+    }
+  });
+
+  const barWidth = (((width - (2 * padding)) - yAxisWidth) / 2);
+  const barHeight = (height - xAxisHeight - splitAxisHeight) - (padding * 2);
   return (
     <Base {...baseProps}
       width={width + 30}
     >
       <Bars values={left}
-        left={(width + yAxisWidth) / 2}
-        height={height - xAxisHeight - splitAxisHeight}
-        width={(width - yAxisWidth) / 2}
+        direction={direction}
+        inverse={true}
+        left={yAxisWidth}
+        height={barHeight}
+        width={barWidth}
         groupLayout={groupLayout}
         bins={data.bins}
         domain={domain}
+        showLabels={showBinPercentages ? [true, true] : [false, false]}
       />
+
+      <Bars values={right}
+        direction={direction}
+        inverse={false}
+        left={(((width - (2 * padding)) + yAxisWidth) / 2)}
+        height={barHeight}
+        width={barWidth}
+        groupLayout={groupLayout}
+        bins={data.bins}
+        domain={domain}
+        showLabels={showBinPercentages ? [true, true] : [false, false]}
+      />
+
       {
         // Left hand axis
       }
       <YAxis
         width={yAxisWidth}
-        height={height - xAxisHeight - splitAxisHeight}
+        height={barHeight}
         scale="band"
         path={{ opacity: 0 }}
         tickSize={0}
-        values={direction === EChartDirection.HORIZONTAL ? data.bins : undefined}
+        values={direction === EChartDirection.HORIZONTAL ? [...data.bins].reverse() : undefined}
       />
 
       {
@@ -113,21 +143,34 @@ const Tornado: FC<IProps> = ({
       }
       <YAxis
         width={yAxisWidth}
-        height={height - xAxisHeight - splitAxisHeight}
-        left={(width - yAxisWidth) / 2}
+        height={barHeight}
+        left={barWidth}
         labelFormat={() => ''}
         values={direction === EChartDirection.HORIZONTAL ? data.bins : undefined}
         scale="band"
       />
 
       {
-        // Bottom values axis
+        // Bottom left values axis
       }
       <XAxis
-        width={width - yAxisWidth}
+        width={barWidth}
+        inverse={true}
         height={xAxisHeight}
-        top={height - xAxisHeight - splitAxisHeight}
+        top={barHeight}
         left={yAxisWidth}
+        scale="linear"
+        domain={domain}
+      />
+
+      {
+        // Bottom right values axis
+      }
+      <XAxis
+        width={barWidth}
+        height={xAxisHeight}
+        top={barHeight}
+        left={((width - (2 * padding) + yAxisWidth) / 2)}
         scale="linear"
         domain={domain}
       />
@@ -137,7 +180,7 @@ const Tornado: FC<IProps> = ({
         direction === EChartDirection.HORIZONTAL && <XAxis
           height={40}
           left={yAxisWidth}
-          top={height - xAxisHeight}
+          top={barHeight + splitAxisHeight}
           width={baseProps.width - yAxisWidth}
           values={splitBins}
           path={{ opacity: 0 }}
@@ -146,7 +189,6 @@ const Tornado: FC<IProps> = ({
       }
 
     </Base>
-
   )
 }
 
@@ -158,7 +200,8 @@ const calculateDomain = (data: ITornadoData, center = true) => {
 
   // Use applyDomainAffordance to allow space for percentage labels
   let domain = [
-    applyDomainAffordance(-Math.max(...leftValues)),
+    // applyDomainAffordance(-Math.max(...leftValues)),
+    0,
     applyDomainAffordance(Math.max(...rightValues)),
   ];
 
@@ -166,7 +209,8 @@ const calculateDomain = (data: ITornadoData, center = true) => {
   if (center) {
     const max = Math.max(Math.max(...leftValues), domain[1]);
     domain = [
-      applyDomainAffordance(-max),
+      // applyDomainAffordance(-max),
+      0,
       applyDomainAffordance(max),
     ];
   }

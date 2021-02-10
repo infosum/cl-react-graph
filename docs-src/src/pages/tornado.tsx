@@ -77,8 +77,8 @@ const initialState: DeepPartial<ITornadoProps> = {
       {
         label: 'Foreground',
         data: [
-          [0, 2600, 5100, 9700, 8400, 6700], // Male bin 1, Male bin 2,
-          [0, 2100, 4700, 8700, 4900, 1400], // Female bin 1, Female bin 2,
+          [0, 260, 510, 970, 840, 670], // Male bin 1, Male bin 2,
+          [0, 5500, 470, 870, 490, 140], // Female bin 1, Female bin 2,
         ],
       },
 
@@ -134,7 +134,10 @@ const Tornado = () => {
             <Card>
               <CardContent>
                 <NativeTornado {...state}
-                  width={800}
+                  width={600}
+                  xAxisHeight={20}
+                  showBinPercentages={state.showBinPercentages}
+                  splitAxisHeight={20}
                   height={500} />
                 {chart}
                 <TornadoChart

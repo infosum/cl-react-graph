@@ -35,7 +35,7 @@ const positionTick = (value: TAxisValue, scale: any, i: number, inverse: boolean
     : scale(value);
 
   if (inverse) {
-    v = 100 - v;
+    v = width - v;
   }
   return `(${v}, 0)`
 }

@@ -150,6 +150,7 @@ const HistogramBars: FC<IProps> = ({
           springs={springs}
           showLabels={showLabels}
           items={dataSets}
+          width={width}
           direction={direction}
           labels={labels}
           LabelComponent={LabelComponent} />

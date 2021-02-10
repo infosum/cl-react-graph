@@ -8,6 +8,7 @@ interface IProps {
   label?: string;
   item: ExtendedGroupItem;
   fill?: string;
+  inverse?: boolean;
 }
 
 export type TLabelComponent = (props: IProps) => JSX.Element;
@@ -17,13 +18,14 @@ export const Label: FC<IProps> = ({
   label,
   item,
   fill = '#a9a9a9',
+  inverse = false,
 }) => {
   const offset = direction === EChartDirection.VERTICAL
     ? '0, -5'
-    : '5, 0';
+    : inverse ? '-5, 0' : '5, 0';
   const textAnchor = direction === EChartDirection.VERTICAL
     ? 'middle'
-    : 'left';
+    : inverse ? 'end' : 'left';
   return (
     <g transform={`translate(${offset})`}
       role="cell">
