@@ -132,7 +132,6 @@ export const data3: ILineChartDataSet<any>[] = [{
 
 export const tornadoData: ITornadoData = {
   bins: ['16-18', '18-25', '25-35', '35-50', '50-65', '65-∞'],
-  // @Todo test with only one count set
   counts: [
     {
       label: 'Background',
