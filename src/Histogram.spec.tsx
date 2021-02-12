@@ -26,8 +26,8 @@ test('Histogram', () => {
   ></Histogram>
   )
   expect(screen.getAllByRole('cell')).toHaveLength(3);
-  expect(screen.getByTestId('chart-bar-0')).toHaveAttribute('width', '10');
-  expect(screen.getByTestId('chart-bar-1')).toHaveAttribute('width', '20');
-  expect(screen.getByTestId('chart-bar-2')).toHaveAttribute('width', '30');
+  expect(screen.getByTestId('chart-bar--0')).toHaveAttribute('width', '10');
+  expect(screen.getByTestId('chart-bar--1')).toHaveAttribute('width', '20');
+  expect(screen.getByTestId('chart-bar--2')).toHaveAttribute('width', '30');
 
 });

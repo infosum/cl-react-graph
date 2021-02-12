@@ -32,6 +32,7 @@ interface IProps {
   domain: [number, number];
   height: number;
   hoverColorScheme?: readonly string[];
+  id: string;
   labels?: string[];
   left?: number;
   showLabels?: boolean[];
@@ -42,6 +43,8 @@ interface IProps {
   values: IBarChartDataSet[];
   visible?: Record<string, boolean>;
   width: number;
+  rx?: number;
+  ry?: number;
 }
 
 const HistogramBars: FC<IProps> = ({
@@ -55,6 +58,7 @@ const HistogramBars: FC<IProps> = ({
   domain,
   height,
   hoverColorScheme,
+  id,
   LabelComponent,
   labels,
   left = 0,
@@ -65,6 +69,8 @@ const HistogramBars: FC<IProps> = ({
   values,
   visible = {},
   width,
+  rx = 0,
+  ry = 0,
 }) => {
   if (width === 0) {
     return null;
@@ -133,7 +139,9 @@ const HistogramBars: FC<IProps> = ({
               stroke={stroke}
               className="chart-bar"
               role="cell"
-              data-testid={`chart-bar-${i}`}
+              rx={rx}
+              ry={ry}
+              data-testid={`chart-bar-${id}-${i}`}
               onMouseEnter={() => setHover(i)}
               onMouseLeave={() => setHover(-1)}
               key={`bar-${item.groupLabel}.${item.label}.${item.value}`}

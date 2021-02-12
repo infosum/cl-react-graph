@@ -12,7 +12,6 @@ import React, {
   SVGAttributes,
 } from 'react';
 
-import { defaultPadding } from '../BarChart';
 import { IHistogramBar } from '../Histogram';
 import {
   ISVGLineStyle,
@@ -25,6 +24,7 @@ import {
 } from '../utils/bars';
 import { isOfType } from '../utils/isOfType';
 import { AnyScale } from '../utils/scales';
+import { defaultPadding } from './Bars/Bars';
 
 export type TAxisValue = string | number;
 export type TAxisLabelFormat = (axis: 'x' | 'y', bin: string, i: number) => string;

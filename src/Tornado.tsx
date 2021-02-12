@@ -1,22 +1,24 @@
 import React, { FC } from 'react';
 
 import { EChartDirection } from './BarChart';
-import Bars from './components/Bars/Bars';
+import Bars, { defaultPadding } from './components/Bars/Bars';
 import Base from './components/Base';
 import XAxis from './components/XAxis';
 import YAxis from './components/YAxis';
 import {
   EGroupedBarLayout,
   IBarChartDataSet,
+  IHistogramBar,
 } from './Histogram';
 import { ITornadoData } from './legacy/Tornado';
 import { applyDomainAffordance } from './utils/domain';
 
-interface IProps {
+export interface IProps {
   data: ITornadoData;
   direction?: EChartDirection;
   groupLayout: EGroupedBarLayout;
   height: number;
+  id?: string;
   /** @description Height in px of the axis which labels the left/right values */
   splitAxisHeight?: number;
   /** @description labels for the left/right split axis  */
@@ -25,12 +27,16 @@ interface IProps {
   xAxisHeight?: number;
   yAxisWidth?: number;
   width: number;
-  padding?: number;
+  /** @description Padding inside the chart svg */
+  chartPadding?: number;
+  /** @description bar chart bar padding */
+  padding?: IHistogramBar;
   showBinPercentages: boolean;
 }
 
 const Tornado: FC<IProps> = ({
   data,
+  id = '',
   direction = EChartDirection.HORIZONTAL,
   groupLayout = EGroupedBarLayout.GROUPED,
   height,
@@ -40,7 +46,8 @@ const Tornado: FC<IProps> = ({
   xAxisHeight,
   splitAxisHeight,
   yAxisWidth,
-  padding = 15,
+  chartPadding = 15,
+  padding = defaultPadding,
   showBinPercentages = false,
 }) => {
   if (!yAxisWidth) {
@@ -57,7 +64,7 @@ const Tornado: FC<IProps> = ({
   const baseProps = {
     width,
     height,
-    padding,
+    chartPadding,
   }
 
   const dataSets: any[] = []
@@ -99,14 +106,15 @@ const Tornado: FC<IProps> = ({
   });
 
   const barWidth = direction === EChartDirection.VERTICAL
-    ? (width - yAxisWidth) - (padding * 2)
-    : ((width - (2 * padding)) - yAxisWidth) / 2;
+    ? (width - yAxisWidth) - (chartPadding * 2)
+    : ((width - (2 * chartPadding)) - yAxisWidth) / 2;
   const barHeight = direction === EChartDirection.VERTICAL
-    ? ((height - (2 * padding)) - xAxisHeight) / 2
-    : (height - xAxisHeight - splitAxisHeight) - (padding * 2);
+    ? ((height - (2 * chartPadding)) - xAxisHeight) / 2
+    : (height - xAxisHeight - splitAxisHeight) - (chartPadding * 2);
   return (
     <Base {...baseProps}
       width={width + 30}
+      id={id}
     >
       <Bars values={left}
         direction={direction}
@@ -119,7 +127,9 @@ const Tornado: FC<IProps> = ({
         groupLayout={groupLayout}
         bins={data.bins}
         domain={domain}
-        showLabels={showBinPercentages ? [true, true] : [false, false]}
+        id={`left-${id}`}
+        padding={padding}
+        showLabels={[showBinPercentages, showBinPercentages]}
       />
 
       <Bars values={right}
@@ -127,14 +137,16 @@ const Tornado: FC<IProps> = ({
         inverse={direction === EChartDirection.VERTICAL}
         left={direction === EChartDirection.VERTICAL
           ? splitAxisHeight + xAxisHeight
-          : (((width - (2 * padding)) + yAxisWidth) / 2)}
+          : (((width - (2 * chartPadding)) + yAxisWidth) / 2)}
         height={barHeight}
         width={barWidth}
         groupLayout={groupLayout}
         bins={data.bins}
         domain={domain}
+        id={`right-${id}`}
         top={direction === EChartDirection.HORIZONTAL ? 0 : barHeight}
-        showLabels={showBinPercentages ? [true, true] : [false, false]}
+        padding={padding}
+        showLabels={[showBinPercentages, showBinPercentages]}
       />
 
       {
@@ -148,6 +160,7 @@ const Tornado: FC<IProps> = ({
             scale="band"
             path={{ opacity: 0 }}
             tickSize={0}
+            padding={padding}
             values={[...data.bins].reverse()}
           />
           {
@@ -158,6 +171,7 @@ const Tornado: FC<IProps> = ({
             height={barHeight}
             left={barWidth}
             labelFormat={() => ''}
+            padding={padding}
             values={direction === EChartDirection.HORIZONTAL ? data.bins : undefined}
             scale="band"
           />
@@ -182,7 +196,7 @@ const Tornado: FC<IProps> = ({
             width={barWidth}
             height={xAxisHeight}
             top={barHeight}
-            left={((width - (2 * padding) + yAxisWidth) / 2)}
+            left={((width - (2 * chartPadding) + yAxisWidth) / 2)}
             scale="linear"
             domain={domain}
           />
@@ -210,6 +224,7 @@ const Tornado: FC<IProps> = ({
             width={barWidth}
             height={yAxisWidth}
             scale="band"
+            padding={padding}
             path={{ opacity: 0 }}
             tickSize={0}
             left={xAxisHeight + splitAxisHeight}
@@ -228,6 +243,7 @@ const Tornado: FC<IProps> = ({
             values={data.bins}
             top={(barHeight)}
             scale="band"
+            padding={padding}
           />
 
           {

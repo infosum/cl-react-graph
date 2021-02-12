@@ -1,13 +1,7 @@
-import React, {
-  FC,
-  Fragment,
-} from 'react';
+import React, { FC } from 'react';
 
-import {
-  defaultPadding,
-  EChartDirection,
-} from './BarChart';
-import Bars from './components/Bars/Bars';
+import { EChartDirection } from './BarChart';
+import Bars, { defaultPadding } from './components/Bars/Bars';
 import Base from './components/Base';
 import { TTipFunc } from './components/ToolTip';
 import XAxis from './components/XAxis';

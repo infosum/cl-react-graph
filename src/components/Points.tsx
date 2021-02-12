@@ -33,7 +33,7 @@ const Points: FC<TPoints> = (props) => {
         const yValue = yScale(y);
         const xValue = xScale(x);
         return <circle
-          key={`point-${xValue}-${yValue}`}
+          key={`point-${className}-${xValue}-${yValue}`}
           className={`${className}-${xValue}-${yValue}`}
           data-testid={`${className}-${xValue}-${yValue}`}
           r={radius}

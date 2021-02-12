@@ -13,6 +13,7 @@ interface IProps {
     domain: [number, number];
     height: number;
     hoverColorScheme?: readonly string[];
+    id: string;
     labels?: string[];
     left?: number;
     showLabels?: boolean[];
@@ -23,6 +24,8 @@ interface IProps {
     values: IBarChartDataSet[];
     visible?: Record<string, boolean>;
     width: number;
+    rx?: number;
+    ry?: number;
 }
 declare const HistogramBars: FC<IProps>;
 export default HistogramBars;

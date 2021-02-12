@@ -104,7 +104,7 @@ const LineChart: FC<IProps> = ({
           width={width - yAxisWidth} />
       }
       {
-        data.map((item) => <Fragment key={item.label}> <Line
+        data.map((item) => <Fragment key={item.label.replace(/[^a-zA-Z0-9-]/, '')}> <Line
           axis={axis}
           key={item.label}
           label={item.label}
@@ -119,7 +119,7 @@ const LineChart: FC<IProps> = ({
             <Points
               axis={axis}
               label={item.label}
-              key={item.label}
+              key={`points-${item.label}`}
               width={width - yAxisWidth}
               left={yAxisWidth}
               height={height - xAxisHeight}
@@ -134,7 +134,7 @@ const LineChart: FC<IProps> = ({
             item.line.fill.show && <AreaFill
               axis={axis}
               label={item.label}
-              key={item.label}
+              key={`area-fill-${item.label}`}
               width={width - yAxisWidth}
               left={yAxisWidth}
               height={height - xAxisHeight}

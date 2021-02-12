@@ -87,6 +87,7 @@ export const Styling: FC<IProps> = ({
           <label>
             Padding inner (0 - 1)
         </label>
+          <br />
           <input
             type="number"
             min={0}
@@ -107,6 +108,7 @@ export const Styling: FC<IProps> = ({
           <label>
             Padding outer (0 - 1)
         </label>
+          <br />
           <input
             type="number"
             min={0}
@@ -117,9 +119,28 @@ export const Styling: FC<IProps> = ({
               dispatch(({ type: 'setPaddingOuter', padding: parseFloat(e.target.value) }))
             }}
           />
-          <small>
-            This is the relative padding for the outside of grouped datasets or single datasets
+          <div>
+            <small>
+              This is the relative padding for the outside of grouped datasets or single datasets
         </small>
+          </div>
+        </Grid>
+
+        <Grid item xs={6}>
+          <label>
+            Corner radius&nbsp;
+        </label>
+          <br />
+          <input
+            type="number"
+            min={0}
+            step={0.1}
+            max={1}
+            value={state.bar.rx.toString()}
+            onChange={(e: any) => {
+              dispatch(({ type: 'setRadius', value: parseFloat(e.target.value) }))
+            }}
+          />
         </Grid>
         <ColorModifierFields
           values={state.bar.hover}

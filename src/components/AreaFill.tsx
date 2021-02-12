@@ -47,13 +47,11 @@ const AreaFill: FC<IProps> = (props) => {
   });
 
   return (
-    <>
-      <animated.path
-        className={className}
-        fill={line.fill.fill}
-        d={spring.t.interpolate((t) => interpolator.current(t))}
-      />
-    </>
+    <animated.path
+      className={className}
+      fill={line.fill.fill}
+      d={spring.t.interpolate((t) => interpolator.current(t))}
+    />
   )
 }
 

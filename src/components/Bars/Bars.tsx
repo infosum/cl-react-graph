@@ -42,6 +42,7 @@ export interface IProps {
   colorScheme?: readonly string[],
   domain: number[];
   direction?: EChartDirection;
+  id?: string;
   groupLayout?: EGroupedBarLayout;
   height: number;
   hoverColorScheme?: readonly string[];
@@ -56,6 +57,8 @@ export interface IProps {
   visible?: Record<string, boolean>;
   width: number;
   inverse?: boolean;
+  rx?: number;
+  ry?: number;
 }
 
 const paddings = {
@@ -74,6 +77,19 @@ export type ExtendedGroupItem = IGroupDataItem & {
   percentage: string;
 }
 
+export const defaultPadding: IHistogramBar = {
+  grouped: {
+    paddingInner: 0.1,
+    paddingOuter: 0,
+  },
+  paddingInner: 0.1,
+  paddingOuter: 0,
+  overlayMargin: 0.5,
+  hover: {
+    lighten: 0.1,
+  },
+}
+
 const Bars: FC<IProps> = ({
   bins,
   colorScheme = ['#a9a9a9', '#2a5379'],
@@ -82,6 +98,7 @@ const Bars: FC<IProps> = ({
   },
   direction = EChartDirection.HORIZONTAL,
   domain,
+  id = '',
   groupLayout = EGroupedBarLayout.GROUPED,
   height,
   hoverColorScheme,
@@ -96,6 +113,8 @@ const Bars: FC<IProps> = ({
   visible = {},
   width,
   inverse = false,
+  rx = 0,
+  ry = 0,
 }) => {
   if (width === 0) {
     return null;
@@ -168,32 +187,32 @@ const Bars: FC<IProps> = ({
               return <animated.rect
                 ref={refs[i]}
                 role="cell"
-                data-testid={`chart-bar-${i}`}
+                data-testid={`chart-bar-${id}-${i}`}
                 onMouseEnter={() => setHover(i)}
                 onMouseLeave={() => setHover(-1)}
-                key={`bar-${dataSets[i].groupLabel}.${dataSets[i].label}`}
+                key={`bar-${dataSets[i].groupLabel}-${dataSets[i].label}-${dataSets[i].binIndex}`}
                 height={props.height}
                 fill={hover == i ? props.hoverFill : props.fill}
                 width={props.width}
+                rx={rx}
+                ry={ry}
                 x={props.x as any}
                 y={props.y as any}
               />
             })
           }
         </g>
-        {
-          <Labels
-            inverse={inverse}
-            colorScheme={colorScheme}
-            springs={springs}
-            showLabels={showLabels}
-            items={dataSets}
-            direction={direction}
-            labels={labels}
-            visible={visible}
-            width={width}
-            LabelComponent={LabelComponent} />
-        }
+        <Labels
+          inverse={inverse}
+          colorScheme={colorScheme}
+          springs={springs}
+          showLabels={showLabels}
+          items={dataSets}
+          direction={direction}
+          labels={labels}
+          visible={visible}
+          width={width}
+          LabelComponent={LabelComponent} />
 
       </g>
 
@@ -203,7 +222,8 @@ const Bars: FC<IProps> = ({
         bins={bins}
         tip={tip}
         items={dataSets} />
-    </>)
+    </>
+  );
 }
 
 

@@ -9,6 +9,7 @@ import {
   ILineChartDataSet,
 } from '../src';
 import { IHistogramData } from '../src/Histogram';
+import { ITornadoData } from '../src/legacy/Tornado';
 
 const now = new Date();
 const xs = new Array(100).fill('').map((_, i) => new Date(new Date().setDate(now.getDate() + i)))
@@ -128,3 +129,25 @@ export const data3: ILineChartDataSet<any>[] = [{
     { x: new Date('2019-08-26T00:00:00.000Z'), y: 0 },
     { x: new Date('2019-08-27T00:00:00.000Z'), y: 0 }]
 }];
+
+export const tornadoData: ITornadoData = {
+  bins: ['16-18', '18-25', '25-35', '35-50', '50-65', '65-∞'],
+  // @Todo test with only one count set
+  counts: [
+    {
+      label: 'Background',
+      data: [
+        [200, 2600, 5100, 9700, 8400, 6700], // Male bin 1, Male bin 2,
+        [2002, 2100, 4700, 8700, 4900, 1400], // Female bin 1, Female bin 2,
+      ],
+    },
+    {
+      label: 'Foreground',
+      data: [
+        [100, 260, 510, 970, 840, 670], // Male bin 1, Male bin 2,
+        [1000, 5500, 470, 870, 490, 140], // Female bin 1, Female bin 2,
+      ],
+    },
+
+  ],
+}

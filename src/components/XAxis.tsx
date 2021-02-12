@@ -8,7 +8,6 @@ import {
 } from 'd3-scale';
 import React, { FC } from 'react';
 
-import { defaultPadding } from '../BarChart';
 import { buildTicks } from '../utils/axis';
 import {
   paddingInner,
@@ -17,6 +16,7 @@ import {
 import { isOfType } from '../utils/isOfType';
 import { AnyScale } from '../utils/scales';
 import textWrap from '../utils/svgTextWrap';
+import { defaultPadding } from './Bars/Bars';
 import {
   defaultPath,
   defaultTickFormat,
