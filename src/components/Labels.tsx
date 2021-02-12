@@ -23,6 +23,8 @@ interface IProps {
   showLabels?: boolean[];
   springs: any[];
   visible?: Record<string, boolean>;
+  inverse?: boolean;
+  width: number;
 }
 export const Labels: FC<IProps> = ({
   colorScheme = ['#a9a9a9', '#2a5379'],
@@ -33,6 +35,8 @@ export const Labels: FC<IProps> = ({
   LabelComponent,
   showLabels = [],
   visible,
+  inverse = false,
+  width,
 }) => {
   const refs: RefObject<any>[] = [];
   return (<g className="labels">
@@ -52,6 +56,11 @@ export const Labels: FC<IProps> = ({
             key={`label-${item.datasetIndex}.${item.label}.${item.value}`}
             className="chart-label"
             transform={interpolate([props.x, props.y, props.width, props.height], (x, y, w, h) => {
+              if (inverse) {
+                return direction === EChartDirection.VERTICAL
+                  ? `translate(${x + (w / 2)},${h + (w / 2)})`
+                  : `translate(${width - w}, ${y + (h / 2)})`;
+              }
               return direction === EChartDirection.VERTICAL
                 ? `translate(${x + (w / 2)},${y})`
                 : `translate(${x + w}, ${y + (h / 2)})`;
@@ -60,8 +69,10 @@ export const Labels: FC<IProps> = ({
             {
               LabelComponent ?
                 <LabelComponent item={item}
+                  inverse={inverse}
                   direction={direction} />
                 : <Label
+                  inverse={inverse}
                   fill={colorScheme[item.datasetIndex]}
                   direction={direction}
                   label={labels?.[i]}

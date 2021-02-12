@@ -10,6 +10,7 @@ export interface IProps {
     colorScheme?: readonly string[];
     domain: number[];
     direction?: EChartDirection;
+    id?: string;
     groupLayout?: EGroupedBarLayout;
     height: number;
     hoverColorScheme?: readonly string[];
@@ -24,11 +25,14 @@ export interface IProps {
     visible?: Record<string, boolean>;
     width: number;
     inverse?: boolean;
+    rx?: number;
+    ry?: number;
 }
 export declare type ExtendedGroupItem = IGroupDataItem & {
     datasetIndex: number;
     binIndex: number;
     percentage: string;
 };
+export declare const defaultPadding: IHistogramBar;
 declare const Bars: FC<IProps>;
 export default Bars;

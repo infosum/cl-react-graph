@@ -8,13 +8,13 @@ export declare enum EChartDirection {
     HORIZONTAL = "HORIZONTAL",
     VERTICAL = "VERTICAL"
 }
-export declare const defaultPadding: IHistogramBar;
 interface IProps {
     animation?: SpringConfig;
     axisLabelFormat?: TAxisLabelFormat;
     colorScheme?: string[];
     data: IBarChartData;
     direction?: EChartDirection;
+    id?: string;
     grid?: IGrid;
     groupLayout?: EGroupedBarLayout;
     height: number;
@@ -27,6 +27,10 @@ interface IProps {
     xAxisHeight?: number;
     xAxisLabelOrientation?: ELabelOrientation;
     yAxisWidth?: number;
+    bars?: {
+        rx?: number;
+        ry?: number;
+    };
 }
 declare const BarChart: FC<IProps>;
 export default BarChart;

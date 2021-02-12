@@ -31,7 +31,7 @@ export const ToolTips: FC<IProps> = ({
         springs.map((_, i) => {
           return (
             <Tooltip
-              key={`bar-tip-${items[i].datasetIndex}.${items[i].label}.${items[i].value}`}
+              key={`bar-tip-${items[i].datasetIndex}-${items[i].binIndex}-${items[i].label}-${items[i].value}`}
               triggerRef={refs[i]}>
               <ThisTip item={items[i]}
                 bin={bins[i]} />

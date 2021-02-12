@@ -2,7 +2,7 @@ import { schemeSet3 } from 'd3-scale-chromatic';
 import React, { FC } from 'react';
 import { SpringConfig } from 'react-spring';
 
-import Bars from './components/Bars/Bars';
+import Bars, { defaultPadding } from './components/Bars/Bars';
 import Base from './components/Base';
 import Grid from './components/Grid';
 import { TLabelComponent } from './components/Label';
@@ -24,26 +24,13 @@ export enum EChartDirection {
   HORIZONTAL = 'HORIZONTAL',
   VERTICAL = 'VERTICAL',
 }
-
-export const defaultPadding: IHistogramBar = {
-  grouped: {
-    paddingInner: 0.1,
-    paddingOuter: 0,
-  },
-  paddingInner: 0.1,
-  paddingOuter: 0,
-  overlayMargin: 0.5,
-  hover: {
-    lighten: 0.1,
-  },
-}
-
 interface IProps {
   animation?: SpringConfig;
   axisLabelFormat?: TAxisLabelFormat;
   colorScheme?: string[];
   data: IBarChartData;
   direction?: EChartDirection;
+  id?: string;
   grid?: IGrid;
   groupLayout?: EGroupedBarLayout;
   height: number;
@@ -56,6 +43,10 @@ interface IProps {
   xAxisHeight?: number;
   xAxisLabelOrientation?: ELabelOrientation;
   yAxisWidth?: number;
+  bars?: {
+    rx?: number;
+    ry?: number;
+  }
 }
 
 const BarChart: FC<IProps> = ({
@@ -65,6 +56,7 @@ const BarChart: FC<IProps> = ({
   data,
   direction = EChartDirection.VERTICAL,
   grid,
+  id = '',
   groupLayout = EGroupedBarLayout.GROUPED,
   height,
   LabelComponent,
@@ -76,6 +68,7 @@ const BarChart: FC<IProps> = ({
   xAxisHeight,
   xAxisLabelOrientation = ELabelOrientation.HORIZONTAL,
   yAxisWidth,
+  bars,
 }) => {
   if (!yAxisWidth) {
     yAxisWidth = direction === EChartDirection.VERTICAL ? 40 : 100;
@@ -99,7 +92,8 @@ const BarChart: FC<IProps> = ({
   return (
     <Base
       width={width + 30} // @TODO work out why without this the bars exceed the chart
-      height={height}>
+      height={height}
+      id={id}>
 
       {
         grid && <Grid
@@ -129,6 +123,8 @@ const BarChart: FC<IProps> = ({
         values={data.counts}
         visible={visible}
         width={width - yAxisWidth}
+        rx={bars?.rx ?? 0}
+        ry={bars?.ry ?? 0}
       />
 
       <YAxis

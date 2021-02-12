@@ -77,6 +77,8 @@ const initialState: IInitialState = {
     hover: {
       lighten: 0.1,
     },
+    rx: 0,
+    ry: 0,
   },
   chartType: 'Histogram',
   data,
@@ -103,6 +105,7 @@ export type Actions = { type: 'setChartType'; chartType: string }
   | { type: 'removeHoverModifier'; index: number; }
   | { type: 'setPaddingInner'; padding: number; }
   | { type: 'setPaddingOuter'; padding: number; }
+  | { type: 'setRadius', value: number; }
   | { type: 'setLabelOrientation', value: ELabelOrientation, axis: 'x' | 'y' }
   | GridActions
   | AxisActions
@@ -113,6 +116,13 @@ function reducer(draft: Draft<IInitialState>, action: Actions) {
 
     case 'setChartType':
       draft.chartType = action.chartType;
+      return;
+    case 'setRadius':
+      draft.bar = {
+        ...draft.bar,
+        rx: action.value,
+        ry: action.value,
+      }
       return;
     case 'setData':
       draft.data = action.data;
@@ -234,9 +244,16 @@ const HistogramExample = () => {
                     groupLayout={state.groupLayout}
                     xAxisLabelOrientation={state.axis.x.labelOrientation}
                     width={w}
+                    bars={{
+                      rx: state.bar.rx,
+                      ry: state.bar.ry,
+                    }}
                     visible={visible}
                   />
                 </div>
+                <Button onClick={() => setDataIndex(dataIndex === 1 ? 0 : 1)}>
+                  toggle data
+                </Button>
                 <h3>Histogram</h3>
 
                 <Histogram
@@ -269,9 +286,7 @@ const HistogramExample = () => {
                   visible={visible}
                 />
 
-                <Button onClick={() => setDataIndex(dataIndex === 1 ? 0 : 1)}>
-                  toggle data
-                </Button>
+
 
                 <Legend
                   theme={theme}

@@ -24,6 +24,7 @@ export { default as TornadoChart } from './legacy/Tornado';
 export { outputSvg } from './utils/outputSvg';
 
 // V3 components...
+export { default as TornadoChart2 } from './Tornado';
 export { default as Bars } from './components/Bars/Bars';
 export { default as HistogramBars } from './components/Bars/HistogramBars';
 export { default as Base } from './components/Base';

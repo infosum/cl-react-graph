@@ -48,6 +48,8 @@ export interface IHistogramBar {
      * If < 1 then use it as a percentage offset of the bar width otherwise use as a pixel offset
      */
     overlayMargin: number;
+    rx?: number;
+    ry?: number;
 }
 export interface IHistogramData {
     bins: [number, number][];
@@ -81,6 +83,7 @@ export interface IHistogramProps {
     colorScheme?: string[];
     data: IHistogramData;
     direction?: EChartDirection;
+    id?: string;
     grid?: IGrid;
     height: number;
     LabelComponent?: TLabelComponent;
@@ -94,6 +97,10 @@ export interface IHistogramProps {
     yAxisWidth?: number;
     title?: string;
     description?: string;
+    bars?: {
+        rx?: number;
+        ry?: number;
+    };
 }
 /**
  * A Histogram renders continuous data and thus use a ScaleLinear x & y axis

@@ -13,11 +13,11 @@ import {
   XAxis,
   YAxis,
 } from './';
+import { EChartDirection } from './BarChart';
 import {
   defaultPadding,
-  EChartDirection,
-} from './BarChart';
-import { IProps as IBarProps } from './components/Bars/Bars';
+  IProps as IBarProps,
+} from './components/Bars/Bars';
 import Base from './components/Base';
 import { TLabelComponent } from './components/Label';
 import {

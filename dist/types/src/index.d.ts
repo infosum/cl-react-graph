@@ -6,6 +6,7 @@ export { default as ScatterPlot } from './legacy/ScatterPlot';
 export { default as filterRange } from './colors/filterRange';
 export { default as TornadoChart } from './legacy/Tornado';
 export { outputSvg } from './utils/outputSvg';
+export { default as TornadoChart2 } from './Tornado';
 export { default as Bars } from './components/Bars/Bars';
 export { default as HistogramBars } from './components/Bars/HistogramBars';
 export { default as Base } from './components/Base';

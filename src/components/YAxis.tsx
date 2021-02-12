@@ -12,7 +12,6 @@ import React, {
   SVGAttributes,
 } from 'react';
 
-import { defaultPadding } from '../BarChart';
 import { IHistogramBar } from '../Histogram';
 import {
   ISVGLineStyle,
@@ -25,6 +24,7 @@ import {
 } from '../utils/bars';
 import { isOfType } from '../utils/isOfType';
 import { AnyScale } from '../utils/scales';
+import { defaultPadding } from './Bars/Bars';
 
 export type TAxisValue = string | number;
 export type TAxisLabelFormat = (axis: 'x' | 'y', bin: string, i: number) => string;
@@ -85,14 +85,18 @@ export const defaultPath: SVGAttributes<SVGPathElement> = {
   strokeWidth: '1',
 }
 
-const positionTick = (value: TAxisValue, scale: any, height: number, i: number) => {
+const positionTick = (value: TAxisValue, scale: any, height: number, i: number, inverse: boolean = false) => {
   const offset = isOfType<ScaleBand<any>>(scale, 'paddingInner')
     ? Math.floor(scale.bandwidth() / 2)
     : 0;
 
-  const v = isOfType<ScaleBand<any>>(scale, 'paddingInner')
+  let v = isOfType<ScaleBand<any>>(scale, 'paddingInner')
     ? height - (Number(scale(String(i))) + offset)
     : scale(value);
+
+  if (inverse) {
+    v = height - v;
+  }
   return `(0, ${v})`
 }
 
@@ -110,6 +114,7 @@ const YAxis: FC<IAxis> = ({
   values = [],
   width,
   labelOrientation = ELabelOrientation.HORIZONTAL,
+  inverse,
 }) => {
   if (scale === 'linear' && typeof values[0] === 'string') {
     throw new Error('Linear axis can not accept string values');
@@ -181,7 +186,7 @@ const YAxis: FC<IAxis> = ({
 
       {
         ticks.map((v, i) => {
-          const tickOffset = positionTick(v, Scale, height, i);
+          const tickOffset = positionTick(v, Scale, height, i, inverse);
           const label = scale === 'band' ? String(values[i]) : String(v);
           const thisFormat = typeof tickFormat === 'function' ? tickFormat(label, i) : tickFormat;
           return (

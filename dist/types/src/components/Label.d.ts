@@ -6,6 +6,7 @@ interface IProps {
     label?: string;
     item: ExtendedGroupItem;
     fill?: string;
+    inverse?: boolean;
 }
 export declare type TLabelComponent = (props: IProps) => JSX.Element;
 export declare const Label: FC<IProps>;

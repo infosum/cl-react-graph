@@ -11,6 +11,8 @@ interface IProps {
     showLabels?: boolean[];
     springs: any[];
     visible?: Record<string, boolean>;
+    inverse?: boolean;
+    width: number;
 }
 export declare const Labels: FC<IProps>;
 export {};

@@ -65,6 +65,8 @@ export interface IHistogramBar {
    * If < 1 then use it as a percentage offset of the bar width otherwise use as a pixel offset
    */
   overlayMargin: number;
+  rx?: number;
+  ry?: number;
 }
 
 export interface IHistogramData {
@@ -103,6 +105,7 @@ export interface IHistogramProps {
   colorScheme?: string[];
   data: IHistogramData;
   direction?: EChartDirection;
+  id?: string;
   grid?: IGrid;
   height: number;
   LabelComponent?: TLabelComponent;
@@ -116,6 +119,10 @@ export interface IHistogramProps {
   yAxisWidth?: number;
   title?: string;
   description?: string;
+  bars?: {
+    rx?: number;
+    ry?: number;
+  }
 }
 
 /**
@@ -127,6 +134,7 @@ const Histogram: FC<IHistogramProps> = ({
   colorScheme = schemeSet3,
   data,
   direction = EChartDirection.VERTICAL,
+  id = '',
   grid,
   height,
   hoverColorScheme,
@@ -140,6 +148,7 @@ const Histogram: FC<IHistogramProps> = ({
   yAxisWidth,
   title,
   description,
+  bars,
 }) => {
   if (!yAxisWidth) {
     yAxisWidth = direction === EChartDirection.VERTICAL ? 40 : 100;
@@ -161,6 +170,7 @@ const Histogram: FC<IHistogramProps> = ({
       width={width + 30} // @TODO work out why without this the bars exceed the chart
       title={title}
       description={description}
+      id={id}
       height={height}>
 
       {
@@ -183,6 +193,7 @@ const Histogram: FC<IHistogramProps> = ({
         width={width - yAxisWidth}
         values={data.counts}
         config={animation}
+        id={id}
         bins={data.bins}
         showLabels={showLabels}
         direction={direction}
@@ -191,6 +202,8 @@ const Histogram: FC<IHistogramProps> = ({
         continuousDomain={continuousDomain}
         tip={tip}
         visible={visible}
+        rx={bars?.rx ?? 0}
+        ry={bars?.ry ?? 0}
       />
 
       <YAxis
