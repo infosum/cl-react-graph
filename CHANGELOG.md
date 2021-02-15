@@ -1,3 +1,5 @@
+[3.1.15]
+  * Add `colorScheme` to Tornado.
 [3.1.14]
   * Fixed rendering of new tornado chart.
   * Fixed duplicate keys

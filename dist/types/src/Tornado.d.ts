@@ -3,6 +3,8 @@ import { EChartDirection } from './BarChart';
 import { EGroupedBarLayout, IHistogramBar } from './Histogram';
 import { ITornadoData } from './legacy/Tornado';
 export interface IProps {
+    /** @description bar colour scheme */
+    colorScheme?: string[];
     data: ITornadoData;
     direction?: EChartDirection;
     groupLayout: EGroupedBarLayout;
