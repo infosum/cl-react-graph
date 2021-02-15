@@ -1,3 +1,4 @@
+import { schemeSet3 } from 'd3-scale-chromatic';
 import React, { FC } from 'react';
 
 import { EChartDirection } from './BarChart';
@@ -14,6 +15,8 @@ import { ITornadoData } from './legacy/Tornado';
 import { applyDomainAffordance } from './utils/domain';
 
 export interface IProps {
+  /** @description bar colour scheme */
+  colorScheme?: string[];
   data: ITornadoData;
   direction?: EChartDirection;
   groupLayout: EGroupedBarLayout;
@@ -35,6 +38,7 @@ export interface IProps {
 }
 
 const Tornado: FC<IProps> = ({
+  colorScheme = schemeSet3,
   data,
   id = '',
   direction = EChartDirection.HORIZONTAL,
@@ -117,6 +121,7 @@ const Tornado: FC<IProps> = ({
       id={id}
     >
       <Bars values={left}
+        colorScheme={colorScheme}
         direction={direction}
         inverse={direction !== EChartDirection.VERTICAL}
         left={direction === EChartDirection.VERTICAL
@@ -133,6 +138,7 @@ const Tornado: FC<IProps> = ({
       />
 
       <Bars values={right}
+        colorScheme={colorScheme}
         direction={direction}
         inverse={direction === EChartDirection.VERTICAL}
         left={direction === EChartDirection.VERTICAL
