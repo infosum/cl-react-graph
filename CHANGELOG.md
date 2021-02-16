@@ -1,3 +1,5 @@
+[3.2.0]
+  * Add scatter chart.
 [3.1.15]
   * Add `colorScheme` to Tornado.
 [3.1.14]

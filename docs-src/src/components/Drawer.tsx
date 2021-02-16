@@ -33,6 +33,7 @@ export const DrawerComponent: FC<IProps> = ({
           <ListItem button><Link to="/brush"><ListItemText primary="Brush" /></Link></ListItem>
           <ListItem button><Link to="/chord"><ListItemText primary="Chord" /></Link></ListItem>
           <ListItem button><Link to="/map"><ListItemText primary="Map" /></Link></ListItem>
+          <ListItem button><Link to="/scatter"><ListItemText primary="Scatter" /></Link></ListItem>
           <ListItem button><Link to="/upset"><ListItemText primary="Upset" /></Link></ListItem>
         </List>
       </div>

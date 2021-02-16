@@ -1,43 +1,22 @@
-import {
-  CurveFactory,
-  CurveFactoryLineOnly,
-} from 'd3-shape';
 import React, {
   FC,
   Fragment,
 } from 'react';
 
-import AreaFill from './components/AreaFill';
 import Base from './components/Base';
 import Grid from './components/Grid';
-import Line from './components/Line';
 import Points, { IPointProps } from './components/Points';
 import XAxis from './components/XAxis';
 import YAxis, { TAxisLabelFormat } from './components/YAxis';
 import { IGrid } from './Histogram';
 import { IAxes } from './legacy/types';
-import { useLineDomain } from './utils/useDomain';
+import {
+  IChartPoint,
+  IChartPointValue,
+} from './LineChart';
+import { useScatterDomain } from './utils/useDomain';
 
-export type IChartPointValue = number | string | Date | object;
-export interface IChartPoint<X extends IChartPointValue = Date | number | string, Y extends IChartPointValue = number> {
-  x: X;
-  y: Y;
-  z?: number;
-}
-
-export interface ILineProps {
-  show: boolean;
-  fill: {
-    show: boolean;
-    fill: string;
-  };
-  curveType: CurveFactory | CurveFactoryLineOnly;
-  stroke: string;
-  strokeDashOffset: number;
-  strokeDashArray: string;
-}
-
-export interface ILineChartDataSet<T> {
+export interface IScatterPlotDataSet<T> {
   label: string;
   point: {
     radius: number;
@@ -46,15 +25,15 @@ export interface ILineChartDataSet<T> {
     show: boolean;
     showTitle?: boolean;
   };
-  line: ILineProps;
   data: T[];
 }
 
 export interface IProps<T extends IChartPoint<IChartPointValue, IChartPointValue> = IChartPoint> {
   axis: IAxes;
-  data: ILineChartDataSet<T>[];
+  data: IScatterPlotDataSet<T>[];
   grid?: IGrid;
   height: number;
+  id?: string;
   width: number;
   xAxisHeight?: number;
   yAxisWidth?: number;
@@ -69,21 +48,21 @@ export interface IProps<T extends IChartPoint<IChartPointValue, IChartPointValue
   PointComponent?: FC<IPointProps>;
 }
 
-const LineChart: FC<IProps> = ({
+const ScatterPlot: FC<IProps> = ({
   axis,
-  axisLabelFormat,
   clampToZero = true,
   data,
-  description,
   grid,
   height,
-  PointComponent,
-  title,
   width,
   xAxisHeight = 60,
   yAxisWidth = 100,
+  title,
+  description,
+  axisLabelFormat,
+  PointComponent,
 }) => {
-  const domain = useLineDomain({
+  const domain = useScatterDomain({
     values: data,
     clampToZero,
   });
@@ -108,17 +87,9 @@ const LineChart: FC<IProps> = ({
           width={width - yAxisWidth} />
       }
       {
-        data.map((item) => <Fragment key={item.label.replace(/[^a-zA-Z0-9-]/, '')}> <Line
-          axis={axis}
-          key={item.label}
-          label={item.label}
-          line={item.line}
-          width={width - yAxisWidth}
-          left={yAxisWidth}
-          height={height - xAxisHeight}
-          data={item.data} />
-          {
+        data.map((item) => <Fragment key={item.label.replace(/[^a-zA-Z0-9-]/, '')}>
 
+          {
             item.point.show &&
             <Points
               axis={axis}
@@ -132,21 +103,10 @@ const LineChart: FC<IProps> = ({
               showTitle={item.point.showTitle}
               stroke={item.point.stroke}
               data={item.data}
-              PointComponent={PointComponent}
-            />
+              PointComponent={PointComponent} />
           }
 
-          {
-            item.line.fill.show && <AreaFill
-              axis={axis}
-              label={item.label}
-              key={`area-fill-${item.label}`}
-              width={width - yAxisWidth}
-              left={yAxisWidth}
-              height={height - xAxisHeight}
-              line={item.line}
-              data={item.data} />
-          }
+
         </Fragment>)
       }
 
@@ -177,4 +137,4 @@ const LineChart: FC<IProps> = ({
   )
 }
 
-export default LineChart;
+export default ScatterPlot;
