@@ -2,15 +2,14 @@ import {
   curveCatmullRom,
   curveStepBefore,
 } from 'd3-shape';
-import { timeFormat } from 'd3-time-format';
 
 import {
   IBarChartData,
   ILineChartDataSet,
 } from '../src';
 import { IHistogramData } from '../src/Histogram';
-import { ITornadoData } from '../src/legacy/Tornado';
 import { IScatterPlotDataSet } from '../src/ScatterPlot';
+import { ITornadoData } from '../src/Tornado';
 
 const now = new Date();
 const xs = new Array(100).fill('').map((_, i) => new Date(new Date().setDate(now.getDate() + i)))

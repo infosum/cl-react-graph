@@ -1,7 +1,18 @@
 import { FC } from 'react';
 import { EChartDirection } from './BarChart';
 import { EGroupedBarLayout, IHistogramBar } from './Histogram';
-import { ITornadoData } from './legacy/Tornado';
+export interface ITornadoDataSet {
+    borderColors?: string[];
+    colors?: string[];
+    label: string;
+    data: [number[], number[]];
+}
+export interface ITornadoData {
+    bins: string[];
+    counts: ITornadoDataSet[];
+    colorScheme?: string[];
+    title?: string;
+}
 export interface IProps {
     /** @description bar colour scheme */
     colorScheme?: string[];

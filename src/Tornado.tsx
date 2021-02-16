@@ -11,8 +11,21 @@ import {
   IBarChartDataSet,
   IHistogramBar,
 } from './Histogram';
-import { ITornadoData } from './legacy/Tornado';
 import { applyDomainAffordance } from './utils/domain';
+
+export interface ITornadoDataSet {
+  borderColors?: string[];
+  colors?: string[];
+  label: string;
+  data: [number[], number[]];
+}
+
+export interface ITornadoData {
+  bins: string[];
+  counts: ITornadoDataSet[];
+  colorScheme?: string[];
+  title?: string;
+}
 
 export interface IProps {
   /** @description bar colour scheme */
