@@ -56,19 +56,6 @@ npm run build
 
 The docs will be built in `/docs`
 
-# Version 3 TODO:
+# Outstanding issues
 
-
-## Horizontal histogram
-
-* Add example of 2nd X axis
-* Use/update the <Points> component which will be used to show the percentage values in the demo dataset
-* Investigate axis scales and use demo page props on example axis.
-
-## Pie Chart
-
-* TODO
-
-## Tornado
-
-* Check all props can be used
+Can be found in https://github.com/infosum/cl-react-graph/projects/1

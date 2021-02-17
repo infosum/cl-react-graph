@@ -2,14 +2,14 @@ import {
   curveCatmullRom,
   curveStepBefore,
 } from 'd3-shape';
-import { timeFormat } from 'd3-time-format';
 
 import {
   IBarChartData,
   ILineChartDataSet,
 } from '../src';
 import { IHistogramData } from '../src/Histogram';
-import { ITornadoData } from '../src/legacy/Tornado';
+import { IScatterPlotDataSet } from '../src/ScatterPlot';
+import { ITornadoData } from '../src/Tornado';
 
 const now = new Date();
 const xs = new Array(100).fill('').map((_, i) => new Date(new Date().setDate(now.getDate() + i)))
@@ -69,23 +69,23 @@ export const data3: ILineChartDataSet<any>[] = [{
   'label': 'rob Allocation',
   'line': {
     'curveType': curveCatmullRom,
-    'fill': { 'fill': 'rgba(11, 85, 167, 0.2)', 'show': true },
-    'show': true,
-    'stroke': 'rgb(11, 85, 167)',
+    fill: { fill: 'rgba(11, 85, 167, 0.2)', show: true },
+    show: true,
+    stroke: 'rgb(11, 85, 167)',
     'strokeDashArray': '0',
     'strokeDashOffset': 0
   },
   'point':
-    { 'fill': '#000', 'radius': 4, 'show': true, 'stroke': '' },
+    { fill: '#000', radius: 4, show: true, stroke: '' },
   'data': dateValues,
 }, {
   'label': 'rob\'',
   'line': {
     'curveType': curveCatmullRom,
-    'fill': { 'fill': 'rgba(11, 85, 167, 0.7)', 'show': true },
-    'show': true, 'stroke': '#000', 'strokeDashArray': '0', 'strokeDashOffset': 0
+    fill: { fill: 'rgba(11, 85, 167, 0.7)', show: true },
+    show: true, stroke: '#000', 'strokeDashArray': '0', 'strokeDashOffset': 0
   },
-  'point': { 'fill': '', 'radius': 0, 'show': false, 'stroke': '' },
+  'point': { fill: '', radius: 0, show: false, stroke: '' },
   'data': [
     { x: new Date('2019-08-20T00:00:00.000Z'), y: 0 },
     { x: new Date('2019-08-21T00:00:00.000Z'), y: 0 },
@@ -100,10 +100,10 @@ export const data3: ILineChartDataSet<any>[] = [{
   'label': 'Their Allocation',
   'line': {
     'curveType': curveCatmullRom,
-    'fill': { 'fill': 'rgba(0, 169, 123, 0.2)', 'show': true },
-    'show': true, 'stroke': 'rgb(0, 169, 123)', 'strokeDashArray': '0', 'strokeDashOffset': 0
+    fill: { fill: 'rgba(0, 169, 123, 0.2)', show: true },
+    show: true, stroke: 'rgb(0, 169, 123)', 'strokeDashArray': '0', 'strokeDashOffset': 0
   },
-  'point': { 'fill': '', 'radius': 0, 'show': false, 'stroke': '' }, 'data': [
+  'point': { fill: '', radius: 0, show: false, stroke: '' }, 'data': [
     { x: new Date('2019-08-20T00:00:00.000Z'), y: 0 },
     { x: new Date('2019-08-21T00:00:00.000Z'), y: 0 },
     { x: new Date('2019-08-22T00:00:00.000Z'), y: 0 },
@@ -116,10 +116,10 @@ export const data3: ILineChartDataSet<any>[] = [{
   'label': 'Theirs',
   'line': {
     'curveType': curveCatmullRom,
-    'fill': { 'fill': 'rgba(0, 169, 123, 0.7)', 'show': true },
-    'show': true, 'stroke': '#000', 'strokeDashArray': '0', 'strokeDashOffset': 0
+    fill: { fill: 'rgba(0, 169, 123, 0.7)', show: true },
+    show: true, stroke: '#000', 'strokeDashArray': '0', 'strokeDashOffset': 0
   },
-  'point': { 'fill': '', 'radius': 0, 'show': false, 'stroke': '' }, 'data': [
+  'point': { fill: '', radius: 0, show: false, stroke: '' }, 'data': [
     { x: new Date('2019-08-20T00:00:00.000Z'), y: 0 },
     { x: new Date('2019-08-21T00:00:00.000Z'), y: 0 },
     { x: new Date('2019-08-22T00:00:00.000Z'), y: 0 },
@@ -149,4 +149,17 @@ export const tornadoData: ITornadoData = {
     },
 
   ],
+}
+export const scatterData: IScatterPlotDataSet<any> = {
+  label: 'Scatter data',
+  point: { fill: '#000', radius: 4, show: true, stroke: '' },
+  data: [
+    { x: 0, y: 1, z: 5 },
+    { x: 2, y: 1, z: 5 },
+    { x: 3, y: 3, z: 10 },
+    { x: 4, y: 4, z: 5 },
+    { x: 5, y: 1, z: 15 },
+    { x: 6, y: 6, z: 5 },
+    { x: 7, y: 7, z: 15 },
+  ]
 }

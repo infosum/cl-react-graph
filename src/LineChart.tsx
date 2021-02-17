@@ -11,7 +11,7 @@ import AreaFill from './components/AreaFill';
 import Base from './components/Base';
 import Grid from './components/Grid';
 import Line from './components/Line';
-import Points from './components/Points';
+import Points, { IPointProps } from './components/Points';
 import XAxis from './components/XAxis';
 import YAxis, { TAxisLabelFormat } from './components/YAxis';
 import { IGrid } from './Histogram';
@@ -22,6 +22,7 @@ export type IChartPointValue = number | string | Date | object;
 export interface IChartPoint<X extends IChartPointValue = Date | number | string, Y extends IChartPointValue = number> {
   x: X;
   y: Y;
+  z?: number;
 }
 
 export interface ILineProps {
@@ -64,20 +65,23 @@ export interface IProps<T extends IChartPoint<IChartPointValue, IChartPointValue
    */
   clampToZero?: boolean;
   axisLabelFormat?: TAxisLabelFormat;
+  /** @description Custom component to override the default <circle /> used to plot points */
+  PointComponent?: FC<IPointProps>;
 }
 
 const LineChart: FC<IProps> = ({
   axis,
+  axisLabelFormat,
   clampToZero = true,
   data,
+  description,
   grid,
   height,
+  PointComponent,
+  title,
   width,
   xAxisHeight = 60,
   yAxisWidth = 100,
-  title,
-  description,
-  axisLabelFormat,
 }) => {
   const domain = useLineDomain({
     values: data,
@@ -127,7 +131,9 @@ const LineChart: FC<IProps> = ({
               fill={item.point.fill}
               showTitle={item.point.showTitle}
               stroke={item.point.stroke}
-              data={item.data} />
+              data={item.data}
+              PointComponent={PointComponent}
+            />
           }
 
           {

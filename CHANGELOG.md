@@ -1,3 +1,6 @@
+[3.2.0]
+  * Added <ScatterPlot />.
+  * Added PointComponent prop to Points to enable custom point rendering (available in LineChart and ScatterPlot)
 [3.1.15]
   * Add `colorScheme` to Tornado.
 [3.1.14]

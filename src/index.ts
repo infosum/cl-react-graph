@@ -1,7 +1,6 @@
 export {
   default as Histogram,
   EGroupedBarLayout,
-
   IHistogramBar,
   IBarChartData,
   IBarChartDataSet,
@@ -18,13 +17,11 @@ export { default as Legend } from './Legend';
 
 // HIstorical V2 components....
 export { default as PieChart, IPieChartProps } from './legacy/PieChart';
-export { default as ScatterPlot } from './legacy/ScatterPlot';
 export { default as filterRange } from './colors/filterRange';
-export { default as TornadoChart } from './legacy/Tornado';
 export { outputSvg } from './utils/outputSvg';
 
 // V3 components...
-export { default as TornadoChart2 } from './Tornado';
+export { default as TornadoChart } from './Tornado';
 export { default as Bars } from './components/Bars/Bars';
 export { default as HistogramBars } from './components/Bars/HistogramBars';
 export { default as Base } from './components/Base';
@@ -40,6 +37,7 @@ export { useMakeLine, useScales } from './utils/useMakeLine';
 export { useHistogramDomain, useLineDomain } from './utils/useDomain';
 export { default as UpsetChart, IProps as IUpsetChartProps } from './UpsetChart';
 export { default as Chord, IProps as IChordProps } from './Chord';
+export { default as ScatterPlot } from './ScatterPlot';
 export { TTipFunc } from './components/ToolTip';
 
 export {

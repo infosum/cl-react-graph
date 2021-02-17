@@ -14,9 +14,15 @@ import {
   IBarChartDataSet,
 } from '../Histogram';
 import { ILineChartDataSet } from '../LineChart';
+import { IScatterPlotDataSet } from '../ScatterPlot';
 
 interface ILIneProps {
   values: ILineChartDataSet<any>[];
+  clampToZero?: boolean;
+}
+
+interface IScatterProps {
+  values: IScatterPlotDataSet<any>[];
   clampToZero?: boolean;
 }
 
@@ -53,6 +59,27 @@ export const useHistogramDomain: (props: IProps) => [number, number] = ({
 }
 
 export const useLineDomain: (props: ILIneProps) => [number, number] = ({
+  values,
+  clampToZero,
+}) => {
+  const [range, setRange] = useState<[number, number]>([0, 0]);
+  useEffect(() => {
+    const allValues = values.reduce((prev, value) => {
+      return prev.concat(value.data.map((d) => d.y))
+    }, [] as number[])
+    if (clampToZero) {
+      allValues.push(0);
+    }
+    const e = extent(allValues) as [number, number];
+    if (e[0] === e[1]) {
+      e[1]++;
+    }
+    setRange(e);
+  }, [values]);
+  return range;
+};
+
+export const useScatterDomain: (props: IScatterProps) => [number, number] = ({
   values,
   clampToZero,
 }) => {
