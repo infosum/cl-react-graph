@@ -13,23 +13,6 @@ The interactive docs can be found at: https://infosum.github.io/cl-react-graph/
 
 ## Developers
 
-### Building the code
-
- ```
- npm run build
- ```
-
-### Publishing to NPM
-
- Ensure that the version number is bumped & publish
- 
- ```
- npm version patch -m "Upgrade to %s for reasons"
- npm publish
- ```
-
-Note you will need to authenticate to NPM to publish.
-
 ### Running docs in development mode
 
 If you don't have Gatsby already installed:
@@ -39,16 +22,34 @@ npm i -g gatsby
 
 Then, to run the docs in development mode
 
-
 ```
 cd docs-src
 gatsby develop
 ```
 
+### Publishing to NPM
+
+Publishing is handled via a GitHub Action.
+
+You will need to 
+* ensure that the version number is bumped E.g. ` npm version patch -m "Upgrade to %s for reasons"`
+* create a new named tag starting with 'v' E.g. `git tag -a v3.3.1`
+* `git push --tag`
+
+
 the site will be available on `http://localhost:8000`
+
+### Building the code
+
+GitLab Actions should now handle this for you, but for reference:
+
+ ```
+ npm run build
+ ```
 
 ### Building the docs
 
+GitLab Actions should now handle this for you, but for reference:
 ```
 cd docs-src
 npm run build
