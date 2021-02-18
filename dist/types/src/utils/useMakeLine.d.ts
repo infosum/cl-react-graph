@@ -10,7 +10,7 @@ export interface IProps<T extends IChartPoint<IChartPointValue, IChartPointValue
     left?: number;
     height: number;
 }
-export declare const useScales: (props: Omit<IProps, 'line'>) => {
+export declare const useScales: (props: Omit<IProps, 'line' | 'curveType'>) => {
     xScale: any;
     yScale: any;
 };

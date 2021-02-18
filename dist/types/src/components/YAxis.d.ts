@@ -1,3 +1,4 @@
+import { ScaleBand } from 'd3-scale';
 import { FC, SVGAttributes } from 'react';
 import { IHistogramBar } from '../Histogram';
 import { ISVGLineStyle, ISVGTextStyle } from '../legacy/types';
@@ -46,5 +47,15 @@ export declare const defaultTickFormat: {
     fontSize: string;
 };
 export declare const defaultPath: SVGAttributes<SVGPathElement>;
+interface IBuildScale {
+    domain?: TAxisValue[];
+    /** @description width for x axis, height for y axis */
+    length: number;
+    padding: IHistogramBar;
+    scale: 'linear' | 'band' | 'point' | 'log' | 'time';
+    values: string[] | number[];
+    range: [number, number];
+}
+export declare const buildScale: ({ domain, length, padding, scale, values, range, }: IBuildScale) => import("d3-scale").ScaleLinear<number, number> | ScaleBand<string> | import("d3-scale").ScaleTime<any, any> | import("d3-scale").ScaleSymLog<any, any> | import("d3-scale").ScalePoint<string>;
 declare const YAxis: FC<IAxis>;
 export default YAxis;

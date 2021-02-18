@@ -4,30 +4,27 @@ import {
   IProps,
   useScales,
 } from '../utils/useMakeLine';
+import Point, { IPointProps } from './Point';
 
-export interface IPointProps {
-  cx: number;
-  x: number | string | Date;
-  cy: number;
-  y: number | string | Date;
-  z: number;
-  className?: string;
-}
+export type PointComponentProps = IPointStyle & IPointProps;
 
-export type TPoints = Omit<IProps, 'line'> & {
-  radius?: number;
+export interface IPointStyle {
+  z?: number;
   fill?: string;
   label?: string;
   stroke?: string;
   showTitle?: boolean;
+  show?: boolean;
   /** @description Custom component to override the default <circle /> used to plot points */
-  PointComponent?: FC<IPointProps>;
+  PointComponent?: FC<PointComponentProps>;
 }
+
+export type TPoints = Omit<IProps, 'line' | 'curveType'> & IPointStyle;
 
 const Points: FC<TPoints> = (props) => {
   const {
     data,
-    radius = 5,
+    z = 5,
     fill = '#000',
     stroke = '#000',
     showTitle = true,
@@ -44,35 +41,21 @@ const Points: FC<TPoints> = (props) => {
         const { x, y, ...rest } = d;
         const yValue = yScale(y);
         const xValue = xScale(x);
-        return PointComponent ?
-          <PointComponent
-            key={`point-${className}-${xValue}-${yValue}`}
-            className={`${className}-${xValue}-${yValue}`}
-            data-testid={`${className}-${xValue}-${yValue}`}
-            cx={xValue}
-            cy={yValue}
-            x={x}
-            y={y}
-            z={d.z ?? radius}>
-            {
-              showTitle && <title>{`${x}, ${y}`}</title>
-            }
-          </PointComponent>
-          : <circle
-            key={`point-${className}-${xValue}-${yValue}`}
-            className={`${className}-${xValue}-${yValue}`}
-            data-testid={`${className}-${xValue}-${yValue}`}
-            r={d.z ?? radius}
-            cy={yValue}
-            cx={xValue}
-            fill={fill}
-            stroke={stroke}
-            {...rest}
-          >
-            {
-              showTitle && <title>{`${x}, ${y}`}</title>
-            }
-          </circle>
+        const id = `${className}-${xValue}-${yValue}`;
+        return <Point
+          key={id}
+          id={id}
+          PointComponent={PointComponent}
+          cx={xValue}
+          cy={yValue}
+          x={x}
+          y={y}
+          z={d.z ?? z}
+        >
+          {
+            showTitle && <title>{`${x}, ${y}`}</title>
+          }
+        </Point>
       })
     }
   </>

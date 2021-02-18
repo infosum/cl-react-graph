@@ -85,6 +85,63 @@ export const defaultPath: SVGAttributes<SVGPathElement> = {
   strokeWidth: '1',
 }
 
+
+interface IBuildScale {
+  domain?: TAxisValue[];
+  /** @description width for x axis, height for y axis */
+  length: number;
+  padding: IHistogramBar;
+  scale: 'linear' | 'band' | 'point' | 'log' | 'time';
+  values: string[] | number[];
+  range: [number, number];
+}
+export const buildScale = ({
+  domain,
+  length,
+  padding,
+  scale,
+  values,
+  range,
+}: IBuildScale) => {
+  let Scale: AnyScale;
+  switch (scale) {
+    case 'linear':
+      Scale = scaleLinear()
+        .domain(extent(domain ? [...domain as number[]] : values as number[]) as any)
+        .rangeRound(range);
+      break;
+    case 'band':
+      const steps = new Array(values.length).fill('').map((_, i) => String(i))
+      Scale = scaleBand().domain(steps)
+        .paddingInner(padding ? paddingInner(padding) : 0.1)
+        .paddingOuter(padding ? paddingOuter(padding) : 0.2)
+        .align(0.5)
+        .rangeRound(range);
+      break;
+    default:
+    case 'point':
+      Scale = scalePoint()
+        .range([Number(length) / 4, Number(length) * (3 / 4)])
+        .domain(values as string[]);
+
+      break;
+    case 'log':
+      const d = extent(domain ? [0, ...domain as number[]] : values as number[]) as any;
+      Scale = scaleSymlog()
+        .clamp(true)// clamp values below 1 to be equal to 0
+        .domain(d)
+        .rangeRound(range);
+      break;
+    case 'time':
+      const ex = extent(domain ? [0, ...domain as number[]] : values as any[]) as any;
+      Scale = scaleTime()
+        .domain(ex)
+        .rangeRound(range);
+      break;
+  }
+  return Scale;
+}
+
 const positionTick = (value: TAxisValue, scale: any, height: number, i: number, inverse: boolean = false) => {
   const offset = isOfType<ScaleBand<any>>(scale, 'paddingInner')
     ? Math.floor(scale.bandwidth() / 2)
@@ -123,39 +180,14 @@ const YAxis: FC<IAxis> = ({
     console.warn('band scale provided without padding settings');
   }
 
-  let Scale: AnyScale;
-  switch (scale) {
-    case 'linear':
-      Scale = scaleLinear()
-        .domain(extent(domain ? [0, ...domain as number[]] : values as number[]) as any)
-        .rangeRound([height, 0]);
-      break;
-    case 'band':
-      const steps = new Array(values.length).fill('').map((_, i) => String(i))
-      Scale = scaleBand().domain(steps)
-        .paddingInner(padding ? paddingInner(padding) : 0.1)
-        .paddingOuter(padding ? paddingOuter(padding) : 0.2)
-        .align(0.5)
-        .rangeRound([height, 0]);
-
-      break;
-    case 'point':
-      Scale = scalePoint()
-        .range([Number(height) / 4, Number(height) * (3 / 4)])
-        .domain(values as string[]);
-      break;
-    case 'log':
-      Scale = scaleSymlog()
-        .clamp(true)// clamp values below 1 to be equal to 0
-        .domain(extent(domain ? [0, ...domain as number[]] : values as number[]) as any)
-        .rangeRound([height, 0]);
-      break;
-    case 'time':
-      Scale = scaleTime()
-        .domain(extent(domain ? [0, ...domain as number[]] : values as number[]) as any)
-        .rangeRound([height, 0]);
-      break;
-  }
+  const Scale = buildScale({
+    domain,
+    length: height,
+    padding,
+    scale,
+    values,
+    range: [height, 0],
+  });
 
   const transform = `(${width + left}, ${top})`;
 

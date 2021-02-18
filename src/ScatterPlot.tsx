@@ -5,7 +5,7 @@ import React, {
 
 import Base from './components/Base';
 import Grid from './components/Grid';
-import Points, { IPointProps } from './components/Points';
+import Points, { PointComponentProps } from './components/Points';
 import XAxis from './components/XAxis';
 import YAxis, { TAxisLabelFormat } from './components/YAxis';
 import { IGrid } from './Histogram';
@@ -45,7 +45,7 @@ export interface IProps<T extends IChartPoint<IChartPointValue, IChartPointValue
   clampToZero?: boolean;
   axisLabelFormat?: TAxisLabelFormat;
   /** @description Custom component to override the default <circle /> used to plot points */
-  PointComponent?: FC<IPointProps>;
+  PointComponent?: FC<PointComponentProps>;
 }
 
 const ScatterPlot: FC<IProps> = ({
@@ -66,6 +66,7 @@ const ScatterPlot: FC<IProps> = ({
     values: data,
     clampToZero,
   });
+
   const values = data.reduce((prev, next) => prev.concat(next.data.map((d) => d.x)), [] as any[])
 
   return (
@@ -98,7 +99,7 @@ const ScatterPlot: FC<IProps> = ({
               width={width - yAxisWidth}
               left={yAxisWidth}
               height={height - xAxisHeight}
-              radius={item.point.radius}
+              z={item.point.radius}
               fill={item.point.fill}
               showTitle={item.point.showTitle}
               stroke={item.point.stroke}

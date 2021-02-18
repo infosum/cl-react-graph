@@ -8,6 +8,8 @@ import {
   ILineChartDataSet,
 } from '../src';
 import { IHistogramData } from '../src/Histogram';
+import { IChartPointValue } from '../src/LineChart';
+import { IRadarChartData } from '../src/RadarChart';
 import { IScatterPlotDataSet } from '../src/ScatterPlot';
 import { ITornadoData } from '../src/Tornado';
 
@@ -150,7 +152,7 @@ export const tornadoData: ITornadoData = {
 
   ],
 }
-export const scatterData: IScatterPlotDataSet<any> = {
+export const scatterData: IScatterPlotDataSet<IChartPointValue> = {
   label: 'Scatter data',
   point: { fill: '#000', radius: 4, show: true, stroke: '' },
   data: [
@@ -163,3 +165,24 @@ export const scatterData: IScatterPlotDataSet<any> = {
     { x: 7, y: 7, z: 15 },
   ]
 }
+
+export const radarData: IRadarChartData[] = [{
+  label: 'Germany',
+  axes: [
+    { axis: "strength", value: 13 },
+    { axis: "intelligence", value: 6 },
+    { axis: "charisma", value: 5 },
+    { axis: "dexterity", value: 9 },
+    { axis: "luck", value: 2 }
+  ]
+},
+{
+  label: 'Argentina',
+  axes: [
+    { axis: "strength", value: 6 },
+    { axis: "intelligence", value: 7 },
+    { axis: "charisma", value: 10 },
+    { axis: "dexterity", value: 13 },
+    { axis: "luck", value: 9 }
+  ]
+}];
