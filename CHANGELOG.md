@@ -1,6 +1,6 @@
 [3.3.0]
-  * Added <RadialChart />
-  * Added <Web />, <Point /> <Path /> as sub components for use in RadialChart
+  * Added <RadarChart />
+  * Added <Web />, <Point /> <Path /> as sub components for use in RadarChart
   * Changed X & Y Axis use a helper function to create the scale.
 [3.2.0]
   * Added <ScatterPlot />.
