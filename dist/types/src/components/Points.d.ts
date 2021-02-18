@@ -1,21 +1,17 @@
 import { FC } from 'react';
 import { IProps } from '../utils/useMakeLine';
-export interface IPointProps {
-    cx: number;
-    x: number | string | Date;
-    cy: number;
-    y: number | string | Date;
-    z: number;
-    className?: string;
-}
-export declare type TPoints = Omit<IProps, 'line'> & {
-    radius?: number;
+import { IPointProps } from './Point';
+export declare type PointComponentProps = IPointStyle & IPointProps;
+export interface IPointStyle {
+    z?: number;
     fill?: string;
     label?: string;
     stroke?: string;
     showTitle?: boolean;
+    show?: boolean;
     /** @description Custom component to override the default <circle /> used to plot points */
-    PointComponent?: FC<IPointProps>;
-};
+    PointComponent?: FC<PointComponentProps>;
+}
+export declare type TPoints = Omit<IProps, 'line' | 'curveType'> & IPointStyle;
 declare const Points: FC<TPoints>;
 export default Points;

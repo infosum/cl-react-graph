@@ -1,6 +1,6 @@
 import { CurveFactory, CurveFactoryLineOnly } from 'd3-shape';
 import { FC } from 'react';
-import { IPointProps } from './components/Points';
+import { PointComponentProps } from './components/Points';
 import { TAxisLabelFormat } from './components/YAxis';
 import { IGrid } from './Histogram';
 import { IAxes } from './legacy/types';
@@ -49,7 +49,7 @@ export interface IProps<T extends IChartPoint<IChartPointValue, IChartPointValue
     clampToZero?: boolean;
     axisLabelFormat?: TAxisLabelFormat;
     /** @description Custom component to override the default <circle /> used to plot points */
-    PointComponent?: FC<IPointProps>;
+    PointComponent?: FC<PointComponentProps>;
 }
 declare const LineChart: FC<IProps>;
 export default LineChart;

@@ -1,3 +1,7 @@
+[3.3.0]
+  * Added <RadarChart />
+  * Added <Web />, <Point /> <Path /> as sub components for use in RadarChart
+  * Changed X & Y Axis use a helper function to create the scale.
 [3.2.0]
   * Added <ScatterPlot />.
   * Added PointComponent prop to Points to enable custom point rendering (available in LineChart and ScatterPlot)

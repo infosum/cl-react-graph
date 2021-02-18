@@ -1,23 +1,13 @@
 import { extent } from 'd3-array';
-import {
-  ScaleBand,
-  scaleBand,
-  scaleLinear,
-  scalePoint,
-  scaleTime,
-} from 'd3-scale';
+import { ScaleBand } from 'd3-scale';
 import React, { FC } from 'react';
 
 import { buildTicks } from '../utils/axis';
-import {
-  paddingInner,
-  paddingOuter,
-} from '../utils/bars';
 import { isOfType } from '../utils/isOfType';
-import { AnyScale } from '../utils/scales';
 import textWrap from '../utils/svgTextWrap';
 import { defaultPadding } from './Bars/Bars';
 import {
+  buildScale,
   defaultPath,
   defaultTickFormat,
   ELabelOrientation,
@@ -62,36 +52,14 @@ const XAxis: FC<IAxis> = ({
   if (scale === 'band' && !padding) {
     console.warn('band scale provided without padding settings');
   }
-
-  let Scale: AnyScale;
-  switch (scale) {
-    case 'linear':
-      Scale = scaleLinear()
-        .domain(extent(domain ? [...domain as number[]] : values as number[]) as any)
-        .rangeRound([0, width]);
-      break;
-    case 'band':
-      const steps = new Array(values.length).fill('').map((_, i) => String(i))
-      Scale = scaleBand().domain(steps)
-        .paddingInner(padding ? paddingInner(padding) : 0.1)
-        .paddingOuter(padding ? paddingOuter(padding) : 0.2)
-        .align(0.5)
-        .rangeRound([0, width]);
-
-      break;
-    default:
-    case 'point':
-      Scale = scalePoint()
-        .range([Number(width) / 4, Number(width) * (3 / 4)])
-        .domain(values as string[]);
-      break;
-    case 'time':
-      const ex = extent(domain ? [0, ...domain as number[]] : values as any[]) as any;
-      Scale = scaleTime()
-        .domain(ex)
-        .rangeRound([0, width]);
-      break;
-  }
+  const Scale = buildScale({
+    domain,
+    length: width,
+    padding,
+    values,
+    scale,
+    range: [0, width],
+  });
 
   const transform = `${left}, ${top}`;
 
