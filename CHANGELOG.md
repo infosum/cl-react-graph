@@ -1,3 +1,5 @@
+[3.3.4]
+  * Add title prop to all charts
 [3.3.0]
   * Added <RadarChart />
   * Added <Web />, <Point /> <Path /> as sub components for use in RadarChart

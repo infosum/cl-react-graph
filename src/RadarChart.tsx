@@ -36,6 +36,8 @@ export interface IProps {
   data: IRadarChartData[];
   /** @description Custom component to override the default <circle /> used to plot points */
   points?: IPointStyle[];
+  /** @description Chart <title /> */
+  title?: string;
 }
 
 const buildArea = (
@@ -66,6 +68,7 @@ const RadarChart: FC<IProps> = ({
   id,
   padding = 15,
   points = [],
+  title,
   width,
 }) => {
 
@@ -87,6 +90,7 @@ const RadarChart: FC<IProps> = ({
     <Base
       height={height}
       id={id}
+      title={title}
       width={width}
     >
       <Web

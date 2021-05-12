@@ -18,6 +18,8 @@ export interface IProps {
   padding?: number;
   data: Record<string, number[]>;
   colorScheme?: string[];
+  /** @description Chart <title /> */
+  title?: string;
   inactive?: {
     stroke: string;
     fill: string;
@@ -34,6 +36,7 @@ const Chord: FC<IProps> = ({
     stroke: '#ddd',
     fill: '#eee',
   },
+  title,
 }) => {
 
   const outerRadius = Math.min(width - padding, height - padding) * 0.5
@@ -55,7 +58,11 @@ const Chord: FC<IProps> = ({
 
   const [active, setActive] = useState<number>();
   return (
-    <Base width={width} height={height}>
+    <Base
+      height={height}
+      title={title}
+      width={width}
+    >
       <g className="ribbons"
         transform={`translate(${(width) / 2},${height / 2})`}>
         {

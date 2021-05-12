@@ -25,6 +25,7 @@ export interface IProps {
   height: number;
   padding?: IHistogramBar;
   tip?: TTipFunc;
+  title?: string;
   width: number;
   xAxisHeight?: number;
   yAxisWidth?: number;
@@ -46,6 +47,8 @@ const JoyPlot: FC<IProps> = ({
   xAxisHeight,
   padding = defaultPadding,
   yAxisWidth,
+  /** @description Chart <title /> */
+  title,
   titleHeight = 40,
   titleLayout = ELabelOrientation.HORIZONTAL,
 }) => {
@@ -69,12 +72,12 @@ const JoyPlot: FC<IProps> = ({
     ? chartHeight - xAxisHeight - titleHeight
     : chartHeight - xAxisHeight;
 
-
   return (
     <Base
+      height={height}
+      title={title}
       width={width}
-      height={height}>
-
+    >
       {
         values.map((d, i) => {
           const top = titleLayout === ELabelOrientation.HORIZONTAL
