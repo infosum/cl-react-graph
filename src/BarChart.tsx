@@ -38,6 +38,8 @@ interface IProps {
   padding?: IHistogramBar;
   showLabels?: boolean[]
   tip?: TTipFunc;
+  /** @description Chart <title /> */
+  title?: string;
   visible?: Record<string, boolean>;
   width: number;
   xAxisHeight?: number;
@@ -69,6 +71,7 @@ const BarChart: FC<IProps> = ({
   xAxisLabelOrientation = ELabelOrientation.HORIZONTAL,
   yAxisWidth,
   bars,
+  title,
 }) => {
   if (!yAxisWidth) {
     yAxisWidth = direction === EChartDirection.VERTICAL ? 40 : 100;
@@ -93,6 +96,7 @@ const BarChart: FC<IProps> = ({
     <Base
       width={width + 30} // @TODO work out why without this the bars exceed the chart
       height={height}
+      title={title}
       id={id}>
 
       {

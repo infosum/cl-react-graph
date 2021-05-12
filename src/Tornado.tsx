@@ -48,6 +48,8 @@ export interface IProps {
   /** @description bar chart bar padding */
   padding?: IHistogramBar;
   showBinPercentages: boolean;
+  /** @description Chart <title /> */
+  title?: string;
 }
 
 const Tornado: FC<IProps> = ({
@@ -66,6 +68,7 @@ const Tornado: FC<IProps> = ({
   chartPadding = 15,
   padding = defaultPadding,
   showBinPercentages = false,
+  title,
 }) => {
   if (!yAxisWidth) {
     yAxisWidth = direction === EChartDirection.VERTICAL ? 40 : 100;
@@ -82,6 +85,7 @@ const Tornado: FC<IProps> = ({
     width,
     height,
     chartPadding,
+    title,
   }
 
   const dataSets: any[] = []
