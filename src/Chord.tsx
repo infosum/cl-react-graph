@@ -36,6 +36,7 @@ const Chord: FC<IProps> = ({
     stroke: '#ddd',
     fill: '#eee',
   },
+  title,
 }) => {
 
   const outerRadius = Math.min(width - padding, height - padding) * 0.5
