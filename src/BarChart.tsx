@@ -36,7 +36,9 @@ interface IProps {
   height: number;
   LabelComponent?: TLabelComponent;
   padding?: IHistogramBar;
-  showLabels?: boolean[]
+  showLabels?: boolean[];
+  /** An array of tick values to show on the numerical axis */
+  tickValues?: number[];
   tip?: TTipFunc;
   /** @description Chart <title /> */
   title?: string;
@@ -70,6 +72,7 @@ const BarChart: FC<IProps> = ({
   xAxisHeight,
   xAxisLabelOrientation = ELabelOrientation.HORIZONTAL,
   yAxisWidth,
+  tickValues = undefined,
   bars,
   title,
 }) => {
@@ -136,8 +139,8 @@ const BarChart: FC<IProps> = ({
         height={height - xAxisHeight}
         labelFormat={axisLabelFormat}
         scale={direction === EChartDirection.HORIZONTAL ? 'band' : 'linear'}
-        values={direction === EChartDirection.HORIZONTAL ? data.bins : undefined}
-        domain={direction === EChartDirection.HORIZONTAL ? undefined : domain}
+        values={direction === EChartDirection.HORIZONTAL ? data.bins : tickValues}
+        domain={direction === EChartDirection.HORIZONTAL ? tickValues : domain}
 
         padding={padding}
       />

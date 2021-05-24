@@ -1,3 +1,5 @@
+[3.3.5]
+  * Add `tickValues` prop to Bar chart to specify numeric scales ticks.
 [3.3.4]
   * Add title prop to all charts
 [3.3.0]
