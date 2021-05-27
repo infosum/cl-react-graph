@@ -239,7 +239,7 @@ const HistogramExample = () => {
                     direction={state.chartType === 'HorizontalHistogram' ? EChartDirection.HORIZONTAL : EChartDirection.VERTICAL}
                     data={d}
                     height={400}
-                    tickValues={[0, 40000, 79200]}
+                    tickValues={[0, 40000, 89200]}
                     grid={state.grid}
                     colorScheme={['#aaa', '#aa0000']}
                     groupLayout={state.groupLayout}
