@@ -34,6 +34,8 @@ export interface IProps {
     /** @description bar chart bar padding */
     padding?: IHistogramBar;
     showBinPercentages: boolean;
+    /** @description Chart <title /> */
+    title?: string;
 }
 declare const Tornado: FC<IProps>;
 export default Tornado;

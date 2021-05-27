@@ -34,16 +34,18 @@ the site will be available on `http://localhost:8000`
 Publishing is handled via a GitHub Action.
 
 You will need to 
+*  npm run build (generates types)
 * ensure that the version number is bumped E.g. ` npm version patch -m "Upgrade to %s for reasons"`
 * create a new named tag starting with 'v' E.g. `git tag -a v3.3.1`
 * `git push --tag`
 
 ### Building the code
 
-GitLab Actions should now handle this for you, but for reference:
+GitLab Actions should now handle this for you, although currently it seems types aren't generated,
+ but for reference:
 
  ```
- npm run build
+npm run build
  ```
 
 ### Building the docs

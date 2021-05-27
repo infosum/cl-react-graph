@@ -1,4 +1,3 @@
-/// <reference types="react" />
 import { Axis } from 'd3-axis';
 import { ScaleLinear } from 'd3-scale';
 import { IAxis } from '../components/YAxis';
@@ -29,7 +28,7 @@ export declare const applyDomainAffordance: (v: number, inc?: boolean, percentIn
  */
 export declare const appendDomainRange: (props: IAppendDomainRangeProps) => void;
 export declare const shouldFormatTick: (axis: IAxis) => boolean;
-export declare const formatTick: (axis: IAxis) => (v: string | number) => import("react").ReactText;
+export declare const formatTick: (axis: IAxis) => (v: string | number) => string | number;
 interface ITickProps {
     scaleBand: AnyScale;
     axis: Axis<string> | Axis<number> | Axis<number | {

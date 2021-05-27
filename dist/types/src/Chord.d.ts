@@ -5,6 +5,8 @@ export interface IProps {
     padding?: number;
     data: Record<string, number[]>;
     colorScheme?: string[];
+    /** @description Chart <title /> */
+    title?: string;
     inactive?: {
         stroke: string;
         fill: string;

@@ -41,6 +41,7 @@ export interface IProps<T extends IChartPoint<IChartPointValue, IChartPointValue
     width: number;
     xAxisHeight?: number;
     yAxisWidth?: number;
+    /** @description Chart <title /> */
     title?: string;
     description?: string;
     /**
