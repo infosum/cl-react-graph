@@ -31,6 +31,11 @@ interface IProps {
   bins: string[],
   values: IBarChartDataSet[];
   clampToZero?: boolean;
+  /** 
+   * Axis tick values - these could have a greater extend than the chart data so should
+   * be included in the domain calculation
+   */
+  tickValues?: number[];
 }
 
 // Y Domains only so far....
@@ -38,6 +43,7 @@ export const useHistogramDomain: (props: IProps) => [number, number] = ({
   groupLayout,
   bins,
   values,
+  tickValues = [],
   clampToZero = true,
 }) => {
   const [range, setRange] = useState<[number, number]>([0, 0]);
@@ -49,12 +55,12 @@ export const useHistogramDomain: (props: IProps) => [number, number] = ({
     if (clampToZero) {
       allValues.push(0);
     }
-    const e = extent(allValues) as [number, number];
+    const e = extent(allValues.concat(tickValues)) as [number, number];
     if (e[0] === e[1]) {
       e[1]++;
     }
     setRange(e);
-  }, [bins, groupLayout, values]);
+  }, [bins, groupLayout, values, tickValues]);
   return range;
 }
 

@@ -92,7 +92,8 @@ const BarChart: FC<IProps> = ({
   const domain = useHistogramDomain({
     groupLayout: groupLayout,
     bins: data.bins,
-    values: data.counts
+    values: data.counts,
+    tickValues,
   });
 
   return (
