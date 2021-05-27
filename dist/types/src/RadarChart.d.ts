@@ -22,6 +22,8 @@ export interface IProps {
     data: IRadarChartData[];
     /** @description Custom component to override the default <circle /> used to plot points */
     points?: IPointStyle[];
+    /** @description Chart <title /> */
+    title?: string;
 }
 declare const RadarChart: FC<IProps>;
 export default RadarChart;

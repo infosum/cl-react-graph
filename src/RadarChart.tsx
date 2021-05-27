@@ -4,6 +4,7 @@ import { schemeSet3 } from 'd3-scale-chromatic';
 import { line } from 'd3-shape';
 import React, {
   FC,
+  Fragment,
   useState,
 } from 'react';
 
@@ -101,7 +102,7 @@ const RadarChart: FC<IProps> = ({
         data.map((datum, i) => {
           const labelId = (datum.label ?? '').replace(/[^a-z]/gi, '');
           return (
-            <>
+            <Fragment key={`area-${labelId}`}>
               <Path
                 id={`area-fill-${labelId}`}
                 fill={colorScheme[i]}
@@ -109,7 +110,6 @@ const RadarChart: FC<IProps> = ({
                   : labelId === isOver ? 1 : 0.1}
                 onMouseEnter={() => setIsOver(labelId)}
                 onMouseLeave={() => setIsOver(null)}
-                key={`area-${labelId}`}
                 d={line()(pointsData[i]) ?? ''}
               />
               {
@@ -131,7 +131,7 @@ const RadarChart: FC<IProps> = ({
                   </Point>
                 })
               }
-            </>
+            </Fragment>
           )
         })
       }

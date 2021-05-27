@@ -95,6 +95,7 @@ export interface IHistogramProps {
     xAxisHeight?: number;
     xAxisLabelOrientation?: ELabelOrientation;
     yAxisWidth?: number;
+    /** @description Chart <title /> */
     title?: string;
     description?: string;
     bars?: {

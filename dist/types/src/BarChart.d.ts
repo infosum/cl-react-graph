@@ -21,7 +21,11 @@ interface IProps {
     LabelComponent?: TLabelComponent;
     padding?: IHistogramBar;
     showLabels?: boolean[];
+    /** An array of tick values to show on the numerical axis */
+    tickValues?: number[];
     tip?: TTipFunc;
+    /** @description Chart <title /> */
+    title?: string;
     visible?: Record<string, boolean>;
     width: number;
     xAxisHeight?: number;

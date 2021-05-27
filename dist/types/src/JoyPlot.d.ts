@@ -11,6 +11,7 @@ export interface IProps {
     height: number;
     padding?: IHistogramBar;
     tip?: TTipFunc;
+    title?: string;
     width: number;
     xAxisHeight?: number;
     yAxisWidth?: number;
