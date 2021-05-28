@@ -35,7 +35,7 @@ interface IProps {
    * Axis tick values - these could have a greater extend than the chart data so should
    * be included in the domain calculation
    */
-  tickValues?: number[];
+  tickValues: number[];
 }
 
 // Y Domains only so far....
@@ -43,7 +43,7 @@ export const useHistogramDomain: (props: IProps) => [number, number] = ({
   groupLayout,
   bins,
   values,
-  tickValues = [],
+  tickValues,
   clampToZero = true,
 }) => {
   const [range, setRange] = useState<[number, number]>([0, 0]);
