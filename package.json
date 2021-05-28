@@ -6,7 +6,8 @@
   "types": "./dist/types/src/index.d.ts",
   "scripts": {
     "build": "export NODE_ENV=production|| set NODE_ENV=production && TS_NODE_PROJECT=\"tsconfig.json\" webpack",
-    "test": "jest"
+    "test": "jest",
+    "test-ci": "jest --clear-cache"
   },
   "nyc": {
     "reporter": [

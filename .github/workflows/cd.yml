@@ -34,7 +34,7 @@ jobs:
     # build the project
     - run: npm run build
     # run tests just in case
-    - run: npm test
+    - run: npm run test-ci
 
     # build docs
     - run: cd docs-src
