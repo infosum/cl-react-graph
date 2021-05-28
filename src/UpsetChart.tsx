@@ -181,6 +181,7 @@ interface IActiveCirclesProps {
   setBandScale: ScaleBand<string>
 }
 
+const tickValues = [];
 /**
  * Renders a grid of circles. Highlighted if the column's data contains that key
  */
@@ -263,6 +264,7 @@ const DistributionBars: FC<TBarProps> = ({
     groupLayout: EGroupedBarLayout.GROUPED,
     bins,
     values,
+    tickValues,
   });
   return (
     <>
@@ -331,6 +333,7 @@ const SetSizeBars: FC<TBarProps & { setBandScale: ScaleBand<string>, bins: strin
     groupLayout: EGroupedBarLayout.GROUPED,
     bins: bins.reverse(),
     values,
+    tickValues,
   });
   return (
     <g className="size-bars" transform={`translate(${0},${top})`}>

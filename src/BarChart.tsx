@@ -53,6 +53,8 @@ interface IProps {
   }
 }
 
+const defaultTickValues = [];
+
 const BarChart: FC<IProps> = ({
   animation,
   axisLabelFormat,
@@ -72,7 +74,7 @@ const BarChart: FC<IProps> = ({
   xAxisHeight,
   xAxisLabelOrientation = ELabelOrientation.HORIZONTAL,
   yAxisWidth,
-  tickValues = undefined,
+  tickValues,
   bars,
   title,
 }) => {
@@ -93,7 +95,7 @@ const BarChart: FC<IProps> = ({
     groupLayout: groupLayout,
     bins: data.bins,
     values: data.counts,
-    tickValues,
+    tickValues: tickValues ?? defaultTickValues,
   });
 
   return (
