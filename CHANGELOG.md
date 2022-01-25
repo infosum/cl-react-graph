@@ -1,3 +1,5 @@
+[3.4.1]
+  * Changed ISVGLineStyle from snake-case props to camelCase
 [3.3.5]
   * Add `tickValues` prop to Bar chart to specify numeric scales ticks.
 [3.3.4]
@@ -23,7 +25,7 @@
   * Change: LineChart passes on axis scale types correctly to x & y axis.
   * Change: LineChart make grid prop optional
   * Change: refactored tick generator into is own function to be used across X & Y Axis
-  * Change: use scaleSymlog over scaleLog as this handles 0 values 
-[3.1.12] 
-  * Change: Bars: overlaid layout. Ensure that smaller bar widths don't disappear on smaller sizes. 
+  * Change: use scaleSymlog over scaleLog as this handles 0 values
+[3.1.12]
+  * Change: Bars: overlaid layout. Ensure that smaller bar widths don't disappear on smaller sizes.
   * Change: IHistogramBar.overlayMargin takes a fraction value to provide a percentage width of overlaid layouts.

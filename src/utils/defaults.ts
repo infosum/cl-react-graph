@@ -11,11 +11,11 @@ import { ILineProps } from '../LineChart';
 export const lineStyle: ISVGLineStyle = {
   'fill': '#000',
   'opacity': 1,
-  'shape-rendering': 'auto',
+  'shapeRendering': 'auto',
   'stroke': '#000',
-  'stroke-opacity': 1,
-  'stroke-width': 1,
-  'visible': true,
+  'strokeOpacity': 1,
+  'strokeWidth': 1,
+  'visible': 'true',
 };
 
 export const stroke: IStroke = {
@@ -68,8 +68,8 @@ export const grid: IGrid = {
       ...lineStyle,
       'fill': 'none',
       'stroke': '#bbb',
-      'stroke-opacity': 0.7,
-      'stroke-width': 1,
+      'strokeOpacity': 0.7,
+      'strokeWidth': 1,
     },
     ticks: 5,
     visible: true,
@@ -79,8 +79,8 @@ export const grid: IGrid = {
       ...lineStyle,
       'fill': 'none',
       'stroke': '#bbb',
-      'stroke-opacity': 0.7,
-      'stroke-width': 1,
+      'strokeOpacity': 0.7,
+      'strokeWidth': 1,
     },
     ticks: 5,
     visible: true,
