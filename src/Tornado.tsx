@@ -4,6 +4,7 @@ import React, { FC } from 'react';
 import { EChartDirection } from './BarChart';
 import Bars, { defaultPadding } from './components/Bars/Bars';
 import Base from './components/Base';
+import { TTipFunc } from './components/ToolTip';
 import XAxis from './components/XAxis';
 import YAxis from './components/YAxis';
 import {
@@ -50,6 +51,7 @@ export interface IProps {
   showBinPercentages: boolean;
   /** @description Chart <title /> */
   title?: string;
+  tip?: TTipFunc;
 }
 
 const Tornado: FC<IProps> = ({
@@ -69,6 +71,7 @@ const Tornado: FC<IProps> = ({
   padding = defaultPadding,
   showBinPercentages = false,
   title,
+  tip,
 }) => {
   if (!yAxisWidth) {
     yAxisWidth = direction === EChartDirection.VERTICAL ? 40 : 100;
@@ -152,6 +155,7 @@ const Tornado: FC<IProps> = ({
         id={`left-${id}`}
         padding={padding}
         showLabels={[showBinPercentages, showBinPercentages]}
+        tip={tip}
       />
 
       <Bars values={right}
@@ -170,6 +174,7 @@ const Tornado: FC<IProps> = ({
         top={direction === EChartDirection.HORIZONTAL ? 0 : barHeight}
         padding={padding}
         showLabels={[showBinPercentages, showBinPercentages]}
+        tip={tip}
       />
 
       {
