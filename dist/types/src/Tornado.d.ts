@@ -1,5 +1,6 @@
 import { FC } from 'react';
 import { EChartDirection } from './BarChart';
+import { TTipFunc } from './components/ToolTip';
 import { EGroupedBarLayout, IHistogramBar } from './Histogram';
 export interface ITornadoDataSet {
     borderColors?: string[];
@@ -36,6 +37,7 @@ export interface IProps {
     showBinPercentages: boolean;
     /** @description Chart <title /> */
     title?: string;
+    tip?: TTipFunc;
 }
 declare const Tornado: FC<IProps>;
 export default Tornado;
