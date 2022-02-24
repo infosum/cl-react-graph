@@ -13,8 +13,8 @@ import {
 
 import { IAxes } from '../legacy/types';
 import {
+  IAnyChartPoint,
   IChartPoint,
-  IChartPointValue,
   ILineProps,
 } from '../LineChart';
 import { rangeAffordance } from './domain';
@@ -25,7 +25,7 @@ import {
 
 const ZERO_SUBSTITUTE: number = 1e-6;
 
-export interface IProps<T extends IChartPoint<IChartPointValue, IChartPointValue> = IChartPoint> {
+export interface IProps<T extends IAnyChartPoint = IChartPoint> {
   data: T[];
   axis: IAxes;
   line: ILineProps;

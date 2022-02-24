@@ -1,96 +1,18 @@
-html, body {
-  height: 100vh;
-  padding: 0;
-  margin: 0;
+@font-face {
+  font-family: "Circular";
+  src: url("../fonts/CircularStd-Medium.otf");
+}
+
+@font-face {
+  font-family: "ProximaNova";
+  src: url("../fonts/Proxima Nova Light.ttf");
 }
 
 
 body {
-  background-color: #f2f2f2;
-  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
-  font-size: 0.9rem;
+  font-family: 'ProximaNova';
 }
 
-#___gatsby, #___gatsby > div {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  justify-content: space-between;
-}
-
-main {
-  margin-top: 1rem;
-}
-
-.tooltip {
-  position: absolute;
-  background: #fff;
-  color: #27626a;
-  font-size: 0.8rem;
-  border: 1px solid #27626a7a;
-  padding: 0.25rem;
-}
-footer {
-  background: #27626a;
-  color: hsla(0,0%,100%,.9);
-  text-align: center;
-  padding: 0.5rem;
-}
-
-footer a {
-  color: hsla(0,0%,100%,.9);
-}
-table.data-grid {
-  width: 100%;
-}
-
-th.action-cell {
-  background: #f2f2f2;
-  border: 1px solid #d2d2d2;
-}
-
-.MuiTypography-h2 {
-  font-size: 1.3rem;
-  line-height: 1.3rem;
-  margin-bottom: 0.75rem;
-}
-
-.MuiToolbar-root a {
-  text-decoration: none;
-  color: #fff;
-}
-
-.data-grid-container .data-grid .cell > input  {
-  height: 21px !important;
-}
-
-pre code {
-  background-color: #eee;
-  border: 1px solid #999;
-  display: block;
-  padding: 20px;
-}
-
-.wrapper {
-  margin: 0 !important;
-  padding: 0 !important;
-  width: 100% !important;
-}
-
-.MuiCard-root {
-  overflow: visible !important;
-}
-
-.MuiTypography-h2 {
-  margin-left: 1.5rem !important;
-  font-size: 1.8rem !important;
-}
-
-.MuiButtonBase-root a {
-  text-decoration: none!important;
-  color: #272727;
-}
-
-.MuiAppBar-colorPrimary {
-  background-color: #627791 !important;
+h1, h2 {
+  font-family:  'Circular';
 }

@@ -11,13 +11,13 @@ import {
 
 import { IAxes } from '../legacy/types';
 import {
+  IAnyChartPoint,
   IChartPoint,
-  IChartPointValue,
   ILineProps,
 } from '../LineChart';
 import { useMakeArea } from '../utils/useMakeLine';
 
-interface IProps<T extends IChartPoint<IChartPointValue, IChartPointValue> = IChartPoint> {
+interface IProps<T extends IAnyChartPoint = IChartPoint> {
   label?: string;
   line: ILineProps;
   width: number;
@@ -27,7 +27,7 @@ interface IProps<T extends IChartPoint<IChartPointValue, IChartPointValue> = ICh
   data: T[];
 }
 
-const AreaFill: FC<IProps> = (props) => {
+export const AreaFill: FC<IProps> = (props) => {
   const { label = '', line } = props;
   const className = `area-${label.replace(/[^a-z]/gi, '')}`;
   const { previous, current } = useMakeArea(props);

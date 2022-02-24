@@ -25,6 +25,8 @@ export interface IChartPoint<X extends IChartPointValue = Date | number | string
   z?: number;
 }
 
+export type IAnyChartPoint = IChartPoint<IChartPointValue, IChartPointValue>;
+
 export interface ILineProps {
   show: boolean;
   fill: {
@@ -50,7 +52,7 @@ export interface ILineChartDataSet<T> {
   data: T[];
 }
 
-export interface IProps<T extends IChartPoint<IChartPointValue, IChartPointValue> = IChartPoint> {
+export interface IProps<T extends IAnyChartPoint = IChartPoint> {
   axis: IAxes;
   data: ILineChartDataSet<T>[];
   grid?: IGrid;

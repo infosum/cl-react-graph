@@ -54,7 +54,7 @@ export interface IProps {
   tip?: TTipFunc;
 }
 
-const Tornado: FC<IProps> = ({
+export const Tornado: FC<IProps> = ({
   colorScheme = schemeSet3,
   data,
   id = '',

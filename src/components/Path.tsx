@@ -5,6 +5,7 @@ import React, {
 
 interface IPathProps {
   fill: string;
+  stroke?: string
   d: string;
   opacity: number;
 }
@@ -12,6 +13,7 @@ interface IPathProps {
 const Path: FC<IPathProps & HTMLAttributes<SVGElement>> = ({
   d,
   fill,
+  stroke,
   id,
   opacity,
   onMouseEnter,
@@ -24,7 +26,7 @@ const Path: FC<IPathProps & HTMLAttributes<SVGElement>> = ({
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
       fill={fill}
-      stroke={fill}
+      stroke={stroke ?? fill}
       style={{ transition: 'all 0.5s ease', opacity }}
       d={d}
     />
