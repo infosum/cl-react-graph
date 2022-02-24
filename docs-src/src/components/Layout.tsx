@@ -16,11 +16,6 @@ const Context = styled.div`
 export const Layout: FC = ({ children }) => {
   return (
     <Context>
-     {/* <Head>
-        <title>Cl-react-charts documentation</title>
-        <meta name="description" content="React svg charting library" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head> */}
       <Navbar />
       <div style={{ display: 'grid', gridTemplateColumns: "20rem 1fr", gridGap: "1rem" }}> 
       <SideMenu />

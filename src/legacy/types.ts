@@ -54,5 +54,5 @@ export interface ISVGLineStyle {
   'strokeWidth': number;
   'strokeOpacity': number;
   'shapeRendering': string;
-  'visible': boolean;
+  'visible': string;
 }
