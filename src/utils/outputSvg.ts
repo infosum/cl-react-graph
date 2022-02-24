@@ -13,7 +13,7 @@ export const outputSvg = (
   width: number,
   height: number,
   callback: (outputData: string | Blob | null) => void,
-  watermark: IWatermark,
+  watermark?: IWatermark,
   type: TOutputType = 'blob',
 ) => {
   // Select the first svg element
@@ -25,7 +25,7 @@ export const outputSvg = (
   // create canvas in memory(not in DOM)
   const canvas = document.createElement('canvas');
   // set canvas size
-  canvas.width = width + 20 + watermark.width;
+  canvas.width = width + 20 + (watermark?.width ? watermark.width : 0);
   canvas.height = height + 20;
   // get canvas context for drawing on canvas
   const context = canvas.getContext('2d');
@@ -40,7 +40,9 @@ export const outputSvg = (
       context!.clearRect(0, 0, canvas.width, canvas.height);
       // draw image with SVG data to canvas
       context!.drawImage(image, 10, 10, width, height);
-      context!.drawImage(watermarkImage, canvas.width - watermark.width - 10, 10, watermark.width, watermark.height);
+      if (watermark) {
+        context!.drawImage(watermarkImage, canvas.width - watermark.width - 10, 10, watermark.width, watermark.height);
+      }
       // add a background
       context!.globalCompositeOperation = 'destination-over'
       context!.fillStyle = "#FFF";
@@ -57,5 +59,7 @@ export const outputSvg = (
     image.src = svgData;
   }
   // start loading watermark SVG data into memory
-  watermarkImage.src = watermark.svg;
+  if(watermark) {
+    watermarkImage.src = watermark.svg;
+  }
 };
