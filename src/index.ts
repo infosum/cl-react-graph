@@ -21,7 +21,7 @@ export { default as filterRange } from './colors/filterRange';
 export { outputSvg } from './utils/outputSvg';
 
 // V3 components...
-export { default as TornadoChart } from './Tornado';
+export { default as TornadoChart, IProps as ITornadoProps } from './Tornado';
 export { default as Bars } from './components/Bars/Bars';
 export { default as HistogramBars } from './components/Bars/HistogramBars';
 export { default as Base } from './components/Base';
@@ -30,9 +30,12 @@ export { default as XAxis } from './components/XAxis';
 export { default as YAxis, ELabelOrientation } from './components/YAxis';
 export { default as Point } from './components/Point';
 export { default as Path } from './components/Path';
+export { useBrush } from './utils/useBrush';
 export { default as Points } from './components/Points';
 export { default as Web } from './components/Web';
 export { default as JoyPlot } from './JoyPlot';
+export { AreaFill } from './components/AreaFill';
+export { ILineProps } from './LineChart';
 export { default as BarChart, EChartDirection } from './BarChart';
 export { default as Histogram2, IHistogramProps } from './Histogram';
 export { default as LineChart, IChartPoint, ILineChartDataSet } from './LineChart';

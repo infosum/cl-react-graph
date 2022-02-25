@@ -1,55 +1,93 @@
-import React, { FC } from 'react';
+import React from 'react';
 
 import {
-  Card,
-  CardContent,
-  Grid,
-  Typography,
-} from '@material-ui/core';
+  RadarChart,
+  useWidth,
+} from '../../../src';
+import { IRadarChartData } from '../../../src/RadarChart';
+import { JSXCode } from '../components/JSXCode';
+import { Layout } from '../components/Layout';
+import { TwoColumns } from '../components/TwoColumns';
 
-import RadarChart, { IProps } from '../../../src/RadarChart';
-import { radarData } from '../../../test/fixtures';
-import JSXToString from '../components/JSXToString';
-import Layout from '../components/layout';
-import SEO from '../components/seo';
+const exampleCode = `import {
+  RadarChart,
+  useWidth,
+} from 'cl-react-graph;
 
-const initialState: IProps = {
-  height: 400,
-  width: 400,
-  data: radarData,
+const data: IRadarChartData[] = [{
+  label: 'Germany',
+  axes: [
+    { axis: "strength", value: 13 },
+    { axis: "intelligence", value: 6 },
+    { axis: "charisma", value: 5 },
+    { axis: "dexterity", value: 9 },
+    { axis: "luck", value: 2 }
+  ]
+},
+{
+  label: 'Argentina',
+  axes: [
+    { axis: "strength", value: 6 },
+    { axis: "intelligence", value: 7 },
+    { axis: "charisma", value: 10 },
+    { axis: "dexterity", value: 13 },
+    { axis: "luck", value: 9 }
+  ]
+}];
+
+const MyComponent = () => {
+  const [ref, width] = useWidth('90%');
+  return(
+    <div ref={ref}>
+      <RadarChart
+        id="radar-demo"
+        height={400}
+        width={width}
+        data={data} />
+    </div>
+  )
 }
+`;
 
-const Radar = () => {
-  const chart = <RadarChart
-    id="radar-demo"
-    {...initialState} />
+const data: IRadarChartData[] = [{
+  label: 'Germany',
+  axes: [
+    { axis: "strength", value: 13 },
+    { axis: "intelligence", value: 6 },
+    { axis: "charisma", value: 5 },
+    { axis: "dexterity", value: 9 },
+    { axis: "luck", value: 2 }
+  ]
+},
+{
+  label: 'Argentina',
+  axes: [
+    { axis: "strength", value: 6 },
+    { axis: "intelligence", value: 7 },
+    { axis: "charisma", value: 10 },
+    { axis: "dexterity", value: 13 },
+    { axis: "luck", value: 9 }
+  ]
+}];
+
+
+const RadarExample = () => {
+  const [ref, width] = useWidth('90%');
   return (
     <Layout>
-      <SEO title="Line Chart" description="" />
-      <Typography variant="h2">Radar Chart</Typography>
-      <div>
-        <Grid container spacing={5} className="wrapper">
-          <Grid item xs={12} md={6}>
-            <Card>
-              <CardContent>
-                {chart}
-              </CardContent>
-            </Card>
-            <br />
-            <Card>
-              <CardContent>
-                <JSXToString component={chart} />
-              </CardContent>
-            </Card>
-          </Grid>
-          <Grid item xs={12} md={6}>
-
-          </Grid>
-
-        </Grid>
-      </div>
+      <h2>Radar Chart</h2>
+      <TwoColumns>
+        <div ref={ref}>
+        <RadarChart
+          id="radar-demo"
+          height={400}
+          width={width}
+          data={data} />
+        </div>
+        <JSXCode exampleCode={exampleCode} />
+      </TwoColumns>
     </Layout>
   )
 }
 
-export default Radar;
+export default RadarExample;

@@ -1,24 +1,27 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import {
-  Button,
-  Card,
-  CardContent,
+  Base,
+  JoyPlot,
+  useWidth,
+} from '../../../src';
+import { JSXCode } from '../components/JSXCode';
+import { Layout } from '../components/Layout';
+import { TwoColumns } from '../components/TwoColumns';
+import { theme } from '../context/theme';
+
+const exampleCode = `import {
+  Base, 
   Grid,
-  Typography,
-} from '@material-ui/core';
+} from 'cl-react-graph;
 
-import { useWidth } from '../../../src';
-import JoyPlot from '../../../src/JoyPlot';
-import Layout from '../components/layout';
-import SEO from '../components/seo';
 
-const data1 = [
+const data = [
   {
     "bins": [
-      "[0, 2500)",
-      "[2500, 5000)",
-      "[100000, 9223372036854775807)"
+      "0, 2500",
+      "2500, 5000",
+      "5000, 10000"
     ],
     "counts": [
       {
@@ -34,9 +37,9 @@ const data1 = [
   },
   {
     "bins": [
-      "[0, 2500)",
-      "[2500, 5000)",
-      "[100000, 9223372036854775807)"
+      "0, 2500",
+      "2500, 5000",
+      "5000, 10000"
     ],
     "counts": [
       {
@@ -52,17 +55,35 @@ const data1 = [
   }
 ]
 
-const data2 = [
+const MyComponent = () => {
+  const [ref, width] = useWidth('90%');
+  return(
+    <div ref={ref}>
+    <JoyPlot
+      data={data}
+      xAxisHeight={20}
+      colorScheme="hsla(140, 60%, 88%, 1)"
+      width={width}
+      height={data.length * 150} />
+    </div>
+  )
+}
+`;
+
+const data = [
   {
     "bins": [
-      "No",
-      "Yes"
+      "0, 2500",
+      "2500, 5000",
+      "5000, 10000"
     ],
     "counts": [
       {
         "label": "in market for car: No",
         "data": [
-          1000, 500
+          500,
+          400,
+          4000
         ]
       }
     ],
@@ -70,56 +91,46 @@ const data2 = [
   },
   {
     "bins": [
-      "No",
-      "Yes"
+      "0, 2500",
+      "2500, 5000",
+      "5000, 10000"
     ],
     "counts": [
       {
         "label": "in market for car: Yes",
         "data": [
-          800, 400
+          300,
+          300,
+          2800
         ]
       }
     ],
     "title": "Yes"
   }
 ]
+
 const JoyPlotExample = () => {
-  const [dataIndex, setDataIndex] = useState(0);
-  const d = dataIndex === 0 ? data1 : data2;
-  const [ref, w] = useWidth('90%');
+  const [ref, width] = useWidth('90%');
   return (
     <Layout>
-      <SEO title="Joy Plot" description="" />
-      <Typography variant="h2">Joy Plot</Typography>
-      <div>
-        <Grid container spacing={5} className="wrapper">
-          <Grid item xs={12} md={6}>
-            <Card>
-              <CardContent>
-                <div ref={ref}>
-                  <JoyPlot
-                    data={d}
-                    xAxisHeight={20}
-                    width={w}
-                    height={d.length * 150} />
-                </div>
-              </CardContent>
-            </Card>
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <Card>
-              <CardContent>
-                <Button onClick={() => setDataIndex(dataIndex === 1 ? 0 : 1)}>
-                  toggle data
-                </Button>
-              </CardContent>
-            </Card>
-          </Grid>
-        </Grid>
-      </div>
+      <h2>JoyPlot</h2>
+
+      <TwoColumns>
+        <div ref={ref}>
+          <h3>In market for a car</h3>
+        <JoyPlot
+          data={data}
+          title="In market for a car"
+          xAxisHeight={20}
+          colorScheme={[theme.green900]}
+          width={width}
+          height={data.length * 150} />
+        </div>
+        <JSXCode exampleCode={exampleCode} />
+
+      </TwoColumns>
     </Layout>
-  );
-};
+  )
+}
 
 export default JoyPlotExample;

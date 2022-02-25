@@ -1,35 +1,69 @@
 import React, { FC } from 'react';
 
 import {
-  Card,
-  CardContent,
-  Grid,
-  Typography,
-} from '@material-ui/core';
+  IAxes,
+  ScatterPlot,
+  useWidth,
+} from '../../../src';
+import { IPointProps } from '../../../src/components/Point';
+import { IChartPointValue } from '../../../src/LineChart';
+import { IScatterPlotDataSet } from '../../../src/ScatterPlot';
+import { JSXCode } from '../components/JSXCode';
+import { Layout } from '../components/Layout';
+import { TwoColumns } from '../components/TwoColumns';
 
-import { IPointProps } from '../../../src/components/Points';
-import ScatterPlot, { IProps } from '../../../src/ScatterPlot';
-import { scatterData } from '../../../test/fixtures';
-import JSXToString from '../components/JSXToString';
-import Layout from '../components/layout';
-import SEO from '../components/seo';
+const exampleCode = `import {
+  ScatterPlot,
+  useWidth,
+} from 'cl-react-graph;
 
-const initialState: IProps = {
-  axis: {
-    x: {
-      height: 20,
-      width: 400,
-      scale: 'linear',
-    },
-    y: {
-      width: 20,
-      height: 400,
-      scale: 'linear',
-    },
-  },
-  height: 400,
-  width: 400,
-  data: [scatterData],
+const data: IScatterPlotDataSet<IChartPointValue> = {
+  label: 'Scatter data',
+  point: { fill: '#000', radius: 4, show: true, stroke: '' },
+  data: [
+    { x: 0, y: 1, z: 5 },
+    { x: 2, y: 1, z: 5 },
+    { x: 3, y: 3, z: 10 },
+    { x: 4, y: 4, z: 5 },
+    { x: 5, y: 1, z: 15 },
+    { x: 6, y: 6, z: 5 },
+    { x: 7, y: 7, z: 15 },
+  ]
+}
+
+const MyComponent = () => {
+  const [ref, width] = useWidth('90%');
+  return(
+    <div ref={ref}>
+    <ScatterPlot
+      axis={axis}
+      height={400}
+      width={400}
+      data={[data]}
+    />
+    </div>
+  )
+}
+`;
+
+
+const exampleCodeCustom = `import {
+  ScatterPlot,
+  useWidth,
+} from 'cl-react-graph;
+
+const data: IScatterPlotDataSet<IChartPointValue> = {
+  label: 'Scatter data',
+  point: { fill: '#000', radius: 4, show: true, stroke: '' },
+  data: [
+    { x: 0, y: 1, z: 5 },
+    { x: 2, y: 1, z: 5 },
+    { x: 3, y: 3, z: 10 },
+    { x: 4, y: 4, z: 5 },
+    { x: 5, y: 1, z: 15 },
+    { x: 6, y: 6, z: 5 },
+    { x: 7, y: 7, z: 15 },
+  ]
 }
 
 const Fruit: FC<IPointProps> = ({
@@ -40,42 +74,94 @@ const Fruit: FC<IPointProps> = ({
   cy,
   children,
 }) => <text x={cx} y={cy} fontSize={z * 4}>
-    {x > 2 ? "🍎" : "🍐"}
+    {(x ?? 0) > 2 ? "🍎" : "🍐"}
+    {children}
+  </text>
+  
+const MyComponent = () => {
+  const [ref, width] = useWidth('90%');
+  return(
+    <div ref={ref}>
+    <ScatterPlot
+      PointComponent={(props: IPointProps) => <Fruit {...props} />}
+      axis={axis}
+      height={400}
+      width={400}
+      data={[data]}
+    />
+    </div>
+  )
+}
+`;
+const data: IScatterPlotDataSet<IChartPointValue> = {
+  label: 'Scatter data',
+  point: { fill: '#000', radius: 4, show: true, stroke: '' },
+  data: [
+    { x: 0, y: 1, z: 5 },
+    { x: 2, y: 1, z: 5 },
+    { x: 3, y: 3, z: 10 },
+    { x: 4, y: 4, z: 5 },
+    { x: 5, y: 1, z: 15 },
+    { x: 6, y: 6, z: 5 },
+    { x: 7, y: 7, z: 15 },
+  ]
+}
+const Fruit: FC<IPointProps> = ({
+  x,
+  y,
+  z,
+  cx,
+  cy,
+  children,
+}) => <text x={cx} y={cy} fontSize={z * 4}>
+    {(x ?? 0) > 2 ? "🍎" : "🍐"}
     {children}
   </text>
 
-const Scatter = () => {
-  const chart = <ScatterPlot
-    id="scatter-demo"
-    PointComponent={(props: IPointProps) => <Fruit {...props} />}
-    {...initialState} />
+
+const RadarExample = () => {
+  const [ref, width] = useWidth('90%');
+  const axis: IAxes = {
+    x: {
+      height: 20,
+      width: width,
+      scale: 'linear',
+    },
+    y: {
+      width: 20,
+      height: width,
+      scale: 'linear',
+    },
+  }
   return (
     <Layout>
-      <SEO title="Line Chart" description="" />
-      <Typography variant="h2">Scatter Chart</Typography>
-      <div>
-        <Grid container spacing={5} className="wrapper">
-          <Grid item xs={12} md={6}>
-            <Card>
-              <CardContent>
-                {chart}
-              </CardContent>
-            </Card>
-            <br />
-            <Card>
-              <CardContent>
-                <JSXToString component={chart} />
-              </CardContent>
-            </Card>
-          </Grid>
-          <Grid item xs={12} md={6}>
-
-          </Grid>
-
-        </Grid>
-      </div>
+      <h2>Scatter Chart</h2>
+      <TwoColumns>
+        <div ref={ref}>
+          <ScatterPlot
+            axis={axis}
+            height={400}
+            width={width}
+            data={[data]}
+          />
+        </div>
+        <JSXCode exampleCode={exampleCode} />
+      </TwoColumns>
+      <TwoColumns>
+        <div>
+          <h3>With a custom point component</h3>
+          <ScatterPlot
+            axis={axis}
+            PointComponent={(props: IPointProps) => <Fruit {...props} />}
+            height={400}
+            width={width}
+            data={[data]}
+          />
+          </div>
+        <JSXCode exampleCode={exampleCodeCustom} />
+      </TwoColumns>
     </Layout>
   )
 }
 
-export default Scatter;
+export default RadarExample;

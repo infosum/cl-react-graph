@@ -1,126 +1,114 @@
-import React, {
-  useReducer,
-  useState,
-} from 'react';
-
-import {
-  Button,
-  Card,
-  CardContent,
-  FormControlLabel,
-  Grid,
-  Switch,
-  Typography,
-} from '@material-ui/core';
+import React from 'react';
 
 import {
   EChartDirection,
   EGroupedBarLayout,
+  ITornadoProps,
+  TornadoChart,
+  useWidth,
 } from '../../../src';
-import NativeTornado, { IProps } from '../../../src/Tornado';
-import { tornadoData } from '../../../test/fixtures';
-import JSXToString from '../components/JSXToString';
-import Layout from '../components/layout';
-import SEO from '../components/seo';
+import { JSXCode } from '../components/JSXCode';
+import { Layout } from '../components/Layout';
+import { TwoColumns } from '../components/TwoColumns';
+import { theme } from '../context/theme';
 
-type Actions = { type: 'SET_SHOW_PERCENTAGES', show: boolean }
-  | { type: 'SET_DIRECTION', direction: EChartDirection };
+const exampleCode = `import {
+  EChartDirection,
+  EGroupedBarLayout,
+  TornadoChart,
+  ITornadoProps,
+  useWidth,
+} from 'cl-react-graph;
 
-const initialState: IProps = {
-  data: tornadoData,
-  splitBins: ['Male', 'Female'],
-  groupLayout: EGroupedBarLayout.OVERLAID,
-  width: 600,
-  height: 500,
-  splitAxisHeight: 50,
-  xAxisHeight: 20,
-  direction: EChartDirection.HORIZONTAL,
-  showBinPercentages: false,
+const data: ITornadoProps['data'] = {
+  bins: ['16-18', '18-25', '25-35', '35-50', '50-65', '65-∞'],
+  counts: [
+    {
+      label: 'Background',
+      data: [
+        [200, 2600, 5100, 9700, 8400, 6700], // Male bin 1, Male bin 2,
+        [2002, 2100, 4700, 8700, 4900, 1400], // Female bin 1, Female bin 2,
+      ],
+    },
+    {
+      label: 'Foreground',
+      data: [
+        [100, 260, 510, 970, 840, 670], // Male bin 1, Male bin 2,
+        [1000, 5500, 470, 870, 490, 140], // Female bin 1, Female bin 2,
+      ],
+    },
+
+  ],
 }
 
-function reducer(state: IProps, action: Actions): IProps {
-  switch (action.type) {
-    case 'SET_SHOW_PERCENTAGES':
-      return {
-        ...state,
-        showBinPercentages: action.show,
-      };
-    case 'SET_DIRECTION': {
-      return {
-        ...state,
-        direction: action.direction
-      }
-    }
-  }
-  return state;
+const MyComponent = () => {
+  const [ref, width] = useWidth('90%');
+  return(
+    <div ref={ref}>
+    <TornadoChart
+    data={data}
+    splitBins={['Male', 'Female']}
+    groupLayout={EGroupedBarLayout.OVERLAID}
+    width={width}
+    height={500}
+    splitAxisHeight={50}
+    xAxisHeight={20}
+    colorScheme={['hsla(140, 60%, 88%, 1)', 'hsla(208, 69%, 66%, 1)']}
+    direction={EChartDirection.HORIZONTAL}
+    showBinPercentages={false}
+ />
+    </div>
+  )
+}
+`;
+
+const data: ITornadoProps['data'] = {
+  bins: ['16-18', '18-25', '25-35', '35-50', '50-65', '65-∞'],
+  counts: [
+    {
+      label: 'Background',
+      data: [
+        [200, 2600, 5100, 9700, 8400, 6700], // Male bin 1, Male bin 2,
+        [2002, 2100, 4700, 8700, 4900, 1400], // Female bin 1, Female bin 2,
+      ],
+    },
+    {
+      label: 'Foreground',
+      data: [
+        [100, 260, 510, 970, 840, 670], // Male bin 1, Male bin 2,
+        [1000, 5500, 470, 870, 490, 140], // Female bin 1, Female bin 2,
+      ],
+    },
+
+  ],
 }
 
-const Tornado = () => {
-  const [state, dispatch] = useReducer(reducer, initialState as IProps);
-  const [index, setIndex] = useState(0);
-  const chart = <NativeTornado
-    id="demo"
-    {...state} />
+const TornadoExample = () => {
+  const [ref, width] = useWidth('90%');
   return (
     <Layout>
-      <SEO title="Line Chart" description="" />
-      <Typography variant="h2">Tornado Chart</Typography>
-      <div>
-        <Grid container spacing={5} className="wrapper">
-          <Grid item xs={12} md={6}>
-            <Card>
-              <CardContent>
-                {chart}
-                <Button onClick={() => setIndex(index === 0 ? 1 : 0)}>
-                  Toggle Data
-                </Button>
+      <h2>Tornado Chart</h2>
 
-              </CardContent>
-            </Card>
-            <br />
-            <Card>
-              <CardContent>
-                <JSXToString component={chart} />
-              </CardContent>
-            </Card>
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <FormControlLabel
-              control={
-                <Switch
-                  checked={state.showBinPercentages}
-                  color="primary"
-                  onChange={(_, value) => {
-                    dispatch({ type: 'SET_SHOW_PERCENTAGES', show: value });
-                  }}
-                />
-              }
-              label="Show points"
-            />
-            <FormControlLabel
-              control={
-                <Switch
-                  checked={state.direction === EChartDirection.VERTICAL}
-                  color="primary"
-                  onChange={(_, value) => {
-                    dispatch({
-                      type: 'SET_DIRECTION',
-                      direction: state.direction === EChartDirection.VERTICAL ? EChartDirection.HORIZONTAL : EChartDirection.VERTICAL,
-                    })
-                  }}
-                />
-              }
-              label={`Direction ${state.direction}`}
-            />
-          </Grid>
+      <TwoColumns>
+        <div ref={ref}>
+          <TornadoChart
+            data={data}
+            splitBins={['Male', 'Female']}
+            groupLayout={EGroupedBarLayout.OVERLAID}
+            width={width}
+            height={500}
+            splitAxisHeight={50}
+            xAxisHeight={20}
+            colorScheme={[theme.green900, theme.brightBlue500]}
+            direction={EChartDirection.HORIZONTAL}
+            showBinPercentages={false}
+          />
+        </div>
+        <JSXCode exampleCode={exampleCode} />
 
-          <Grid item xs={12} md={6}>
-
-          </Grid>
-        </Grid>
-      </div>
+      </TwoColumns>
     </Layout>
   )
 }
 
-export default Tornado;
+export default TornadoExample;

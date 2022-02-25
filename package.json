@@ -1,6 +1,6 @@
 {
   "name": "cl-react-graph",
-  "version": "3.4.4",
+  "version": "3.5.0",
   "description": "React D3 Charts",
   "main": "./dist/index.js",
   "types": "./dist/types/src/index.d.ts",
@@ -61,8 +61,8 @@
     "jest": "^26.6.3",
     "jest-config": "^27.3.1",
     "jsdom": "^16.6.0",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
     "ts-loader": "^8.0.17",
     "ts-node": "^9.1.1",
     "typescript": "^4.3.2",

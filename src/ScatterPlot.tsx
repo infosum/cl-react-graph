@@ -11,8 +11,8 @@ import YAxis, { TAxisLabelFormat } from './components/YAxis';
 import { IGrid } from './Histogram';
 import { IAxes } from './legacy/types';
 import {
+  IAnyChartPoint,
   IChartPoint,
-  IChartPointValue,
 } from './LineChart';
 import { useScatterDomain } from './utils/useDomain';
 
@@ -28,7 +28,7 @@ export interface IScatterPlotDataSet<T> {
   data: T[];
 }
 
-export interface IProps<T extends IChartPoint<IChartPointValue, IChartPointValue> = IChartPoint> {
+export interface IProps<T extends IAnyChartPoint = IChartPoint> {
   axis: IAxes;
   data: IScatterPlotDataSet<T>[];
   grid?: IGrid;

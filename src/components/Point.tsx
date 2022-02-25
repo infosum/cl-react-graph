@@ -18,11 +18,12 @@ export interface IPointProps {
   /** @description Pixel y value */
   cy: number;
   /** @description Actual X value */
-  x: number | string | Date;
+  x?: number | string | Date;
   /** @description Actual Y value */
-  y: number | string | Date;
+  y?: number | string | Date;
   z: number;
   className?: string;
+  opacity?: number;
 }
 
 const Point: FC<IPointStyle & IPointProps> = ({
@@ -36,20 +37,22 @@ const Point: FC<IPointStyle & IPointProps> = ({
   stroke = defaultPointStyle.stroke,
   x,
   y,
+  opacity,
 }) => {
   return PointComponent ?
     <PointComponent
       data-testid={id}
       cx={Math.round(cx)}
       cy={Math.round(cy)}
-      x={x}
-      y={y}
+      x={x ?? cx}
+      y={y ?? cy}
       z={z ?? 3} >
       {children}
     </PointComponent>
     : <circle
       data-testid={id}
       r={z ?? 3}
+      style={{ transition: 'all 0.5s ease', opacity }}
       cx={Math.round(cx)}
       cy={Math.round(cy)}
       fill={fill}

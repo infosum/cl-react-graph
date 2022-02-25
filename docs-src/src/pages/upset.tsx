@@ -1,21 +1,22 @@
-// Be sure to include styles at some point, probably during your bootstrapping
-import 'react-datasheet/lib/react-datasheet.css';
-
-import React, { FC } from 'react';
+import React from 'react';
 
 import {
-  Card,
-  CardContent,
-  Grid,
-  Typography,
-} from '@material-ui/core';
+  IUpsetChartProps,
+  UpsetChart,
+  useWidth,
+} from '../../../src';
+import { JSXCode } from '../components/JSXCode';
+import { Layout } from '../components/Layout';
+import { TwoColumns } from '../components/TwoColumns';
+import { theme } from '../context/theme';
 
-import { useWidth } from '../../../src';
-import UpsetChart, { TUpsetData } from '../../../src/UpsetChart';
-import Layout from '../components/layout';
-import SEO from '../components/seo';
+const exampleCode = `import {
+  IUpsetChartProps,
+  UpsetChart,
+  useWidth,
+} from 'cl-react-graph;
 
-const data: TUpsetData = [
+const data: IUpsetChartProps['data'] = [
   { keys: ['Email'], value: 10 },
   { keys: ['Email', 'MAID'], value: 14 },
   { keys: ['Email', 'MAID', 'Postcode'], value: 1 },
@@ -24,43 +25,72 @@ const data: TUpsetData = [
   { keys: ['Postcode'], value: 12 },
 ];
 
-const UpsetExample: FC = () => {
-  const [ref, w] = useWidth('90%');
+
+const MyComponent = () => {
+  const [ref, width] = useWidth('90%');
+  return(
+    <div ref={ref}>
+    <UpsetChart
+    title="example upset chart"
+    description="more info for accessibility"
+    width={width}
+    height={400}
+    distribution={{
+      colorScheme: ['hsla(140, 60%, 88%, 1)],
+      fill: {
+        active: 'hsla(6, 90%, 70%, 1)',
+        inactive: 'hsla(208, 32%, 91%, 1)',
+      },
+    }}
+    setSize={{
+      dimensions: { chartWidth: width / 6, axisWidth: 120, height: 150 },
+      colorScheme: ['rgb(154, 218, 172)'],
+    }}
+    data={data} />
+    </div>
+  )
+}
+`;
+const data: IUpsetChartProps['data'] = [
+  { keys: ['Email'], value: 10 },
+  { keys: ['Email', 'MAID'], value: 14 },
+  { keys: ['Email', 'MAID', 'Postcode'], value: 1 },
+  { keys: ['MAID'], value: 10 },
+  { keys: ['Email', 'Postcode'], value: 14 },
+  { keys: ['Postcode'], value: 12 },
+];
+
+const UpsetChartExample = () => {
+  const [ref, width] = useWidth('90%');
   return (
     <Layout>
-      <SEO title="Upset Chart" description="" />
-      <Typography variant="h2">Upset</Typography>
-      <div>
-        <Grid container spacing={5} className="wrapper">
-          <Grid item xs={12}>
-            <Card>
-              <CardContent>
-                <div ref={ref}>
-                  <UpsetChart
-                    title="example upset chart"
-                    description="more info for accessibility"
-                    width={w}
-                    height={400}
-                    distribution={{
-                      colorScheme: ['rgb(154, 187, 218)'],
-                      fill: {
-                        active: 'rgb(154, 187, 218)',
-                        inactive: '#ddd',
-                      },
-                    }}
-                    setSize={{
-                      dimensions: { chartWidth: w / 6, axisWidth: 120, height: 150 },
-                      colorScheme: ['rgb(154, 218, 172)'],
-                    }}
-                    data={data} />
-                </div>
-              </CardContent>
-            </Card>
-          </Grid>
-        </Grid>
-      </div>
-    </Layout>
-  );
-};
+      <h2>Upset Chart</h2>
 
-export default UpsetExample;
+      <TwoColumns>
+        <div ref={ref}>
+          <UpsetChart
+            title="example upset chart"
+            description="more info for accessibility"
+            width={width}
+            height={400}
+            distribution={{
+              colorScheme: [theme.green900],
+              fill: {
+                active: theme.red700,
+                inactive: theme.grey600,
+              },
+            }}
+            setSize={{
+              dimensions: { chartWidth: width / 6, axisWidth: 120, height: 150 },
+              colorScheme: ['rgb(154, 218, 172)'],
+            }}
+            data={data} />
+        </div>
+        <JSXCode exampleCode={exampleCode} />
+
+      </TwoColumns>
+    </Layout>
+  )
+}
+
+export default UpsetChartExample;

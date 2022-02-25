@@ -85,6 +85,7 @@ export interface IBarChartData {
   title?: string;
 }
 
+// @TODO deprecate this interface in favour of <Grids /> actual props
 export interface IGrid {
   x: {
     height: number;
