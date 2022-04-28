@@ -17,13 +17,13 @@ import {
 interface ILabels {
   display: boolean;
   displayFn: (d: any, ix: number) => string | number;
-};
+}
 
 export interface IPieDataItem {
   count: number;
   groupLabel: string;
   label: string;
-};
+}
 
 export interface IPieChartProps {
   data: {
@@ -43,7 +43,7 @@ export interface IPieChartProps {
   tipContentFn: TipContentFn<string>;
   visible: { [key: string]: boolean };
   width: number | string;
-};
+}
 
 /**
  * PieChart component

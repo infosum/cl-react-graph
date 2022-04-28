@@ -4,7 +4,7 @@ import React, { FC } from 'react';
 
 interface Props {
   exampleCode: string;
-};
+}
 
 export const JSXCode: FC<Props> = ({ exampleCode }) => {
   return (
