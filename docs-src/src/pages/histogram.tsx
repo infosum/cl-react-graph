@@ -1,24 +1,25 @@
-import React, { createRef } from 'react';
-import { Tooltip } from 'react-svg-tooltip';
+import React from 'react';
 
 import {
-  Chord,
   EChartDirection,
   ELabelOrientation,
   Histogram,
-  useWidth,
-} from '../../../src';
-import {
   IGrid,
   IHistogramData,
-} from '../../../src/Histogram';
-import { ISVGLineStyle } from '../../../src/legacy/types';
+  ISVGLineStyle,
+  useWidth,
+} from '../../../src';
 import { JSXCode } from '../components/JSXCode';
 import { Layout } from '../components/Layout';
 import { TwoColumns } from '../components/TwoColumns';
 
 const exampleCode = `import {
-  Chord,
+  EChartDirection,
+  ELabelOrientation,
+  Histogram,
+  IGrid,
+  IHistogramData,
+  ISVGLineStyle,
   useWidth,
 } from 'cl-react-graph;
 
@@ -39,7 +40,7 @@ const lineStyle: ISVGLineStyle = {
   stroke: '#000',
   strokeOpacity: 1,
   strokeWidth: 1,
-  visible: true,
+  visible: 'true',
 };
 
 const grid: IGrid = {
@@ -89,11 +90,10 @@ const MyComponent = () => {
         height={400}
         grid={grid}
         xAxisLabelOrientation={ELabelOrientation.HORIZONTAL}
-        width={width}
-      />
+        width={width} />
     </div>
   )
-}
+};
 `;
 
 const data: IHistogramData = {
@@ -113,7 +113,7 @@ const lineStyle: ISVGLineStyle = {
   stroke: '#000',
   strokeOpacity: 1,
   strokeWidth: 1,
-  visible: true,
+  visible: 'true',
 };
 
 const grid: IGrid = {
@@ -172,6 +172,6 @@ const HistogramExample = () => {
       </TwoColumns>
     </Layout>
   )
-}
+};
 
 export default HistogramExample;

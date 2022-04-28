@@ -1,7 +1,6 @@
 import React from 'react';
 
 import {
-  Base,
   JoyPlot,
   useWidth,
 } from '../../../src';
@@ -11,47 +10,45 @@ import { TwoColumns } from '../components/TwoColumns';
 import { theme } from '../context/theme';
 
 const exampleCode = `import {
-  Base, 
-  Grid,
+  JoyPlot,
+  useWidth,
 } from 'cl-react-graph;
 
 
 const data = [
   {
-    "bins": [
-      "0, 2500",
-      "2500, 5000",
-      "5000, 10000"
+    'bins': [
+      '0, 2500',
+      '2500, 5000',
+      '5000, 10000'
     ],
-    "counts": [
+    'counts': [
       {
-        "label": "in market for car: No",
-        "data": [
+        'label': 'in market for car: No',
+        'data': [
           500,
           400,
           4000
         ]
       }
     ],
-    "title": "No"
   },
   {
-    "bins": [
-      "0, 2500",
-      "2500, 5000",
-      "5000, 10000"
+    'bins': [
+      '0, 2500',
+      '2500, 5000',
+      '5000, 10000'
     ],
-    "counts": [
+    'counts': [
       {
-        "label": "in market for car: Yes",
-        "data": [
+        'label': 'in market for car: Yes',
+        'data': [
           300,
           300,
           2800
         ]
       }
     ],
-    "title": "Yes"
   }
 ]
 
@@ -59,53 +56,53 @@ const MyComponent = () => {
   const [ref, width] = useWidth('90%');
   return(
     <div ref={ref}>
-    <JoyPlot
-      data={data}
-      xAxisHeight={20}
-      colorScheme="hsla(140, 60%, 88%, 1)"
-      width={width}
-      height={data.length * 150} />
+      <JoyPlot
+        data={data}
+        xAxisHeight={20}
+        colorScheme="hsla(140, 60%, 88%, 1)"
+        width={width}
+        height={data.length * 150} />
     </div>
   )
-}
+};
 `;
 
 const data = [
   {
-    "bins": [
-      "0, 2500",
-      "2500, 5000",
-      "5000, 10000"
+    bins: [
+      '0, 2500',
+      '2500, 5000',
+      '5000, 10000'
     ],
-    "counts": [
+    counts: [
       {
-        "label": "in market for car: No",
-        "data": [
+        label: 'in market for car: No',
+        data: [
           500,
           400,
           4000
         ]
       }
     ],
-    "title": "No"
+    title: 'No'
   },
   {
-    "bins": [
-      "0, 2500",
-      "2500, 5000",
-      "5000, 10000"
+    bins: [
+      '0, 2500',
+      '2500, 5000',
+      '5000, 10000'
     ],
-    "counts": [
+    counts: [
       {
-        "label": "in market for car: Yes",
-        "data": [
+        label: 'in market for car: Yes',
+        data: [
           300,
           300,
           2800
         ]
       }
     ],
-    "title": "Yes"
+    title: 'Yes'
   }
 ]
 
@@ -131,6 +128,6 @@ const JoyPlotExample = () => {
       </TwoColumns>
     </Layout>
   )
-}
+};
 
 export default JoyPlotExample;

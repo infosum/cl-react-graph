@@ -24,4 +24,4 @@ export const Layout: FC = ({ children }) => {
       <Footer />
     </Context>
   )
-}
+};

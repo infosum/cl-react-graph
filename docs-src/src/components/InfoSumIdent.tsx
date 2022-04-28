@@ -3,7 +3,7 @@ import React, { FC } from 'react';
 interface Props {
   width?: string;
   height?: string;
-}
+};
 
 export const InfoSumIdent: FC<Props> = (props) => {
   return (

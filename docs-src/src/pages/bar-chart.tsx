@@ -2,16 +2,16 @@ import React from 'react';
 
 import {
   BarChart,
+  DeepPartial,
   EChartDirection,
   EGroupedBarLayout,
   ELabelOrientation,
   IAxes,
   IBarChartData,
+  IGrid,
+  ISVGLineStyle,
   useWidth,
 } from '../../../src';
-import { IGrid } from '../../../src/Histogram';
-import { ISVGLineStyle } from '../../../src/legacy/types';
-import { DeepPartial } from '../../../src/utils/types';
 import { JSXCode } from '../components/JSXCode';
 import { Layout } from '../components/Layout';
 import { TwoColumns } from '../components/TwoColumns';
@@ -19,11 +19,14 @@ import { theme } from '../context/theme';
 
 const exampleCode = `import {
   BarChart,
+  DeepPartial,
   EChartDirection,
   EGroupedBarLayout,
   ELabelOrientation,
   IAxes,
   IBarChartData,
+  IGrid,
+  ISVGLineStyle,
   useWidth,
 } from 'cl-react-graph;
 
@@ -52,7 +55,7 @@ const data: IBarChartData = {
       label: 'Filtered',
     },
   ]
-}
+};
 
 export const lineStyle: ISVGLineStyle = {
   'fill': '#000',
@@ -61,7 +64,7 @@ export const lineStyle: ISVGLineStyle = {
   'stroke': '#000',
   'strokeOpacity': 1,
   'strokeWidth': 1,
-  'visible': true,
+  'visible': 'true',
 };
 
 const grid: IGrid = {
@@ -95,24 +98,23 @@ const MyComponent = () => {
 
   return (
     <div ref={ref}>
-    <BarChart
-      animation={{
-        duration: 800,
-      }}
-      showLabels={[false, true]}
-      direction={EChartDirection.HORIZONTAL}
-      data={data}
-      height={400}
-      tickValues={[0, 40000, 89200]}
-      grid={grid}
-      colorScheme={[theme.brightBlue800, theme.green900]}
-      groupLayout={EGroupedBarLayout.GROUPED}
-      xAxisLabelOrientation={ELabelOrientation.HORIZONTAL}
-      width={width}
-    />
-  </div>
+      <BarChart
+        animation={{
+          duration: 800,
+        }}
+        showLabels={[false, true]}
+        direction={EChartDirection.HORIZONTAL}
+        data={data}
+        height={400}
+        tickValues={[0, 40000, 89200]}
+        grid={grid}
+        colorScheme={[theme.brightBlue800, theme.green900]}
+        groupLayout={EGroupedBarLayout.GROUPED}
+        xAxisLabelOrientation={ELabelOrientation.HORIZONTAL}
+        width={width} />
+    </div>
   )
-}
+};
 `;
 
 export const axis: DeepPartial<IAxes> = {
@@ -148,7 +150,7 @@ const lineStyle: ISVGLineStyle = {
   stroke: '#000',
   strokeOpacity: 1,
   strokeWidth: 1,
-  visible: true,
+  visible: 'true',
 };
 
 const grid: IGrid = {
@@ -205,6 +207,6 @@ const BarChartExample = () => {
       </TwoColumns>
     </Layout>
   )
-}
+};
 
 export default BarChartExample;

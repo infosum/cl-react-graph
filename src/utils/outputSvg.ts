@@ -1,11 +1,13 @@
 import { select } from 'd3-selection';
 
 export type TOutputType = 'png' | 'blob';
+
 export interface IWatermark {
   svg: string;
   width: number;
   height: number;
-}
+};
+
 // Method to combine an svg specified by id with the InfoSum watermark and 
 // produce a blob or png output that can be used for download
 export const outputSvg = (

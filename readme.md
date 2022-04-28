@@ -24,6 +24,7 @@ Then, to run the docs in development mode
 
 ```
 cd docs-src
+npm i
 gatsby develop
 ```
 

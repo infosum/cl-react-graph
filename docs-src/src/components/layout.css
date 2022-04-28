@@ -1,18 +1,18 @@
 @font-face {
   font-family: "Circular";
   src: url("../fonts/CircularStd-Medium.otf");
-}
+};
 
 @font-face {
   font-family: "ProximaNova";
   src: url("../fonts/Proxima Nova Light.ttf");
-}
+};
 
 
 body {
   font-family: 'ProximaNova';
-}
+};
 
 h1, h2 {
   font-family:  'Circular';
-}
+};

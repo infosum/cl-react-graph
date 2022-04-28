@@ -29,9 +29,9 @@ const MyComponent = () => {
             'Spain': [10, 23, 43, 0]
           }
         } />
-  </div>
+    </div>
   )
-}
+};
 `;
 
 const ChordExample = () => {
@@ -57,6 +57,6 @@ const ChordExample = () => {
       </TwoColumns>
     </Layout>
   )
-}
+};
 
 export default ChordExample;

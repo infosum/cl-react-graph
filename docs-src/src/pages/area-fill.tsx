@@ -4,21 +4,21 @@ import React from 'react';
 import {
   AreaFill,
   Base,
+  defaultAxis as axis,
   ILineProps,
   useWidth,
 } from '../../../src';
-import { axis } from '../../../src/utils/defaults';
 import { JSXCode } from '../components/JSXCode';
 import { Layout } from '../components/Layout';
 import { TwoColumns } from '../components/TwoColumns';
 import { theme } from '../context/theme';
 
 const exampleCode = `import {
-  AreaFill, 
+  AreaFill,
   Base,
-  useWidth,
-  IAxes,
+  defaultAxis as axis,
   ILineProps,
+  useWidth,
 } from 'cl-react-graph;
 import { curveCatmullRom } from 'd3-shape';
 
@@ -68,21 +68,21 @@ const MyComponent = () => {
   const [ref, width] = useWidth('90%');
   return(
     <div ref={ref}>
-    <Base
-      width={width}
-      height={220}>
-      <AreaFill
-        axis={axis}
-        label="Area fill"
+      <Base
         width={width}
-        left={0}
-        height={200}
-        line={line}
-        data={data} />
-    </Base>
-  </div>
+        height={220}>
+        <AreaFill
+          axis={axis}
+          label="Area fill"
+          width={width}
+          left={0}
+          height={200}
+          line={line}
+          data={data} />
+      </Base>
+    </div>
   )
-}
+};
 `;
 
 const data = [
@@ -127,6 +127,6 @@ const AreaFillExample = () => {
       </TwoColumns>
     </Layout>
   )
-}
+};
 
 export default AreaFillExample;

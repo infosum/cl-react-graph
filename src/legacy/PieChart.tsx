@@ -14,16 +14,16 @@ import {
   TipContentFn,
 } from './types';
 
-interface ILabels {
+export interface IPieLabels {
   display: boolean;
   displayFn: (d: any, ix: number) => string | number;
-}
+};
 
 export interface IPieDataItem {
   count: number;
   groupLabel: string;
   label: string;
-}
+};
 
 export interface IPieChartProps {
   data: {
@@ -36,14 +36,14 @@ export interface IPieChartProps {
   donutWidth: number;
   height: number;
   hover?: Partial<Record<EColorManipulations, number>>,
-  labels: ILabels;
+  labels: IPieLabels;
   margin: IMargin;
   tip: any;
   tipContainer: string;
   tipContentFn: TipContentFn<string>;
   visible: { [key: string]: boolean };
   width: number | string;
-}
+};
 
 /**
  * PieChart component
@@ -154,6 +154,6 @@ class PieChart extends Component<DeepPartial<IPieChartProps>, IChartState> {
   public render(): JSX.Element {
     return (<div ref={(ref) => this.ref = ref} className="piechart-chart-container"></div>);
   }
-}
+};
 
 export default PieChart;

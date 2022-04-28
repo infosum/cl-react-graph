@@ -2,17 +2,20 @@ import React, { FC } from 'react';
 
 import {
   IAxes,
+  IChartPointValue,
+  IPointProps,
+  IScatterPlotDataSet,
   ScatterPlot,
   useWidth,
 } from '../../../src';
-import { IPointProps } from '../../../src/components/Point';
-import { IChartPointValue } from '../../../src/LineChart';
-import { IScatterPlotDataSet } from '../../../src/ScatterPlot';
 import { JSXCode } from '../components/JSXCode';
 import { Layout } from '../components/Layout';
 import { TwoColumns } from '../components/TwoColumns';
 
 const exampleCode = `import {
+  IAxes,
+  IChartPointValue,
+  IScatterPlotDataSet,
   ScatterPlot,
   useWidth,
 } from 'cl-react-graph;
@@ -48,6 +51,10 @@ const MyComponent = () => {
 
 
 const exampleCodeCustom = `import {
+  IAxes,
+  IChartPointValue,
+  IPointProps,
+  IScatterPlotDataSet,
   ScatterPlot,
   useWidth,
 } from 'cl-react-graph;
@@ -87,11 +94,10 @@ const MyComponent = () => {
       axis={axis}
       height={400}
       width={400}
-      data={[data]}
-    />
+      data={[data]} />
     </div>
   )
-}
+};
 `;
 const data: IScatterPlotDataSet<IChartPointValue> = {
   label: 'Scatter data',
@@ -155,13 +161,12 @@ const RadarExample = () => {
             PointComponent={(props: IPointProps) => <Fruit {...props} />}
             height={400}
             width={width}
-            data={[data]}
-          />
+            data={[data]} />
           </div>
         <JSXCode exampleCode={exampleCodeCustom} />
       </TwoColumns>
     </Layout>
   )
-}
+};
 
 export default RadarExample;

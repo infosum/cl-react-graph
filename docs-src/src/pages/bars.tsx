@@ -67,7 +67,7 @@ const MyComponent = () => {
       </Base>
     </div>
   )
-}
+};
 `;
 
 const data: IBarChartData = {
@@ -120,6 +120,6 @@ const BarsExample = () => {
       </TwoColumns>
     </Layout>
   )
-}
+};
 
 export default BarsExample;
