@@ -36,7 +36,7 @@ export interface IPieChartProps {
   donutWidth: number;
   height: number;
   hover?: Partial<Record<EColorManipulations, number>>,
-  labels: IPieLabels;
+  labels: ILabels;
   margin: IMargin;
   tip: any;
   tipContainer: string;
