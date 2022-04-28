@@ -14,7 +14,7 @@ import {
   TipContentFn,
 } from './types';
 
-interface IPieLabels {
+interface ILabels {
   display: boolean;
   displayFn: (d: any, ix: number) => string | number;
 };
