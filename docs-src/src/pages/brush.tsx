@@ -46,7 +46,8 @@ const axis: IAxes = {
 };
 
 const now = new Date();
-const xs = new Array(100).fill('').map((_, i) => new Date(new Date().setDate(now.getDate() + i)))
+const xs = new Array(100).fill('')
+  .map((_, i) => new Date(new Date().setDate(now.getDate() + i)))
 const data: IAnyChartPoint[] = xs.map((v, i) => ({
   x: v,
   y: i * Math.random() * 1000,
@@ -107,7 +108,7 @@ const BrushExample = () => {
       </Base>
     </div>
   )
-}
+};
 `;
 
 const axis: IAxes = {
@@ -127,7 +128,8 @@ const axis: IAxes = {
 };
 
 const now = new Date();
-const xs = new Array(100).fill('').map((_, i) => new Date(new Date().setDate(now.getDate() + i)))
+const xs = new Array(100).fill('')
+  .map((_, i) => new Date(new Date().setDate(now.getDate() + i)))
 const data: IAnyChartPoint[] = xs.map((v, i) => ({
   x: v,
   y: i * Math.random() * 1000,
@@ -194,6 +196,6 @@ const BrushExample = () => {
       </TwoColumns>
     </Layout>
   )
-}
+};
 
 export default BrushExample;

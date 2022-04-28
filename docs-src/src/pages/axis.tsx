@@ -31,21 +31,20 @@ const exampleCode = `import {
 const MyComponent = () => {
   const [ref, width] = useWidth('90%');
   return(
-  <Base
-  width={220}
-  height={50}>
-  <XAxis
-    width={200}
-    height={20}
-    top={0}
-    left={20}
-    labelOrientation={ELabelOrientation.HORIZONTAL}
-    scale="band"
-    values={['Female', 'Male', 'Other']}
-  />
-</Base>
+    <Base
+    width={220}
+    height={50}>
+      <XAxis
+        width={200}
+        height={20}
+        top={0}
+        left={20}
+        labelOrientation={ELabelOrientation.HORIZONTAL}
+        scale="band"
+        values={['Female', 'Male', 'Other']} />
+    </Base>
   )
-}
+};
 `;
 
 const exampleYAxisCode = `import {
@@ -55,21 +54,20 @@ const exampleYAxisCode = `import {
 const MyComponent = () => {
   const [ref, width] = useWidth('90%');
   return(
-  <Base
-  width={220}
-  height={50}>
-  <YAxis
-    width={20}
-    height={200}
-    top={0}
-    left={20}
-    labelOrientation={ELabelOrientation.HORIZONTAL}
-    scale="band"
-    values={data.bins}
-  />
-</Base>
+    <Base
+      width={220}
+      height={50}>
+      <YAxis
+        width={20}
+        height={200}
+        top={0}
+        left={20}
+        labelOrientation={ELabelOrientation.HORIZONTAL}
+        scale="band"
+        values={data.bins} />
+    </Base>
   )
-}
+};
 `;
 
 const AxisExample = () => {
@@ -120,6 +118,6 @@ const AxisExample = () => {
       </TwoColumns>
     </Layout>
   )
-}
+};
 
 export default AxisExample;

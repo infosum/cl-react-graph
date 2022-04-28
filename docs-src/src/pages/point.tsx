@@ -2,10 +2,10 @@ import React from 'react';
 
 import {
   Base,
+  IPointProps,
   Point,
   useWidth,
 } from '../../../src';
-import { IPointProps } from '../../../src/components/Point';
 import { JSXCode } from '../components/JSXCode';
 import { Layout } from '../components/Layout';
 import { TwoColumns } from '../components/TwoColumns';
@@ -13,6 +13,7 @@ import { theme } from '../context/theme';
 
 const exampleCode = `import {
   Base,
+  IPointProps,
   Point,
   useWidth,
 } from 'cl-react-graph;
@@ -28,24 +29,23 @@ const MyComponent = () => {
   ];
   return (
     <div ref={ref}>
-    <Base
-      width={width}
-      height={200}
-      title="Path example"
-    >
-      {
-        data.map((d, i) => <Point
-          fill={theme.purple900}
-          key={i}
-          opacity={0.5}
-          stroke={theme.grey400}
-          {...d} />
-        )
-      }
-    </Base>
-  </div>
-)
-}
+      <Base
+        width={width}
+        height={200}
+        title="Path example">
+        {
+          data.map((d, i) => <Point
+            fill={theme.purple900}
+            key={i}
+            opacity={0.5}
+            stroke={theme.grey400}
+            {...d} />
+          )
+        }
+      </Base>
+    </div>
+  )
+};
 `;
 
 const PointExample = () => {
@@ -67,8 +67,7 @@ const PointExample = () => {
           <Base
             width={width}
             height={200}
-            title="Path example"
-          >
+            title="Path example">
             {
               data.map((d, i) => <Point
                 fill={theme.purple900}
@@ -85,6 +84,6 @@ const PointExample = () => {
       </TwoColumns>
     </Layout>
   )
-}
+};
 
 export default PointExample;

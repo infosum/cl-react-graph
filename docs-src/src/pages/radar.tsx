@@ -1,21 +1,21 @@
 import React from 'react';
 
 import {
+  IRadarChartData,
   RadarChart,
   useWidth,
 } from '../../../src';
-import { IRadarChartData } from '../../../src/RadarChart';
 import { JSXCode } from '../components/JSXCode';
 import { Layout } from '../components/Layout';
 import { TwoColumns } from '../components/TwoColumns';
 
 const exampleCode = `import {
+  IRadarChartData,
   RadarChart,
   useWidth,
 } from 'cl-react-graph;
 
 const data: IRadarChartData[] = [{
-  label: 'Germany',
   axes: [
     { axis: "strength", value: 13 },
     { axis: "intelligence", value: 6 },
@@ -25,7 +25,6 @@ const data: IRadarChartData[] = [{
   ]
 },
 {
-  label: 'Argentina',
   axes: [
     { axis: "strength", value: 6 },
     { axis: "intelligence", value: 7 },
@@ -46,11 +45,10 @@ const MyComponent = () => {
         data={data} />
     </div>
   )
-}
+};
 `;
 
 const data: IRadarChartData[] = [{
-  label: 'Germany',
   axes: [
     { axis: "strength", value: 13 },
     { axis: "intelligence", value: 6 },
@@ -60,7 +58,6 @@ const data: IRadarChartData[] = [{
   ]
 },
 {
-  label: 'Argentina',
   axes: [
     { axis: "strength", value: 6 },
     { axis: "intelligence", value: 7 },
@@ -88,6 +85,6 @@ const RadarExample = () => {
       </TwoColumns>
     </Layout>
   )
-}
+};
 
 export default RadarExample;

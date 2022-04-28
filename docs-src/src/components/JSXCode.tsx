@@ -12,7 +12,7 @@ export const JSXCode: FC<Props> = ({ exampleCode }) => {
       theme={editorTheme}
       code={exampleCode} language="jsx">
       {({ className, style, tokens, getLineProps, getTokenProps }) => (
-        <pre className={className} style={{ ...style, padding: '1rem' }}>
+        <pre className={className} style={{ ...style, padding: '1rem', maxWidth: '37rem' }}>
           {tokens.map((line, i) => (
             <div key={i}
             {...getLineProps({ line, key: i })}>
@@ -25,4 +25,4 @@ export const JSXCode: FC<Props> = ({ exampleCode }) => {
       )}
     </Highlight>
   )
-}
+};

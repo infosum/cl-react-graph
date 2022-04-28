@@ -154,6 +154,6 @@ class PieChart extends Component<DeepPartial<IPieChartProps>, IChartState> {
   public render(): JSX.Element {
     return (<div ref={(ref) => this.ref = ref} className="piechart-chart-container"></div>);
   }
-}
+};
 
 export default PieChart;

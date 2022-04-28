@@ -18,7 +18,7 @@ const MyComponent = () => {
   return(
   
   )
-}
+};
 `;
 
 const LabelExample = () => {
@@ -42,6 +42,6 @@ const LabelExample = () => {
       </TwoColumns>
     </Layout>
   )
-}
+};
 
 export default LabelExample;

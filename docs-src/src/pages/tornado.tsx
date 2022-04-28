@@ -55,11 +55,10 @@ const MyComponent = () => {
     xAxisHeight={20}
     colorScheme={['hsla(140, 60%, 88%, 1)', 'hsla(208, 69%, 66%, 1)']}
     direction={EChartDirection.HORIZONTAL}
-    showBinPercentages={false}
- />
+    showBinPercentages={false} />
     </div>
   )
-}
+};
 `;
 
 const data: ITornadoProps['data'] = {
@@ -101,8 +100,7 @@ const TornadoExample = () => {
             xAxisHeight={20}
             colorScheme={[theme.green900, theme.brightBlue500]}
             direction={EChartDirection.HORIZONTAL}
-            showBinPercentages={false}
-          />
+            showBinPercentages={false} />
         </div>
         <JSXCode exampleCode={exampleCode} />
 

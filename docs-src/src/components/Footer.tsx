@@ -9,4 +9,4 @@ export const Footer = () =>   <StyledFooter>
 © {new Date().getFullYear()}, Built by
 {` `}
 <a href="https://www.infosum.com">InfoSum</a>
-</StyledFooter>
+</StyledFooter>;

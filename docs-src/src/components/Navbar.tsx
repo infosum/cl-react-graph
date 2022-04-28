@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { theme } from '../context/theme';
 import { InfoSumIdent } from './InfoSumIdent';
 
 const H1 = styled.h1`
@@ -17,4 +16,4 @@ export const Navbar = () => (
   <H1>Cl React Charts</H1>
   </div>
   </div>
-)
+);

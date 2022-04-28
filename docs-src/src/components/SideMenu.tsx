@@ -18,4 +18,4 @@ export const SideMenu = () => {
     <MenuItems />
   </Bg>
   );
-}
+};

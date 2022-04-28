@@ -49,7 +49,7 @@ const MyComponent = () => {
     data={data} />
     </div>
   )
-}
+};
 `;
 const data: IUpsetChartProps['data'] = [
   { keys: ['Email'], value: 10 },
@@ -91,6 +91,6 @@ const UpsetChartExample = () => {
       </TwoColumns>
     </Layout>
   )
-}
+};
 
 export default UpsetChartExample;
