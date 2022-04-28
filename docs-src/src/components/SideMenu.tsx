@@ -9,7 +9,7 @@ const Bg = styled.div`
   padding: 1.75rem 0;
   @media (max-width: 640px){ 
     display: none;
-  };
+  }
 `;
 
 
