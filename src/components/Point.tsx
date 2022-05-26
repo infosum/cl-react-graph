@@ -24,6 +24,7 @@ export interface IPointProps {
   z: number;
   className?: string;
   opacity?: number;
+  children?: React.ReactNode;
 }
 
 const Point: FC<IPointStyle & IPointProps> = ({

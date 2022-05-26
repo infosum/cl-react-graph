@@ -8,7 +8,7 @@ interface ISizeProps {
     height: number | string;
     className: string;
 }
-export declare const makeSvg: (el: Element, svg: TSelection | undefined, svgId?: string | undefined) => TSelection;
+export declare const makeSvg: (el: Element, svg: TSelection | undefined, svgId?: string) => TSelection;
 export declare const sizeSVG: (svg: TSelection | undefined, props: ISizeProps) => void;
 export declare const makeGrid: (svg: TSelection) => [TSelection, TSelection];
 export declare const makeScales: (svg: TSelection) => [TSelection, TSelection, TSelection, TSelection, TSelection, TSelection];

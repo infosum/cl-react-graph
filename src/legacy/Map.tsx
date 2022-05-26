@@ -16,6 +16,7 @@ export interface IMapProps {
   geojson: FeatureCollection<any, any>;
   height: number;
   width: number | string;
+  children?: React.ReactNode;
 }
 
 /**
