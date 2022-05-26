@@ -1,5 +1,5 @@
 import { FeatureCollection } from 'geojson';
-import { Component } from 'react';
+import React, { Component } from 'react';
 import { DeepPartial } from '../utils/types';
 interface IChartState {
     parentWidth?: number;
@@ -10,6 +10,7 @@ export interface IMapProps {
     geojson: FeatureCollection<any, any>;
     height: number;
     width: number | string;
+    children?: React.ReactNode;
 }
 /**
  * Map component

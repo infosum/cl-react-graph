@@ -3,7 +3,7 @@ import { PointComponentProps } from './components/Points';
 import { TAxisLabelFormat } from './components/YAxis';
 import { IGrid } from './Histogram';
 import { IAxes } from './legacy/types';
-import { IChartPoint, IChartPointValue } from './LineChart';
+import { IAnyChartPoint, IChartPoint } from './LineChart';
 export interface IScatterPlotDataSet<T> {
     label: string;
     point: {
@@ -15,7 +15,7 @@ export interface IScatterPlotDataSet<T> {
     };
     data: T[];
 }
-export interface IProps<T extends IChartPoint<IChartPointValue, IChartPointValue> = IChartPoint> {
+export interface IProps<T extends IAnyChartPoint = IChartPoint> {
     axis: IAxes;
     data: IScatterPlotDataSet<T>[];
     grid?: IGrid;

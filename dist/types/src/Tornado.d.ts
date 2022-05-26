@@ -39,5 +39,5 @@ export interface IProps {
     title?: string;
     tip?: TTipFunc;
 }
-declare const Tornado: FC<IProps>;
+export declare const Tornado: FC<IProps>;
 export default Tornado;

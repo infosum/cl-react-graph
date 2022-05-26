@@ -43,6 +43,7 @@ export interface IPieChartProps {
   tipContentFn: TipContentFn<string>;
   visible: { [key: string]: boolean };
   width: number | string;
+  children?: React.ReactNode;
 }
 
 /**

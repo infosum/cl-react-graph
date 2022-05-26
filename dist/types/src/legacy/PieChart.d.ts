@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import React, { Component } from 'react';
 import { EColorManipulations, IBarChartDataSet } from '../Histogram';
 import { DeepPartial } from '../utils/types';
 import { IChartState, IMargin, TipContentFn } from './types';
@@ -31,6 +31,7 @@ export interface IPieChartProps {
         [key: string]: boolean;
     };
     width: number | string;
+    children?: React.ReactNode;
 }
 /**
  * PieChart component

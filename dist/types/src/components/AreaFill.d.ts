@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { IAxes } from '../legacy/types';
-import { IChartPoint, IChartPointValue, ILineProps } from '../LineChart';
-interface IProps<T extends IChartPoint<IChartPointValue, IChartPointValue> = IChartPoint> {
+import { IAnyChartPoint, IChartPoint, ILineProps } from '../LineChart';
+interface IProps<T extends IAnyChartPoint = IChartPoint> {
     label?: string;
     line: ILineProps;
     width: number;
@@ -10,5 +10,5 @@ interface IProps<T extends IChartPoint<IChartPointValue, IChartPointValue> = ICh
     axis: IAxes;
     data: T[];
 }
-declare const AreaFill: FC<IProps>;
+export declare const AreaFill: FC<IProps>;
 export default AreaFill;

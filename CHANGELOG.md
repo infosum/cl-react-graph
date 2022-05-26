@@ -1,3 +1,5 @@
+[3.6.0]
+  * Updated dependencies and pruned unused dependencies for Snyk
 [3.4.1]
   * Changed ISVGLineStyle from snake-case props to camelCase
 [3.3.5]

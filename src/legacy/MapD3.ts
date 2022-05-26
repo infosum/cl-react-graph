@@ -8,6 +8,7 @@ import {
 } from 'd3-selection';
 import { FeatureCollection } from 'geojson';
 import merge from 'lodash/merge';
+import React from 'react';
 
 import { DeepPartial } from '../utils/types';
 import { IMapProps } from './Map';

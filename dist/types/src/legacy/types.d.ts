@@ -1,6 +1,5 @@
 import { IAxis } from '../components/YAxis';
 import { DeepPartial } from '../utils/types';
-
 export interface IChartAdaptor<P> {
     create: (el: Element, props: DeepPartial<P>) => void;
     update: (props: DeepPartial<P>) => void;
@@ -24,10 +23,10 @@ export interface IStroke {
 }
 export interface ISVGTextStyle {
     fill?: string;
-    fontSize?: string;
+    'font-size'?: string;
     dy?: string | number;
-    strokeOpacity?: number;
-    textAnchor?: string;
+    'stroke-opacity'?: number;
+    'text-anchor'?: string;
     transform?: string;
     x?: string | number;
     y?: string | number;
@@ -38,11 +37,11 @@ export interface IAxes {
     x: IAxis;
 }
 export interface ISVGLineStyle {
-    stroke: string;
-    fill: string;
-    opacity: number;
-    strokeWidth: number;
-    strokeOpacity: number;
-    shapeRendering: string;
-    visible: string;
+    'stroke': string;
+    'fill': string;
+    'opacity': number;
+    'strokeWidth': number;
+    'strokeOpacity': number;
+    'shapeRendering': string;
+    'visible': string;
 }

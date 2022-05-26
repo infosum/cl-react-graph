@@ -1,7 +1,7 @@
 import { CurveFactory, CurveFactoryLineOnly } from 'd3-shape';
 import { IAxes } from '../legacy/types';
-import { IChartPoint, IChartPointValue, ILineProps } from '../LineChart';
-export interface IProps<T extends IChartPoint<IChartPointValue, IChartPointValue> = IChartPoint> {
+import { IAnyChartPoint, IChartPoint, ILineProps } from '../LineChart';
+export interface IProps<T extends IAnyChartPoint = IChartPoint> {
     data: T[];
     axis: IAxes;
     line: ILineProps;

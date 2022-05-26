@@ -22,7 +22,7 @@ interface IProps {
   onChange?: ({ start, end }: IPosition) => void;
 }
 
-const Container: FC<{ width: number, height: number }> = ({
+const Container: FC<{ width: number, height: number, children?: React.ReactNode }> = ({
   children,
   height,
   width,

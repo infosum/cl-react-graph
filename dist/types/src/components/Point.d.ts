@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import React, { FC } from 'react';
 import { IPointStyle } from './Points';
 export declare const defaultPointStyle: IPointStyle;
 export interface IPointProps {
@@ -8,11 +8,13 @@ export interface IPointProps {
     /** @description Pixel y value */
     cy: number;
     /** @description Actual X value */
-    x: number | string | Date;
+    x?: number | string | Date;
     /** @description Actual Y value */
-    y: number | string | Date;
+    y?: number | string | Date;
     z: number;
     className?: string;
+    opacity?: number;
+    children?: React.ReactNode;
 }
 declare const Point: FC<IPointStyle & IPointProps>;
 export default Point;
