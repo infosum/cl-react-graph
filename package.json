@@ -1,6 +1,6 @@
 {
   "name": "cl-react-graph",
-  "version": "3.5.1",
+  "version": "3.6.0",
   "description": "React D3 Charts",
   "main": "./dist/index.js",
   "types": "./dist/types/src/index.d.ts",
@@ -85,7 +85,7 @@
     "d3-scale": "^4.0.2",
     "d3-scale-chromatic": "^3.0.0",
     "d3-selection": "^3.0.0",
-    "d3-shape": "^3.1.0", 
+    "d3-shape": "^3.1.0",
     "d3-time-format": "^4.1.0",
     "d3-transition": "^3.0.1",
     "geojson": "^0.5.0",
