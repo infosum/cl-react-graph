@@ -1,3 +1,5 @@
+[3.6.2]
+  * Update dependencies and add snyk ignores
 [3.6.0]
   * Updated dependencies and pruned unused dependencies for Snyk
 [3.4.1]
