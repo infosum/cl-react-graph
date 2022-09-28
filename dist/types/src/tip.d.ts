@@ -1,8 +1,8 @@
 declare const _default: {
     fx: {
-        in: (container: any) => void;
-        move: (container: any) => void;
-        out: (container: any) => void;
+        in: (event: any, container: any) => void;
+        move: (event: any, container: any) => void;
+        out: (event: any, container: any) => void;
     };
 };
 export default _default;
