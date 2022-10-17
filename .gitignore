@@ -1,5 +1,4 @@
 node_modules
-.npmrc
 docs/node_modules
 docs/.cache
 docs-src/.cache

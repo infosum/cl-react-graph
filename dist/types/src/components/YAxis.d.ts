@@ -56,6 +56,6 @@ interface IBuildScale {
     values: string[] | number[];
     range: [number, number];
 }
-export declare const buildScale: ({ domain, length, padding, scale, values, range, }: IBuildScale) => import("d3-scale").ScaleLinear<number, number> | ScaleBand<string> | import("d3-scale").ScaleTime<any, any> | import("d3-scale").ScaleSymLog<any, any> | import("d3-scale").ScalePoint<string>;
+export declare const buildScale: ({ domain, length, padding, scale, values, range, }: IBuildScale) => ScaleBand<string> | import("d3-scale").ScaleLinear<number, number, never> | import("d3-scale").ScaleTime<any, any, never> | import("d3-scale").ScaleSymLog<any, any, never> | import("d3-scale").ScalePoint<string>;
 declare const YAxis: FC<IAxis>;
 export default YAxis;

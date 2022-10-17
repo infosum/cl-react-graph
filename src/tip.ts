@@ -1,11 +1,8 @@
-import {
-  event,
-  select,
-} from 'd3-selection';
+import { select } from 'd3-selection';
 
 export default {
   fx: {
-    in: (container) => {
+    in: (event, container) => {
       if (typeof container === 'string') {
         return;
       }
@@ -15,14 +12,14 @@ export default {
         .duration(200)
         .style('opacity', 0.9);
     },
-    move: (container) => {
+    move: (event, container) => {
       if (typeof container === 'string') {
         return;
       }
       container?.style('left', (event.pageX) + 'px')
         .style('top', (event.pageY - 55) + 'px');
     },
-    out: (container) => {
+    out: (event, container) => {
       if (typeof container === 'string') {
         return;
       }
