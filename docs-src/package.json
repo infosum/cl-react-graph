@@ -10,7 +10,7 @@
   "scripts": {
     "develop": "gatsby develop",
     "start": "gatsby develop",
-    "build": "gatsby build",
+    "build": "gatsby build  --prefix-paths",
     "postbuild": "rm -rf ../docs && mv public ../docs",
     "serve": "gatsby serve",
     "clean": "gatsby clean",

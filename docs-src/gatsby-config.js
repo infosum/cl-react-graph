@@ -4,5 +4,6 @@ module.exports = {
       title: ``,
     siteUrl: `https://www.yourdomain.tld`
   },
+  pathPrefix: "/cl-react-graph",
   plugins: ["gatsby-plugin-styled-components"]
 };
