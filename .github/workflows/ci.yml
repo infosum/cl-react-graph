@@ -22,7 +22,7 @@ jobs:
         # this will use the latest Node 16 version
         node-version: 16.x
     # install dependencies using clean install to avoid package lock updates
-    - run: npm ci
+    - run: npm ci  --legacy-peer-deps
     # build the project if necessary
     - run: npm run build --if-present
     # finally run the tests
