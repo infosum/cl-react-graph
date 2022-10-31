@@ -18,14 +18,14 @@ jobs:
         # "github.event.release.target_commitish" is a global variable and specifies the branch the release targeted
         ref: ${{ github.event.release.target_commitish }}
     # install Node.js
-    - name: Use Node.js 12
+    - name: Use Node.js 16
       uses: actions/setup-node@v1
       with:
-        node-version: 12
+        node-version: 16
         # Specifies the registry, this field is required!
         registry-url: https://registry.npmjs.org/
     # clean install of your projects' deps. We use "npm ci" to avoid package lock changes
-    - run: npm ci
+    - run: npm ci  --legacy-peer-deps
     # set up git since we will later push to the repo
     - run: git config --global user.name "GitHub CD bot"
     - run: git config --global user.email "github-cd-bot@example.com"
