@@ -20,7 +20,7 @@
     "@types/styled-components": "^5.1.23",
     "babel-plugin-styled-components": "^2.0.5",
     "d3-array": "^3.2.0",
-    "gatsby": "^4.8.0",
+    "gatsby": "^4.24.7",
     "gatsby-plugin-react-helmet": "^5.8.0",
     "gatsby-plugin-styled-components": "^5.8.0",
     "gatsby-source-filesystem": "^4.8.0",
