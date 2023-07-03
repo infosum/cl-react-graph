@@ -8,7 +8,7 @@ import {
   screen,
 } from '@testing-library/react';
 
-import Base from './Base';
+import { Base } from './Base';
 
 test('displays percentage', () => {
   render(<Base

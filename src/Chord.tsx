@@ -5,19 +5,16 @@ import {
 } from 'd3-chord';
 import { schemeSet3 } from 'd3-scale-chromatic';
 import { arc } from 'd3-shape';
-import React, {
-  FC,
-  useState,
-} from 'react';
+import React, { useState } from 'react';
 
-import Base from './components/Base';
+import { Base } from './components/Base';
 
-export interface IProps {
+export type Props = {
   width: number;
   height: number;
   padding?: number;
   data: Record<string, number[]>;
-  colorScheme?: string[];
+  colorScheme?: readonly string[];
   /** @description Chart <title /> */
   title?: string;
   inactive?: {
@@ -26,7 +23,7 @@ export interface IProps {
   }
 }
 
-const Chord: FC<IProps> = ({
+export const Chord = ({
   width,
   height,
   padding = 10,
@@ -37,7 +34,7 @@ const Chord: FC<IProps> = ({
     fill: '#eee',
   },
   title,
-}) => {
+}: Props) => {
 
   const outerRadius = Math.min(width - padding, height - padding) * 0.5
   const innerRadius = outerRadius - 10;
@@ -125,5 +122,3 @@ const Chord: FC<IProps> = ({
     </Base>
   )
 }
-
-export default Chord;

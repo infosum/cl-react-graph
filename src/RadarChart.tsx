@@ -3,18 +3,23 @@ import { scaleLinear } from 'd3-scale';
 import { schemeSet3 } from 'd3-scale-chromatic';
 import { line } from 'd3-shape';
 import React, {
-  FC,
   Fragment,
   useState,
 } from 'react';
 
-import Base from './components/Base';
-import Path from './components/Path';
-import Point, { defaultPointStyle } from './components/Point';
-import { IPointStyle } from './components/Points';
-import Web, { polar2cart } from './components/Web';
+import { Base } from './components/Base';
+import { Path } from './components/Path';
+import {
+  defaultPointStyle,
+  Point,
+} from './components/Point';
+import { PointStyle } from './components/Points';
+import {
+  polar2cart,
+  Web,
+} from './components/Web';
 
-export interface IRadarChartData {
+export type RadarChartData = {
   label?: string;
   axes: {
     axis: string,
@@ -22,9 +27,9 @@ export interface IRadarChartData {
   }[];
 }
 
-export interface IProps {
+export type Props = {
   /** @description Chart colour scheme */
-  colorScheme?: string[];
+  colorScheme?: readonly string[];
   /** @description Chart height */
   height: number;
   /** @description Chart id */
@@ -34,15 +39,15 @@ export interface IProps {
   /** @description Chart width */
   width: number;
   /** @description Chart data, array of plots each one will be rendered as as filled path inside the radar */
-  data: IRadarChartData[];
+  data: RadarChartData[];
   /** @description Custom component to override the default <circle /> used to plot points */
-  points?: IPointStyle[];
+  points?: PointStyle[];
   /** @description Chart <title /> */
   title?: string;
 }
 
 const buildArea = (
-  datum: IRadarChartData,
+  datum: RadarChartData,
   labels: string[],
   center: [number, number],
   extent: [number, number] | [undefined, undefined],
@@ -62,7 +67,7 @@ const buildArea = (
   return points;
 }
 
-const RadarChart: FC<IProps> = ({
+export const RadarChart = ({
   colorScheme = schemeSet3,
   data,
   height,
@@ -71,7 +76,7 @@ const RadarChart: FC<IProps> = ({
   points = [],
   title,
   width,
-}) => {
+}: Props) => {
 
   const allValues = data.reduce((prev, next) => prev.concat(next.axes.map((a) => a.value)), [] as number[]);
   const labels = data.reduce((prev, next) => {
@@ -138,5 +143,3 @@ const RadarChart: FC<IProps> = ({
     </Base>
   );
 }
-
-export default RadarChart;

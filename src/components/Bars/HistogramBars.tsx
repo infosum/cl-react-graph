@@ -1,29 +1,29 @@
 import { extent } from 'd3-array';
-import { color } from 'd3-color';
 import { scaleLinear } from 'd3-scale';
 import React, {
-  FC,
   RefObject,
   useState,
 } from 'react';
+
 import {
   animated,
   SpringConfig,
   useSprings,
-} from 'react-spring';
+} from '@react-spring/web';
 
 import { EChartDirection } from '../../BarChart';
-import { IBarChartDataSet } from '../../Histogram';
+import { BarChartDataSet } from '../../Histogram';
+import { getHoverColorScheme } from '../../utils/hoverColorScheme';
 import { TLabelComponent } from '../Label';
 import { Labels } from '../Labels';
-import { TTipFunc } from '../ToolTip';
+import { TipFunc } from '../ToolTip';
 import { ToolTips } from '../ToolTips';
 import { ExtendedGroupItem } from './Bars';
 import { buildHistogramSprings } from './histogramHelper';
 
 const binWidth = (bin: [number, number]) => bin[1] - bin[0];
 
-interface IProps {
+type Props = {
   bins: [number, number][];
   config?: SpringConfig;
   colorScheme?: readonly string[],
@@ -39,15 +39,15 @@ interface IProps {
   LabelComponent?: TLabelComponent;
   stroke?: string;
   top?: number;
-  tip?: TTipFunc;
-  values: IBarChartDataSet[];
+  tip?: TipFunc;
+  values: BarChartDataSet[];
   visible?: Record<string, boolean>;
   width: number;
   rx?: number;
   ry?: number;
 }
 
-const HistogramBars: FC<IProps> = ({
+export const HistogramBars = ({
   bins,
   config = {
     duration: 250,
@@ -71,13 +71,13 @@ const HistogramBars: FC<IProps> = ({
   width,
   rx = 0,
   ry = 0,
-}) => {
+}: Props) => {
   if (width === 0) {
     return null;
   }
 
   if (!hoverColorScheme) {
-    hoverColorScheme = colorScheme.map((c) => color(c)?.brighter(0.1).toString()) as readonly string[];
+    hoverColorScheme = getHoverColorScheme(colorScheme);
   }
   const dataSets: ExtendedGroupItem[] = [];
   const binLabels = bins.reduce((p, n) => p.concat(Array.isArray(n) ? n : [n]), [] as (number | string)[]);
@@ -173,6 +173,3 @@ const HistogramBars: FC<IProps> = ({
 
     </>)
 }
-
-
-export default HistogramBars;

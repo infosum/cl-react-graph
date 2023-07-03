@@ -10,7 +10,7 @@ import {
   ScaleTime,
 } from 'd3-scale';
 
-import { IAxes } from '../';
+import { Axes } from '../';
 
 export type AnyScale = ScaleLinear<number, number>
   | ScaleTime<any, any>
@@ -19,7 +19,7 @@ export type AnyScale = ScaleLinear<number, number>
   | ScaleBand<string>
   | ScalePoint<string>;
 
-export const buildScales = (axis: IAxes) => {
+export const buildScales = (axis: Axes) => {
   let x: AnyScale;
   let y: AnyScale;
 

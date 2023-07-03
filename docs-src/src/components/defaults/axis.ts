@@ -1,6 +1,6 @@
-import { IAxes } from '../../../../src';
+import { Axes } from '../../../../src';
 
-export const axis: IAxes = {
+export const axis: Axes = {
   x: {
     dateFormat: '',
     height: 20,

@@ -2,12 +2,12 @@ import React from 'react';
 
 import { ExtendedGroupItem } from './Bars/Bars';
 
-export type TTipFunc = (props: {
+export type TipFunc = (props: {
   item: ExtendedGroupItem,
   bin: string | [number, number];
 }) => JSX.Element;
 
-export const TipContent: TTipFunc = ({ item, bin }) => {
+export const TipContent: TipFunc = ({ item, bin }) => {
   return <>
 
     <defs>

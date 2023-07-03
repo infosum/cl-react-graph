@@ -41,13 +41,10 @@ const chartCode = `
   const MyComponent = () => {
     const [ref, width] = useWidth('90%');
     return(
-      <div ref={ref}>
+      <div ref={ref} style={{width: '400px'}}>
         <PieChart
-          width={400}
+          width={width}
           height={400}
-          labels={{
-            display: true,
-          }}
           data={data}
         />
       </div>
@@ -68,6 +65,7 @@ const data = {
   counts: [
     {
       data: [1, 2, 3, 4, 5, 6, 7],
+      label: 'Set 1',
     },
   ],
 };
@@ -78,27 +76,25 @@ const Home = () => {
     <Layout>
     <h1>Quick start guide</h1>
     <h3>Installation</h3>
-    <Paragraph>Install cl-react-graph using NPM or Yarn</Paragraph>
+    <Paragraph>Install cl-react-graph using NPM or Yarn.</Paragraph>
     <JSXCode exampleCode={npmICode} />
 
-    <h3>Creating our first Graph</h3>
-    <Paragraph>You are going to use a pie chart for our example lets import that and useWidth to handle the resizing</Paragraph>
+    <h3>Creating our first graph</h3>
+    <Paragraph>You are going to use a pie chart for our example lets import that and useWidth to handle the resizing.</Paragraph>
     <JSXCode exampleCode={importCode} />
 
-    <Paragraph>Now You need some data here is an example for you to get started, for more options take a deeper dive into the chart you want to use</Paragraph>
+    <Paragraph>Now You need some data here is an example for you to get started, 
+      for more options take a deeper dive into the chart you want to use.</Paragraph>
     <JSXCode exampleCode={dataCode} />
 
-    <Paragraph>Then use the chart like so passing in your data</Paragraph>
+    <Paragraph>Then use the chart like so passing in your data:</Paragraph>
     <JSXCode exampleCode={chartCode} />
 
     <h3>Resulting pie chart</h3>
-    <div ref={ref}>
+    <div ref={ref} style={{width: '400px'}}>
       <PieChart
-        width={400}
+        width={width}
         height={400}
-        labels={{
-          display: true,
-        }}
         data={data}
       />
     </div>

@@ -1,8 +1,8 @@
 import React from 'react';
 
 import {
-  IRadarChartData,
   RadarChart,
+  RadarChartData,
   useWidth,
 } from '../../../src';
 import { JSXCode } from '../components/JSXCode';
@@ -10,12 +10,12 @@ import { Layout } from '../components/Layout';
 import { TwoColumns } from '../components/TwoColumns';
 
 const exampleCode = `import {
-  IRadarChartData,
+  RadarChartData,
   RadarChart,
   useWidth,
 } from 'cl-react-graph;
 
-const data: IRadarChartData[] = [{
+const data: RadarChartData[] = [{
   axes: [
     { axis: "strength", value: 13 },
     { axis: "intelligence", value: 6 },
@@ -48,7 +48,7 @@ const MyComponent = () => {
 };
 `;
 
-const data: IRadarChartData[] = [{
+const data: RadarChartData[] = [{
   axes: [
     { axis: "strength", value: 13 },
     { axis: "intelligence", value: 6 },

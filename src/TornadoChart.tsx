@@ -1,37 +1,40 @@
 import { schemeSet3 } from 'd3-scale-chromatic';
-import React, { FC } from 'react';
+import React from 'react';
 
 import { EChartDirection } from './BarChart';
-import Bars, { defaultPadding } from './components/Bars/Bars';
-import Base from './components/Base';
-import { TTipFunc } from './components/ToolTip';
-import XAxis from './components/XAxis';
-import YAxis from './components/YAxis';
 import {
+  Bars,
+  defaultPadding,
+} from './components/Bars/Bars';
+import { Base } from './components/Base';
+import { TipFunc } from './components/ToolTip';
+import { XAxis } from './components/XAxis';
+import { YAxis } from './components/YAxis';
+import {
+  BarChartDataSet,
   EGroupedBarLayout,
-  IBarChartDataSet,
-  IHistogramBar,
+  HistogramBar,
 } from './Histogram';
 import { applyDomainAffordance } from './utils/domain';
 
-export interface ITornadoDataSet {
+type TornadoDataSet = {
   borderColors?: string[];
   colors?: string[];
   label: string;
   data: [number[], number[]];
 }
 
-export interface ITornadoData {
+export type TornadoData = {
   bins: string[];
-  counts: ITornadoDataSet[];
+  counts: TornadoDataSet[];
   colorScheme?: string[];
   title?: string;
 }
 
-export interface IProps {
+export type Props = {
   /** @description bar colour scheme */
-  colorScheme?: string[];
-  data: ITornadoData;
+  colorScheme?: readonly string[];
+  data: TornadoData;
   direction?: EChartDirection;
   groupLayout: EGroupedBarLayout;
   height: number;
@@ -47,14 +50,14 @@ export interface IProps {
   /** @description Padding inside the chart svg */
   chartPadding?: number;
   /** @description bar chart bar padding */
-  padding?: IHistogramBar;
+  padding?: HistogramBar;
   showBinPercentages: boolean;
   /** @description Chart <title /> */
   title?: string;
-  tip?: TTipFunc;
+  tip?: TipFunc;
 }
 
-export const Tornado: FC<IProps> = ({
+export const TornadoChart = ({
   colorScheme = schemeSet3,
   data,
   id = '',
@@ -72,7 +75,7 @@ export const Tornado: FC<IProps> = ({
   showBinPercentages = false,
   title,
   tip,
-}) => {
+}: Props) => {
   if (!yAxisWidth) {
     yAxisWidth = direction === EChartDirection.VERTICAL ? 40 : 100;
   }
@@ -110,7 +113,7 @@ export const Tornado: FC<IProps> = ({
     });
   });
 
-  const left: IBarChartDataSet[] = data.counts.map((counts, i) => {
+  const left: BarChartDataSet[] = data.counts.map((counts, i) => {
 
     return {
       label: splitBins[0] + ' ' + counts.label,
@@ -120,7 +123,7 @@ export const Tornado: FC<IProps> = ({
     }
   })
 
-  const right: IBarChartDataSet[] = data.counts.map((counts, i) => {
+  const right: BarChartDataSet[] = data.counts.map((counts, i) => {
     return {
       label: splitBins[1] + ' ' + counts.label,
       data: direction === EChartDirection.HORIZONTAL
@@ -316,9 +319,7 @@ export const Tornado: FC<IProps> = ({
   )
 }
 
-export default Tornado;
-
-const calculateDomain = (data: ITornadoData, center = true) => {
+const calculateDomain = (data: TornadoData, center = true) => {
   const leftValues = data.counts.reduce((prev, next) => prev.concat(next.data[0]), [] as number[]);
   const rightValues = data.counts.reduce((prev, next) => prev.concat(next.data[1]), [] as number[]);
 

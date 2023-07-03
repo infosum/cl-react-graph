@@ -1,38 +1,44 @@
 import React, {
-  FC,
+  PropsWithChildren,
   ReactNode,
   useState,
 } from 'react';
-import { animated } from 'react-spring';
 import { useDrag } from 'react-use-gesture';
 
-interface IPosition {
+import { animated } from '@react-spring/web';
+
+type Position = {
   start: number;
   end: number;
 }
 
-interface IProps {
+type Props = {
   width: number;
   height: number;
   brushWidth: number;
   top?: number;
   left?: number;
   chart: () => ReactNode;
-  initialPosition?: IPosition;
-  onChange?: ({ start, end }: IPosition) => void;
+  initialPosition?: Position;
+  onChange?: ({ start, end }: Position) => void;
 }
 
-const Container: FC<{ width: number, height: number, children?: React.ReactNode }> = ({
+type ContainerProps = { 
+  width: number;
+  height: number;
+}
+
+const Container = ({
   children,
   height,
   width,
-}) => <rect width={width}
+}: PropsWithChildren<ContainerProps>) => <rect width={width}
   height={height}
   fill="#eee"
 >{children}</rect>
 
 // @TODO resize handles...
-const Brush: FC<IProps> = ({
+export const Brush = ({
   onChange,
   brushWidth,
   width,
@@ -41,7 +47,7 @@ const Brush: FC<IProps> = ({
   left = 0,
   chart,
   initialPosition,
-}) => {
+}: Props) => {
   const start = initialPosition
     ? { x: initialPosition.start, y: 0, w: brushWidth }
     : { x: 0, y: 0, w: brushWidth };
@@ -127,6 +133,4 @@ const Brush: FC<IProps> = ({
       ></animated.rect>
     </g >
   )
-}
-
-export default Brush;
+};

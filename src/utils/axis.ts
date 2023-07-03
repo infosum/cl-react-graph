@@ -1,11 +1,11 @@
-import { IAxis } from '../components/YAxis';
+import { Axis } from '../components/YAxis';
 import { round } from './number';
 
 /**
  * Ticks are the values shown along an axis
  * We don't want to show too many by default as they then overlap each other
  */
-export const buildTicks = (scale: IAxis['scale'], values: string[] | number[], domain: number[]) => {
+export const buildTicks = (scale: Axis['scale'], values: string[] | number[], domain: number[]) => {
   let ticks: any[];
   switch (scale) {
     case 'linear':

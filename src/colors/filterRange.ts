@@ -1,6 +1,6 @@
 import Color from 'color';
 
-export default (colors) => {
+export const filterRange = (colors: string[]) => {
   return colors.filter((value) => {
     try {
       const c = Color(value);

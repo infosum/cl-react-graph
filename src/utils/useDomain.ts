@@ -10,26 +10,26 @@ import {
  * y axis domain bounds need to be.
  * */
 import {
+  BarChartDataSet,
   EGroupedBarLayout,
-  IBarChartDataSet,
 } from '../Histogram';
-import { ILineChartDataSet } from '../LineChart';
-import { IScatterPlotDataSet } from '../ScatterPlot';
+import { LineChartDataSet } from '../LineChart';
+import { ScatterPlotDataSet } from '../ScatterPlot';
 
-interface ILIneProps {
-  values: ILineChartDataSet<any>[];
+type LineProps = {
+  values: LineChartDataSet<any>[];
   clampToZero?: boolean;
 }
 
-interface IScatterProps {
-  values: IScatterPlotDataSet<any>[];
+type ScatterProps = {
+  values: ScatterPlotDataSet<any>[];
   clampToZero?: boolean;
 }
 
-interface IProps {
+type Props = {
   groupLayout: EGroupedBarLayout,
   bins: string[],
-  values: IBarChartDataSet[];
+  values: BarChartDataSet[];
   clampToZero?: boolean;
   /** 
    * Axis tick values - these could have a greater extend than the chart data so should
@@ -39,7 +39,7 @@ interface IProps {
 }
 
 // Y Domains only so far....
-export const useHistogramDomain: (props: IProps) => [number, number] = ({
+export const useHistogramDomain: (props: Props) => [number, number] = ({
   groupLayout,
   bins,
   values,
@@ -64,7 +64,7 @@ export const useHistogramDomain: (props: IProps) => [number, number] = ({
   return range;
 }
 
-export const useLineDomain: (props: ILIneProps) => [number, number] = ({
+export const useLineDomain: (props: LineProps) => [number, number] = ({
   values,
   clampToZero,
 }) => {
@@ -85,7 +85,7 @@ export const useLineDomain: (props: ILIneProps) => [number, number] = ({
   return range;
 };
 
-export const useScatterDomain: (props: IScatterProps) => [number, number] = ({
+export const useScatterDomain: (props: ScatterProps) => [number, number] = ({
   values,
   clampToZero,
 }) => {

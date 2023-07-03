@@ -1,8 +1,8 @@
-import React, { FC } from 'react';
+import React from 'react';
 
-import { IPointStyle } from './Points';
+import { PointStyle } from './Points';
 
-export const defaultPointStyle: IPointStyle = {
+export const defaultPointStyle: PointStyle = {
   show: true,
   showTitle: true,
   z: 3,
@@ -11,23 +11,23 @@ export const defaultPointStyle: IPointStyle = {
 };
 
 
-export interface IPointProps {
+export type PointProps<V = number | string | Date> = {
   id?: string;
   /** @description Pixel x value */
   cx: number;
   /** @description Pixel y value */
   cy: number;
   /** @description Actual X value */
-  x?: number | string | Date;
+  x?: V;
   /** @description Actual Y value */
-  y?: number | string | Date;
-  z: number;
+  y?: V;
+  z?: number;
   className?: string;
   opacity?: number;
   children?: React.ReactNode;
 }
 
-const Point: FC<IPointStyle & IPointProps> = ({
+export const Point = ({
   children,
   cx,
   cy,
@@ -39,7 +39,7 @@ const Point: FC<IPointStyle & IPointProps> = ({
   x,
   y,
   opacity,
-}) => {
+}: PointStyle & PointProps) => {
   return PointComponent ?
     <PointComponent
       data-testid={id}
@@ -62,5 +62,3 @@ const Point: FC<IPointStyle & IPointProps> = ({
       {children}
     </circle>
 }
-
-export default Point;

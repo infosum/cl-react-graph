@@ -1,15 +1,15 @@
 import React from 'react';
 
 import {
+  Axes,
   BarChart,
+  BarChartData,
   DeepPartial,
   EChartDirection,
   EGroupedBarLayout,
   ELabelOrientation,
-  IAxes,
-  IBarChartData,
-  IGrid,
-  ISVGLineStyle,
+  GridProps,
+  SVGLineStyle,
   useWidth,
 } from '../../../src';
 import { JSXCode } from '../components/JSXCode';
@@ -23,15 +23,15 @@ const exampleCode = `import {
   EChartDirection,
   EGroupedBarLayout,
   ELabelOrientation,
-  IAxes,
-  IBarChartData,
-  IGrid,
-  ISVGLineStyle,
+  Axes,
+  BarChartData,
+  GridProps,
+  SVGLineStyle,
   useWidth,
 } from 'cl-react-graph;
 
 
-export const axis: DeepPartial<IAxes> = {
+export const axis: DeepPartial<Axes> = {
   x: {
     scale: 'linear',
     numberFormat: '.2s',
@@ -43,7 +43,7 @@ export const axis: DeepPartial<IAxes> = {
   },
 };
 
-const data: IBarChartData = {
+const data: BarChartData = {
   bins: ['Female', 'Male', 'Other'],
   counts: [
     {
@@ -57,7 +57,7 @@ const data: IBarChartData = {
   ]
 };
 
-export const lineStyle: ISVGLineStyle = {
+export const lineStyle: SVGLineStyle = {
   'fill': '#000',
   'opacity': 1,
   'shapeRendering': 'auto',
@@ -67,7 +67,7 @@ export const lineStyle: ISVGLineStyle = {
   'visible': 'true',
 };
 
-const grid: IGrid = {
+const grid: GridProps = {
   x: {
     height: 1,
     style: {
@@ -117,7 +117,7 @@ const MyComponent = () => {
 };
 `;
 
-export const axis: DeepPartial<IAxes> = {
+export const axis: DeepPartial<Axes> = {
   x: {
     scale: 'linear',
     numberFormat: '.2s',
@@ -129,7 +129,7 @@ export const axis: DeepPartial<IAxes> = {
   },
 };
 
-const data: IBarChartData = {
+const data: BarChartData = {
   bins: ['Female', 'Male', 'Other'],
   counts: [
     {
@@ -143,7 +143,7 @@ const data: IBarChartData = {
   ]
 }
 
-const lineStyle: ISVGLineStyle = {
+const lineStyle: SVGLineStyle = {
   fill: '#000',
   opacity: 1,
   shapeRendering: 'auto',
@@ -153,7 +153,7 @@ const lineStyle: ISVGLineStyle = {
   visible: 'true',
 };
 
-const grid: IGrid = {
+const grid: GridProps = {
   x: {
     height: 1,
     style: {

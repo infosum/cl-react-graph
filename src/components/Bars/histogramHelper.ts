@@ -1,13 +1,14 @@
 import { ScaleLinear } from 'd3-scale';
-import { SpringConfig } from 'react-spring';
+
+import { SpringConfig } from '@react-spring/web';
 
 import { EChartDirection } from '../../BarChart';
-import { IBarChartDataSet } from '../../Histogram';
+import { BarChartDataSet } from '../../Histogram';
 import { ExtendedGroupItem } from './Bars';
 
-interface IHistogramSpringProps {
+type HistogramSpringProps = {
   bins: [number, number][];
-  values: IBarChartDataSet[];
+  values: BarChartDataSet[];
   height: number;
   width: number;
   dataSets: ExtendedGroupItem[];
@@ -21,7 +22,7 @@ interface IHistogramSpringProps {
 /**
  * Build the from / to spring animation properties to animate the bars.
  */
-export const buildHistogramSprings = (props: IHistogramSpringProps) => {
+export const buildHistogramSprings = (props: HistogramSpringProps) => {
   const { bins, direction, config, height, dataSets, numericScale, continuousScale, colorScheme, hoverColorScheme } = props;
   const s = dataSets.map((item, index) => {
     const bandPosition = continuousScale(bins[index][0]);

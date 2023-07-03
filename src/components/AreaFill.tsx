@@ -1,33 +1,33 @@
 import { interpolate } from 'd3-interpolate';
 import React, {
-  FC,
   useLayoutEffect,
   useRef,
 } from 'react';
+
 import {
   animated,
   useSpring,
-} from 'react-spring';
+} from '@react-spring/web';
 
-import { IAxes } from '../legacy/types';
 import {
-  IAnyChartPoint,
-  IChartPoint,
-  ILineProps,
+  AnyChartPoint,
+  ChartPoint,
+  LineProps,
 } from '../LineChart';
+import { Axes } from '../utils/types';
 import { useMakeArea } from '../utils/useMakeLine';
 
-interface IProps<T extends IAnyChartPoint = IChartPoint> {
+type Props<T extends AnyChartPoint = ChartPoint> = {
   label?: string;
-  line: ILineProps;
+  line: LineProps;
   width: number;
   left: number;
   height: number;
-  axis: IAxes;
+  axis: Axes;
   data: T[];
 }
 
-export const AreaFill: FC<IProps> = (props) => {
+export const AreaFill = (props: Props) => {
   const { label = '', line } = props;
   const className = `area-${label.replace(/[^a-z]/gi, '')}`;
   const { previous, current } = useMakeArea(props);
@@ -55,4 +55,3 @@ export const AreaFill: FC<IProps> = (props) => {
   )
 }
 
-export default AreaFill;

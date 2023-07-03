@@ -3,10 +3,10 @@ import React from 'react';
 import {
   EChartDirection,
   ELabelOrientation,
+  GridProps,
   Histogram,
-  IGrid,
-  IHistogramData,
-  ISVGLineStyle,
+  HistogramData,
+  SVGLineStyle,
   useWidth,
 } from '../../../src';
 import { JSXCode } from '../components/JSXCode';
@@ -18,12 +18,12 @@ const exampleCode = `import {
   ELabelOrientation,
   Histogram,
   IGrid,
-  IHistogramData,
-  ISVGLineStyle,
+  HistogramData,
+  SVGLineStyle,
   useWidth,
 } from 'cl-react-graph;
 
-const data: IHistogramData = {
+const data: HistogramData = {
   bins: [[0, 50], [50, 150], [150, 300]],
   counts: [
     {
@@ -33,7 +33,7 @@ const data: IHistogramData = {
   ]
 }
 
-const lineStyle: ISVGLineStyle = {
+const lineStyle: SVGLineStyle = {
   fill: '#000',
   opacity: 1,
   shapeRendering: 'auto',
@@ -96,7 +96,7 @@ const MyComponent = () => {
 };
 `;
 
-const data: IHistogramData = {
+const data: HistogramData = {
   bins: [[0, 50], [50, 150], [150, 300]],
   counts: [
     {
@@ -106,7 +106,7 @@ const data: IHistogramData = {
   ]
 }
 
-const lineStyle: ISVGLineStyle = {
+const lineStyle: SVGLineStyle = {
   fill: '#000',
   opacity: 1,
   shapeRendering: 'auto',
@@ -116,7 +116,7 @@ const lineStyle: ISVGLineStyle = {
   visible: 'true',
 };
 
-const grid: IGrid = {
+const grid: GridProps = {
   x: {
     height: 1,
     style: {

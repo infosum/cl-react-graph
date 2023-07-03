@@ -1,29 +1,26 @@
-import React, {
-  FC,
-  RefObject,
-} from 'react';
+import React, { RefObject } from 'react';
 import { Tooltip } from 'react-svg-tooltip';
 
 import { ExtendedGroupItem } from './Bars/Bars';
 import {
   TipContent,
-  TTipFunc,
+  TipFunc,
 } from './ToolTip';
 
-interface IProps {
+type Props = {
   items: ExtendedGroupItem[];
   springs: any[];
   refs: RefObject<any>[];
   bins: (string | [number, number])[];
-  tip?: TTipFunc;
+  tip?: TipFunc;
 }
-export const ToolTips: FC<IProps> = ({
+export const ToolTips = ({
   items,
   springs,
   refs,
   bins,
   tip,
-}) => {
+}: Props) => {
   const ThisTip = tip ?? TipContent;
   return (
     <g className="tips">

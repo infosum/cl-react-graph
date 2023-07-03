@@ -2,13 +2,14 @@ import {
   ScaleBand,
   ScaleLinear,
 } from 'd3-scale';
-import { SpringConfig } from 'react-spring';
+
+import { SpringConfig } from '@react-spring/web';
 
 import { EChartDirection } from '../../BarChart';
 import {
+  BarChartDataSet,
   EGroupedBarLayout,
-  IBarChartDataSet,
-  IHistogramBar,
+  HistogramBar,
 } from '../../Histogram';
 import { ExtendedGroupItem } from './Bars';
 
@@ -20,7 +21,7 @@ import { ExtendedGroupItem } from './Bars';
  */
 const getBandPosition = (
   item: ExtendedGroupItem,
-  props: IBarSpringProps,
+  props: BarSpringProps,
   itemWidths: number[],
 ) => {
   const { innerScaleBand, innerDomain, groupLayout, paddings } = props;
@@ -48,8 +49,8 @@ const getBandPosition = (
   return bandX;
 }
 
-export interface IBarSpringProps {
-  values: IBarChartDataSet[];
+export type BarSpringProps = {
+  values: BarChartDataSet[];
   height: number;
   width: number;
   dataSets: ExtendedGroupItem[];
@@ -60,7 +61,7 @@ export interface IBarSpringProps {
   innerDomain: string[];
   innerScaleBand: ScaleBand<string>;
   groupLayout: EGroupedBarLayout;
-  paddings: IHistogramBar,
+  paddings: HistogramBar,
   config: SpringConfig,
   direction: EChartDirection;
   /** @description - inverse the bars e.g if direction = horizontal run the bars from right to left */
@@ -70,7 +71,7 @@ export interface IBarSpringProps {
 /**
  * Build the from / to spring animation properties to animate the bars.
  */
-export const buildBarSprings = (props: IBarSpringProps) => {
+export const buildBarSprings = (props: BarSpringProps) => {
   const { direction, config, height, dataSets, numericScale, bandScale, colorScheme,
     hoverColorScheme,
     inverse = false,
@@ -136,7 +137,7 @@ export const buildBarSprings = (props: IBarSpringProps) => {
  */
 export const getValueOffset = (
   item: ExtendedGroupItem,
-  props: IBarSpringProps,
+  props: BarSpringProps,
 ) => {
   const { direction, numericScale, groupLayout, height, dataSets } = props;
   const offSet = dataSets

@@ -1,7 +1,7 @@
 
 import './layout.css';
 
-import React, { FC } from 'react';
+import React, { PropsWithChildren } from 'react';
 import styled from 'styled-components';
 
 import { theme } from '../context/theme';
@@ -13,7 +13,9 @@ const Context = styled.div`
   color: ${theme.grey300};
 `;
 
-export const Layout: FC = ({ children }) => {
+export const Layout = ({ 
+  children,
+ }: PropsWithChildren<unknown>) => {
   return (
     <Context>
       <Navbar />

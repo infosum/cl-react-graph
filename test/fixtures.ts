@@ -4,14 +4,14 @@ import {
 } from 'd3-shape';
 
 import {
-  IBarChartData,
-  ILineChartDataSet,
+  BarChartData,
+  LineChartDataSet,
 } from '../src';
-import { IHistogramData } from '../src/Histogram';
-import { IChartPointValue } from '../src/LineChart';
-import { IRadarChartData } from '../src/RadarChart';
-import { IScatterPlotDataSet } from '../src/ScatterPlot';
-import { ITornadoData } from '../src/Tornado';
+import { HistogramData } from '../src/Histogram';
+import { ChartPointValue } from '../src/LineChart';
+import { RadarChartData } from '../src/RadarChart';
+import { ScatterPlotDataSet } from '../src/ScatterPlot';
+import { TornadoData } from '../src/TornadoChart';
 
 const now = new Date();
 const xs = new Array(100).fill('').map((_, i) => new Date(new Date().setDate(now.getDate() + i)))
@@ -19,7 +19,7 @@ const dateValues = xs.map((v, i) => ({
   x: v, y: i * 1000,
 }));
 
-export const lineChartData: ILineChartDataSet<any>[] = [
+export const lineChartData: LineChartDataSet<any>[] = [
   {
     "label": "cdd7c30f-4d9b-433c-a5d4-12bb39df89c6 usage",
     "line": {
@@ -43,7 +43,7 @@ export const lineChartData: ILineChartDataSet<any>[] = [
   }
 ]
 
-export const histogramData: IHistogramData = {
+export const histogramData: HistogramData = {
   bins: [[0, 50], [50, 150], [150, 300]],
   counts: [
     {
@@ -53,8 +53,8 @@ export const histogramData: IHistogramData = {
   ]
 }
 
-export const barChartData: IBarChartData = {
-  bins: ['Female', 'Male', 'Other', 'sdfdfg', 'dagdsg', 'sfsd', 'ds34fsdf', 'dfsfsd', 'sdfs34dfs', 'ghf34hfg', 'fd33gag', 'jg343hj', 'a343wes', 'ye343ye', 'fd343gjs', 'sdfd343fg', '34', 'sfsd', '433', '45245', '745'],
+export const barChartData: BarChartData = {
+  bins: ['Female', 'Male', 'Other', 'sdfdfg', 'dagdsg', 'ABCsfsd', 'ds34fsdf', 'dfsfsd', 'sdfs34dfs', 'ghf34hfg', 'fd33gag', 'jg343hj', 'a343wes', 'ye343ye', 'fd343gjs', 'sdfd343fg', '34', 'sfsd', '433', '45245', '745'],
   counts: [
     {
       data: [58483, 52400, 13300, 79200, 52400, 13300, 79200, 52400, 13300, 79200, 52400, 13300, 79200, 52400, 13300, 79200, 52400, 13300, 79200, 52400, 13300],
@@ -67,7 +67,7 @@ export const barChartData: IBarChartData = {
   ]
 }
 
-export const data3: ILineChartDataSet<any>[] = [{
+export const data3: LineChartDataSet<any>[] = [{
   'label': 'rob Allocation',
   'line': {
     'curveType': curveCatmullRom,
@@ -132,7 +132,7 @@ export const data3: ILineChartDataSet<any>[] = [{
     { x: new Date('2019-08-27T00:00:00.000Z'), y: 0 }]
 }];
 
-export const tornadoData: ITornadoData = {
+export const tornadoData: TornadoData = {
   bins: ['16-18', '18-25', '25-35', '35-50', '50-65', '65-∞'],
   counts: [
     {
@@ -152,7 +152,7 @@ export const tornadoData: ITornadoData = {
 
   ],
 }
-export const scatterData: IScatterPlotDataSet<IChartPointValue> = {
+export const scatterData: ScatterPlotDataSet<ChartPointValue> = {
   label: 'Scatter data',
   point: { fill: '#000', radius: 4, show: true, stroke: '' },
   data: [
@@ -166,7 +166,7 @@ export const scatterData: IScatterPlotDataSet<IChartPointValue> = {
   ]
 }
 
-export const radarData: IRadarChartData[] = [{
+export const radarData: RadarChartData[] = [{
   label: 'Germany',
   axes: [
     { axis: "strength", value: 13 },

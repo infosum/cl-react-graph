@@ -1,14 +1,17 @@
 import React, { FC } from 'react';
 
 import {
-  IProps,
+  Props,
   useScales,
 } from '../utils/useMakeLine';
-import Point, { IPointProps } from './Point';
+import {
+  Point,
+  PointProps,
+} from './Point';
 
-export type PointComponentProps = IPointStyle & IPointProps;
+export type PointComponentProps = PointStyle & PointProps;
 
-export interface IPointStyle {
+export type PointStyle = {
   z?: number;
   fill?: string;
   label?: string;
@@ -19,9 +22,9 @@ export interface IPointStyle {
   PointComponent?: FC<PointComponentProps>;
 }
 
-export type TPoints = Omit<IProps, 'line' | 'curveType'> & IPointStyle;
+export type TPoints = Omit<Props, 'line' | 'curveType'> & PointStyle;
 
-const Points: FC<TPoints> = (props) => {
+export const Points = (props: TPoints) => {
   const {
     data,
     z = 5,
@@ -60,5 +63,3 @@ const Points: FC<TPoints> = (props) => {
     }
   </>
 }
-
-export default Points;

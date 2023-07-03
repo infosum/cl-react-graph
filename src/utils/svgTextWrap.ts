@@ -36,7 +36,7 @@ const svgTextSize = (texts: string[] | string, attrs: Record<string, any>, doc =
   return { width, height };
 };
 
-const svgTextWrap = (text: string, width: number, attrs: Record<string, any>) => {
+export const svgTextWrap = (text: string, width: number, attrs: Record<string, any>) => {
   if (typeof window === 'undefined') {
     return [text];
   }
@@ -57,5 +57,3 @@ const svgTextWrap = (text: string, width: number, attrs: Record<string, any>) =>
   if (lines[0] === '') { lines.shift(); }
   return lines;
 };
-
-export default svgTextWrap;

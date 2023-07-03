@@ -1,15 +1,13 @@
-import React, {
-  FC,
-  HTMLAttributes,
-} from 'react';
+import React, { HTMLAttributes } from 'react';
 
-interface IProps {
+type Props = {
   width: number;
   height: number;
   padding?: number;
   description?: string;
 }
-const Base: FC<IProps & HTMLAttributes<SVGElement>> = ({
+
+export const Base = ({
   children,
   width,
   height,
@@ -19,7 +17,7 @@ const Base: FC<IProps & HTMLAttributes<SVGElement>> = ({
   style,
   title,
   description,
-}) => {
+}: Props & HTMLAttributes<SVGElement>) => {
   // Could be measuring a % width in which case wait else animations start off from 
   // the wrong position
   if (width === 0) {
@@ -46,6 +44,3 @@ const Base: FC<IProps & HTMLAttributes<SVGElement>> = ({
     </g>
   </svg>
 };
-
-export default Base
-

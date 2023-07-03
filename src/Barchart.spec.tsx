@@ -9,7 +9,7 @@ import {
 } from '@testing-library/react';
 
 import { barChartData } from '../test/fixtures';
-import BarChart from './BarChart';
+import { BarChart } from './BarChart';
 import { EGroupedBarLayout } from './Histogram';
 
 beforeEach(() => {
@@ -27,9 +27,9 @@ test('BarChart', () => {
   ></BarChart>
   )
   expect(screen.getAllByRole('cell')).toHaveLength(42);
-  expect(screen.getByTestId('chart-bar--0')).toHaveAttribute('width', '20');
-  expect(screen.getByTestId('chart-bar--1')).toHaveAttribute('width', '20');
-  expect(screen.getByTestId('chart-bar--2')).toHaveAttribute('width', '20');
+  expect(screen.getByTestId('chart-bar--0')).toHaveAttribute('width', '19');
+  expect(screen.getByTestId('chart-bar--1')).toHaveAttribute('width', '19');
+  expect(screen.getByTestId('chart-bar--2')).toHaveAttribute('width', '19');
 });
 
 test('BarChart Grouped overlaid layout', () => {
@@ -42,13 +42,13 @@ test('BarChart Grouped overlaid layout', () => {
   ></BarChart>
   )
   expect(screen.getAllByRole('cell')).toHaveLength(42);
-  expect(screen.getByTestId('chart-bar--0')).toHaveAttribute('width', '39');
-  expect(screen.getByTestId('chart-bar--1')).toHaveAttribute('width', '39');
-  expect(screen.getByTestId('chart-bar--20')).toHaveAttribute('width', '39');
-  expect(screen.getByTestId('chart-bar--20')).toHaveAttribute('x', '916');
+  expect(screen.getByTestId('chart-bar--0')).toHaveAttribute('width', '37');
+  expect(screen.getByTestId('chart-bar--1')).toHaveAttribute('width', '37');
+  expect(screen.getByTestId('chart-bar--20')).toHaveAttribute('width', '37');
+  expect(screen.getByTestId('chart-bar--20')).toHaveAttribute('x', '912');
 
-  expect(screen.getByTestId('chart-bar--41')).toHaveAttribute('width', '19');
-  expect(screen.getByTestId('chart-bar--41')).toHaveAttribute('x', '926');
+  expect(screen.getByTestId('chart-bar--41')).toHaveAttribute('width', '18');
+  expect(screen.getByTestId('chart-bar--41')).toHaveAttribute('x', '921');
 });
 
 test('BarChart Grouped overlaid layout, compact width', () => {
@@ -62,11 +62,11 @@ test('BarChart Grouped overlaid layout, compact width', () => {
   ></BarChart>
   )
   expect(screen.getAllByRole('cell')).toHaveLength(42);
-  expect(screen.getByTestId('chart-bar--0')).toHaveAttribute('width', '3');
-  expect(screen.getByTestId('chart-bar--1')).toHaveAttribute('width', '3');
-  expect(screen.getByTestId('chart-bar--20')).toHaveAttribute('width', '3');
-  expect(screen.getByTestId('chart-bar--20')).toHaveAttribute('x', '57');
+  expect(screen.getByTestId('chart-bar--0')).toHaveAttribute('width', '2');
+  expect(screen.getByTestId('chart-bar--1')).toHaveAttribute('width', '2');
+  expect(screen.getByTestId('chart-bar--20')).toHaveAttribute('width', '2');
+  expect(screen.getByTestId('chart-bar--20')).toHaveAttribute('x', '49');
 
   expect(screen.getByTestId('chart-bar--41')).toHaveAttribute('width', '1');
-  expect(screen.getByTestId('chart-bar--41')).toHaveAttribute('x', '58');
+  expect(screen.getByTestId('chart-bar--41')).toHaveAttribute('x', '49');
 });

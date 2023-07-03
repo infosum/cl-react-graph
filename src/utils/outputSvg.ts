@@ -1,8 +1,8 @@
 import { select } from 'd3-selection';
 
-export type TOutputType = 'png' | 'blob';
+type OutputType = 'png' | 'blob';
 
-export interface IWatermark {
+type Watermark = {
   svg: string;
   width: number;
   height: number;
@@ -15,8 +15,8 @@ export const outputSvg = (
   width: number,
   height: number,
   callback: (outputData: string | Blob | null) => void,
-  watermark?: IWatermark,
-  type: TOutputType = 'blob',
+  watermark?: Watermark,
+  type: OutputType = 'blob',
 ) => {
   // Select the first svg element
   const svg: any = select(`svg#${svgId}`);

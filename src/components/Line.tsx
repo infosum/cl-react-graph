@@ -1,27 +1,26 @@
 import { interpolate } from 'd3-interpolate';
 import React, {
-  FC,
   useLayoutEffect,
   useRef,
 } from 'react';
+
 import {
   animated,
   useSpring,
-} from 'react-spring';
+} from '@react-spring/web';
 
 import {
-  IProps,
+  Props as UseMakeLineProps,
   useMakeLine,
 } from '../utils/useMakeLine';
 
 type Props = {
   animate?: boolean;
   label: string;
-
-} & IProps;
+} & UseMakeLineProps;
 
 // @TODO look at using https://github.com/pbeshai/d3-interpolate-path instead 
-const Line: FC<Props> = (props) => {
+export const Line = (props: Props) => {
   const { label = '', line } = props;
   const className = `line-${label.replace(/[^a-z]/gi, '')}`;
   const { previous, current } = useMakeLine(props);
@@ -56,5 +55,3 @@ const Line: FC<Props> = (props) => {
     </>
   )
 }
-
-export default Line;

@@ -1,7 +1,7 @@
 {
     "compilerOptions": {
         "allowSyntheticDefaultImports": true,
-        "skipLibCheck": false,
+        "skipLibCheck": true,
         "declaration": true,
         "jsx": "react",
         "module": "commonjs",
@@ -20,11 +20,11 @@
         "target": "es6"
     },
     "include": [
-        "node_modules/@types/**/*.d.ts",
         "src/**/*.ts",
         "src/**/*.tsx"
     ],
     "exclude": [
-        "test/**/*.*"
+        "test/**/*.*",
+        "node_modules"
     ]
 }

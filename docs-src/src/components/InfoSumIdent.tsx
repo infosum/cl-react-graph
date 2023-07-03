@@ -1,11 +1,11 @@
-import React, { FC } from 'react';
+import React from 'react';
 
-interface Props {
+type Props = {
   width?: string;
   height?: string;
 }
 
-export const InfoSumIdent: FC<Props> = (props) => {
+export const InfoSumIdent = (props: Props) => {
   return (
     <svg role="img"
       {...props}
@@ -24,5 +24,3 @@ InfoSumIdent.defaultProps = {
   height: '35',
   width: '35',
 };
-
-export default InfoSumIdent;
