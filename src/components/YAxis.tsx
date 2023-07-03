@@ -7,16 +7,9 @@ import {
   scaleSymlog,
   scaleTime,
 } from 'd3-scale';
-import React, {
-  FC,
-  SVGAttributes,
-} from 'react';
+import React, { SVGAttributes } from 'react';
 
-import { IHistogramBar } from '../Histogram';
-import {
-  ISVGLineStyle,
-  ISVGTextStyle,
-} from '../legacy/types';
+import { HistogramBar } from '../Histogram';
 import { buildTicks } from '../utils/axis';
 import {
   paddingInner,
@@ -24,6 +17,10 @@ import {
 } from '../utils/bars';
 import { isOfType } from '../utils/isOfType';
 import { AnyScale } from '../utils/scales';
+import {
+  SVGLineStyle,
+  SVGTextStyle,
+} from '../utils/types';
 import { defaultPadding } from './Bars/Bars';
 
 export type TAxisValue = string | number;
@@ -39,7 +36,7 @@ type TTickFormat = (label: string, i: number) => {
   fontSize?: string;
 };
 
-export interface IAxis {
+export type Axis = {
   stroke?: string;
   height: number;
   width: number;
@@ -50,7 +47,7 @@ export interface IAxis {
   top?: number;
   domain?: TAxisValue[];
   left?: number;
-  padding?: IHistogramBar;
+  padding?: HistogramBar;
   labelFormat?: TAxisLabelFormat;
   /** @description make the axis ticks display in the opposite direction */
   inverse?: boolean;
@@ -67,9 +64,9 @@ export interface IAxis {
   label?: string;
   margin?: number
   text?: {
-    style: ISVGTextStyle;
+    style: SVGTextStyle;
   }
-  style?: ISVGLineStyle;
+  style?: SVGLineStyle;
 }
 
 export const defaultTickFormat = {
@@ -86,11 +83,11 @@ export const defaultPath: SVGAttributes<SVGPathElement> = {
 }
 
 
-interface IBuildScale {
+type BuildScale = {
   domain?: TAxisValue[];
   /** @description width for x axis, height for y axis */
   length: number;
-  padding: IHistogramBar;
+  padding: HistogramBar;
   scale: 'linear' | 'band' | 'point' | 'log' | 'time';
   values: string[] | number[];
   range: [number, number];
@@ -102,7 +99,7 @@ export const buildScale = ({
   scale,
   values,
   range,
-}: IBuildScale) => {
+}: BuildScale) => {
   let Scale: AnyScale;
   switch (scale) {
     case 'linear':
@@ -157,7 +154,7 @@ const positionTick = (value: TAxisValue, scale: any, height: number, i: number, 
   return `(0, ${v})`
 }
 
-const YAxis: FC<IAxis> = ({
+export const YAxis = ({
   domain,
   labelFormat,
   height,
@@ -172,7 +169,7 @@ const YAxis: FC<IAxis> = ({
   width,
   labelOrientation = ELabelOrientation.HORIZONTAL,
   inverse,
-}) => {
+}: Axis) => {
   if (scale === 'linear' && typeof values[0] === 'string') {
     throw new Error('Linear axis can not accept string values');
   }
@@ -258,6 +255,3 @@ const YAxis: FC<IAxis> = ({
     </g>
   )
 }
-
-
-export default YAxis;

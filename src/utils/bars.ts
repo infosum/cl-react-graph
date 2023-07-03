@@ -3,22 +3,22 @@ import { ScaleBand } from 'd3-scale';
 import { ExtendedGroupItem } from '../components/Bars/Bars';
 import {
   EGroupedBarLayout,
-  IBarChartDataSet,
-  IHistogramBar,
+  HistogramBar,
 } from '../Histogram';
 
-export interface IGroupedProps {
+export type GroupedProps = {
   groupLayout: EGroupedBarLayout,
   stacked?: boolean;
 }
-export const groupedBarsUseSameXAxisValue = ({ groupLayout, stacked }: IGroupedProps): boolean => {
+
+export const groupedBarsUseSameXAxisValue = ({ groupLayout, stacked }: GroupedProps): boolean => {
   return stacked || groupLayout === EGroupedBarLayout.STACKED || groupLayout === EGroupedBarLayout.OVERLAID;
 };
 
 /**
  *This is the inner padding between each grouped dataset or single datasets.
  */
-export const paddingInner = (bar: IHistogramBar): number => {
+export const paddingInner = (bar: HistogramBar): number => {
   const m = bar?.paddingInner ?? 0;
   return m >= 0 && m <= 1
     ? m
@@ -29,7 +29,7 @@ export const paddingInner = (bar: IHistogramBar): number => {
  * Padding for the outside of grouped datasets or single datasets
  * 
  */
-export const paddingOuter = (bar: IHistogramBar): number => {
+export const paddingOuter = (bar: HistogramBar): number => {
   const m = bar?.paddingOuter ?? 0;
   return m >= 0 && m <= 1
     ? m
@@ -47,7 +47,7 @@ export const paddingOuter = (bar: IHistogramBar): number => {
 export const getBarWidth = (
   i: number,
   groupLayout: EGroupedBarLayout,
-  bar: IHistogramBar,
+  bar: HistogramBar,
   innerScaleBand: ScaleBand<string>,
 ) => {
   const w = innerScaleBand.bandwidth();
@@ -66,7 +66,7 @@ export const getBarWidth = (
 /**
  * When grouping data this is the spacing between the group's bars.
  */
-export const groupedPaddingInner = (bar: IHistogramBar): number => {
+export const groupedPaddingInner = (bar: HistogramBar): number => {
   const m = bar?.grouped?.paddingInner ?? 0.1;
   return m >= 0 && m <= 1
     ? m
@@ -76,18 +76,13 @@ export const groupedPaddingInner = (bar: IHistogramBar): number => {
 /**
  * When grouping data this is the spacing to the left of the first and the right of the last bar.
  */
-export const groupedPaddingOuter = (bar: IHistogramBar): number => {
+export const groupedPaddingOuter = (bar: HistogramBar): number => {
   const m = bar?.grouped?.paddingOuter ?? 0.1;
   return m >= 0 && m <= 1
     ? m
     : 0.1;
 }
 
-interface P {
-  bins: (string | [number, number])[];
-  values: IBarChartDataSet[];
-  visible: Record<string, boolean>;
-}
 export const buildBarDatasets = ({
   values,
   bins,

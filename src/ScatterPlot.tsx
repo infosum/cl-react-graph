@@ -3,20 +3,26 @@ import React, {
   Fragment,
 } from 'react';
 
-import Base from './components/Base';
-import Grid from './components/Grid';
-import Points, { PointComponentProps } from './components/Points';
-import XAxis from './components/XAxis';
-import YAxis, { TAxisLabelFormat } from './components/YAxis';
-import { IGrid } from './Histogram';
-import { IAxes } from './legacy/types';
+import { Base } from './components/Base';
+import { Grid } from './components/Grid';
 import {
-  IAnyChartPoint,
-  IChartPoint,
+  PointComponentProps,
+  Points,
+} from './components/Points';
+import { XAxis } from './components/XAxis';
+import {
+  TAxisLabelFormat,
+  YAxis,
+} from './components/YAxis';
+import { Grid as GridProps } from './Histogram';
+import {
+  AnyChartPoint,
+  ChartPoint,
 } from './LineChart';
+import { Axes } from './utils/types';
 import { useScatterDomain } from './utils/useDomain';
 
-export interface IScatterPlotDataSet<T> {
+export type ScatterPlotDataSet<T> = {
   label: string;
   point: {
     radius: number;
@@ -28,10 +34,10 @@ export interface IScatterPlotDataSet<T> {
   data: T[];
 }
 
-export interface IProps<T extends IAnyChartPoint = IChartPoint> {
-  axis: IAxes;
-  data: IScatterPlotDataSet<T>[];
-  grid?: IGrid;
+export type Props<T extends AnyChartPoint = ChartPoint> = {
+  axis: Axes;
+  data: ScatterPlotDataSet<T>[];
+  grid?: GridProps;
   height: number;
   id?: string;
   width: number;
@@ -48,7 +54,7 @@ export interface IProps<T extends IAnyChartPoint = IChartPoint> {
   PointComponent?: FC<PointComponentProps>;
 }
 
-const ScatterPlot: FC<IProps> = ({
+export const ScatterPlot = ({
   axis,
   clampToZero = true,
   data,
@@ -61,7 +67,7 @@ const ScatterPlot: FC<IProps> = ({
   description,
   axisLabelFormat,
   PointComponent,
-}) => {
+}: Props) => {
   const domain = useScatterDomain({
     values: data,
     clampToZero,
@@ -89,7 +95,6 @@ const ScatterPlot: FC<IProps> = ({
       }
       {
         data.map((item) => <Fragment key={item.label.replace(/[^a-zA-Z0-9-]/, '')}>
-
           {
             item.point.show &&
             <Points
@@ -106,8 +111,6 @@ const ScatterPlot: FC<IProps> = ({
               data={item.data}
               PointComponent={PointComponent} />
           }
-
-
         </Fragment>)
       }
 
@@ -137,5 +140,3 @@ const ScatterPlot: FC<IProps> = ({
     </Base>
   )
 }
-
-export default ScatterPlot;

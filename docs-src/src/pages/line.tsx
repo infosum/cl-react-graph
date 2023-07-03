@@ -2,10 +2,10 @@ import { curveCatmullRom } from 'd3-shape';
 import React from 'react';
 
 import {
+  Axes,
   Base,
-  IAxes,
-  ILineProps,
   Line,
+  LineProps,
   useWidth,
 } from '../../../src';
 import { JSXCode } from '../components/JSXCode';
@@ -15,14 +15,14 @@ import { theme } from '../context/theme';
 
 const exampleCode = `import {
   Base,
-  IAxes,
-  ILineProps,
+  Axes,
+  LineProps,
   useWidth,
   Line,
 } from 'cl-react-graph;
 import { curveCatmullRom } from 'd3-shape';
 
-const axis: IAxes = {
+const axis: Axes = {
   x: {
     dateFormat: '%d-%b-%y',
     scale: 'time',
@@ -38,7 +38,7 @@ const axis: IAxes = {
   },
 };
 
-const line: ILineProps = {
+const line: LineProps = {
   curveType: curveCatmullRom,
   fill: {
     fill: theme.brightBlue800,
@@ -86,7 +86,7 @@ const MyComponent = () => {
 
 const LineExample = () => {
   const [ref, width] = useWidth('90%');
-  const axis: IAxes = {
+  const axis: Axes = {
     x: {
       dateFormat: '%d-%b-%y',
       scale: 'time',
@@ -102,7 +102,7 @@ const LineExample = () => {
     },
   };
 
-  const line: ILineProps = {
+  const line: LineProps = {
     curveType: curveCatmullRom,
     fill: {
       fill: theme.brightBlue800,

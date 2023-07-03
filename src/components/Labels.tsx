@@ -1,7 +1,4 @@
-import React, {
-  FC,
-  RefObject,
-} from 'react';
+import React, { RefObject } from 'react';
 import {
   animated,
   interpolate,
@@ -14,7 +11,7 @@ import {
   TLabelComponent,
 } from './Label';
 
-interface IProps {
+type Props = {
   colorScheme?: readonly string[];
   direction: EChartDirection;
   items: ExtendedGroupItem[];
@@ -26,7 +23,7 @@ interface IProps {
   inverse?: boolean;
   width: number;
 }
-export const Labels: FC<IProps> = ({
+export const Labels = ({
   colorScheme = ['#a9a9a9', '#2a5379'],
   springs,
   items,
@@ -37,7 +34,7 @@ export const Labels: FC<IProps> = ({
   visible,
   inverse = false,
   width,
-}) => {
+}: Props) => {
   const refs: RefObject<any>[] = [];
   return (<g className="labels">
     {

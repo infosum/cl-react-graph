@@ -4,7 +4,6 @@ import {
   scaleLinear,
 } from 'd3-scale';
 import React, {
-  FC,
   RefObject,
   useState,
 } from 'react';
@@ -16,10 +15,10 @@ import {
 
 import { EChartDirection } from '../../BarChart';
 import {
+  BarChartDataSet,
   EGroupedBarLayout,
-  IBarChartDataSet,
-  IGroupDataItem,
-  IHistogramBar,
+  GroupDataItem,
+  HistogramBar,
 } from '../../Histogram';
 import {
   buildBarDatasets,
@@ -32,11 +31,11 @@ import {
 } from '../../utils/bars';
 import { TLabelComponent } from '../Label';
 import { Labels } from '../Labels';
-import { TTipFunc } from '../ToolTip';
+import { TipFunc } from '../ToolTip';
 import { ToolTips } from '../ToolTips';
 import { buildBarSprings } from './barHelper';
 
-export interface IProps {
+export type Props = {
   bins: (string | [number, number])[]
   config?: SpringConfig;
   colorScheme?: readonly string[],
@@ -49,11 +48,11 @@ export interface IProps {
   LabelComponent?: TLabelComponent;
   labels?: string[];
   left?: number;
-  padding?: IHistogramBar;
+  padding?: HistogramBar;
   top?: number;
-  tip?: TTipFunc;
+  tip?: TipFunc;
   showLabels?: boolean[];
-  values: IBarChartDataSet[];
+  values: BarChartDataSet[];
   visible?: Record<string, boolean>;
   width: number;
   inverse?: boolean;
@@ -71,13 +70,13 @@ const paddings = {
   paddingOuter: 0,
 };
 
-export type ExtendedGroupItem = IGroupDataItem & {
+export type ExtendedGroupItem = GroupDataItem & {
   datasetIndex: number;
   binIndex: number;
   percentage: string;
 }
 
-export const defaultPadding: IHistogramBar = {
+export const defaultPadding: HistogramBar = {
   grouped: {
     paddingInner: 0.1,
     paddingOuter: 0,
@@ -90,7 +89,7 @@ export const defaultPadding: IHistogramBar = {
   },
 }
 
-const Bars: FC<IProps> = ({
+export const Bars = ({
   bins,
   colorScheme = ['#a9a9a9', '#2a5379'],
   config = {
@@ -115,7 +114,7 @@ const Bars: FC<IProps> = ({
   inverse = false,
   rx = 0,
   ry = 0,
-}) => {
+}: Props) => {
   if (width === 0) {
     return null;
   }
@@ -225,6 +224,3 @@ const Bars: FC<IProps> = ({
     </>
   );
 }
-
-
-export default Bars;

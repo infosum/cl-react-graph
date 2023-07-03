@@ -1,16 +1,13 @@
-import React, {
-  FC,
-  HTMLAttributes,
-} from 'react';
+import React, { HTMLAttributes } from 'react';
 
-interface IPathProps {
+type Props = {
   fill: string;
   stroke?: string
   d: string;
   opacity: number;
 }
 
-const Path: FC<IPathProps & HTMLAttributes<SVGElement>> = ({
+export const Path = ({
   d,
   fill,
   stroke,
@@ -18,7 +15,7 @@ const Path: FC<IPathProps & HTMLAttributes<SVGElement>> = ({
   opacity,
   onMouseEnter,
   onMouseLeave,
-}) => {
+}: Props & HTMLAttributes<SVGElement>) => {
   return (
     <path
       id={id}
@@ -32,5 +29,3 @@ const Path: FC<IPathProps & HTMLAttributes<SVGElement>> = ({
     />
   )
 }
-
-export default Path;

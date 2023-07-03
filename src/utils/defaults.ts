@@ -1,14 +1,14 @@
 import { curveCatmullRom } from 'd3-shape';
 
 import {
-  IAxes,
-  IStroke,
+  Axes,
+  Stroke,
 } from '../';
-import { IGrid } from '../Histogram';
-import { ISVGLineStyle } from '../legacy/types';
-import { ILineProps } from '../LineChart';
+import { Grid } from '../Histogram';
+import { LineProps } from '../LineChart';
+import { SVGLineStyle } from '../utils/types';
 
-export const lineStyle: ISVGLineStyle = {
+export const lineStyle: SVGLineStyle = {
   'fill': '#000',
   'opacity': 1,
   'shapeRendering': 'auto',
@@ -18,14 +18,14 @@ export const lineStyle: ISVGLineStyle = {
   'visible': 'true',
 };
 
-export const stroke: IStroke = {
+export const stroke: Stroke = {
   color: '#000',
   dasharray: '0',
   linecap: 'butt',
   width: 1,
 };
 
-export const line: ILineProps = {
+export const line: LineProps = {
   curveType: curveCatmullRom,
   fill: {
     fill: '#000',
@@ -38,7 +38,7 @@ export const line: ILineProps = {
 };
 
 
-export const axis: IAxes = {
+export const axis: Axes = {
   x: {
     dateFormat: '',
     height: 20,
@@ -61,7 +61,7 @@ export const axis: IAxes = {
   },
 };
 
-export const grid: IGrid = {
+export const grid: Grid = {
   x: {
     height: 1,
     style: {

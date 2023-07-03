@@ -1,30 +1,34 @@
-import React, { FC } from 'react';
+import React from 'react';
 
 import { EChartDirection } from './BarChart';
-import Bars, { defaultPadding } from './components/Bars/Bars';
-import Base from './components/Base';
-import { TTipFunc } from './components/ToolTip';
-import XAxis from './components/XAxis';
-import YAxis, {
+import {
+  Bars,
+  defaultPadding,
+} from './components/Bars/Bars';
+import { Base } from './components/Base';
+import { TipFunc } from './components/ToolTip';
+import { XAxis } from './components/XAxis';
+import {
   defaultTickFormat,
   ELabelOrientation,
   TAxisLabelFormat,
+  YAxis,
 } from './components/YAxis';
 import {
+  BarChartData,
   EGroupedBarLayout,
-  IBarChartData,
-  IHistogramBar,
+  HistogramBar,
 } from './Histogram';
 import { useJoyPlot } from './utils/useJoyPlot';
 
-export interface IProps {
+export type Props = {
   axisLabelFormat?: TAxisLabelFormat;
   colorScheme?: string[];
-  data: IBarChartData[];
+  data: BarChartData[];
   direction?: EChartDirection;
   height: number;
-  padding?: IHistogramBar;
-  tip?: TTipFunc;
+  padding?: HistogramBar;
+  tip?: TipFunc;
   title?: string;
   width: number;
   xAxisHeight?: number;
@@ -36,7 +40,7 @@ export interface IProps {
 /**
  * JoyPlot component
  */
-const JoyPlot: FC<IProps> = ({
+export const JoyPlot = ({
   axisLabelFormat,
   colorScheme,
   data,
@@ -51,7 +55,7 @@ const JoyPlot: FC<IProps> = ({
   title,
   titleHeight = 40,
   titleLayout = ELabelOrientation.HORIZONTAL,
-}) => {
+}: Props) => {
   const {
     chartHeight,
     bins,
@@ -153,4 +157,3 @@ const JoyPlot: FC<IProps> = ({
     </Base>
   )
 }
-export default JoyPlot;

@@ -1,15 +1,15 @@
 import { scaleOrdinal } from 'd3-scale';
-import React, { FC } from 'react';
+import React from 'react';
 
 import colorScheme from './colors';
-import { IBarChartDataSet } from './Histogram';
+import { BarChartDataSet } from './Histogram';
 
-interface IProps {
+type Props = {
   className?: string;
   theme?: string[];
   data: {
     bins: string[],
-    counts: IBarChartDataSet[];
+    counts: BarChartDataSet[];
   };
   onSelect: (label: string) => void;
   visible: { [key: string]: boolean };
@@ -34,14 +34,14 @@ const liStyle = {
   alignItems: 'center',
 }
 
-const Legend: FC<IProps> = ({
+export const Legend = ({
   className,
   theme = colorScheme,
   data,
   onSelect,
   visible,
-}) => {
-  const scheme: any = scaleOrdinal(theme);
+}: Props) => {
+  const scheme = scaleOrdinal(theme);
   const labels = data.bins;
   return (
     <div className={className}>
@@ -70,5 +70,3 @@ const Legend: FC<IProps> = ({
     </div>
   );
 };
-
-export default Legend;

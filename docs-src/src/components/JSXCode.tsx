@@ -1,12 +1,12 @@
 import Highlight, { defaultProps } from 'prism-react-renderer';
 import editorTheme from 'prism-react-renderer/themes/duotoneLight';
-import React, { FC } from 'react';
+import React from 'react';
 
-interface Props {
+type Props = {
   exampleCode: string;
 }
 
-export const JSXCode: FC<Props> = ({ exampleCode }) => {
+export const JSXCode = ({ exampleCode }: Props) => {
   return (
     <Highlight {...defaultProps}
       theme={editorTheme}

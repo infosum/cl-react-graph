@@ -1,11 +1,11 @@
-import React, { FC } from 'react';
+import React from 'react';
 
 import {
-  IAxes,
-  IChartPointValue,
-  IPointProps,
-  IScatterPlotDataSet,
+  Axes,
+  ChartPointValue,
+  PointProps,
   ScatterPlot,
+  ScatterPlotDataSet,
   useWidth,
 } from '../../../src';
 import { JSXCode } from '../components/JSXCode';
@@ -13,14 +13,14 @@ import { Layout } from '../components/Layout';
 import { TwoColumns } from '../components/TwoColumns';
 
 const exampleCode = `import {
-  IAxes,
-  IChartPointValue,
-  IScatterPlotDataSet,
+  Axes,
+  ChartPointValue,
+  ScatterPlotDataSet,
   ScatterPlot,
   useWidth,
 } from 'cl-react-graph;
 
-const data: IScatterPlotDataSet<IChartPointValue> = {
+const data: ScatterPlotDataSet<ChartPointValue> = {
   label: 'Scatter data',
   point: { fill: '#000', radius: 4, show: true, stroke: '' },
   data: [
@@ -51,15 +51,15 @@ const MyComponent = () => {
 
 
 const exampleCodeCustom = `import {
-  IAxes,
-  IChartPointValue,
-  IPointProps,
-  IScatterPlotDataSet,
+  Axes,
+  ChartPointValue,
+  PointProps,
+  ScatterPlotDataSet,
   ScatterPlot,
   useWidth,
 } from 'cl-react-graph;
 
-const data: IScatterPlotDataSet<IChartPointValue> = {
+const data: ScatterPlotDataSet<ChartPointValue> = {
   label: 'Scatter data',
   point: { fill: '#000', radius: 4, show: true, stroke: '' },
   data: [
@@ -73,14 +73,14 @@ const data: IScatterPlotDataSet<IChartPointValue> = {
   ]
 }
 
-const Fruit: FC<IPointProps> = ({
+const Fruit = ({
   x,
   y,
   z,
   cx,
   cy,
   children,
-}) => <text x={cx} y={cy} fontSize={z * 4}>
+}: PointProps<number>) => <text x={cx} y={cy} fontSize={z * 4}>
     {(x ?? 0) > 2 ? "🍎" : "🍐"}
     {children}
   </text>
@@ -90,7 +90,7 @@ const MyComponent = () => {
   return(
     <div ref={ref}>
     <ScatterPlot
-      PointComponent={(props: IPointProps) => <Fruit {...props} />}
+      PointComponent={(props: PointProps) => <Fruit {...props} />}
       axis={axis}
       height={400}
       width={400}
@@ -99,7 +99,7 @@ const MyComponent = () => {
   )
 };
 `;
-const data: IScatterPlotDataSet<IChartPointValue> = {
+const data: ScatterPlotDataSet<ChartPointValue> = {
   label: 'Scatter data',
   point: { fill: '#000', radius: 4, show: true, stroke: '' },
   data: [
@@ -112,14 +112,14 @@ const data: IScatterPlotDataSet<IChartPointValue> = {
     { x: 7, y: 7, z: 15 },
   ]
 }
-const Fruit: FC<IPointProps> = ({
+const Fruit = ({
   x,
   y,
   z,
   cx,
   cy,
   children,
-}) => <text x={cx} y={cy} fontSize={z * 4}>
+}: PointProps<number>) => <text x={cx} y={cy} fontSize={(z ?? 1) * 4}>
     {(x ?? 0) > 2 ? "🍎" : "🍐"}
     {children}
   </text>
@@ -127,7 +127,7 @@ const Fruit: FC<IPointProps> = ({
 
 const RadarExample = () => {
   const [ref, width] = useWidth('90%');
-  const axis: IAxes = {
+  const axis: Axes = {
     x: {
       height: 20,
       width: width,
@@ -158,7 +158,7 @@ const RadarExample = () => {
           <h3>With a custom point component</h3>
           <ScatterPlot
             axis={axis}
-            PointComponent={(props: IPointProps) => <Fruit {...props} />}
+            PointComponent={(props: PointProps) => <Fruit {...props} />}
             height={400}
             width={width}
             data={[data]} />

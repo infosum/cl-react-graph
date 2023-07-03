@@ -1,17 +1,17 @@
 import { extent } from 'd3-array';
 import { ScaleBand } from 'd3-scale';
-import React, { FC } from 'react';
+import React from 'react';
 
 import { buildTicks } from '../utils/axis';
 import { isOfType } from '../utils/isOfType';
-import textWrap from '../utils/svgTextWrap';
+import { svgTextWrap } from '../utils/svgTextWrap';
 import { defaultPadding } from './Bars/Bars';
 import {
+  Axis,
   buildScale,
   defaultPath,
   defaultTickFormat,
   ELabelOrientation,
-  IAxis,
   TAxisValue,
 } from './YAxis';
 
@@ -30,7 +30,7 @@ const positionTick = (value: TAxisValue, scale: any, i: number, inverse: boolean
   return `(${v}, 0)`
 }
 
-const XAxis: FC<IAxis> = ({
+export const XAxis = ({
   labelFormat,
   values = [],
   tickSize = 2,
@@ -45,7 +45,7 @@ const XAxis: FC<IAxis> = ({
   tickFormat = defaultTickFormat,
   labelOrientation = ELabelOrientation.HORIZONTAL,
   inverse = false,
-}) => {
+}: Axis) => {
   if (scale === 'linear' && values.length > 0 && typeof values[0] === 'string') {
     throw new Error('Linear axis can not accept string values');
   }
@@ -92,7 +92,7 @@ const XAxis: FC<IAxis> = ({
           const label = scale === 'band' ? String(values[i]) : String(v);
           const thisFormat = typeof tickFormat === 'function' ? tickFormat(label, i) : tickFormat;
           const tickLabel = labelFormat ? labelFormat('x', label, i) : label
-          const textArray: string[] = textWrap(tickLabel, height, { 'font-size': thisFormat.fontSize });
+          const textArray: string[] = svgTextWrap(tickLabel, height, { 'font-size': thisFormat.fontSize });
 
           return (
             <g
@@ -136,5 +136,3 @@ const XAxis: FC<IAxis> = ({
     </g>
   )
 }
-
-export default XAxis;

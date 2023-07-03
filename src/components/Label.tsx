@@ -1,25 +1,25 @@
-import React, { FC } from 'react';
+import React from 'react';
 
 import { EChartDirection } from '../BarChart';
 import { ExtendedGroupItem } from './Bars/Bars';
 
-interface IProps {
-  direction: EChartDirection;
+type Props = {
+  direction?: EChartDirection;
   label?: string;
   item: ExtendedGroupItem;
   fill?: string;
   inverse?: boolean;
 }
 
-export type TLabelComponent = (props: IProps) => JSX.Element;
+export type TLabelComponent = (props: Props) => JSX.Element;
 
-export const Label: FC<IProps> = ({
-  direction,
+export const Label = ({
+  direction = EChartDirection.VERTICAL,
   label,
   item,
   fill = '#a9a9a9',
   inverse = false,
-}) => {
+}: Props) => {
   const offset = direction === EChartDirection.VERTICAL
     ? '0, -5'
     : inverse ? '-5, 0' : '5, 0';

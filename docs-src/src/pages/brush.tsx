@@ -3,15 +3,15 @@ import { curveCatmullRom } from 'd3-shape';
 import React from 'react';
 
 import {
+  Axes,
   Base,
-  IAxes,
-  ILineProps,
+  LineProps,
   useBrush,
   useWidth,
 } from '../../../src';
-import Brush from '../../../src/components/Brush';
-import Line from '../../../src/components/Line';
-import { IAnyChartPoint } from '../../../src/LineChart';
+import { Brush } from '../../../src/components/Brush';
+import { Line } from '../../../src/components/Line';
+import { AnyChartPoint } from '../../../src/LineChart';
 import { JSXCode } from '../components/JSXCode';
 import { Layout } from '../components/Layout';
 import { TwoColumns } from '../components/TwoColumns';
@@ -20,8 +20,8 @@ import { theme } from '../context/theme';
 const exampleCode = `
 import {
   Base,
-  IAxes,
-  ILineProps,
+  Axes,
+  LineProps,
   useBrush,
   Brush,
   useWidth,
@@ -29,7 +29,7 @@ import {
 import { scaleTime } from 'd3-scale';
 import { curveCatmullRom } from 'd3-shape';
 
-const axis: IAxes = {
+const axis: Axes = {
   x: {
     dateFormat: '%d-%b-%y',
     scale: 'time',
@@ -48,12 +48,12 @@ const axis: IAxes = {
 const now = new Date();
 const xs = new Array(100).fill('')
   .map((_, i) => new Date(new Date().setDate(now.getDate() + i)))
-const data: IAnyChartPoint[] = xs.map((v, i) => ({
+const data: AnyChartPoint[] = xs.map((v, i) => ({
   x: v,
   y: i * Math.random() * 1000,
 }));
 
-const line: ILineProps = {
+const line: LineProps = {
   curveType: curveCatmullRom,
   fill: {
     fill: theme.brightBlue800,
@@ -111,7 +111,7 @@ const BrushExample = () => {
 };
 `;
 
-const axis: IAxes = {
+const axis: Axes = {
   x: {
     dateFormat: '%d-%b-%y',
     scale: 'time',
@@ -130,12 +130,12 @@ const axis: IAxes = {
 const now = new Date();
 const xs = new Array(100).fill('')
   .map((_, i) => new Date(new Date().setDate(now.getDate() + i)))
-const data: IAnyChartPoint[] = xs.map((v, i) => ({
+const data: AnyChartPoint[] = xs.map((v, i) => ({
   x: v,
   y: i * Math.random() * 1000,
 }));
 
-const line: ILineProps = {
+const line: LineProps = {
   curveType: curveCatmullRom,
   fill: {
     fill: theme.brightBlue800,

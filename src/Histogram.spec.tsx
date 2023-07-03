@@ -9,7 +9,7 @@ import {
 } from '@testing-library/react';
 
 import { histogramData } from '../test/fixtures';
-import Histogram from './Histogram';
+import { Histogram } from './Histogram';
 
 beforeEach(() => {
   (SVGElement.prototype as any).getBBox = (): any => {

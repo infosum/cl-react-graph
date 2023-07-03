@@ -11,12 +11,12 @@ import {
   useState,
 } from 'react';
 
-import { IAxes } from '../legacy/types';
 import {
-  IAnyChartPoint,
-  IChartPoint,
-  ILineProps,
+  AnyChartPoint,
+  ChartPoint,
+  LineProps,
 } from '../LineChart';
+import { Axes } from '../utils/types';
 import { rangeAffordance } from './domain';
 import {
   AnyScale,
@@ -25,17 +25,17 @@ import {
 
 const ZERO_SUBSTITUTE: number = 1e-6;
 
-export interface IProps<T extends IAnyChartPoint = IChartPoint> {
+export type Props<T extends AnyChartPoint = ChartPoint> = {
   data: T[];
-  axis: IAxes;
-  line: ILineProps;
+  axis: Axes;
+  line: LineProps;
   curveType?: CurveFactory | CurveFactoryLineOnly;
   width: number;
   left?: number;
   height: number;
 }
 
-export const useScales: (props: Omit<IProps, 'line' | 'curveType'>) => { xScale: any, yScale: any } = ({
+export const useScales: (props: Omit<Props, 'line' | 'curveType'>) => { xScale: any, yScale: any } = ({
   data,
   width,
   height,
@@ -70,7 +70,7 @@ export const useScales: (props: Omit<IProps, 'line' | 'curveType'>) => { xScale:
 }
 
 
-export const useMakeLine: (props: IProps) => { previous: string, current: string } = (props) => {
+export const useMakeLine: (props: Props) => { previous: string, current: string } = (props) => {
   const [current, setCurrent] = useState('');
   const [previous, setPrevious] = useState('');
   const { xScale, yScale } = useScales(props);
@@ -99,7 +99,7 @@ export const useMakeLine: (props: IProps) => { previous: string, current: string
   return { previous, current };
 }
 
-export const useMakeArea: (props: IProps) => { previous: string, current: string } = (props) => {
+export const useMakeArea: (props: Props) => { previous: string, current: string } = (props) => {
   const [current, setCurrent] = useState('');
   const [previous, setPrevious] = useState('');
   const { xScale, yScale } = useScales(props);

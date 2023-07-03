@@ -8,7 +8,10 @@ import {
   screen,
 } from '@testing-library/react';
 
-import UpsetChart, { TUpsetData } from './UpsetChart';
+import {
+  TUpsetData,
+  UpsetChart,
+} from './UpsetChart';
 
 const data: TUpsetData = [
   { keys: ['Another label'], value: 10 },

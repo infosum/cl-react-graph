@@ -1,20 +1,21 @@
 import { extent } from 'd3-array';
 import { schemeSet3 } from 'd3-scale-chromatic';
-import React, { FC } from 'react';
+import React from 'react';
 import { SpringConfig } from 'react-spring';
 
 import { EChartDirection } from './BarChart';
-import HistogramBars from './components/Bars/HistogramBars';
-import Base from './components/Base';
-import Grid from './components/Grid';
+import { HistogramBars } from './components/Bars/HistogramBars';
+import { Base } from './components/Base';
+import { Grid } from './components/Grid';
 import { TLabelComponent } from './components/Label';
-import { TTipFunc } from './components/ToolTip';
-import XAxis from './components/XAxis';
-import YAxis, {
+import { TipFunc } from './components/ToolTip';
+import { XAxis } from './components/XAxis';
+import {
   ELabelOrientation,
   TAxisLabelFormat,
+  YAxis,
 } from './components/YAxis';
-import { ISVGLineStyle } from './legacy/types';
+import { SVGLineStyle } from './utils/types';
 
 export enum EGroupedBarLayout {
   GROUPED,
@@ -22,7 +23,7 @@ export enum EGroupedBarLayout {
   OVERLAID,
 }
 
-export interface IBarChartDataSet {
+export type BarChartDataSet = {
   borderColors?: string[];
   colors?: string[];
   label: string;
@@ -41,7 +42,7 @@ export enum EColorManipulations {
   'rotate' = 'rotate',
 };
 
-export interface IGroupDataItem {
+export type GroupDataItem = {
   label: string;
   groupLabel?: string;
   colorRef?: string; // String which can be used to return same colour value
@@ -49,7 +50,7 @@ export interface IGroupDataItem {
   side?: 'left' | 'right'; // For Tornados
 }
 
-export interface IHistogramBar {
+export type HistogramBar = {
   // Padding for the inside of grouped datasets
   grouped: {
     paddingInner: number;
@@ -69,50 +70,50 @@ export interface IHistogramBar {
   ry?: number;
 }
 
-export interface IHistogramData {
+export type HistogramData = {
   bins: [number, number][];
-  counts: IBarChartDataSet[];
+  counts: BarChartDataSet[];
   colorScheme?: string[];
   title?: string;
 }
-export type IGroupData = IGroupDataItem[][];
+export type GroupData = GroupDataItem[][];
 
 
-export interface IBarChartData {
+export type BarChartData = {
   bins: string[];
-  counts: IBarChartDataSet[];
+  counts: BarChartDataSet[];
   colorScheme?: string[];
   title?: string;
 }
 
 // @TODO deprecate this interface in favour of <Grids /> actual props
-export interface IGrid {
+export type Grid = {
   x: {
     height: number;
     ticks: number;
     visible: boolean;
-    style: ISVGLineStyle;
+    style: SVGLineStyle;
   };
   y: {
-    style: ISVGLineStyle;
+    style: SVGLineStyle;
     ticks: number;
     visible: boolean;
   };
 }
 
-export interface IHistogramProps {
+export type Props = {
   animation?: SpringConfig;
   axisLabelFormat?: TAxisLabelFormat;
   colorScheme?: string[];
-  data: IHistogramData;
+  data: HistogramData;
   direction?: EChartDirection;
   id?: string;
-  grid?: IGrid;
+  grid?: Grid;
   height: number;
   LabelComponent?: TLabelComponent;
   hoverColorScheme?: string[];
   showLabels?: boolean[];
-  tip?: TTipFunc;
+  tip?: TipFunc;
   visible?: Record<string, boolean>;
   width: number;
   xAxisHeight?: number;
@@ -130,10 +131,10 @@ export interface IHistogramProps {
 /**
  * A Histogram renders continuous data and thus use a ScaleLinear x & y axis 
  */
-const Histogram: FC<IHistogramProps> = ({
+export const Histogram = ({
   animation,
   axisLabelFormat,
-  colorScheme = schemeSet3,
+  colorScheme = [...schemeSet3],
   data,
   direction = EChartDirection.VERTICAL,
   id = '',
@@ -151,7 +152,7 @@ const Histogram: FC<IHistogramProps> = ({
   title,
   description,
   bars,
-}) => {
+}: Props) => {
   if (!yAxisWidth) {
     yAxisWidth = direction === EChartDirection.VERTICAL ? 40 : 100;
   }
@@ -243,10 +244,6 @@ const Histogram: FC<IHistogramProps> = ({
             continuousDomain[1],
           ]}
       />
-
     </Base>
   )
-
 }
-
-export default Histogram;

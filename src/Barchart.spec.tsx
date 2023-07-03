@@ -9,7 +9,7 @@ import {
 } from '@testing-library/react';
 
 import { barChartData } from '../test/fixtures';
-import BarChart from './BarChart';
+import { BarChart } from './BarChart';
 import { EGroupedBarLayout } from './Histogram';
 
 beforeEach(() => {

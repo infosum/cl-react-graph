@@ -7,27 +7,33 @@ import React, {
   Fragment,
 } from 'react';
 
-import AreaFill from './components/AreaFill';
-import Base from './components/Base';
-import Grid from './components/Grid';
-import Line from './components/Line';
-import Points, { PointComponentProps } from './components/Points';
-import XAxis from './components/XAxis';
-import YAxis, { TAxisLabelFormat } from './components/YAxis';
-import { IGrid } from './Histogram';
-import { IAxes } from './legacy/types';
+import { AreaFill } from './components/AreaFill';
+import { Base } from './components/Base';
+import { Grid } from './components/Grid';
+import { Line } from './components/Line';
+import {
+  PointComponentProps,
+  Points,
+} from './components/Points';
+import { XAxis } from './components/XAxis';
+import {
+  TAxisLabelFormat,
+  YAxis,
+} from './components/YAxis';
+import { Grid as GridProps } from './Histogram';
+import { Axes } from './utils/types';
 import { useLineDomain } from './utils/useDomain';
 
-export type IChartPointValue = number | string | Date | object;
-export interface IChartPoint<X extends IChartPointValue = Date | number | string, Y extends IChartPointValue = number> {
+export type ChartPointValue = number | string | Date | object;
+export type ChartPoint<X extends ChartPointValue = Date | number | string, Y extends ChartPointValue = number> = {
   x: X;
   y: Y;
   z?: number;
 }
 
-export type IAnyChartPoint = IChartPoint<IChartPointValue, IChartPointValue>;
+export type AnyChartPoint = ChartPoint<ChartPointValue, ChartPointValue>;
 
-export interface ILineProps {
+export type LineProps = {
   show: boolean;
   fill: {
     show: boolean;
@@ -39,7 +45,7 @@ export interface ILineProps {
   strokeDashArray: string;
 }
 
-export interface ILineChartDataSet<T> {
+export type LineChartDataSet<T> = {
   label: string;
   point: {
     radius: number;
@@ -48,14 +54,14 @@ export interface ILineChartDataSet<T> {
     show: boolean;
     showTitle?: boolean;
   };
-  line: ILineProps;
+  line: LineProps;
   data: T[];
 }
 
-export interface IProps<T extends IAnyChartPoint = IChartPoint> {
-  axis: IAxes;
-  data: ILineChartDataSet<T>[];
-  grid?: IGrid;
+export type Props<T extends AnyChartPoint = ChartPoint> = {
+  axis: Axes;
+  data: LineChartDataSet<T>[];
+  grid?: GridProps;
   height: number;
   width: number;
   xAxisHeight?: number;
@@ -72,7 +78,7 @@ export interface IProps<T extends IAnyChartPoint = IChartPoint> {
   PointComponent?: FC<PointComponentProps>;
 }
 
-const LineChart: FC<IProps> = ({
+export const LineChart = ({
   axis,
   axisLabelFormat,
   clampToZero = true,
@@ -85,7 +91,7 @@ const LineChart: FC<IProps> = ({
   width,
   xAxisHeight = 60,
   yAxisWidth = 100,
-}) => {
+}: Props) => {
   const domain = useLineDomain({
     values: data,
     clampToZero,
@@ -179,5 +185,3 @@ const LineChart: FC<IProps> = ({
     </Base>
   )
 }
-
-export default LineChart;

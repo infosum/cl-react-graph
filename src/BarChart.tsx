@@ -1,22 +1,26 @@
 import { schemeSet3 } from 'd3-scale-chromatic';
-import React, { FC } from 'react';
+import React from 'react';
 import { SpringConfig } from 'react-spring';
 
-import Bars, { defaultPadding } from './components/Bars/Bars';
-import Base from './components/Base';
-import Grid from './components/Grid';
+import {
+  Bars,
+  defaultPadding,
+} from './components/Bars/Bars';
+import { Base } from './components/Base';
+import { Grid } from './components/Grid';
 import { TLabelComponent } from './components/Label';
-import { TTipFunc } from './components/ToolTip';
-import XAxis from './components/XAxis';
-import YAxis, {
+import { TipFunc } from './components/ToolTip';
+import { XAxis } from './components/XAxis';
+import {
   ELabelOrientation,
   TAxisLabelFormat,
+  YAxis,
 } from './components/YAxis';
 import {
+  BarChartData,
   EGroupedBarLayout,
-  IBarChartData,
-  IGrid,
-  IHistogramBar,
+  Grid as GridProps,
+  HistogramBar,
 } from './Histogram';
 import { useHistogramDomain } from './utils/useDomain';
 
@@ -24,22 +28,22 @@ export enum EChartDirection {
   HORIZONTAL = 'HORIZONTAL',
   VERTICAL = 'VERTICAL',
 }
-interface IProps {
+type Props = {
   animation?: SpringConfig;
   axisLabelFormat?: TAxisLabelFormat;
-  colorScheme?: string[];
-  data: IBarChartData;
+  colorScheme?: readonly string[];
+  data: BarChartData;
   direction?: EChartDirection;
   id?: string;
-  grid?: IGrid;
+  grid?: GridProps;
   groupLayout?: EGroupedBarLayout;
   height: number;
   LabelComponent?: TLabelComponent;
-  padding?: IHistogramBar;
+  padding?: HistogramBar;
   showLabels?: boolean[];
   /** An array of tick values to show on the numerical axis */
   tickValues?: number[];
-  tip?: TTipFunc;
+  tip?: TipFunc;
   /** @description Chart <title /> */
   title?: string;
   visible?: Record<string, boolean>;
@@ -55,7 +59,7 @@ interface IProps {
 
 const defaultTickValues = [];
 
-const BarChart: FC<IProps> = ({
+export const BarChart = ({
   animation,
   axisLabelFormat,
   colorScheme = schemeSet3,
@@ -77,7 +81,7 @@ const BarChart: FC<IProps> = ({
   tickValues,
   bars,
   title,
-}) => {
+}: Props) => {
   if (!yAxisWidth) {
     yAxisWidth = direction === EChartDirection.VERTICAL ? 40 : 100;
   }
@@ -165,5 +169,3 @@ const BarChart: FC<IProps> = ({
   )
 
 }
-
-export default BarChart;

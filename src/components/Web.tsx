@@ -1,7 +1,7 @@
 import { lineRadial } from 'd3-shape';
-import React, { FC } from 'react';
+import React from 'react';
 
-interface IProps {
+type Props = {
   axis?: {
     stroke?: string;
     strokeWidth?: number;
@@ -35,13 +35,13 @@ const buildRadial = (labels: string[], radius: number) => {
   return lineRadial()(braids) ?? '';
 }
 
-const Web: FC<IProps> = ({
+export const Web = ({
   axis,
   ticks = 7,
   labels,
   center,
   radial,
-}) => {
+}: Props) => {
   const radius = Math.min(...center);
   const angle = 360 / labels.length;
 
@@ -81,6 +81,3 @@ const Web: FC<IProps> = ({
     </>
   )
 }
-
-
-export default Web;

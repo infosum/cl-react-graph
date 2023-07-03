@@ -3,10 +3,7 @@ import {
   scaleBand,
 } from 'd3-scale';
 import { schemeSet3 } from 'd3-scale-chromatic';
-import React, {
-  FC,
-  useMemo,
-} from 'react';
+import React, { useMemo } from 'react';
 
 import {
   Bars,
@@ -16,13 +13,13 @@ import {
 import { EChartDirection } from './BarChart';
 import {
   defaultPadding,
-  IProps as IBarProps,
+  Props as BarProps,
 } from './components/Bars/Bars';
-import Base from './components/Base';
+import { Base } from './components/Base';
 import { TLabelComponent } from './components/Label';
 import {
+  BarChartDataSet,
   EGroupedBarLayout,
-  IBarChartDataSet,
 } from './Histogram';
 import {
   paddingInner,
@@ -32,14 +29,14 @@ import { useHistogramDomain } from './utils/useDomain';
 
 export type TUpsetData = { keys: string[], value: number }[];
 
-type TBarProps = Pick<IBarProps, 'width' | 'height' | 'top' | 'left' | 'colorScheme' | 'LabelComponent'> & {
+type TBarProps = Pick<BarProps, 'width' | 'height' | 'top' | 'left' | 'colorScheme' | 'LabelComponent'> & {
   data: TUpsetData,
   axisSpace: number;
   axisWidth?: number;
   textFill?: string;
 };
 
-export interface IProps {
+export type Props = {
   colorScheme?: string[];
   data: TUpsetData;
   height: number;
@@ -76,7 +73,7 @@ export interface IProps {
   description: string;
 }
 
-const UpsetChart: FC<IProps> = ({
+export const UpsetChart = ({
   data,
   width,
   height,
@@ -97,7 +94,7 @@ const UpsetChart: FC<IProps> = ({
   },
   title,
   description,
-}) => {
+}: Props) => {
 
   const left = (setSize.dimensions.chartWidth + setSize.dimensions.axisWidth);
   const h = height - setSize.dimensions.height;
@@ -167,7 +164,7 @@ const UpsetChart: FC<IProps> = ({
   </Base>
 }
 
-interface IActiveCirclesProps {
+type ActiveCirclesProps = {
   data: TUpsetData;
   left: number;
   width: number;
@@ -185,7 +182,7 @@ const tickValues = [];
 /**
  * Renders a grid of circles. Highlighted if the column's data contains that key
  */
-const ActiveCircles: FC<IActiveCirclesProps> = ({
+const ActiveCircles = ({
   data,
   left,
   width,
@@ -196,7 +193,7 @@ const ActiveCircles: FC<IActiveCirclesProps> = ({
     inactive: '#eee',
   },
   setBandScale,
-}) => {
+}: ActiveCirclesProps) => {
   const bins = Array.from(data.reduce((prev, next) => union<string>(new Set<string>(next.keys), prev), new Set<string>()));
   const yPoints = bins.map((bin) => Number(setBandScale(bin)) + (setBandScale.bandwidth() / 2));
   const labels = data.map((d) => d.keys.join(' & '))
@@ -244,7 +241,7 @@ const ActiveCircles: FC<IActiveCirclesProps> = ({
   );
 };
 
-const DistributionBars: FC<TBarProps> = ({
+const DistributionBars = ({
   LabelComponent,
   colorScheme,
   width,
@@ -253,9 +250,9 @@ const DistributionBars: FC<TBarProps> = ({
   top,
   data,
   axisSpace,
-}) => {
+}: TBarProps) => {
   const bins = useMemo(() => data.map((d) => d.keys.join(' & ')), [data]);
-  const values: IBarChartDataSet[] = useMemo(() => ([{
+  const values: BarChartDataSet[] = useMemo(() => ([{
     label: 'segments',
     data: data.map((d) => d.value),
   }]), [data]);
@@ -297,10 +294,16 @@ const DistributionBars: FC<TBarProps> = ({
   )
 }
 
+type SetSizeBarProps = TBarProps & { 
+  setBandScale: ScaleBand<string>;
+  bins: string[];
+  label: string;
+}
+
 /**
  * Shows a bar chat of the accumulated total number of records in each data point.
  */
-const SetSizeBars: FC<TBarProps & { setBandScale: ScaleBand<string>, bins: string[], label: string }> = ({
+const SetSizeBars = ({
   width,
   height,
   colorScheme,
@@ -312,7 +315,7 @@ const SetSizeBars: FC<TBarProps & { setBandScale: ScaleBand<string>, bins: strin
   setBandScale,
   bins,
   label,
-}) => {
+}: SetSizeBarProps) => {
   const values = useMemo(() => {
     const empty = new Array(bins.length).fill(0);
     const counts = data.reduce((prev, next) => {
@@ -322,7 +325,7 @@ const SetSizeBars: FC<TBarProps & { setBandScale: ScaleBand<string>, bins: strin
       })
       return prev;
     }, empty);
-    const values: IBarChartDataSet[] = [{
+    const values: BarChartDataSet[] = [{
       label: 'tets',
       data: counts,
     }];
@@ -393,5 +396,3 @@ function union<T>(...iterables: any): Set<T> {
   }
   return set;
 }
-
-export default UpsetChart;

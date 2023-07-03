@@ -4,11 +4,11 @@ import {
   useState,
 } from 'react';
 
-import { IAnyChartPoint } from '../LineChart';
+import { AnyChartPoint } from '../LineChart';
 
-interface IUseBrush {
+type UseBrush = {
   initialPosition: { start: number, end: number };
-  data: IAnyChartPoint[];
+  data: AnyChartPoint[];
   scaleFunction: () => any;
   width: number;
 }
@@ -18,9 +18,9 @@ export const useBrush = ({
   data,
   scaleFunction,
   width,
-}: IUseBrush) => {
+}: UseBrush) => {
 
-  const filterData = (scale: any, pos: { start: number, end: number }) => (data: IAnyChartPoint) => {
+  const filterData = (scale: any, pos: { start: number, end: number }) => (data: AnyChartPoint) => {
     const x = scale(data.x);
     return x >= pos.start && x <= pos.end;
   }

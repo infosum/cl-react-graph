@@ -5,7 +5,7 @@ import {
   AreaFill,
   Base,
   defaultAxis as axis,
-  ILineProps,
+  LineProps,
   useWidth,
 } from '../../../src';
 import { JSXCode } from '../components/JSXCode';
@@ -17,12 +17,13 @@ const exampleCode = `import {
   AreaFill,
   Base,
   defaultAxis as axis,
-  ILineProps,
+  LineProps,
   useWidth,
+  Axis,
 } from 'cl-react-graph;
 import { curveCatmullRom } from 'd3-shape';
 
-const axis: IAxes = {
+const axis: Axes = {
   x: {
     dateFormat: '',
     height: 20,
@@ -52,7 +53,7 @@ const data = [
   { x: 30, y: 60 },
 ]
 
-const line: ILineProps = {
+const line: LineProps = {
   curveType: curveCatmullRom,
   fill: {
     fill: 'hsla(208, 69%, 66%, 1)',
@@ -91,7 +92,7 @@ const data = [
   { x: 20, y: 10 },
   { x: 30, y: 60 },
 ]
-const line: ILineProps = {
+const line: LineProps = {
   curveType: curveCatmullRom,
   fill: {
     fill: theme.brightBlue800,

@@ -1,9 +1,6 @@
-import React, {
-  FC,
-  SVGAttributes,
-} from 'react';
+import React, { SVGAttributes } from 'react';
 
-interface IProps {
+type Props = {
   left?: number;
   top?: number;
   width: number;
@@ -24,7 +21,7 @@ const baseSvgProps: SVGAttributes<SVGLineElement> = {
   strokeWidth: '1',
 }
 
-const Grid: FC<IProps> = ({
+export const Grid = ({
   left = 0,
   top = 0,
   width,
@@ -35,7 +32,7 @@ const Grid: FC<IProps> = ({
     vertical: 0,
   },
   svgProps = {},
-}) => {
+}: Props) => {
   const verticals = new Array(lines.vertical).fill('');
   const horizontals = new Array(lines.horizontal).fill('');
   const lineProps = { ...baseSvgProps, ...svgProps };
@@ -68,5 +65,3 @@ const Grid: FC<IProps> = ({
     </g>
   );
 };
-
-export default Grid;

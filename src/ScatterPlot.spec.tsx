@@ -9,8 +9,8 @@ import {
 } from '@testing-library/react';
 
 import { lineChartData } from '../test/fixtures';
-import { IAxes } from './legacy/types';
-import ScatterPlot from './ScatterPlot';
+import { ScatterPlot } from './ScatterPlot';
+import { Axes } from './utils/types';
 
 beforeEach(() => {
   (SVGElement.prototype as any).getBBox = (): any => {
@@ -18,7 +18,7 @@ beforeEach(() => {
   }
 });
 
-const axis: IAxes = {
+const axis: Axes = {
   x: {
     height: 20,
     width: 400,
