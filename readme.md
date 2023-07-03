@@ -36,7 +36,7 @@ Publishing is handled via a GitHub Action.
 
 You will need to 
 *  npm run build (generates types)
-* ensure that the version number is bumped E.g. ` npm version patch -m "Upgrade to %s for reasons"`
+* ensure that the version number is bumped E.g. `npm version patch -m "Upgrade to %s for reasons"`
 * create a new named tag starting with 'v' E.g. `git tag -a v3.3.1`
 * `git push --tag`
 

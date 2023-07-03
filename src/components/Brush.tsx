@@ -3,8 +3,9 @@ import React, {
   ReactNode,
   useState,
 } from 'react';
-import { animated } from 'react-spring';
 import { useDrag } from 'react-use-gesture';
+
+import { animated } from '@react-spring/web';
 
 type Position = {
   start: number;

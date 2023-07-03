@@ -1,8 +1,9 @@
 import React, { RefObject } from 'react';
+
 import {
   animated,
   interpolate,
-} from 'react-spring';
+} from '@react-spring/web';
 
 import { EChartDirection } from '../BarChart';
 import { ExtendedGroupItem } from './Bars/Bars';

@@ -8,5 +8,5 @@ module.exports = (api) => {
     "@babel/preset-react",
   ];
 
-  return { presets, plugins: ["@babel/plugin-proposal-class-properties", "@babel/plugin-transform-classes"], };
+  return { presets };
 };

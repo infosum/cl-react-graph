@@ -2,7 +2,8 @@ import {
   ScaleBand,
   ScaleLinear,
 } from 'd3-scale';
-import { SpringConfig } from 'react-spring';
+
+import { SpringConfig } from '@react-spring/web';
 
 import { EChartDirection } from '../../BarChart';
 import {

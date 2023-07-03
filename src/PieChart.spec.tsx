@@ -25,15 +25,7 @@ test('PieChart', () => {
     data={barChartData}
   ></PieChart>
   )
-  // expect(screen.getAllByRole('table')).toHaveLength(1);
-  // expect(screen.getByTestId('axis-strength'));
-  // expect(screen.getByTestId('axis-intelligence'));
-  // expect(screen.getByTestId('axis-charisma'));
-  // expect(screen.getByTestId('axis-dexterity'));
-  // expect(screen.getByTestId('axis-luck'));
 
-  // expect(screen.getByTestId('point-Argentina-strength')).toHaveAttribute('cx', '185');
-  // expect(screen.getByTestId('point-Argentina-strength')).toHaveAttribute('cy', '118');
   expect(screen.getByTestId('ring-0-0')).toHaveAttribute('d', 'M0,-190A190,190,0,0,1,68.677,-177.154L0,0Z');
   expect(screen.getByTestId('ring-0-1')).toHaveAttribute('d', 'M68.677,-177.154A190,190,0,0,1,122.575,-145.173L0,0Z');
   expect(screen.getByTestId('ring-1-0')).toHaveAttribute('d', 'M0,-190A190,190,0,0,1,87.125,-168.847L0,0Z');

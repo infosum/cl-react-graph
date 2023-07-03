@@ -3,10 +3,11 @@ import React, {
   useLayoutEffect,
   useRef,
 } from 'react';
+
 import {
   animated,
   useSpring,
-} from 'react-spring';
+} from '@react-spring/web';
 
 import {
   Props as UseMakeLineProps,

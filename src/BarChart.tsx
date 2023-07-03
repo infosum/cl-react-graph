@@ -1,6 +1,7 @@
 import { schemeSet3 } from 'd3-scale-chromatic';
 import React from 'react';
-import { SpringConfig } from 'react-spring';
+
+import { SpringConfig } from '@react-spring/web';
 
 import {
   Bars,

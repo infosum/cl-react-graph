@@ -4,11 +4,12 @@ import React, {
   RefObject,
   useState,
 } from 'react';
+
 import {
   animated,
   SpringConfig,
   useSprings,
-} from 'react-spring';
+} from '@react-spring/web';
 
 import { EChartDirection } from '../../BarChart';
 import { BarChartDataSet } from '../../Histogram';

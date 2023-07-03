@@ -1,3 +1,7 @@
+[4.0.0]
+  * Convert Pie Chart to use React rather than D3 for rendering
+  * Rename types/interfaces
+  * Remove Map which was never fully implemented
 [3.6.2]
   * Update dependencies and add snyk ignores
 [3.6.0]
