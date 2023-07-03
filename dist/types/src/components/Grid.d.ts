@@ -1,5 +1,5 @@
-import { FC, SVGAttributes } from 'react';
-interface IProps {
+import { SVGAttributes } from 'react';
+type Props = {
     left?: number;
     top?: number;
     width: number;
@@ -10,6 +10,6 @@ interface IProps {
         vertical: number;
     };
     svgProps?: SVGAttributes<SVGLineElement>;
-}
-declare const Grid: FC<IProps>;
-export default Grid;
+};
+export declare const Grid: ({ left, top, width, height, stroke, lines, svgProps, }: Props) => JSX.Element;
+export {};

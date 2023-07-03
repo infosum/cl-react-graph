@@ -1,10 +1,9 @@
-import { FC } from 'react';
-import { SpringConfig } from 'react-spring';
+import { SpringConfig } from '@react-spring/web';
 import { EChartDirection } from '../../BarChart';
-import { EGroupedBarLayout, IBarChartDataSet, IGroupDataItem, IHistogramBar } from '../../Histogram';
+import { BarChartDataSet, EGroupedBarLayout, GroupDataItem, HistogramBar } from '../../Histogram';
 import { TLabelComponent } from '../Label';
-import { TTipFunc } from '../ToolTip';
-export interface IProps {
+import { TipFunc } from '../ToolTip';
+export type Props = {
     bins: (string | [number, number])[];
     config?: SpringConfig;
     colorScheme?: readonly string[];
@@ -17,22 +16,21 @@ export interface IProps {
     LabelComponent?: TLabelComponent;
     labels?: string[];
     left?: number;
-    padding?: IHistogramBar;
+    padding?: HistogramBar;
     top?: number;
-    tip?: TTipFunc;
+    tip?: TipFunc;
     showLabels?: boolean[];
-    values: IBarChartDataSet[];
+    values: BarChartDataSet[];
     visible?: Record<string, boolean>;
     width: number;
     inverse?: boolean;
     rx?: number;
     ry?: number;
-}
-export declare type ExtendedGroupItem = IGroupDataItem & {
+};
+export type ExtendedGroupItem = GroupDataItem & {
     datasetIndex: number;
     binIndex: number;
     percentage: string;
 };
-export declare const defaultPadding: IHistogramBar;
-declare const Bars: FC<IProps>;
-export default Bars;
+export declare const defaultPadding: HistogramBar;
+export declare const Bars: ({ bins, colorScheme, config, direction, domain, id, groupLayout, height, hoverColorScheme, LabelComponent, labels, left, padding, showLabels, tip, top, values, visible, width, inverse, rx, ry, }: Props) => JSX.Element | null;

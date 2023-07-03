@@ -1,11 +1,11 @@
-import { IBarChartData } from '../Histogram';
+import { BarChartData } from '../Histogram';
 export declare const useJoyPlot: ({ data, height, clampToZero, }: {
-    data: IBarChartData[];
+    data: BarChartData[];
     height: number;
     clampToZero?: boolean | undefined;
 }) => {
     chartHeight: number;
     bins: string[];
     domain: [number, number];
-    values: IBarChartData[];
+    values: BarChartData[];
 };

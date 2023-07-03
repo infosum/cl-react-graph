@@ -1,13 +1,33 @@
-declare type Filter<T, U> = T extends U ? T : never;
-declare type Diff<T extends string, U extends string> = ({
-    [P in T]: P;
-} & {
-    [P in U]: never;
-} & {
-    [x: string]: never;
-})[T];
-declare type Omit<T, K extends Filter<keyof T, string>> = Pick<T, Diff<Filter<keyof T, string>, K>>;
-export default Omit;
-export declare type DeepPartial<T> = {
+export type DeepPartial<T> = {
     [P in keyof T]?: T[P] extends Array<infer U> ? Array<DeepPartial<U>> : T[P] extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>> : DeepPartial<T[P]>;
+};
+import { Axis } from '../components/YAxis';
+export type Stroke = {
+    color: ((d: any, i: number, colors: (i: number) => string) => string) | string;
+    dasharray: string;
+    linecap: 'butt' | 'round' | 'square';
+    width: number;
+};
+export type SVGTextStyle = {
+    fill?: string;
+    'font-size'?: string;
+    dy?: string | number;
+    'stroke-opacity'?: number;
+    'text-anchor'?: string;
+    transform?: string;
+    x?: string | number;
+    y?: string | number;
+};
+export type Axes = {
+    y: Axis;
+    x: Axis;
+};
+export type SVGLineStyle = {
+    'stroke': string;
+    'fill': string;
+    'opacity': number;
+    'strokeWidth': number;
+    'strokeOpacity': number;
+    'shapeRendering': string;
+    'visible': string;
 };

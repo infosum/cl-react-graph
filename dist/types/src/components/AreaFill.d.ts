@@ -1,14 +1,13 @@
-import { FC } from 'react';
-import { IAxes } from '../legacy/types';
-import { IAnyChartPoint, IChartPoint, ILineProps } from '../LineChart';
-interface IProps<T extends IAnyChartPoint = IChartPoint> {
+import { AnyChartPoint, ChartPoint, LineProps } from '../LineChart';
+import { Axes } from '../utils/types';
+type Props<T extends AnyChartPoint = ChartPoint> = {
     label?: string;
-    line: ILineProps;
+    line: LineProps;
     width: number;
     left: number;
     height: number;
-    axis: IAxes;
+    axis: Axes;
     data: T[];
-}
-export declare const AreaFill: FC<IProps>;
-export default AreaFill;
+};
+export declare const AreaFill: (props: Props) => JSX.Element;
+export {};

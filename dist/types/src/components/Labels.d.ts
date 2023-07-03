@@ -1,8 +1,7 @@
-import { FC } from 'react';
 import { EChartDirection } from '../BarChart';
 import { ExtendedGroupItem } from './Bars/Bars';
 import { TLabelComponent } from './Label';
-interface IProps {
+type Props = {
     colorScheme?: readonly string[];
     direction: EChartDirection;
     items: ExtendedGroupItem[];
@@ -13,6 +12,6 @@ interface IProps {
     visible?: Record<string, boolean>;
     inverse?: boolean;
     width: number;
-}
-export declare const Labels: FC<IProps>;
+};
+export declare const Labels: ({ colorScheme, springs, items, direction, labels, LabelComponent, showLabels, visible, inverse, width, }: Props) => JSX.Element;
 export {};

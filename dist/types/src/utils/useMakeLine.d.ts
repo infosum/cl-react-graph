@@ -1,24 +1,24 @@
 import { CurveFactory, CurveFactoryLineOnly } from 'd3-shape';
-import { IAxes } from '../legacy/types';
-import { IAnyChartPoint, IChartPoint, ILineProps } from '../LineChart';
-export interface IProps<T extends IAnyChartPoint = IChartPoint> {
+import { AnyChartPoint, ChartPoint, LineProps } from '../LineChart';
+import { Axes } from '../utils/types';
+export type Props<T extends AnyChartPoint = ChartPoint> = {
     data: T[];
-    axis: IAxes;
-    line: ILineProps;
+    axis: Axes;
+    line: LineProps;
     curveType?: CurveFactory | CurveFactoryLineOnly;
     width: number;
     left?: number;
     height: number;
-}
-export declare const useScales: (props: Omit<IProps, 'line' | 'curveType'>) => {
+};
+export declare const useScales: (props: Omit<Props, 'line' | 'curveType'>) => {
     xScale: any;
     yScale: any;
 };
-export declare const useMakeLine: (props: IProps) => {
+export declare const useMakeLine: (props: Props) => {
     previous: string;
     current: string;
 };
-export declare const useMakeArea: (props: IProps) => {
+export declare const useMakeArea: (props: Props) => {
     previous: string;
     current: string;
 };

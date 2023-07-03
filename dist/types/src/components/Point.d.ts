@@ -1,20 +1,19 @@
-import React, { FC } from 'react';
-import { IPointStyle } from './Points';
-export declare const defaultPointStyle: IPointStyle;
-export interface IPointProps {
+import React from 'react';
+import { PointStyle } from './Points';
+export declare const defaultPointStyle: PointStyle;
+export type PointProps<V = number | string | Date> = {
     id?: string;
     /** @description Pixel x value */
     cx: number;
     /** @description Pixel y value */
     cy: number;
     /** @description Actual X value */
-    x?: number | string | Date;
+    x?: V;
     /** @description Actual Y value */
-    y?: number | string | Date;
-    z: number;
+    y?: V;
+    z?: number;
     className?: string;
     opacity?: number;
     children?: React.ReactNode;
-}
-declare const Point: FC<IPointStyle & IPointProps>;
-export default Point;
+};
+export declare const Point: ({ children, cx, cy, fill, id, PointComponent, z, stroke, x, y, opacity, }: PointStyle & PointProps) => JSX.Element;

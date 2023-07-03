@@ -6,9 +6,9 @@ import { Layout } from '../components/Layout';
 const Home = () => {
   return (
     <Layout>
-      <h1>Cl React Graphs</h1>
-      <p>Cl React Graphs provides a composable set of React components to build graphs and visualizations.</p>
-      <p>Along side this we have standard chart components which compose these components to provide higher abstractions</p>
+      <h1>CL React Graph</h1>
+      <p>CL React Graph exposes a composable set of React building block components to build charts, graphs and visualizations.</p>
+      <p>In addition CL React Graph provides higher level Chart components, created by composing these building blocks.</p>
       <p>To get started check out the <Link to="/getting-started">quick start guide</Link></p>
       </Layout>
   )

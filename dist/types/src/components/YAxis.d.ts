@@ -1,18 +1,18 @@
 import { ScaleBand } from 'd3-scale';
-import { FC, SVGAttributes } from 'react';
-import { IHistogramBar } from '../Histogram';
-import { ISVGLineStyle, ISVGTextStyle } from '../legacy/types';
-export declare type TAxisValue = string | number;
-export declare type TAxisLabelFormat = (axis: 'x' | 'y', bin: string, i: number) => string;
+import { SVGAttributes } from 'react';
+import { HistogramBar } from '../Histogram';
+import { SVGLineStyle, SVGTextStyle } from '../utils/types';
+export type TAxisValue = string | number;
+export type TAxisLabelFormat = (axis: 'x' | 'y', bin: string, i: number) => string;
 export declare enum ELabelOrientation {
     HORIZONTAL = "HORIZONTAL",
     VERTICAL = "VERTICAL"
 }
-declare type TTickFormat = (label: string, i: number) => {
+type TTickFormat = (label: string, i: number) => {
     stroke: string;
     fontSize?: string;
 };
-export interface IAxis {
+export type Axis = {
     stroke?: string;
     height: number;
     width: number;
@@ -23,7 +23,7 @@ export interface IAxis {
     top?: number;
     domain?: TAxisValue[];
     left?: number;
-    padding?: IHistogramBar;
+    padding?: HistogramBar;
     labelFormat?: TAxisLabelFormat;
     /** @description make the axis ticks display in the opposite direction */
     inverse?: boolean;
@@ -38,24 +38,24 @@ export interface IAxis {
     label?: string;
     margin?: number;
     text?: {
-        style: ISVGTextStyle;
+        style: SVGTextStyle;
     };
-    style?: ISVGLineStyle;
-}
+    style?: SVGLineStyle;
+};
 export declare const defaultTickFormat: {
     stroke: string;
     fontSize: string;
 };
 export declare const defaultPath: SVGAttributes<SVGPathElement>;
-interface IBuildScale {
+type BuildScale = {
     domain?: TAxisValue[];
     /** @description width for x axis, height for y axis */
     length: number;
-    padding: IHistogramBar;
+    padding: HistogramBar;
     scale: 'linear' | 'band' | 'point' | 'log' | 'time';
     values: string[] | number[];
     range: [number, number];
-}
-export declare const buildScale: ({ domain, length, padding, scale, values, range, }: IBuildScale) => ScaleBand<string> | import("d3-scale").ScaleLinear<number, number, never> | import("d3-scale").ScaleTime<any, any, never> | import("d3-scale").ScaleSymLog<any, any, never> | import("d3-scale").ScalePoint<string>;
-declare const YAxis: FC<IAxis>;
-export default YAxis;
+};
+export declare const buildScale: ({ domain, length, padding, scale, values, range, }: BuildScale) => ScaleBand<string> | import("d3-scale").ScaleLinear<number, number, never> | import("d3-scale").ScaleTime<any, any, never> | import("d3-scale").ScaleSymLog<any, any, never> | import("d3-scale").ScalePoint<string>;
+export declare const YAxis: ({ domain, labelFormat, height, left, path, padding, scale, tickSize, tickFormat, top, values, width, labelOrientation, inverse, }: Axis) => JSX.Element;
+export {};
