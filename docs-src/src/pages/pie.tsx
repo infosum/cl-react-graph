@@ -59,11 +59,16 @@ const data = {
   counts: [
     {
       data: [1, 2, 3, 4, 5, 6, 7],
+      label: 'Set 1',
+    },
+    {
+      data: [4, 32, 23, 14, 2, 1, 22],
+      label: 'Set 2',
     },
   ],
 };
 
-const JoyPlotExample = () => {
+const PieChartExample = () => {
   const [ref, width] = useWidth('90%');
   return (
     <Layout>
@@ -74,9 +79,7 @@ const JoyPlotExample = () => {
           <PieChart
             width={400}
             height={400}
-            labels={{
-              display: true,
-            }}
+            donutWidth={30}
             data={data}
           />
         </div>
@@ -87,4 +90,4 @@ const JoyPlotExample = () => {
   )
 };
 
-export default JoyPlotExample;
+export default PieChartExample;
