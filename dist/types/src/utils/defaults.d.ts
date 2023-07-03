@@ -1,9 +1,9 @@
-import { IAxes, IStroke } from '../';
-import { IGrid } from '../Histogram';
-import { ISVGLineStyle } from '../legacy/types';
-import { ILineProps } from '../LineChart';
-export declare const lineStyle: ISVGLineStyle;
-export declare const stroke: IStroke;
-export declare const line: ILineProps;
-export declare const axis: IAxes;
-export declare const grid: IGrid;
+import { Axes, Stroke } from '../';
+import { Grid } from '../Histogram';
+import { LineProps } from '../LineChart';
+import { SVGLineStyle } from '../utils/types';
+export declare const lineStyle: SVGLineStyle;
+export declare const stroke: Stroke;
+export declare const line: LineProps;
+export declare const axis: Axes;
+export declare const grid: Grid;

@@ -1,7 +1,7 @@
 /// <reference types="react" />
 import { ExtendedGroupItem } from './Bars/Bars';
-export declare type TTipFunc = (props: {
+export type TipFunc = (props: {
     item: ExtendedGroupItem;
     bin: string | [number, number];
 }) => JSX.Element;
-export declare const TipContent: TTipFunc;
+export declare const TipContent: TipFunc;

@@ -1,8 +1,7 @@
-import { FC } from 'react';
-import { IProps } from '../utils/useMakeLine';
-declare type Props = {
+import { Props as UseMakeLineProps } from '../utils/useMakeLine';
+type Props = {
     animate?: boolean;
     label: string;
-} & IProps;
-declare const Line: FC<Props>;
-export default Line;
+} & UseMakeLineProps;
+export declare const Line: (props: Props) => JSX.Element;
+export {};

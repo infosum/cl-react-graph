@@ -1,10 +1,9 @@
-import { FC } from 'react';
 import { TLabelComponent } from './components/Label';
-export declare type TUpsetData = {
+export type TUpsetData = {
     keys: string[];
     value: number;
 }[];
-export interface IProps {
+export type Props = {
     colorScheme?: string[];
     data: TUpsetData;
     height: number;
@@ -39,6 +38,5 @@ export interface IProps {
     title: string;
     /** @description accessible description */
     description: string;
-}
-declare const UpsetChart: FC<IProps>;
-export default UpsetChart;
+};
+export declare const UpsetChart: ({ data, width, height, setSize, axisSpace, textFill, radius, distribution, title, description, }: Props) => JSX.Element;

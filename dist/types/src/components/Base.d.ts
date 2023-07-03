@@ -1,9 +1,9 @@
-import { FC, HTMLAttributes } from 'react';
-interface IProps {
+import { HTMLAttributes } from 'react';
+type Props = {
     width: number;
     height: number;
     padding?: number;
     description?: string;
-}
-declare const Base: FC<IProps & HTMLAttributes<SVGElement>>;
-export default Base;
+};
+export declare const Base: ({ children, width, height, padding, id, className, style, title, description, }: Props & HTMLAttributes<SVGElement>) => JSX.Element | null;
+export {};

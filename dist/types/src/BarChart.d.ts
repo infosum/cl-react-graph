@@ -1,29 +1,28 @@
-import { FC } from 'react';
-import { SpringConfig } from 'react-spring';
+import { SpringConfig } from '@react-spring/web';
 import { TLabelComponent } from './components/Label';
-import { TTipFunc } from './components/ToolTip';
+import { TipFunc } from './components/ToolTip';
 import { ELabelOrientation, TAxisLabelFormat } from './components/YAxis';
-import { EGroupedBarLayout, IBarChartData, IGrid, IHistogramBar } from './Histogram';
+import { BarChartData, EGroupedBarLayout, Grid as GridProps, HistogramBar } from './Histogram';
 export declare enum EChartDirection {
     HORIZONTAL = "HORIZONTAL",
     VERTICAL = "VERTICAL"
 }
-interface IProps {
+type Props = {
     animation?: SpringConfig;
     axisLabelFormat?: TAxisLabelFormat;
-    colorScheme?: string[];
-    data: IBarChartData;
+    colorScheme?: readonly string[];
+    data: BarChartData;
     direction?: EChartDirection;
     id?: string;
-    grid?: IGrid;
+    grid?: GridProps;
     groupLayout?: EGroupedBarLayout;
     height: number;
     LabelComponent?: TLabelComponent;
-    padding?: IHistogramBar;
+    padding?: HistogramBar;
     showLabels?: boolean[];
     /** An array of tick values to show on the numerical axis */
     tickValues?: number[];
-    tip?: TTipFunc;
+    tip?: TipFunc;
     /** @description Chart <title /> */
     title?: string;
     visible?: Record<string, boolean>;
@@ -35,6 +34,6 @@ interface IProps {
         rx?: number;
         ry?: number;
     };
-}
-declare const BarChart: FC<IProps>;
-export default BarChart;
+};
+export declare const BarChart: ({ animation, axisLabelFormat, colorScheme, data, direction, grid, id, groupLayout, height, LabelComponent, padding, showLabels, tip, visible, width, xAxisHeight, xAxisLabelOrientation, yAxisWidth, tickValues, bars, title, }: Props) => JSX.Element | null;
+export {};

@@ -1,11 +1,11 @@
 import { ScaleLinear } from 'd3-scale';
-import { SpringConfig } from 'react-spring';
+import { SpringConfig } from '@react-spring/web';
 import { EChartDirection } from '../../BarChart';
-import { IBarChartDataSet } from '../../Histogram';
+import { BarChartDataSet } from '../../Histogram';
 import { ExtendedGroupItem } from './Bars';
-interface IHistogramSpringProps {
+type HistogramSpringProps = {
     bins: [number, number][];
-    values: IBarChartDataSet[];
+    values: BarChartDataSet[];
     height: number;
     width: number;
     dataSets: ExtendedGroupItem[];
@@ -15,11 +15,11 @@ interface IHistogramSpringProps {
     hoverColorScheme?: readonly string[];
     config: SpringConfig;
     direction: EChartDirection;
-}
+};
 /**
  * Build the from / to spring animation properties to animate the bars.
  */
-export declare const buildHistogramSprings: (props: IHistogramSpringProps) => ({
+export declare const buildHistogramSprings: (props: HistogramSpringProps) => ({
     from: {
         width: number;
         fill: string;
@@ -36,7 +36,7 @@ export declare const buildHistogramSprings: (props: IHistogramSpringProps) => ({
         y: number;
         height: any;
     };
-    config: SpringConfig;
+    config: Partial<import("@react-spring/core").AnimationConfig>;
 } | {
     from: {
         height: number;
@@ -54,6 +54,6 @@ export declare const buildHistogramSprings: (props: IHistogramSpringProps) => ({
         y: number;
         width: any;
     };
-    config: SpringConfig;
+    config: Partial<import("@react-spring/core").AnimationConfig>;
 })[];
 export {};

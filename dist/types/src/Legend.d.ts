@@ -1,16 +1,15 @@
-import { FC } from 'react';
-import { IBarChartDataSet } from './Histogram';
-interface IProps {
+import { BarChartDataSet } from './Histogram';
+type Props = {
     className?: string;
     theme?: string[];
     data: {
         bins: string[];
-        counts: IBarChartDataSet[];
+        counts: BarChartDataSet[];
     };
     onSelect: (label: string) => void;
     visible: {
         [key: string]: boolean;
     };
-}
-declare const Legend: FC<IProps>;
-export default Legend;
+};
+export declare const Legend: ({ className, theme, data, onSelect, visible, }: Props) => JSX.Element;
+export {};

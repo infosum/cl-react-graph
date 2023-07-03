@@ -1,10 +1,10 @@
 import { ScaleBand, ScaleLinear } from 'd3-scale';
-import { SpringConfig } from 'react-spring';
+import { SpringConfig } from '@react-spring/web';
 import { EChartDirection } from '../../BarChart';
-import { EGroupedBarLayout, IBarChartDataSet, IHistogramBar } from '../../Histogram';
+import { BarChartDataSet, EGroupedBarLayout, HistogramBar } from '../../Histogram';
 import { ExtendedGroupItem } from './Bars';
-export interface IBarSpringProps {
-    values: IBarChartDataSet[];
+export type BarSpringProps = {
+    values: BarChartDataSet[];
     height: number;
     width: number;
     dataSets: ExtendedGroupItem[];
@@ -15,17 +15,17 @@ export interface IBarSpringProps {
     innerDomain: string[];
     innerScaleBand: ScaleBand<string>;
     groupLayout: EGroupedBarLayout;
-    paddings: IHistogramBar;
+    paddings: HistogramBar;
     config: SpringConfig;
     direction: EChartDirection;
     /** @description - inverse the bars e.g if direction = horizontal run the bars from right to left */
     inverse?: boolean;
     itemWidths: number[];
-}
+};
 /**
  * Build the from / to spring animation properties to animate the bars.
  */
-export declare const buildBarSprings: (props: IBarSpringProps) => ({
+export declare const buildBarSprings: (props: BarSpringProps) => ({
     from: {
         width: number;
         fill: string;
@@ -42,7 +42,7 @@ export declare const buildBarSprings: (props: IBarSpringProps) => ({
         y: number;
         height: number;
     };
-    config: SpringConfig;
+    config: Partial<import("@react-spring/core").AnimationConfig>;
 } | {
     from: {
         height: number;
@@ -60,11 +60,11 @@ export declare const buildBarSprings: (props: IBarSpringProps) => ({
         y: any;
         width: number;
     };
-    config: SpringConfig;
+    config: Partial<import("@react-spring/core").AnimationConfig>;
 })[];
 /**
  * If we are using a STACKED group layout the work out the total height
  * of the bars which should be stacked under the current item.
  * This should provide us with the finishing location for the bar's y position.
  */
-export declare const getValueOffset: (item: ExtendedGroupItem, props: IBarSpringProps) => any;
+export declare const getValueOffset: (item: ExtendedGroupItem, props: BarSpringProps) => any;

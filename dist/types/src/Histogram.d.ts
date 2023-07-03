@@ -1,21 +1,20 @@
-import { FC } from 'react';
-import { SpringConfig } from 'react-spring';
+import { SpringConfig } from '@react-spring/web';
 import { EChartDirection } from './BarChart';
 import { TLabelComponent } from './components/Label';
-import { TTipFunc } from './components/ToolTip';
+import { TipFunc } from './components/ToolTip';
 import { ELabelOrientation, TAxisLabelFormat } from './components/YAxis';
-import { ISVGLineStyle } from './legacy/types';
+import { SVGLineStyle } from './utils/types';
 export declare enum EGroupedBarLayout {
     GROUPED = 0,
     STACKED = 1,
     OVERLAID = 2
 }
-export interface IBarChartDataSet {
+export type BarChartDataSet = {
     borderColors?: string[];
     colors?: string[];
     label: string;
     data: number[];
-}
+};
 export declare enum EColorManipulations {
     'negate' = "negate",
     'lighten' = "lighten",
@@ -28,14 +27,14 @@ export declare enum EColorManipulations {
     'opaquer' = "opaquer",
     'rotate' = "rotate"
 }
-export interface IGroupDataItem {
+export type GroupDataItem = {
     label: string;
     groupLabel?: string;
     colorRef?: string;
     value: number;
     side?: 'left' | 'right';
-}
-export interface IHistogramBar {
+};
+export type HistogramBar = {
     grouped: {
         paddingInner: number;
         paddingOuter: number;
@@ -50,46 +49,46 @@ export interface IHistogramBar {
     overlayMargin: number;
     rx?: number;
     ry?: number;
-}
-export interface IHistogramData {
+};
+export type HistogramData = {
     bins: [number, number][];
-    counts: IBarChartDataSet[];
+    counts: BarChartDataSet[];
     colorScheme?: string[];
     title?: string;
-}
-export declare type IGroupData = IGroupDataItem[][];
-export interface IBarChartData {
+};
+export type GroupData = GroupDataItem[][];
+export type BarChartData = {
     bins: string[];
-    counts: IBarChartDataSet[];
+    counts: BarChartDataSet[];
     colorScheme?: string[];
     title?: string;
-}
-export interface IGrid {
+};
+export type Grid = {
     x: {
         height: number;
         ticks: number;
         visible: boolean;
-        style: ISVGLineStyle;
+        style: SVGLineStyle;
     };
     y: {
-        style: ISVGLineStyle;
+        style: SVGLineStyle;
         ticks: number;
         visible: boolean;
     };
-}
-export interface IHistogramProps {
+};
+export type Props = {
     animation?: SpringConfig;
     axisLabelFormat?: TAxisLabelFormat;
     colorScheme?: string[];
-    data: IHistogramData;
+    data: HistogramData;
     direction?: EChartDirection;
     id?: string;
-    grid?: IGrid;
+    grid?: Grid;
     height: number;
     LabelComponent?: TLabelComponent;
     hoverColorScheme?: string[];
     showLabels?: boolean[];
-    tip?: TTipFunc;
+    tip?: TipFunc;
     visible?: Record<string, boolean>;
     width: number;
     xAxisHeight?: number;
@@ -102,9 +101,8 @@ export interface IHistogramProps {
         rx?: number;
         ry?: number;
     };
-}
+};
 /**
  * A Histogram renders continuous data and thus use a ScaleLinear x & y axis
  */
-declare const Histogram: FC<IHistogramProps>;
-export default Histogram;
+export declare const Histogram: ({ animation, axisLabelFormat, colorScheme, data, direction, id, grid, height, hoverColorScheme, LabelComponent, showLabels, tip, visible, width, xAxisHeight, xAxisLabelOrientation, yAxisWidth, title, description, bars, }: Props) => JSX.Element | null;

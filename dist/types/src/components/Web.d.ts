@@ -1,5 +1,4 @@
-import { FC } from 'react';
-interface IProps {
+type Props = {
     axis?: {
         stroke?: string;
         strokeWidth?: number;
@@ -12,7 +11,7 @@ interface IProps {
         stroke?: string;
         strokeWidth?: number;
     };
-}
+};
 export declare const polar2cart: (degree: number, radius: number) => [number, number];
-declare const Web: FC<IProps>;
-export default Web;
+export declare const Web: ({ axis, ticks, labels, center, radial, }: Props) => JSX.Element;
+export {};

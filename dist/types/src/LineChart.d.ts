@@ -2,16 +2,16 @@ import { CurveFactory, CurveFactoryLineOnly } from 'd3-shape';
 import { FC } from 'react';
 import { PointComponentProps } from './components/Points';
 import { TAxisLabelFormat } from './components/YAxis';
-import { IGrid } from './Histogram';
-import { IAxes } from './legacy/types';
-export declare type IChartPointValue = number | string | Date | object;
-export interface IChartPoint<X extends IChartPointValue = Date | number | string, Y extends IChartPointValue = number> {
+import { Grid as GridProps } from './Histogram';
+import { Axes } from './utils/types';
+export type ChartPointValue = number | string | Date | object;
+export type ChartPoint<X extends ChartPointValue = Date | number | string, Y extends ChartPointValue = number> = {
     x: X;
     y: Y;
     z?: number;
-}
-export declare type IAnyChartPoint = IChartPoint<IChartPointValue, IChartPointValue>;
-export interface ILineProps {
+};
+export type AnyChartPoint = ChartPoint<ChartPointValue, ChartPointValue>;
+export type LineProps = {
     show: boolean;
     fill: {
         show: boolean;
@@ -21,8 +21,8 @@ export interface ILineProps {
     stroke: string;
     strokeDashOffset: number;
     strokeDashArray: string;
-}
-export interface ILineChartDataSet<T> {
+};
+export type LineChartDataSet<T> = {
     label: string;
     point: {
         radius: number;
@@ -31,13 +31,13 @@ export interface ILineChartDataSet<T> {
         show: boolean;
         showTitle?: boolean;
     };
-    line: ILineProps;
+    line: LineProps;
     data: T[];
-}
-export interface IProps<T extends IAnyChartPoint = IChartPoint> {
-    axis: IAxes;
-    data: ILineChartDataSet<T>[];
-    grid?: IGrid;
+};
+export type Props<T extends AnyChartPoint = ChartPoint> = {
+    axis: Axes;
+    data: LineChartDataSet<T>[];
+    grid?: GridProps;
     height: number;
     width: number;
     xAxisHeight?: number;
@@ -52,6 +52,5 @@ export interface IProps<T extends IAnyChartPoint = IChartPoint> {
     axisLabelFormat?: TAxisLabelFormat;
     /** @description Custom component to override the default <circle /> used to plot points */
     PointComponent?: FC<PointComponentProps>;
-}
-declare const LineChart: FC<IProps>;
-export default LineChart;
+};
+export declare const LineChart: ({ axis, axisLabelFormat, clampToZero, data, description, grid, height, PointComponent, title, width, xAxisHeight, yAxisWidth, }: Props) => JSX.Element;

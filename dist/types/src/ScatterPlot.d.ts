@@ -1,10 +1,10 @@
 import { FC } from 'react';
 import { PointComponentProps } from './components/Points';
 import { TAxisLabelFormat } from './components/YAxis';
-import { IGrid } from './Histogram';
-import { IAxes } from './legacy/types';
-import { IAnyChartPoint, IChartPoint } from './LineChart';
-export interface IScatterPlotDataSet<T> {
+import { Grid as GridProps } from './Histogram';
+import { AnyChartPoint, ChartPoint } from './LineChart';
+import { Axes } from './utils/types';
+export type ScatterPlotDataSet<T> = {
     label: string;
     point: {
         radius: number;
@@ -14,11 +14,11 @@ export interface IScatterPlotDataSet<T> {
         showTitle?: boolean;
     };
     data: T[];
-}
-export interface IProps<T extends IAnyChartPoint = IChartPoint> {
-    axis: IAxes;
-    data: IScatterPlotDataSet<T>[];
-    grid?: IGrid;
+};
+export type Props<T extends AnyChartPoint = ChartPoint> = {
+    axis: Axes;
+    data: ScatterPlotDataSet<T>[];
+    grid?: GridProps;
     height: number;
     id?: string;
     width: number;
@@ -33,6 +33,5 @@ export interface IProps<T extends IAnyChartPoint = IChartPoint> {
     axisLabelFormat?: TAxisLabelFormat;
     /** @description Custom component to override the default <circle /> used to plot points */
     PointComponent?: FC<PointComponentProps>;
-}
-declare const ScatterPlot: FC<IProps>;
-export default ScatterPlot;
+};
+export declare const ScatterPlot: ({ axis, clampToZero, data, grid, height, width, xAxisHeight, yAxisWidth, title, description, axisLabelFormat, PointComponent, }: Props) => JSX.Element;

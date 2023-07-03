@@ -1,16 +1,14 @@
-import { FC } from 'react';
-export interface IProps {
+export type Props = {
     width: number;
     height: number;
     padding?: number;
     data: Record<string, number[]>;
-    colorScheme?: string[];
+    colorScheme?: readonly string[];
     /** @description Chart <title /> */
     title?: string;
     inactive?: {
         stroke: string;
         fill: string;
     };
-}
-declare const Chord: FC<IProps>;
-export default Chord;
+};
+export declare const Chord: ({ width, height, padding, data, colorScheme, inactive, title, }: Props) => JSX.Element;
