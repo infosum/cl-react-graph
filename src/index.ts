@@ -23,6 +23,7 @@ export { filterRange } from './colors/filterRange';
 export { outputSvg } from './utils/outputSvg';
 
 // V3 components...
+export { Map } from './Map';
 export { PieChart } from './PieChart';
 export type { Props as PieChartProps } from './PieChart';
 export { TornadoChart } from './TornadoChart';
