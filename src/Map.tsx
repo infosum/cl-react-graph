@@ -61,8 +61,8 @@ export const Map = ({
   if (!isExtendedJSON(geoJSON)) {
     throw new Error('not geo json feature set');
   }
-  const min =  domain?.[0] ?? Object.values(data).reduce((p, n) => n > p ? n : p, 0);
-  const max = domain?.[1] ?? Object.values(data).reduce((p, n) => n < p ? n : p, 0);
+  const min =  domain?.[0] ?? Object.values(data).reduce((p, n) => n < p ? n : p, 0);
+  const max = domain?.[1] ?? Object.values(data).reduce((p, n) => n > p ? n : p, 0);
   const scale = scaleSequential(colorInterpolate).domain([min, max]);
 
   const thisProjection = (projection ?? geoEquirectangular)().fitSize([width, height], geoJSON);
@@ -100,7 +100,10 @@ export const Map = ({
     {
       featurePaths.map((d, i) => {
         refs[i] = React.createRef<any>();
-        return <path key={d.bin} d={d.d ?? ''}
+        return <path 
+        key={d.bin}
+        d={d.d ?? ''}
+        data-testid={d.bin}
         ref={refs[i]}
         data-name={d.bin}
         fill={scale(data[d.bin])} stroke="#fff" />;
