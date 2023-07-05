@@ -88,7 +88,6 @@ export const Map = ({
     }
   }));
 
-geoJSON.features.forEach((f) => console.log(f?.properties?.[bin]))
   return (
   <Base 
     width={width}
