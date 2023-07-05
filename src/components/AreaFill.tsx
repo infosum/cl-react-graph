@@ -50,7 +50,7 @@ export const AreaFill = (props: Props) => {
     <animated.path
       className={className}
       fill={line.fill.fill}
-      d={spring.t.interpolate((t) => interpolator.current(t))}
+      d={spring.t.to((t) => interpolator.current(t))}
     />
   )
 }

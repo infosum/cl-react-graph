@@ -88,6 +88,9 @@ export const MenuItems = () => {
             <MenuItem to="/line">Line chart</MenuItem>
           </li>
           <li>
+            <MenuItem to="/map">Map</MenuItem>
+          </li>
+          <li>
             <MenuItem to="/pie">Pie chart</MenuItem>
           </li>
           <li>

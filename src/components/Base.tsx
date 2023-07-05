@@ -1,11 +1,11 @@
 import React, { HTMLAttributes } from 'react';
 
-type Props = {
+export type Props = {
   width: number;
   height: number;
   padding?: number;
   description?: string;
-}
+}  & HTMLAttributes<SVGElement>
 
 export const Base = ({
   children,
@@ -17,7 +17,7 @@ export const Base = ({
   style,
   title,
   description,
-}: Props & HTMLAttributes<SVGElement>) => {
+}: Props) => {
   // Could be measuring a % width in which case wait else animations start off from 
   // the wrong position
   if (width === 0) {

@@ -1,8 +1,8 @@
-import React, { RefObject } from 'react';
+import React from 'react';
 
 import {
   animated,
-  interpolate,
+  to,
 } from '@react-spring/web';
 
 import { EChartDirection } from '../BarChart';
@@ -36,7 +36,6 @@ export const Labels = ({
   inverse = false,
   width,
 }: Props) => {
-  const refs: RefObject<any>[] = [];
   return (<g className="labels">
     {
       springs
@@ -44,7 +43,7 @@ export const Labels = ({
           const k = String(items[i].groupLabel);
           return visible?.[k] === false ? false : true;
         })
-        .map((props: any, i) => {
+        .map((props: any, i) => { 
 
           const item = items[i];
           if (!showLabels[item.datasetIndex]) {
@@ -53,7 +52,7 @@ export const Labels = ({
           return <animated.g
             key={`label-${item.datasetIndex}.${item.label}.${item.value}`}
             className="chart-label"
-            transform={interpolate([props.x, props.y, props.width, props.height], (x, y, w, h) => {
+            transform={to([props.x, props.y, props.width, props.height], (x, y, w, h) => {
               if (inverse) {
                 return direction === EChartDirection.VERTICAL
                   ? `translate(${x + (w / 2)},${h + (w / 2)})`

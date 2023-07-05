@@ -4,7 +4,7 @@ const config: Config = {
   testEnvironment: 'jsdom',
   verbose: true,
   transformIgnorePatterns: [
-    "node_modules/(?!d3-*)"
+    '<rootDir>/node_modules/(?!d3|internmap|delaunator|robust-predicates)'
   ],
 };
 

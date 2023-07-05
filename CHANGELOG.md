@@ -1,3 +1,5 @@
+[4.1.0]
+  * Added <Map />.
 [4.0.0]
   * Convert Pie Chart to use React rather than D3 for rendering
   * Rename types/interfaces

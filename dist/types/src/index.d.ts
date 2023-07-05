@@ -4,6 +4,7 @@ export type { Axes, Stroke, } from './utils/types';
 export { Legend } from './Legend';
 export { filterRange } from './colors/filterRange';
 export { outputSvg } from './utils/outputSvg';
+export { Map } from './Map';
 export { PieChart } from './PieChart';
 export type { Props as PieChartProps } from './PieChart';
 export { TornadoChart } from './TornadoChart';
