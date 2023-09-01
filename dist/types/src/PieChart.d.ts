@@ -1,3 +1,4 @@
+import { RingItem } from './components/Ring';
 import { TipFunc } from './components/ToolTip';
 import { BarChartDataSet } from './Histogram';
 export type Props = {
@@ -20,5 +21,7 @@ export type Props = {
     title?: string;
     description?: string;
     id?: string;
+    /** @description Format the label that appears above each pie chart's segment */
+    labelFormat?: (item: RingItem) => string;
 };
 export declare const PieChart: (props: Props) => JSX.Element | null;
