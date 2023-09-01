@@ -81,6 +81,7 @@ const PieChartExample = () => {
             height={400}
             donutWidth={30}
             data={data}
+            labelFormat={(item) => item.percentage + '%'}
           />
         </div>
         <JSXCode exampleCode={exampleCode} />

@@ -2,7 +2,10 @@ import { schemeSet3 } from 'd3-scale-chromatic';
 import React from 'react';
 
 import { Base } from './components/Base';
-import { Ring } from './components/Ring';
+import {
+  Ring,
+  RingItem,
+} from './components/Ring';
 import { TipFunc } from './components/ToolTip';
 import { BarChartDataSet } from './Histogram';
 import { getHoverColorScheme } from './utils/hoverColorScheme';
@@ -43,6 +46,8 @@ export type Props = {
   title?: string;
   description?: string;
   id?: string;
+  /** @description Format the label that appears above each pie chart's segment */
+  labelFormat?: (item: RingItem) => string;
 }
 
 export const PieChart = (props: Props) => {

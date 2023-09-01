@@ -1,3 +1,5 @@
+[4.2.0]   
+  * <PieChart> & <Ring> - add labelFormat prop.
 [4.1.0]
   * Added <Map />.
 [4.0.0]
