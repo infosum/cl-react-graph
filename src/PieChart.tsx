@@ -2,7 +2,10 @@ import { schemeSet3 } from 'd3-scale-chromatic';
 import React from 'react';
 
 import { Base } from './components/Base';
-import { Ring } from './components/Ring';
+import {
+  Ring,
+  RingItem,
+} from './components/Ring';
 import { TipFunc } from './components/ToolTip';
 import { BarChartDataSet } from './Histogram';
 import { getHoverColorScheme } from './utils/hoverColorScheme';
@@ -43,6 +46,7 @@ export type Props = {
   title?: string;
   description?: string;
   id?: string;
+  labelFormat?: (item: RingItem) => React.ReactNode;
 }
 
 export const PieChart = (props: Props) => {

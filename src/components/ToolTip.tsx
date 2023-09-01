@@ -34,7 +34,9 @@ export const TipContent: TipFunc = ({ item, bin }) => {
         <div xmlns="http://www.w3.org/1999/xhtml" style={{ paddingLeft: '10px', textAlign: 'center', height: '85px' }}>
           <strong>{item.groupLabel}</strong>
           <div data-testid="bin">
-            {Array.isArray(bin) ? `${bin[0]} - ${bin[1]}` : bin}
+            <strong>
+              {Array.isArray(bin) ? `${bin[0]} - ${bin[1]}` : bin}
+            </strong>
           </div>
           <div data-testid="count">
             <strong>Count:</strong> {item.value}

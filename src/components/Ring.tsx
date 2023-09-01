@@ -12,6 +12,14 @@ import { BarChartDataSet } from '../Histogram';
 import { TipFunc } from './ToolTip';
 import { ToolTips } from './ToolTips';
 
+export type RingItem = {
+  binIndex: number;
+  datasetIndex: number;
+  label: string;
+  value: number;
+  percentage: string;
+}
+
 type Props = {
   data: BarChartDataSet;
   setIndex: number;
@@ -23,6 +31,7 @@ type Props = {
   tip?: TipFunc;
   outerRadius: number; 
   innerRadius: number;
+  labelFormat?: (item: RingItem) => React.ReactNode;
 }
 
 /**
@@ -39,6 +48,7 @@ export const Ring = ({
   tip,
   outerRadius, 
   innerRadius,
+  labelFormat,
 }: Props) => {
   const centerTransform = `translate(${width / 2},${height / 2})`;
   const [hover, setHover] = useState(-1);
@@ -63,7 +73,10 @@ export const Ring = ({
     outerRadius,
   }));
 
-  const tipItems = centroids.map((path, i) => ({
+  const tipItems: {
+    transform: string;
+    item: RingItem;
+  }[] = centroids.map((path, i) => ({
     transform: `translate(${path[0] + width / 2},${path[1] + height / 2})`,
     item: {
       binIndex: i,
@@ -104,7 +117,11 @@ return (
           textAnchor="middle"
           transform={`translate(${path[0] + width / 2},${path[1] + height / 2})`}
           className="label">
-            {data.data[i]}
+            {
+              labelFormat 
+                ? labelFormat(tipItems[i].item) 
+                : data.data[i]
+            }
         </text>)
       }
     </g>
@@ -114,7 +131,6 @@ return (
       bins={bins}
       tip={tip}
       items={tipItems.map(({item}) => item)} />
-
   </>
-)
+  )
 }
