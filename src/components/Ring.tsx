@@ -31,7 +31,7 @@ type Props = {
   tip?: TipFunc;
   outerRadius: number; 
   innerRadius: number;
-  labelFormat?: (item: RingItem) => React.ReactNode;
+  labelFormat?: (item: RingItem) => string;
 }
 
 /**

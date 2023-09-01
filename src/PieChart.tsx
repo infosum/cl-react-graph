@@ -46,7 +46,8 @@ export type Props = {
   title?: string;
   description?: string;
   id?: string;
-  labelFormat?: (item: RingItem) => React.ReactNode;
+  /** @description Format the label that appears above each pie chart's segment */
+  labelFormat?: (item: RingItem) => string;
 }
 
 export const PieChart = (props: Props) => {
