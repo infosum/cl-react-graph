@@ -14,6 +14,10 @@ import {
   ChartPoint,
   LineProps,
 } from '../LineChart';
+import {
+  ColorSchemeDefs,
+  getFill,
+} from '../utils/colorScheme';
 import { Axes } from '../utils/types';
 import { useMakeArea } from '../utils/useMakeLine';
 
@@ -47,11 +51,15 @@ export const AreaFill = (props: Props) => {
   });
 
   return (
+    <>
+    <ColorSchemeDefs schemes={[[line.fill.fill]]} />
+
     <animated.path
       className={className}
-      fill={line.fill.fill}
+      fill={getFill(line.fill.fill)}
       d={spring.t.to((t) => interpolator.current(t))}
     />
+    </>
   )
 }
 

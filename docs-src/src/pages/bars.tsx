@@ -180,8 +180,8 @@ const BarsExample = () => {
           </Base>
 
           <h3>Using a custom label</h3>
-          <p>The label assigned after the bar can be customized with a new component, as shown in the example below,
-            where we increase its font size:</p>
+          <p>The label assigned after each bar can be customized with a new component. In the example below
+            we increase its font size:</p>
           <JSXCode exampleCode={customLabelCode} />
 
           <h3>Color Schemes</h3>

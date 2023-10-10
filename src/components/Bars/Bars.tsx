@@ -32,6 +32,7 @@ import {
 } from '../../utils/bars';
 import {
   ColorScheme,
+  ColorSchemeDefs,
   getGradientId,
   Gradient,
   isGradient,
@@ -248,32 +249,5 @@ export const Bars = ({
         items={dataSets}
       />
     </>
-  );
-};
-
-const ColorSchemeDefs = ({ schemes }: { schemes: ColorScheme[] }) => {
-  return (
-    <defs>
-      {schemes.map((scheme, i) => {
-        return scheme.map((item, j) =>
-          isGradient(item) ? (
-            <GradientFill key={`${i}-${j}`} gradient={item} />
-          ) : null
-        );
-      })}
-    </defs>
-  );
-};
-
-const GradientFill = ({ gradient }: { gradient: Gradient }) => {
-  return (
-    <linearGradient
-      id={getGradientId(gradient)}
-      gradientTransform={gradient.gradientTransform ?? ""}
-    >
-      {gradient.stops.map((stop) => (
-        <stop key={stop.offset} {...stop} />
-      ))}
-    </linearGradient>
   );
 };
