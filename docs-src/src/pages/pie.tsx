@@ -1,6 +1,8 @@
+import { schemeSet3 } from 'd3-scale-chromatic';
 import React from 'react';
 
 import {
+  Legend,
   PieChart,
   useWidth,
 } from '../../../src';
@@ -75,6 +77,10 @@ const PieChartExample = () => {
       <h2>Pie Chart</h2>
 
       <TwoColumns>
+        <Legend data={data} 
+        theme={schemeSet3 as string[]}
+        onSelect={() => console.log('select')}
+        visible={{}}/>
         <div ref={ref}>
           <PieChart
             width={400}

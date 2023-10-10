@@ -6,6 +6,10 @@ import {
 } from '@react-spring/web';
 
 import { EChartDirection } from '../BarChart';
+import {
+  ColorScheme,
+  getFill,
+} from '../utils/colorScheme';
 import { ExtendedGroupItem } from './Bars/Bars';
 import {
   Label,
@@ -13,7 +17,7 @@ import {
 } from './Label';
 
 type Props = {
-  colorScheme?: readonly string[];
+  colorScheme?: ColorScheme;
   direction: EChartDirection;
   items: ExtendedGroupItem[];
   LabelComponent?: TLabelComponent;
@@ -70,7 +74,7 @@ export const Labels = ({
                   direction={direction} />
                 : <Label
                   inverse={inverse}
-                  fill={colorScheme[item.datasetIndex]}
+                  fill={getFill(colorScheme[item.datasetIndex])}
                   direction={direction}
                   label={labels?.[i]}
                   item={item} />

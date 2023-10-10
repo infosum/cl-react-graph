@@ -9,6 +9,10 @@ import React, {
 } from 'react';
 
 import { BarChartDataSet } from '../Histogram';
+import {
+  ColorScheme,
+  getFill,
+} from '../utils/colorScheme';
 import { TipFunc } from './ToolTip';
 import { ToolTips } from './ToolTips';
 
@@ -26,8 +30,8 @@ type Props = {
   bins: string[];
   width: number;
   height: number;
-  colorScheme?: readonly string[];
-  hoverColorScheme?: readonly string[];
+  colorScheme?: ColorScheme;
+  hoverColorScheme?: ColorScheme;
   tip?: TipFunc;
   outerRadius: number; 
   innerRadius: number;
@@ -102,7 +106,7 @@ return (
           onMouseLeave={() => setHover(-1)}
           transform={centerTransform} 
           stroke="#FFF" 
-          fill={hover === i ? hoverColorScheme?.[i] : colorScheme[i]}
+          fill={getFill((hover === i &&  hoverColorScheme) ? hoverColorScheme[i] : colorScheme[i])}
           d={path ?? ''}
           style={{opacity: 1}}
         />)

@@ -201,6 +201,18 @@ const BarChartExample = () => {
             groupLayout={EGroupedBarLayout.GROUPED}
             xAxisLabelOrientation={ELabelOrientation.HORIZONTAL}
             width={width}
+            padding={{
+              grouped: {
+                paddingInner: 0.1,
+                paddingOuter: 0,
+              },
+              paddingInner: 0.3,
+              paddingOuter: 0,
+              overlayMargin: 0.5,
+              hover: {
+                lighten: 0.1,
+              },
+            }}
           />
         </div>
         <JSXCode exampleCode={exampleCode} />

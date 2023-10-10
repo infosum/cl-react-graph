@@ -18,6 +18,10 @@ import {
   polar2cart,
   Web,
 } from './components/Web';
+import {
+  ColorScheme,
+  getFill,
+} from './utils/colorScheme';
 
 export type RadarChartData = {
   label?: string;
@@ -29,7 +33,7 @@ export type RadarChartData = {
 
 export type Props = {
   /** @description Chart colour scheme */
-  colorScheme?: readonly string[];
+  colorScheme?: ColorScheme;
   /** @description Chart height */
   height: number;
   /** @description Chart id */
@@ -110,7 +114,7 @@ export const RadarChart = ({
             <Fragment key={`area-${labelId}`}>
               <Path
                 id={`area-fill-${labelId}`}
-                fill={colorScheme[i]}
+                fill={getFill(colorScheme[i])}
                 opacity={isOver === null ? 0.5
                   : labelId === isOver ? 1 : 0.1}
                 onMouseEnter={() => setIsOver(labelId)}

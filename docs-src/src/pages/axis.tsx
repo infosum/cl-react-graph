@@ -2,9 +2,9 @@ import React from 'react';
 
 import {
   BarChart,
+  BarChartData,
   Base,
   ELabelOrientation,
-  IBarChartData,
   useWidth,
   XAxis,
   YAxis,
@@ -13,7 +13,7 @@ import { JSXCode } from '../components/JSXCode';
 import { Layout } from '../components/Layout';
 import { TwoColumns } from '../components/TwoColumns';
 
-const data: IBarChartData = {
+const data: BarChartData = {
   bins: ['Female', 'Male', 'Other'],
   counts: [
     {

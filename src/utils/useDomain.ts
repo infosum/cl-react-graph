@@ -1,9 +1,6 @@
 import { extent } from 'd3-array';
 //useDomain is a React hook to calculate a chart domain, used in Axis and Bars
-import {
-  useEffect,
-  useState,
-} from 'react';
+import { useMemo } from 'react';
 
 /*
  * Depending on the axis group layout we need to take the values and work out what the 
@@ -46,8 +43,7 @@ export const useHistogramDomain: (props: Props) => [number, number] = ({
   tickValues,
   clampToZero = true,
 }) => {
-  const [range, setRange] = useState<[number, number]>([0, 0]);
-  useEffect(() => {
+  return useMemo(() => {
     let allValues: number[] = []
     allValues = (groupLayout === EGroupedBarLayout.STACKED)
       ? bins.map((bin, binIndex) => values.map((dataset) => dataset.data[binIndex]).reduce((p, n) => p + n, 0))
@@ -59,17 +55,15 @@ export const useHistogramDomain: (props: Props) => [number, number] = ({
     if (e[0] === e[1]) {
       e[1]++;
     }
-    setRange(e);
-  }, [bins, groupLayout, values, tickValues]);
-  return range;
+    return e;
+  }, [bins, groupLayout, values, tickValues, clampToZero]);
 }
 
 export const useLineDomain: (props: LineProps) => [number, number] = ({
   values,
   clampToZero,
 }) => {
-  const [range, setRange] = useState<[number, number]>([0, 0]);
-  useEffect(() => {
+  return useMemo(() => {
     const allValues = values.reduce((prev, value) => {
       return prev.concat(value.data.map((d) => d.y))
     }, [] as number[])
@@ -80,17 +74,15 @@ export const useLineDomain: (props: LineProps) => [number, number] = ({
     if (e[0] === e[1]) {
       e[1]++;
     }
-    setRange(e);
-  }, [values]);
-  return range;
+    return e;
+  }, [values, clampToZero]);
 };
 
 export const useScatterDomain: (props: ScatterProps) => [number, number] = ({
   values,
   clampToZero,
 }) => {
-  const [range, setRange] = useState<[number, number]>([0, 0]);
-  useEffect(() => {
+  return useMemo(() => {
     const allValues = values.reduce((prev, value) => {
       return prev.concat(value.data.map((d) => d.y))
     }, [] as number[])
@@ -101,7 +93,6 @@ export const useScatterDomain: (props: ScatterProps) => [number, number] = ({
     if (e[0] === e[1]) {
       e[1]++;
     }
-    setRange(e);
-  }, [values]);
-  return range;
+    return e;
+  }, [values, clampToZero]);
 };
