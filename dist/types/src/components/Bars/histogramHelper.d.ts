@@ -2,6 +2,7 @@ import { ScaleLinear } from 'd3-scale';
 import { SpringConfig } from '@react-spring/web';
 import { EChartDirection } from '../../BarChart';
 import { BarChartDataSet } from '../../Histogram';
+import { ColorScheme } from '../../utils/colorScheme';
 import { ExtendedGroupItem } from './Bars';
 type HistogramSpringProps = {
     bins: [number, number][];
@@ -11,8 +12,8 @@ type HistogramSpringProps = {
     dataSets: ExtendedGroupItem[];
     numericScale: ScaleLinear<any, any>;
     continuousScale: ScaleLinear<any, any>;
-    colorScheme: readonly string[];
-    hoverColorScheme?: readonly string[];
+    colorScheme: ColorScheme;
+    hoverColorScheme?: ColorScheme;
     config: SpringConfig;
     direction: EChartDirection;
 };

@@ -1,4 +1,5 @@
 import { BarChartDataSet } from '../Histogram';
+import { ColorScheme } from '../utils/colorScheme';
 import { TipFunc } from './ToolTip';
 export type RingItem = {
     binIndex: number;
@@ -13,8 +14,8 @@ type Props = {
     bins: string[];
     width: number;
     height: number;
-    colorScheme?: readonly string[];
-    hoverColorScheme?: readonly string[];
+    colorScheme?: ColorScheme;
+    hoverColorScheme?: ColorScheme;
     tip?: TipFunc;
     outerRadius: number;
     innerRadius: number;

@@ -1,8 +1,9 @@
 import { EChartDirection } from '../BarChart';
+import { ColorScheme } from '../utils/colorScheme';
 import { ExtendedGroupItem } from './Bars/Bars';
 import { TLabelComponent } from './Label';
 type Props = {
-    colorScheme?: readonly string[];
+    colorScheme?: ColorScheme;
     direction: EChartDirection;
     items: ExtendedGroupItem[];
     LabelComponent?: TLabelComponent;

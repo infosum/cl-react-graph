@@ -2,6 +2,7 @@ import { ScaleBand, ScaleLinear } from 'd3-scale';
 import { SpringConfig } from '@react-spring/web';
 import { EChartDirection } from '../../BarChart';
 import { BarChartDataSet, EGroupedBarLayout, HistogramBar } from '../../Histogram';
+import { ColorScheme } from '../../utils/colorScheme';
 import { ExtendedGroupItem } from './Bars';
 export type BarSpringProps = {
     values: BarChartDataSet[];
@@ -10,8 +11,8 @@ export type BarSpringProps = {
     dataSets: ExtendedGroupItem[];
     numericScale: ScaleLinear<any, any>;
     bandScale: ScaleBand<string>;
-    colorScheme: readonly string[];
-    hoverColorScheme?: readonly string[];
+    colorScheme: ColorScheme;
+    hoverColorScheme?: ColorScheme;
     innerDomain: string[];
     innerScaleBand: ScaleBand<string>;
     groupLayout: EGroupedBarLayout;

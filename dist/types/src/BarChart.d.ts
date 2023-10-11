@@ -3,6 +3,7 @@ import { TLabelComponent } from './components/Label';
 import { TipFunc } from './components/ToolTip';
 import { ELabelOrientation, TAxisLabelFormat } from './components/YAxis';
 import { BarChartData, EGroupedBarLayout, Grid as GridProps, HistogramBar } from './Histogram';
+import { ColorScheme } from './utils/colorScheme';
 export declare enum EChartDirection {
     HORIZONTAL = "HORIZONTAL",
     VERTICAL = "VERTICAL"
@@ -10,7 +11,7 @@ export declare enum EChartDirection {
 type Props = {
     animation?: SpringConfig;
     axisLabelFormat?: TAxisLabelFormat;
-    colorScheme?: readonly string[];
+    colorScheme?: ColorScheme;
     data: BarChartData;
     direction?: EChartDirection;
     id?: string;

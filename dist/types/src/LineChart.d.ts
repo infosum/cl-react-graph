@@ -3,6 +3,7 @@ import { FC } from 'react';
 import { PointComponentProps } from './components/Points';
 import { TAxisLabelFormat } from './components/YAxis';
 import { Grid as GridProps } from './Histogram';
+import { ColorSchemeItem } from './utils/colorScheme';
 import { Axes } from './utils/types';
 export type ChartPointValue = number | string | Date | object;
 export type ChartPoint<X extends ChartPointValue = Date | number | string, Y extends ChartPointValue = number> = {
@@ -15,7 +16,7 @@ export type LineProps = {
     show: boolean;
     fill: {
         show: boolean;
-        fill: string;
+        fill: ColorSchemeItem;
     };
     curveType: CurveFactory | CurveFactoryLineOnly;
     stroke: string;

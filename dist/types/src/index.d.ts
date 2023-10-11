@@ -21,6 +21,7 @@ export { Path } from './components/Path';
 export { useBrush } from './utils/useBrush';
 export { Points } from './components/Points';
 export { Web } from './components/Web';
+export type { TLabelComponent } from './components/Label';
 export { JoyPlot } from './JoyPlot';
 export { AreaFill } from './components/AreaFill';
 export type { LineProps } from './LineChart';

@@ -1,4 +1,5 @@
 import { PointStyle } from './components/Points';
+import { ColorScheme } from './utils/colorScheme';
 export type RadarChartData = {
     label?: string;
     axes: {
@@ -8,7 +9,7 @@ export type RadarChartData = {
 };
 export type Props = {
     /** @description Chart colour scheme */
-    colorScheme?: readonly string[];
+    colorScheme?: ColorScheme;
     /** @description Chart height */
     height: number;
     /** @description Chart id */
