@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 import {
   BarChartData,
@@ -8,11 +8,11 @@ import {
   EGroupedBarLayout,
   useHistogramDomain,
   useWidth,
-} from '../../../src';
-import { JSXCode } from '../components/JSXCode';
-import { Layout } from '../components/Layout';
-import { TwoColumns } from '../components/TwoColumns';
-import { theme } from '../context/theme';
+} from "../../../src";
+import { JSXCode } from "../components/JSXCode";
+import { Layout } from "../components/Layout";
+import { TwoColumns } from "../components/TwoColumns";
+import { theme } from "../context/theme";
 
 const exampleCode = `import {
   Bars,
@@ -96,9 +96,9 @@ return (
     ...
     LabelComponent={CustomLabel}
   />
-`
+`;
 
-const colorSchemeExample= `
+const colorSchemeExample = `
 const scheme = [
   {
     gradientTransform: 'rotate(90)',
@@ -118,7 +118,7 @@ const scheme = [
     ...
     colorScheme={scheme}
   />
-`
+`;
 const data: BarChartData = {
   bins: ["Female", "Male", "Other"],
   counts: [
@@ -135,7 +135,7 @@ const data: BarChartData = {
 
 const scheme = [
   {
-    gradientTransform: 'rotate(90)',
+    gradientTransform: "rotate(90)",
     stops: [
       { offset: "5%", stopColor: theme.green700 },
       { offset: "95%", stopColor: theme.green500 },
@@ -143,11 +143,11 @@ const scheme = [
   },
   {
     stops: [
-      { offset: "5%", stopColor:  theme.brightBlue700 },
-      { offset: "95%", stopColor:  theme.brightBlue300 },
+      { offset: "5%", stopColor: theme.brightBlue700 },
+      { offset: "95%", stopColor: theme.brightBlue300 },
     ],
   },
-]
+];
 
 const BarsExample = () => {
   const [ref, width] = useWidth("90%");
@@ -179,31 +179,37 @@ const BarsExample = () => {
           </Base>
 
           <h3>Using a custom label</h3>
-          <p>The label assigned after each bar can be customized with a new component. In the example below
-            we increase its font size:</p>
+          <p>
+            The label assigned after each bar can be customized with a new
+            component. In the example below we increase its font size:
+          </p>
           <JSXCode exampleCode={customLabelCode} />
 
           <h3>Color Schemes</h3>
-          <p>The colorScheme prop is an array of items. Each bin item will be filled with the corresponding color scheme item</p>
-          <p>Each item can be a string representing a solid fill, or an object to specify a linear fill</p>
+          <p>
+            The colorScheme prop is an array of items. Each bin item will be
+            filled with the corresponding color scheme item
+          </p>
+          <p>
+            Each item can be a string representing a solid fill, or an object to
+            specify a linear fill
+          </p>
           <JSXCode exampleCode={colorSchemeExample} />
           <p>
-          <Base width={width} height={120}>
-            <Bars
-              bins={data.bins}
-              colorScheme={scheme}
-              direction={EChartDirection.HORIZONTAL}
-              domain={domain}
-              groupLayout={groupLayout}
-              height={100}
-              showLabels={[true, true]}
-              values={data.counts}
-              width={width}
-            />
-          </Base>
-
+            <Base width={width} height={120}>
+              <Bars
+                bins={data.bins}
+                colorScheme={scheme}
+                direction={EChartDirection.HORIZONTAL}
+                domain={domain}
+                groupLayout={groupLayout}
+                height={100}
+                showLabels={[true, true]}
+                values={data.counts}
+                width={width}
+              />
+            </Base>
           </p>
-
         </div>
         <JSXCode exampleCode={exampleCode} />
       </TwoColumns>

@@ -1,10 +1,7 @@
-import { extent } from 'd3-array';
-import {
-  useEffect,
-  useState,
-} from 'react';
+import { extent } from "d3-array";
+import { useEffect, useState } from "react";
 
-import { BarChartData } from '../Histogram';
+import { BarChartData } from "../Histogram";
 
 export const useJoyPlot = ({
   data,
@@ -15,14 +12,14 @@ export const useJoyPlot = ({
   height: number;
   clampToZero?: boolean;
 }) => {
-  const chartHeight = height / (data.length);
+  const chartHeight = height / data.length;
   const [bins, setBins] = useState<string[]>([]);
   const [domain, setDomain] = useState<[number, number]>([0, 0]);
   const [values, setValues] = useState<BarChartData[]>([]);
   useEffect(() => {
     const allBins = data.reduce((p, n) => {
       return Array.from(new Set([...p, ...n.bins]));
-    }, [] as string[])
+    }, [] as string[]);
     setBins(allBins);
     const allValues: BarChartData[] = data.map((d) => {
       const counts = d.counts.map((count) => {
@@ -42,7 +39,10 @@ export const useJoyPlot = ({
     setValues(allValues);
 
     const eachValue = allValues.reduce((prev, next) => {
-      const values = next.counts.reduce((p, n) => [...p, ...n.data], [] as number[]);
+      const values = next.counts.reduce(
+        (p, n) => [...p, ...n.data],
+        [] as number[],
+      );
       return [...values, ...prev];
     }, [] as number[]);
     if (clampToZero) {
@@ -54,12 +54,11 @@ export const useJoyPlot = ({
     }
 
     setDomain(e);
-
-  }, [data])
-  return ({
+  }, [data]);
+  return {
     chartHeight,
     bins,
     domain,
-    values
-  });
-}
+    values,
+  };
+};

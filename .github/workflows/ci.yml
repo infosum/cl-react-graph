@@ -8,23 +8,22 @@ on: [push, pull_request]
 
 jobs:
   build:
-
     # run build on latest ubuntu
     runs-on: ubuntu-latest
 
     steps:
-    # this will check out the current branch (https://github.com/actions/checkout#Push-a-commit-using-the-built-in-token)
-    - uses: actions/checkout@v3
-    # installing Node
-    - name: Use Node.js 16.x
-      uses: actions/setup-node@v3
-      with:
-        # this will use the latest Node 16 version
-        node-version: 16.x
-    # install dependencies using clean install to avoid package lock updates
-    - run: npm ci  --legacy-peer-deps
-    # build the project if necessary
-    - run: npm run build --if-present
-    # finally run the tests
-    - run: npx jest --clear-cache
-    - run: npm test
+      # this will check out the current branch (https://github.com/actions/checkout#Push-a-commit-using-the-built-in-token)
+      - uses: actions/checkout@v3
+      # installing Node
+      - name: Use Node.js 16.x
+        uses: actions/setup-node@v3
+        with:
+          # this will use the latest Node 16 version
+          node-version: 16.x
+      # install dependencies using clean install to avoid package lock updates
+      - run: npm ci  --legacy-peer-deps
+      # build the project if necessary
+      - run: npm run build --if-present
+      # finally run the tests
+      - run: npx jest --clear-cache
+      - run: npm test

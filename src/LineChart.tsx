@@ -1,34 +1,22 @@
-import {
-  CurveFactory,
-  CurveFactoryLineOnly,
-} from 'd3-shape';
-import React, {
-  FC,
-  Fragment,
-} from 'react';
+import { CurveFactory, CurveFactoryLineOnly } from "d3-shape";
+import React, { FC, Fragment } from "react";
 
-import { AreaFill } from './components/AreaFill';
-import { Base } from './components/Base';
-import { Grid } from './components/Grid';
-import { Line } from './components/Line';
-import {
-  PointComponentProps,
-  Points,
-} from './components/Points';
-import { XAxis } from './components/XAxis';
-import {
-  TAxisLabelFormat,
-  YAxis,
-} from './components/YAxis';
-import { Grid as GridProps } from './Histogram';
-import { ColorSchemeItem } from './utils/colorScheme';
-import { Axes } from './utils/types';
-import { useLineDomain } from './utils/useDomain';
+import { AreaFill } from "./components/AreaFill";
+import { Base } from "./components/Base";
+import { Grid } from "./components/Grid";
+import { Line } from "./components/Line";
+import { PointComponentProps, Points } from "./components/Points";
+import { XAxis } from "./components/XAxis";
+import { TAxisLabelFormat, YAxis } from "./components/YAxis";
+import { Grid as GridProps } from "./Histogram";
+import { ColorSchemeItem } from "./utils/colorScheme";
+import { Axes } from "./utils/types";
+import { useLineDomain } from "./utils/useDomain";
 
 export type ChartPointValue = number | string | Date | object;
 export type ChartPoint<
   X extends ChartPointValue = Date | number | string,
-  Y extends ChartPointValue = number
+  Y extends ChartPointValue = number,
 > = {
   x: X;
   y: Y;
@@ -102,7 +90,7 @@ export const LineChart = ({
   });
   const values = data.reduce(
     (prev, next) => prev.concat(next.data.map((d) => d.x)),
-    [] as any[]
+    [] as any[],
   );
 
   return (

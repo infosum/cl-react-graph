@@ -1,35 +1,26 @@
-import { interpolate } from 'd3-interpolate';
-import React, {
-  useLayoutEffect,
-  useRef,
-} from 'react';
+import { interpolate } from "d3-interpolate";
+import React, { useLayoutEffect, useRef } from "react";
 
-import {
-  animated,
-  useSpring,
-} from '@react-spring/web';
+import { animated, useSpring } from "@react-spring/web";
 
-import {
-  Props as UseMakeLineProps,
-  useMakeLine,
-} from '../utils/useMakeLine';
+import { Props as UseMakeLineProps, useMakeLine } from "../utils/useMakeLine";
 
 type Props = {
   animate?: boolean;
   label: string;
 } & UseMakeLineProps;
 
-// @TODO look at using https://github.com/pbeshai/d3-interpolate-path instead 
+// @TODO look at using https://github.com/pbeshai/d3-interpolate-path instead
 export const Line = (props: Props) => {
-  const { label = '', line } = props;
-  const className = `line-${label.replace(/[^a-z]/gi, '')}`;
+  const { label = "", line } = props;
+  const className = `line-${label.replace(/[^a-z]/gi, "")}`;
   const { previous, current } = useMakeLine(props);
 
   const spring = useSpring<any>({
     from: { t: 0 },
     to: { t: 1 },
     reset: true,
-    delay: 0
+    delay: 0,
   });
 
   const getInterpolator = () => interpolate(previous, current);
@@ -48,10 +39,12 @@ export const Line = (props: Props) => {
         strokeDashoffset={line.strokeDashOffset}
         strokeDasharray={line.strokeDashArray}
         stroke={line.stroke}
-        d={props.animate
-          ? spring.t.interpolate((t) => interpolator.current(Number(t)))
-          : current}
+        d={
+          props.animate
+            ? spring.t.interpolate((t) => interpolator.current(Number(t)))
+            : current
+        }
       />
     </>
-  )
-}
+  );
+};

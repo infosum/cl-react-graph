@@ -1,25 +1,18 @@
-import React from 'react';
+import React from "react";
 
-import { EChartDirection } from './BarChart';
-import {
-  Bars,
-  defaultPadding,
-} from './components/Bars/Bars';
-import { Base } from './components/Base';
-import { TipFunc } from './components/ToolTip';
-import { XAxis } from './components/XAxis';
+import { EChartDirection } from "./BarChart";
+import { Bars, defaultPadding } from "./components/Bars/Bars";
+import { Base } from "./components/Base";
+import { TipFunc } from "./components/ToolTip";
+import { XAxis } from "./components/XAxis";
 import {
   defaultTickFormat,
   ELabelOrientation,
   TAxisLabelFormat,
   YAxis,
-} from './components/YAxis';
-import {
-  BarChartData,
-  EGroupedBarLayout,
-  HistogramBar,
-} from './Histogram';
-import { useJoyPlot } from './utils/useJoyPlot';
+} from "./components/YAxis";
+import { BarChartData, EGroupedBarLayout, HistogramBar } from "./Histogram";
+import { useJoyPlot } from "./utils/useJoyPlot";
 
 export type Props = {
   axisLabelFormat?: TAxisLabelFormat;
@@ -35,7 +28,7 @@ export type Props = {
   yAxisWidth?: number;
   titleHeight?: number;
   titleLayout?: ELabelOrientation;
-}
+};
 
 /**
  * JoyPlot component
@@ -56,15 +49,10 @@ export const JoyPlot = ({
   titleHeight = 40,
   titleLayout = ELabelOrientation.HORIZONTAL,
 }: Props) => {
-  const {
-    chartHeight,
-    bins,
-    domain,
-    values
-  } = useJoyPlot({
+  const { chartHeight, bins, domain, values } = useJoyPlot({
     data,
     height,
-  })
+  });
   if (!yAxisWidth) {
     yAxisWidth = direction === EChartDirection.VERTICAL ? 40 : 100;
   }
@@ -72,56 +60,56 @@ export const JoyPlot = ({
     xAxisHeight = direction === EChartDirection.VERTICAL ? 100 : 40;
   }
 
-  const plotHeight = titleLayout === ELabelOrientation.HORIZONTAL
-    ? chartHeight - xAxisHeight - titleHeight
-    : chartHeight - xAxisHeight;
+  const plotHeight =
+    titleLayout === ELabelOrientation.HORIZONTAL
+      ? chartHeight - xAxisHeight - titleHeight
+      : chartHeight - xAxisHeight;
 
   return (
-    <Base
-      height={height}
-      title={title}
-      width={width}
-    >
-      {
-        values.map((d, i) => {
-          const top = titleLayout === ELabelOrientation.HORIZONTAL
-            ? (chartHeight * i) + titleHeight
-            : (chartHeight * i);
-          const xWidth = width - Number(yAxisWidth);
-          return (<g key={`plot-${d.title}`}>
-            {
-              titleLayout === ELabelOrientation.HORIZONTAL
-                ? <g
-                  transform={`translate(${yAxisWidth}, ${(chartHeight * i) + (titleHeight / 2)})`}
-                  height={titleHeight}
-                  width={xWidth}
-                ><text
+    <Base height={height} title={title} width={width}>
+      {values.map((d, i) => {
+        const top =
+          titleLayout === ELabelOrientation.HORIZONTAL
+            ? chartHeight * i + titleHeight
+            : chartHeight * i;
+        const xWidth = width - Number(yAxisWidth);
+        return (
+          <g key={`plot-${d.title}`}>
+            {titleLayout === ELabelOrientation.HORIZONTAL ? (
+              <g
+                transform={`translate(${yAxisWidth}, ${
+                  chartHeight * i + titleHeight / 2
+                })`}
+                height={titleHeight}
+                width={xWidth}
+              >
+                <text
                   fill={defaultTickFormat.stroke}
                   fontSize="12px"
                   fontWeight="bold"
                   width={xWidth}
-
-                >{String(d.title)}
-                  </text>
-                </g>
-                :
-                <YAxis
-                  width={0}
-                  height={plotHeight}
-                  scale="band"
-                  top={chartHeight * i}
-                  labelFormat={axisLabelFormat}
-                  path={{
-                    opacity: 0,
-                  }}
-                  labelOrientation={ELabelOrientation.VERTICAL}
-                  tickFormat={{
-                    fontSize: '12px',
-                    stroke: '#333',
-                  }}
-                  values={[String(d.title)]}
-                />
-            }
+                >
+                  {String(d.title)}
+                </text>
+              </g>
+            ) : (
+              <YAxis
+                width={0}
+                height={plotHeight}
+                scale="band"
+                top={chartHeight * i}
+                labelFormat={axisLabelFormat}
+                path={{
+                  opacity: 0,
+                }}
+                labelOrientation={ELabelOrientation.VERTICAL}
+                tickFormat={{
+                  fontSize: "12px",
+                  stroke: "#333",
+                }}
+                values={[String(d.title)]}
+              />
+            )}
             <YAxis
               width={Number(yAxisWidth)}
               labelFormat={axisLabelFormat}
@@ -132,11 +120,12 @@ export const JoyPlot = ({
             <XAxis
               width={xWidth}
               height={Number(xAxisHeight)}
-              top={((chartHeight) * (i + 1)) - Number(xAxisHeight)}
+              top={chartHeight * (i + 1) - Number(xAxisHeight)}
               left={yAxisWidth}
               labelFormat={axisLabelFormat}
               padding={padding}
-              values={bins} />
+              values={bins}
+            />
 
             <Bars
               left={yAxisWidth}
@@ -152,8 +141,9 @@ export const JoyPlot = ({
               tip={tip}
               width={xWidth}
             />
-          </g>);
-        })}
+          </g>
+        );
+      })}
     </Base>
-  )
-}
+  );
+};

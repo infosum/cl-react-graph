@@ -1,22 +1,18 @@
-import { extent } from 'd3-array';
-import { schemeSet3 } from 'd3-scale-chromatic';
-import React from 'react';
+import { extent } from "d3-array";
+import { schemeSet3 } from "d3-scale-chromatic";
+import React from "react";
 
-import { SpringConfig } from '@react-spring/web';
+import { SpringConfig } from "@react-spring/web";
 
-import { EChartDirection } from './BarChart';
-import { HistogramBars } from './components/Bars/HistogramBars';
-import { Base } from './components/Base';
-import { Grid } from './components/Grid';
-import { TLabelComponent } from './components/Label';
-import { TipFunc } from './components/ToolTip';
-import { XAxis } from './components/XAxis';
-import {
-  ELabelOrientation,
-  TAxisLabelFormat,
-  YAxis,
-} from './components/YAxis';
-import { SVGLineStyle } from './utils/types';
+import { EChartDirection } from "./BarChart";
+import { HistogramBars } from "./components/Bars/HistogramBars";
+import { Base } from "./components/Base";
+import { Grid } from "./components/Grid";
+import { TLabelComponent } from "./components/Label";
+import { TipFunc } from "./components/ToolTip";
+import { XAxis } from "./components/XAxis";
+import { ELabelOrientation, TAxisLabelFormat, YAxis } from "./components/YAxis";
+import { SVGLineStyle } from "./utils/types";
 
 export enum EGroupedBarLayout {
   GROUPED,
@@ -166,11 +162,11 @@ export const Histogram = ({
 
   const bins = data.bins.reduce(
     (p, n) => p.concat(Array.isArray(n) ? n : [n]),
-    [] as number[]
+    [] as number[],
   );
   const continuousDomain = extent(bins) as [number, number];
   const domain = extent(
-    data.counts.reduce((p, n) => p.concat(n.data), [] as number[])
+    data.counts.reduce((p, n) => p.concat(n.data), [] as number[]),
   ) as [number, number];
 
   return (

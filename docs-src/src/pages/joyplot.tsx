@@ -1,13 +1,10 @@
-import React from 'react';
+import React from "react";
 
-import {
-  JoyPlot,
-  useWidth,
-} from '../../../src';
-import { JSXCode } from '../components/JSXCode';
-import { Layout } from '../components/Layout';
-import { TwoColumns } from '../components/TwoColumns';
-import { theme } from '../context/theme';
+import { JoyPlot, useWidth } from "../../../src";
+import { JSXCode } from "../components/JSXCode";
+import { Layout } from "../components/Layout";
+import { TwoColumns } from "../components/TwoColumns";
+import { theme } from "../context/theme";
 
 const exampleCode = `import {
   JoyPlot,
@@ -69,45 +66,29 @@ const MyComponent = () => {
 
 const data = [
   {
-    bins: [
-      '0, 2500',
-      '2500, 5000',
-      '5000, 10000'
-    ],
+    bins: ["0, 2500", "2500, 5000", "5000, 10000"],
     counts: [
       {
-        label: 'in market for car: No',
-        data: [
-          500,
-          400,
-          4000
-        ]
-      }
+        label: "in market for car: No",
+        data: [500, 400, 4000],
+      },
     ],
-    title: 'No'
+    title: "No",
   },
   {
-    bins: [
-      '0, 2500',
-      '2500, 5000',
-      '5000, 10000'
-    ],
+    bins: ["0, 2500", "2500, 5000", "5000, 10000"],
     counts: [
       {
-        label: 'in market for car: Yes',
-        data: [
-          300,
-          300,
-          2800
-        ]
-      }
+        label: "in market for car: Yes",
+        data: [300, 300, 2800],
+      },
     ],
-    title: 'Yes'
-  }
-]
+    title: "Yes",
+  },
+];
 
 const JoyPlotExample = () => {
-  const [ref, width] = useWidth('90%');
+  const [ref, width] = useWidth("90%");
   return (
     <Layout>
       <h2>JoyPlot</h2>
@@ -115,19 +96,19 @@ const JoyPlotExample = () => {
       <TwoColumns>
         <div ref={ref}>
           <h3>In market for a car</h3>
-        <JoyPlot
-          data={data}
-          title="In market for a car"
-          xAxisHeight={20}
-          colorScheme={[theme.green900]}
-          width={width}
-          height={data.length * 150} />
+          <JoyPlot
+            data={data}
+            title="In market for a car"
+            xAxisHeight={20}
+            colorScheme={[theme.green900]}
+            width={width}
+            height={data.length * 150}
+          />
         </div>
         <JSXCode exampleCode={exampleCode} />
-
       </TwoColumns>
     </Layout>
-  )
+  );
 };
 
 export default JoyPlotExample;

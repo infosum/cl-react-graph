@@ -1,11 +1,11 @@
-import React, { HTMLAttributes } from 'react';
+import React, { HTMLAttributes } from "react";
 
 type Props = {
   fill: string;
-  stroke?: string
+  stroke?: string;
   d: string;
   opacity: number;
-}
+};
 
 export const Path = ({
   d,
@@ -24,8 +24,8 @@ export const Path = ({
       onMouseLeave={onMouseLeave}
       fill={fill}
       stroke={stroke ?? fill}
-      style={{ transition: 'all 0.5s ease', opacity }}
+      style={{ transition: "all 0.5s ease", opacity }}
       d={d}
     />
-  )
-}
+  );
+};

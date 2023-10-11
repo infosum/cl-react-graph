@@ -1,11 +1,12 @@
 {
   "typescript.tsdk": "node_modules/typescript/lib",
-  "cSpell.words": [
-    "desaturate"
-  ],
-  "cSpell.ignoreWords": [
-    "isvg",
-    "line",
-    "style"
-  ]
+  "cSpell.words": ["desaturate"],
+  "cSpell.ignoreWords": ["isvg", "line", "style"],
+  "editor.formatOnSave": true,
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
 }

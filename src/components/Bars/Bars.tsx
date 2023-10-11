@@ -1,26 +1,16 @@
-import { color } from 'd3-color';
-import {
-  scaleBand,
-  scaleLinear,
-} from 'd3-scale';
-import React, {
-  RefObject,
-  useState,
-} from 'react';
+import { color } from "d3-color";
+import { scaleBand, scaleLinear } from "d3-scale";
+import React, { RefObject, useState } from "react";
 
-import {
-  animated,
-  SpringConfig,
-  useSprings,
-} from '@react-spring/web';
+import { animated, SpringConfig, useSprings } from "@react-spring/web";
 
-import { EChartDirection } from '../../BarChart';
+import { EChartDirection } from "../../BarChart";
 import {
   BarChartDataSet,
   EGroupedBarLayout,
   GroupDataItem,
   HistogramBar,
-} from '../../Histogram';
+} from "../../Histogram";
 import {
   buildBarDatasets,
   getBarWidth,
@@ -29,19 +19,19 @@ import {
   groupedPaddingOuter,
   paddingInner,
   paddingOuter,
-} from '../../utils/bars';
+} from "../../utils/bars";
 import {
   ColorScheme,
   ColorSchemeDefs,
   getGradientId,
   Gradient,
   isGradient,
-} from '../../utils/colorScheme';
-import { TLabelComponent } from '../Label';
-import { Labels } from '../Labels';
-import { TipFunc } from '../ToolTip';
-import { ToolTips } from '../ToolTips';
-import { buildBarSprings } from './barHelper';
+} from "../../utils/colorScheme";
+import { TLabelComponent } from "../Label";
+import { Labels } from "../Labels";
+import { TipFunc } from "../ToolTip";
+import { ToolTips } from "../ToolTips";
+import { buildBarSprings } from "./barHelper";
 
 export type Props = {
   bins: (string | [number, number])[];
@@ -131,14 +121,17 @@ export const Bars = ({
       if (isGradient(c)) {
         return {
           ...c,
-          stops: c.stops.map((stop) => ({... stop, stopColor: color(stop.stopColor)?.brighter(0.1).toString()}))
-        }
+          stops: c.stops.map((stop) => ({
+            ...stop,
+            stopColor: color(stop.stopColor)?.brighter(0.1).toString(),
+          })),
+        };
       } else {
         return color(c)?.brighter(0.1).toString();
       }
     }) as readonly string[];
   }
-  
+
   const { dataSets, binLabels } = buildBarDatasets({ values, bins, visible });
 
   const numericScale = scaleLinear()
@@ -170,8 +163,8 @@ export const Bars = ({
   const itemWidths = Array.from(
     dataSets.reduce(
       (prev, next) => prev.add(next.datasetIndex),
-      new Set<number>()
-    )
+      new Set<number>(),
+    ),
   ).map((i) => {
     const itemWidth = getBarWidth(i, groupLayout, paddings, innerScaleBand);
     return itemWidth;
@@ -197,7 +190,7 @@ export const Bars = ({
       paddings,
       values,
       width,
-    })
+    }),
   );
 
   const refs: RefObject<any>[] = [];

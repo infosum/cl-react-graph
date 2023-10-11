@@ -1,33 +1,26 @@
-import { schemeSet3 } from 'd3-scale-chromatic';
-import React from 'react';
+import { schemeSet3 } from "d3-scale-chromatic";
+import React from "react";
 
-import { SpringConfig } from '@react-spring/web';
+import { SpringConfig } from "@react-spring/web";
 
-import {
-  Bars,
-  defaultPadding,
-} from './components/Bars/Bars';
-import { Base } from './components/Base';
-import { Grid } from './components/Grid';
-import { TLabelComponent } from './components/Label';
-import { TipFunc } from './components/ToolTip';
-import { XAxis } from './components/XAxis';
-import {
-  ELabelOrientation,
-  TAxisLabelFormat,
-  YAxis,
-} from './components/YAxis';
+import { Bars, defaultPadding } from "./components/Bars/Bars";
+import { Base } from "./components/Base";
+import { Grid } from "./components/Grid";
+import { TLabelComponent } from "./components/Label";
+import { TipFunc } from "./components/ToolTip";
+import { XAxis } from "./components/XAxis";
+import { ELabelOrientation, TAxisLabelFormat, YAxis } from "./components/YAxis";
 import {
   BarChartData,
   EGroupedBarLayout,
   Grid as GridProps,
   HistogramBar,
-} from './Histogram';
-import { useHistogramDomain } from './utils/useDomain';
+} from "./Histogram";
+import { useHistogramDomain } from "./utils/useDomain";
 
 export enum EChartDirection {
-  HORIZONTAL = 'HORIZONTAL',
-  VERTICAL = 'VERTICAL',
+  HORIZONTAL = "HORIZONTAL",
+  VERTICAL = "VERTICAL",
 }
 type Props = {
   animation?: SpringConfig;
@@ -55,8 +48,8 @@ type Props = {
   bars?: {
     rx?: number;
     ry?: number;
-  }
-}
+  };
+};
 
 const defaultTickValues = [];
 
@@ -67,7 +60,7 @@ export const BarChart = ({
   data,
   direction = EChartDirection.VERTICAL,
   grid,
-  id = '',
+  id = "",
   groupLayout = EGroupedBarLayout.GROUPED,
   height,
   LabelComponent,
@@ -90,7 +83,7 @@ export const BarChart = ({
     xAxisHeight = direction === EChartDirection.VERTICAL ? 100 : 40;
   }
 
-  // TODO - do we want a chart context to contain the bounding x/y axis. 
+  // TODO - do we want a chart context to contain the bounding x/y axis.
   // Once we've build up standard components it would be good to asses this.
   if (width === 0) {
     return null;
@@ -108,19 +101,16 @@ export const BarChart = ({
       width={width + 30} // @TODO work out why without this the bars exceed the chart
       height={height}
       title={title}
-      id={id}>
-
-      {
-        grid && <Grid
+      id={id}
+    >
+      {grid && (
+        <Grid
           left={yAxisWidth}
           height={height - xAxisHeight}
-          svgProps={{ ...grid.x.style }}
-          lines={{
-            vertical: grid.y.ticks,
-            horizontal: grid.x.ticks,
-          }}
-          width={width - yAxisWidth} />
-      }
+          width={width - yAxisWidth}
+          {...grid}
+        />
+      )}
 
       <Bars
         bins={data.bins}
@@ -146,10 +136,11 @@ export const BarChart = ({
         width={yAxisWidth}
         height={height - xAxisHeight}
         labelFormat={axisLabelFormat}
-        scale={direction === EChartDirection.HORIZONTAL ? 'band' : 'linear'}
-        values={direction === EChartDirection.HORIZONTAL ? data.bins : tickValues}
+        scale={direction === EChartDirection.HORIZONTAL ? "band" : "linear"}
+        values={
+          direction === EChartDirection.HORIZONTAL ? data.bins : tickValues
+        }
         domain={direction === EChartDirection.HORIZONTAL ? tickValues : domain}
-
         padding={padding}
       />
 
@@ -161,12 +152,12 @@ export const BarChart = ({
         left={yAxisWidth}
         labelFormat={axisLabelFormat}
         labelOrientation={xAxisLabelOrientation}
-        scale={direction === EChartDirection.HORIZONTAL ? 'linear' : 'band'}
-        values={direction === EChartDirection.HORIZONTAL ? undefined : data.bins}
+        scale={direction === EChartDirection.HORIZONTAL ? "linear" : "band"}
+        values={
+          direction === EChartDirection.HORIZONTAL ? undefined : data.bins
+        }
         domain={direction === EChartDirection.HORIZONTAL ? domain : undefined}
       />
-
     </Base>
-  )
-
-}
+  );
+};

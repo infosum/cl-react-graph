@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 import {
   BarChart,
@@ -8,21 +8,20 @@ import {
   useWidth,
   XAxis,
   YAxis,
-} from '../../../src';
-import { JSXCode } from '../components/JSXCode';
-import { Layout } from '../components/Layout';
-import { TwoColumns } from '../components/TwoColumns';
+} from "../../../src";
+import { JSXCode } from "../components/JSXCode";
+import { Layout } from "../components/Layout";
+import { TwoColumns } from "../components/TwoColumns";
 
 const data: BarChartData = {
-  bins: ['Female', 'Male', 'Other'],
+  bins: ["Female", "Male", "Other"],
   counts: [
     {
       data: [79200, 52400, 13300],
-      label: 'Baseline',
+      label: "Baseline",
     },
-
-  ]
-}
+  ],
+};
 
 const exampleCode = `import {
   BarChart, 
@@ -71,17 +70,18 @@ const MyComponent = () => {
 `;
 
 const AxisExample = () => {
-  const [ref, width] = useWidth('90%');
+  const [ref, width] = useWidth("90%");
   return (
     <Layout>
       <h2>Axis</h2>
 
-      <p>An axis must be placed inside a Base component. Axis can be either XAxis or YAxis</p>
+      <p>
+        An axis must be placed inside a Base component. Axis can be either XAxis
+        or YAxis
+      </p>
       <h3>XAxis</h3>
       <TwoColumns>
-        <Base
-          width={220}
-          height={50}>
+        <Base width={220} height={50}>
           <XAxis
             width={200}
             height={20}
@@ -94,14 +94,11 @@ const AxisExample = () => {
         </Base>
 
         <JSXCode exampleCode={exampleCode} />
-
       </TwoColumns>
 
       <h3>YAxis</h3>
       <TwoColumns>
-        <Base
-          width={220}
-          height={50}>
+        <Base width={220} height={50}>
           <YAxis
             width={20}
             height={200}
@@ -114,10 +111,9 @@ const AxisExample = () => {
         </Base>
 
         <JSXCode exampleCode={exampleYAxisCode} />
-
       </TwoColumns>
     </Layout>
-  )
+  );
 };
 
 export default AxisExample;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 import {
   EChartDirection,
@@ -6,11 +6,11 @@ import {
   ITornadoProps,
   TornadoChart,
   useWidth,
-} from '../../../src';
-import { JSXCode } from '../components/JSXCode';
-import { Layout } from '../components/Layout';
-import { TwoColumns } from '../components/TwoColumns';
-import { theme } from '../context/theme';
+} from "../../../src";
+import { JSXCode } from "../components/JSXCode";
+import { Layout } from "../components/Layout";
+import { TwoColumns } from "../components/TwoColumns";
+import { theme } from "../context/theme";
 
 const exampleCode = `import {
   EChartDirection,
@@ -61,29 +61,28 @@ const MyComponent = () => {
 };
 `;
 
-const data: ITornadoProps['data'] = {
-  bins: ['16-18', '18-25', '25-35', '35-50', '50-65', '65-∞'],
+const data: ITornadoProps["data"] = {
+  bins: ["16-18", "18-25", "25-35", "35-50", "50-65", "65-∞"],
   counts: [
     {
-      label: 'Background',
+      label: "Background",
       data: [
         [200, 2600, 5100, 9700, 8400, 6700], // Male bin 1, Male bin 2,
         [2002, 2100, 4700, 8700, 4900, 1400], // Female bin 1, Female bin 2,
       ],
     },
     {
-      label: 'Foreground',
+      label: "Foreground",
       data: [
         [100, 260, 510, 970, 840, 670], // Male bin 1, Male bin 2,
         [1000, 5500, 470, 870, 490, 140], // Female bin 1, Female bin 2,
       ],
     },
-
   ],
-}
+};
 
 const TornadoExample = () => {
-  const [ref, width] = useWidth('90%');
+  const [ref, width] = useWidth("90%");
   return (
     <Layout>
       <h2>Tornado Chart</h2>
@@ -92,7 +91,7 @@ const TornadoExample = () => {
         <div ref={ref}>
           <TornadoChart
             data={data}
-            splitBins={['Male', 'Female']}
+            splitBins={["Male", "Female"]}
             groupLayout={EGroupedBarLayout.OVERLAID}
             width={width}
             height={500}
@@ -100,13 +99,13 @@ const TornadoExample = () => {
             xAxisHeight={20}
             colorScheme={[theme.green900, theme.brightBlue500]}
             direction={EChartDirection.HORIZONTAL}
-            showBinPercentages={false} />
+            showBinPercentages={false}
+          />
         </div>
         <JSXCode exampleCode={exampleCode} />
-
       </TwoColumns>
     </Layout>
-  )
-}
+  );
+};
 
 export default TornadoExample;

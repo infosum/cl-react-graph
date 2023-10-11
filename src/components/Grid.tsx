@@ -1,6 +1,6 @@
-import React, { SVGAttributes } from 'react';
+import React, { SVGAttributes } from "react";
 
-import { GridProps } from '../';
+import { GridProps } from "../";
 
 type Props = {
   left?: number;
@@ -16,76 +16,66 @@ type Props = {
   };
   /** @deprecated use x/y instead */
   svgProps?: SVGAttributes<SVGLineElement>;
-} & Partial<GridProps>
-
+} & Partial<GridProps>;
 
 const baseSvgProps: SVGAttributes<SVGLineElement> = {
-  fill: 'none',
-  opacity: '1',
-  shapeRendering: 'auto',
-  strokeOpacity: '1',
-  strokeWidth: '1',
-}
+  fill: "none",
+  opacity: "1",
+  shapeRendering: "auto",
+  strokeOpacity: "1",
+  strokeWidth: "1",
+};
 
 export const Grid = (props: Props) => {
-  const {
-    left = 0,
-    top = 0,
-    width,
-    height,
-  } = props;
-  const verticalLines = getLineCount(props, 'x');
-  const horizontalLines = getLineCount(props, 'y');
-  const verticals = new Array(verticalLines).fill('');
-  const horizontals = new Array(horizontalLines).fill('');
+  const { left = 0, top = 0, width, height } = props;
+  const verticalLines = getLineCount(props, "x");
+  const horizontalLines = getLineCount(props, "y");
+  const verticals = new Array(verticalLines).fill("");
+  const horizontals = new Array(horizontalLines).fill("");
   return (
     <g className="grid" transform={`translate(${left}, ${top})`}>
-      {
-        verticals.map((_, i) => <line
-          key={'vertical-line' + i}
+      {verticals.map((_, i) => (
+        <line
+          key={"vertical-line" + i}
           x1={width * ((i + 1) / verticalLines)}
           x2={width * ((i + 1) / verticalLines)}
           y2={height}
-          {...getLineProps(props, 'x')}
-        >
-        </line>
-        )
-      }
-      {
-        horizontals.map((_, i) => <line
-          key={'horizontal-line' + i}
-          y1={height * ((i) / horizontalLines)}
-          y2={height * ((i) / horizontalLines)}
+          {...getLineProps(props, "x")}
+        ></line>
+      ))}
+      {horizontals.map((_, i) => (
+        <line
+          key={"horizontal-line" + i}
+          y1={height * (i / horizontalLines)}
+          y2={height * (i / horizontalLines)}
           x2={width}
-          {...getLineProps(props, 'y')}
-        >
-        </line>
-        )
-      }
+          {...getLineProps(props, "y")}
+        ></line>
+      ))}
     </g>
   );
 };
 
-const getLineCount = (props: Props, axis: 'x' | 'y') => {
-  if (axis == 'x' && props.x) {
+const getLineCount = (props: Props, axis: "x" | "y") => {
+  if (axis == "x" && props.x) {
     return props.x.visible ? props.x.ticks : 0;
   }
-  if (axis == 'y' && props.y) {
+  if (axis == "y" && props.y) {
     return props.y.visible ? props.y.ticks : 0;
   }
   return props.lines?.vertical ?? 0;
-}
+};
 
-const getLineProps = (props: Props, axis: 'x' | 'y') => {
-  
-  if (axis === 'x' && props.x) {
-    return {...baseSvgProps, ...props.x.style};
+const getLineProps = (props: Props, axis: "x" | "y") => {
+  if (axis === "x" && props.x) {
+    return { ...baseSvgProps, ...props.x.style };
   }
-  if (axis === 'y' && props.y) {
-    return {...baseSvgProps, ...props.y.style};
+  if (axis === "y" && props.y) {
+    return { ...baseSvgProps, ...props.y.style };
   }
-  return { 
+  return {
     ...baseSvgProps,
-     ...props.svgProps,
-     stroke: props.stroke ?? props.svgProps?.stroke ??  '#666' };
-}
+    ...props.svgProps,
+    stroke: props.stroke ?? props.svgProps?.stroke ?? "#666",
+  };
+};

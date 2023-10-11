@@ -1,12 +1,9 @@
-import React from 'react';
+import React from "react";
 
-import {
-  Base,
-  useWidth,
-} from '../../../src';
-import { JSXCode } from '../components/JSXCode';
-import { Layout } from '../components/Layout';
-import { TwoColumns } from '../components/TwoColumns';
+import { Base, useWidth } from "../../../src";
+import { JSXCode } from "../components/JSXCode";
+import { Layout } from "../components/Layout";
+import { TwoColumns } from "../components/TwoColumns";
 
 const exampleCode = `import {
   Base, 
@@ -22,7 +19,7 @@ const MyComponent = () => {
 `;
 
 const LabelExample = () => {
-  const [ref, width] = useWidth('90%');
+  const [ref, width] = useWidth("90%");
   return (
     <Layout>
       <h2>Label</h2>
@@ -30,18 +27,12 @@ const LabelExample = () => {
       <p>@todo</p>
       <TwoColumns>
         <div ref={ref}>
-        <Base
-          width={width}
-          height={200}
-          title="Label example"
-        >
-        </Base>
+          <Base width={width} height={200} title="Label example"></Base>
         </div>
         <JSXCode exampleCode={exampleCode} />
-
       </TwoColumns>
     </Layout>
-  )
+  );
 };
 
 export default LabelExample;

@@ -1,15 +1,10 @@
-import React from 'react';
+import React from "react";
 
-import {
-  Base,
-  IPointProps,
-  Point,
-  useWidth,
-} from '../../../src';
-import { JSXCode } from '../components/JSXCode';
-import { Layout } from '../components/Layout';
-import { TwoColumns } from '../components/TwoColumns';
-import { theme } from '../context/theme';
+import { Base, IPointProps, Point, useWidth } from "../../../src";
+import { JSXCode } from "../components/JSXCode";
+import { Layout } from "../components/Layout";
+import { TwoColumns } from "../components/TwoColumns";
+import { theme } from "../context/theme";
 
 const exampleCode = `import {
   Base,
@@ -49,7 +44,7 @@ const MyComponent = () => {
 `;
 
 const PointExample = () => {
-  const [ref, width] = useWidth('90%');
+  const [ref, width] = useWidth("90%");
   const data: IPointProps[] = [
     { cx: 0, cy: 0, z: 10 },
     { cx: 30, cy: 30, z: 20 },
@@ -64,26 +59,22 @@ const PointExample = () => {
       <TwoColumns>
         <div ref={ref}>
           <p>Renders a single or group of points</p>
-          <Base
-            width={width}
-            height={200}
-            title="Path example">
-            {
-              data.map((d, i) => <Point
+          <Base width={width} height={200} title="Path example">
+            {data.map((d, i) => (
+              <Point
                 fill={theme.purple900}
                 key={i}
                 opacity={0.5}
                 stroke={theme.grey400}
-                {...d} />
-              )
-            }
+                {...d}
+              />
+            ))}
           </Base>
         </div>
         <JSXCode exampleCode={exampleCode} />
-
       </TwoColumns>
     </Layout>
-  )
+  );
 };
 
 export default PointExample;
