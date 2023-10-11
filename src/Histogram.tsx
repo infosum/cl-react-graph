@@ -29,63 +29,62 @@ export type BarChartDataSet = {
   colors?: string[];
   label: string;
   data: number[];
-}
-export enum EColorManipulations {
-  'negate' = 'negate',
-  'lighten' = 'lighten',
-  'darken' = 'darken',
-  'saturate' = 'saturate',
-  'desaturate' = 'desaturate',
-  'whiten' = 'whiten',
-  'blacken' = 'blacken',
-  'fade' = 'fade',
-  'opaquer' = 'opaquer',
-  'rotate' = 'rotate',
 };
+export enum EColorManipulations {
+  "negate" = "negate",
+  "lighten" = "lighten",
+  "darken" = "darken",
+  "saturate" = "saturate",
+  "desaturate" = "desaturate",
+  "whiten" = "whiten",
+  "blacken" = "blacken",
+  "fade" = "fade",
+  "opaquer" = "opaquer",
+  "rotate" = "rotate",
+}
 
 export type GroupDataItem = {
   label: string;
   groupLabel?: string;
   colorRef?: string; // String which can be used to return same colour value
   value: number;
-  side?: 'left' | 'right'; // For Tornados
-}
+  side?: "left" | "right"; // For Tornados
+};
 
 export type HistogramBar = {
   // Padding for the inside of grouped datasets
   grouped: {
     paddingInner: number;
     paddingOuter: number;
-  }
+  };
   // Padding for the outside of grouped datasets or single datasets
   paddingOuter: number;
   paddingInner: number;
   // @deprecated in 3.0
-  hover?: Partial<Record<EColorManipulations, number>>,
-  /**  
+  hover?: Partial<Record<EColorManipulations, number>>;
+  /**
    * @description When bars are rendered as EGroupedBarLayout.OVERLAID (offset between the two overlaid bars)
    * If < 1 then use it as a percentage offset of the bar width otherwise use as a pixel offset
    */
   overlayMargin: number;
   rx?: number;
   ry?: number;
-}
+};
 
 export type HistogramData = {
   bins: [number, number][];
   counts: BarChartDataSet[];
   colorScheme?: string[];
   title?: string;
-}
+};
 export type GroupData = GroupDataItem[][];
-
 
 export type BarChartData = {
   bins: string[];
   counts: BarChartDataSet[];
   colorScheme?: string[];
   title?: string;
-}
+};
 
 // @TODO deprecate this interface in favour of <Grids /> actual props
 export type Grid = {
@@ -100,7 +99,7 @@ export type Grid = {
     ticks: number;
     visible: boolean;
   };
-}
+};
 
 export type Props = {
   animation?: SpringConfig;
@@ -126,11 +125,11 @@ export type Props = {
   bars?: {
     rx?: number;
     ry?: number;
-  }
-}
+  };
+};
 
 /**
- * A Histogram renders continuous data and thus use a ScaleLinear x & y axis 
+ * A Histogram renders continuous data and thus use a ScaleLinear x & y axis
  */
 export const Histogram = ({
   animation,
@@ -138,7 +137,7 @@ export const Histogram = ({
   colorScheme = [...schemeSet3],
   data,
   direction = EChartDirection.VERTICAL,
-  id = '',
+  id = "",
   grid,
   height,
   hoverColorScheme,
@@ -165,9 +164,14 @@ export const Histogram = ({
     return null;
   }
 
-  const bins = data.bins.reduce((p, n) => p.concat(Array.isArray(n) ? n : [n]), [] as number[]);
+  const bins = data.bins.reduce(
+    (p, n) => p.concat(Array.isArray(n) ? n : [n]),
+    [] as number[]
+  );
   const continuousDomain = extent(bins) as [number, number];
-  const domain = extent(data.counts.reduce((p, n) => p.concat(n.data), [] as number[])) as [number, number];
+  const domain = extent(
+    data.counts.reduce((p, n) => p.concat(n.data), [] as number[])
+  ) as [number, number];
 
   return (
     <Base
@@ -175,19 +179,16 @@ export const Histogram = ({
       title={title}
       description={description}
       id={id}
-      height={height}>
-
-      {
-        grid && <Grid
+      height={height}
+    >
+      {grid && (
+        <Grid
           left={yAxisWidth}
           height={height - xAxisHeight}
-          svgProps={{ ...grid.x.style }}
-          lines={{
-            vertical: grid.y.ticks,
-            horizontal: grid.x.ticks,
-          }}
-          width={width - yAxisWidth} />
-      }
+          width={width - yAxisWidth}
+          {...grid}
+        />
+      )}
 
       <HistogramBars
         colorScheme={colorScheme}
@@ -215,15 +216,18 @@ export const Histogram = ({
         height={height - xAxisHeight}
         labelFormat={axisLabelFormat}
         scale="linear"
-        domain={direction === EChartDirection.HORIZONTAL ? continuousDomain : domain}
-        values={direction === EChartDirection.HORIZONTAL
-          ? [
-            continuousDomain[0],
-            ((continuousDomain[1] - continuousDomain[0]) * 1) / 3,
-            ((continuousDomain[1] - continuousDomain[0]) * 2) / 3,
-            continuousDomain[1],
-          ]
-          : domain
+        domain={
+          direction === EChartDirection.HORIZONTAL ? continuousDomain : domain
+        }
+        values={
+          direction === EChartDirection.HORIZONTAL
+            ? [
+                continuousDomain[0],
+                ((continuousDomain[1] - continuousDomain[0]) * 1) / 3,
+                ((continuousDomain[1] - continuousDomain[0]) * 2) / 3,
+                continuousDomain[1],
+              ]
+            : domain
         }
       />
 
@@ -235,16 +239,20 @@ export const Histogram = ({
         labelFormat={axisLabelFormat}
         labelOrientation={xAxisLabelOrientation}
         scale="linear"
-        domain={direction === EChartDirection.HORIZONTAL ? domain : continuousDomain}
-        values={direction === EChartDirection.HORIZONTAL
-          ? domain
-          : [
-            continuousDomain[0],
-            ((continuousDomain[1] - continuousDomain[0]) * 1) / 3,
-            ((continuousDomain[1] - continuousDomain[0]) * 2) / 3,
-            continuousDomain[1],
-          ]}
+        domain={
+          direction === EChartDirection.HORIZONTAL ? domain : continuousDomain
+        }
+        values={
+          direction === EChartDirection.HORIZONTAL
+            ? domain
+            : [
+                continuousDomain[0],
+                ((continuousDomain[1] - continuousDomain[0]) * 1) / 3,
+                ((continuousDomain[1] - continuousDomain[0]) * 2) / 3,
+                continuousDomain[1],
+              ]
+        }
       />
     </Base>
-  )
-}
+  );
+};

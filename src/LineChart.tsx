@@ -26,11 +26,14 @@ import { Axes } from './utils/types';
 import { useLineDomain } from './utils/useDomain';
 
 export type ChartPointValue = number | string | Date | object;
-export type ChartPoint<X extends ChartPointValue = Date | number | string, Y extends ChartPointValue = number> = {
+export type ChartPoint<
+  X extends ChartPointValue = Date | number | string,
+  Y extends ChartPointValue = number
+> = {
   x: X;
   y: Y;
   z?: number;
-}
+};
 
 export type AnyChartPoint = ChartPoint<ChartPointValue, ChartPointValue>;
 
@@ -44,7 +47,7 @@ export type LineProps = {
   stroke: string;
   strokeDashOffset: number;
   strokeDashArray: string;
-}
+};
 
 export type LineChartDataSet<T> = {
   label: string;
@@ -57,7 +60,7 @@ export type LineChartDataSet<T> = {
   };
   line: LineProps;
   data: T[];
-}
+};
 
 export type Props<T extends AnyChartPoint = ChartPoint> = {
   axis: Axes;
@@ -77,7 +80,7 @@ export type Props<T extends AnyChartPoint = ChartPoint> = {
   axisLabelFormat?: TAxisLabelFormat;
   /** @description Custom component to override the default <circle /> used to plot points */
   PointComponent?: FC<PointComponentProps>;
-}
+};
 
 export const LineChart = ({
   axis,
@@ -97,39 +100,35 @@ export const LineChart = ({
     values: data,
     clampToZero,
   });
-  const values = data.reduce((prev, next) => prev.concat(next.data.map((d) => d.x)), [] as any[])
+  const values = data.reduce(
+    (prev, next) => prev.concat(next.data.map((d) => d.x)),
+    [] as any[]
+  );
 
   return (
-    <Base
-      width={width}
-      height={height}
-      title={title}
-      description={description}>
-
-      {
-        grid && <Grid
+    <Base width={width} height={height} title={title} description={description}>
+      {grid && (
+        <Grid
           left={yAxisWidth}
           height={height - xAxisHeight}
-          svgProps={{ ...grid.x.style }}
-          lines={{
-            vertical: grid.y.ticks,
-            horizontal: grid.x.ticks,
-          }}
-          width={width - yAxisWidth} />
-      }
-      {
-        data.map((item) => <Fragment key={item.label.replace(/[^a-zA-Z0-9-]/, '')}> <Line
-          axis={axis}
-          key={item.label}
-          label={item.label}
-          line={item.line}
           width={width - yAxisWidth}
-          left={yAxisWidth}
-          height={height - xAxisHeight}
-          data={item.data} />
-          {
-
-            item.point.show &&
+          {...grid}
+        />
+      )}
+      {data.map((item) => (
+        <Fragment key={item.label.replace(/[^a-zA-Z0-9-]/, "")}>
+          {" "}
+          <Line
+            axis={axis}
+            key={item.label}
+            label={item.label}
+            line={item.line}
+            width={width - yAxisWidth}
+            left={yAxisWidth}
+            height={height - xAxisHeight}
+            data={item.data}
+          />
+          {item.point.show && (
             <Points
               axis={axis}
               label={item.label}
@@ -144,10 +143,9 @@ export const LineChart = ({
               data={item.data}
               PointComponent={PointComponent}
             />
-          }
-
-          {
-            item.line.fill.show && <AreaFill
+          )}
+          {item.line.fill.show && (
+            <AreaFill
               axis={axis}
               label={item.label}
               key={`area-fill-${item.label}`}
@@ -155,15 +153,16 @@ export const LineChart = ({
               left={yAxisWidth}
               height={height - xAxisHeight}
               line={item.line}
-              data={item.data} />
-          }
-        </Fragment>)
-      }
+              data={item.data}
+            />
+          )}
+        </Fragment>
+      ))}
 
       <YAxis
         width={yAxisWidth}
         height={height - xAxisHeight}
-        scale={axis.y.scale ?? 'linear'}
+        scale={axis.y.scale ?? "linear"}
         domain={domain}
       />
 
@@ -171,18 +170,20 @@ export const LineChart = ({
         width={width - yAxisWidth}
         height={xAxisHeight}
         labelFormat={axisLabelFormat}
-        scale={axis.x.scale ?? 'band'}
+        scale={axis.x.scale ?? "band"}
         top={height - xAxisHeight}
         left={yAxisWidth}
         values={
           values.length > 4
-            ? [values[0], values[Math.floor(values.length / 4)],
-            values[Math.floor(values.length / 2)],
-            values[Math.floor(values.length * (3 / 4))],
-            ] as number[]
-            : values}
+            ? ([
+                values[0],
+                values[Math.floor(values.length / 4)],
+                values[Math.floor(values.length / 2)],
+                values[Math.floor(values.length * (3 / 4))],
+              ] as number[])
+            : values
+        }
       />
-
     </Base>
-  )
-}
+  );
+};
