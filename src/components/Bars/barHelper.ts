@@ -35,7 +35,7 @@ const getBandPosition = (
     case EGroupedBarLayout.OVERLAID:
       // Move to the right for each subsequent dataset to reveal the previous dataset's bars.
       const overlaidOffset =
-        item.datasetIndex == 0
+        item.datasetIndex === 0
           ? 0
           : Math.floor(
               (itemWidths[item.datasetIndex - 1] -

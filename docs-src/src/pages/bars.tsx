@@ -9,7 +9,6 @@ import {
   useHistogramDomain,
   useWidth,
 } from '../../../src';
-import { TLabelComponent } from '../../../src/components/Label';
 import { JSXCode } from '../components/JSXCode';
 import { Layout } from '../components/Layout';
 import { TwoColumns } from '../components/TwoColumns';

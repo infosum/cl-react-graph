@@ -18,6 +18,7 @@ export const getFill = (schemeItem: ColorSchemeItem): string => {
 }
 
 export const getGradientId = (schemeItem: Gradient) => {
+  // Strip out characters which would make an invalid id (keep alphanumeric & _)
   const start = schemeItem.stops[0].stopColor.replace(/[\W_]+/g, '');
   const end = schemeItem.stops[schemeItem.stops.length -1].stopColor.replace(/[\W_]+/g, '');
 return `gradient-${start}-${end}`
