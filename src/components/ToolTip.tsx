@@ -42,8 +42,8 @@ export const TipContent: TipFunc = ({ item, bin }) => {
       />
       <foreignObject x="0" y="0" width="160" height="85">
         {
-          // @ts-ignore
           <div
+            // @ts-ignore
             xmlns="http://www.w3.org/1999/xhtml"
             style={{ paddingLeft: "10px", textAlign: "center", height: "85px" }}
           >
