@@ -4,6 +4,10 @@ import { SpringConfig } from '@react-spring/web';
 
 import { EChartDirection } from '../../BarChart';
 import { BarChartDataSet } from '../../Histogram';
+import {
+  ColorScheme,
+  getFill,
+} from '../../utils/colorScheme';
 import { ExtendedGroupItem } from './Bars';
 
 type HistogramSpringProps = {
@@ -14,8 +18,8 @@ type HistogramSpringProps = {
   dataSets: ExtendedGroupItem[];
   numericScale: ScaleLinear<any, any>;
   continuousScale: ScaleLinear<any, any>;
-  colorScheme: readonly string[];
-  hoverColorScheme?: readonly string[];
+  colorScheme: ColorScheme;
+  hoverColorScheme?: ColorScheme;
   config: SpringConfig,
   direction: EChartDirection;
 }
@@ -33,21 +37,26 @@ export const buildHistogramSprings = (props: HistogramSpringProps) => {
     const itemWidth = continuousScale(binWidth + startValue);
 
     const itemHeight = numericScale(item.value);
-
+    const hoverFill = getFill(
+      hoverColorScheme
+        ? hoverColorScheme[item.datasetIndex]
+        : colorScheme[item.datasetIndex]
+    );
+    const fill = getFill(colorScheme[item.datasetIndex]);
     if (direction === EChartDirection.HORIZONTAL) {
       return {
         from: {
           width: 0,
-          fill: colorScheme[item.datasetIndex],
-          hoverFill: hoverColorScheme?.[item.datasetIndex] ?? colorScheme[item.datasetIndex],
+          fill,
+          hoverFill,
           x: 0,
           y: height - itemWidth - bandPosition,
           height: itemWidth,
         },
         to: {
           width: itemHeight,
-          fill: colorScheme[item.datasetIndex],
-          hoverFill: hoverColorScheme?.[item.datasetIndex] ?? colorScheme[item.datasetIndex],
+          fill,
+          hoverFill,
           x: 0,
           y: height - itemWidth - bandPosition,
           height: itemWidth,
@@ -59,16 +68,16 @@ export const buildHistogramSprings = (props: HistogramSpringProps) => {
     return {
       from: {
         height: 0,
-        fill: colorScheme[item.datasetIndex],
-        hoverFill: hoverColorScheme?.[item.datasetIndex] ?? colorScheme[item.datasetIndex],
+        fill,
+        hoverFill,
         x: bandPosition,
         y: height,
         width: itemWidth,
       },
       to: {
         height: itemHeight,
-        fill: colorScheme[item.datasetIndex],
-        hoverFill: hoverColorScheme?.[item.datasetIndex] ?? colorScheme[item.datasetIndex],
+        fill,
+        hoverFill,
         x: bandPosition,
         y: height - itemHeight,
         width: itemWidth,

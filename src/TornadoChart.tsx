@@ -15,6 +15,7 @@ import {
   EGroupedBarLayout,
   HistogramBar,
 } from './Histogram';
+import { ColorScheme } from './utils/colorScheme';
 import { applyDomainAffordance } from './utils/domain';
 
 type TornadoDataSet = {
@@ -27,13 +28,13 @@ type TornadoDataSet = {
 export type TornadoData = {
   bins: string[];
   counts: TornadoDataSet[];
-  colorScheme?: string[];
+  colorScheme?: ColorScheme;
   title?: string;
 }
 
 export type Props = {
   /** @description bar colour scheme */
-  colorScheme?: readonly string[];
+  colorScheme?: ColorScheme;
   data: TornadoData;
   direction?: EChartDirection;
   groupLayout: EGroupedBarLayout;

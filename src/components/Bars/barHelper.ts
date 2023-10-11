@@ -66,7 +66,7 @@ export type BarSpringProps = {
   numericScale: ScaleLinear<any, any>;
   bandScale: ScaleBand<string>;
   colorScheme: ColorScheme;
-  hoverColorScheme?: readonly string[];
+  hoverColorScheme?: ColorScheme;
   innerDomain: string[];
   innerScaleBand: ScaleBand<string>;
   groupLayout: EGroupedBarLayout;

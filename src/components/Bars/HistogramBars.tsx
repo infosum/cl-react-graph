@@ -13,6 +13,10 @@ import {
 
 import { EChartDirection } from '../../BarChart';
 import { BarChartDataSet } from '../../Histogram';
+import {
+  ColorScheme,
+  ColorSchemeDefs,
+} from '../../utils/colorScheme';
 import { getHoverColorScheme } from '../../utils/hoverColorScheme';
 import { TLabelComponent } from '../Label';
 import { Labels } from '../Labels';
@@ -26,12 +30,12 @@ const binWidth = (bin: [number, number]) => bin[1] - bin[0];
 type Props = {
   bins: [number, number][];
   config?: SpringConfig;
-  colorScheme?: readonly string[],
+  colorScheme?: ColorScheme;
   continuousDomain: [number, number];
   direction?: EChartDirection;
   domain: [number, number];
   height: number;
-  hoverColorScheme?: readonly string[];
+  hoverColorScheme?: ColorScheme;
   id: string;
   labels?: string[];
   left?: number;
@@ -128,6 +132,7 @@ export const HistogramBars = ({
   const refs: RefObject<any>[] = [];
   return (
     <>
+      <ColorSchemeDefs schemes={[colorScheme, hoverColorScheme]} />
       <g className="bars"
         transform={`translate${transform}`}>
         {

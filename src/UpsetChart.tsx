@@ -38,10 +38,10 @@ type TBarProps = Pick<BarProps, 'width' | 'height' | 'top' | 'left' | 'colorSche
 };
 
 export type Props = {
-  colorScheme?: string[];
+  colorScheme?: ColorScheme;
   data: TUpsetData;
   height: number;
-  hoverColorScheme?: string[];
+  hoverColorScheme?: ColorScheme;
   showLabels?: boolean[];
   visible?: Record<string, boolean>;
   width: number;

@@ -19,11 +19,12 @@ import {
   EGroupedBarLayout,
   HistogramBar,
 } from './Histogram';
+import { ColorScheme } from './utils/colorScheme';
 import { useJoyPlot } from './utils/useJoyPlot';
 
 export type Props = {
   axisLabelFormat?: TAxisLabelFormat;
-  colorScheme?: string[];
+  colorScheme?: ColorScheme;
   data: BarChartData[];
   direction?: EChartDirection;
   height: number;

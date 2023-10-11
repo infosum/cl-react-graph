@@ -8,6 +8,7 @@ import {
 } from './components/Ring';
 import { TipFunc } from './components/ToolTip';
 import { BarChartDataSet } from './Histogram';
+import { ColorScheme } from './utils/colorScheme';
 import { getHoverColorScheme } from './utils/hoverColorScheme';
 
 /**
@@ -35,10 +36,10 @@ export type Props = {
   };
   backgroundColor?: string;
   className?: string;
-  colorScheme?: readonly string[];
+  colorScheme?: ColorScheme;
   donutWidth?: number;
   height: number;
-  hoverColorScheme?: readonly string[];
+  hoverColorScheme?: ColorScheme;
   tip?: TipFunc;
   visible?: { [key: string]: boolean };
   width: number;
