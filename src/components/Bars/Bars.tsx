@@ -30,6 +30,13 @@ import {
   paddingInner,
   paddingOuter,
 } from '../../utils/bars';
+import {
+  ColorScheme,
+  ColorSchemeDefs,
+  getGradientId,
+  Gradient,
+  isGradient,
+} from '../../utils/colorScheme';
 import { TLabelComponent } from '../Label';
 import { Labels } from '../Labels';
 import { TipFunc } from '../ToolTip';
@@ -37,9 +44,9 @@ import { ToolTips } from '../ToolTips';
 import { buildBarSprings } from './barHelper';
 
 export type Props = {
-  bins: (string | [number, number])[]
+  bins: (string | [number, number])[];
   config?: SpringConfig;
-  colorScheme?: readonly string[],
+  colorScheme?: ColorScheme;
   domain: number[];
   direction?: EChartDirection;
   id?: string;
@@ -59,7 +66,7 @@ export type Props = {
   inverse?: boolean;
   rx?: number;
   ry?: number;
-}
+};
 
 const paddings = {
   grouped: {
@@ -75,7 +82,7 @@ export type ExtendedGroupItem = GroupDataItem & {
   datasetIndex: number;
   binIndex: number;
   percentage: string;
-}
+};
 
 export const defaultPadding: HistogramBar = {
   grouped: {
@@ -88,17 +95,17 @@ export const defaultPadding: HistogramBar = {
   hover: {
     lighten: 0.1,
   },
-}
+};
 
 export const Bars = ({
   bins,
-  colorScheme = ['#a9a9a9', '#2a5379'],
+  colorScheme = ["#a9a9a9", "#2a5379"],
   config = {
     duration: 250,
   },
   direction = EChartDirection.HORIZONTAL,
   domain,
-  id = '',
+  id = "",
   groupLayout = EGroupedBarLayout.GROUPED,
   height,
   hoverColorScheme,
@@ -120,8 +127,18 @@ export const Bars = ({
     return null;
   }
   if (!hoverColorScheme) {
-    hoverColorScheme = colorScheme.map((c) => color(c)?.brighter(0.1).toString()) as readonly string[];
+    hoverColorScheme = colorScheme.map((c) => {
+      if (isGradient(c)) {
+        return {
+          ...c,
+          stops: c.stops.map((stop) => ({... stop, stopColor: color(stop.stopColor)?.brighter(0.1).toString()}))
+        }
+      } else {
+        return color(c)?.brighter(0.1).toString();
+      }
+    }) as readonly string[];
   }
+  
   const { dataSets, binLabels } = buildBarDatasets({ values, bins, visible });
 
   const numericScale = scaleLinear()
@@ -129,7 +146,8 @@ export const Bars = ({
     .rangeRound([0, direction === EChartDirection.HORIZONTAL ? width : height]);
 
   // Distribute the bin values across the x axis
-  const bandScale = scaleBand().domain(binLabels as string[])
+  const bandScale = scaleBand()
+    .domain(binLabels as string[])
     .rangeRound([0, direction === EChartDirection.HORIZONTAL ? height : width])
     .paddingInner(paddingInner(padding))
     .paddingOuter(paddingOuter(padding))
@@ -137,54 +155,61 @@ export const Bars = ({
 
   const dataLabels = values.map((c) => c.label);
 
-  // Used to distribute a given bins values 
-  const innerDomain = groupedBarsUseSameXAxisValue({ groupLayout }) ? ['main'] : dataLabels;
+  // Used to distribute a given bins values
+  const innerDomain = groupedBarsUseSameXAxisValue({ groupLayout })
+    ? ["main"]
+    : dataLabels;
   const innerScaleBand = scaleBand()
     .domain(innerDomain)
     .rangeRound([0, bandScale.bandwidth()])
     .paddingInner(groupedPaddingInner(padding))
-    .paddingOuter(groupedPaddingOuter(padding)) // Center the bar distribution around the middle;
+    .paddingOuter(groupedPaddingOuter(padding)); // Center the bar distribution around the middle;
 
   const transform = `(${left}, ${top})`;
 
-
-  const itemWidths = Array.from(dataSets.reduce((prev, next) => prev.add(next.datasetIndex), new Set<number>()))
-    .map((i) => {
-      const itemWidth = getBarWidth(i, groupLayout, paddings, innerScaleBand);
-      return itemWidth;
-    });
+  const itemWidths = Array.from(
+    dataSets.reduce(
+      (prev, next) => prev.add(next.datasetIndex),
+      new Set<number>()
+    )
+  ).map((i) => {
+    const itemWidth = getBarWidth(i, groupLayout, paddings, innerScaleBand);
+    return itemWidth;
+  });
 
   const [hover, setHover] = useState(-1);
-  const springs = useSprings(dataSets.length, buildBarSprings({
-    bandScale,
-    colorScheme,
-    config,
-    dataSets,
-    direction,
-    groupLayout,
-    height,
-    hoverColorScheme,
-    innerDomain,
-    innerScaleBand,
-    inverse,
-    itemWidths,
-    numericScale,
-    paddings,
-    values,
-    width,
-  }));
+  const springs = useSprings(
+    dataSets.length,
+    buildBarSprings({
+      bandScale,
+      colorScheme,
+      config,
+      dataSets,
+      direction,
+      groupLayout,
+      height,
+      hoverColorScheme,
+      innerDomain,
+      innerScaleBand,
+      inverse,
+      itemWidths,
+      numericScale,
+      paddings,
+      values,
+      width,
+    })
+  );
 
   const refs: RefObject<any>[] = [];
   return (
     <>
-      <g className="bars"
-        role="row"
-        transform={`translate${transform}`}>
+      <ColorSchemeDefs schemes={[colorScheme, hoverColorScheme]} />
+      <g className="bars" role="row" transform={`translate${transform}`}>
         <g className="bar-lines">
-          {
-            springs.map((props: any, i) => {
-              refs[i] = React.createRef<any>();
-              return <animated.rect
+          {springs.map((props: any, i) => {
+            refs[i] = React.createRef<any>();
+            return (
+              <animated.rect
                 ref={refs[i]}
                 role="cell"
                 data-testid={`chart-bar-${id}-${i}`}
@@ -199,8 +224,8 @@ export const Bars = ({
                 x={props.x as any}
                 y={props.y as any}
               />
-            })
-          }
+            );
+          })}
         </g>
         <Labels
           inverse={inverse}
@@ -212,8 +237,8 @@ export const Bars = ({
           labels={labels}
           visible={visible}
           width={width}
-          LabelComponent={LabelComponent} />
-
+          LabelComponent={LabelComponent}
+        />
       </g>
 
       <ToolTips
@@ -221,7 +246,8 @@ export const Bars = ({
         refs={refs}
         bins={bins}
         tip={tip}
-        items={dataSets} />
+        items={dataSets}
+      />
     </>
   );
-}
+};

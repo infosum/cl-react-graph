@@ -21,6 +21,7 @@ import {
   YAxis,
 } from './components/YAxis';
 import { Grid as GridProps } from './Histogram';
+import { ColorSchemeItem } from './utils/colorScheme';
 import { Axes } from './utils/types';
 import { useLineDomain } from './utils/useDomain';
 
@@ -37,7 +38,7 @@ export type LineProps = {
   show: boolean;
   fill: {
     show: boolean;
-    fill: string;
+    fill: ColorSchemeItem;
   };
   curveType: CurveFactory | CurveFactoryLineOnly;
   stroke: string;

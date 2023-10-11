@@ -8,13 +8,17 @@ import { arc } from 'd3-shape';
 import React, { useState } from 'react';
 
 import { Base } from './components/Base';
+import {
+  ColorScheme,
+  getFill,
+} from './utils/colorScheme';
 
 export type Props = {
   width: number;
   height: number;
   padding?: number;
   data: Record<string, number[]>;
-  colorScheme?: readonly string[];
+  colorScheme?: ColorScheme;
   /** @description Chart <title /> */
   title?: string;
   inactive?: {
@@ -71,8 +75,8 @@ export const Chord = ({
                 opacity: [m.source.index, m.target.index].includes(active as number) ? 1 : 0.5,
                 mixBlendMode: "multiply",
               }}
-              fill={active === m.source.index ? colorScheme[m.source.index] :
-                active === m.target.index ? colorScheme[m.target.index]
+              fill={active === m.source.index ? getFill(colorScheme[m.source.index]) :
+                active === m.target.index ? getFill(colorScheme[m.target.index])
                   : inactive.fill}
               d={`${rPath({
                 source: {
@@ -98,14 +102,16 @@ export const Chord = ({
         transform={`translate(${(width) / 2},${height / 2})`}>
         {
           chords.groups.map((arc, i: number) => {
-            return <><path
-              stroke={colorScheme[i]}
-              fill={colorScheme[i]}
-              onMouseEnter={() => setActive(i)}
-              onMouseLeave={() => setActive(undefined)}
-              d={thisArc(arc) ?? ''}
-
-            ></path>
+            const fill = getFill(colorScheme[i]);
+            return (
+            <>
+              <path
+                stroke={fill}
+                fill={fill}
+                onMouseEnter={() => setActive(i)}
+                onMouseLeave={() => setActive(undefined)}
+                d={thisArc(arc) ?? ''}
+              ></path>
               <g transform={`rotate(${(arc.endAngle - ((arc.endAngle - arc.startAngle) / 2)) * 180 / Math.PI - 90}) translate(${outerRadius},0)`}>
                 <text x={0}
                   y={-10}
@@ -114,7 +120,8 @@ export const Chord = ({
                   textAnchor="middle"
                 >{labels[arc.index]}</text>
               </g>
-            </>;
+            </>
+            );
           }
           )
         }

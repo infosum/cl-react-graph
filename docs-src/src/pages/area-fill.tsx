@@ -86,12 +86,34 @@ const MyComponent = () => {
 };
 `;
 
+const gradientFill = `<AreaFill
+  axis={axis}
+  label="Area fill"
+  width={width}
+  left={0}
+  height={200}
+  line={{
+    ...line,
+    fill: {
+     fill: {
+       gradientTransform: 'rotate(90)',
+       stops: [
+         { offset: "5%", stopColor:  theme.brightBlue700 },
+         { offset: "95%", stopColor:  theme.brightBlue300, stopOpacity: 0 },
+       ],
+      },
+      show: true,
+    }
+  }}
+  data={data} />
+`;
+
 const data = [
   { x: 0, y: 0 },
   { x: 10, y: 20 },
   { x: 20, y: 10 },
   { x: 30, y: 60 },
-]
+];
 const line: LineProps = {
   curveType: curveCatmullRom,
   fill: {
@@ -99,21 +121,19 @@ const line: LineProps = {
     show: true,
   },
   show: true,
-  stroke: '#000',
-  strokeDashArray: '0',
+  stroke: "#000",
+  strokeDashArray: "0",
   strokeDashOffset: 0,
-}
+};
 
 const AreaFillExample = () => {
-  const [ref, width] = useWidth('90%');
+  const [ref, width] = useWidth("90%");
   return (
     <Layout>
       <h2>Area Fill</h2>
       <TwoColumns>
         <div ref={ref}>
-          <Base
-            width={width}
-            height={220}>
+          <Base width={width} height={220}>
             <AreaFill
               axis={axis}
               label="Area fill"
@@ -121,13 +141,45 @@ const AreaFillExample = () => {
               left={0}
               height={200}
               line={line}
-              data={data} />
+              data={data}
+            />
           </Base>
+
+          <h3>Gradients</h3>
+          <p>You can supply a gradient to the line fill props</p>
+          <Base width={width} height={220}>
+            <AreaFill
+              axis={axis}
+              label="Area fill"
+              width={width}
+              left={0}
+              height={200}
+              line={{
+                ...line,
+                fill: {
+                  fill: {
+                    gradientTransform: "rotate(90)",
+                    stops: [
+                      { offset: "5%", stopColor: theme.brightBlue700 },
+                      {
+                        offset: "95%",
+                        stopColor: theme.brightBlue300,
+                        stopOpacity: 0,
+                      },
+                    ],
+                  },
+                  show: true,
+                },
+              }}
+              data={data}
+            />
+          </Base>
+          <JSXCode exampleCode={gradientFill} />
         </div>
         <JSXCode exampleCode={exampleCode} />
       </TwoColumns>
     </Layout>
-  )
+  );
 };
 
 export default AreaFillExample;

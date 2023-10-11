@@ -1,3 +1,7 @@
+import {
+  scaleLinear,
+  scaleOrdinal,
+} from 'd3-scale';
 import { schemeSet3 } from 'd3-scale-chromatic';
 import {
   arc,
@@ -9,6 +13,10 @@ import React, {
 } from 'react';
 
 import { BarChartDataSet } from '../Histogram';
+import {
+  ColorScheme,
+  getFill,
+} from '../utils/colorScheme';
 import { TipFunc } from './ToolTip';
 import { ToolTips } from './ToolTips';
 
@@ -18,7 +26,7 @@ export type RingItem = {
   label: string;
   value: number;
   percentage: string;
-}
+};
 
 type Props = {
   data: BarChartDataSet;
@@ -26,19 +34,19 @@ type Props = {
   bins: string[];
   width: number;
   height: number;
-  colorScheme?: readonly string[];
-  hoverColorScheme?: readonly string[];
+  colorScheme?: ColorScheme;
+  hoverColorScheme?: ColorScheme;
   tip?: TipFunc;
-  outerRadius: number; 
+  outerRadius: number;
   innerRadius: number;
   labelFormat?: (item: RingItem) => string;
-}
+};
 
 /**
  * Render a ring of data - most often used inside a PieChart
  */
 export const Ring = ({
-  colorScheme = [...schemeSet3],
+  colorScheme,
   height,
   hoverColorScheme,
   width,
@@ -46,32 +54,36 @@ export const Ring = ({
   bins,
   setIndex,
   tip,
-  outerRadius, 
+  outerRadius,
   innerRadius,
   labelFormat,
 }: Props) => {
+  const colorScale = scaleOrdinal<string>().domain(bins).range(schemeSet3);
   const centerTransform = `translate(${width / 2},${height / 2})`;
   const [hover, setHover] = useState(-1);
   const refs: RefObject<any>[] = [];
-  
+
   const makeArc = arc();
   const pieData = pie().sort(null)(data.data);
   const total = data.data.reduce((p, n) => p + n, 0);
- 
-  
-  const arcs = pieData.map((c) => makeArc({
-    endAngle: c.endAngle,
-    startAngle: c.startAngle,
-    innerRadius,
-    outerRadius,
-  }));
 
-  const centroids = pieData.map((c) => arc().centroid({
-    endAngle: c.endAngle,
-    startAngle: c.startAngle,
-    innerRadius,
-    outerRadius,
-  }));
+  const arcs = pieData.map((c) =>
+    makeArc({
+      endAngle: c.endAngle,
+      startAngle: c.startAngle,
+      innerRadius,
+      outerRadius,
+    })
+  );
+
+  const centroids = pieData.map((c) =>
+    arc().centroid({
+      endAngle: c.endAngle,
+      startAngle: c.startAngle,
+      innerRadius,
+      outerRadius,
+    })
+  );
 
   const tipItems: {
     transform: string;
@@ -83,54 +95,63 @@ export const Ring = ({
       datasetIndex: setIndex,
       label: bins[i],
       value: data.data[i],
-      percentage: (Math.round((data.data[i] / total) * 100)).toString(),
-    }
-   }));
+      percentage: Math.round((data.data[i] / total) * 100).toString(),
+    },
+  }));
 
-return (
-  <>
-   <g className="pie-container">
-      {
-        arcs.map((path, i) => {
+  const chooseFill = (hover: number, i: number) => {
+    if (hover === i && hoverColorScheme) {
+      return getFill(hoverColorScheme[i]);
+    }
+    if (colorScheme) {
+      return getFill(colorScheme[i]);
+    }
+    return colorScale(bins[i]);
+  };
+
+  return (
+    <>
+      <g className="pie-container">
+        {arcs.map((path, i) => {
           refs[i] = React.createRef<any>();
-          
-        return (<path
-          key={bins[i]}
-          ref={refs[i]}
-          data-testid={`ring-${setIndex}-${i}`}
-          onMouseEnter={() => setHover(i)}
-          onMouseLeave={() => setHover(-1)}
-          transform={centerTransform} 
-          stroke="#FFF" 
-          fill={hover === i ? hoverColorScheme?.[i] : colorScheme[i]}
-          d={path ?? ''}
-          style={{opacity: 1}}
-        />)
-    })
-      }
-    
-    </g>
-    <g className="pie-labels">
-      {
-        centroids.map((path, i) => <text
-          key={bins[i]}
-          textAnchor="middle"
-          transform={`translate(${path[0] + width / 2},${path[1] + height / 2})`}
-          className="label">
-            {
-              labelFormat 
-                ? labelFormat(tipItems[i].item) 
-                : data.data[i]
-            }
-        </text>)
-      }
-    </g>
-    <ToolTips
-      springs={tipItems}
-      refs={refs}
-      bins={bins}
-      tip={tip}
-      items={tipItems.map(({item}) => item)} />
-  </>
-  )
-}
+
+          return (
+            <path
+              key={bins[i]}
+              ref={refs[i]}
+              data-testid={`ring-${setIndex}-${i}`}
+              onMouseEnter={() => setHover(i)}
+              onMouseLeave={() => setHover(-1)}
+              transform={centerTransform}
+              stroke="#FFF"
+              fill={chooseFill(hover, i)}
+              d={path ?? ""}
+              style={{ opacity: 1 }}
+            />
+          );
+        })}
+      </g>
+      <g className="pie-labels">
+        {centroids.map((path, i) => (
+          <text
+            key={bins[i]}
+            textAnchor="middle"
+            transform={`translate(${path[0] + width / 2},${
+              path[1] + height / 2
+            })`}
+            className="label"
+          >
+            {labelFormat ? labelFormat(tipItems[i].item) : data.data[i]}
+          </text>
+        ))}
+      </g>
+      <ToolTips
+        springs={tipItems}
+        refs={refs}
+        bins={bins}
+        tip={tip}
+        items={tipItems.map(({ item }) => item)}
+      />
+    </>
+  );
+};
