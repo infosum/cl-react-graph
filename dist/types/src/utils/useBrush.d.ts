@@ -1,4 +1,4 @@
-import { AnyChartPoint } from '../LineChart';
+import { AnyChartPoint } from "../LineChart";
 type UseBrush = {
     initialPosition: {
         start: number;

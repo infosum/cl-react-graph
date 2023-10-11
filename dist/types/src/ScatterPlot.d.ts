@@ -1,9 +1,9 @@
-import { FC } from 'react';
-import { PointComponentProps } from './components/Points';
-import { TAxisLabelFormat } from './components/YAxis';
-import { Grid as GridProps } from './Histogram';
-import { AnyChartPoint, ChartPoint } from './LineChart';
-import { Axes } from './utils/types';
+import { FC } from "react";
+import { PointComponentProps } from "./components/Points";
+import { TAxisLabelFormat } from "./components/YAxis";
+import { Grid as GridProps } from "./Histogram";
+import { AnyChartPoint, ChartPoint } from "./LineChart";
+import { Axes } from "./utils/types";
 export type ScatterPlotDataSet<T> = {
     label: string;
     point: {

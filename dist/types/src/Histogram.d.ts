@@ -1,9 +1,9 @@
-import { SpringConfig } from '@react-spring/web';
-import { EChartDirection } from './BarChart';
-import { TLabelComponent } from './components/Label';
-import { TipFunc } from './components/ToolTip';
-import { ELabelOrientation, TAxisLabelFormat } from './components/YAxis';
-import { SVGLineStyle } from './utils/types';
+import { SpringConfig } from "@react-spring/web";
+import { EChartDirection } from "./BarChart";
+import { TLabelComponent } from "./components/Label";
+import { TipFunc } from "./components/ToolTip";
+import { ELabelOrientation, TAxisLabelFormat } from "./components/YAxis";
+import { SVGLineStyle } from "./utils/types";
 export declare enum EGroupedBarLayout {
     GROUPED = 0,
     STACKED = 1,
@@ -16,23 +16,23 @@ export type BarChartDataSet = {
     data: number[];
 };
 export declare enum EColorManipulations {
-    'negate' = "negate",
-    'lighten' = "lighten",
-    'darken' = "darken",
-    'saturate' = "saturate",
-    'desaturate' = "desaturate",
-    'whiten' = "whiten",
-    'blacken' = "blacken",
-    'fade' = "fade",
-    'opaquer' = "opaquer",
-    'rotate' = "rotate"
+    "negate" = "negate",
+    "lighten" = "lighten",
+    "darken" = "darken",
+    "saturate" = "saturate",
+    "desaturate" = "desaturate",
+    "whiten" = "whiten",
+    "blacken" = "blacken",
+    "fade" = "fade",
+    "opaquer" = "opaquer",
+    "rotate" = "rotate"
 }
 export type GroupDataItem = {
     label: string;
     groupLabel?: string;
     colorRef?: string;
     value: number;
-    side?: 'left' | 'right';
+    side?: "left" | "right";
 };
 export type HistogramBar = {
     grouped: {

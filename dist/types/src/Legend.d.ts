@@ -1,4 +1,4 @@
-import { BarChartDataSet } from './Histogram';
+import { BarChartDataSet } from "./Histogram";
 type Props = {
     className?: string;
     theme?: string[];

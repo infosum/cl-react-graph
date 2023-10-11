@@ -1,4 +1,4 @@
-type OutputType = 'png' | 'blob';
+type OutputType = "png" | "blob";
 type Watermark = {
     svg: string;
     width: number;

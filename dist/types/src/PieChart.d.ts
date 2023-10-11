@@ -1,6 +1,6 @@
-import { RingItem } from './components/Ring';
-import { TipFunc } from './components/ToolTip';
-import { BarChartDataSet } from './Histogram';
+import { RingItem } from "./components/Ring";
+import { TipFunc } from "./components/ToolTip";
+import { BarChartDataSet } from "./Histogram";
 export type Props = {
     data: {
         bins: string[];

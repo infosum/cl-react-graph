@@ -1,7 +1,7 @@
-import { EChartDirection } from './BarChart';
-import { TipFunc } from './components/ToolTip';
-import { ELabelOrientation, TAxisLabelFormat } from './components/YAxis';
-import { BarChartData, HistogramBar } from './Histogram';
+import { EChartDirection } from "./BarChart";
+import { TipFunc } from "./components/ToolTip";
+import { ELabelOrientation, TAxisLabelFormat } from "./components/YAxis";
+import { BarChartData, HistogramBar } from "./Histogram";
 export type Props = {
     axisLabelFormat?: TAxisLabelFormat;
     colorScheme?: string[];

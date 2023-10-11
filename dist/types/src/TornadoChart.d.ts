@@ -1,6 +1,6 @@
-import { EChartDirection } from './BarChart';
-import { TipFunc } from './components/ToolTip';
-import { EGroupedBarLayout, HistogramBar } from './Histogram';
+import { EChartDirection } from "./BarChart";
+import { TipFunc } from "./components/ToolTip";
+import { EGroupedBarLayout, HistogramBar } from "./Histogram";
 type TornadoDataSet = {
     borderColors?: string[];
     colors?: string[];

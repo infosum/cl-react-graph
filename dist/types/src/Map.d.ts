@@ -1,6 +1,6 @@
-import { ExtendedFeatureCollection, GeoProjection } from 'd3';
-import { Props as BaseProps } from './components/Base';
-import { TipFunc } from './components/ToolTip';
+import { ExtendedFeatureCollection, GeoProjection } from "d3";
+import { Props as BaseProps } from "./components/Base";
+import { TipFunc } from "./components/ToolTip";
 type MapData = Record<string, number>;
 type Props = {
     /** Object name found in feature.properties whose value matches the data's key. This ties the data to the given map area. */

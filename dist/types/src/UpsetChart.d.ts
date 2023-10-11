@@ -1,4 +1,5 @@
-import { TLabelComponent } from './components/Label';
+import { TLabelComponent } from "./components/Label";
+import { ColorScheme } from "./utils/colorScheme";
 export type TUpsetData = {
     keys: string[];
     value: number;
@@ -15,7 +16,7 @@ export type Props = {
     yAxisWidth?: number;
     textFill?: string;
     distribution?: {
-        colorScheme: string[];
+        colorScheme: ColorScheme;
         fill: {
             active: string;
             inactive: string;
@@ -29,7 +30,7 @@ export type Props = {
             height: number;
         };
         label?: string;
-        colorScheme: string[];
+        colorScheme: ColorScheme;
         LabelComponent?: TLabelComponent;
     };
     axisSpace?: number;
