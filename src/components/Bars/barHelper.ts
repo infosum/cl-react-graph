@@ -1,21 +1,15 @@
-import {
-  ScaleBand,
-  ScaleLinear,
-} from 'd3-scale';
+import { ScaleBand, ScaleLinear } from "d3-scale";
 
-import { SpringConfig } from '@react-spring/web';
+import { SpringConfig } from "@react-spring/web";
 
-import { EChartDirection } from '../../BarChart';
+import { EChartDirection } from "../../BarChart";
 import {
   BarChartDataSet,
   EGroupedBarLayout,
   HistogramBar,
-} from '../../Histogram';
-import {
-  ColorScheme,
-  getFill,
-} from '../../utils/colorScheme';
-import { ExtendedGroupItem } from './Bars';
+} from "../../Histogram";
+import { ColorScheme, getFill } from "../../utils/colorScheme";
+import { ExtendedGroupItem } from "./Bars";
 
 /**
  * Calculate the bar's band position based in the axis layout type.
@@ -26,7 +20,7 @@ import { ExtendedGroupItem } from './Bars';
 const getBandPosition = (
   item: ExtendedGroupItem,
   props: BarSpringProps,
-  itemWidths: number[]
+  itemWidths: number[],
 ) => {
   const { innerScaleBand, innerDomain, groupLayout, paddings } = props;
   const groupLabel = item.groupLabel ?? "main";
@@ -40,7 +34,7 @@ const getBandPosition = (
           : Math.floor(
               (itemWidths[item.datasetIndex - 1] -
                 itemWidths[item.datasetIndex]) /
-                2
+                2,
             );
 
       bandX = Number(innerScaleBand(String(innerDomain[0]))) + overlaidOffset;
@@ -104,7 +98,7 @@ export const buildBarSprings = (props: BarSpringProps) => {
     const hoverFill = getFill(
       hoverColorScheme
         ? hoverColorScheme[item.datasetIndex]
-        : colorScheme[item.datasetIndex]
+        : colorScheme[item.datasetIndex],
     );
     const fill = getFill(colorScheme[item.datasetIndex]);
     if (direction === EChartDirection.HORIZONTAL) {
@@ -158,7 +152,7 @@ export const buildBarSprings = (props: BarSpringProps) => {
  */
 export const getValueOffset = (
   item: ExtendedGroupItem,
-  props: BarSpringProps
+  props: BarSpringProps,
 ) => {
   const { direction, numericScale, groupLayout, height, dataSets } = props;
   const offSet = dataSets
@@ -166,7 +160,7 @@ export const getValueOffset = (
     .filter((_, i) =>
       direction === EChartDirection.HORIZONTAL
         ? i < item.datasetIndex
-        : i <= item.datasetIndex
+        : i <= item.datasetIndex,
     )
     .reduce((p, n) => p + n.value, 0);
 

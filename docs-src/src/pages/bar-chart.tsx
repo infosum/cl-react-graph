@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 import {
   Axes,
@@ -11,11 +11,11 @@ import {
   GridProps,
   SVGLineStyle,
   useWidth,
-} from '../../../src';
-import { JSXCode } from '../components/JSXCode';
-import { Layout } from '../components/Layout';
-import { TwoColumns } from '../components/TwoColumns';
-import { theme } from '../context/theme';
+} from "../../../src";
+import { JSXCode } from "../components/JSXCode";
+import { Layout } from "../components/Layout";
+import { TwoColumns } from "../components/TwoColumns";
+import { theme } from "../context/theme";
 
 const exampleCode = `import {
   BarChart,
@@ -119,38 +119,38 @@ const MyComponent = () => {
 
 export const axis: DeepPartial<Axes> = {
   x: {
-    scale: 'linear',
-    numberFormat: '.2s',
+    scale: "linear",
+    numberFormat: ".2s",
     labelOrientation: ELabelOrientation.HORIZONTAL,
   },
   y: {
-    numberFormat: '.2s',
+    numberFormat: ".2s",
     labelOrientation: ELabelOrientation.HORIZONTAL,
   },
 };
 
 const data: BarChartData = {
-  bins: ['Female', 'Male', 'Other'],
+  bins: ["Female", "Male", "Other"],
   counts: [
     {
       data: [58483, 52400, 13300],
-      label: 'Baseline',
+      label: "Baseline",
     },
     {
       data: [54932, 34230, 10000],
-      label: 'Filtered',
+      label: "Filtered",
     },
-  ]
-}
+  ],
+};
 
 const lineStyle: SVGLineStyle = {
-  fill: '#000',
+  fill: "#000",
   opacity: 1,
-  shapeRendering: 'auto',
-  stroke: '#000',
+  shapeRendering: "auto",
+  stroke: "#000",
   strokeOpacity: 1,
   strokeWidth: 1,
-  visible: 'true',
+  visible: "true",
 };
 
 const grid: GridProps = {
@@ -158,8 +158,8 @@ const grid: GridProps = {
     height: 1,
     style: {
       ...lineStyle,
-      fill: 'none',
-      stroke: '#bbb',
+      fill: "none",
+      stroke: "#bbb",
       strokeOpacity: 0.7,
       strokeWidth: 1,
     },
@@ -169,8 +169,8 @@ const grid: GridProps = {
   y: {
     style: {
       ...lineStyle,
-      fill: 'none',
-      stroke: '#bbb',
+      fill: "none",
+      stroke: "#bbb",
       strokeOpacity: 0.7,
       strokeWidth: 5,
     },
@@ -179,9 +179,8 @@ const grid: GridProps = {
   },
 };
 
-
 const BarChartExample = () => {
-  const [ref, width] = useWidth('90%');
+  const [ref, width] = useWidth("90%");
   return (
     <Layout>
       <h2>Bar Chart</h2>
@@ -206,7 +205,7 @@ const BarChartExample = () => {
         <JSXCode exampleCode={exampleCode} />
       </TwoColumns>
     </Layout>
-  )
+  );
 };
 
 export default BarChartExample;

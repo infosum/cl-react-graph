@@ -1,14 +1,12 @@
-import path from 'path';
-import webpack from 'webpack';
-import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
+import path from "path";
+import webpack from "webpack";
+import { BundleAnalyzerPlugin } from "webpack-bundle-analyzer";
 
-const libraryName = 'cl-react-graph';
-const entry = [
-  './src/index.ts',
-];
+const libraryName = "cl-react-graph";
+const entry = ["./src/index.ts"];
 const plugins = [
   new BundleAnalyzerPlugin({
-    analyzerMode: 'static',
+    analyzerMode: "static",
   }),
   new webpack.NoEmitOnErrorsPlugin(),
 ];
@@ -18,10 +16,10 @@ const rules = [
     test: /\.ts(x?)$/,
     use: [
       {
-        loader: 'babel-loader',
+        loader: "babel-loader",
       },
       {
-        loader: 'ts-loader',
+        loader: "ts-loader",
       },
     ],
   },
@@ -30,48 +28,48 @@ const rules = [
     test: /\.js$/,
     use: [
       {
-        loader: 'babel-loader',
+        loader: "babel-loader",
       },
     ],
   },
 ];
 
 export default {
-  devtool: 'cheap-module-source-map',
+  devtool: "cheap-module-source-map",
   entry,
   externals: [
     {
       react: {
-        amd: 'react',
-        commonjs: 'react',
-        commonjs2: 'react',
-        root: 'React',
+        amd: "react",
+        commonjs: "react",
+        commonjs2: "react",
+        root: "React",
       },
     },
     {
-      'react-dom': {
-        amd: 'react-dom',
-        commonjs: 'react-dom',
-        commonjs2: 'react-dom',
-        root: 'ReactDOM',
+      "react-dom": {
+        amd: "react-dom",
+        commonjs: "react-dom",
+        commonjs2: "react-dom",
+        root: "ReactDOM",
       },
     },
   ],
-  mode: 'production',
+  mode: "production",
   module: {
     rules,
   },
   output: {
-    path: path.join(__dirname, 'dist'),
-    publicPath: '/',
-    filename: 'index.js',
+    path: path.join(__dirname, "dist"),
+    publicPath: "/",
+    filename: "index.js",
     library: libraryName,
-    libraryTarget: 'umd',
-    umdNamedDefine: true
+    libraryTarget: "umd",
+    umdNamedDefine: true,
   },
   plugins,
   resolve: {
-    extensions: ['.tsx', '.ts', '.js'],
+    extensions: [".tsx", ".ts", ".js"],
   },
   watchOptions: {
     poll: true,

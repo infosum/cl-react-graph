@@ -1,15 +1,12 @@
-import { interpolate } from 'd3';
-import React from 'react';
-import * as topo from 'topojson-client';
+import { interpolate } from "d3";
+import React from "react";
+import * as topo from "topojson-client";
 
-import {
-  Map,
-  useWidth,
-} from '../../../src';
-import j from '../assets/uk-region.topo.json';
-import { JSXCode } from '../components/JSXCode';
-import { Layout } from '../components/Layout';
-import { TwoColumns } from '../components/TwoColumns';
+import { Map, useWidth } from "../../../src";
+import j from "../assets/uk-region.topo.json";
+import { JSXCode } from "../components/JSXCode";
+import { Layout } from "../components/Layout";
+import { TwoColumns } from "../components/TwoColumns";
 
 const exampleCode = `import {
   Map,
@@ -40,20 +37,20 @@ const MyComponent = () => {
 `;
 
 const data = {
-  "North East": 3432, 
-  "North West": 2322, 
-  "Yorkshire and The Humber": 22, 
-  "East Midlands": 986, 
-  "West Midlands": 3454, 
-  "Eastern": 3432,
-  "London": 999,
-  "South East": 2321, 
+  "North East": 3432,
+  "North West": 2322,
+  "Yorkshire and The Humber": 22,
+  "East Midlands": 986,
+  "West Midlands": 3454,
+  Eastern: 3432,
+  London: 999,
+  "South East": 2321,
   "South West": 2234,
-}
+};
 
 const MapExample = () => {
-  const [ref, width] = useWidth('90%');
-  const f = topo.feature(j as any, 'eer');
+  const [ref, width] = useWidth("90%");
+  const f = topo.feature(j as any, "eer");
   return (
     <Layout>
       <h2>Map</h2>
@@ -70,10 +67,9 @@ const MapExample = () => {
           />
         </div>
         <JSXCode exampleCode={exampleCode} />
-
       </TwoColumns>
     </Layout>
-  )
+  );
 };
 
 export default MapExample;

@@ -1,6 +1,6 @@
-import { select } from 'd3-selection';
+import { select } from "d3-selection";
 
-type OutputType = 'png' | 'blob';
+type OutputType = "png" | "blob";
 
 type Watermark = {
   svg: string;
@@ -8,7 +8,7 @@ type Watermark = {
   height: number;
 };
 
-// Method to combine an svg specified by id with the InfoSum watermark and 
+// Method to combine an svg specified by id with the InfoSum watermark and
 // produce a blob or png output that can be used for download
 export const outputSvg = (
   svgId: string,
@@ -16,21 +16,23 @@ export const outputSvg = (
   height: number,
   callback: (outputData: string | Blob | null) => void,
   watermark?: Watermark,
-  type: OutputType = 'blob',
+  type: OutputType = "blob",
 ) => {
   // Select the first svg element
   const svg: any = select(`svg#${svgId}`);
   const serializer = new XMLSerializer();
   // generate IMG in new tab
   const svgStr = serializer.serializeToString(svg.node());
-  const svgData = 'data:image/svg+xml;base64,' + window.btoa(unescape(encodeURIComponent(svgStr)));
+  const svgData =
+    "data:image/svg+xml;base64," +
+    window.btoa(unescape(encodeURIComponent(svgStr)));
   // create canvas in memory(not in DOM)
-  const canvas = document.createElement('canvas');
+  const canvas = document.createElement("canvas");
   // set canvas size
   canvas.width = width + 20 + (watermark?.width ? watermark.width : 0);
   canvas.height = height + 20;
   // get canvas context for drawing on canvas
-  const context = canvas.getContext('2d');
+  const context = canvas.getContext("2d");
   // create images in memory(not DOM)
   var image = new Image();
   const watermarkImage = new Image();
@@ -43,25 +45,31 @@ export const outputSvg = (
       // draw image with SVG data to canvas
       context!.drawImage(image, 10, 10, width, height);
       if (watermark) {
-        context!.drawImage(watermarkImage, canvas.width - watermark.width - 10, 10, watermark.width, watermark.height);
+        context!.drawImage(
+          watermarkImage,
+          canvas.width - watermark.width - 10,
+          10,
+          watermark.width,
+          watermark.height,
+        );
       }
       // add a background
-      context!.globalCompositeOperation = 'destination-over'
+      context!.globalCompositeOperation = "destination-over";
       context!.fillStyle = "#FFF";
       context!.fillRect(0, 0, canvas.width, canvas.height);
       // snapshot canvas as png or blob depending on type
-      if (type === 'blob') {
+      if (type === "blob") {
         canvas.toBlob(callback);
-      } else if (type === 'png') {
-        const pngData = canvas.toDataURL('image/png');
+      } else if (type === "png") {
+        const pngData = canvas.toDataURL("image/png");
         callback(pngData);
       }
     };
     // start loading SVG data into in memory image
     image.src = svgData;
-  }
+  };
   // start loading watermark SVG data into memory
-  if(watermark) {
+  if (watermark) {
     watermarkImage.src = watermark.svg;
   }
 };

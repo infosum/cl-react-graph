@@ -1,4 +1,4 @@
-import { Axis as AxisProps } from '../components/YAxis';
+import { Axis as AxisProps } from "../components/YAxis";
 
 /**
  * Slightly better attempt from applyDomainAffordance, taking into
@@ -13,16 +13,16 @@ export const rangeAffordance = (
     return [0, 0];
   }
   try {
-    const first = axis.scale === 'time' ? range[0].getTime() : range[0];
-    const last = axis.scale === 'time' ? range[1].getTime() : range[1];
+    const first = axis.scale === "time" ? range[0].getTime() : range[0];
+    const last = axis.scale === "time" ? range[1].getTime() : range[1];
     const diff = last - first;
-    const percentIncrement = axis.scale === 'log' ? 100 : 5;
+    const percentIncrement = axis.scale === "log" ? 100 : 5;
 
     const incremental = applyDomainAffordance(diff, inc, percentIncrement);
 
     const newLast = last + (incremental - diff);
 
-    if (axis.scale === 'time') {
+    if (axis.scale === "time") {
       return [range[0], new Date(newLast)];
     }
     // Only apply affordance at the end as line should start from origin.
@@ -30,13 +30,11 @@ export const rangeAffordance = (
   } catch (e) {
     return [0, 0];
   }
-}
+};
 
 export const applyDomainAffordance = (
   v: number,
   inc: boolean = true,
   percentIncrement: number = 5,
 ) =>
-  inc ? v + v * percentIncrement / 100
-    : v - v * percentIncrement / 100;
-
+  inc ? v + (v * percentIncrement) / 100 : v - (v * percentIncrement) / 100;

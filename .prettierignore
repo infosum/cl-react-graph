@@ -1,0 +1,6 @@
+docs
+dist
+.github
+docs-src/src/assets
+*.md
+*.json

@@ -1,29 +1,32 @@
-import React from 'react';
+import React from "react";
 
 export type Gradient = {
   gradientTransform?: string;
-  stops: {offset: string, stopColor: string, stopOpacity?: number}[];
+  stops: { offset: string; stopColor: string; stopOpacity?: number }[];
 };
 
 export type ColorSchemeItem = string | Gradient;
-export type ColorScheme = readonly ColorSchemeItem[]
+export type ColorScheme = readonly ColorSchemeItem[];
 
-export const isGradient = (scheme: string | Gradient): scheme is Gradient => scheme.hasOwnProperty('stops');
+export const isGradient = (scheme: string | Gradient): scheme is Gradient =>
+  scheme.hasOwnProperty("stops");
 
 export const getFill = (schemeItem: ColorSchemeItem): string => {
   if (isGradient(schemeItem)) {
-    return `url(#${getGradientId(schemeItem)})`
+    return `url(#${getGradientId(schemeItem)})`;
   }
   return schemeItem;
-}
+};
 
 export const getGradientId = (schemeItem: Gradient) => {
   // Strip out characters which would make an invalid id (keep alphanumeric & _)
-  const start = schemeItem.stops[0].stopColor.replace(/[\W_]+/g, '');
-  const end = schemeItem.stops[schemeItem.stops.length -1].stopColor.replace(/[\W_]+/g, '');
-return `gradient-${start}-${end}`
-}
-
+  const start = schemeItem.stops[0].stopColor.replace(/[\W_]+/g, "");
+  const end = schemeItem.stops[schemeItem.stops.length - 1].stopColor.replace(
+    /[\W_]+/g,
+    "",
+  );
+  return `gradient-${start}-${end}`;
+};
 
 export const ColorSchemeDefs = ({ schemes }: { schemes: ColorScheme[] }) => {
   return (
@@ -32,7 +35,7 @@ export const ColorSchemeDefs = ({ schemes }: { schemes: ColorScheme[] }) => {
         return scheme.map((item, j) =>
           isGradient(item) ? (
             <GradientFill key={`${i}-${j}`} gradient={item} />
-          ) : null
+          ) : null,
         );
       })}
     </defs>

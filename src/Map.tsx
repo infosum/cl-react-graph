@@ -5,15 +5,12 @@ import {
   GeoProjection,
   interpolateSpectral,
   scaleSequential,
-} from 'd3';
-import React, { RefObject } from 'react';
+} from "d3";
+import React, { RefObject } from "react";
 
-import {
-  Base,
-  Props as BaseProps,
-} from './components/Base';
-import { TipFunc } from './components/ToolTip';
-import { ToolTips } from './components/ToolTips';
+import { Base, Props as BaseProps } from "./components/Base";
+import { TipFunc } from "./components/ToolTip";
+import { ToolTips } from "./components/ToolTips";
 
 type MapData = Record<string, number>;
 
@@ -34,10 +31,9 @@ type Props = {
   tip?: TipFunc;
 } & BaseProps;
 
-
 const isExtendedJSON = (json: any): json is ExtendedFeatureCollection => {
-  return json.hasOwnProperty('features')
-}
+  return json.hasOwnProperty("features");
+};
 
 // @TODO allow topoJSON as well (file located here src/assets/uk-region.topo.json)
 export const Map = ({
@@ -55,66 +51,73 @@ export const Map = ({
   geoJSON,
   tip,
 }: Props) => {
-
   const refs: RefObject<any>[] = [];
 
   if (!isExtendedJSON(geoJSON)) {
-    throw new Error('not geo json feature set');
+    throw new Error("not geo json feature set");
   }
-  const min =  domain?.[0] ?? Object.values(data).reduce((p, n) => n < p ? n : p, 0);
-  const max = domain?.[1] ?? Object.values(data).reduce((p, n) => n > p ? n : p, 0);
+  const min =
+    domain?.[0] ?? Object.values(data).reduce((p, n) => (n < p ? n : p), 0);
+  const max =
+    domain?.[1] ?? Object.values(data).reduce((p, n) => (n > p ? n : p), 0);
   const scale = scaleSequential(colorInterpolate).domain([min, max]);
 
-  const thisProjection = (projection ?? geoEquirectangular)().fitSize([width, height], geoJSON);
+  const thisProjection = (projection ?? geoEquirectangular)().fitSize(
+    [width, height],
+    geoJSON,
+  );
 
   const geoGenerator = geoPath().projection(thisProjection);
 
   const featurePaths = geoJSON.features.map((f) => ({
     d: geoGenerator(f),
-    bin: f?.properties?.[bin]  ?? '',
+    bin: f?.properties?.[bin] ?? "",
     center: geoPath().centroid(f),
-  }))
+  }));
 
   const total = Object.values(data).reduce((p, n) => p + n, 0);
 
-  const tipItems = featurePaths.map(({center, bin}, i) => ({
+  const tipItems = featurePaths.map(({ center, bin }, i) => ({
     transform: `translate(${center[0] + width / 2},${center[1] + height / 2})`,
     item: {
       binIndex: i,
       label: bin,
       datasetIndex: 0,
       value: data[bin],
-      percentage: (Math.round(( data[bin] / total) * 100)).toString(),
-    }
+      percentage: Math.round((data[bin] / total) * 100).toString(),
+    },
   }));
 
   return (
-  <Base 
-    width={width}
-    height={height}
-    description={description}
-    className={className}
-    id={id}
-    padding={padding}
-  >
-    {
-      featurePaths.map((d, i) => {
+    <Base
+      width={width}
+      height={height}
+      description={description}
+      className={className}
+      id={id}
+      padding={padding}
+    >
+      {featurePaths.map((d, i) => {
         refs[i] = React.createRef<any>();
-        return <path 
-        key={d.bin}
-        d={d.d ?? ''}
-        data-testid={d.bin}
-        ref={refs[i]}
-        data-name={d.bin}
-        fill={scale(data[d.bin])} stroke="#fff" />;
-      })
-    }
-    <ToolTips
-      springs={tipItems}
-      refs={refs}
-      bins={Object.keys(data)}
-      tip={tip}
-      items={tipItems.map(({item}) => item)} />
-  </Base>
-  )
-}
+        return (
+          <path
+            key={d.bin}
+            d={d.d ?? ""}
+            data-testid={d.bin}
+            ref={refs[i]}
+            data-name={d.bin}
+            fill={scale(data[d.bin])}
+            stroke="#fff"
+          />
+        );
+      })}
+      <ToolTips
+        springs={tipItems}
+        refs={refs}
+        bins={Object.keys(data)}
+        tip={tip}
+        items={tipItems.map(({ item }) => item)}
+      />
+    </Base>
+  );
+};

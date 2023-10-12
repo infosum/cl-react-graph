@@ -1,23 +1,23 @@
-import { Link } from 'gatsby';
-import React from 'react';
-import styled from 'styled-components';
+import { Link } from "gatsby";
+import React from "react";
+import styled from "styled-components";
 
 const Section = styled.div`
-margin-bottom: 1rem;
-ul {
-  list-style: none;
-  padding: 0;
-}
+  margin-bottom: 1rem;
+  ul {
+    list-style: none;
+    padding: 0;
+  }
 
-li {
-  padding: 0;
-  margin: 0;
-}
+  li {
+    padding: 0;
+    margin: 0;
+  }
 
-h2 {
-  margin: 0 1rem 0.75rem 1rem;
-  font-size: 1.1rem;
-}
+  h2 {
+    margin: 0 1rem 0.75rem 1rem;
+    font-size: 1.1rem;
+  }
 `;
 
 const MenuItem = styled(Link)`
@@ -26,7 +26,7 @@ const MenuItem = styled(Link)`
   display: block;
   color: hsla(206, 4%, 36%, 1);
   &:hover {
-    background: ${(props) => props.theme.brightBlue900}
+    background: ${(props) => props.theme.brightBlue900};
   }
 `;
 
@@ -108,5 +108,5 @@ export const MenuItems = () => {
         </ul>
       </Section>
     </>
-  )
+  );
 };

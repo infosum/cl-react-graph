@@ -1,35 +1,28 @@
-import { schemeSet3 } from 'd3-scale-chromatic';
-import React from 'react';
+import { schemeSet3 } from "d3-scale-chromatic";
+import React from "react";
 
-import { EChartDirection } from './BarChart';
-import {
-  Bars,
-  defaultPadding,
-} from './components/Bars/Bars';
-import { Base } from './components/Base';
-import { TipFunc } from './components/ToolTip';
-import { XAxis } from './components/XAxis';
-import { YAxis } from './components/YAxis';
-import {
-  BarChartDataSet,
-  EGroupedBarLayout,
-  HistogramBar,
-} from './Histogram';
-import { applyDomainAffordance } from './utils/domain';
+import { EChartDirection } from "./BarChart";
+import { Bars, defaultPadding } from "./components/Bars/Bars";
+import { Base } from "./components/Base";
+import { TipFunc } from "./components/ToolTip";
+import { XAxis } from "./components/XAxis";
+import { YAxis } from "./components/YAxis";
+import { BarChartDataSet, EGroupedBarLayout, HistogramBar } from "./Histogram";
+import { applyDomainAffordance } from "./utils/domain";
 
 type TornadoDataSet = {
   borderColors?: string[];
   colors?: string[];
   label: string;
   data: [number[], number[]];
-}
+};
 
 export type TornadoData = {
   bins: string[];
   counts: TornadoDataSet[];
   colorScheme?: string[];
   title?: string;
-}
+};
 
 export type Props = {
   /** @description bar colour scheme */
@@ -55,16 +48,16 @@ export type Props = {
   /** @description Chart <title /> */
   title?: string;
   tip?: TipFunc;
-}
+};
 
 export const TornadoChart = ({
   colorScheme = schemeSet3,
   data,
-  id = '',
+  id = "",
   direction = EChartDirection.HORIZONTAL,
   groupLayout = EGroupedBarLayout.GROUPED,
   height,
-  splitBins = ['Left', 'Right'],
+  splitBins = ["Left", "Right"],
   width,
   visible = {},
   xAxisHeight,
@@ -92,9 +85,9 @@ export const TornadoChart = ({
     height,
     chartPadding,
     title,
-  }
+  };
 
-  const dataSets: any[] = []
+  const dataSets: any[] = [];
   data.counts.forEach((count) => {
     count.data.forEach((value, genderIndex) => {
       value.forEach((aValue, rowIndex) => {
@@ -102,54 +95,60 @@ export const TornadoChart = ({
           dataSets[rowIndex] = [];
         }
         dataSets[rowIndex].push({
-          side: genderIndex === 0 ? 'left' : 'right',
+          side: genderIndex === 0 ? "left" : "right",
           groupLabel: count.label,
           colorRef: count.label,
           label: data.bins[rowIndex],
-          value: visible[data.bins[rowIndex]] !== false && visible[count.label] !== false ? aValue : 0,
+          value:
+            visible[data.bins[rowIndex]] !== false &&
+            visible[count.label] !== false
+              ? aValue
+              : 0,
         });
-      })
-
+      });
     });
   });
 
   const left: BarChartDataSet[] = data.counts.map((counts, i) => {
-
     return {
-      label: splitBins[0] + ' ' + counts.label,
-      data: direction === EChartDirection.HORIZONTAL
-        ? [...counts.data[0]].reverse()
-        : [...counts.data[0]],
-    }
-  })
+      label: splitBins[0] + " " + counts.label,
+      data:
+        direction === EChartDirection.HORIZONTAL
+          ? [...counts.data[0]].reverse()
+          : [...counts.data[0]],
+    };
+  });
 
   const right: BarChartDataSet[] = data.counts.map((counts, i) => {
     return {
-      label: splitBins[1] + ' ' + counts.label,
-      data: direction === EChartDirection.HORIZONTAL
-        ? [...counts.data[1]].reverse()
-        : [...counts.data[1]],
-    }
+      label: splitBins[1] + " " + counts.label,
+      data:
+        direction === EChartDirection.HORIZONTAL
+          ? [...counts.data[1]].reverse()
+          : [...counts.data[1]],
+    };
   });
 
-  const barWidth = direction === EChartDirection.VERTICAL
-    ? (width - yAxisWidth) - (chartPadding * 2)
-    : ((width - (2 * chartPadding)) - yAxisWidth) / 2;
-  const barHeight = direction === EChartDirection.VERTICAL
-    ? ((height - (2 * chartPadding)) - xAxisHeight) / 2
-    : (height - xAxisHeight - splitAxisHeight) - (chartPadding * 2);
+  const barWidth =
+    direction === EChartDirection.VERTICAL
+      ? width - yAxisWidth - chartPadding * 2
+      : (width - 2 * chartPadding - yAxisWidth) / 2;
+  const barHeight =
+    direction === EChartDirection.VERTICAL
+      ? (height - 2 * chartPadding - xAxisHeight) / 2
+      : height - xAxisHeight - splitAxisHeight - chartPadding * 2;
   return (
-    <Base {...baseProps}
-      width={width + 30}
-      id={id}
-    >
-      <Bars values={left}
+    <Base {...baseProps} width={width + 30} id={id}>
+      <Bars
+        values={left}
         colorScheme={colorScheme}
         direction={direction}
         inverse={direction !== EChartDirection.VERTICAL}
-        left={direction === EChartDirection.VERTICAL
-          ? splitAxisHeight + xAxisHeight
-          : yAxisWidth}
+        left={
+          direction === EChartDirection.VERTICAL
+            ? splitAxisHeight + xAxisHeight
+            : yAxisWidth
+        }
         height={barHeight}
         width={barWidth}
         groupLayout={groupLayout}
@@ -161,13 +160,16 @@ export const TornadoChart = ({
         tip={tip}
       />
 
-      <Bars values={right}
+      <Bars
+        values={right}
         colorScheme={colorScheme}
         direction={direction}
         inverse={direction === EChartDirection.VERTICAL}
-        left={direction === EChartDirection.VERTICAL
-          ? splitAxisHeight + xAxisHeight
-          : (((width - (2 * chartPadding)) + yAxisWidth) / 2)}
+        left={
+          direction === EChartDirection.VERTICAL
+            ? splitAxisHeight + xAxisHeight
+            : (width - 2 * chartPadding + yAxisWidth) / 2
+        }
         height={barHeight}
         width={barWidth}
         groupLayout={groupLayout}
@@ -180,8 +182,8 @@ export const TornadoChart = ({
         tip={tip}
       />
 
-      {
-        direction === EChartDirection.HORIZONTAL && <>
+      {direction === EChartDirection.HORIZONTAL && (
+        <>
           {
             // Band axis (Left hand axis)
           }
@@ -201,9 +203,11 @@ export const TornadoChart = ({
             width={yAxisWidth}
             height={barHeight}
             left={barWidth}
-            labelFormat={() => ''}
+            labelFormat={() => ""}
             padding={padding}
-            values={direction === EChartDirection.HORIZONTAL ? data.bins : undefined}
+            values={
+              direction === EChartDirection.HORIZONTAL ? data.bins : undefined
+            }
             scale="band"
           />
 
@@ -227,7 +231,7 @@ export const TornadoChart = ({
             width={barWidth}
             height={xAxisHeight}
             top={barHeight}
-            left={((width - (2 * chartPadding) + yAxisWidth) / 2)}
+            left={(width - 2 * chartPadding + yAxisWidth) / 2}
             scale="linear"
             domain={domain}
           />
@@ -241,13 +245,12 @@ export const TornadoChart = ({
             width={baseProps.width - yAxisWidth}
             values={splitBins}
             path={{ opacity: 0 }}
-            scale='point'
+            scale="point"
           />
         </>
-      }
-      {
-
-        direction === EChartDirection.VERTICAL && <>
+      )}
+      {direction === EChartDirection.VERTICAL && (
+        <>
           {
             // Band axis (bottom axis)
           }
@@ -259,7 +262,7 @@ export const TornadoChart = ({
             path={{ opacity: 0 }}
             tickSize={0}
             left={xAxisHeight + splitAxisHeight}
-            top={(barHeight * 2)}
+            top={barHeight * 2}
             values={[...data.bins]}
           />
 
@@ -270,9 +273,9 @@ export const TornadoChart = ({
             width={barWidth}
             height={yAxisWidth}
             left={xAxisHeight + splitAxisHeight}
-            labelFormat={() => ''}
+            labelFormat={() => ""}
             values={data.bins}
-            top={(barHeight)}
+            top={barHeight}
             scale="band"
             padding={padding}
           />
@@ -310,32 +313,31 @@ export const TornadoChart = ({
             width={splitAxisHeight}
             values={splitBins}
             path={{ opacity: 0 }}
-            scale='point'
+            scale="point"
           />
         </>
-      }
-
+      )}
     </Base>
-  )
-}
+  );
+};
 
 const calculateDomain = (data: TornadoData, center = true) => {
-  const leftValues = data.counts.reduce((prev, next) => prev.concat(next.data[0]), [] as number[]);
-  const rightValues = data.counts.reduce((prev, next) => prev.concat(next.data[1]), [] as number[]);
+  const leftValues = data.counts.reduce(
+    (prev, next) => prev.concat(next.data[0]),
+    [] as number[],
+  );
+  const rightValues = data.counts.reduce(
+    (prev, next) => prev.concat(next.data[1]),
+    [] as number[],
+  );
 
   // Use applyDomainAffordance to allow space for percentage labels
-  let domain = [
-    0,
-    applyDomainAffordance(Math.max(...rightValues)),
-  ];
+  let domain = [0, applyDomainAffordance(Math.max(...rightValues))];
 
   // Center the 0 axis value in the middle of the chart
   if (center) {
     const max = Math.max(Math.max(...leftValues), domain[1]);
-    domain = [
-      0,
-      applyDomainAffordance(max),
-    ];
+    domain = [0, applyDomainAffordance(max)];
   }
   return domain;
-}
+};

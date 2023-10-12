@@ -1,23 +1,23 @@
-import { Axes } from '../../../../src';
+import { Axes } from "../../../../src";
 
 export const axis: Axes = {
   x: {
-    dateFormat: '',
+    dateFormat: "",
     height: 20,
-    label: '',
+    label: "",
     margin: 20,
-    numberFormat: '',
-    scale: 'linear',
+    numberFormat: "",
+    scale: "linear",
     tickSize: 0,
     width: 50,
   },
   y: {
-    dateFormat: '',
+    dateFormat: "",
     height: 20,
-    label: '',
+    label: "",
     margin: 20,
-    numberFormat: '',
-    scale: 'linear',
+    numberFormat: "",
+    scale: "linear",
     tickSize: 20,
     width: 50,
   },

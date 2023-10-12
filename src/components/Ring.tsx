@@ -1,24 +1,12 @@
-import {
-  scaleLinear,
-  scaleOrdinal,
-} from 'd3-scale';
-import { schemeSet3 } from 'd3-scale-chromatic';
-import {
-  arc,
-  pie,
-} from 'd3-shape';
-import React, {
-  RefObject,
-  useState,
-} from 'react';
+import { scaleLinear, scaleOrdinal } from "d3-scale";
+import { schemeSet3 } from "d3-scale-chromatic";
+import { arc, pie } from "d3-shape";
+import React, { RefObject, useState } from "react";
 
-import { BarChartDataSet } from '../Histogram';
-import {
-  ColorScheme,
-  getFill,
-} from '../utils/colorScheme';
-import { TipFunc } from './ToolTip';
-import { ToolTips } from './ToolTips';
+import { BarChartDataSet } from "../Histogram";
+import { ColorScheme, getFill } from "../utils/colorScheme";
+import { TipFunc } from "./ToolTip";
+import { ToolTips } from "./ToolTips";
 
 export type RingItem = {
   binIndex: number;
@@ -73,7 +61,7 @@ export const Ring = ({
       startAngle: c.startAngle,
       innerRadius,
       outerRadius,
-    })
+    }),
   );
 
   const centroids = pieData.map((c) =>
@@ -82,7 +70,7 @@ export const Ring = ({
       startAngle: c.startAngle,
       innerRadius,
       outerRadius,
-    })
+    }),
   );
 
   const tipItems: {

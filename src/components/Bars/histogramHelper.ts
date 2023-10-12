@@ -1,10 +1,10 @@
-import { ScaleLinear } from 'd3-scale';
+import { ScaleLinear } from "d3-scale";
 
-import { SpringConfig } from '@react-spring/web';
+import { SpringConfig } from "@react-spring/web";
 
-import { EChartDirection } from '../../BarChart';
-import { BarChartDataSet } from '../../Histogram';
-import { ExtendedGroupItem } from './Bars';
+import { EChartDirection } from "../../BarChart";
+import { BarChartDataSet } from "../../Histogram";
+import { ExtendedGroupItem } from "./Bars";
 
 type HistogramSpringProps = {
   bins: [number, number][];
@@ -16,14 +16,24 @@ type HistogramSpringProps = {
   continuousScale: ScaleLinear<any, any>;
   colorScheme: readonly string[];
   hoverColorScheme?: readonly string[];
-  config: SpringConfig,
+  config: SpringConfig;
   direction: EChartDirection;
-}
+};
 /**
  * Build the from / to spring animation properties to animate the bars.
  */
 export const buildHistogramSprings = (props: HistogramSpringProps) => {
-  const { bins, direction, config, height, dataSets, numericScale, continuousScale, colorScheme, hoverColorScheme } = props;
+  const {
+    bins,
+    direction,
+    config,
+    height,
+    dataSets,
+    numericScale,
+    continuousScale,
+    colorScheme,
+    hoverColorScheme,
+  } = props;
   const s = dataSets.map((item, index) => {
     const bandPosition = continuousScale(bins[index][0]);
 
@@ -39,7 +49,9 @@ export const buildHistogramSprings = (props: HistogramSpringProps) => {
         from: {
           width: 0,
           fill: colorScheme[item.datasetIndex],
-          hoverFill: hoverColorScheme?.[item.datasetIndex] ?? colorScheme[item.datasetIndex],
+          hoverFill:
+            hoverColorScheme?.[item.datasetIndex] ??
+            colorScheme[item.datasetIndex],
           x: 0,
           y: height - itemWidth - bandPosition,
           height: itemWidth,
@@ -47,20 +59,24 @@ export const buildHistogramSprings = (props: HistogramSpringProps) => {
         to: {
           width: itemHeight,
           fill: colorScheme[item.datasetIndex],
-          hoverFill: hoverColorScheme?.[item.datasetIndex] ?? colorScheme[item.datasetIndex],
+          hoverFill:
+            hoverColorScheme?.[item.datasetIndex] ??
+            colorScheme[item.datasetIndex],
           x: 0,
           y: height - itemWidth - bandPosition,
           height: itemWidth,
         },
         config,
-      }
+      };
     }
 
     return {
       from: {
         height: 0,
         fill: colorScheme[item.datasetIndex],
-        hoverFill: hoverColorScheme?.[item.datasetIndex] ?? colorScheme[item.datasetIndex],
+        hoverFill:
+          hoverColorScheme?.[item.datasetIndex] ??
+          colorScheme[item.datasetIndex],
         x: bandPosition,
         y: height,
         width: itemWidth,
@@ -68,13 +84,15 @@ export const buildHistogramSprings = (props: HistogramSpringProps) => {
       to: {
         height: itemHeight,
         fill: colorScheme[item.datasetIndex],
-        hoverFill: hoverColorScheme?.[item.datasetIndex] ?? colorScheme[item.datasetIndex],
+        hoverFill:
+          hoverColorScheme?.[item.datasetIndex] ??
+          colorScheme[item.datasetIndex],
         x: bandPosition,
         y: height - itemHeight,
         width: itemWidth,
       },
       config,
-    }
+    };
   });
   return s;
-}
+};

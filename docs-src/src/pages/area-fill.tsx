@@ -1,5 +1,5 @@
-import { curveCatmullRom } from 'd3-shape';
-import React from 'react';
+import { curveCatmullRom } from "d3-shape";
+import React from "react";
 
 import {
   AreaFill,
@@ -7,11 +7,11 @@ import {
   defaultAxis as axis,
   LineProps,
   useWidth,
-} from '../../../src';
-import { JSXCode } from '../components/JSXCode';
-import { Layout } from '../components/Layout';
-import { TwoColumns } from '../components/TwoColumns';
-import { theme } from '../context/theme';
+} from "../../../src";
+import { JSXCode } from "../components/JSXCode";
+import { Layout } from "../components/Layout";
+import { TwoColumns } from "../components/TwoColumns";
+import { theme } from "../context/theme";
 
 const exampleCode = `import {
   AreaFill,

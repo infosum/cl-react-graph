@@ -1,3 +1,7 @@
+[4.4.1]
+  * Fix grid: visible not used, y axis styling not applied.     
+[4.4.0]
+  * Add Linear Gradients to bar/areas
 [4.2.0]   
   * <PieChart> & <Ring> - add labelFormat prop.
 [4.1.0]
