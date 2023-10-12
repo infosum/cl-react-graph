@@ -21,7 +21,7 @@ export type TAxisValue = string | number;
 export type TAxisLabelFormat = (
   axis: "x" | "y",
   bin: string,
-  i: number,
+  i: number
 ) => string;
 
 export enum ELabelOrientation {
@@ -31,7 +31,7 @@ export enum ELabelOrientation {
 
 type TTickFormat = (
   label: string,
-  i: number,
+  i: number
 ) => {
   stroke: string;
   fontSize?: string;
@@ -108,8 +108,8 @@ export const buildScale = ({
       Scale = scaleLinear()
         .domain(
           extent(
-            domain ? [...(domain as number[])] : (values as number[]),
-          ) as any,
+            domain ? [...(domain as number[])] : (values as number[])
+          ) as any
         )
         .rangeRound(range);
       break;
@@ -131,7 +131,7 @@ export const buildScale = ({
       break;
     case "log":
       const d = extent(
-        domain ? [0, ...(domain as number[])] : (values as number[]),
+        domain ? [0, ...(domain as number[])] : (values as number[])
       ) as any;
       Scale = scaleSymlog()
         .clamp(true) // clamp values below 1 to be equal to 0
@@ -140,7 +140,7 @@ export const buildScale = ({
       break;
     case "time":
       const ex = extent(
-        domain ? [0, ...(domain as number[])] : (values as any[]),
+        domain ? [0, ...(domain as number[])] : (values as any[])
       ) as any;
       Scale = scaleTime().domain(ex).rangeRound(range);
       break;
@@ -153,7 +153,7 @@ const positionTick = (
   scale: any,
   height: number,
   i: number,
-  inverse: boolean = false,
+  inverse: boolean = false
 ) => {
   const offset = isOfType<ScaleBand<any>>(scale, "paddingInner")
     ? Math.floor(scale.bandwidth() / 2)
@@ -214,6 +214,7 @@ export const YAxis = ({
   return (
     <g
       className="y-axis"
+      data-testid="y-axis"
       transform={`translate${transform}`}
       fill="none"
       fontSize="10"
