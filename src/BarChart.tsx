@@ -154,9 +154,9 @@ export const BarChart = ({
         labelOrientation={xAxisLabelOrientation}
         scale={direction === EChartDirection.HORIZONTAL ? "linear" : "band"}
         values={
-          direction === EChartDirection.HORIZONTAL ? undefined : data.bins
+          direction === EChartDirection.HORIZONTAL ? tickValues : data.bins
         }
-        domain={direction === EChartDirection.HORIZONTAL ? domain : undefined}
+        domain={direction === EChartDirection.HORIZONTAL ? domain : tickValues}
       />
     </Base>
   );

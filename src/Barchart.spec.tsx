@@ -2,10 +2,10 @@ import "@testing-library/jest-dom/extend-expect";
 
 import React from "react";
 
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 
 import { barChartData } from "../test/fixtures";
-import { BarChart } from "./BarChart";
+import { BarChart, EChartDirection } from "./BarChart";
 import { EGroupedBarLayout } from "./Histogram";
 
 beforeEach(() => {
@@ -21,7 +21,7 @@ test("BarChart", () => {
       height={600}
       id="demo"
       data={barChartData}
-    ></BarChart>,
+    ></BarChart>
   );
   expect(screen.getAllByRole("cell")).toHaveLength(42);
   expect(screen.getByTestId("chart-bar--0")).toHaveAttribute("width", "19");
@@ -37,7 +37,7 @@ test("BarChart Grouped overlaid layout", () => {
       id="demo"
       groupLayout={EGroupedBarLayout.OVERLAID}
       data={barChartData}
-    ></BarChart>,
+    ></BarChart>
   );
   expect(screen.getAllByRole("cell")).toHaveLength(42);
   expect(screen.getByTestId("chart-bar--0")).toHaveAttribute("width", "37");
@@ -57,7 +57,7 @@ test("BarChart Grouped overlaid layout, compact width", () => {
       id="demo"
       groupLayout={EGroupedBarLayout.OVERLAID}
       data={barChartData}
-    ></BarChart>,
+    ></BarChart>
   );
   expect(screen.getAllByRole("cell")).toHaveLength(42);
   expect(screen.getByTestId("chart-bar--0")).toHaveAttribute("width", "2");
@@ -67,4 +67,50 @@ test("BarChart Grouped overlaid layout, compact width", () => {
 
   expect(screen.getByTestId("chart-bar--41")).toHaveAttribute("width", "1");
   expect(screen.getByTestId("chart-bar--41")).toHaveAttribute("x", "49");
+});
+
+test("shows the x axis tick value when the chart is horizontal", () => {
+  render(
+    <BarChart
+      width={100}
+      height={600}
+      direction={EChartDirection.HORIZONTAL}
+      id="demo"
+      groupLayout={EGroupedBarLayout.OVERLAID}
+      data={barChartData}
+      tickValues={[33, 66, 99]}
+    ></BarChart>
+  );
+  const xaxis = screen.getByTestId("x-axis");
+  const yaxis = screen.getByTestId("y-axis");
+  expect(within(xaxis).getByText("33")).toBeInTheDocument();
+  expect(within(xaxis).getByText("66")).toBeInTheDocument();
+  expect(within(xaxis).getByText("99")).toBeInTheDocument();
+
+  expect(within(yaxis).queryByText("33")).not.toBeInTheDocument();
+  expect(within(yaxis).queryByText("66")).not.toBeInTheDocument();
+  expect(within(yaxis).queryByText("99")).not.toBeInTheDocument();
+});
+
+test("shows the y axis tick value when the chart is vertical", () => {
+  render(
+    <BarChart
+      width={100}
+      height={600}
+      direction={EChartDirection.VERTICAL}
+      id="demo"
+      groupLayout={EGroupedBarLayout.OVERLAID}
+      data={barChartData}
+      tickValues={[33, 66, 99]}
+    ></BarChart>
+  );
+  const xaxis = screen.getByTestId("x-axis");
+  const yaxis = screen.getByTestId("y-axis");
+  expect(within(yaxis).getByText("33")).toBeInTheDocument();
+  expect(within(yaxis).getByText("66")).toBeInTheDocument();
+  expect(within(yaxis).getByText("99")).toBeInTheDocument();
+
+  expect(within(xaxis).queryByText("33")).not.toBeInTheDocument();
+  expect(within(xaxis).queryByText("66")).not.toBeInTheDocument();
+  expect(within(xaxis).queryByText("99")).not.toBeInTheDocument();
 });

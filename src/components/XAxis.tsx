@@ -20,7 +20,7 @@ const positionTick = (
   scale: any,
   i: number,
   inverse: boolean = false,
-  width = 10,
+  width = 10
 ) => {
   const offset = isOfType<ScaleBand<any>>(scale, "paddingInner")
     ? scale.bandwidth() / 2
@@ -82,6 +82,7 @@ export const XAxis = ({
   return (
     <g
       className="x-axis"
+      data-testid="x-axis"
       transform={`translate(${transform})`}
       fill="none"
       fontSize="10"

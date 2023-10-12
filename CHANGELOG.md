@@ -1,3 +1,5 @@
+[4.4.2]
+  * Fix: BarChar xaxis - tick values not applied
 [4.4.1]
   * Fix grid: visible not used, y axis styling not applied.     
 [4.4.0]
