@@ -1,9 +1,10 @@
+import { ColorScheme } from "./utils/colorScheme";
 export type Props = {
     width: number;
     height: number;
     padding?: number;
     data: Record<string, number[]>;
-    colorScheme?: readonly string[];
+    colorScheme?: ColorScheme;
     /** @description Chart <title /> */
     title?: string;
     inactive?: {

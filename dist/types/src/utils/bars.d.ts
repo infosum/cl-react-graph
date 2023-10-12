@@ -1,11 +1,11 @@
-import { ScaleBand } from 'd3-scale';
-import { ExtendedGroupItem } from '../components/Bars/Bars';
-import { EGroupedBarLayout, HistogramBar } from '../Histogram';
+import { ScaleBand } from "d3-scale";
+import { ExtendedGroupItem } from "../components/Bars/Bars";
+import { EGroupedBarLayout, HistogramBar } from "../Histogram";
 export type GroupedProps = {
     groupLayout: EGroupedBarLayout;
     stacked?: boolean;
 };
-export declare const groupedBarsUseSameXAxisValue: ({ groupLayout, stacked }: GroupedProps) => boolean;
+export declare const groupedBarsUseSameXAxisValue: ({ groupLayout, stacked, }: GroupedProps) => boolean;
 /**
  *This is the inner padding between each grouped dataset or single datasets.
  */
@@ -32,7 +32,7 @@ export declare const groupedPaddingInner: (bar: HistogramBar) => number;
  * When grouping data this is the spacing to the left of the first and the right of the last bar.
  */
 export declare const groupedPaddingOuter: (bar: HistogramBar) => number;
-export declare const buildBarDatasets: ({ values, bins, visible, }: {
+export declare const buildBarDatasets: ({ values, bins, visible }: {
     values: any;
     bins: any;
     visible: any;

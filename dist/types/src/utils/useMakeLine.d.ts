@@ -1,6 +1,6 @@
-import { CurveFactory, CurveFactoryLineOnly } from 'd3-shape';
-import { AnyChartPoint, ChartPoint, LineProps } from '../LineChart';
-import { Axes } from '../utils/types';
+import { CurveFactory, CurveFactoryLineOnly } from "d3-shape";
+import { AnyChartPoint, ChartPoint, LineProps } from "../LineChart";
+import { Axes } from "../utils/types";
 export type Props<T extends AnyChartPoint = ChartPoint> = {
     data: T[];
     axis: Axes;
@@ -10,7 +10,7 @@ export type Props<T extends AnyChartPoint = ChartPoint> = {
     left?: number;
     height: number;
 };
-export declare const useScales: (props: Omit<Props, 'line' | 'curveType'>) => {
+export declare const useScales: (props: Omit<Props, "line" | "curveType">) => {
     xScale: any;
     yScale: any;
 };

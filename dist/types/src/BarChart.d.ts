@@ -1,8 +1,8 @@
-import { SpringConfig } from '@react-spring/web';
-import { TLabelComponent } from './components/Label';
-import { TipFunc } from './components/ToolTip';
-import { ELabelOrientation, TAxisLabelFormat } from './components/YAxis';
-import { BarChartData, EGroupedBarLayout, Grid as GridProps, HistogramBar } from './Histogram';
+import { SpringConfig } from "@react-spring/web";
+import { TLabelComponent } from "./components/Label";
+import { TipFunc } from "./components/ToolTip";
+import { ELabelOrientation, TAxisLabelFormat } from "./components/YAxis";
+import { BarChartData, EGroupedBarLayout, Grid as GridProps, HistogramBar } from "./Histogram";
 export declare enum EChartDirection {
     HORIZONTAL = "HORIZONTAL",
     VERTICAL = "VERTICAL"

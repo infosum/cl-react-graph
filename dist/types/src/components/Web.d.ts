@@ -13,5 +13,5 @@ type Props = {
     };
 };
 export declare const polar2cart: (degree: number, radius: number) => [number, number];
-export declare const Web: ({ axis, ticks, labels, center, radial, }: Props) => JSX.Element;
+export declare const Web: ({ axis, ticks, labels, center, radial }: Props) => JSX.Element;
 export {};

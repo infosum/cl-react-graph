@@ -1,8 +1,8 @@
-import { ScaleLinear } from 'd3-scale';
-import { SpringConfig } from '@react-spring/web';
-import { EChartDirection } from '../../BarChart';
-import { BarChartDataSet } from '../../Histogram';
-import { ExtendedGroupItem } from './Bars';
+import { ScaleLinear } from "d3-scale";
+import { SpringConfig } from "@react-spring/web";
+import { EChartDirection } from "../../BarChart";
+import { BarChartDataSet } from "../../Histogram";
+import { ExtendedGroupItem } from "./Bars";
 type HistogramSpringProps = {
     bins: [number, number][];
     values: BarChartDataSet[];

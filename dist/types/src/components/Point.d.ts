@@ -1,5 +1,5 @@
-import React from 'react';
-import { PointStyle } from './Points';
+import React from "react";
+import { PointStyle } from "./Points";
 export declare const defaultPointStyle: PointStyle;
 export type PointProps<V = number | string | Date> = {
     id?: string;

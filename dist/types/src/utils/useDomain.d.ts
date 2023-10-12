@@ -1,6 +1,6 @@
-import { BarChartDataSet, EGroupedBarLayout } from '../Histogram';
-import { LineChartDataSet } from '../LineChart';
-import { ScatterPlotDataSet } from '../ScatterPlot';
+import { BarChartDataSet, EGroupedBarLayout } from "../Histogram";
+import { LineChartDataSet } from "../LineChart";
+import { ScatterPlotDataSet } from "../ScatterPlot";
 type LineProps = {
     values: LineChartDataSet<any>[];
     clampToZero?: boolean;

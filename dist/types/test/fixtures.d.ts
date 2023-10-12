@@ -1,9 +1,9 @@
-import { BarChartData, LineChartDataSet } from '../src';
-import { HistogramData } from '../src/Histogram';
-import { ChartPointValue } from '../src/LineChart';
-import { RadarChartData } from '../src/RadarChart';
-import { ScatterPlotDataSet } from '../src/ScatterPlot';
-import { TornadoData } from '../src/TornadoChart';
+import { BarChartData, LineChartDataSet } from "../src";
+import { HistogramData } from "../src/Histogram";
+import { ChartPointValue } from "../src/LineChart";
+import { RadarChartData } from "../src/RadarChart";
+import { ScatterPlotDataSet } from "../src/ScatterPlot";
+import { TornadoData } from "../src/TornadoChart";
 export declare const lineChartData: LineChartDataSet<any>[];
 export declare const histogramData: HistogramData;
 export declare const barChartData: BarChartData;
