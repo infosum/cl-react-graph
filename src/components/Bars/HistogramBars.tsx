@@ -6,6 +6,7 @@ import { animated, SpringConfig, useSprings } from "@react-spring/web";
 
 import { EChartDirection } from "../../BarChart";
 import { BarChartDataSet } from "../../Histogram";
+import { ColorScheme } from "../../utils/colorScheme";
 import { getHoverColorScheme } from "../../utils/hoverColorScheme";
 import { TLabelComponent } from "../Label";
 import { Labels } from "../Labels";
@@ -19,7 +20,7 @@ const binWidth = (bin: [number, number]) => bin[1] - bin[0];
 type Props = {
   bins: [number, number][];
   config?: SpringConfig;
-  colorScheme?: readonly string[];
+  colorScheme?: ColorScheme;
   continuousDomain: [number, number];
   direction?: EChartDirection;
   domain: [number, number];
@@ -75,13 +76,13 @@ export const HistogramBars = ({
   const dataSets: ExtendedGroupItem[] = [];
   const binLabels = bins.reduce(
     (p, n) => p.concat(Array.isArray(n) ? n : [n]),
-    [] as (number | string)[],
+    [] as (number | string)[]
   );
 
   values.forEach((count, datasetIndex) => {
     const totalArea = count.data.reduce(
       (p, n, i) => p + n * binWidth(bins[i]),
-      0,
+      0
     );
     count.data.forEach((value, i) => {
       dataSets.push({
@@ -129,7 +130,7 @@ export const HistogramBars = ({
       hoverColorScheme,
       config,
       direction,
-    }),
+    })
   );
 
   const refs: RefObject<any>[] = [];

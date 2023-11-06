@@ -2,6 +2,7 @@ import { ScaleLinear } from "d3-scale";
 import { SpringConfig } from "@react-spring/web";
 import { EChartDirection } from "../../BarChart";
 import { BarChartDataSet } from "../../Histogram";
+import { ColorScheme } from "../../utils/colorScheme";
 import { ExtendedGroupItem } from "./Bars";
 type HistogramSpringProps = {
     bins: [number, number][];
@@ -11,8 +12,8 @@ type HistogramSpringProps = {
     dataSets: ExtendedGroupItem[];
     numericScale: ScaleLinear<any, any>;
     continuousScale: ScaleLinear<any, any>;
-    colorScheme: readonly string[];
-    hoverColorScheme?: readonly string[];
+    colorScheme: ColorScheme;
+    hoverColorScheme?: ColorScheme;
     config: SpringConfig;
     direction: EChartDirection;
 };
@@ -22,16 +23,16 @@ type HistogramSpringProps = {
 export declare const buildHistogramSprings: (props: HistogramSpringProps) => ({
     from: {
         width: number;
-        fill: string;
-        hoverFill: string;
+        fill: import("../../utils/colorScheme").ColorSchemeItem;
+        hoverFill: import("../../utils/colorScheme").ColorSchemeItem;
         x: number;
         y: number;
         height: any;
     };
     to: {
         width: any;
-        fill: string;
-        hoverFill: string;
+        fill: import("../../utils/colorScheme").ColorSchemeItem;
+        hoverFill: import("../../utils/colorScheme").ColorSchemeItem;
         x: number;
         y: number;
         height: any;
@@ -40,16 +41,16 @@ export declare const buildHistogramSprings: (props: HistogramSpringProps) => ({
 } | {
     from: {
         height: number;
-        fill: string;
-        hoverFill: string;
+        fill: import("../../utils/colorScheme").ColorSchemeItem;
+        hoverFill: import("../../utils/colorScheme").ColorSchemeItem;
         x: any;
         y: number;
         width: any;
     };
     to: {
         height: any;
-        fill: string;
-        hoverFill: string;
+        fill: import("../../utils/colorScheme").ColorSchemeItem;
+        hoverFill: import("../../utils/colorScheme").ColorSchemeItem;
         x: any;
         y: number;
         width: any;
