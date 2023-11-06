@@ -1,4 +1,3 @@
-import { color } from "d3-color";
 import { scaleBand, scaleLinear } from "d3-scale";
 import React, { RefObject, useState } from "react";
 
@@ -20,13 +19,8 @@ import {
   paddingInner,
   paddingOuter,
 } from "../../utils/bars";
-import {
-  ColorScheme,
-  ColorSchemeDefs,
-  getGradientId,
-  Gradient,
-  isGradient,
-} from "../../utils/colorScheme";
+import { ColorScheme, ColorSchemeDefs } from "../../utils/colorScheme";
+import { getHoverColorScheme } from "../../utils/hoverColorScheme";
 import { TLabelComponent } from "../Label";
 import { Labels } from "../Labels";
 import { TipFunc } from "../ToolTip";
@@ -117,19 +111,7 @@ export const Bars = ({
     return null;
   }
   if (!hoverColorScheme) {
-    hoverColorScheme = colorScheme.map((c) => {
-      if (isGradient(c)) {
-        return {
-          ...c,
-          stops: c.stops.map((stop) => ({
-            ...stop,
-            stopColor: color(stop.stopColor)?.brighter(0.1).toString(),
-          })),
-        };
-      } else {
-        return color(c)?.brighter(0.1).toString();
-      }
-    }) as readonly string[];
+    hoverColorScheme = getHoverColorScheme(colorScheme);
   }
 
   const { dataSets, binLabels } = buildBarDatasets({ values, bins, visible });
@@ -163,8 +145,8 @@ export const Bars = ({
   const itemWidths = Array.from(
     dataSets.reduce(
       (prev, next) => prev.add(next.datasetIndex),
-      new Set<number>(),
-    ),
+      new Set<number>()
+    )
   ).map((i) => {
     const itemWidth = getBarWidth(i, groupLayout, paddings, innerScaleBand);
     return itemWidth;
@@ -190,7 +172,7 @@ export const Bars = ({
       paddings,
       values,
       width,
-    }),
+    })
   );
 
   const refs: RefObject<any>[] = [];

@@ -1,5 +1,5 @@
 /// <reference types="react" />
-import { ExtendedGroupItem } from './Bars/Bars';
+import { ExtendedGroupItem } from "./Bars/Bars";
 export type TipFunc = (props: {
     item: ExtendedGroupItem;
     bin: string | [number, number];

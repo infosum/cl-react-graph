@@ -1,9 +1,9 @@
-import { ScaleBand } from 'd3-scale';
-import { SVGAttributes } from 'react';
-import { HistogramBar } from '../Histogram';
-import { SVGLineStyle, SVGTextStyle } from '../utils/types';
+import { ScaleBand } from "d3-scale";
+import { SVGAttributes } from "react";
+import { HistogramBar } from "../Histogram";
+import { SVGLineStyle, SVGTextStyle } from "../utils/types";
 export type TAxisValue = string | number;
-export type TAxisLabelFormat = (axis: 'x' | 'y', bin: string, i: number) => string;
+export type TAxisLabelFormat = (axis: "x" | "y", bin: string, i: number) => string;
 export declare enum ELabelOrientation {
     HORIZONTAL = "HORIZONTAL",
     VERTICAL = "VERTICAL"
@@ -19,7 +19,7 @@ export type Axis = {
     values?: string[] | number[];
     tickSize?: number;
     path?: SVGAttributes<SVGPathElement>;
-    scale?: 'linear' | 'band' | 'point' | 'log' | 'time';
+    scale?: "linear" | "band" | "point" | "log" | "time";
     top?: number;
     domain?: TAxisValue[];
     left?: number;
@@ -52,7 +52,7 @@ type BuildScale = {
     /** @description width for x axis, height for y axis */
     length: number;
     padding: HistogramBar;
-    scale: 'linear' | 'band' | 'point' | 'log' | 'time';
+    scale: "linear" | "band" | "point" | "log" | "time";
     values: string[] | number[];
     range: [number, number];
 };

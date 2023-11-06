@@ -1,6 +1,6 @@
 /// <reference types="react" />
-import { EChartDirection } from '../BarChart';
-import { ExtendedGroupItem } from './Bars/Bars';
+import { EChartDirection } from "../BarChart";
+import { ExtendedGroupItem } from "./Bars/Bars";
 type Props = {
     direction?: EChartDirection;
     label?: string;

@@ -1,4 +1,4 @@
-import { BarChartData } from '../Histogram';
+import { BarChartData } from "../Histogram";
 export declare const useJoyPlot: ({ data, height, clampToZero, }: {
     data: BarChartData[];
     height: number;

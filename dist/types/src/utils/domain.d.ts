@@ -1,4 +1,4 @@
-import { Axis as AxisProps } from '../components/YAxis';
+import { Axis as AxisProps } from "../components/YAxis";
 /**
  * Slightly better attempt from applyDomainAffordance, taking into
  * account axis types.

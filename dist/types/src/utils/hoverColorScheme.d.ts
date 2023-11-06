@@ -1,1 +1,2 @@
-export declare const getHoverColorScheme: (colorScheme: readonly string[]) => readonly string[];
+import { ColorScheme } from "./colorScheme";
+export declare const getHoverColorScheme: (colorScheme: ColorScheme) => readonly string[];

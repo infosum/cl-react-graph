@@ -1,6 +1,6 @@
 {
   "name": "cl-react-graph",
-  "version": "4.2.3",
+  "version": "4.4.2",
   "description": "React D3 Charts",
   "main": "./dist/index.js",
   "types": "./dist/types/src/index.d.ts",

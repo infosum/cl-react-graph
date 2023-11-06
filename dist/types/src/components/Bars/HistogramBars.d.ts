@@ -1,12 +1,13 @@
-import { SpringConfig } from '@react-spring/web';
-import { EChartDirection } from '../../BarChart';
-import { BarChartDataSet } from '../../Histogram';
-import { TLabelComponent } from '../Label';
-import { TipFunc } from '../ToolTip';
+import { SpringConfig } from "@react-spring/web";
+import { EChartDirection } from "../../BarChart";
+import { BarChartDataSet } from "../../Histogram";
+import { ColorScheme } from "../../utils/colorScheme";
+import { TLabelComponent } from "../Label";
+import { TipFunc } from "../ToolTip";
 type Props = {
     bins: [number, number][];
     config?: SpringConfig;
-    colorScheme?: readonly string[];
+    colorScheme?: ColorScheme;
     continuousDomain: [number, number];
     direction?: EChartDirection;
     domain: [number, number];
