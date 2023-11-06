@@ -25,7 +25,7 @@ type Props = {
   direction?: EChartDirection;
   domain: [number, number];
   height: number;
-  hoverColorScheme?: readonly string[];
+  hoverColorScheme?: ColorScheme;
   id: string;
   labels?: string[];
   left?: number;

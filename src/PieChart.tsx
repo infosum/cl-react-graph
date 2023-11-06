@@ -5,6 +5,7 @@ import { Base } from "./components/Base";
 import { Ring, RingItem } from "./components/Ring";
 import { TipFunc } from "./components/ToolTip";
 import { BarChartDataSet } from "./Histogram";
+import { ColorScheme } from "./utils/colorScheme";
 import { getHoverColorScheme } from "./utils/hoverColorScheme";
 
 /**
@@ -27,7 +28,7 @@ const getRadii = (props: {
     0,
     donutWidth === 0
       ? 0
-      : radius - 10 - donutWidth - setIndex * (donutWidth + 10),
+      : radius - 10 - donutWidth - setIndex * (donutWidth + 10)
   );
   return { outerRadius, innerRadius };
 };
@@ -39,10 +40,10 @@ export type Props = {
   };
   backgroundColor?: string;
   className?: string;
-  colorScheme?: readonly string[];
+  colorScheme?: ColorScheme;
   donutWidth?: number;
   height: number;
-  hoverColorScheme?: readonly string[];
+  hoverColorScheme?: ColorScheme;
   tip?: TipFunc;
   visible?: { [key: string]: boolean };
   width: number;

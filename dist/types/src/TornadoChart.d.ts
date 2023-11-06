@@ -1,6 +1,7 @@
 import { EChartDirection } from "./BarChart";
 import { TipFunc } from "./components/ToolTip";
 import { EGroupedBarLayout, HistogramBar } from "./Histogram";
+import { ColorScheme } from "./utils/colorScheme";
 type TornadoDataSet = {
     borderColors?: string[];
     colors?: string[];
@@ -10,12 +11,12 @@ type TornadoDataSet = {
 export type TornadoData = {
     bins: string[];
     counts: TornadoDataSet[];
-    colorScheme?: string[];
+    colorScheme?: ColorScheme;
     title?: string;
 };
 export type Props = {
-    /** @description bar colour scheme */
-    colorScheme?: readonly string[];
+    /** @description bar color scheme */
+    colorScheme?: ColorScheme;
     data: TornadoData;
     direction?: EChartDirection;
     groupLayout: EGroupedBarLayout;

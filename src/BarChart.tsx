@@ -16,6 +16,7 @@ import {
   Grid as GridProps,
   HistogramBar,
 } from "./Histogram";
+import { ColorScheme } from "./utils/colorScheme";
 import { useHistogramDomain } from "./utils/useDomain";
 
 export enum EChartDirection {
@@ -25,7 +26,7 @@ export enum EChartDirection {
 type Props = {
   animation?: SpringConfig;
   axisLabelFormat?: TAxisLabelFormat;
-  colorScheme?: readonly string[];
+  colorScheme?: ColorScheme;
   data: BarChartData;
   direction?: EChartDirection;
   id?: string;

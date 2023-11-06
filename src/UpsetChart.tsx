@@ -25,10 +25,10 @@ type TBarProps = Pick<
 };
 
 export type Props = {
-  colorScheme?: string[];
+  colorScheme?: ColorScheme;
   data: TUpsetData;
   height: number;
-  hoverColorScheme?: string[];
+  hoverColorScheme?: ColorScheme;
   showLabels?: boolean[];
   visible?: Record<string, boolean>;
   width: number;
@@ -90,7 +90,7 @@ export const UpsetChart = ({
     const bins = Array.from(
       data.reduce((prev, next) => {
         return union<string>(new Set<string>(next.keys), prev);
-      }, new Set<string>()),
+      }, new Set<string>())
     );
     const setBandScale = scaleBand()
       .domain(bins as string[])
@@ -185,11 +185,11 @@ const ActiveCircles = ({
   const bins = Array.from(
     data.reduce(
       (prev, next) => union<string>(new Set<string>(next.keys), prev),
-      new Set<string>(),
-    ),
+      new Set<string>()
+    )
   );
   const yPoints = bins.map(
-    (bin) => Number(setBandScale(bin)) + setBandScale.bandwidth() / 2,
+    (bin) => Number(setBandScale(bin)) + setBandScale.bandwidth() / 2
   );
   const labels = data.map((d) => d.keys.join(" & "));
   const bandScale = scaleBand()
@@ -261,7 +261,7 @@ const DistributionBars = ({
         data: data.map((d) => d.value),
       },
     ],
-    [data],
+    [data]
   );
 
   const domain = useHistogramDomain({
