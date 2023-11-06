@@ -13,7 +13,7 @@ export type Props = {
     id?: string;
     groupLayout?: EGroupedBarLayout;
     height: number;
-    hoverColorScheme?: readonly string[];
+    hoverColorScheme?: ColorScheme;
     LabelComponent?: TLabelComponent;
     labels?: string[];
     left?: number;

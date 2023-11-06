@@ -12,6 +12,7 @@ import { TLabelComponent } from "./components/Label";
 import { TipFunc } from "./components/ToolTip";
 import { XAxis } from "./components/XAxis";
 import { ELabelOrientation, TAxisLabelFormat, YAxis } from "./components/YAxis";
+import { ColorScheme } from "./utils/colorScheme";
 import { SVGLineStyle } from "./utils/types";
 
 export enum EGroupedBarLayout {
@@ -70,7 +71,7 @@ export type HistogramBar = {
 export type HistogramData = {
   bins: [number, number][];
   counts: BarChartDataSet[];
-  colorScheme?: string[];
+  colorScheme?: ColorScheme;
   title?: string;
 };
 export type GroupData = GroupDataItem[][];
@@ -78,7 +79,7 @@ export type GroupData = GroupDataItem[][];
 export type BarChartData = {
   bins: string[];
   counts: BarChartDataSet[];
-  colorScheme?: string[];
+  colorScheme?: ColorScheme;
   title?: string;
 };
 
@@ -100,14 +101,14 @@ export type Grid = {
 export type Props = {
   animation?: SpringConfig;
   axisLabelFormat?: TAxisLabelFormat;
-  colorScheme?: string[];
+  colorScheme?: ColorScheme;
   data: HistogramData;
   direction?: EChartDirection;
   id?: string;
   grid?: Grid;
   height: number;
   LabelComponent?: TLabelComponent;
-  hoverColorScheme?: string[];
+  hoverColorScheme?: ColorScheme;
   showLabels?: boolean[];
   tip?: TipFunc;
   visible?: Record<string, boolean>;
@@ -162,11 +163,11 @@ export const Histogram = ({
 
   const bins = data.bins.reduce(
     (p, n) => p.concat(Array.isArray(n) ? n : [n]),
-    [] as number[],
+    [] as number[]
   );
   const continuousDomain = extent(bins) as [number, number];
   const domain = extent(
-    data.counts.reduce((p, n) => p.concat(n.data), [] as number[]),
+    data.counts.reduce((p, n) => p.concat(n.data), [] as number[])
   ) as [number, number];
 
   return (

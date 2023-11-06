@@ -8,6 +8,7 @@ import { TipFunc } from "./components/ToolTip";
 import { XAxis } from "./components/XAxis";
 import { YAxis } from "./components/YAxis";
 import { BarChartDataSet, EGroupedBarLayout, HistogramBar } from "./Histogram";
+import { ColorScheme } from "./utils/colorScheme";
 import { applyDomainAffordance } from "./utils/domain";
 
 type TornadoDataSet = {
@@ -20,13 +21,13 @@ type TornadoDataSet = {
 export type TornadoData = {
   bins: string[];
   counts: TornadoDataSet[];
-  colorScheme?: string[];
+  colorScheme?: ColorScheme;
   title?: string;
 };
 
 export type Props = {
-  /** @description bar colour scheme */
-  colorScheme?: readonly string[];
+  /** @description bar color scheme */
+  colorScheme?: ColorScheme;
   data: TornadoData;
   direction?: EChartDirection;
   groupLayout: EGroupedBarLayout;
@@ -324,11 +325,11 @@ export const TornadoChart = ({
 const calculateDomain = (data: TornadoData, center = true) => {
   const leftValues = data.counts.reduce(
     (prev, next) => prev.concat(next.data[0]),
-    [] as number[],
+    [] as number[]
   );
   const rightValues = data.counts.reduce(
     (prev, next) => prev.concat(next.data[1]),
-    [] as number[],
+    [] as number[]
   );
 
   // Use applyDomainAffordance to allow space for percentage labels
