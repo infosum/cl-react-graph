@@ -36,6 +36,7 @@ export const Grid = (props: Props) => {
     <g className="grid" transform={`translate(${left}, ${top})`}>
       {verticals.map((_, i) => (
         <line
+          data-testid={"vertical-line" + i}
           key={"vertical-line" + i}
           x1={width * ((i + 1) / verticalLines)}
           x2={width * ((i + 1) / verticalLines)}
@@ -45,6 +46,7 @@ export const Grid = (props: Props) => {
       ))}
       {horizontals.map((_, i) => (
         <line
+          data-testid={"horizontal-line" + i}
           key={"horizontal-line" + i}
           y1={height * (i / horizontalLines)}
           y2={height * (i / horizontalLines)}
