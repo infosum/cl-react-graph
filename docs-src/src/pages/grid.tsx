@@ -22,16 +22,26 @@ const MyComponent = () => {
       <Grid
         left={0}
         height={200}
-        svgProps={{
-          'stroke': theme.grey400,
-          'strokeOpacity': 0.2,
-          'strokeWidth': 1,
+        x={{
+          height: 1,
+          style: {
+            stroke: "#eee",
+            strokeDasharray: "2 2",
+            fill: theme.grey400,
+          },
+          ticks: 5,
+          visible: true,
         }}
-        lines={{
-          vertical: 5,
-          horizontal: 3,
+        y={{
+          style: {
+            stroke: "#eee",
+            fill: theme.grey400,
+          },
+          ticks: 10,
+          visible: true,
         }}
-        width={width} />
+        width={width}
+      />
     </Base>
   )
 };
@@ -50,14 +60,23 @@ const GridExample = () => {
             <Grid
               left={0}
               height={200}
-              svgProps={{
-                stroke: theme.grey400,
-                strokeOpacity: 0.2,
-                strokeWidth: 1,
+              x={{
+                height: 1,
+                style: {
+                  stroke: "#eee",
+                  strokeDasharray: "2 2",
+                  fill: theme.grey400,
+                },
+                ticks: 5,
+                visible: true,
               }}
-              lines={{
-                vertical: 5,
-                horizontal: 3,
+              y={{
+                style: {
+                  stroke: "#eee",
+                  fill: theme.grey400,
+                },
+                ticks: 10,
+                visible: true,
               }}
               width={width}
             />

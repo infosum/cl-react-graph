@@ -51,7 +51,9 @@ export type GroupDataItem = {
 export type HistogramBar = {
   // Padding for the inside of grouped datasets
   grouped: {
+    // @description - padding between each bar
     paddingInner: number;
+    // @description - padding on the outside of the first and last bar
     paddingOuter: number;
   };
   // Padding for the outside of grouped datasets or single datasets
