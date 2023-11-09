@@ -9,7 +9,12 @@ import { Grid } from "./components/Grid";
 import { TLabelComponent } from "./components/Label";
 import { TipFunc } from "./components/ToolTip";
 import { XAxis } from "./components/XAxis";
-import { ELabelOrientation, TAxisLabelFormat, YAxis } from "./components/YAxis";
+import {
+  Axis,
+  ELabelOrientation,
+  TAxisLabelFormat,
+  YAxis,
+} from "./components/YAxis";
 import {
   BarChartData,
   EGroupedBarLayout,
@@ -31,6 +36,18 @@ type Props = {
   direction?: EChartDirection;
   id?: string;
   grid?: GridProps;
+  axis?: {
+    x?: {
+      path?: Axis["path"];
+      labelOrientation: ELabelOrientation;
+      tickSize?: number;
+    };
+    y?: {
+      path?: Axis["path"];
+      labelOrientation: ELabelOrientation;
+      tickSize?: number;
+    };
+  };
   groupLayout?: EGroupedBarLayout;
   height: number;
   LabelComponent?: TLabelComponent;
@@ -44,6 +61,7 @@ type Props = {
   visible?: Record<string, boolean>;
   width: number;
   xAxisHeight?: number;
+  /** @deprecated use axis.x.labelOrientation */
   xAxisLabelOrientation?: ELabelOrientation;
   yAxisWidth?: number;
   bars?: {
@@ -76,6 +94,7 @@ export const BarChart = ({
   tickValues,
   bars,
   title,
+  axis,
 }: Props) => {
   if (!yAxisWidth) {
     yAxisWidth = direction === EChartDirection.VERTICAL ? 40 : 100;
@@ -137,12 +156,15 @@ export const BarChart = ({
         width={yAxisWidth}
         height={height - xAxisHeight}
         labelFormat={axisLabelFormat}
+        labelOrientation={axis?.y?.labelOrientation}
         scale={direction === EChartDirection.HORIZONTAL ? "band" : "linear"}
         values={
           direction === EChartDirection.HORIZONTAL ? data.bins : tickValues
         }
         domain={direction === EChartDirection.HORIZONTAL ? tickValues : domain}
         padding={padding}
+        path={axis?.y?.path}
+        tickSize={axis?.y?.tickSize}
       />
 
       <XAxis
@@ -152,12 +174,14 @@ export const BarChart = ({
         padding={padding}
         left={yAxisWidth}
         labelFormat={axisLabelFormat}
-        labelOrientation={xAxisLabelOrientation}
+        labelOrientation={axis?.x?.labelOrientation ?? xAxisLabelOrientation}
         scale={direction === EChartDirection.HORIZONTAL ? "linear" : "band"}
         values={
           direction === EChartDirection.HORIZONTAL ? tickValues : data.bins
         }
         domain={direction === EChartDirection.HORIZONTAL ? domain : tickValues}
+        path={axis?.x?.path}
+        tickSize={axis?.x?.tickSize}
       />
     </Base>
   );
