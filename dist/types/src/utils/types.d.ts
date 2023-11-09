@@ -23,11 +23,12 @@ export type Axes = {
     x: Axis;
 };
 export type SVGLineStyle = {
-    stroke: string;
-    fill: string;
-    opacity: number;
-    strokeWidth: number;
-    strokeOpacity: number;
-    shapeRendering: string;
-    visible: string;
+    stroke?: string;
+    fill?: string;
+    opacity?: number;
+    strokeWidth?: number;
+    strokeOpacity?: number;
+    strokeDasharray?: string;
+    shapeRendering?: string;
+    visible?: string;
 };
