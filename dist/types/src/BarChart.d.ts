@@ -1,7 +1,7 @@
 import { SpringConfig } from "@react-spring/web";
 import { TLabelComponent } from "./components/Label";
 import { TipFunc } from "./components/ToolTip";
-import { Axis, ELabelOrientation, TAxisLabelFormat } from "./components/YAxis";
+import { Axis, ELabelOrientation, TAxisLabelFormat, TTickFormat } from "./components/YAxis";
 import { BarChartData, EGroupedBarLayout, Grid as GridProps, HistogramBar } from "./Histogram";
 import { ColorScheme } from "./utils/colorScheme";
 export declare enum EChartDirection {
@@ -21,11 +21,13 @@ type Props = {
             path?: Axis["path"];
             labelOrientation: ELabelOrientation;
             tickSize?: number;
+            tickFormat?: TTickFormat;
         };
         y?: {
             path?: Axis["path"];
             labelOrientation: ELabelOrientation;
             tickSize?: number;
+            tickFormat?: TTickFormat;
         };
     };
     groupLayout?: EGroupedBarLayout;

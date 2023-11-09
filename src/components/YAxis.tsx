@@ -29,13 +29,18 @@ export enum ELabelOrientation {
   VERTICAL = "VERTICAL",
 }
 
-type TTickFormat = (
-  label: string,
-  i: number
-) => {
-  stroke: string;
-  fontSize?: string;
-};
+export type TTickFormat =
+  | {
+      stroke: string;
+      fontSize?: string;
+    }
+  | ((
+      label: string,
+      i: number
+    ) => {
+      stroke: string;
+      fontSize?: string;
+    });
 
 export type Axis = {
   stroke?: string;
@@ -53,12 +58,7 @@ export type Axis = {
   /** @description make the axis ticks display in the opposite direction */
   inverse?: boolean;
 
-  tickFormat?:
-    | {
-        stroke: string;
-        fontSize?: string;
-      }
-    | TTickFormat;
+  tickFormat?: TTickFormat;
   labelOrientation?: ELabelOrientation;
 
   /** @deprecated used for backwards compat with legacy v2 components */

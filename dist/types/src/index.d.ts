@@ -14,7 +14,7 @@ export { HistogramBars } from "./components/Bars/HistogramBars";
 export { Base } from "./components/Base";
 export { Grid } from "./components/Grid";
 export { XAxis } from "./components/XAxis";
-export { YAxis, ELabelOrientation } from "./components/YAxis";
+export { YAxis, ELabelOrientation, TTickFormat } from "./components/YAxis";
 export { Point } from "./components/Point";
 export type { PointProps } from "./components/Point";
 export { Path } from "./components/Path";

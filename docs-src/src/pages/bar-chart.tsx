@@ -216,6 +216,10 @@ const BarChartExample = () => {
                   strokeWidth: "1",
                   stroke: "#eee",
                 },
+                tickFormat: {
+                  stroke: "#ddd",
+                  fontSize: "0.8rem",
+                },
               },
             }}
             width={width}
