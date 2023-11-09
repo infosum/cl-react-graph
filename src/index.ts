@@ -23,6 +23,7 @@ export type { Props as PieChartProps } from "./PieChart";
 export { TornadoChart } from "./TornadoChart";
 export type { Props as ITornadoProps, TornadoData } from "./TornadoChart";
 export { Bars } from "./components/Bars/Bars";
+export type { ExtendedGroupItem } from "./components/Bars/Bars";
 export { HistogramBars } from "./components/Bars/HistogramBars";
 export { Base } from "./components/Base";
 export { Grid } from "./components/Grid";
