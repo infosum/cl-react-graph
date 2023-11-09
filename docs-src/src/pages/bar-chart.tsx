@@ -108,6 +108,16 @@ const MyComponent = () => {
         height={400}
         tickValues={[0, 40000, 89200]}
         grid={grid}
+        axis={{
+          x: {
+            labelOrientation: ELabelOrientation.VERTICAL,
+            tickSize: 0,
+            path: {
+              strokeWidth: "1",
+              stroke: "#eee",
+            },
+          },
+        }}
         colorScheme={[theme.brightBlue800, theme.green900]}
         groupLayout={EGroupedBarLayout.GROUPED}
         xAxisLabelOrientation={ELabelOrientation.HORIZONTAL}
@@ -172,7 +182,7 @@ const grid: GridProps = {
       fill: "none",
       stroke: "#bbb",
       strokeOpacity: 0.7,
-      strokeWidth: 5,
+      strokeWidth: 1,
     },
     ticks: 5,
     visible: true,
@@ -198,7 +208,16 @@ const BarChartExample = () => {
             grid={grid}
             colorScheme={[theme.brightBlue800, theme.green900]}
             groupLayout={EGroupedBarLayout.GROUPED}
-            xAxisLabelOrientation={ELabelOrientation.HORIZONTAL}
+            axis={{
+              x: {
+                labelOrientation: ELabelOrientation.VERTICAL,
+                tickSize: 0,
+                path: {
+                  strokeWidth: "1",
+                  stroke: "#eee",
+                },
+              },
+            }}
             width={width}
             padding={{
               grouped: {
