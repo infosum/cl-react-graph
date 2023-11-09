@@ -1,7 +1,7 @@
 import { SpringConfig } from "@react-spring/web";
 import { TLabelComponent } from "./components/Label";
 import { TipFunc } from "./components/ToolTip";
-import { ELabelOrientation, TAxisLabelFormat } from "./components/YAxis";
+import { Axis, ELabelOrientation, TAxisLabelFormat } from "./components/YAxis";
 import { BarChartData, EGroupedBarLayout, Grid as GridProps, HistogramBar } from "./Histogram";
 import { ColorScheme } from "./utils/colorScheme";
 export declare enum EChartDirection {
@@ -16,6 +16,18 @@ type Props = {
     direction?: EChartDirection;
     id?: string;
     grid?: GridProps;
+    axis?: {
+        x?: {
+            path?: Axis["path"];
+            labelOrientation: ELabelOrientation;
+            tickSize?: number;
+        };
+        y?: {
+            path?: Axis["path"];
+            labelOrientation: ELabelOrientation;
+            tickSize?: number;
+        };
+    };
     groupLayout?: EGroupedBarLayout;
     height: number;
     LabelComponent?: TLabelComponent;
@@ -29,6 +41,7 @@ type Props = {
     visible?: Record<string, boolean>;
     width: number;
     xAxisHeight?: number;
+    /** @deprecated use axis.x.labelOrientation */
     xAxisLabelOrientation?: ELabelOrientation;
     yAxisWidth?: number;
     bars?: {
@@ -36,5 +49,5 @@ type Props = {
         ry?: number;
     };
 };
-export declare const BarChart: ({ animation, axisLabelFormat, colorScheme, data, direction, grid, id, groupLayout, height, LabelComponent, padding, showLabels, tip, visible, width, xAxisHeight, xAxisLabelOrientation, yAxisWidth, tickValues, bars, title, }: Props) => JSX.Element | null;
+export declare const BarChart: ({ animation, axisLabelFormat, colorScheme, data, direction, grid, id, groupLayout, height, LabelComponent, padding, showLabels, tip, visible, width, xAxisHeight, xAxisLabelOrientation, yAxisWidth, tickValues, bars, title, axis, }: Props) => JSX.Element | null;
 export {};
