@@ -73,7 +73,13 @@ const MyComponent = () => {
 const customLabelCode = `
 import { TLabelComponent, EChartDirection } from 'cl-react-graph';
 
-const CustomLabel: TLabelComponent = ({direction, inverse, fill, label, item}) => {
+const CustomLabel: TLabelComponent = ({
+  direction,
+  inverse,
+  fill,
+  label,
+  item,
+}) => {
   const offset = direction === EChartDirection.VERTICAL
   ? '0, -5'
   : inverse ? '-5, 0' : '5, 0';
