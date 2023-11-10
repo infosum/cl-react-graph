@@ -177,3 +177,15 @@ export const getValueOffset = (
 
   return height - numericScale(offSet);
 };
+
+export const shouldShowLabel = (
+  item: ExtendedGroupItem,
+  visible: Record<string, boolean>,
+  showLabels: boolean[]
+) => {
+  const k = String(item.groupLabel);
+  if (visible?.[k] === false || showLabels?.[item.datasetIndex] === false) {
+    return false;
+  }
+  return true;
+};

@@ -21,11 +21,10 @@ import {
 } from "../../utils/bars";
 import { ColorScheme, ColorSchemeDefs } from "../../utils/colorScheme";
 import { getHoverColorScheme } from "../../utils/hoverColorScheme";
-import { TLabelComponent } from "../Label";
-import { Labels } from "../Labels";
+import { Label, TLabelComponent } from "../Label";
 import { TipFunc } from "../ToolTip";
 import { ToolTips } from "../ToolTips";
-import { buildBarSprings } from "./barHelper";
+import { buildBarSprings, shouldShowLabel } from "./barHelper";
 
 export type Props = {
   bins: (string | [number, number])[];
@@ -35,6 +34,7 @@ export type Props = {
   direction?: EChartDirection;
   id?: string;
   groupLayout?: EGroupedBarLayout;
+  /** @description Height of the bar render area */
   height: number;
   hoverColorScheme?: ColorScheme;
   LabelComponent?: TLabelComponent;
@@ -174,46 +174,49 @@ export const Bars = ({
       width,
     })
   );
-
+  const ThisLabel = LabelComponent ?? Label;
   const refs: RefObject<any>[] = [];
   return (
     <>
       <ColorSchemeDefs schemes={[colorScheme, hoverColorScheme]} />
       <g className="bars" role="row" transform={`translate${transform}`}>
         <g className="bar-lines">
-          {springs.map((props: any, i) => {
+          {springs.map((props, i) => {
             refs[i] = React.createRef<any>();
+            const item = dataSets[i];
+            const showLabel = shouldShowLabel(item, visible, showLabels);
             return (
-              <animated.rect
-                ref={refs[i]}
-                role="cell"
-                data-testid={`chart-bar-${id}-${i}`}
-                onMouseEnter={() => setHover(i)}
-                onMouseLeave={() => setHover(-1)}
-                key={`bar-${dataSets[i].groupLabel}-${dataSets[i].label}-${dataSets[i].binIndex}`}
-                height={props.height}
-                fill={hover == i ? props.hoverFill : props.fill}
-                width={props.width}
-                rx={rx}
-                ry={ry}
-                x={props.x as any}
-                y={props.y as any}
-              />
+              <g key={i}>
+                <animated.rect
+                  ref={refs[i]}
+                  role="cell"
+                  data-testid={`chart-bar-${id}-${i}`}
+                  onMouseEnter={() => setHover(i)}
+                  onMouseLeave={() => setHover(-1)}
+                  key={`bar-${item.groupLabel}-${item.label}-${item.binIndex}`}
+                  height={props.height}
+                  fill={hover == i ? props.hoverFill : props.fill}
+                  width={props.width}
+                  rx={rx}
+                  ry={ry}
+                  x={props.x}
+                  y={props.y}
+                ></animated.rect>
+                {showLabel && (
+                  <ThisLabel
+                    {...props}
+                    label={labels?.[i]}
+                    item={item}
+                    containerHeight={height}
+                    fill={props.fill.get()}
+                    direction={direction}
+                    inverse={inverse}
+                  />
+                )}
+              </g>
             );
           })}
         </g>
-        <Labels
-          inverse={inverse}
-          colorScheme={colorScheme}
-          springs={springs}
-          showLabels={showLabels}
-          items={dataSets}
-          direction={direction}
-          labels={labels}
-          visible={visible}
-          width={width}
-          LabelComponent={LabelComponent}
-        />
       </g>
 
       <ToolTips

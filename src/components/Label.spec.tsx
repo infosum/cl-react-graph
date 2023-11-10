@@ -2,15 +2,24 @@ import "@testing-library/jest-dom/extend-expect";
 
 import React from "react";
 
+import { useSpringValue } from "@react-spring/web";
 import { render, screen } from "@testing-library/react";
 
 import { EChartDirection } from "../BarChart";
-import { Label } from "./Label";
+import { Label, Props } from "./Label";
 
-test("displays percentage", () => {
-  render(
+const TestLabel = (props: Partial<Props>) => {
+  const x = useSpringValue(0);
+  const y = useSpringValue(0);
+  const height = useSpringValue(40);
+  const width = useSpringValue(100);
+  return (
     <svg>
       <Label
+        x={x}
+        y={y}
+        height={height}
+        width={width}
         direction={EChartDirection.VERTICAL}
         item={{
           label: "test",
@@ -19,29 +28,18 @@ test("displays percentage", () => {
           value: 40,
           percentage: "50",
         }}
+        {...props}
       />
-    </svg>,
+    </svg>
   );
+};
+test("displays percentage", () => {
+  render(<TestLabel />);
 
   expect(screen.getByRole("cell")).toHaveTextContent("50%");
 });
 
 test("displays label", () => {
-  render(
-    <svg>
-      <Label
-        direction={EChartDirection.VERTICAL}
-        label="test label"
-        item={{
-          label: "test",
-          binIndex: 1,
-
-          datasetIndex: 1,
-          value: 40,
-          percentage: "50",
-        }}
-      />
-    </svg>,
-  );
+  render(<TestLabel label="test label" />);
   expect(screen.getByRole("cell")).toHaveTextContent("test label");
 });

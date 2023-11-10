@@ -15,7 +15,7 @@ beforeEach(() => {
 
 test("Histogram", () => {
   render(<Histogram width={100} height={200} data={histogramData}></Histogram>);
-  expect(screen.getAllByRole("cell")).toHaveLength(3);
+  expect(screen.getAllByRole("cell")).toHaveLength(6);
   expect(screen.getByTestId("chart-bar--0")).toHaveAttribute("width", "10");
   expect(screen.getByTestId("chart-bar--1")).toHaveAttribute("width", "20");
   expect(screen.getByTestId("chart-bar--2")).toHaveAttribute("width", "30");

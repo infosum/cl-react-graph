@@ -9,7 +9,7 @@ import { BarChart, EChartDirection } from "./BarChart";
 import { EGroupedBarLayout } from "./Histogram";
 
 beforeEach(() => {
-  (SVGElement.prototype as any).getBBox = (): any => {
+  (SVGElement.prototype as any).getBBox = () => {
     return { x: 0, y: 0, width: 0, heigh: 0, bottom: 0, left: 0 };
   };
 });
@@ -23,7 +23,7 @@ test("BarChart", () => {
       data={barChartData}
     ></BarChart>
   );
-  expect(screen.getAllByRole("cell")).toHaveLength(42);
+  expect(screen.getAllByRole("cell")).toHaveLength(84);
   expect(screen.getByTestId("chart-bar--0")).toHaveAttribute("width", "19");
   expect(screen.getByTestId("chart-bar--1")).toHaveAttribute("width", "19");
   expect(screen.getByTestId("chart-bar--2")).toHaveAttribute("width", "19");
@@ -39,7 +39,7 @@ test("BarChart Grouped overlaid layout", () => {
       data={barChartData}
     ></BarChart>
   );
-  expect(screen.getAllByRole("cell")).toHaveLength(42);
+  expect(screen.getAllByRole("cell")).toHaveLength(84);
   expect(screen.getByTestId("chart-bar--0")).toHaveAttribute("width", "37");
   expect(screen.getByTestId("chart-bar--1")).toHaveAttribute("width", "37");
   expect(screen.getByTestId("chart-bar--20")).toHaveAttribute("width", "37");
@@ -59,7 +59,7 @@ test("BarChart Grouped overlaid layout, compact width", () => {
       data={barChartData}
     ></BarChart>
   );
-  expect(screen.getAllByRole("cell")).toHaveLength(42);
+  expect(screen.getAllByRole("cell")).toHaveLength(84);
   expect(screen.getByTestId("chart-bar--0")).toHaveAttribute("width", "2");
   expect(screen.getByTestId("chart-bar--1")).toHaveAttribute("width", "2");
   expect(screen.getByTestId("chart-bar--20")).toHaveAttribute("width", "2");
