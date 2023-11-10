@@ -13,6 +13,7 @@ import {
   Axis,
   ELabelOrientation,
   TAxisLabelFormat,
+  TTickFormat,
   YAxis,
 } from "./components/YAxis";
 import {
@@ -41,11 +42,13 @@ type Props = {
       path?: Axis["path"];
       labelOrientation: ELabelOrientation;
       tickSize?: number;
+      tickFormat?: TTickFormat;
     };
     y?: {
       path?: Axis["path"];
       labelOrientation: ELabelOrientation;
       tickSize?: number;
+      tickFormat?: TTickFormat;
     };
   };
   groupLayout?: EGroupedBarLayout;
@@ -165,6 +168,7 @@ export const BarChart = ({
         padding={padding}
         path={axis?.y?.path}
         tickSize={axis?.y?.tickSize}
+        tickFormat={axis?.y?.tickFormat}
       />
 
       <XAxis
@@ -182,6 +186,7 @@ export const BarChart = ({
         domain={direction === EChartDirection.HORIZONTAL ? domain : tickValues}
         path={axis?.x?.path}
         tickSize={axis?.x?.tickSize}
+        tickFormat={axis?.x?.tickFormat}
       />
     </Base>
   );
