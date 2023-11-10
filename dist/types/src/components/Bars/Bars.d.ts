@@ -12,6 +12,7 @@ export type Props = {
     direction?: EChartDirection;
     id?: string;
     groupLayout?: EGroupedBarLayout;
+    /** @description Height of the bar render area */
     height: number;
     hoverColorScheme?: ColorScheme;
     LabelComponent?: TLabelComponent;

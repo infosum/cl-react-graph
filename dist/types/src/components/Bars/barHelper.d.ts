@@ -69,3 +69,4 @@ export declare const buildBarSprings: (props: BarSpringProps) => ({
  * This should provide us with the finishing location for the bar's y position.
  */
 export declare const getValueOffset: (item: ExtendedGroupItem, props: BarSpringProps) => any;
+export declare const shouldShowLabel: (item: ExtendedGroupItem, visible: Record<string, boolean>, showLabels: boolean[]) => boolean;

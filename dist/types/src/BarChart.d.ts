@@ -50,6 +50,8 @@ type Props = {
         rx?: number;
         ry?: number;
     };
+    /** @description nodes rendered after/above the bars */
+    labels?: string[];
 };
-export declare const BarChart: ({ animation, axisLabelFormat, colorScheme, data, direction, grid, id, groupLayout, height, LabelComponent, padding, showLabels, tip, visible, width, xAxisHeight, xAxisLabelOrientation, yAxisWidth, tickValues, bars, title, axis, }: Props) => JSX.Element | null;
+export declare const BarChart: ({ animation, axisLabelFormat, colorScheme, data, direction, grid, id, groupLayout, height, LabelComponent, padding, showLabels, tip, visible, width, xAxisHeight, xAxisLabelOrientation, yAxisWidth, tickValues, bars, title, axis, labels, }: Props) => JSX.Element | null;
 export {};
