@@ -21,7 +21,7 @@ export const ToolTips = ({ items, springs, refs, bins, tip }: Props) => {
             key={`bar-tip-${items[i].datasetIndex}-${items[i].binIndex}-${items[i].label}-${items[i].value}`}
             triggerRef={refs[i]}
           >
-            <ThisTip item={items[i]} bin={bins[i]} />
+            <ThisTip item={items[i]} bin={bins[i % bins.length]} />
           </Tooltip>
         );
       })}
