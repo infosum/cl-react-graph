@@ -17,6 +17,7 @@ const TestLabel = (props: Partial<Props>) => {
     <svg>
       <Label
         x={x}
+        containerHeight={100}
         y={y}
         height={height}
         width={width}
