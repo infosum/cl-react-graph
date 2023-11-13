@@ -201,6 +201,8 @@ export const Bars = ({
                   ry={ry}
                   x={props.x}
                   y={props.y}
+                  data-value={item.value}
+                  data-percentage={item.percentage}
                 ></animated.rect>
                 {showLabel && (
                   <ThisLabel
