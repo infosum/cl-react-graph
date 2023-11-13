@@ -71,6 +71,8 @@ type Props = {
     rx?: number;
     ry?: number;
   };
+  /** @description nodes rendered after/above the bars */
+  labels?: string[];
 };
 
 const defaultTickValues = [];
@@ -98,6 +100,7 @@ export const BarChart = ({
   bars,
   title,
   axis,
+  labels,
 }: Props) => {
   if (!yAxisWidth) {
     yAxisWidth = direction === EChartDirection.VERTICAL ? 40 : 100;
@@ -147,6 +150,7 @@ export const BarChart = ({
         left={yAxisWidth}
         padding={padding}
         showLabels={showLabels}
+        labels={labels}
         tip={tip}
         values={data.counts}
         visible={visible}

@@ -8,10 +8,10 @@ import { EChartDirection } from "../../BarChart";
 import { BarChartDataSet } from "../../Histogram";
 import { ColorScheme } from "../../utils/colorScheme";
 import { getHoverColorScheme } from "../../utils/hoverColorScheme";
-import { TLabelComponent } from "../Label";
-import { Labels } from "../Labels";
+import { Label, TLabelComponent } from "../Label";
 import { TipFunc } from "../ToolTip";
 import { ToolTips } from "../ToolTips";
+import { shouldShowLabel } from "./barHelper";
 import { ExtendedGroupItem } from "./Bars";
 import { buildHistogramSprings } from "./histogramHelper";
 
@@ -132,13 +132,14 @@ export const HistogramBars = ({
       direction,
     })
   );
-
+  const ThisLabel = LabelComponent ?? Label;
   const refs: RefObject<any>[] = [];
   return (
     <>
       <g className="bars" transform={`translate${transform}`}>
         {springs.map((props: any, i) => {
           const item = dataSets[i];
+          const showLabel = shouldShowLabel(item, visible, showLabels);
           refs[i] = React.createRef<any>();
           return (
             <animated.rect
@@ -157,19 +158,19 @@ export const HistogramBars = ({
               width={props.width}
               x={props.x as any}
               y={props.y as any}
-            />
+            >
+              {showLabel && (
+                <ThisLabel
+                  {...props}
+                  label={labels?.[i]}
+                  item={dataSets[i]}
+                  fill={props.fill.get()}
+                  direction={direction}
+                />
+              )}
+            </animated.rect>
           );
         })}
-        <Labels
-          colorScheme={colorScheme}
-          springs={springs}
-          showLabels={showLabels}
-          items={dataSets}
-          width={width}
-          direction={direction}
-          labels={labels}
-          LabelComponent={LabelComponent}
-        />
       </g>
 
       <ToolTips
