@@ -150,10 +150,6 @@ const data: BarChartData = {
       data: [54932, 34230, 10000],
       label: "Filtered",
     },
-    {
-      data: [54932, 34230, 10000],
-      label: "Ffoo",
-    },
   ],
 };
 
