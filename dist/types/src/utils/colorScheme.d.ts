@@ -14,3 +14,4 @@ export declare const getGradientId: (schemeItem: Gradient) => string;
 export declare const ColorSchemeDefs: ({ schemes }: {
     schemes: ColorScheme[];
 }) => JSX.Element;
+export declare const getSchemeItem: (scheme: ColorScheme, index: number) => ColorSchemeItem;
