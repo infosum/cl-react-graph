@@ -1,10 +1,10 @@
-import { scaleLinear, scaleOrdinal } from "d3-scale";
+import { scaleOrdinal } from "d3-scale";
 import { schemeSet3 } from "d3-scale-chromatic";
 import { arc, pie } from "d3-shape";
 import React, { RefObject, useState } from "react";
 
 import { BarChartDataSet } from "../Histogram";
-import { ColorScheme, getFill } from "../utils/colorScheme";
+import { ColorScheme, getFill, getSchemeItem } from "../utils/colorScheme";
 import { TipFunc } from "./ToolTip";
 import { ToolTips } from "./ToolTips";
 
@@ -61,7 +61,7 @@ export const Ring = ({
       startAngle: c.startAngle,
       innerRadius,
       outerRadius,
-    }),
+    })
   );
 
   const centroids = pieData.map((c) =>
@@ -70,7 +70,7 @@ export const Ring = ({
       startAngle: c.startAngle,
       innerRadius,
       outerRadius,
-    }),
+    })
   );
 
   const tipItems: {
@@ -89,10 +89,10 @@ export const Ring = ({
 
   const chooseFill = (hover: number, i: number) => {
     if (hover === i && hoverColorScheme) {
-      return getFill(hoverColorScheme[i]);
+      return getFill(getSchemeItem(hoverColorScheme, i));
     }
     if (colorScheme) {
-      return getFill(colorScheme[i]);
+      return getFill(getSchemeItem(colorScheme, i));
     }
     return colorScale(bins[i]);
   };
