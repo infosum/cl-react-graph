@@ -1,4 +1,4 @@
-import { ScaleBand, ScaleLinear, scaleOrdinal } from "d3-scale";
+import { ScaleBand, ScaleLinear } from "d3-scale";
 
 import { SpringConfig } from "@react-spring/web";
 

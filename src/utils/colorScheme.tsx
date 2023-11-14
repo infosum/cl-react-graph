@@ -1,4 +1,3 @@
-import { scaleOrdinal } from "d3-scale";
 import React from "react";
 
 export type Gradient = {
