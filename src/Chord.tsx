@@ -5,7 +5,7 @@ import { arc } from "d3-shape";
 import React, { useState } from "react";
 
 import { Base } from "./components/Base";
-import { ColorScheme, getFill } from "./utils/colorScheme";
+import { ColorScheme, getFill, getSchemeItem } from "./utils/colorScheme";
 
 export type Props = {
   width: number;
@@ -63,7 +63,7 @@ export const Chord = ({
               stroke={inactive.stroke}
               style={{
                 opacity: [m.source.index, m.target.index].includes(
-                  active as number,
+                  active as number
                 )
                   ? 1
                   : 0.5,
@@ -71,9 +71,9 @@ export const Chord = ({
               }}
               fill={
                 active === m.source.index
-                  ? getFill(colorScheme[m.source.index])
+                  ? getFill(getSchemeItem(colorScheme, m.source.index))
                   : active === m.target.index
-                  ? getFill(colorScheme[m.target.index])
+                  ? getFill(getSchemeItem(colorScheme, m.target.index))
                   : inactive.fill
               }
               d={`${rPath({
@@ -99,7 +99,7 @@ export const Chord = ({
       </g>
       <g className="arcs" transform={`translate(${width / 2},${height / 2})`}>
         {chords.groups.map((arc, i: number) => {
-          const fill = getFill(colorScheme[i]);
+          const fill = getFill(getSchemeItem(colorScheme, i));
           return (
             <>
               <path

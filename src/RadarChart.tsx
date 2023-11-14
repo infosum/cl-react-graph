@@ -9,7 +9,7 @@ import { Path } from "./components/Path";
 import { defaultPointStyle, Point } from "./components/Point";
 import { PointStyle } from "./components/Points";
 import { polar2cart, Web } from "./components/Web";
-import { ColorScheme, getFill } from "./utils/colorScheme";
+import { ColorScheme, getFill, getSchemeItem } from "./utils/colorScheme";
 
 export type RadarChartData = {
   label?: string;
@@ -42,7 +42,7 @@ const buildArea = (
   datum: RadarChartData,
   labels: string[],
   center: [number, number],
-  extent: [number, number] | [undefined, undefined],
+  extent: [number, number] | [undefined, undefined]
 ) => {
   const angle = 360 / labels.length;
   const radius = Math.min(...center);
@@ -72,7 +72,7 @@ export const RadarChart = ({
 }: Props) => {
   const allValues = data.reduce(
     (prev, next) => prev.concat(next.axes.map((a) => a.value)),
-    [] as number[],
+    [] as number[]
   );
   const labels = data.reduce((prev, next) => {
     next.axes.forEach((a) => {
@@ -99,7 +99,7 @@ export const RadarChart = ({
           <Fragment key={`area-${labelId}`}>
             <Path
               id={`area-fill-${labelId}`}
-              fill={getFill(colorScheme[i])}
+              fill={getFill(getSchemeItem(colorScheme, i))}
               opacity={isOver === null ? 0.5 : labelId === isOver ? 1 : 0.1}
               onMouseEnter={() => setIsOver(labelId)}
               onMouseLeave={() => setIsOver(null)}
@@ -109,7 +109,7 @@ export const RadarChart = ({
               const pointStyle = points[i] ?? defaultPointStyle;
               const id = `point-${labelId}-${datum.axes[j].axis.replace(
                 /[^a-z]/gi,
-                "",
+                ""
               )}`;
               return (
                 <Point

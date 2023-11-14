@@ -1,3 +1,4 @@
+import { scaleOrdinal } from "d3-scale";
 import React from "react";
 
 export type Gradient = {
@@ -23,7 +24,7 @@ export const getGradientId = (schemeItem: Gradient) => {
   const start = schemeItem.stops[0].stopColor.replace(/[\W_]+/g, "");
   const end = schemeItem.stops[schemeItem.stops.length - 1].stopColor.replace(
     /[\W_]+/g,
-    "",
+    ""
   );
   return `gradient-${start}-${end}`;
 };
@@ -35,7 +36,7 @@ export const ColorSchemeDefs = ({ schemes }: { schemes: ColorScheme[] }) => {
         return scheme.map((item, j) =>
           isGradient(item) ? (
             <GradientFill key={`${i}-${j}`} gradient={item} />
-          ) : null,
+          ) : null
         );
       })}
     </defs>
@@ -53,4 +54,9 @@ const GradientFill = ({ gradient }: { gradient: Gradient }) => {
       ))}
     </linearGradient>
   );
+};
+
+export const getSchemeItem = (scheme: ColorScheme, index: number) => {
+  const i = index < scheme.length ? index : index % scheme.length;
+  return scheme[i];
 };

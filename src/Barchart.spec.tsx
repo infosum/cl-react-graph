@@ -114,3 +114,43 @@ test("shows the y axis tick value when the chart is vertical", () => {
   expect(within(xaxis).queryByText("66")).not.toBeInTheDocument();
   expect(within(xaxis).queryByText("99")).not.toBeInTheDocument();
 });
+
+test("iterates over color scheme if more values present than colors", () => {
+  render(
+    <BarChart
+      width={100}
+      height={600}
+      direction={EChartDirection.VERTICAL}
+      id="demo"
+      groupLayout={EGroupedBarLayout.OVERLAID}
+      colorScheme={["red", "green"]}
+      data={{
+        bins: ["Female", "Male", "Other"],
+        counts: [
+          {
+            data: [58483, 52400, 13300],
+            label: "Baseline",
+          },
+          {
+            data: [54932, 34230, 10000],
+            label: "Filtered",
+          },
+          {
+            data: [54932, 34230, 10000],
+            label: "Surprise!",
+          },
+        ],
+      }}
+      tickValues={[33, 66, 99]}
+    ></BarChart>
+  );
+  expect(screen.getByTestId("chart-bar--0")).toHaveAttribute("fill", "red");
+  expect(screen.getByTestId("chart-bar--1")).toHaveAttribute("fill", "red");
+  expect(screen.getByTestId("chart-bar--2")).toHaveAttribute("fill", "red");
+  expect(screen.getByTestId("chart-bar--3")).toHaveAttribute("fill", "green");
+  expect(screen.getByTestId("chart-bar--4")).toHaveAttribute("fill", "green");
+  expect(screen.getByTestId("chart-bar--5")).toHaveAttribute("fill", "green");
+  expect(screen.getByTestId("chart-bar--6")).toHaveAttribute("fill", "red");
+  expect(screen.getByTestId("chart-bar--7")).toHaveAttribute("fill", "red");
+  expect(screen.getByTestId("chart-bar--8")).toHaveAttribute("fill", "red");
+});

@@ -1,4 +1,4 @@
-import { ScaleBand, ScaleLinear } from "d3-scale";
+import { ScaleBand, ScaleLinear, scaleOrdinal } from "d3-scale";
 
 import { SpringConfig } from "@react-spring/web";
 
@@ -8,7 +8,7 @@ import {
   EGroupedBarLayout,
   HistogramBar,
 } from "../../Histogram";
-import { ColorScheme, getFill } from "../../utils/colorScheme";
+import { ColorScheme, getFill, getSchemeItem } from "../../utils/colorScheme";
 import { ExtendedGroupItem } from "./Bars";
 
 /**
@@ -88,6 +88,7 @@ export const buildBarSprings = (props: BarSpringProps) => {
     itemWidths,
   } = props;
   const [_, width] = numericScale.range();
+  const concreteHoverScheme = hoverColorScheme ?? colorScheme;
 
   const s = dataSets.map((item) => {
     const bandValue = Number(bandScale(item.label));
@@ -96,11 +97,9 @@ export const buildBarSprings = (props: BarSpringProps) => {
     const itemWidth = itemWidths[item.datasetIndex];
     const itemHeight = numericScale(item.value);
     const hoverFill = getFill(
-      hoverColorScheme
-        ? hoverColorScheme[item.datasetIndex]
-        : colorScheme[item.datasetIndex]
+      getSchemeItem(concreteHoverScheme, item.datasetIndex)
     );
-    const fill = getFill(colorScheme[item.datasetIndex]);
+    const fill = getFill(getSchemeItem(colorScheme, item.datasetIndex));
     if (direction === EChartDirection.HORIZONTAL) {
       return {
         from: {
