@@ -67,15 +67,19 @@ const data: ITornadoProps["data"] = {
     {
       label: "Background",
       data: [
-        [200, 2600, 5100, 9700, 8400, 6700], // Male bin 1, Male bin 2,
-        [2002, 2100, 4700, 8700, 4900, 1400], // Female bin 1, Female bin 2,
+        [9700],
+        [],
+        // [1000, 2600, 5100, 9700, 8400, 6700], // Male bin 1, Male bin 2,
+        // [2002, 2100, 4700, 8700, 4900, 1400], // Female bin 1, Female bin 2,
       ],
     },
     {
       label: "Foreground",
       data: [
-        [100, 260, 510, 970, 840, 670], // Male bin 1, Male bin 2,
-        [1000, 5500, 470, 870, 490, 140], // Female bin 1, Female bin 2,
+        [200],
+        [],
+        // [200, 560, 510, 970, 840, 670], // Male bin 1, Male bin 2,
+        // [1000, 5500, 470, 870, 490, 140], // Female bin 1, Female bin 2,
       ],
     },
   ],
@@ -98,12 +102,77 @@ const TornadoExample = () => {
             splitAxisHeight={50}
             xAxisHeight={20}
             colorScheme={[theme.green900, theme.brightBlue500]}
-            direction={EChartDirection.HORIZONTAL}
+            direction={EChartDirection.VERTICAL}
             showBinPercentages={false}
           />
         </div>
         <JSXCode exampleCode={exampleCode} />
       </TwoColumns>
+
+      <TornadoChart
+        data={data}
+        splitBins={["Male", "Female"]}
+        groupLayout={EGroupedBarLayout.GROUPED}
+        width={width}
+        height={500}
+        splitAxisHeight={50}
+        xAxisHeight={20}
+        colorScheme={[theme.green900, theme.brightBlue500]}
+        direction={EChartDirection.VERTICAL}
+        showBinPercentages={false}
+      />
+
+      <TornadoChart
+        data={data}
+        splitBins={["Male", "Female"]}
+        groupLayout={EGroupedBarLayout.STACKED}
+        width={width}
+        height={500}
+        splitAxisHeight={50}
+        xAxisHeight={20}
+        colorScheme={[theme.green900, theme.brightBlue500]}
+        direction={EChartDirection.VERTICAL}
+        showBinPercentages={false}
+      />
+
+      <TornadoChart
+        data={data}
+        splitBins={["Male", "Female"]}
+        groupLayout={EGroupedBarLayout.OVERLAID}
+        width={width}
+        height={500}
+        splitAxisHeight={50}
+        xAxisHeight={20}
+        colorScheme={[theme.green900, theme.brightBlue500]}
+        direction={EChartDirection.HORIZONTAL}
+        showBinPercentages={false}
+      />
+
+      <TornadoChart
+        data={data}
+        splitBins={["Male", "Female"]}
+        groupLayout={EGroupedBarLayout.GROUPED}
+        width={width}
+        height={500}
+        splitAxisHeight={50}
+        xAxisHeight={20}
+        colorScheme={[theme.green900, theme.brightBlue500]}
+        direction={EChartDirection.HORIZONTAL}
+        showBinPercentages={false}
+      />
+
+      <TornadoChart
+        data={data}
+        splitBins={["Male", "Female"]}
+        groupLayout={EGroupedBarLayout.STACKED}
+        width={width}
+        height={500}
+        splitAxisHeight={50}
+        xAxisHeight={20}
+        colorScheme={[theme.green900, theme.brightBlue500]}
+        direction={EChartDirection.HORIZONTAL}
+        showBinPercentages={false}
+      />
     </Layout>
   );
 };

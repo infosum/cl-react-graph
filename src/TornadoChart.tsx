@@ -36,7 +36,7 @@ export type Props = {
   /** @description Height in px of the axis which labels the left/right values */
   splitAxisHeight?: number;
   /** @description labels for the left/right split axis  */
-  splitBins: [string, string];
+  splitBins?: [string, string];
   visible?: Record<string, boolean>;
   xAxisHeight?: number;
   yAxisWidth?: number;
@@ -80,6 +80,9 @@ export const TornadoChart = ({
     splitAxisHeight = direction === EChartDirection.VERTICAL ? 100 : 40;
   }
 
+  if (width === 0) {
+    return null;
+  }
   const domain = calculateDomain(data, true);
   const baseProps = {
     width,
@@ -87,28 +90,6 @@ export const TornadoChart = ({
     chartPadding,
     title,
   };
-
-  const dataSets: any[] = [];
-  data.counts.forEach((count) => {
-    count.data.forEach((value, genderIndex) => {
-      value.forEach((aValue, rowIndex) => {
-        if (!dataSets[rowIndex]) {
-          dataSets[rowIndex] = [];
-        }
-        dataSets[rowIndex].push({
-          side: genderIndex === 0 ? "left" : "right",
-          groupLabel: count.label,
-          colorRef: count.label,
-          label: data.bins[rowIndex],
-          value:
-            visible[data.bins[rowIndex]] !== false &&
-            visible[count.label] !== false
-              ? aValue
-              : 0,
-        });
-      });
-    });
-  });
 
   const left: BarChartDataSet[] = data.counts.map((counts, i) => {
     return {

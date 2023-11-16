@@ -24,11 +24,33 @@ test("BarChart", () => {
     ></BarChart>
   );
   expect(screen.getAllByRole("cell")).toHaveLength(84);
-  expect(screen.getByTestId("chart-bar--0")).toHaveAttribute("width", "19");
-  expect(screen.getByTestId("chart-bar--1")).toHaveAttribute("width", "19");
-  expect(screen.getByTestId("chart-bar--2")).toHaveAttribute("width", "19");
+  expect(screen.getByTestId("chart-bar--0")).toHaveAttribute(
+    "data-percentage",
+    "5.89"
+  );
+  expect(screen.getByTestId("chart-bar--0")).toHaveAttribute(
+    "d",
+    "m11 500 v0 a0 0 0 0 1 0 -0 h19 a0 0 0 0 1 0 0 v0 h-19"
+  );
+  expect(screen.getByTestId("chart-bar--1")).toHaveAttribute(
+    "data-percentage",
+    "5.27"
+  );
+  expect(screen.getByTestId("chart-bar--1")).toHaveAttribute(
+    "d",
+    "m56 500 v0 a0 0 0 0 1 0 -0 h19 a0 0 0 0 1 0 0 v0 h-19"
+  );
+  expect(screen.getByTestId("chart-bar--2")).toHaveAttribute(
+    "data-percentage",
+    "1.34"
+  );
+  expect(screen.getByTestId("chart-bar--2")).toHaveAttribute(
+    "d",
+    "m101 500 v0 a0 0 0 0 1 0 -0 h19 a0 0 0 0 1 0 0 v0 h-19"
+  );
 });
 
+t: HTMLInputElement;
 test("BarChart Grouped overlaid layout", () => {
   render(
     <BarChart
@@ -40,13 +62,23 @@ test("BarChart Grouped overlaid layout", () => {
     ></BarChart>
   );
   expect(screen.getAllByRole("cell")).toHaveLength(84);
-  expect(screen.getByTestId("chart-bar--0")).toHaveAttribute("width", "37");
-  expect(screen.getByTestId("chart-bar--1")).toHaveAttribute("width", "37");
-  expect(screen.getByTestId("chart-bar--20")).toHaveAttribute("width", "37");
-  expect(screen.getByTestId("chart-bar--20")).toHaveAttribute("x", "912");
+  expect(screen.getByTestId("chart-bar--0")).toHaveAttribute(
+    "d",
+    "m12 500 v0 a10 10 0 0 1 10 -10 h17 a10 10 0 0 1 10 10 v0 h-17"
+  );
+  expect(screen.getByTestId("chart-bar--1")).toHaveAttribute(
+    "d",
+    "m57 500 v0 a10 10 0 0 1 10 -10 h17 a10 10 0 0 1 10 10 v0 h-17"
+  );
+  expect(screen.getByTestId("chart-bar--20")).toHaveAttribute(
+    "d",
+    "m912 500 v0 a10 10 0 0 1 10 -10 h17 a10 10 0 0 1 10 10 v0 h-17"
+  );
 
-  expect(screen.getByTestId("chart-bar--41")).toHaveAttribute("width", "18");
-  expect(screen.getByTestId("chart-bar--41")).toHaveAttribute("x", "921");
+  expect(screen.getByTestId("chart-bar--41")).toHaveAttribute(
+    "d",
+    "m921 500 v0 a0 0 0 0 1 0 -0 h18 a0 0 0 0 1 0 0 v0 h-18"
+  );
 });
 
 test("BarChart Grouped overlaid layout, compact width", () => {
@@ -60,13 +92,29 @@ test("BarChart Grouped overlaid layout, compact width", () => {
     ></BarChart>
   );
   expect(screen.getAllByRole("cell")).toHaveLength(84);
-  expect(screen.getByTestId("chart-bar--0")).toHaveAttribute("width", "2");
-  expect(screen.getByTestId("chart-bar--1")).toHaveAttribute("width", "2");
-  expect(screen.getByTestId("chart-bar--20")).toHaveAttribute("width", "2");
-  expect(screen.getByTestId("chart-bar--20")).toHaveAttribute("x", "49");
-
-  expect(screen.getByTestId("chart-bar--41")).toHaveAttribute("width", "1");
-  expect(screen.getByTestId("chart-bar--41")).toHaveAttribute("x", "49");
+  expect(screen.getByTestId("chart-bar--0")).toHaveAttribute(
+    "data-percentage",
+    "5.89"
+  );
+  expect(screen.getByTestId("chart-bar--0")).toHaveAttribute(
+    "d",
+    "m9 500 v0 a0 0 0 0 1 0 -0 h2 a0 0 0 0 1 0 0 v0 h-2"
+  );
+  expect(screen.getByTestId("chart-bar--1")).toHaveAttribute(
+    "d",
+    "m11 500 v0 a0 0 0 0 1 0 -0 h2 a0 0 0 0 1 0 0 v0 h-2"
+  );
+  expect(screen.getByTestId("chart-bar--20")).toHaveAttribute(
+    "d",
+    "m49 500 v0 a0 0 0 0 1 0 -0 h2 a0 0 0 0 1 0 0 v0 h-2"
+  );
+  // expect(screen.getByTestId("chart-bar--1")).toHaveAttribute("width", "2");
+  // expect(screen.getByTestId("chart-bar--20")).toHaveAttribute("width", "2");
+  // expect(screen.getByTestId("chart-bar--20")).toHaveAttribute("x", "49");
+  expect(screen.getByTestId("chart-bar--41")).toHaveAttribute(
+    "d",
+    "m49 500 v0 a0 0 0 0 1 0 -0 h1 a0 0 0 0 1 0 0 v0 h-1"
+  );
 });
 
 test("shows the x axis tick value when the chart is horizontal", () => {

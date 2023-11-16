@@ -99,11 +99,35 @@ export const buildBarSprings = (props: BarSpringProps) => {
     const hoverFill = getFill(
       getSchemeItem(concreteHoverScheme, item.datasetIndex)
     );
+    const radius = 10;
     const fill = getFill(getSchemeItem(colorScheme, item.datasetIndex));
     if (direction === EChartDirection.HORIZONTAL) {
+      const fromX = inverse ? width : 0;
+      const fromY = bandPosition + bandValue;
+      const r = radius * 2 < itemWidth ? radius : 0;
+      const toX = inverse ? width - itemHeight + valueOffset + r : valueOffset;
+      const toY = bandPosition + bandValue;
+      const { topRightCurve, topLeftCurve, bottomLeftCurve, bottomRightCurve } =
+        makeCurves(r);
+
+      const vertical = inverse ? itemWidth : itemWidth - 2 * r;
+      const horizontal = itemHeight - r;
+
+      const startD = inverse
+        ? `m${fromX} ${fromY} h${0} v${vertical} h-${0} ${bottomLeftCurve} v-${
+            vertical - 2 * radius
+          } ${topLeftCurve} z`
+        : `m${fromX} ${fromY} h${0} ${topRightCurve} v${vertical} ${bottomRightCurve} h-${0}  v-${vertical}`;
+
+      const endD = inverse
+        ? `m${toX} ${toY} h${horizontal} v${vertical} h-${horizontal} ${bottomLeftCurve} v-${
+            vertical - 2 * radius
+          } ${topLeftCurve} z`
+        : `m${toX} ${toY} h${horizontal} ${topRightCurve} v${vertical} ${bottomRightCurve} h-${horizontal} v-${vertical}`;
       return {
         from: {
           width: 0,
+          d: startD,
           fill,
           hoverFill,
           x: inverse ? width : 0,
@@ -112,30 +136,60 @@ export const buildBarSprings = (props: BarSpringProps) => {
         },
         to: {
           width: itemHeight,
+          d: endD,
           fill,
           hoverFill,
-          x: inverse ? width - itemHeight - valueOffset : valueOffset,
+          x: toX,
           y: bandPosition + bandValue,
           height: itemWidth,
         },
         config,
       };
     }
+    console.log("itemWidth", itemWidth);
+    console.log("itemHeight", itemHeight);
+    const r = radius * 2 < itemHeight ? radius : itemHeight / 2;
+
+    const fromX = bandPosition + bandValue;
+    const toX = bandPosition + bandValue;
+    const fromY = inverse ? 0 : height;
+    const toY = inverse ? 0 : valueOffset;
+
+    const vertical = itemHeight - r;
+    const horizontal = inverse ? itemWidth : itemWidth - 2 * r;
+
+    const { topRightCurve, topLeftCurve, bottomLeftCurve, bottomRightCurve } =
+      makeCurves(r);
+
+    const startD = inverse
+      ? `m${fromX} ${fromY} h${horizontal} v0 ${bottomRightCurve} h-${
+          horizontal - 2 * radius
+        } ${bottomLeftCurve} v0 z`
+      : `m${fromX} ${fromY} v0 ${topLeftCurve} h${horizontal} ${topRightCurve} v0 h-${horizontal}`;
+
+    const endD = inverse
+      ? `m${toX} ${toY} h${horizontal} v${vertical} ${bottomRightCurve} h-${
+          horizontal - 2 * radius
+        } ${bottomLeftCurve}  v-${vertical} z`
+      : `m${fromX} ${fromY} v-${vertical} ${topLeftCurve} h${horizontal} ${topRightCurve} v${vertical} h-${horizontal}`;
+
     return {
       from: {
         height: 0,
         fill,
         hoverFill,
-        x: bandPosition + bandValue,
-        y: inverse ? 0 : height,
+        d: startD,
+        x: fromX,
+        y: fromY,
         width: itemWidth,
       },
       to: {
         height: itemHeight,
         fill,
         hoverFill,
-        x: bandPosition + bandValue,
-        y: inverse ? 0 : valueOffset,
+        d: endD,
+        x: toX,
+        y: toY,
         width: itemWidth,
       },
       config,
@@ -144,6 +198,18 @@ export const buildBarSprings = (props: BarSpringProps) => {
   return s;
 };
 
+const makeCurves = (radius: number) => {
+  const topRightCurve = `a${radius} ${radius} 0 0 1 ${radius} ${radius}`;
+  const bottomRightCurve = `a${radius} ${radius} 0 0 1 -${radius} ${radius}`;
+  const bottomLeftCurve = `a${radius} ${radius} 0 0 1 -${radius} -${radius}`;
+  const topLeftCurve = `a${radius},${radius} 0 0 1 ${radius},-${radius}`;
+  return {
+    topLeftCurve,
+    topRightCurve,
+    bottomLeftCurve,
+    bottomRightCurve,
+  };
+};
 /**
  * If we are using a STACKED group layout the work out the total height
  * of the bars which should be stacked under the current item.
