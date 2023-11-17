@@ -37,8 +37,7 @@ type Props = {
   values: BarChartDataSet[];
   visible?: Record<string, boolean>;
   width: number;
-  rx?: number;
-  ry?: number;
+  radius?: number;
 };
 
 export const HistogramBars = ({
@@ -63,8 +62,7 @@ export const HistogramBars = ({
   values,
   visible = {},
   width,
-  rx = 0,
-  ry = 0,
+  radius = 0,
 }: Props) => {
   if (width === 0) {
     return null;
@@ -137,27 +135,28 @@ export const HistogramBars = ({
   return (
     <>
       <g className="bars" transform={`translate${transform}`}>
-        {springs.map((props: any, i) => {
+        {springs.map((props, i) => {
           const item = dataSets[i];
           const showLabel = shouldShowLabel(item, visible, showLabels);
           refs[i] = React.createRef<any>();
           return (
-            <animated.rect
+            <animated.path
               ref={refs[i]}
               stroke={stroke}
               className="chart-bar"
               role="cell"
-              rx={rx}
-              ry={ry}
+              // rx={rx}
+              // ry={ry}
+              d={props.d}
               data-testid={`chart-bar-${id}-${i}`}
               onMouseEnter={() => setHover(i)}
               onMouseLeave={() => setHover(-1)}
               key={`bar-${item.groupLabel}.${item.label}.${item.value}`}
               height={props.height}
               fill={hover == i ? props.hoverFill : props.fill}
-              width={props.width}
-              x={props.x as any}
-              y={props.y as any}
+              // width={props.width}
+              x={props.x}
+              y={props.y}
             >
               {showLabel && (
                 <ThisLabel
@@ -168,7 +167,7 @@ export const HistogramBars = ({
                   direction={direction}
                 />
               )}
-            </animated.rect>
+            </animated.path>
           );
         })}
       </g>

@@ -100,6 +100,9 @@ const JoyPlotExample = () => {
             data={data}
             title="In market for a car"
             xAxisHeight={20}
+            bars={{
+              radius: 4,
+            }}
             colorScheme={[theme.green900]}
             width={width}
             height={data.length * 150}

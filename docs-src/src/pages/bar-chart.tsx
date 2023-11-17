@@ -104,6 +104,7 @@ const MyComponent = () => {
         }}
         showLabels={[false, true]}
         direction={EChartDirection.HORIZONTAL}
+        bars={{radius: 4}}
         data={data}
         height={400}
         tickValues={[0, 40000, 89200]}
@@ -152,63 +153,6 @@ const data: BarChartData = {
     },
   ],
 };
-// const data: BarChartData = {
-//   bins: ["Age 0-17", "Age 18-40", "Age 40+"],
-//   counts: [
-//     {
-//       label: "Male",
-//       data: [27.77777777777778, 55.55555555555556, 16.666666666666664],
-//     },
-//     {
-//       label: "Female",
-//       data: [11.11111111111111, 38.88888888888889, 50],
-//     },
-// {
-//   label: "quia",
-//   data: [27.77777777777778, 0, 0],
-// },
-// {
-//   label: "repellat",
-//   data: [27.77777777777778, 0, 0],
-// },
-// {
-//   label: "qui",
-//   data: [27.77777777777778, 0, 0],
-// },
-// {
-//   label: "dolorum",
-//   data: [27.77777777777778, 0, 0],
-// },
-// {
-//   label: "nostrum",
-//   data: [27.77777777777778, 0, 0],
-// },
-// {
-//   label: "cupiditate",
-//   data: [27.77777777777778, 0, 0],
-// },
-// {
-//   label: "blanditiis",
-//   data: [27.77777777777778, 0, 0],
-// },
-// {
-//   label: "et",
-//   data: [27.77777777777778, 0, 0],
-// },
-// {
-//   label: "hi",
-//   data: [27.77777777777778, 0, 0],
-// },
-// {
-//   label: "there",
-//   data: [38.88888888888889, 0, 0],
-// },
-// {
-//   label: "bob",
-//   data: [0, 16.666666666666664, 0],
-// },
-//   ],
-// };
 
 const lineStyle: SVGLineStyle = {
   fill: "#000",
@@ -259,6 +203,8 @@ const BarChartExample = () => {
             }}
             showLabels={[false, true]}
             direction={EChartDirection.HORIZONTAL}
+            groupLayout={EGroupedBarLayout.OVERLAID}
+            bars={{ radius: 4 }}
             data={data}
             height={400}
             tickValues={[0, 40000, 89200]}
@@ -281,7 +227,6 @@ const BarChartExample = () => {
               },
             }}
             colorScheme={[theme.brightBlue800, theme.green900]}
-            groupLayout={EGroupedBarLayout.GROUPED}
             axis={{
               x: {
                 labelOrientation: ELabelOrientation.VERTICAL,

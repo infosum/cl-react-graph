@@ -64,12 +64,10 @@ type Props = {
   visible?: Record<string, boolean>;
   width: number;
   xAxisHeight?: number;
-  /** @deprecated use axis.x.labelOrientation */
-  xAxisLabelOrientation?: ELabelOrientation;
   yAxisWidth?: number;
   bars?: {
-    rx?: number;
-    ry?: number;
+    /** @description radius (px) of bar rounded end's curves. Default 0 - no rounded ends */
+    radius?: number;
   };
   /** @description nodes rendered after/above the bars */
   labels?: string[];
@@ -94,7 +92,6 @@ export const BarChart = ({
   visible,
   width,
   xAxisHeight,
-  xAxisLabelOrientation = ELabelOrientation.HORIZONTAL,
   yAxisWidth,
   tickValues,
   bars,
@@ -155,8 +152,7 @@ export const BarChart = ({
         values={data.counts}
         visible={visible}
         width={width - yAxisWidth}
-        rx={bars?.rx ?? 0}
-        ry={bars?.ry ?? 0}
+        radius={bars?.radius ?? 0}
       />
 
       <YAxis
@@ -182,7 +178,7 @@ export const BarChart = ({
         padding={padding}
         left={yAxisWidth}
         labelFormat={axisLabelFormat}
-        labelOrientation={axis?.x?.labelOrientation ?? xAxisLabelOrientation}
+        labelOrientation={axis?.x?.labelOrientation}
         scale={direction === EChartDirection.HORIZONTAL ? "linear" : "band"}
         values={
           direction === EChartDirection.HORIZONTAL ? tickValues : data.bins

@@ -122,8 +122,7 @@ export type Props = {
   title?: string;
   description?: string;
   bars?: {
-    rx?: number;
-    ry?: number;
+    radius?: number;
   };
 };
 
@@ -206,8 +205,7 @@ export const Histogram = ({
         continuousDomain={continuousDomain}
         tip={tip}
         visible={visible}
-        rx={bars?.rx ?? 0}
-        ry={bars?.ry ?? 0}
+        radius={bars?.radius ?? 0}
       />
 
       <YAxis

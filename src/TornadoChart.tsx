@@ -49,6 +49,10 @@ export type Props = {
   /** @description Chart <title /> */
   title?: string;
   tip?: TipFunc;
+  bars?: {
+    /** @description radius (px) of bar rounded end's curves. Default 0 - no rounded ends */
+    radius?: number;
+  };
 };
 
 export const TornadoChart = ({
@@ -69,6 +73,7 @@ export const TornadoChart = ({
   showBinPercentages = false,
   title,
   tip,
+  bars,
 }: Props) => {
   if (!yAxisWidth) {
     yAxisWidth = direction === EChartDirection.VERTICAL ? 40 : 100;
@@ -140,6 +145,7 @@ export const TornadoChart = ({
         padding={padding}
         showLabels={[showBinPercentages, showBinPercentages]}
         tip={tip}
+        radius={bars?.radius ?? 0}
       />
 
       <Bars
@@ -162,6 +168,7 @@ export const TornadoChart = ({
         padding={padding}
         showLabels={[showBinPercentages, showBinPercentages]}
         tip={tip}
+        radius={bars?.radius ?? 0}
       />
 
       {direction === EChartDirection.HORIZONTAL && (

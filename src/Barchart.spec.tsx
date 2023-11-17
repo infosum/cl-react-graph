@@ -19,6 +19,7 @@ test("BarChart", () => {
     <BarChart
       width={1000}
       height={600}
+      bars={{ radius: 4 }}
       id="demo"
       data={barChartData}
     ></BarChart>
@@ -30,7 +31,7 @@ test("BarChart", () => {
   );
   expect(screen.getByTestId("chart-bar--0")).toHaveAttribute(
     "d",
-    "m11 500 v0 a0 0 0 0 1 0 -0 h19 a0 0 0 0 1 0 0 v0 h-19"
+    "m11 500 v0 a4,4 0 0 1 4,-4 h11 a4 4 0 0 1 4 4 v0 h-19 z"
   );
   expect(screen.getByTestId("chart-bar--1")).toHaveAttribute(
     "data-percentage",
@@ -38,7 +39,7 @@ test("BarChart", () => {
   );
   expect(screen.getByTestId("chart-bar--1")).toHaveAttribute(
     "d",
-    "m56 500 v0 a0 0 0 0 1 0 -0 h19 a0 0 0 0 1 0 0 v0 h-19"
+    "m56 500 v0 a4,4 0 0 1 4,-4 h11 a4 4 0 0 1 4 4 v0 h-19 z"
   );
   expect(screen.getByTestId("chart-bar--2")).toHaveAttribute(
     "data-percentage",
@@ -46,7 +47,7 @@ test("BarChart", () => {
   );
   expect(screen.getByTestId("chart-bar--2")).toHaveAttribute(
     "d",
-    "m101 500 v0 a0 0 0 0 1 0 -0 h19 a0 0 0 0 1 0 0 v0 h-19"
+    "m101 500 v0 a4,4 0 0 1 4,-4 h11 a4 4 0 0 1 4 4 v0 h-19 z"
   );
 });
 
@@ -56,6 +57,7 @@ test("BarChart Grouped overlaid layout", () => {
     <BarChart
       width={1000}
       height={600}
+      bars={{ radius: 4 }}
       id="demo"
       groupLayout={EGroupedBarLayout.OVERLAID}
       data={barChartData}
@@ -64,20 +66,20 @@ test("BarChart Grouped overlaid layout", () => {
   expect(screen.getAllByRole("cell")).toHaveLength(84);
   expect(screen.getByTestId("chart-bar--0")).toHaveAttribute(
     "d",
-    "m12 500 v0 a10 10 0 0 1 10 -10 h17 a10 10 0 0 1 10 10 v0 h-17"
+    "m12 500 v0 a4,4 0 0 1 4,-4 h29 a4 4 0 0 1 4 4 v0 h-37 z"
   );
   expect(screen.getByTestId("chart-bar--1")).toHaveAttribute(
     "d",
-    "m57 500 v0 a10 10 0 0 1 10 -10 h17 a10 10 0 0 1 10 10 v0 h-17"
+    "m57 500 v0 a4,4 0 0 1 4,-4 h29 a4 4 0 0 1 4 4 v0 h-37 z"
   );
   expect(screen.getByTestId("chart-bar--20")).toHaveAttribute(
     "d",
-    "m912 500 v0 a10 10 0 0 1 10 -10 h17 a10 10 0 0 1 10 10 v0 h-17"
+    "m912 500 v0 a4,4 0 0 1 4,-4 h29 a4 4 0 0 1 4 4 v0 h-37 z"
   );
 
   expect(screen.getByTestId("chart-bar--41")).toHaveAttribute(
     "d",
-    "m921 500 v0 a0 0 0 0 1 0 -0 h18 a0 0 0 0 1 0 0 v0 h-18"
+    "m921 500 v0 a4,4 0 0 1 4,-4 h10 a4 4 0 0 1 4 4 v0 h-18 z"
   );
 });
 
@@ -86,6 +88,7 @@ test("BarChart Grouped overlaid layout, compact width", () => {
     <BarChart
       width={100}
       height={600}
+      bars={{ radius: 4 }}
       id="demo"
       groupLayout={EGroupedBarLayout.OVERLAID}
       data={barChartData}
@@ -98,22 +101,19 @@ test("BarChart Grouped overlaid layout, compact width", () => {
   );
   expect(screen.getByTestId("chart-bar--0")).toHaveAttribute(
     "d",
-    "m9 500 v0 a0 0 0 0 1 0 -0 h2 a0 0 0 0 1 0 0 v0 h-2"
+    "m9 500 v0 a4,4 0 0 1 4,-4 h-6 a4 4 0 0 1 4 4 v0 h-2 z"
   );
   expect(screen.getByTestId("chart-bar--1")).toHaveAttribute(
     "d",
-    "m11 500 v0 a0 0 0 0 1 0 -0 h2 a0 0 0 0 1 0 0 v0 h-2"
+    "m11 500 v0 a4,4 0 0 1 4,-4 h-6 a4 4 0 0 1 4 4 v0 h-2 z"
   );
   expect(screen.getByTestId("chart-bar--20")).toHaveAttribute(
     "d",
-    "m49 500 v0 a0 0 0 0 1 0 -0 h2 a0 0 0 0 1 0 0 v0 h-2"
+    "m49 500 v0 a4,4 0 0 1 4,-4 h-6 a4 4 0 0 1 4 4 v0 h-2 z"
   );
-  // expect(screen.getByTestId("chart-bar--1")).toHaveAttribute("width", "2");
-  // expect(screen.getByTestId("chart-bar--20")).toHaveAttribute("width", "2");
-  // expect(screen.getByTestId("chart-bar--20")).toHaveAttribute("x", "49");
   expect(screen.getByTestId("chart-bar--41")).toHaveAttribute(
     "d",
-    "m49 500 v0 a0 0 0 0 1 0 -0 h1 a0 0 0 0 1 0 0 v0 h-1"
+    "m49 500 v0 a4,4 0 0 1 4,-4 h-7 a4 4 0 0 1 4 4 v0 h-1 z"
   );
 });
 
@@ -122,6 +122,7 @@ test("shows the x axis tick value when the chart is horizontal", () => {
     <BarChart
       width={100}
       height={600}
+      bars={{ radius: 4 }}
       direction={EChartDirection.HORIZONTAL}
       id="demo"
       groupLayout={EGroupedBarLayout.OVERLAID}
@@ -145,6 +146,7 @@ test("shows the y axis tick value when the chart is vertical", () => {
     <BarChart
       width={100}
       height={600}
+      bars={{ radius: 4 }}
       direction={EChartDirection.VERTICAL}
       id="demo"
       groupLayout={EGroupedBarLayout.OVERLAID}
@@ -168,6 +170,7 @@ test("iterates over color scheme if more values present than colors", () => {
     <BarChart
       width={100}
       height={600}
+      bars={{ radius: 4 }}
       direction={EChartDirection.VERTICAL}
       id="demo"
       groupLayout={EGroupedBarLayout.OVERLAID}

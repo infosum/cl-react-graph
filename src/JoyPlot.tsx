@@ -29,6 +29,10 @@ export type Props = {
   yAxisWidth?: number;
   titleHeight?: number;
   titleLayout?: ELabelOrientation;
+  bars?: {
+    /** @description radius (px) of bar rounded end's curves. Default 0 - no rounded ends */
+    radius?: number;
+  };
 };
 
 /**
@@ -49,6 +53,7 @@ export const JoyPlot = ({
   title,
   titleHeight = 40,
   titleLayout = ELabelOrientation.HORIZONTAL,
+  bars,
 }: Props) => {
   const { chartHeight, bins, domain, values } = useJoyPlot({
     data,
@@ -141,6 +146,7 @@ export const JoyPlot = ({
               direction={direction}
               tip={tip}
               width={xWidth}
+              radius={bars?.radius ?? 0}
             />
           </g>
         );

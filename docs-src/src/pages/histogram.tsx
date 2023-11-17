@@ -151,6 +151,7 @@ const HistogramExample = () => {
   return (
     <Layout>
       <h2>Histogram Chart</h2>
+      <h3>Horizontal</h3>
       <TwoColumns>
         <div ref={ref}>
           <Histogram
@@ -177,6 +178,60 @@ const HistogramExample = () => {
           />
         </div>
         <JSXCode exampleCode={exampleCode} />
+      </TwoColumns>
+      <h3>Vertical</h3>
+
+      <TwoColumns>
+        <div ref={ref}>
+          <Histogram
+            animation={{
+              duration: 300,
+            }}
+            showLabels={[true, true]}
+            LabelComponent={({ item }) => {
+              return (
+                <g transform="translate(0, -10)">
+                  <g>
+                    <circle dy={10} r={4} fill="red"></circle>
+                    <text dx="10">{item.percentage}</text>
+                  </g>
+                </g>
+              );
+            }}
+            direction={EChartDirection.VERTICAL}
+            data={data}
+            height={400}
+            grid={grid}
+            xAxisLabelOrientation={ELabelOrientation.HORIZONTAL}
+            width={width}
+          />
+        </div>
+        <JSXCode
+          exampleCode={`
+<Histogram
+  animation={{
+    duration: 300,
+  }}
+  showLabels={[true, true]}
+  LabelComponent={({ item }) => {
+    return (
+      <g transform="translate(0, -10)">
+        <g>
+          <circle dy={10} r={4} fill="red"></circle>
+          <text dx="10">{item.percentage}</text>
+        </g>
+      </g>
+    );
+  }}
+  direction={EChartDirection.VERTICAL}
+  data={data}
+  height={400}
+  grid={grid}
+  xAxisLabelOrientation={ELabelOrientation.HORIZONTAL}
+  width={width}
+/>
+        `}
+        />
       </TwoColumns>
     </Layout>
   );

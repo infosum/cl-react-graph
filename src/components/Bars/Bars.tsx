@@ -50,6 +50,7 @@ export type Props = {
   inverse?: boolean;
   rx?: number;
   ry?: number;
+  radius?: number;
 };
 
 const paddings = {
@@ -106,6 +107,7 @@ export const Bars = ({
   inverse = false,
   rx = 0,
   ry = 0,
+  radius = 4,
 }: Props) => {
   if (width === 0 || height === 0) {
     return null;
@@ -115,7 +117,6 @@ export const Bars = ({
   }
 
   const { dataSets, binLabels } = buildBarDatasets({ values, bins, visible });
-  console.log("chart dims", width, height);
   const numericScale = scaleLinear()
     .domain(domain)
     .rangeRound([0, direction === EChartDirection.HORIZONTAL ? width : height]);
@@ -172,6 +173,7 @@ export const Bars = ({
       paddings,
       values,
       width,
+      radius,
     })
   );
   const ThisLabel = LabelComponent ?? Label;
@@ -199,15 +201,6 @@ export const Bars = ({
                   data-percentage={item.percentage}
                   d={props.d}
                 ></animated.path>
-                {/* <animated.rect
-                  height={props.height}
-                  width={props.width}
-                  rx={rx}
-                  ry={ry}
-                  x={props.x}
-                  fill="rgba(10, 10, 10, 0.1)"
-                  y={props.y}
-                ></animated.rect> */}
                 {showLabel && (
                   <ThisLabel
                     {...props}
