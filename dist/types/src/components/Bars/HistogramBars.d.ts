@@ -24,8 +24,7 @@ type Props = {
     values: BarChartDataSet[];
     visible?: Record<string, boolean>;
     width: number;
-    rx?: number;
-    ry?: number;
+    radius?: number;
 };
-export declare const HistogramBars: ({ bins, config, colorScheme, continuousDomain, direction, domain, height, hoverColorScheme, id, LabelComponent, labels, left, showLabels, stroke, top, tip, values, visible, width, rx, ry, }: Props) => JSX.Element | null;
+export declare const HistogramBars: ({ bins, config, colorScheme, continuousDomain, direction, domain, height, hoverColorScheme, id, LabelComponent, labels, left, showLabels, stroke, top, tip, values, visible, width, radius, }: Props) => JSX.Element | null;
 export {};

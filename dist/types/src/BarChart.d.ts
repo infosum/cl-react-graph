@@ -43,15 +43,13 @@ type Props = {
     visible?: Record<string, boolean>;
     width: number;
     xAxisHeight?: number;
-    /** @deprecated use axis.x.labelOrientation */
-    xAxisLabelOrientation?: ELabelOrientation;
     yAxisWidth?: number;
     bars?: {
-        rx?: number;
-        ry?: number;
+        /** @description radius (px) of bar rounded end's curves. Default 0 - no rounded ends */
+        radius?: number;
     };
     /** @description nodes rendered after/above the bars */
     labels?: string[];
 };
-export declare const BarChart: ({ animation, axisLabelFormat, colorScheme, data, direction, grid, id, groupLayout, height, LabelComponent, padding, showLabels, tip, visible, width, xAxisHeight, xAxisLabelOrientation, yAxisWidth, tickValues, bars, title, axis, labels, }: Props) => JSX.Element | null;
+export declare const BarChart: ({ animation, axisLabelFormat, colorScheme, data, direction, grid, id, groupLayout, height, LabelComponent, padding, showLabels, tip, visible, width, xAxisHeight, yAxisWidth, tickValues, bars, title, axis, labels, }: Props) => JSX.Element | null;
 export {};

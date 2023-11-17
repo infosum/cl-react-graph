@@ -99,8 +99,7 @@ export type Props = {
     title?: string;
     description?: string;
     bars?: {
-        rx?: number;
-        ry?: number;
+        radius?: number;
     };
 };
 /**
