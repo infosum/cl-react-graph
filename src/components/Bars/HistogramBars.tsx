@@ -145,8 +145,6 @@ export const HistogramBars = ({
               stroke={stroke}
               className="chart-bar"
               role="cell"
-              // rx={rx}
-              // ry={ry}
               d={props.d}
               data-testid={`chart-bar-${id}-${i}`}
               onMouseEnter={() => setHover(i)}
@@ -154,7 +152,6 @@ export const HistogramBars = ({
               key={`bar-${item.groupLabel}.${item.label}.${item.value}`}
               height={props.height}
               fill={hover == i ? props.hoverFill : props.fill}
-              // width={props.width}
               x={props.x}
               y={props.y}
             >
@@ -163,6 +160,7 @@ export const HistogramBars = ({
                   {...props}
                   label={labels?.[i]}
                   item={dataSets[i]}
+                  containerHeight={height}
                   fill={props.fill.get()}
                   direction={direction}
                 />

@@ -4,7 +4,7 @@ import { SpringConfig } from "@react-spring/web";
 
 import { EChartDirection } from "../../BarChart";
 import { BarChartDataSet } from "../../Histogram";
-import { ColorScheme, ColorSchemeItem } from "../../utils/colorScheme";
+import { ColorScheme, getFill } from "../../utils/colorScheme";
 import { ExtendedGroupItem } from "./Bars";
 
 type HistogramSpringProps = {
@@ -46,9 +46,10 @@ export const buildHistogramSprings = (props: HistogramSpringProps) => {
     const itemWidth = continuousScale(binWidth + startValue);
 
     const itemHeight = numericScale(item.value);
-    const fill = colorScheme[item.datasetIndex];
-    const hoverFill =
-      hoverColorScheme?.[item.datasetIndex] ?? colorScheme[item.datasetIndex];
+    const fill = getFill(colorScheme[item.datasetIndex]);
+    const hoverFill = getFill(
+      hoverColorScheme?.[item.datasetIndex] ?? colorScheme[item.datasetIndex]
+    );
 
     if (direction === EChartDirection.HORIZONTAL) {
       return horizontalSpring({
@@ -78,8 +79,8 @@ export const buildHistogramSprings = (props: HistogramSpringProps) => {
 };
 
 type FnProps = {
-  fill: ColorSchemeItem;
-  hoverFill: ColorSchemeItem;
+  fill: string;
+  hoverFill: string;
   bandPosition: number;
   height: number;
   itemWidth: number;
