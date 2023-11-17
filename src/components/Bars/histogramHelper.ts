@@ -117,11 +117,9 @@ const horizontalSpring = ({
   return {
     from: {
       width: 0,
-
       d: `m${from.x} ${from.y} h${0} ${topRightCurve} v${
         vertical - 2 * r
       } ${bottomRightCurve} h-${0}  v-${vertical - 2 * r}`,
-
       fill,
       hoverFill,
       x: 0,
@@ -132,7 +130,6 @@ const horizontalSpring = ({
       d: `m${to.x} ${to.y} h${horizontal - r} ${topRightCurve} v${
         vertical - 2 * r
       } ${bottomRightCurve} h-${horizontal - r} v-${vertical - 2 * r}`,
-
       width: itemHeight,
       fill,
       hoverFill,

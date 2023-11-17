@@ -407,11 +407,7 @@ export const getValueOffset = (
     props;
   const offSet = dataSets
     .filter((d) => d.label === item.label)
-    .filter((_, i) =>
-      direction === EChartDirection.HORIZONTAL
-        ? i < item.datasetIndex
-        : i < item.datasetIndex
-    )
+    .filter((_, i) => i < item.datasetIndex)
     .reduce((p, n) => p + n.value, 0);
 
   if (direction === EChartDirection.HORIZONTAL) {
