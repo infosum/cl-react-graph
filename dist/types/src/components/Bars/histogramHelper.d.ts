@@ -16,45 +16,30 @@ type HistogramSpringProps = {
     hoverColorScheme?: ColorScheme;
     config: SpringConfig;
     direction: EChartDirection;
+    radius?: number;
 };
 /**
  * Build the from / to spring animation properties to animate the bars.
  */
-export declare const buildHistogramSprings: (props: HistogramSpringProps) => ({
+export declare const buildHistogramSprings: (props: HistogramSpringProps) => {
     from: {
         width: number;
-        fill: import("../../utils/colorScheme").ColorSchemeItem;
-        hoverFill: import("../../utils/colorScheme").ColorSchemeItem;
+        d: string;
+        fill: string;
+        hoverFill: string;
         x: number;
         y: number;
-        height: any;
-    };
-    to: {
-        width: any;
-        fill: import("../../utils/colorScheme").ColorSchemeItem;
-        hoverFill: import("../../utils/colorScheme").ColorSchemeItem;
-        x: number;
-        y: number;
-        height: any;
-    };
-    config: Partial<import("@react-spring/core").AnimationConfig>;
-} | {
-    from: {
         height: number;
-        fill: import("../../utils/colorScheme").ColorSchemeItem;
-        hoverFill: import("../../utils/colorScheme").ColorSchemeItem;
-        x: any;
-        y: number;
-        width: any;
     };
     to: {
-        height: any;
-        fill: import("../../utils/colorScheme").ColorSchemeItem;
-        hoverFill: import("../../utils/colorScheme").ColorSchemeItem;
-        x: any;
+        d: string;
+        width: number;
+        fill: string;
+        hoverFill: string;
+        x: number;
         y: number;
-        width: any;
+        height: number;
     };
     config: Partial<import("@react-spring/core").AnimationConfig>;
-})[];
+}[];
 export {};

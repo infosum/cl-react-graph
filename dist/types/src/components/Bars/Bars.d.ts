@@ -28,6 +28,7 @@ export type Props = {
     inverse?: boolean;
     rx?: number;
     ry?: number;
+    radius?: number;
 };
 export type ExtendedGroupItem = GroupDataItem & {
     datasetIndex: number;
@@ -35,4 +36,4 @@ export type ExtendedGroupItem = GroupDataItem & {
     percentage: string;
 };
 export declare const defaultPadding: HistogramBar;
-export declare const Bars: ({ bins, colorScheme, config, direction, domain, id, groupLayout, height, hoverColorScheme, LabelComponent, labels, left, padding, showLabels, tip, top, values, visible, width, inverse, rx, ry, }: Props) => JSX.Element | null;
+export declare const Bars: ({ bins, colorScheme, config, direction, domain, id, groupLayout, height, hoverColorScheme, LabelComponent, labels, left, padding, showLabels, tip, top, values, visible, width, inverse, rx, ry, radius, }: Props) => JSX.Element | null;
