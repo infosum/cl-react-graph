@@ -176,7 +176,6 @@ test("Tornado: Horizontal grouped", () => {
   );
 });
 
-////
 
 test("Tornado: Vertical overlay", () => {
   render(
