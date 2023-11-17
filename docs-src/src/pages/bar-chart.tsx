@@ -104,6 +104,7 @@ const MyComponent = () => {
         }}
         showLabels={[false, true]}
         direction={EChartDirection.HORIZONTAL}
+        bars={{radius: 4}}
         data={data}
         height={400}
         tickValues={[0, 40000, 89200]}
@@ -202,12 +203,30 @@ const BarChartExample = () => {
             }}
             showLabels={[false, true]}
             direction={EChartDirection.HORIZONTAL}
+            groupLayout={EGroupedBarLayout.OVERLAID}
+            bars={{ radius: 4 }}
             data={data}
             height={400}
             tickValues={[0, 40000, 89200]}
-            grid={grid}
+            grid={{
+              x: {
+                height: 1,
+                style: {
+                  fill: "hsla(208, 32%, 91%, 1)",
+                  stroke: "hsla(208, 32%, 91%, 1)",
+                  strokeDasharray: "2 2",
+                  strokeOpacity: 1,
+                },
+                ticks: 4,
+                visible: true,
+              },
+              y: {
+                style: {},
+                ticks: 10,
+                visible: false,
+              },
+            }}
             colorScheme={[theme.brightBlue800, theme.green900]}
-            groupLayout={EGroupedBarLayout.GROUPED}
             axis={{
               x: {
                 labelOrientation: ELabelOrientation.VERTICAL,

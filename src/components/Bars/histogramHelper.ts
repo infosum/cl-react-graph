@@ -4,7 +4,7 @@ import { SpringConfig } from "@react-spring/web";
 
 import { EChartDirection } from "../../BarChart";
 import { BarChartDataSet } from "../../Histogram";
-import { ColorScheme } from "../../utils/colorScheme";
+import { ColorScheme, getFill } from "../../utils/colorScheme";
 import { ExtendedGroupItem } from "./Bars";
 
 type HistogramSpringProps = {
@@ -19,6 +19,7 @@ type HistogramSpringProps = {
   hoverColorScheme?: ColorScheme;
   config: SpringConfig;
   direction: EChartDirection;
+  radius?: number;
 };
 /**
  * Build the from / to spring animation properties to animate the bars.
@@ -34,6 +35,7 @@ export const buildHistogramSprings = (props: HistogramSpringProps) => {
     continuousScale,
     colorScheme,
     hoverColorScheme,
+    radius = 4,
   } = props;
   const s = dataSets.map((item, index) => {
     const bandPosition = continuousScale(bins[index][0]);
@@ -44,56 +46,146 @@ export const buildHistogramSprings = (props: HistogramSpringProps) => {
     const itemWidth = continuousScale(binWidth + startValue);
 
     const itemHeight = numericScale(item.value);
+    const fill = getFill(colorScheme[item.datasetIndex]);
+    const hoverFill = getFill(
+      hoverColorScheme?.[item.datasetIndex] ?? colorScheme[item.datasetIndex]
+    );
 
     if (direction === EChartDirection.HORIZONTAL) {
-      return {
-        from: {
-          width: 0,
-          fill: colorScheme[item.datasetIndex],
-          hoverFill:
-            hoverColorScheme?.[item.datasetIndex] ??
-            colorScheme[item.datasetIndex],
-          x: 0,
-          y: height - itemWidth - bandPosition,
-          height: itemWidth,
-        },
-        to: {
-          width: itemHeight,
-          fill: colorScheme[item.datasetIndex],
-          hoverFill:
-            hoverColorScheme?.[item.datasetIndex] ??
-            colorScheme[item.datasetIndex],
-          x: 0,
-          y: height - itemWidth - bandPosition,
-          height: itemWidth,
-        },
+      return horizontalSpring({
+        fill,
+        hoverFill,
+        bandPosition,
+        height,
+        itemWidth,
         config,
-      };
+        itemHeight,
+        radius,
+      });
     }
 
-    return {
-      from: {
-        height: 0,
-        fill: colorScheme[item.datasetIndex],
-        hoverFill:
-          hoverColorScheme?.[item.datasetIndex] ??
-          colorScheme[item.datasetIndex],
-        x: bandPosition,
-        y: height,
-        width: itemWidth,
-      },
-      to: {
-        height: itemHeight,
-        fill: colorScheme[item.datasetIndex],
-        hoverFill:
-          hoverColorScheme?.[item.datasetIndex] ??
-          colorScheme[item.datasetIndex],
-        x: bandPosition,
-        y: height - itemHeight,
-        width: itemWidth,
-      },
+    return verticalSpring({
+      fill,
+      hoverFill,
+      bandPosition,
+      height,
+      itemWidth,
       config,
-    };
+      itemHeight,
+      radius,
+    });
   });
   return s;
+};
+
+type FnProps = {
+  fill: string;
+  hoverFill: string;
+  bandPosition: number;
+  height: number;
+  itemWidth: number;
+  itemHeight: number;
+  config: SpringConfig;
+  radius: number;
+};
+
+const horizontalSpring = ({
+  fill,
+  hoverFill,
+  bandPosition,
+  height,
+  itemWidth,
+  itemHeight,
+  config,
+  radius,
+}: FnProps) => {
+  const from = {
+    x: 0,
+    y: height - itemWidth - bandPosition,
+  };
+
+  const to = {
+    x: 0,
+    y: height - itemWidth - bandPosition,
+  };
+  let r = radius * 2 < itemHeight ? radius : itemHeight / 2;
+  const topRightCurve = `a${r} ${r} 0 0 1 ${r} ${r}`;
+  const bottomRightCurve = `a${r} ${r} 0 0 1 -${r} ${r}`;
+  const vertical = itemWidth;
+  const horizontal = itemHeight;
+
+  return {
+    from: {
+      width: 0,
+      d: `m${from.x} ${from.y} h${0} ${topRightCurve} v${
+        vertical - 2 * r
+      } ${bottomRightCurve} h-${0}  v-${vertical - 2 * r}`,
+      fill,
+      hoverFill,
+      x: 0,
+      y: height - itemWidth - bandPosition,
+      height: itemWidth,
+    },
+    to: {
+      d: `m${to.x} ${to.y} h${horizontal - r} ${topRightCurve} v${
+        vertical - 2 * r
+      } ${bottomRightCurve} h-${horizontal - r} v-${vertical - 2 * r}`,
+      width: itemHeight,
+      fill,
+      hoverFill,
+      x: 0,
+      y: height - itemWidth - bandPosition,
+      height: itemWidth,
+    },
+    config,
+  };
+};
+
+const verticalSpring = ({
+  fill,
+  hoverFill,
+  bandPosition,
+  height,
+  itemWidth,
+  itemHeight,
+  config,
+  radius,
+}: FnProps) => {
+  const r = radius * 2 < itemWidth ? radius : itemWidth / 2;
+  const topLeftCurve = `a${r},${r} 0 0 1 ${r},-${r}`;
+  const topRightCurve = `a${r} ${r} 0 0 1 ${r} ${r}`;
+
+  const from = {
+    x: bandPosition,
+    y: height,
+  };
+  const to = {
+    x: bandPosition,
+    y: height,
+  };
+  return {
+    from: {
+      height: 0,
+      d: `m${from.x} ${from.y} v0 ${topLeftCurve} h${
+        itemWidth - 2 * r
+      } ${topRightCurve} v0 h-${itemHeight} z`,
+      fill,
+      hoverFill,
+      x: bandPosition,
+      y: height,
+      width: itemWidth,
+    },
+    to: {
+      height: itemHeight,
+      d: `m${to.x} ${to.y} v-${itemHeight} ${topLeftCurve} h${
+        itemWidth - 2 * r
+      } ${topRightCurve} v${itemHeight} h-${itemWidth} z`,
+      fill,
+      hoverFill,
+      x: bandPosition,
+      y: height - itemHeight,
+      width: itemWidth,
+    },
+    config,
+  };
 };

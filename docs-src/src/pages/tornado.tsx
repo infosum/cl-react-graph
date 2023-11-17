@@ -50,7 +50,7 @@ const MyComponent = () => {
     splitBins={['Male', 'Female']}
     groupLayout={EGroupedBarLayout.OVERLAID}
     width={width}
-    height={500}
+    height={350}
     splitAxisHeight={50}
     xAxisHeight={20}
     colorScheme={['hsla(140, 60%, 88%, 1)', 'hsla(208, 69%, 66%, 1)']}
@@ -67,14 +67,14 @@ const data: ITornadoProps["data"] = {
     {
       label: "Background",
       data: [
-        [200, 2600, 5100, 9700, 8400, 6700], // Male bin 1, Male bin 2,
+        [1000, 2600, 5100, 9700, 8400, 6700], // Male bin 1, Male bin 2,
         [2002, 2100, 4700, 8700, 4900, 1400], // Female bin 1, Female bin 2,
       ],
     },
     {
       label: "Foreground",
       data: [
-        [100, 260, 510, 970, 840, 670], // Male bin 1, Male bin 2,
+        [200, 560, 510, 970, 840, 670], // Male bin 1, Male bin 2,
         [1000, 5500, 470, 870, 490, 140], // Female bin 1, Female bin 2,
       ],
     },
@@ -87,22 +87,187 @@ const TornadoExample = () => {
     <Layout>
       <h2>Tornado Chart</h2>
 
+      <h3>Horizontal Overlaid</h3>
       <TwoColumns>
         <div ref={ref}>
           <TornadoChart
             data={data}
             splitBins={["Male", "Female"]}
+            bars={{ radius: 4 }}
             groupLayout={EGroupedBarLayout.OVERLAID}
+            direction={EChartDirection.HORIZONTAL}
             width={width}
-            height={500}
+            height={350}
             splitAxisHeight={50}
             xAxisHeight={20}
             colorScheme={[theme.green900, theme.brightBlue500]}
-            direction={EChartDirection.HORIZONTAL}
             showBinPercentages={false}
           />
         </div>
         <JSXCode exampleCode={exampleCode} />
+      </TwoColumns>
+
+      <h3>Horizontal Stacked</h3>
+      <TwoColumns>
+        <TornadoChart
+          data={data}
+          splitBins={["Male", "Female"]}
+          bars={{ radius: 4 }}
+          direction={EChartDirection.HORIZONTAL}
+          groupLayout={EGroupedBarLayout.STACKED}
+          width={width}
+          height={350}
+          splitAxisHeight={50}
+          xAxisHeight={20}
+          colorScheme={[theme.green900, theme.brightBlue500]}
+          showBinPercentages={false}
+        />
+        <JSXCode
+          exampleCode={`
+  <TornadoChart
+    data={data}
+    splitBins={["Male", "Female"]}
+    bars={{radius: 4}}
+    direction={EChartDirection.HORIZONTAL}
+    groupLayout={EGroupedBarLayout.STACKED}
+    width={width}
+    height={350}
+    splitAxisHeight={50}
+    xAxisHeight={20}
+    colorScheme={[theme.green900, theme.brightBlue500]}
+    showBinPercentages={false}
+  />`}
+        />
+      </TwoColumns>
+      <h3>Horizontal Grouped</h3>
+      <TwoColumns>
+        <TornadoChart
+          data={data}
+          splitBins={["Male", "Female"]}
+          bars={{ radius: 4 }}
+          groupLayout={EGroupedBarLayout.GROUPED}
+          direction={EChartDirection.HORIZONTAL}
+          width={width}
+          height={350}
+          splitAxisHeight={50}
+          xAxisHeight={20}
+          colorScheme={[theme.green900, theme.brightBlue500]}
+          showBinPercentages={false}
+        />
+        <JSXCode
+          exampleCode={`
+  <TornadoChart
+    data={data}
+    splitBins={["Male", "Female"]}
+    bars={{radius: 4}}
+    direction={EChartDirection.HORIZONTAL}
+    groupLayout={EGroupedBarLayout.GROUPED}
+    width={width}
+    height={350}
+    splitAxisHeight={50}
+    xAxisHeight={20}
+    colorScheme={[theme.green900, theme.brightBlue500]}
+    showBinPercentages={false}
+  />`}
+        />
+      </TwoColumns>
+
+      <h3>Vertical Overlaid</h3>
+      <TwoColumns>
+        <TornadoChart
+          data={data}
+          splitBins={["Male", "Female"]}
+          bars={{ radius: 4 }}
+          groupLayout={EGroupedBarLayout.OVERLAID}
+          direction={EChartDirection.VERTICAL}
+          width={width}
+          height={350}
+          splitAxisHeight={50}
+          xAxisHeight={20}
+          colorScheme={[theme.green900, theme.brightBlue500]}
+          showBinPercentages={false}
+        />
+        <JSXCode
+          exampleCode={`
+  <TornadoChart
+    data={data}
+    splitBins={["Male", "Female"]}
+    bars={{radius: 4}}
+    direction={EChartDirection.VERTICAL}
+    groupLayout={EGroupedBarLayout.OVERLAID}
+    width={width}
+    height={350}
+    splitAxisHeight={50}
+    xAxisHeight={20}
+    colorScheme={[theme.green900, theme.brightBlue500]}
+    showBinPercentages={false}
+  />`}
+        />
+      </TwoColumns>
+
+      <h3>Vertical Stacked</h3>
+      <TwoColumns>
+        <TornadoChart
+          data={data}
+          splitBins={["Male", "Female"]}
+          bars={{ radius: 4 }}
+          groupLayout={EGroupedBarLayout.STACKED}
+          direction={EChartDirection.VERTICAL}
+          width={width}
+          height={350}
+          splitAxisHeight={50}
+          xAxisHeight={20}
+          colorScheme={[theme.green900, theme.brightBlue500]}
+          showBinPercentages={false}
+        />
+        <JSXCode
+          exampleCode={`
+  <TornadoChart
+    data={data}
+    splitBins={["Male", "Female"]}
+    bars={{radius: 4}}
+    direction={EChartDirection.VERTICAL}
+    groupLayout={EGroupedBarLayout.STACKED}
+    width={width}
+    height={350}
+    splitAxisHeight={50}
+    xAxisHeight={20}
+    colorScheme={[theme.green900, theme.brightBlue500]}
+    showBinPercentages={false}
+  />`}
+        />
+      </TwoColumns>
+      <h3>Vertical Grouped</h3>
+      <TwoColumns>
+        <TornadoChart
+          data={data}
+          splitBins={["Male", "Female"]}
+          bars={{ radius: 4 }}
+          direction={EChartDirection.VERTICAL}
+          groupLayout={EGroupedBarLayout.GROUPED}
+          width={width}
+          height={500}
+          splitAxisHeight={50}
+          xAxisHeight={20}
+          colorScheme={[theme.green900, theme.brightBlue500]}
+          showBinPercentages={false}
+        />
+        <JSXCode
+          exampleCode={`
+  <TornadoChart
+    data={data}
+    splitBins={["Male", "Female"]}
+    bars={{radius: 4}}
+    direction={EChartDirection.VERTICAL}
+    groupLayout={EGroupedBarLayout.GROUPED}
+    width={width}
+    height={500}
+    splitAxisHeight={50}
+    xAxisHeight={20}
+    colorScheme={[theme.green900, theme.brightBlue500]}
+    showBinPercentages={false}
+  />`}
+        />
       </TwoColumns>
     </Layout>
   );

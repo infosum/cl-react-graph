@@ -50,6 +50,7 @@ export type Props = {
   inverse?: boolean;
   rx?: number;
   ry?: number;
+  radius?: number;
 };
 
 const paddings = {
@@ -106,8 +107,9 @@ export const Bars = ({
   inverse = false,
   rx = 0,
   ry = 0,
+  radius = 4,
 }: Props) => {
-  if (width === 0) {
+  if (width === 0 || height === 0) {
     return null;
   }
   if (!hoverColorScheme) {
@@ -115,7 +117,6 @@ export const Bars = ({
   }
 
   const { dataSets, binLabels } = buildBarDatasets({ values, bins, visible });
-
   const numericScale = scaleLinear()
     .domain(domain)
     .rangeRound([0, direction === EChartDirection.HORIZONTAL ? width : height]);
@@ -172,6 +173,7 @@ export const Bars = ({
       paddings,
       values,
       width,
+      radius,
     })
   );
   const ThisLabel = LabelComponent ?? Label;
@@ -187,23 +189,18 @@ export const Bars = ({
             const showLabel = shouldShowLabel(item, visible, showLabels);
             return (
               <g key={i}>
-                <animated.rect
+                <animated.path
                   ref={refs[i]}
                   role="cell"
                   data-testid={`chart-bar-${id}-${i}`}
                   onMouseEnter={() => setHover(i)}
                   onMouseLeave={() => setHover(-1)}
                   key={`bar-${item.groupLabel}-${item.label}-${item.binIndex}`}
-                  height={props.height}
                   fill={hover == i ? props.hoverFill : props.fill}
-                  width={props.width}
-                  rx={rx}
-                  ry={ry}
-                  x={props.x}
-                  y={props.y}
                   data-value={item.value}
                   data-percentage={item.percentage}
-                ></animated.rect>
+                  d={props.d}
+                ></animated.path>
                 {showLabel && (
                   <ThisLabel
                     {...props}
