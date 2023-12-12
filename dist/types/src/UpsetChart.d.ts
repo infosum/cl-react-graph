@@ -1,3 +1,4 @@
+/// <reference types="react" />
 import { TLabelComponent } from "./components/Label";
 import { ColorScheme } from "./utils/colorScheme";
 export type TUpsetData = {

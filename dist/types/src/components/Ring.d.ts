@@ -1,3 +1,4 @@
+/// <reference types="react" />
 import { BarChartDataSet } from "../Histogram";
 import { ColorScheme } from "../utils/colorScheme";
 import { TipFunc } from "./ToolTip";

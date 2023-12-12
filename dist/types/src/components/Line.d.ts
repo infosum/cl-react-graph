@@ -1,3 +1,4 @@
+/// <reference types="react" />
 import { Props as UseMakeLineProps } from "../utils/useMakeLine";
 type Props = {
     animate?: boolean;

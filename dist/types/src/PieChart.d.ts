@@ -1,3 +1,4 @@
+/// <reference types="react" />
 import { RingItem } from "./components/Ring";
 import { TipFunc } from "./components/ToolTip";
 import { BarChartDataSet } from "./Histogram";
