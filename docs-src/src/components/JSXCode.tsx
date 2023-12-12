@@ -1,5 +1,4 @@
-import Highlight, { defaultProps } from "prism-react-renderer";
-import editorTheme from "prism-react-renderer/themes/duotoneLight";
+import { Highlight, themes } from "prism-react-renderer";
 import React from "react";
 
 type Props = {
@@ -8,12 +7,7 @@ type Props = {
 
 export const JSXCode = ({ exampleCode }: Props) => {
   return (
-    <Highlight
-      {...defaultProps}
-      theme={editorTheme}
-      code={exampleCode}
-      language="jsx"
-    >
+    <Highlight theme={themes.duotoneLight} code={exampleCode} language="jsx">
       {({ className, style, tokens, getLineProps, getTokenProps }) => (
         <pre
           className={className}
