@@ -14,6 +14,7 @@ import { buildTicks } from "../utils/axis";
 import { paddingInner, paddingOuter } from "../utils/bars";
 import { isOfType } from "../utils/isOfType";
 import { AnyScale } from "../utils/scales";
+import { svgTextWrap } from "../utils/svgTextWrap";
 import { SVGLineStyle, SVGTextStyle } from "../utils/types";
 import { defaultPadding } from "./Bars/Bars";
 
@@ -76,6 +77,8 @@ export const defaultTickFormat = {
   stroke: "#a9a9a9",
   fontSize: "10px",
 };
+
+const lineHeight = 15;
 
 export const defaultPath: SVGAttributes<SVGPathElement> = {
   opacity: 1,
@@ -153,7 +156,8 @@ const positionTick = (
   scale: any,
   height: number,
   i: number,
-  inverse: boolean = false
+  inverse: boolean = false,
+  textArray: string[]
 ) => {
   const offset = isOfType<ScaleBand<any>>(scale, "paddingInner")
     ? Math.floor(scale.bandwidth() / 2)
@@ -166,7 +170,8 @@ const positionTick = (
   if (inverse) {
     v = height - v;
   }
-  return `(0, ${v})`;
+  const totalOffset = lineHeight * textArray.length;
+  return `(0, ${v - totalOffset})`;
 };
 
 export const YAxis = ({
@@ -233,10 +238,24 @@ export const YAxis = ({
       ></path>
 
       {ticks.map((v, i) => {
-        const tickOffset = positionTick(v, Scale, height, i, inverse);
         const label = scale === "band" ? String(values[i]) : String(v);
         const thisFormat =
           typeof tickFormat === "function" ? tickFormat(label, i) : tickFormat;
+
+        const tickLabel = labelFormat ? labelFormat("y", label, i) : label;
+
+        const textArray: string[] = svgTextWrap(tickLabel, width, {
+          "font-size": thisFormat.fontSize,
+        });
+
+        const tickOffset = positionTick(
+          v,
+          Scale,
+          height,
+          i,
+          inverse,
+          textArray
+        );
         return (
           <g
             aria-hidden={scale !== "band"}
@@ -255,36 +274,56 @@ export const YAxis = ({
               strokeOpacity="1"
               strokeWidth="1"
             ></line>
-
-            <text
+            <g
               role={scale === "band" ? "columnheader" : ""}
-              fill={thisFormat.stroke}
-              fontSize={thisFormat.fontSize}
-              textAnchor={
-                labelOrientation === ELabelOrientation.HORIZONTAL
-                  ? "right"
-                  : "center"
-              }
-              writingMode={
-                labelOrientation === ELabelOrientation.HORIZONTAL
-                  ? "horizontal-tb"
-                  : "vertical-rl"
-              }
-              transform={
-                labelOrientation === ELabelOrientation.HORIZONTAL
-                  ? "rotate(0)"
-                  : "rotate(180)"
-              }
-              height={height}
-              x={`-${tickSize + 10}`}
-              dy={
-                labelOrientation === ELabelOrientation.HORIZONTAL
-                  ? "0.32em"
-                  : "20"
-              }
+              transform={`translate(0, ${
+                (textArray.length - 1) * (lineHeight / 2)
+              })`}
             >
-              {labelFormat ? labelFormat("y", label, i) : label}
-            </text>
+              {textArray.map((txt, j) => {
+                const dx =
+                  textArray.length === 1
+                    ? 0
+                    : (textArray.length / 2) * 20 - 20 * j - 10;
+                const dy = textArray.length === 1 ? 20 : lineHeight * j + 20;
+                return (
+                  <text
+                    key={j}
+                    fill={thisFormat.stroke}
+                    fontSize={thisFormat.fontSize}
+                    textAnchor={
+                      labelOrientation === ELabelOrientation.HORIZONTAL
+                        ? "right"
+                        : "center"
+                    }
+                    writingMode={
+                      labelOrientation === ELabelOrientation.HORIZONTAL
+                        ? "horizontal-tb"
+                        : "vertical-rl"
+                    }
+                    transform={
+                      labelOrientation === ELabelOrientation.HORIZONTAL
+                        ? "rotate(0)"
+                        : "rotate(180)"
+                    }
+                    height={height}
+                    x={`-${tickSize + 10}`}
+                    dy={
+                      labelOrientation === ELabelOrientation.HORIZONTAL
+                        ? dy
+                        : "20"
+                    }
+                    dx={
+                      labelOrientation === ELabelOrientation.HORIZONTAL
+                        ? "0"
+                        : dx
+                    }
+                  >
+                    {txt}
+                  </text>
+                );
+              })}
+            </g>
           </g>
         );
       })}
