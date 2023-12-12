@@ -1,3 +1,5 @@
+[4.4.3]
+  * Fix: y-axis labels not wrapping to fit inside y axis width.
 [4.4.2]
   * Fix: BarChar xaxis - tick values not applied
 [4.4.1]

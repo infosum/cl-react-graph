@@ -1,3 +1,4 @@
+/// <reference types="react" />
 export type Gradient = {
     gradientTransform?: string;
     stops: {

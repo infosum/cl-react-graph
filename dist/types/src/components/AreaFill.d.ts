@@ -1,3 +1,4 @@
+/// <reference types="react" />
 import { AnyChartPoint, ChartPoint, LineProps } from "../LineChart";
 import { Axes } from "../utils/types";
 type Props<T extends AnyChartPoint = ChartPoint> = {
