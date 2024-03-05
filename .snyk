@@ -2,11 +2,6 @@
 version: v1.25.0
 # ignores vulnerabilities until expiry date; change duration by modifying expiry date
 ignore:
-  SNYK-JS-UNSETVALUE-2400660:
-    - '*':
-        reason: 'Vulnerability present in test code, not built code'
-        expires: 2023-09-01T00:00:00.000Z
-        created: 2022-09-28T09:46:44.053Z
   SNYK-JS-ANSIREGEX-1583908:
     - '*':
         reason: >-
