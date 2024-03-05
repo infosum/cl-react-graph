@@ -1,4 +1,4 @@
-import "@testing-library/jest-dom/extend-expect";
+import "@testing-library/jest-dom";
 
 import React from "react";
 
@@ -21,20 +21,20 @@ test("Histogram: Vertical", () => {
       direction={EChartDirection.VERTICAL}
       height={200}
       data={histogramData}
-    ></Histogram>
+    ></Histogram>,
   );
   expect(screen.getAllByRole("cell")).toHaveLength(6);
   expect(screen.getByTestId("chart-bar--0")).toHaveAttribute(
     "d",
-    "m0 100 v0 a4,4 0 0 1 4,-4 h2 a4 4 0 0 1 4 4 v0 h-25 z"
+    "m0 100 v0 a4,4 0 0 1 4,-4 h2 a4 4 0 0 1 4 4 v0 h-25 z",
   );
   expect(screen.getByTestId("chart-bar--1")).toHaveAttribute(
     "d",
-    "m10 100 v0 a4,4 0 0 1 4,-4 h12 a4 4 0 0 1 4 4 v0 h-100 z"
+    "m10 100 v0 a4,4 0 0 1 4,-4 h12 a4 4 0 0 1 4 4 v0 h-100 z",
   );
   expect(screen.getByTestId("chart-bar--2")).toHaveAttribute(
     "d",
-    "m30 100 v0 a4,4 0 0 1 4,-4 h22 a4 4 0 0 1 4 4 v0 h-75 z"
+    "m30 100 v0 a4,4 0 0 1 4,-4 h22 a4 4 0 0 1 4 4 v0 h-75 z",
   );
 });
 
@@ -45,19 +45,19 @@ test("Histogram: Horizontal", () => {
       direction={EChartDirection.HORIZONTAL}
       height={500}
       data={histogramData}
-    ></Histogram>
+    ></Histogram>,
   );
   expect(screen.getAllByRole("cell")).toHaveLength(6);
   expect(screen.getByTestId("chart-bar--0")).toHaveAttribute(
     "d",
-    "m0 383 h0 a4 4 0 0 1 4 4 v69 a4 4 0 0 1 -4 4 h-0  v-69"
+    "m0 383 h0 a4 4 0 0 1 4 4 v69 a4 4 0 0 1 -4 4 h-0  v-69",
   );
   expect(screen.getByTestId("chart-bar--1")).toHaveAttribute(
     "d",
-    "m0 230 h0 a4 4 0 0 1 4 4 v145 a4 4 0 0 1 -4 4 h-0  v-145"
+    "m0 230 h0 a4 4 0 0 1 4 4 v145 a4 4 0 0 1 -4 4 h-0  v-145",
   );
   expect(screen.getByTestId("chart-bar--2")).toHaveAttribute(
     "d",
-    "m0 0 h0 a4 4 0 0 1 4 4 v222 a4 4 0 0 1 -4 4 h-0  v-222"
+    "m0 0 h0 a4 4 0 0 1 4 4 v222 a4 4 0 0 1 -4 4 h-0  v-222",
   );
 });

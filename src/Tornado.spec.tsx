@@ -1,4 +1,4 @@
-import "@testing-library/jest-dom/extend-expect";
+import "@testing-library/jest-dom";
 
 import React from "react";
 
@@ -45,40 +45,40 @@ test("Tornado: Horizontal overlay", () => {
       showBinPercentages={false}
       data={data}
       id="demo"
-    ></TornadoChart>
+    ></TornadoChart>,
   );
   expect(screen.getAllByRole("cell")).toHaveLength(8);
   expect(screen.getByTestId("chart-bar-left-demo-0")).toHaveAttribute(
     "data-percentage",
-    "66.67"
+    "66.67",
   );
   expect(screen.getByTestId("chart-bar-left-demo-0")).toHaveAttribute(
     "d",
-    "m435 4 h0 v68 h-0 a0 0 0 0 1 -0 -0 v-68 a0,0 0 0 1 0,-0 z"
+    "m435 4 h0 v68 h-0 a0 0 0 0 1 -0 -0 v-68 a0,0 0 0 1 0,-0 z",
   );
   expect(screen.getByTestId("chart-bar-left-demo-1")).toHaveAttribute(
     "data-percentage",
-    "33.33"
+    "33.33",
   );
   expect(screen.getByTestId("chart-bar-left-demo-1")).toHaveAttribute(
     "d",
-    "m435 87 h0 v68 h-0 a0 0 0 0 1 -0 -0 v-68 a0,0 0 0 1 0,-0 z"
+    "m435 87 h0 v68 h-0 a0 0 0 0 1 -0 -0 v-68 a0,0 0 0 1 0,-0 z",
   );
   expect(screen.getByTestId("chart-bar-right-demo-0")).toHaveAttribute(
     "data-percentage",
-    "50.00"
+    "50.00",
   );
   expect(screen.getByTestId("chart-bar-right-demo-0")).toHaveAttribute(
     "d",
-    "m0 4 h0 a0 0 0 0 1 0 0 v68 a0 0 0 0 1 -0 0 h-0  v-68"
+    "m0 4 h0 a0 0 0 0 1 0 0 v68 a0 0 0 0 1 -0 0 h-0  v-68",
   );
   expect(screen.getByTestId("chart-bar-right-demo-1")).toHaveAttribute(
     "data-percentage",
-    "50.00"
+    "50.00",
   );
   expect(screen.getByTestId("chart-bar-right-demo-1")).toHaveAttribute(
     "d",
-    "m0 87 h0 a0 0 0 0 1 0 0 v68 a0 0 0 0 1 -0 0 h-0  v-68"
+    "m0 87 h0 a0 0 0 0 1 0 0 v68 a0 0 0 0 1 -0 0 h-0  v-68",
   );
 });
 
@@ -92,40 +92,40 @@ test("Tornado: Horizontal stacked", () => {
       showBinPercentages={false}
       data={data}
       id="demo"
-    ></TornadoChart>
+    ></TornadoChart>,
   );
   expect(screen.getAllByRole("cell")).toHaveLength(8);
   expect(screen.getByTestId("chart-bar-left-demo-0")).toHaveAttribute(
     "data-percentage",
-    "66.67"
+    "66.67",
   );
   expect(screen.getByTestId("chart-bar-left-demo-0")).toHaveAttribute(
     "d",
-    "m435 4 h0 v68 h-0 a0 0 0 0 1 -0 -0 v-68 a0,0 0 0 1 0,-0 z"
+    "m435 4 h0 v68 h-0 a0 0 0 0 1 -0 -0 v-68 a0,0 0 0 1 0,-0 z",
   );
   expect(screen.getByTestId("chart-bar-left-demo-1")).toHaveAttribute(
     "data-percentage",
-    "33.33"
+    "33.33",
   );
   expect(screen.getByTestId("chart-bar-left-demo-1")).toHaveAttribute(
     "d",
-    "m435 87 h0 v68 h-0 a0 0 0 0 1 -0 -0 v-68 a0,0 0 0 1 0,-0 z"
+    "m435 87 h0 v68 h-0 a0 0 0 0 1 -0 -0 v-68 a0,0 0 0 1 0,-0 z",
   );
   expect(screen.getByTestId("chart-bar-right-demo-0")).toHaveAttribute(
     "data-percentage",
-    "50.00"
+    "50.00",
   );
   expect(screen.getByTestId("chart-bar-right-demo-0")).toHaveAttribute(
     "d",
-    "m0 4 h0 a0 0 0 0 1 0 0 v68 a0 0 0 0 1 -0 0 h-0  v-68"
+    "m0 4 h0 a0 0 0 0 1 0 0 v68 a0 0 0 0 1 -0 0 h-0  v-68",
   );
   expect(screen.getByTestId("chart-bar-right-demo-1")).toHaveAttribute(
     "data-percentage",
-    "50.00"
+    "50.00",
   );
   expect(screen.getByTestId("chart-bar-right-demo-1")).toHaveAttribute(
     "d",
-    "m0 87 h0 a0 0 0 0 1 0 0 v68 a0 0 0 0 1 -0 0 h-0  v-68"
+    "m0 87 h0 a0 0 0 0 1 0 0 v68 a0 0 0 0 1 -0 0 h-0  v-68",
   );
 });
 
@@ -139,43 +139,42 @@ test("Tornado: Horizontal grouped", () => {
       showBinPercentages={false}
       data={data}
       id="demo"
-    ></TornadoChart>
+    ></TornadoChart>,
   );
   expect(screen.getAllByRole("cell")).toHaveLength(8);
   expect(screen.getByTestId("chart-bar-left-demo-0")).toHaveAttribute(
     "data-percentage",
-    "66.67"
+    "66.67",
   );
   expect(screen.getByTestId("chart-bar-left-demo-0")).toHaveAttribute(
     "d",
-    "m435 0 h0 v35 h-0 a0 0 0 0 1 -0 -0 v-35 a0,0 0 0 1 0,-0 z"
+    "m435 0 h0 v35 h-0 a0 0 0 0 1 -0 -0 v-35 a0,0 0 0 1 0,-0 z",
   );
   expect(screen.getByTestId("chart-bar-left-demo-1")).toHaveAttribute(
     "data-percentage",
-    "33.33"
+    "33.33",
   );
   expect(screen.getByTestId("chart-bar-left-demo-1")).toHaveAttribute(
     "d",
-    "m435 83 h0 v35 h-0 a0 0 0 0 1 -0 -0 v-35 a0,0 0 0 1 0,-0 z"
+    "m435 83 h0 v35 h-0 a0 0 0 0 1 -0 -0 v-35 a0,0 0 0 1 0,-0 z",
   );
   expect(screen.getByTestId("chart-bar-right-demo-0")).toHaveAttribute(
     "data-percentage",
-    "50.00"
+    "50.00",
   );
   expect(screen.getByTestId("chart-bar-right-demo-0")).toHaveAttribute(
     "d",
-    "m0 0 h0 a0 0 0 0 1 0 0 v35 a0 0 0 0 1 -0 0 h-0  v-35"
+    "m0 0 h0 a0 0 0 0 1 0 0 v35 a0 0 0 0 1 -0 0 h-0  v-35",
   );
   expect(screen.getByTestId("chart-bar-right-demo-1")).toHaveAttribute(
     "data-percentage",
-    "50.00"
+    "50.00",
   );
   expect(screen.getByTestId("chart-bar-right-demo-1")).toHaveAttribute(
     "d",
-    "m0 83 h0 a0 0 0 0 1 0 0 v35 a0 0 0 0 1 -0 0 h-0  v-35"
+    "m0 83 h0 a0 0 0 0 1 0 0 v35 a0 0 0 0 1 -0 0 h-0  v-35",
   );
 });
-
 
 test("Tornado: Vertical overlay", () => {
   render(
@@ -187,40 +186,40 @@ test("Tornado: Vertical overlay", () => {
       showBinPercentages={false}
       data={data}
       id="demo"
-    ></TornadoChart>
+    ></TornadoChart>,
   );
   expect(screen.getAllByRole("cell")).toHaveLength(8);
   expect(screen.getByTestId("chart-bar-left-demo-0")).toHaveAttribute(
     "data-percentage",
-    "33.33"
+    "33.33",
   );
   expect(screen.getByTestId("chart-bar-left-demo-0")).toHaveAttribute(
     "d",
-    "m9 235 v0 a0,0 0 0 1 0,-0 h127 a0 0 0 0 1 0 0 v0 h-127 z"
+    "m9 235 v0 a0,0 0 0 1 0,-0 h127 a0 0 0 0 1 0 0 v0 h-127 z",
   );
   expect(screen.getByTestId("chart-bar-left-demo-1")).toHaveAttribute(
     "data-percentage",
-    "66.67"
+    "66.67",
   );
   expect(screen.getByTestId("chart-bar-left-demo-1")).toHaveAttribute(
     "d",
-    "m166 235 v0 a0,0 0 0 1 0,-0 h127 a0 0 0 0 1 0 0 v0 h-127 z"
+    "m166 235 v0 a0,0 0 0 1 0,-0 h127 a0 0 0 0 1 0 0 v0 h-127 z",
   );
   expect(screen.getByTestId("chart-bar-right-demo-0")).toHaveAttribute(
     "data-percentage",
-    "50.00"
+    "50.00",
   );
   expect(screen.getByTestId("chart-bar-right-demo-0")).toHaveAttribute(
     "d",
-    "m9 0 v0 a0 0 0 0 0 0 0 h127 a0 0 0 0 0 0 -0 v0 h-127 z"
+    "m9 0 v0 a0 0 0 0 0 0 0 h127 a0 0 0 0 0 0 -0 v0 h-127 z",
   );
   expect(screen.getByTestId("chart-bar-right-demo-1")).toHaveAttribute(
     "data-percentage",
-    "50.00"
+    "50.00",
   );
   expect(screen.getByTestId("chart-bar-right-demo-1")).toHaveAttribute(
     "d",
-    "m166 0 v0 a0 0 0 0 0 0 0 h127 a0 0 0 0 0 0 -0 v0 h-127 z"
+    "m166 0 v0 a0 0 0 0 0 0 0 h127 a0 0 0 0 0 0 -0 v0 h-127 z",
   );
 });
 
@@ -234,40 +233,40 @@ test("Tornado: Vertical stacked", () => {
       showBinPercentages={false}
       data={data}
       id="demo"
-    ></TornadoChart>
+    ></TornadoChart>,
   );
   expect(screen.getAllByRole("cell")).toHaveLength(8);
   expect(screen.getByTestId("chart-bar-left-demo-0")).toHaveAttribute(
     "data-percentage",
-    "33.33"
+    "33.33",
   );
   expect(screen.getByTestId("chart-bar-left-demo-0")).toHaveAttribute(
     "d",
-    "m9 235 v0 a0,0 0 0 1 0,-0 h127 a0 0 0 0 1 0 0 v0 h-127 z"
+    "m9 235 v0 a0,0 0 0 1 0,-0 h127 a0 0 0 0 1 0 0 v0 h-127 z",
   );
   expect(screen.getByTestId("chart-bar-left-demo-1")).toHaveAttribute(
     "data-percentage",
-    "66.67"
+    "66.67",
   );
   expect(screen.getByTestId("chart-bar-left-demo-1")).toHaveAttribute(
     "d",
-    "m166 235 v0 a0,0 0 0 1 0,-0 h127 a0 0 0 0 1 0 0 v0 h-127 z"
+    "m166 235 v0 a0,0 0 0 1 0,-0 h127 a0 0 0 0 1 0 0 v0 h-127 z",
   );
   expect(screen.getByTestId("chart-bar-right-demo-0")).toHaveAttribute(
     "data-percentage",
-    "50.00"
+    "50.00",
   );
   expect(screen.getByTestId("chart-bar-right-demo-0")).toHaveAttribute(
     "d",
-    "m9 0 v0 a0 0 0 0 0 0 0 h127 a0 0 0 0 0 0 -0 v0 h-127 z"
+    "m9 0 v0 a0 0 0 0 0 0 0 h127 a0 0 0 0 0 0 -0 v0 h-127 z",
   );
   expect(screen.getByTestId("chart-bar-right-demo-1")).toHaveAttribute(
     "data-percentage",
-    "50.00"
+    "50.00",
   );
   expect(screen.getByTestId("chart-bar-right-demo-1")).toHaveAttribute(
     "d",
-    "m166 0 v0 a0 0 0 0 0 0 0 h127 a0 0 0 0 0 0 -0 v0 h-127 z"
+    "m166 0 v0 a0 0 0 0 0 0 0 h127 a0 0 0 0 0 0 -0 v0 h-127 z",
   );
 });
 
@@ -281,39 +280,39 @@ test("Tornado: Vertical grouped", () => {
       showBinPercentages={false}
       data={data}
       id="demo"
-    ></TornadoChart>
+    ></TornadoChart>,
   );
   expect(screen.getAllByRole("cell")).toHaveLength(8);
   expect(screen.getByTestId("chart-bar-left-demo-0")).toHaveAttribute(
     "data-percentage",
-    "33.33"
+    "33.33",
   );
   expect(screen.getByTestId("chart-bar-left-demo-0")).toHaveAttribute(
     "d",
-    "m2 235 v0 a0,0 0 0 1 0,-0 h67 a0 0 0 0 1 0 0 v0 h-67 z"
+    "m2 235 v0 a0,0 0 0 1 0,-0 h67 a0 0 0 0 1 0 0 v0 h-67 z",
   );
   expect(screen.getByTestId("chart-bar-left-demo-1")).toHaveAttribute(
     "data-percentage",
-    "66.67"
+    "66.67",
   );
   expect(screen.getByTestId("chart-bar-left-demo-1")).toHaveAttribute(
     "d",
-    "m159 235 v0 a0,0 0 0 1 0,-0 h67 a0 0 0 0 1 0 0 v0 h-67 z"
+    "m159 235 v0 a0,0 0 0 1 0,-0 h67 a0 0 0 0 1 0 0 v0 h-67 z",
   );
   expect(screen.getByTestId("chart-bar-right-demo-0")).toHaveAttribute(
     "data-percentage",
-    "50.00"
+    "50.00",
   );
   expect(screen.getByTestId("chart-bar-right-demo-0")).toHaveAttribute(
     "d",
-    "m2 0 v0 a0 0 0 0 0 0 0 h67 a0 0 0 0 0 0 -0 v0 h-67 z"
+    "m2 0 v0 a0 0 0 0 0 0 0 h67 a0 0 0 0 0 0 -0 v0 h-67 z",
   );
   expect(screen.getByTestId("chart-bar-right-demo-1")).toHaveAttribute(
     "data-percentage",
-    "50.00"
+    "50.00",
   );
   expect(screen.getByTestId("chart-bar-right-demo-1")).toHaveAttribute(
     "d",
-    "m159 0 v0 a0 0 0 0 0 0 0 h67 a0 0 0 0 0 0 -0 v0 h-67 z"
+    "m159 0 v0 a0 0 0 0 0 0 0 h67 a0 0 0 0 0 0 -0 v0 h-67 z",
   );
 });

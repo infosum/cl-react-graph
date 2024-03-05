@@ -1,4 +1,4 @@
-import "@testing-library/jest-dom/extend-expect";
+import "@testing-library/jest-dom";
 
 import React from "react";
 
@@ -22,32 +22,32 @@ test("BarChart", () => {
       bars={{ radius: 4 }}
       id="demo"
       data={barChartData}
-    ></BarChart>
+    ></BarChart>,
   );
   expect(screen.getAllByRole("cell")).toHaveLength(84);
   expect(screen.getByTestId("chart-bar--0")).toHaveAttribute(
     "data-percentage",
-    "5.89"
+    "5.89",
   );
   expect(screen.getByTestId("chart-bar--0")).toHaveAttribute(
     "d",
-    "m11 500 v0 a4,4 0 0 1 4,-4 h11 a4 4 0 0 1 4 4 v0 h-19 z"
+    "m11 500 v0 a4,4 0 0 1 4,-4 h11 a4 4 0 0 1 4 4 v0 h-19 z",
   );
   expect(screen.getByTestId("chart-bar--1")).toHaveAttribute(
     "data-percentage",
-    "5.27"
+    "5.27",
   );
   expect(screen.getByTestId("chart-bar--1")).toHaveAttribute(
     "d",
-    "m56 500 v0 a4,4 0 0 1 4,-4 h11 a4 4 0 0 1 4 4 v0 h-19 z"
+    "m56 500 v0 a4,4 0 0 1 4,-4 h11 a4 4 0 0 1 4 4 v0 h-19 z",
   );
   expect(screen.getByTestId("chart-bar--2")).toHaveAttribute(
     "data-percentage",
-    "1.34"
+    "1.34",
   );
   expect(screen.getByTestId("chart-bar--2")).toHaveAttribute(
     "d",
-    "m101 500 v0 a4,4 0 0 1 4,-4 h11 a4 4 0 0 1 4 4 v0 h-19 z"
+    "m101 500 v0 a4,4 0 0 1 4,-4 h11 a4 4 0 0 1 4 4 v0 h-19 z",
   );
 });
 
@@ -61,25 +61,25 @@ test("BarChart Grouped overlaid layout", () => {
       id="demo"
       groupLayout={EGroupedBarLayout.OVERLAID}
       data={barChartData}
-    ></BarChart>
+    ></BarChart>,
   );
   expect(screen.getAllByRole("cell")).toHaveLength(84);
   expect(screen.getByTestId("chart-bar--0")).toHaveAttribute(
     "d",
-    "m12 500 v0 a4,4 0 0 1 4,-4 h29 a4 4 0 0 1 4 4 v0 h-37 z"
+    "m12 500 v0 a4,4 0 0 1 4,-4 h29 a4 4 0 0 1 4 4 v0 h-37 z",
   );
   expect(screen.getByTestId("chart-bar--1")).toHaveAttribute(
     "d",
-    "m57 500 v0 a4,4 0 0 1 4,-4 h29 a4 4 0 0 1 4 4 v0 h-37 z"
+    "m57 500 v0 a4,4 0 0 1 4,-4 h29 a4 4 0 0 1 4 4 v0 h-37 z",
   );
   expect(screen.getByTestId("chart-bar--20")).toHaveAttribute(
     "d",
-    "m912 500 v0 a4,4 0 0 1 4,-4 h29 a4 4 0 0 1 4 4 v0 h-37 z"
+    "m912 500 v0 a4,4 0 0 1 4,-4 h29 a4 4 0 0 1 4 4 v0 h-37 z",
   );
 
   expect(screen.getByTestId("chart-bar--41")).toHaveAttribute(
     "d",
-    "m921 500 v0 a4,4 0 0 1 4,-4 h10 a4 4 0 0 1 4 4 v0 h-18 z"
+    "m921 500 v0 a4,4 0 0 1 4,-4 h10 a4 4 0 0 1 4 4 v0 h-18 z",
   );
 });
 
@@ -92,28 +92,28 @@ test("BarChart Grouped overlaid layout, compact width", () => {
       id="demo"
       groupLayout={EGroupedBarLayout.OVERLAID}
       data={barChartData}
-    ></BarChart>
+    ></BarChart>,
   );
   expect(screen.getAllByRole("cell")).toHaveLength(84);
   expect(screen.getByTestId("chart-bar--0")).toHaveAttribute(
     "data-percentage",
-    "5.89"
+    "5.89",
   );
   expect(screen.getByTestId("chart-bar--0")).toHaveAttribute(
     "d",
-    "m9 500 v0 a4,4 0 0 1 4,-4 h-6 a4 4 0 0 1 4 4 v0 h-2 z"
+    "m9 500 v0 a4,4 0 0 1 4,-4 h-6 a4 4 0 0 1 4 4 v0 h-2 z",
   );
   expect(screen.getByTestId("chart-bar--1")).toHaveAttribute(
     "d",
-    "m11 500 v0 a4,4 0 0 1 4,-4 h-6 a4 4 0 0 1 4 4 v0 h-2 z"
+    "m11 500 v0 a4,4 0 0 1 4,-4 h-6 a4 4 0 0 1 4 4 v0 h-2 z",
   );
   expect(screen.getByTestId("chart-bar--20")).toHaveAttribute(
     "d",
-    "m49 500 v0 a4,4 0 0 1 4,-4 h-6 a4 4 0 0 1 4 4 v0 h-2 z"
+    "m49 500 v0 a4,4 0 0 1 4,-4 h-6 a4 4 0 0 1 4 4 v0 h-2 z",
   );
   expect(screen.getByTestId("chart-bar--41")).toHaveAttribute(
     "d",
-    "m49 500 v0 a4,4 0 0 1 4,-4 h-7 a4 4 0 0 1 4 4 v0 h-1 z"
+    "m49 500 v0 a4,4 0 0 1 4,-4 h-7 a4 4 0 0 1 4 4 v0 h-1 z",
   );
 });
 
@@ -128,7 +128,7 @@ test("shows the x axis tick value when the chart is horizontal", () => {
       groupLayout={EGroupedBarLayout.OVERLAID}
       data={barChartData}
       tickValues={[33, 66, 99]}
-    ></BarChart>
+    ></BarChart>,
   );
   const xaxis = screen.getByTestId("x-axis");
   const yaxis = screen.getByTestId("y-axis");
@@ -152,7 +152,7 @@ test("shows the y axis tick value when the chart is vertical", () => {
       groupLayout={EGroupedBarLayout.OVERLAID}
       data={barChartData}
       tickValues={[33, 66, 99]}
-    ></BarChart>
+    ></BarChart>,
   );
   const xaxis = screen.getByTestId("x-axis");
   const yaxis = screen.getByTestId("y-axis");
@@ -193,7 +193,7 @@ test("iterates over color scheme if more values present than colors", () => {
         ],
       }}
       tickValues={[33, 66, 99]}
-    ></BarChart>
+    ></BarChart>,
   );
   expect(screen.getByTestId("chart-bar--0")).toHaveAttribute("fill", "red");
   expect(screen.getByTestId("chart-bar--1")).toHaveAttribute("fill", "red");

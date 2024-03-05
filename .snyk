@@ -2,38 +2,21 @@
 version: v1.25.0
 # ignores vulnerabilities until expiry date; change duration by modifying expiry date
 ignore:
-  SNYK-JS-D3COLOR-1076592:
-    - d3-color:
-        reason: None given
-        expires: '2022-03-12T23:32:16.678Z'
-    - d3-scale-chromatic > d3-color:
-        reason: None given
-        expires: '2022-03-12T23:32:16.678Z'
-    - d3-transition > d3-color:
-        reason: None given
-        expires: '2022-03-12T23:32:16.678Z'
-    - d3-scale > d3-interpolate > d3-color:
-        reason: None given
-        expires: '2022-03-12T23:32:16.678Z'
-    - d3-scale-chromatic > d3-interpolate > d3-color:
-        reason: None given
-        expires: '2022-03-12T23:32:16.678Z'
-    - d3-transition > d3-interpolate > d3-color:
-        reason: None given
-        expires: '2022-03-12T23:32:16.678Z'
-    - d3-radial-axis > d3-scale > d3-interpolate > d3-color:
-        reason: None given
-        expires: '2022-03-12T23:32:16.678Z'
-  SNYK-JS-UNSETVALUE-2400660:
-    - '*':
-        reason: 'Vulnerability present in test code, not built code'
-        expires: 2023-09-01T00:00:00.000Z
-        created: 2022-09-28T09:46:44.053Z
   SNYK-JS-ANSIREGEX-1583908:
     - '*':
         reason: >-
           Babel is a build time tool, vulnerability should not be present in
           built code
-        expires: 2023-09-01T00:00:00.000Z
+        expires: 2024-04-01T00:00:00.000Z
         created: 2022-09-28T09:51:12.859Z
+  SNYK-JS-BABELTRAVERSE-5962463:
+    - '*':
+        reason: build time only
+        expires: 2024-04-04T11:28:53.115Z
+        created: 2024-03-05T11:28:53.128Z
+  SNYK-JS-JSON5-3182856:
+    - '*':
+        reason: build time only
+        expires: 2024-04-04T11:29:57.215Z
+        created: 2024-03-05T11:29:57.219Z
 patch: {}
