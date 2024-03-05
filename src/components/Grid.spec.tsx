@@ -1,4 +1,4 @@
-import "@testing-library/jest-dom/extend-expect";
+import "@testing-library/jest-dom";
 
 import React from "react";
 
@@ -30,7 +30,7 @@ test("render grid", () => {
         }}
         width={200}
       />
-    </svg>
+    </svg>,
   );
 
   expect(screen.getByTestId("horizontal-line0")).toBeInTheDocument();
@@ -42,15 +42,15 @@ test("render grid", () => {
   expect(screen.getByTestId("vertical-line0")).toHaveAttribute("fill", "#bbb");
   expect(screen.getByTestId("vertical-line0")).toHaveAttribute(
     "stroke-dasharray",
-    "2 2"
+    "2 2",
   );
 
   expect(screen.getByTestId("horizontal-line0")).toHaveAttribute(
     "fill",
-    "#eee"
+    "#eee",
   );
 
   expect(screen.queryByTestId("horizontal-line0")).not.toHaveAttribute(
-    "stroke-dasharray"
+    "stroke-dasharray",
   );
 });
