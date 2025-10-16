@@ -26,5 +26,4 @@ jobs:
     # build the project if necessary
     - run: npm run build --if-present
     # finally run the tests
-    - run: npx jest --clear-cache
     - run: npm test

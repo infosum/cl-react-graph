@@ -34,7 +34,6 @@ jobs:
     # build the project
     - run: npm run build
     # run tests just in case
-    - run: npx jest --clear-cache
     - run: npm test
 
     # build docs
