@@ -18,10 +18,10 @@ jobs:
         # "github.event.release.target_commitish" is a global variable and specifies the branch the release targeted
         ref: ${{ github.event.release.target_commitish }}
     # install Node.js
-    - name: Use Node.js 16
+    - name: Use Node.js latest
       uses: actions/setup-node@v3
       with:
-        node-version: 16
+        node-version: latest
         # Specifies the registry, this field is required!
         registry-url: https://registry.npmjs.org/
     # clean install of your projects' deps. We use "npm ci" to avoid package lock changes
@@ -34,6 +34,7 @@ jobs:
     # build the project
     - run: npm run build
     # run tests just in case
+    - run: npx jest --clear-cache
     - run: npm test
 
     # build docs
