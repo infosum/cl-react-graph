@@ -1,4 +1,3 @@
-/// <reference types="react" />
 import { BarChartDataSet } from "./Histogram";
 type Props = {
     className?: string;

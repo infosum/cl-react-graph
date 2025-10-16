@@ -1,4 +1,3 @@
-/// <reference types="react" />
 import { SpringConfig } from "@react-spring/web";
 import { EChartDirection } from "../../BarChart";
 import { BarChartDataSet, EGroupedBarLayout, GroupDataItem, HistogramBar } from "../../Histogram";

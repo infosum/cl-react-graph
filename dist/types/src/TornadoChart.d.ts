@@ -1,4 +1,3 @@
-/// <reference types="react" />
 import { EChartDirection } from "./BarChart";
 import { TipFunc } from "./components/ToolTip";
 import { EGroupedBarLayout, HistogramBar } from "./Histogram";

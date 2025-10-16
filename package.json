@@ -75,7 +75,7 @@
   },
   "dependencies": {
     "@juggle/resize-observer": "^3.4.0",
-    "@react-spring/web": "^10.0.3",
+    "@react-spring/web": "^9.7.5",
     "color": "^4.2.3",
     "d3-array": "^3.2.4",
     "d3-axis": "^3.0.0",

@@ -1,4 +1,3 @@
-/// <reference types="react" />
 import { SpringConfig } from "@react-spring/web";
 import { EChartDirection } from "./BarChart";
 import { TLabelComponent } from "./components/Label";

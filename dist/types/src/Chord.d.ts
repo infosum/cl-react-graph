@@ -1,4 +1,3 @@
-/// <reference types="react" />
 import { ColorScheme } from "./utils/colorScheme";
 export type Props = {
     width: number;
