@@ -1,4 +1,3 @@
-/// <reference types="react" />
 import { SpringConfig } from "@react-spring/web";
 import { TLabelComponent } from "./components/Label";
 import { TipFunc } from "./components/ToolTip";

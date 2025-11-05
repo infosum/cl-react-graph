@@ -1,4 +1,3 @@
-/// <reference types="react" />
 import { ExtendedGroupItem } from "./Bars/Bars";
 export type TipFunc = (props: {
     item: ExtendedGroupItem;

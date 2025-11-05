@@ -1,9 +1,12 @@
-import React from "react";
+import React from 'react';
 
-import { animated, SpringValue } from "@react-spring/web";
+import {
+  animated,
+  SpringValue,
+} from '@react-spring/web';
 
-import { EChartDirection } from "../BarChart";
-import { ExtendedGroupItem } from "./Bars/Bars";
+import { EChartDirection } from '../BarChart';
+import { ExtendedGroupItem } from './Bars/Bars';
 
 export type Props = {
   direction?: EChartDirection;

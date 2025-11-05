@@ -1,4 +1,3 @@
-/// <reference types="react" />
 import { PointStyle } from "./components/Points";
 import { ColorScheme } from "./utils/colorScheme";
 export type RadarChartData = {

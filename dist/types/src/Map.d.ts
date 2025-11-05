@@ -1,4 +1,3 @@
-/// <reference types="react" />
 import { ExtendedFeatureCollection, GeoProjection } from "d3";
 import { Props as BaseProps } from "./components/Base";
 import { TipFunc } from "./components/ToolTip";

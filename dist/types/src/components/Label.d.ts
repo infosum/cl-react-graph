@@ -1,7 +1,6 @@
-/// <reference types="react" />
-import { SpringValue } from "@react-spring/web";
-import { EChartDirection } from "../BarChart";
-import { ExtendedGroupItem } from "./Bars/Bars";
+import { SpringValue } from '@react-spring/web';
+import { EChartDirection } from '../BarChart';
+import { ExtendedGroupItem } from './Bars/Bars';
 export type Props = {
     direction?: EChartDirection;
     fill?: string;

@@ -1,12 +1,13 @@
-import "@testing-library/jest-dom";
+import '@testing-library/jest-dom';
 
-import React from "react";
+import React from 'react';
 
-import { render, screen } from "@testing-library/react";
+import { screen } from '@testing-library/dom';
+import { render } from '@testing-library/react';
 
-import { histogramData } from "../test/fixtures";
-import { EChartDirection } from "./";
-import { Histogram } from "./Histogram";
+import { histogramData } from '../test/fixtures';
+import { EChartDirection } from './';
+import { Histogram } from './Histogram';
 
 beforeEach(() => {
   (SVGElement.prototype as any).getBBox = (): any => {

@@ -1,7 +1,11 @@
-import React, { PropsWithChildren, ReactNode, useState } from "react";
-import { useDrag } from "react-use-gesture";
+import React, {
+  PropsWithChildren,
+  ReactNode,
+  useState,
+} from 'react';
+import { useDrag } from 'react-use-gesture';
 
-import { animated } from "@react-spring/web";
+import { animated } from '@react-spring/web';
 
 type Position = {
   start: number;
